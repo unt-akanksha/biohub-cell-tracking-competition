@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib
 import json
 import math
 import os
@@ -14,9 +15,11 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 from .evidence import resolve_producer
+from .diagnostics import aggregate_movie_diagnostics, diagnose_movie
 from .graphs import (
     PredictionInventory,
     artifact_tree_sha256,
+    graph_data_from_tracksdata,
     load_geff_graph,
     preflight_prediction_set,
 )
@@ -45,6 +48,13 @@ _POLICY_KEYS = {
     "native_prediction_space",
     "diagnostics",
     "bootstrap",
+}
+_DIAGNOSTIC_POLICY_KEYS = {
+    "density_boundaries_per_mm3",
+    "density_boundary_rule",
+    "displacement_boundaries_um",
+    "division_offsets_frames",
+    "no_event_encoding",
 }
 _CORE_KEYS = {
     "schema_version",
@@ -187,6 +197,14 @@ def load_evaluation_policy(path: str | Path) -> tuple[dict[str, Any], str]:
     bootstrap = value["bootstrap"]
     if not isinstance(diagnostics, dict) or not isinstance(bootstrap, dict):
         _fail("EVALUATION_POLICY_INVALID", "policy sections must be objects")
+    if set(diagnostics) != _DIAGNOSTIC_POLICY_KEYS:
+        _fail("EVALUATION_POLICY_INVALID", "diagnostic policy schema changed")
+    if diagnostics["density_boundary_rule"] != "training-side-frozen-per-manifest-v1":
+        _fail("EVALUATION_POLICY_INVALID", "density rule changed")
+    if diagnostics["division_offsets_frames"] != [-1, 0, 1]:
+        _fail("EVALUATION_POLICY_INVALID", "division offsets changed")
+    if diagnostics["no_event_encoding"] != "not_applicable":
+        _fail("EVALUATION_POLICY_INVALID", "no-event encoding changed")
     _finite_tree(value, "evaluation_policy")
     return value, sha256_bytes(canonical_json_bytes(value))
 
@@ -305,7 +323,13 @@ def _canonical_summary(summary: Mapping[str, Any]) -> dict[str, Any]:
     return result
 
 
-def _score_movie(verified: Any, prediction: Any, truth: Any, sample: SampleRecord) -> dict[str, Any]:
+def _score_movie(
+    verified: Any,
+    prediction: Any,
+    truth: Any,
+    sample: SampleRecord,
+    policy: Mapping[str, Any],
+) -> dict[str, Any]:
     scored_prediction = prediction.copy()
     scored_truth = truth.copy()
     result = verified.evaluate(
@@ -333,6 +357,53 @@ def _score_movie(verified: Any, prediction: Any, truth: Any, sample: SampleRecor
     if any(value < 0 for value in counts.values()):
         _fail("OFFICIAL_COUNTS_INVALID", sample.sample_id)
     matched_gt_nodes = round(float(recall) * scored_truth.num_nodes())
+    node_id_key = verified.tracksdata.DEFAULT_ATTR_KEYS.NODE_ID
+    match_key = verified.tracksdata.DEFAULT_ATTR_KEYS.MATCHED_NODE_ID
+    match_rows = scored_prediction.node_attrs(
+        attr_keys=[node_id_key, match_key]
+    ).to_dicts()
+    prediction_to_truth = {
+        int(row[node_id_key]): int(row[match_key])
+        for row in match_rows
+        if row[match_key] is not None and int(row[match_key]) >= 0
+    }
+    division_module = importlib.import_module("tracking_cellmot.division_metrics")
+    division_result = division_module.score_divisions(
+        prediction.copy(),
+        truth.copy(),
+        scale=tuple(float(item) for item in sample.scale_zyx_um),
+        max_distance=float(verified.lock.raw["constants"]["max_distance_um"]),
+    )
+    reproduced_division_counts = {
+        "division_tp": sum(int(value) for value in division_result.scores.values()),
+        "division_fn": len(division_result.scores)
+        - sum(int(value) for value in division_result.scores.values()),
+        "division_fp": len(division_result.fp_forks),
+    }
+    if reproduced_division_counts != {
+        name: counts[name] for name in ("division_tp", "division_fn", "division_fp")
+    }:
+        _fail("DIAGNOSTIC_RECONCILIATION_FAILED", f"{sample.sample_id}:division")
+    diagnostic_policy = policy["diagnostics"]
+    diagnostic = diagnose_movie(
+        prediction=graph_data_from_tracksdata(scored_prediction),
+        truth=graph_data_from_tracksdata(scored_truth),
+        prediction_to_truth=prediction_to_truth,
+        official_counts=counts,
+        official_adjusted_edge_jaccard=organizer_row["adj_edge_jaccard"],
+        estimated_number_of_nodes=sample.estimated_number_of_nodes,
+        shape_tzyx=sample.shape_tzyx,
+        scale_zyx_um=sample.scale_zyx_um,
+        adjustment_alpha=verified.lock.raw["constants"]["adjustment_alpha"],
+        displacement_boundaries_um=diagnostic_policy["displacement_boundaries_um"],
+        density_boundaries_per_mm3=diagnostic_policy["density_boundaries_per_mm3"],
+        density_boundary_rule=diagnostic_policy["density_boundary_rule"],
+        division_offsets_frames=diagnostic_policy["division_offsets_frames"],
+        no_event_encoding=diagnostic_policy["no_event_encoding"],
+        division_scores=division_result.scores,
+        division_tp_forks=division_result.tp_forks,
+        division_fp_forks=division_result.fp_forks,
+    )
     return {
         "organizer_row": organizer_row,
         "official_counts": counts,
@@ -345,6 +416,7 @@ def _score_movie(verified: Any, prediction: Any, truth: Any, sample: SampleRecor
         "adjusted_edge_jaccard": decimal_string(
             organizer_row["adj_edge_jaccard"], "adjusted_edge_jaccard"
         ),
+        "diagnostic_state": diagnostic,
     }
 
 
@@ -393,7 +465,11 @@ def aggregate_official_rows(verified: Any, rows: Sequence[Mapping[str, Any]]) ->
 
 
 def _public_movie(item: Mapping[str, Any]) -> dict[str, Any]:
-    return {key: value for key, value in item.items() if key != "organizer_row"}
+    return {
+        key: value
+        for key, value in item.items()
+        if key not in {"organizer_row", "diagnostic_state"}
+    }
 
 
 def _official_projection(verified: Any, movies: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -408,6 +484,38 @@ def _official_projection(verified: Any, movies: Sequence[Mapping[str, Any]]) -> 
         by_embryo[embryo_id] = aggregate_official_rows(verified, selected)
     return {
         "pooled": aggregate_official_rows(verified, movies),
+        "by_embryo": by_embryo,
+        "by_fold": by_fold,
+        "by_movie": by_movie,
+    }
+
+
+def _diagnostic_projection(movies: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    by_movie = [
+        {
+            "sample_id": item["sample_id"],
+            "embryo_id": item["embryo_id"],
+            "fold_id": item["fold_id"],
+            **dict(item["diagnostic_state"]),
+        }
+        for item in sorted(movies, key=lambda row: row["sample_id"])
+    ]
+    by_fold: dict[str, Any] = {}
+    by_embryo: dict[str, Any] = {}
+    for fold_id in sorted({str(item["fold_id"]) for item in movies}):
+        by_fold[fold_id] = aggregate_movie_diagnostics(
+            [item["diagnostic_state"] for item in movies if item["fold_id"] == fold_id]
+        )
+    for embryo_id in sorted({str(item["embryo_id"]) for item in movies}):
+        by_embryo[embryo_id] = aggregate_movie_diagnostics(
+            [item["diagnostic_state"] for item in movies if item["embryo_id"] == embryo_id]
+        )
+    return {
+        "authority": "non_authoritative_diagnostic",
+        "organizer_input_eligible": False,
+        "pooled": aggregate_movie_diagnostics(
+            [item["diagnostic_state"] for item in movies]
+        ),
         "by_embryo": by_embryo,
         "by_fold": by_fold,
         "by_movie": by_movie,
@@ -561,7 +669,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             ledger,
             manifest,
             lock,
-            _policy,
+            policy,
             _policy_sha,
             inventories,
             members,
@@ -621,6 +729,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
                     load_geff_graph(prediction_path, verified),
                     load_geff_graph(truth_path, verified),
                     sample,
+                    policy,
                 )
                 if row["official_counts"] != roundtrip_counts[sample_id]:
                     _fail("ROUNDTRIP_COUNT_MISMATCH", sample_id)
@@ -637,12 +746,21 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             role: _official_projection(verified, movies[role])
             for role in ("baseline", "candidate")
         }
+        diagnostics = {
+            "authority": "non_authoritative_diagnostic",
+            "organizer_input_eligible": False,
+            **{
+                role: _diagnostic_projection(movies[role])
+                for role in ("baseline", "candidate")
+            },
+        }
         state = reconstruct_exact_evaluations(ledger.read_events())[request.evaluation_run_id]
         core = canonical_report_core(
             registration=state.registered,
             authoritative_inventories=authoritative,
             official=official,
             expected_samples=[item.sample_id for item in manifest.samples],
+            diagnostics=diagnostics,
         )
         core_sha = sha256_bytes(canonical_json_bytes(core))
         _, peak_bytes = tracemalloc.get_traced_memory()

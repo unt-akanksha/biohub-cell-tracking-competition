@@ -308,6 +308,10 @@ def test_exact_canonical_complete_movie_report_is_pooled_and_ledger_attached(tmp
     assert len(report.core["official"]["baseline"]["by_movie"]) == 4
     assert set(report.core["official"]["candidate"]["by_embryo"]) == {"44b6", "6bba"}
     assert report.core["official"]["candidate"]["pooled"]["score"] != report.core["official"]["baseline"]["pooled"]["score"]
+    assert report.core["diagnostics"]["authority"] == "non_authoritative_diagnostic"
+    assert report.core["diagnostics"]["organizer_input_eligible"] is False
+    assert report.core["diagnostics"]["candidate"]["pooled"]["reconciliation"]["status"] == "passed"
+    assert "diagnostic_state" not in json.dumps(report.core["official"], sort_keys=True)
     assert report.core["integrity_checks"]["authoritative_prediction_space"] == "integer-csv-rebuilt-geff"
     assert validate_exact_report(
         ExactReport.from_files(report.core_path, report.envelope_path),
