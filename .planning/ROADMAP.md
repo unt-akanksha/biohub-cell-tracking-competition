@@ -32,12 +32,12 @@ The roadmap first makes competition work safe and measurable, then establishes l
   3. A launch with malformed quota, a conflicting GPU job, no declared maximum, or a worst case that crosses the 8-hour reserve is rejected before Kaggle execution.
   4. Long jobs cannot start until smoke, dense-memory, and coverage preflights pass, and launched notebooks stop and checkpoint before their declared budget.
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 
 - [x] 01-01-PLAN.md
-- [ ] 01-02-PLAN.md
+- [x] 01-02-PLAN.md
 - [ ] 01-03-PLAN.md
 
 **Wave 1**
@@ -143,7 +143,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Competition Control Plane | 1/3 | In Progress|  |
+| 1. Competition Control Plane | 2/3 | In Progress|  |
 | 2. Exact Generalization Validation | 0/3 | Not started | - |
 | 3. ZebraHub Affinity Promotion Gate | 0/2 | Not started | - |
 | 4. Strong Spatiotemporal Model | 0/4 | Not started | - |

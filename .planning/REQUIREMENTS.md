@@ -14,10 +14,10 @@
 
 ### Experiment Tracking
 
-- [ ] **TRACK-01**: The competitor can register an experiment with a stable ID, hypothesis, parent experiment, configuration, code/data/model hashes, seeds, split, and declared maximum runtime before execution.
-- [ ] **TRACK-02**: The project appends actual resource use, artifact hashes, status, failure reason, full-movie metrics, per-embryo metrics, fold metrics, and worst-movie delta after execution.
-- [ ] **TRACK-03**: The project preserves rejected, failed, incomplete, and superseded experiments and represents corrections as amendments rather than destructive edits.
-- [ ] **TRACK-04**: The competitor can render a progress board showing experiment lineage, evidence, GPU-hour cost, promotion state, and the highest-value next experiment.
+- [x] **TRACK-01**: The competitor can register an experiment with a stable ID, hypothesis, parent experiment, configuration, code/data/model hashes, seeds, split, and declared maximum runtime before execution.
+- [x] **TRACK-02**: The project appends actual resource use, artifact hashes, status, failure reason, full-movie metrics, per-embryo metrics, fold metrics, and worst-movie delta after execution.
+- [x] **TRACK-03**: The project preserves rejected, failed, incomplete, and superseded experiments and represents corrections as amendments rather than destructive edits.
+- [x] **TRACK-04**: The competitor can render a progress board showing experiment lineage, evidence, GPU-hour cost, promotion state, and the highest-value next experiment.
 
 ### Resource Safety
 
@@ -97,10 +97,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INTEL-02 | Phase 1 | Complete |
 | INTEL-03 | Phase 1 | Complete |
 | INTEL-04 | Phase 1 | Complete |
-| TRACK-01 | Phase 1 | Pending |
-| TRACK-02 | Phase 1 | Pending |
-| TRACK-03 | Phase 1 | Pending |
-| TRACK-04 | Phase 1 | Pending |
+| TRACK-01 | Phase 1 | Complete |
+| TRACK-02 | Phase 1 | Complete |
+| TRACK-03 | Phase 1 | Complete |
+| TRACK-04 | Phase 1 | Complete |
 | SAFE-01 | Phase 1 | Pending |
 | SAFE-02 | Phase 1 | Pending |
 | SAFE-03 | Phase 1 | Pending |
