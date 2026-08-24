@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
@@ -159,8 +158,10 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
             competition_slug,
             "--format",
             "json",
+            "--sort-by",
+            "dateRun",
             "--page-size",
-            "200",
+            "20",
         ]
     )
     if not isinstance(payload, list):
@@ -177,7 +178,10 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
         seen.add(ref)
         refs.append(ref)
 
-    def resolve_status(ref: str) -> ActiveKernel | None:
+    # An executing or newly queued version sorts ahead of historical completed
+    # versions by dateRun. Inspecting the newest 20 sequentially avoids Kaggle's
+    # status-endpoint rate limit while covering far more than its concurrency cap.
+    for ref in refs:
         try:
             status = str(runner.kernel_status(ref)).removeprefix("KernelWorkerStatus.").upper()
         except Exception as exc:
@@ -185,17 +189,7 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
                 "KERNEL_STATUS_UNAVAILABLE", f"could not resolve status for {ref}"
             ) from exc
         if status in ACTIVE_STATUSES:
-            return ActiveKernel(ref=ref, status=status)
-        return None
-
-    # Status calls are independent authenticated reads; bounded concurrency keeps the
-    # fail-closed pre-launch check practical for accounts with a long kernel history.
-    with ThreadPoolExecutor(max_workers=min(12, max(1, len(refs)))) as pool:
-        futures = {pool.submit(resolve_status, ref): ref for ref in refs}
-        for future in as_completed(futures):
-            item = future.result()
-            if item is not None:
-                active.append(item)
+            active.append(ActiveKernel(ref=ref, status=status))
     return sorted(active, key=lambda item: item.ref)
 
 

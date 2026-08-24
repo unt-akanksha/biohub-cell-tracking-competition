@@ -207,6 +207,27 @@
       "registered_at": "2026-08-08T00:00:00Z",
       "run_id": "prior-zebrahub-selective-ssm-medium",
       "status": "incomplete"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "0.01",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Read-only Phase 1 live guard verification; no kernel launch is authorized or executed.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-24T03:55:56.321151Z",
+      "run_id": "phase1-live-guard-readonly-smoke",
+      "status": "registered"
     }
   ],
   "schema_version": 1

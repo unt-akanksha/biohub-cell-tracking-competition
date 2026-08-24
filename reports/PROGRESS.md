@@ -20,6 +20,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `prior-hoct-dense-movie` | — | HOCT can process the dense movie within Kaggle memory after fallback patching. | failed | not recorded | — | 2.0 / unknown | retire | Out of memory on a dense movie after fallback patching. | — |
 | `prior-ranker-coverage-failure` | — | The sparse-PU ranker completes with invariant output movie coverage. | failed | not recorded | — | 11.3 / unknown | retire | Output movie coverage changed. | — |
 | `prior-zebrahub-selective-ssm-medium` | — | ZebraHub selective_ssm_medium parent-ranking gains survive reciprocal competition calibration and exact complete-graph OOF scoring. | incomplete | {"mean_net_recoveries":"51.7","nearest_parent_top1":"0.932190","parent_top1":"0.932448"} | — | unknown / unknown | retain | — | reciprocal_competition_calibration_and_complete_graph_exact_metric |
+| `phase1-live-guard-readonly-smoke` | — | Read-only Phase 1 live guard verification; no kernel launch is authorized or executed. | registered | not recorded | — | unknown / 0.01 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -78,3 +79,10 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `true`
 - Evidence: `{"mean_net_recoveries":"51.7","nearest_parent_top1":"0.932190","parent_top1":"0.932448"}`
 - Decision evidence: `["external_holdout:all_maturation_gates_passed_three_seeds","authorization:false"]`
+
+### phase1-live-guard-readonly-smoke
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
