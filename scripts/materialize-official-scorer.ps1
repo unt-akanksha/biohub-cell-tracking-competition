@@ -68,7 +68,9 @@ function Assert-Or-CreateCheckout {
         return
     }
 
-    Invoke-Git -Arguments @("clone", "--filter=blob:none", "--no-checkout", $Repository, $Destination)
+    # Keep the small public source history so isolated regression tests can
+    # compare the pre-patch commit without a second network checkout.
+    Invoke-Git -Arguments @("clone", "--no-checkout", $Repository, $Destination)
     Invoke-Git -Arguments @("-C", $Destination, "checkout", "--detach", $Commit)
 }
 

@@ -34,7 +34,10 @@
   },
   "fixtures": {
     "expected_path": "tests/fixtures/metric/expected/official-counts.json",
-    "expected_sha256": "ff079059762c8b223d15d6352c8ce6121399bbbad7b62b2810bd37ce9dfe8d42",
+    "expected_sha256": "9d35d86d17125157f1b35129492c880125ef6fb3926d7383195eda872e49ecb6",
+    "hack2_result_sha256": "db08e3417e394b526c0e4052a2568466cb9a75b1a3660ee4cfdabf92c14a6538",
+    "patched_exploit_path": "tests/fixtures/metric/graph_specs/patched-exploit.json",
+    "patched_exploit_sha256": "0670774e8522e490223882219f8ef9bbb4d5385995dcfd284512b787a08aa9ab",
     "perfect_linear_path": "tests/fixtures/metric/graph_specs/perfect-linear.json",
     "perfect_linear_result_sha256": "8dd250c67ac988da0085c657814287e3218255614b88abbe1192c878f71ea0d4",
     "perfect_linear_sha256": "1a22bb66e34941d7ca099339e7398d93a26e3ac4d67fd9380ac4b6122dacc922"

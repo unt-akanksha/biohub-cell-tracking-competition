@@ -46,6 +46,14 @@ def _required_sha(value: Any, name: str, *, commit: bool = False) -> str:
     return text
 
 
+def _required_relative_path(value: Any, name: str) -> str:
+    text = _required_text(value, name)
+    path = Path(text)
+    if path.is_absolute() or ".." in path.parts:
+        raise ScorerVerificationError("lock_schema_invalid", f"{name} must be workspace-relative")
+    return text
+
+
 @dataclass(frozen=True)
 class ScorerLock:
     schema_version: int
@@ -60,7 +68,12 @@ class ScorerLock:
     packages: tuple[tuple[str, str], ...]
     fixture_expected_path: str
     fixture_expected_sha256: str
+    perfect_fixture_path: str
+    perfect_fixture_sha256: str
     fixture_result_sha256: str
+    patched_exploit_path: str
+    patched_exploit_sha256: str
+    hack2_result_sha256: str
     api_symbols: tuple[str, ...]
     raw: dict[str, Any]
 
@@ -115,13 +128,32 @@ class ScorerLock:
             tracksdata_repository=_required_text(tracksdata.get("repository"), "tracksdata.repository"),
             tracksdata_commit=_required_sha(tracksdata.get("commit"), "tracksdata.commit", commit=True),
             critical_files=tuple(normalized_files),
-            environment_lock_path=_required_text(environment.get("lock_path"), "environment.lock_path"),
+            environment_lock_path=_required_relative_path(
+                environment.get("lock_path"), "environment.lock_path"
+            ),
             environment_lock_sha256=_required_sha(environment.get("lock_sha256"), "environment.lock_sha256"),
             packages=normalized_packages,
-            fixture_expected_path=_required_text(fixtures.get("expected_path"), "fixtures.expected_path"),
+            fixture_expected_path=_required_relative_path(
+                fixtures.get("expected_path"), "fixtures.expected_path"
+            ),
             fixture_expected_sha256=_required_sha(fixtures.get("expected_sha256"), "fixtures.expected_sha256"),
+            perfect_fixture_path=_required_relative_path(
+                fixtures.get("perfect_linear_path"), "fixtures.perfect_linear_path"
+            ),
+            perfect_fixture_sha256=_required_sha(
+                fixtures.get("perfect_linear_sha256"), "fixtures.perfect_linear_sha256"
+            ),
             fixture_result_sha256=_required_sha(
                 fixtures.get("perfect_linear_result_sha256"), "fixtures.perfect_linear_result_sha256"
+            ),
+            patched_exploit_path=_required_relative_path(
+                fixtures.get("patched_exploit_path"), "fixtures.patched_exploit_path"
+            ),
+            patched_exploit_sha256=_required_sha(
+                fixtures.get("patched_exploit_sha256"), "fixtures.patched_exploit_sha256"
+            ),
+            hack2_result_sha256=_required_sha(
+                fixtures.get("hack2_result_sha256"), "fixtures.hack2_result_sha256"
             ),
             api_symbols=required_symbols,
             raw=root,
@@ -278,6 +310,15 @@ def verify_scorer_lock(
         raise ScorerVerificationError("fixture_expected_missing", str(expected_file))
     if not secrets.compare_digest(sha256_file(expected_file), lock.fixture_expected_sha256):
         raise ScorerVerificationError("fixture_expected_hash_mismatch", str(expected_file))
+    for relative, expected in (
+        (lock.perfect_fixture_path, lock.perfect_fixture_sha256),
+        (lock.patched_exploit_path, lock.patched_exploit_sha256),
+    ):
+        fixture_file = workspace_root / relative
+        if not fixture_file.is_file():
+            raise ScorerVerificationError("fixture_missing", str(fixture_file))
+        if not secrets.compare_digest(sha256_file(fixture_file), expected):
+            raise ScorerVerificationError("fixture_hash_mismatch", str(fixture_file))
 
     locked_packages = _locked_requirements(environment_lock)
     locked_packages.update(dict(lock.packages))
