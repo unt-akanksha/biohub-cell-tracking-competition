@@ -1,0 +1,21 @@
+[
+  {
+    "ref": "sub-59",
+    "fileName": "submission.csv",
+    "date": "2026-08-23T19:00:00Z",
+    "description": "dense motion state guard",
+    "status": "complete",
+    "publicScore": "0.913367",
+    "privateScore": null
+  },
+  {
+    "ref": "sub-58",
+    "fileName": "submission.csv",
+    "date": "2026-08-22T19:00:00Z",
+    "description": "clean baseline",
+    "status": "complete",
+    "publicScore": "0.913000",
+    "privateScore": null
+  }
+]
+

@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+
+# Runtime snapshots and downloaded Kaggle material
+.biohub/cache/
+.biohub/snapshots/
+.biohub/authorizations/
+downloads/
+notebooks/downloaded/
+leaderboard-archives/
+
+# Large biological/model artifacts
+*.zarr/
+*.geff/
+weights/
+checkpoints/
+artifacts/models/
+*.ckpt
+*.pt
+*.pth
+
+# Credentials and local secrets
+.env
+.env.*
+secrets/
+kaggle.json
+
+# Compact reports and the append-only experiment ledger are intentionally tracked.
+
