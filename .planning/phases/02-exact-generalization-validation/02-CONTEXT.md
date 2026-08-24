@@ -32,6 +32,13 @@ Deliver the authoritative offline decision system for Biohub candidates: a pinne
 - Compare candidates against a named baseline on identical manifests and emit deltas plus deterministic movie bootstrap intervals; public leaderboard scores stay in a separate non-authoritative field.
 - Validate GEFF directly and after GEFF-to-CSV-to-GEFF round trips; reject missing movies, non-finite values, invalid time edges, malformed forks, or schema drift.
 
+### Ledger Authority and CPU Acceptance
+- Treat every `prediction-set.json` as an untrusted claim. Before scoring or promotion, resolve `producer_run_id` against the immutable local ledger, require a completed evidence-eligible producer, and match registered manifest/fold/train/calibration/evaluation/model/config/code/data identities plus terminal graph-inventory/artifact hashes.
+- Attach reciprocal baseline/candidate evidence to one aggregate exact-evaluation run. Its immutable member table maps role and fold to producer/event hashes; only `registered -> started -> completed|failed` is legal, and only a completed report attachment can reach promotion.
+- Give the live official-data control its own CPU acceptance lifecycle, separate from Phase 1 GPU experiment events and GPU quota accounting. Existing Phase 1 ledgers must reconstruct unchanged; incomplete legacy producer records remain readable but evidence-ineligible.
+- Because the authoritative ledger is not mounted in Kaggle, pre-issue a one-use nonce and request hash locally. The CPU kernel may return only a pending content-addressed envelope; local reconciliation binds discovered manifest/fold inputs and terminal artifacts before the CPU producer and aggregate evaluation can complete. The remote envelope is not called signed or promotable.
+- Kaggle competition operations remain read-only/no-submission. Phase 2 may write only versions of the user's explicitly owned CPU acceptance runtime dataset and acceptance kernel through the guarded wrapper; GPU use is prohibited.
+
 ### Promotion Policy
 - Default `promote` requires a positive pooled exact delta, nonnegative bilateral embryo evidence within configured tolerance, no material worst-movie collapse, stable node recall, and no material division regression.
 - Marginal or intentionally traded-off results become `review_required`, never automatic promotion; the exact thresholds, inputs, evidence hashes, and approved exception must be appended to the ledger.

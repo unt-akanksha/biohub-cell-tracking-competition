@@ -16,7 +16,8 @@ The system evaluates 3D+time cell-tracking graphs produced by learned models. It
 2. Training/calibration and evaluation share embryo source material.
 3. A metric exploit, incomplete graph, or missing movie is accepted as a candidate.
 4. Pooled gains conceal a severe embryo, movie, node-recall, or division regression.
-5. A promotion cannot be reproduced from source, manifest, and artifact hashes.
+5. A self-asserted, unknown, nonterminal, or hash-mismatched producer/report enters promotion without resolving against the immutable local ledger.
+6. A remote CPU control envelope is replayed or treated as authoritative before its pre-issued request and artifacts are locally reconciled.
 
 ---
 
@@ -65,9 +66,9 @@ No clinical regulation applies. Competition rules, public-access/licensing requi
 
 ## 2. Framework Decision
 
-**Selected Framework:** Pinned `royerlab/tracking_cellmot` organizer implementation with NumPy/SciPy/Polars/GEFF adapters and pytest
+**Selected Framework:** Pinned `tracking_cellmot` package from `royerlab/kaggle-cell-tracking-competition` with NumPy/SciPy/Polars/GEFF adapters and pytest
 
-**Version:** Exact upstream Git commit SHA recorded in `config/official-baseline.lock.json`
+**Version:** Exact upstream Git commit SHA recorded in `config/official-scorer.lock.json`
 
 **Rationale:**
 The target is a deterministic scientific metric, not an LLM or agent workflow. Reusing the organizer implementation maximizes leaderboard fidelity; a narrow local adapter adds provenance, manifests, decomposition, round trips, and policy without forking metric semantics. Pytest supplies fast regression gates and the Phase 1 JSONL ledger supplies offline traceability.
@@ -90,7 +91,7 @@ The target is a deterministic scientific metric, not an LLM or agent workflow. R
 ### Installation
 
 ```bash
-python -m pip install -e vendor/tracking-cellmot
+python -m pip install -e .biohub/vendor/kaggle-cell-tracking-competition
 python -m pip install pytest pydantic
 ```
 
@@ -99,21 +100,51 @@ python -m pip install pytest pydantic
 ```python
 from pathlib import Path
 from tracking_cellmot.metrics import evaluate  # exact name verified against pinned source
-from biohub_tracker.evaluation import evaluate_split
+from biohub_tracker.evaluation import (
+    ExactEvaluationRequest,
+    PredictionSetRef,
+    evaluate_exact,
+)
 from biohub_tracker.manifests import load_manifest
 ```
 
 ### Entry Point Pattern
 
 ```python
-report = evaluate_split(
-    baseline_dir=Path("predictions/baseline"),
-    candidate_dir=Path("predictions/candidate"),
+request = ExactEvaluationRequest(
+    ledger_path=Path("experiments/events.jsonl"),
+    evaluation_run_id="eval-candidate-reciprocal-v1",
     truth_dir=Path("ground_truth"),
-    manifest_path=Path("manifests/fold-44b6-to-6bba.json"),
-    scorer_lock=Path("config/official-baseline.lock.json"),
+    manifest_path=Path("manifests/reciprocal-embryo-v1.json"),
+    scorer_lock_path=Path("config/official-scorer.lock.json"),
+    evaluation_policy_path=Path("config/evaluation-policy.json"),
+    baseline_sets=(
+        PredictionSetRef(
+            fold_id="fold-44b6-to-6bba",
+            graph_dir=Path("predictions/baseline/6bba"),
+            producer_manifest_path=Path("predictions/baseline/6bba/prediction-set.json"),
+        ),
+        PredictionSetRef(
+            fold_id="fold-6bba-to-44b6",
+            graph_dir=Path("predictions/baseline/44b6"),
+            producer_manifest_path=Path("predictions/baseline/44b6/prediction-set.json"),
+        ),
+    ),
+    candidate_sets=(
+        PredictionSetRef(
+            fold_id="fold-44b6-to-6bba",
+            graph_dir=Path("predictions/candidate/6bba"),
+            producer_manifest_path=Path("predictions/candidate/6bba/prediction-set.json"),
+        ),
+        PredictionSetRef(
+            fold_id="fold-6bba-to-44b6",
+            graph_dir=Path("predictions/candidate/44b6"),
+            producer_manifest_path=Path("predictions/candidate/44b6/prediction-set.json"),
+        ),
+    ),
+    output_dir=Path("reports/exact"),
 )
-report.write_immutable(Path("reports/exact"))
+report = evaluate_exact(request)
 ```
 
 ### Key Abstractions
@@ -122,6 +153,9 @@ report.write_immutable(Path("reports/exact"))
 |---|---|---|
 | Scorer lock | Upstream commit, file hashes, license, constants, and adapter version | Every exact evaluation |
 | Frozen manifest | Canonical movie/source memberships and hashes | Training, calibration, and evaluation |
+| Producer resolution | Sidecar claims reconciled to immutable registration/terminal events | Before graph loading, scoring, evidence attachment, and promotion |
+| Aggregate evaluation run | Registered role/fold member-producer map with registered -> started -> completed/failed lifecycle | Every reciprocal baseline/candidate report |
+| CPU acceptance run | Separate no-GPU request/bind/reconcile lifecycle | Live official-data infrastructure control only |
 | Exact report | Counts, scores, diagnostics, bootstrap deltas, and provenance | Candidate comparison and ledger completion |
 | Promotion decision | Deterministic policy result plus hashed evidence | Advancing, reviewing, or rejecting a candidate |
 
@@ -143,7 +177,7 @@ src/biohub_tracker/
 ├── diagnostics.py
 └── promotion.py
 config/
-├── official-baseline.lock.json
+├── official-scorer.lock.json
 └── promotion-policy.json
 tests/fixtures/metric/
 manifests/
@@ -154,13 +188,17 @@ reports/exact/
 
 ## 4. Implementation Guidance
 
-**Model Configuration:** Evaluation is model-agnostic. A report always records model/config hashes, seeds, split manifest SHA-256, candidate/baseline artifact hashes, and scorer lock SHA-256.
+**Model Configuration:** Evaluation is model-agnostic. Each reciprocal prediction set carries a producer sidecar claim containing `producer_run_id`, `fold_id`, evaluation-manifest SHA-256, train/calibration/evaluation membership hashes, model/config/code/data hashes, graph-inventory SHA-256, and artifact hashes. The sidecar is never authoritative by itself. Before graph loading, scoring, report attachment, and promotion, resolve the producer against the immutable local ledger: it must exist, occupy an allowed completed/evidence-eligible terminal state, and exactly match registration-time manifest/fold/membership/model/config/code/data values plus terminal graph-inventory/artifact hashes. Unknown/nonterminal producers, incomplete legacy records, registered mismatch, and terminal artifact mismatch are hard failures.
 
-**Core Pattern:** Validate provenance and complete coverage, evaluate baseline and candidate through the same pinned adapter, retain raw sufficient statistics, derive deterministic decompositions and paired deltas, then apply a versioned policy.
+**Core Pattern:** Register one aggregate evaluation run with its exact baseline/candidate-by-fold producer-member map, resolve all member event hashes, validate provenance and complete coverage, evaluate through the same pinned adapter, attach the report to a completed aggregate event, derive deterministic decompositions/deltas, then apply a versioned policy after re-resolution.
 
-**Tool Use:** Git/GitHub retrieve organizer source; GEFF/tracksdata load graphs; NumPy/SciPy implement diagnostics/bootstrap; Polars or stdlib CSV validates tables; pytest freezes regressions. Kaggle CLI is read-only in this phase.
+**Tool Use:** Git/GitHub retrieve organizer source; GEFF/tracksdata load graphs; NumPy/SciPy implement diagnostics/bootstrap; Polars or stdlib CSV validates tables; pytest freezes regressions. Kaggle competition operations remain read-only and competition submission is prohibited. The only explicit Kaggle writes permitted in Phase 2 are create/version operations for the user's named CPU acceptance runtime dataset and CPU acceptance kernel through the guarded wrapper; `enable_gpu=false`, no CUDA/GPU launch path, and no unrelated asset write are allowed.
 
-**State Management:** Immutable JSON reports and manifests are content-addressed. Ledger decisions append hashes and never rewrite prior evidence.
+**State Management:** Immutable JSON reports/manifests are content-addressed. Producer sidecars are untrusted claims until resolved against immutable registration/terminal events. Aggregate evaluation runs use `registered -> started -> completed|failed` and freeze every role/fold member plus report attachments. CPU controls use their own `registered -> started -> inputs_bound -> completed|failed` events, never GPU experiment events or quota fields. A remote Kaggle result is a distinct `PendingControlReport` plus `pending_reconciliation` envelope, not an `ExactReport`; it echoes a one-use nonce/request hash. Local reconciliation completes the producer, registers/starts the aggregate, and constructs a new exact core containing the now-known ledger event hashes before aggregate completion. Old Phase 1 ledger records are neither migrated nor reinterpreted.
+
+**Ledger Contracts:** `EXACT_EVALUATION_REGISTERED` freezes `evaluation_run_id`, scorer/environment/manifest/policy hashes, and each member's role, fold, producer ID, producer event hashes, registered lineage hashes, and terminal inventory/artifact hashes; `STARTED` follows once and `COMPLETED` attaches the locally issued exact report core/envelope/inventory hashes, while `FAILED` is terminal. `CPU_ACCEPTANCE_REGISTERED` freezes the no-GPU request, one-use nonce/request hash, proposed evaluation ID, owned asset names, CPU watchdog, and known source/code/config/data commitments; `STARTED` binds the owned versions; `INPUTS_BOUND` adds the locally validated real manifest/fold/membership identities; `COMPLETED` adds reconciled terminal artifact/pending-payload/inventory hashes and CPU evidence, or `FAILED` records a reason. The authoritative CPU producer registration projection is the immutable REGISTERED+INPUTS_BOUND pair. No decision may reference a non-completed aggregate or unresolved member.
+
+**CLI Contract:** Local candidate evaluation is `biohub evaluate exact --ledger experiments/events.jsonl --evaluation-run-id <id> --truth-dir ... --manifest ... --scorer-lock ... --evaluation-policy ... --baseline-set <fold>=<dir> --candidate-set <fold>=<dir> --output-dir ...`. `evaluate_exact` has no missing-ledger or provisional fallback. The Kaggle kernel uses a separate `evaluate_pending_control(acceptance_request, ...)` entrypoint that requires a pre-issued request and reuses only pure manifest/graph/round-trip/scorer/statistic functions; its `PendingControlReport` is rejected by `validate_exact_report` and promotion. CPU lifecycle is exposed as `biohub cpu-acceptance register|start|reconcile|fail` behind `scripts/run-phase2-cpu-acceptance.ps1 -Execute`; local reconciliation issues the final exact core.
 
 **Context Window Strategy:** N/A — no generative model is invoked. Large graph data is streamed movie-by-movie; only compact sufficient statistics are retained in memory.
 
@@ -192,7 +230,7 @@ Invalid, non-finite, negative-count, or extra-field payloads fail before ledger 
 
 ### Async-First Design
 
-Not applicable: exact evaluation is local CPU-bound work over movie graphs. Deterministic sequential evaluation is preferred; optional process-level parallelism must sort results before aggregation and prove byte-identical output.
+Not applicable to scoring: exact evaluation is deterministic CPU-bound work over movie graphs. Local candidate evaluation resolves directly against the ledger; the one live Kaggle CPU control returns a pending envelope and is accepted only by a separate local reconciliation step. Optional process-level parallelism must sort results before aggregation and prove byte-identical output.
 
 ### Prompt Engineering Discipline
 
@@ -204,7 +242,7 @@ N/A — stream complete movies and avoid retaining volume arrays when graph stat
 
 ### Cost and Latency Budget
 
-Phase 2 consumes zero GPU hours. The full regression suite should finish in under 30 seconds on synthetic fixtures; a complete real OOF report should record CPU time and peak memory.
+Phase 2 consumes zero GPU hours. The full regression suite should finish in under 30 seconds on synthetic fixtures; the live official-data CPU control may run for hours below its watchdog and must record CPU time/peak memory without touching GPU quota fields.
 
 ---
 
@@ -219,6 +257,8 @@ Phase 2 consumes zero GPU hours. The full regression suite should finish in unde
 | Leakage safety | Manifest train/eval source sets are disjoint and identities complete | Code | Critical |
 | Round-trip fidelity | Direct GEFF and CSV↔GEFF reports are identical within declared exact tolerance | Code | Critical |
 | Coverage | Every expected complete movie appears exactly once with finite valid graphs | Code | Critical |
+| Evidence authority | Every sidecar resolves to an evidence-eligible terminal producer and every report to a completed aggregate member map | Code | Critical |
+| CPU reconciliation | A one-use request-bound remote envelope can complete only through local CPU/aggregate lifecycles; replay/hash drift fails | Code plus live control | Critical |
 | Generalization | Pooled and bilateral embryo deltas meet the versioned policy | Code | High |
 | Tail behavior | Worst-movie, density, displacement, node, and division diagnostics remain inside policy | Code plus targeted human review | High |
 | Reproducibility | Re-run with identical hashes produces canonical byte-identical report | Code | Critical |
@@ -231,7 +271,7 @@ Phase 2 consumes zero GPU hours. The full regression suite should finish in unde
 
 ```bash
 python -m pip install -e .
-python -m pytest -q tests/test_scorer.py tests/test_manifests.py tests/test_evaluation.py tests/test_promotion.py
+python -m pytest -q tests/test_scorer.py tests/test_manifests.py tests/test_graphs.py tests/test_evaluation.py tests/test_ledger.py tests/test_promotion.py tests/test_exact_cli.py
 ```
 
 **CI/CD Integration:**
@@ -258,6 +298,9 @@ python -m pytest -q && python -m compileall -q src tests
 |---|---|---|
 | Scorer provenance | Lock/source hash mismatch | Block evaluation |
 | Manifest leakage | Overlapping or unknown source identity | Block evaluation |
+| Prediction lineage | Unknown/nonterminal/ineligible producer, missing sidecar, registered lineage mismatch, terminal artifact/inventory mismatch, wrong fold, mixed producer, or membership mismatch | Block before graph loading/scoring |
+| Aggregate evaluation | Unknown/nonstarted run, missing/duplicated/swapped role/fold member, producer event-hash drift, failed run, or report attachment mismatch | Block report publication/promotion |
+| Remote CPU evidence | Missing/reused nonce, request/event mismatch, unexpected owned asset version, pending reconciliation, GPU/submission evidence, or output hash drift | Fail CPU/aggregate lifecycle; publish no accepted control artifact |
 | Graph integrity | Invalid time, non-finite coordinate, duplicate ID, malformed fork | Block candidate |
 | Complete coverage | Missing or extra movie | Block candidate |
 | Metric-hack policy | Known exploit signature or prohibited topology intent | Reject candidate |
@@ -276,9 +319,9 @@ python -m pytest -q && python -m compileall -q src tests
 
 ## 7. Production Monitoring
 
-**Tracing Tool:** Existing append-only JSONL experiment ledger and content-addressed exact reports; Arize Phoenix explicitly rejected as unnecessary/offline-incompatible for this deterministic non-LLM system.
+**Tracing Tool:** Existing append-only JSONL ledger extended with backward-compatible producer resolution, aggregate exact-evaluation events, and a distinct CPU acceptance lifecycle; content-addressed reports/envelopes reference the exact event hashes. Arize Phoenix remains unnecessary/offline-incompatible for this deterministic non-LLM system.
 
-**Key Metrics to Track:** scorer-lock hash, manifest hash, complete movie count, pooled/bilateral/worst-movie deltas, node recall/count penalty, edge/division TP/FP/FN, CPU runtime, and peak memory.
+**Key Metrics to Track:** scorer-lock hash, manifest hash, producer registration/terminal hashes, aggregate evaluation ID/status/member map, report attachment hash, CPU request/reconciliation hashes, complete movie count, pooled/bilateral/worst-movie deltas, node recall/count penalty, edge/division TP/FP/FN, CPU runtime, and peak memory. CPU events never alter GPU-hour/quota projections.
 
 **Alert Thresholds:** Any provenance/coverage/integrity failure blocks immediately. Promotion thresholds are loaded from the versioned policy; no silent fallback values exist.
 

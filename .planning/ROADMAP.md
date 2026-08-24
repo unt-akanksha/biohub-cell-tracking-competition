@@ -54,24 +54,37 @@ Plans:
 
 ### Phase 2: Exact Generalization Validation
 
-**Goal:** The competitor can decide whether a model generalizes using pinned official scoring, overlap-safe folds, and diagnostic decomposition.
+**Goal:** The competitor can decide whether a model generalizes using pinned official scoring, producer-bound overlap-safe folds, diagnostic decomposition, and a CPU-only control proven on mounted official data.
 **Mode:** mvp
 **Depends on:** Phase 1
 **Requirements:** VAL-01, VAL-02, VAL-03, VAL-04, VAL-05
 **Success Criteria** (what must be TRUE):
 
   1. The patched official scorer is pinned and regression tests detect the old division exploit, coordinate/penalty mistakes, aggregation errors, and CSV/GEFF drift.
-  2. Frozen leave-one-embryo-out manifests are hashed into runs and prevent overlapping source material from crossing the training/evaluation boundary.
-  3. A candidate receives one exact report with pooled, embryo, fold, worst-movie, node, edge, division, endpoint-availability, oracle-link, and conditional-link evidence.
-  4. Promotion is a deterministic policy decision whose inputs and any approved trade-off are persisted in the ledger.
+  2. Frozen leave-one-embryo-out manifests and reciprocal prediction-set claims resolve against evidence-eligible terminal producers in the immutable ledger, matching registered fold/train/calibration/evaluation/model/config/code/data and terminal inventory/artifact hashes without source overlap.
+  3. The exact evaluator produces pooled, embryo, fold, worst-movie, node, edge, division, endpoint-availability, oracle-link, conditional-link, and bootstrap evidence from native subvoxel graphs only after authoritative integer submission-space round trip.
+  4. Reciprocal multi-producer reports use a legal aggregate evaluation lifecycle and promotion is a deterministic decision whose completed report/member hashes and any approved trade-off are persisted in the ledger.
+  5. A separately registered CPU-only Kaggle acceptance run builds/verifies the production reciprocal manifest from mounted official data and returns a request-bound truth/self or controlled-reference report for both folds plus union; Phase 2 closes only after local ledger reconciliation legally completes the CPU producer and aggregate evaluation, with zero GPU use, no competition submission, and unchanged Phase 1 GPU accounting.
 
-**Plans:** 3 plans
+**Plans:** 4 plans
 
 Plans:
 
-- [ ] 02-01: Pin official baseline/metric and build scorer, topology, coordinate, and round-trip regression fixtures.
-- [ ] 02-02: Build overlap-aware embryo manifests and complete-movie evaluation runner.
-- [ ] 02-03: Add error decomposition, bootstrap/worst-case reporting, and executable promotion policy.
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Pin and prove the patched organizer scorer with lock-to-fixture and adversarial regressions.
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Build overlap-safe reciprocal manifests, ledger-resolved producer prediction sets, native/submission graph validation, and integer round trips.
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-03-PLAN.md — Produce aggregate-lifecycle exact reports, ledger-resolved multi-producer diagnostics, worst cases, and deterministic paired movie bootstrap.
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 02-04-PLAN.md — Enforce promotion/ledger policy and close Phase 2 through a distinct, locally reconciled CPU-only Kaggle control lifecycle.
 
 ### Phase 3: ZebraHub Affinity Promotion Gate
 
@@ -79,10 +92,11 @@ Plans:
 **Mode:** mvp
 **Depends on:** Phase 2
 **Requirements:** MODEL-01
+**Entry gate:** Phase 2's reconciled live official-data control proves the implementation/control lifecycle only. Before ZebraHub can be promoted or retired, Phase 3 must register and complete real evidence-eligible model producers, resolve every reciprocal sidecar against their ledger registration/terminal hashes, and complete a learned-candidate aggregate exact-evaluation report; the truth/self control and pending remote envelopes cannot satisfy this gate.
 **Success Criteria** (what must be TRUE):
 
   1. The three-seed `selective_ssm_medium` artifacts, manifests, hashes, and maturation evidence are imported without using public output as a training target.
-  2. Calibration is selected in both embryo directions and evaluated on complete competition graphs with the Phase 2 report.
+  2. Calibration is selected in both embryo directions, each prediction set resolves to its completed evidence-eligible producer/fold/train/calibration/evaluation/model/config/code/data/inventory/artifact ledger identities, and the real learned candidate completes an aggregate evaluation on complete competition graphs with the Phase 2 report.
   3. The candidate receives a reproducible promote/retire decision before any larger affinity pretraining or ensemble is attempted.
 
 **Plans:** 2 plans
@@ -144,7 +158,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Competition Control Plane | 3/3 | Complete   | 2026-08-23 |
-| 2. Exact Generalization Validation | 0/3 | Not started | - |
+| 2. Exact Generalization Validation | 0/4 | Not started | - |
 | 3. ZebraHub Affinity Promotion Gate | 0/2 | Not started | - |
 | 4. Strong Spatiotemporal Model | 0/4 | Not started | - |
 | 5. Offline Submission and Final Selection | 0/3 | Not started | - |
