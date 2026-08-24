@@ -66,13 +66,13 @@ Plans:
   4. Reciprocal multi-producer reports use a legal aggregate evaluation lifecycle and promotion is a deterministic decision whose completed report/member hashes and any approved trade-off are persisted in the ledger.
   5. A separately registered CPU-only Kaggle acceptance run builds/verifies the production reciprocal manifest from mounted official data and returns a request-bound truth/self or controlled-reference report for both folds plus union; Phase 2 closes only after local ledger reconciliation legally completes the CPU producer and aggregate evaluation, with zero GPU use, no competition submission, and unchanged Phase 1 GPU accounting.
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Pin and prove the patched organizer scorer with lock-to-fixture and adversarial regressions.
+- [x] 02-01-PLAN.md — Pin and prove the patched organizer scorer with lock-to-fixture and adversarial regressions.
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -158,7 +158,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Competition Control Plane | 3/3 | Complete   | 2026-08-23 |
-| 2. Exact Generalization Validation | 0/4 | Not started | - |
+| 2. Exact Generalization Validation | 1/4 | In Progress|  |
 | 3. ZebraHub Affinity Promotion Gate | 0/2 | Not started | - |
 | 4. Strong Spatiotemporal Model | 0/4 | Not started | - |
 | 5. Offline Submission and Final Selection | 0/3 | Not started | - |
