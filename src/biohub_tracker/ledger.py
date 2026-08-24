@@ -41,6 +41,7 @@ class EventType(StrEnum):
     REJECTED = "rejected"
     DECISION = "decision"
     AMENDMENT = "amendment"
+    GUARD_DECISION = "guard_decision"
 
 
 class RunStatus(StrEnum):
@@ -113,6 +114,7 @@ class RunState:
     decision: str | None = None
     decision_evidence: list[str] = field(default_factory=list)
     amendments: list[dict[str, Any]] = field(default_factory=list)
+    guard_decisions: list[dict[str, Any]] = field(default_factory=list)
 
 
 def _iso_utc(value: datetime) -> str:
@@ -201,12 +203,13 @@ def git_state(workspace_root: Path) -> dict[str, Any]:
 def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
     precedence = {
         EventType.REGISTERED: 0,
-        EventType.STARTED: 1,
-        EventType.COMPLETED: 2,
-        EventType.FAILED: 2,
-        EventType.REJECTED: 2,
-        EventType.DECISION: 3,
-        EventType.AMENDMENT: 4,
+        EventType.GUARD_DECISION: 1,
+        EventType.STARTED: 2,
+        EventType.COMPLETED: 3,
+        EventType.FAILED: 3,
+        EventType.REJECTED: 3,
+        EventType.DECISION: 4,
+        EventType.AMENDMENT: 5,
     }
     return (_parse_time(event.created_at), precedence[event.event_type], event.event_id)
 
@@ -251,6 +254,8 @@ def reconstruct_runs(events: Iterable[ExperimentEvent]) -> dict[str, RunState]:
                 if event.payload.get("target_event_id") not in seen_event_ids:
                     raise TransitionError(f"run {run_id} amendment targets a later or unknown event")
                 state.amendments.append(dict(event.payload))
+            elif event.event_type is EventType.GUARD_DECISION:
+                state.guard_decisions.append(dict(event.payload))
             seen_event_ids.add(event.event_id)
         runs[run_id] = state
     for state in runs.values():
@@ -311,6 +316,13 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
         _bounded_text(event.payload.get("correction_reason"), "correction reason", 1000)
         if not isinstance(event.payload.get("replacement_fields"), Mapping):
             raise TransitionError("amendment replacement_fields must be an object")
+    if event.event_type is EventType.GUARD_DECISION:
+        if existing.status is not RunStatus.REGISTERED:
+            raise TransitionError(
+                f"run {event.run_id} cannot receive launch authorization from {existing.status}"
+            )
+        if not isinstance(event.payload.get("reason_codes"), list):
+            raise TransitionError("guard decision requires reason_codes")
 
 
 class _ExclusiveLock:

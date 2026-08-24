@@ -7,6 +7,9 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Sequence
 
+from .guard import GuardInputError, evaluate_guard, list_active_gpu_kernels, read_gpu_quota
+from .kaggle import FixtureRunner, KaggleRunner
+
 from .ledger import (
     EventType,
     ExperimentEvent,
@@ -21,6 +24,7 @@ from .ledger import (
     git_state,
     rejected_payload,
     registration_payload,
+    reconstruct_runs,
     start_payload,
 )
 from .progress import render_progress_json, render_progress_markdown, write_progress_reports
@@ -130,6 +134,13 @@ def build_parser() -> argparse.ArgumentParser:
     amend.add_argument("--replacement", required=True)
     progress = subparsers.add_parser("progress", help="render immutable experiment lineage")
     progress.add_argument("--json", action="store_true", dest="json_output")
+    guard = subparsers.add_parser("guard", help="evaluate quota-safe Kaggle launch eligibility")
+    guard.add_argument("--run-id", required=True)
+    guard.add_argument("--max-runtime-hours", required=True)
+    guard_source = guard.add_mutually_exclusive_group()
+    guard_source.add_argument("--live", action="store_true", help="read authenticated Kaggle state")
+    guard_source.add_argument("--fixture-dir", type=Path, help="read deterministic fixtures")
+    guard.add_argument("--json", action="store_true", dest="json_output")
     return parser
 
 
@@ -283,6 +294,37 @@ def _main(argv: Sequence[str] | None = None) -> int:
             print(render_progress_markdown(events))
             print(f"\nReport: {markdown_path}")
         return 0
+    if args.command == "guard":
+        config = _load_config(root / "config" / "competition.json")
+        ledger = Ledger(root / "experiments" / "events.jsonl", root)
+        runs = reconstruct_runs(ledger.read_events())
+        state = runs.get(args.run_id)
+        fixture_dir = args.fixture_dir or (root / "tests" / "fixtures" / "kaggle")
+        runner = KaggleRunner() if args.live else FixtureRunner(fixture_dir)
+        quota = None
+        active = []
+        input_error = None
+        try:
+            quota = read_gpu_quota(runner)
+            active = list_active_gpu_kernels(runner, config["slug"])
+        except GuardInputError as exc:
+            input_error = exc.reason_code
+        decision = evaluate_guard(
+            run_id=args.run_id,
+            registered_status=state.status if state else None,
+            declared_max_runtime=args.max_runtime_hours,
+            quota=quota,
+            active_kernels=active,
+            reserve=config["gpu_reserve_hours"],
+            notebook_maximum=config["notebook_runtime_limit_hours"],
+            input_error_code=input_error,
+        )
+        if state:
+            ledger.append(
+                ExperimentEvent.create(args.run_id, EventType.GUARD_DECISION, decision.to_dict())
+            )
+        print(json.dumps(decision.to_dict(), indent=2 if args.json_output else None, sort_keys=True))
+        return 0 if decision.authorized else 2
     parser.error(f"unknown command: {args.command}")
     return 2
 
@@ -290,6 +332,6 @@ def _main(argv: Sequence[str] | None = None) -> int:
 def main(argv: Sequence[str] | None = None) -> int:
     try:
         return _main(argv)
-    except (LedgerError, OSError, ValueError, json.JSONDecodeError) as exc:
+    except (GuardInputError, LedgerError, OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

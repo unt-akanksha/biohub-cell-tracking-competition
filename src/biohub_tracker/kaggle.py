@@ -74,6 +74,15 @@ class KaggleRunner:
             detail = redact_diagnostic(completed.stderr)
             raise KaggleCommandError(f"Kaggle returned invalid JSON: {detail}") from exc
 
+    def kernel_status(self, ref: str) -> str:
+        if not _KERNEL_REF.fullmatch(ref):
+            raise ValueError(f"invalid Kaggle kernel reference: {ref!r}")
+        completed = self.run(["kernels", "status", ref])
+        match = re.search(r'has status\s+"(?:KernelWorkerStatus\.)?([A-Za-z_]+)"', completed.stdout)
+        if not match:
+            raise KaggleCommandError("Kaggle kernel status output was ambiguous")
+        return match.group(1).upper()
+
     def pull_kernel_source(self, ref: str, cache_root: Path) -> Path:
         if not _KERNEL_REF.fullmatch(ref):
             raise ValueError(f"invalid Kaggle kernel reference: {ref!r}")
@@ -129,6 +138,16 @@ class FixtureRunner:
         path = self.fixture_dir / f"{name}.json"
         with path.open("r", encoding="utf-8") as handle:
             return json.load(handle)
+
+    def kernel_status(self, ref: str) -> str:
+        if not _KERNEL_REF.fullmatch(ref):
+            raise ValueError(f"invalid Kaggle kernel reference: {ref!r}")
+        path = self.fixture_dir / "kernel_status.json"
+        with path.open("r", encoding="utf-8") as handle:
+            values = json.load(handle)
+        if not isinstance(values, dict) or ref not in values:
+            raise KaggleCommandError(f"fixture has no kernel status for {ref}")
+        return str(values[ref]).removeprefix("KernelWorkerStatus.").upper()
 
 
 def fixture_name(args: Sequence[str]) -> str:
