@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 2
 current_phase_name: Exact Generalization Validation
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-08-24T07:06:08.456Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-08-24T07:46:41.693Z"
 last_activity: 2026-08-24
 last_activity_desc: Phase 2 execution started
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-08-23)
 ## Current Position
 
 Phase: 2 (Exact Generalization Validation) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-08-24 — Phase 2 execution started
 
@@ -61,6 +61,7 @@ Progress: [██████░░░░] 57%
 | Phase 01 P02 | 17 min | 3 tasks | 9 files |
 | Phase 01 P03 | 22 min | 3 tasks | 14 files |
 | Phase 02 P01 | 42min | 3 tasks | 13 files |
+| Phase 02 P02 | 35m | 3 tasks | 16 files |
 
 ## Competition Snapshot
 
@@ -84,6 +85,8 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 02]: Only the pinned patched organizer and TracksData checkouts may expose production scorer callables after source, environment, fixture, and module-path verification.
 - [Phase 02]: Represent the official no-division aggregate with null division Jaccard while rejecting every other required non-finite metric.
 - [Phase 02]: Keep pre-patch scorer execution isolated to a temporary regression archive with no production selector.
+- [Phase 02]: Prediction sidecars remain hostile until exact registration and completed evidence-eligible terminal hashes resolve in the immutable ledger. — Prevents self-asserted, stale, mixed, or legacy prediction outputs from entering exact scoring.
+- [Phase 02]: Only integer CSV-rebuilt GEFF graphs are authoritative for promotion; native subvoxel graphs are diagnostic. — Pins rounding once and proves semantic plus official-count parity after fresh node-ID assignment.
 
 ### Pending Todos
 
@@ -94,6 +97,7 @@ None yet.
 - Kaggle quota is time-varying and must be re-read immediately before any launch.
 - The workspace does not yet contain the pinned official baseline or prior experiment source; Phase 2 must materialize reproducible inputs.
 - Several prior Kaggle jobs failed late from OOM or output coverage, motivating mandatory preflights.
+- Phase 2 cannot close until Plan 02-04 completes and locally reconciles the CPU-only Kaggle official-data acceptance control; fixture evidence is insufficient.
 
 ## Deferred Items
 
@@ -105,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-24T07:06:08.414Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-08-24T07:44:44.276Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
