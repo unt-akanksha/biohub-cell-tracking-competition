@@ -262,16 +262,40 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
         raise TransitionError(f"unknown run ID: {event.run_id}")
     if event.event_type is EventType.STARTED and existing.status is not RunStatus.REGISTERED:
         raise TransitionError(f"run {event.run_id} cannot start from {existing.status}")
+    if event.event_type is EventType.STARTED:
+        _bounded_text(event.payload.get("kaggle_ref"), "kaggle ref", 240)
+        _bounded_text(event.payload.get("authorization_id"), "authorization ID", 240)
+        decimal_text(event.payload.get("quota_before_hours"), "quota before")
     if event.event_type in {EventType.COMPLETED, EventType.FAILED, EventType.REJECTED}:
         if existing.status is not RunStatus.RUNNING:
             raise TransitionError(f"run {event.run_id} cannot finish from {existing.status}")
+        decimal_text(event.payload.get("actual_runtime_hours"), "actual runtime", positive=True)
+        decimal_text(event.payload.get("quota_after_hours"), "quota after")
+        if event.event_type is EventType.COMPLETED:
+            validate_complete_metrics(event.payload.get("metrics"))
+        elif event.event_type is EventType.FAILED:
+            _bounded_text(event.payload.get("failure_reason"), "failure reason", 2000)
+        else:
+            _bounded_text(event.payload.get("failed_gate"), "failed gate", 500)
+            _bounded_text(event.payload.get("reason"), "rejection reason", 2000)
     if event.event_type is EventType.DECISION:
         if existing.status not in {RunStatus.COMPLETED, RunStatus.FAILED, RunStatus.REJECTED}:
             raise TransitionError(f"run {event.run_id} cannot be decided from {existing.status}")
+        decision = str(event.payload.get("decision"))
+        if decision not in {"promote", "retain", "retire", "inconclusive"}:
+            raise TransitionError(f"invalid decision: {decision}")
+        evidence = event.payload.get("evidence")
+        if not isinstance(evidence, list) or not evidence:
+            raise TransitionError("decision requires evidence references")
+        if decision == "promote" and all(_is_public_only_evidence(item) for item in evidence):
+            raise TransitionError("promotion requires non-public-score evidence")
     if event.event_type is EventType.AMENDMENT:
         target = event.payload.get("target_event_id")
         if not any(candidate.event_id == target for candidate in existing.events):
             raise TransitionError(f"unknown amendment target: {target}")
+        _bounded_text(event.payload.get("correction_reason"), "correction reason", 1000)
+        if not isinstance(event.payload.get("replacement_fields"), Mapping):
+            raise TransitionError("amendment replacement_fields must be an object")
 
 
 class _ExclusiveLock:
@@ -441,3 +465,133 @@ def registration_payload(
         "authorized_for_submission": False,
     }
     return payload
+
+
+def normalize_exact_values(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        return {str(key): normalize_exact_values(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [normalize_exact_values(item) for item in value]
+    if isinstance(value, Decimal):
+        return format(value, "f")
+    if isinstance(value, float):
+        return format(Decimal(str(value)), "f")
+    return value
+
+
+def validate_complete_metrics(metrics: Any) -> dict[str, Any]:
+    if not isinstance(metrics, Mapping):
+        raise ValueError("completed experiment requires a metrics object")
+    pooled = metrics.get("pooled")
+    required_pooled = {
+        "adjusted_edge_jaccard",
+        "edge_jaccard",
+        "division_jaccard",
+        "node_recall",
+    }
+    if not isinstance(pooled, Mapping) or not required_pooled <= pooled.keys():
+        raise ValueError(f"metrics.pooled requires {sorted(required_pooled)}")
+    counts = metrics.get("division_counts")
+    if not isinstance(counts, Mapping) or not {"tp", "fp", "fn"} <= counts.keys():
+        raise ValueError("metrics.division_counts requires tp, fp, and fn")
+    for key in ("by_embryo", "by_fold"):
+        if not isinstance(metrics.get(key), Mapping):
+            raise ValueError(f"metrics.{key} must be an object")
+    if "worst_movie_delta" not in metrics:
+        raise ValueError("metrics.worst_movie_delta is required")
+    return normalize_exact_values(metrics)
+
+
+def start_payload(
+    *, kaggle_ref: str, authorization_id: str, quota_before_hours: Any
+) -> dict[str, Any]:
+    return {
+        "kaggle_ref": _bounded_text(kaggle_ref, "kaggle ref", 240),
+        "authorization_id": _bounded_text(authorization_id, "authorization ID", 240),
+        "quota_before_hours": decimal_text(quota_before_hours, "quota before"),
+    }
+
+
+def completed_payload(
+    *,
+    actual_runtime_hours: Any,
+    quota_after_hours: Any,
+    metrics: Mapping[str, Any],
+    artifacts: Sequence[Mapping[str, Any]] = (),
+    reports: Sequence[Mapping[str, Any]] = (),
+    public_score: Any | None = None,
+) -> dict[str, Any]:
+    return {
+        "actual_runtime_hours": decimal_text(
+            actual_runtime_hours, "actual runtime", positive=True
+        ),
+        "quota_after_hours": decimal_text(quota_after_hours, "quota after"),
+        "metrics": validate_complete_metrics(metrics),
+        "artifacts": [dict(item) for item in artifacts],
+        "reports": [dict(item) for item in reports],
+        "public_score": decimal_text(public_score, "public score") if public_score is not None else None,
+        "authorized_for_submission": False,
+    }
+
+
+def failed_payload(
+    *,
+    actual_runtime_hours: Any,
+    quota_after_hours: Any,
+    failure_reason: str,
+    traceback_artifact: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "actual_runtime_hours": decimal_text(
+            actual_runtime_hours, "actual runtime", positive=True
+        ),
+        "quota_after_hours": decimal_text(quota_after_hours, "quota after"),
+        "failure_reason": _bounded_text(failure_reason, "failure reason", 2000),
+        "traceback_artifact": dict(traceback_artifact) if traceback_artifact else None,
+        "authorized_for_submission": False,
+    }
+
+
+def rejected_payload(
+    *,
+    actual_runtime_hours: Any,
+    quota_after_hours: Any,
+    failed_gate: str,
+    reason: str,
+) -> dict[str, Any]:
+    return {
+        "actual_runtime_hours": decimal_text(
+            actual_runtime_hours, "actual runtime", positive=True
+        ),
+        "quota_after_hours": decimal_text(quota_after_hours, "quota after"),
+        "failed_gate": _bounded_text(failed_gate, "failed gate", 500),
+        "reason": _bounded_text(reason, "rejection reason", 2000),
+        "authorized_for_submission": False,
+    }
+
+
+def _is_public_only_evidence(value: Any) -> bool:
+    normalized = str(value).casefold().replace("-", "_")
+    return normalized.startswith("public") or "leaderboard" in normalized
+
+
+def decision_payload(decision: str, evidence: Sequence[str]) -> dict[str, Any]:
+    normalized = str(decision).casefold()
+    if normalized not in {"promote", "retain", "retire", "inconclusive"}:
+        raise ValueError(f"invalid decision: {decision}")
+    references = [_bounded_text(item, "evidence reference", 500) for item in evidence]
+    if not references:
+        raise ValueError("decision requires at least one evidence reference")
+    if normalized == "promote" and all(_is_public_only_evidence(item) for item in references):
+        raise ValueError("promotion requires non-public-score evidence")
+    return {"decision": normalized, "evidence": references}
+
+
+def amendment_payload(
+    *, target_event_id: str, correction_reason: str, replacement_fields: Mapping[str, Any]
+) -> dict[str, Any]:
+    return {
+        "target_event_id": _bounded_text(target_event_id, "target event ID", 160),
+        "correction_reason": _bounded_text(correction_reason, "correction reason", 1000),
+        "replacement_fields": normalize_exact_values(dict(replacement_fields)),
+    }

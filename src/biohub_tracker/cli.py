@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from decimal import Decimal
 from pathlib import Path
 from typing import Sequence
 
@@ -11,10 +12,16 @@ from .ledger import (
     ExperimentEvent,
     Ledger,
     LedgerError,
+    amendment_payload,
     artifact_record,
+    completed_payload,
+    decision_payload,
+    failed_payload,
     generate_run_id,
     git_state,
+    rejected_payload,
     registration_payload,
+    start_payload,
 )
 from .watch import collect_snapshot, persist_snapshot, status_line, write_status_reports
 
@@ -28,7 +35,7 @@ def _json_value(value: str | None) -> dict:
     if value is None:
         return {}
     candidate = Path(value)
-    if candidate.is_file():
+    if not value.lstrip().startswith("{") and candidate.is_file():
         with candidate.open("r", encoding="utf-8") as handle:
             parsed = json.load(handle)
     else:
@@ -36,6 +43,18 @@ def _json_value(value: str | None) -> dict:
     if not isinstance(parsed, dict):
         raise ValueError("configuration must be a JSON object")
     return parsed
+
+
+def _load_metrics(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as handle:
+        value = json.load(handle, parse_float=Decimal)
+    if not isinstance(value, dict):
+        raise ValueError("metrics report must be a JSON object")
+    return value
+
+
+def _artifact_records(root: Path, paths: Sequence[Path] | None) -> list[dict[str, str]]:
+    return [artifact_record(root, path) for path in (paths or [])]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -70,6 +89,44 @@ def build_parser() -> argparse.ArgumentParser:
     register.add_argument("--model-sha256")
     repair = experiment_commands.add_parser("repair", help="acknowledge a quarantined tail")
     repair.add_argument("--reason", required=True)
+    start = experiment_commands.add_parser("start", help="record a launched experiment")
+    start.add_argument("run_id")
+    start.add_argument("--kaggle-ref", required=True)
+    start.add_argument("--authorization-id", required=True)
+    start.add_argument("--quota-before-hours", required=True)
+    finish = experiment_commands.add_parser("finish", help="record a completed experiment")
+    finish.add_argument("run_id")
+    finish.add_argument("--actual-runtime-hours", required=True)
+    finish.add_argument("--quota-after-hours", required=True)
+    finish.add_argument("--metrics-report", type=Path, required=True)
+    finish.add_argument("--artifact", type=Path, action="append", default=[])
+    finish.add_argument("--report", type=Path, action="append", default=[])
+    finish.add_argument("--public-score")
+    fail = experiment_commands.add_parser("fail", help="record an experiment failure")
+    fail.add_argument("run_id")
+    fail.add_argument("--actual-runtime-hours", required=True)
+    fail.add_argument("--quota-after-hours", required=True)
+    fail.add_argument("--reason", required=True)
+    fail.add_argument("--traceback", type=Path)
+    reject = experiment_commands.add_parser("reject", help="record a failed experiment gate")
+    reject.add_argument("run_id")
+    reject.add_argument("--actual-runtime-hours", required=True)
+    reject.add_argument("--quota-after-hours", required=True)
+    reject.add_argument("--gate", required=True)
+    reject.add_argument("--reason", required=True)
+    decide = experiment_commands.add_parser("decide", help="record a promotion decision")
+    decide.add_argument("run_id")
+    decide.add_argument(
+        "--decision",
+        choices=["promote", "retain", "retire", "inconclusive"],
+        required=True,
+    )
+    decide.add_argument("--evidence", action="append", required=True)
+    amend = experiment_commands.add_parser("amend", help="append a correction without mutation")
+    amend.add_argument("run_id")
+    amend.add_argument("--target-event-id", required=True)
+    amend.add_argument("--reason", required=True)
+    amend.add_argument("--replacement", required=True)
     return parser
 
 
@@ -127,6 +184,92 @@ def _main(argv: Sequence[str] | None = None) -> int:
         if args.experiment_command == "repair":
             print(ledger.repair_truncated(args.reason))
             return 0
+        if args.experiment_command == "start":
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.STARTED,
+                start_payload(
+                    kaggle_ref=args.kaggle_ref,
+                    authorization_id=args.authorization_id,
+                    quota_before_hours=args.quota_before_hours,
+                ),
+            )
+        elif args.experiment_command == "finish":
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.COMPLETED,
+                completed_payload(
+                    actual_runtime_hours=args.actual_runtime_hours,
+                    quota_after_hours=args.quota_after_hours,
+                    metrics=_load_metrics(args.metrics_report),
+                    artifacts=_artifact_records(root, args.artifact),
+                    reports=_artifact_records(root, args.report),
+                    public_score=args.public_score,
+                ),
+            )
+        elif args.experiment_command == "fail":
+            traceback_artifact = artifact_record(root, args.traceback) if args.traceback else None
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.FAILED,
+                failed_payload(
+                    actual_runtime_hours=args.actual_runtime_hours,
+                    quota_after_hours=args.quota_after_hours,
+                    failure_reason=args.reason,
+                    traceback_artifact=traceback_artifact,
+                ),
+            )
+        elif args.experiment_command == "reject":
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.REJECTED,
+                rejected_payload(
+                    actual_runtime_hours=args.actual_runtime_hours,
+                    quota_after_hours=args.quota_after_hours,
+                    failed_gate=args.gate,
+                    reason=args.reason,
+                ),
+            )
+        elif args.experiment_command == "decide":
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.DECISION,
+                decision_payload(args.decision, args.evidence),
+            )
+        elif args.experiment_command == "amend":
+            replacement = _json_value(args.replacement)
+            target = next(
+                (
+                    candidate
+                    for candidate in ledger.read_events()
+                    if candidate.event_id == args.target_event_id and candidate.run_id == args.run_id
+                ),
+                None,
+            )
+            if target is None:
+                raise ValueError("amendment target was not found for this run")
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.AMENDMENT,
+                amendment_payload(
+                    target_event_id=args.target_event_id,
+                    correction_reason=args.reason,
+                    replacement_fields=replacement,
+                ),
+            )
+            ledger.append(event)
+            print(
+                json.dumps(
+                    {"original": target.payload, "corrected": replacement, "event_id": event.event_id},
+                    sort_keys=True,
+                )
+            )
+            return 0
+        else:
+            parser.error(f"unknown experiment command: {args.experiment_command}")
+        ledger.append(event)
+        print(event.event_id)
+        return 0
     parser.error(f"unknown command: {args.command}")
     return 2
 

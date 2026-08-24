@@ -13,9 +13,16 @@ from biohub_tracker.ledger import (
     Ledger,
     LedgerCorruptionError,
     LedgerLockTimeout,
+    RunStatus,
     TransitionError,
+    amendment_payload,
     artifact_record,
+    completed_payload,
+    decision_payload,
+    failed_payload,
+    reconstruct_runs,
     registration_payload,
+    start_payload,
 )
 
 
@@ -140,3 +147,217 @@ def test_concurrent_append_has_complete_json_lines(tmp_path):
     assert not errors
     assert len(ledger.read_events()) == 2
     assert all(json.loads(line) for line in ledger.path.read_text().splitlines())
+
+
+def complete_metrics():
+    return {
+        "pooled": {
+            "adjusted_edge_jaccard": 0.91,
+            "edge_jaccard": 0.90,
+            "division_jaccard": 0.10,
+            "node_recall": 0.95,
+        },
+        "division_counts": {"tp": 2, "fp": 1, "fn": 3},
+        "by_embryo": {"44b6": {"score": 0.90}, "6bba": {"score": 0.92}},
+        "by_fold": {"fold-44b6": {"score": 0.90}},
+        "worst_movie_delta": -0.01,
+    }
+
+
+def register_and_start(ledger, run_id="run-a"):
+    ledger.append(ExperimentEvent.create(run_id, EventType.REGISTERED, payload()))
+    ledger.append(
+        ExperimentEvent.create(
+            run_id,
+            EventType.STARTED,
+            start_payload(
+                kaggle_ref="owner/kernel",
+                authorization_id="auth-1",
+                quota_before_hours="30",
+            ),
+        )
+    )
+
+
+def test_lifecycle_reconstructs_terminal_and_decision(tmp_path):
+    ledger = make_ledger(tmp_path)
+    register_and_start(ledger)
+    ledger.append(
+        ExperimentEvent.create(
+            "run-a",
+            EventType.COMPLETED,
+            completed_payload(
+                actual_runtime_hours="1.25",
+                quota_after_hours="28.75",
+                metrics=complete_metrics(),
+            ),
+        )
+    )
+    ledger.append(
+        ExperimentEvent.create(
+            "run-a",
+            EventType.DECISION,
+            decision_payload("retain", ["exact_oof:report.json"]),
+        )
+    )
+    state = reconstruct_runs(ledger.read_events())["run-a"]
+    assert state.status is RunStatus.COMPLETED
+    assert state.decision == "retain"
+    assert state.terminal["metrics"]["pooled"]["adjusted_edge_jaccard"] == "0.91"
+
+
+def test_lifecycle_illegal_transition_and_missing_failure_reason_do_not_append(tmp_path):
+    ledger = make_ledger(tmp_path)
+    ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
+    original = ledger.path.read_bytes()
+    with pytest.raises(TransitionError):
+        ledger.append(
+            ExperimentEvent.create(
+                "run-a",
+                EventType.COMPLETED,
+                completed_payload(
+                    actual_runtime_hours="1", quota_after_hours="29", metrics=complete_metrics()
+                ),
+            )
+        )
+    with pytest.raises(ValueError):
+        failed_payload(actual_runtime_hours="1", quota_after_hours="29", failure_reason="")
+    assert ledger.path.read_bytes() == original
+
+
+def test_hash_missing_artifact_and_mismatch_fail_before_append(tmp_path):
+    ledger = make_ledger(tmp_path)
+    register_and_start(ledger)
+    original = ledger.path.read_bytes()
+    with pytest.raises(ValueError):
+        artifact_record(tmp_path, "missing.pt")
+    artifact = tmp_path / "model.pt"
+    artifact.write_bytes(b"weights")
+    with pytest.raises(ValueError):
+        artifact_record(tmp_path, artifact, expected_sha256="f" * 64)
+    assert ledger.path.read_bytes() == original
+
+
+def test_promote_rejects_public_only_evidence_without_append(tmp_path):
+    ledger = make_ledger(tmp_path)
+    register_and_start(ledger)
+    ledger.append(
+        ExperimentEvent.create(
+            "run-a",
+            EventType.COMPLETED,
+            completed_payload(
+                actual_runtime_hours="1", quota_after_hours="29", metrics=complete_metrics()
+            ),
+        )
+    )
+    original = ledger.path.read_bytes()
+    with pytest.raises(ValueError):
+        decision_payload("promote", ["public_score:0.920", "leaderboard:rank-10"])
+    assert ledger.path.read_bytes() == original
+
+
+def test_amendment_preserves_original_line_and_records_both_values(tmp_path):
+    ledger = make_ledger(tmp_path)
+    registered = ExperimentEvent.create("run-a", EventType.REGISTERED, payload())
+    ledger.append(registered)
+    original_line = ledger.path.read_bytes()
+    amendment = ExperimentEvent.create(
+        "run-a",
+        EventType.AMENDMENT,
+        amendment_payload(
+            target_event_id=registered.event_id,
+            correction_reason="split label typo",
+            replacement_fields={"split": "leave-one-embryo-out"},
+        ),
+    )
+    ledger.append(amendment)
+    assert ledger.path.read_bytes().startswith(original_line)
+    state = reconstruct_runs(ledger.read_events())["run-a"]
+    assert state.registered["split"] == "embryo-held-out"
+    assert state.amendments[0]["replacement_fields"]["split"] == "leave-one-embryo-out"
+
+
+def test_lifecycle_cli_and_amendment_output(tmp_path, capsys):
+    metrics_path = tmp_path / "metrics.json"
+    metrics_path.write_text(json.dumps(complete_metrics()), encoding="utf-8")
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "experiment",
+            "register",
+            "--run-id",
+            "cli-run",
+            "--hypothesis",
+            "CLI lifecycle",
+            "--max-runtime-hours",
+            "2",
+        ]
+    ) == 0
+    registration = make_ledger(tmp_path).read_events()[0]
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "experiment",
+            "start",
+            "cli-run",
+            "--kaggle-ref",
+            "owner/kernel",
+            "--authorization-id",
+            "auth-1",
+            "--quota-before-hours",
+            "30",
+        ]
+    ) == 0
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "experiment",
+            "finish",
+            "cli-run",
+            "--actual-runtime-hours",
+            "1.5",
+            "--quota-after-hours",
+            "28.5",
+            "--metrics-report",
+            str(metrics_path),
+            "--report",
+            str(metrics_path),
+        ]
+    ) == 0
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "experiment",
+            "decide",
+            "cli-run",
+            "--decision",
+            "retain",
+            "--evidence",
+            "exact_oof:metrics.json",
+        ]
+    ) == 0
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "experiment",
+            "amend",
+            "cli-run",
+            "--target-event-id",
+            registration.event_id,
+            "--reason",
+            "correct split",
+            "--replacement",
+            '{"split":"leave-one-embryo-out"}',
+        ]
+    ) == 0
+    output = capsys.readouterr().out
+    assert '"original"' in output and '"corrected"' in output
+    state = reconstruct_runs(make_ledger(tmp_path).read_events())["cli-run"]
+    assert state.status is RunStatus.COMPLETED
+    assert state.decision == "retain"
+    assert len(state.events) == 5
