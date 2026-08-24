@@ -16,13 +16,13 @@ Reliably improve the clean, private-test-generalizable Biohub tracking score wit
 
 - ✓ Kaggle CLI authentication can read competition metadata, submissions, leaderboard state, notebooks, discussions, logs, outputs, and current accelerator quota — live audit on 2026-08-23
 - ✓ The official patched scorer and complete-movie OOF evaluation are available in the existing Kaggle experiment lineage — prior experiment outputs
-- ✓ The current clean submission baseline is approximately 0.913 public score, with 59 submissions and public rank 747 at the audit snapshot — Kaggle CLI snapshot on 2026-08-23
+- ✓ The current clean submission baseline is approximately 0.913 public score, with 59 submissions and public rank 751 at the latest audit snapshot — Kaggle CLI snapshot on 2026-08-23
+- ✓ A reproducible competition watch refreshes rules, deadlines, discussions, submissions, full leaderboard state, notebook-source provenance, official-page fingerprints, and GPU quota — Phase 1
+- ✓ An append-only experiment ledger preserves hashes, lineage, resource declarations, evidence, failures, amendments, and promotion decisions — Phase 1
+- ✓ A fail-closed Kaggle launch path requires fresh live quota and active-run evidence, enforces the 8-hour reserve, binds preflights, and consumes single-use launch authorization atomically — Phase 1
 
 ### Active
 
-- [ ] Maintain a reproducible competition watch that refreshes rules, deadlines, discussions, submissions, leaderboard state, notebook source provenance, and GPU quota
-- [ ] Maintain an append-only experiment ledger with code/data/model hashes, resource use, full-movie metrics, per-embryo metrics, failure modes, and promotion decisions
-- [ ] Enforce a fail-closed Kaggle GPU guard that reserves at least 8 hours under worst-case projected runtime
 - [ ] Establish leakage-resistant, leave-one-embryo-out validation using the patched official scorer on complete movies
 - [ ] Finish reciprocal calibration and exact complete-graph OOF evaluation of the ZebraHub selective-SSM lineage-affinity model
 - [ ] Train a mixed-precision spatiotemporal detector and association model that improves node selection, ordinary links, and division topology beyond the public checkpoint family
@@ -78,14 +78,14 @@ The main modeling hypothesis is that a stronger but throughput-conscious spatiot
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Use clean post-patch evidence only | Stale notebook scores and the former division loophole distort apparent progress | — Pending |
-| Reserve the final 8 Kaggle GPU hours | The user will provide a cloud GPU after this threshold, so Kaggle must fail closed before it | — Pending |
+| Use clean post-patch evidence only | Stale notebook scores and the former division loophole distort apparent progress | ✓ Implemented in Phase 1 provenance policy and watch report |
+| Reserve the final 8 Kaggle GPU hours | The user will provide a cloud GPU after this threshold, so Kaggle must fail closed before it | ✓ Implemented in Phase 1 guard and launch authorization |
 | Validate by held-out embryo and complete movie | Random edges and overlapping source clips create optimistic validation | — Pending |
 | Improve detection and learned affinity before adding more graph patches | Current post-processing gains are small and forum evidence identifies node selection as a major ceiling | — Pending |
 | Advance ZebraHub selective-SSM to reciprocal exact-graph calibration | It is the strongest unfinished prior lead with all maturation gates passed | — Pending |
 | Train in mixed precision with cached/chunk-aware data loading | Prior Kaggle T4 training and long inference runs were too slow or failed late | — Pending |
-| Use vertical MVP phases | Each phase must leave a working, auditable competition capability rather than an isolated technical layer | — Pending |
-| Execute GPU work sequentially | A single quota and strict reserve are easier to protect with one active accelerator job | — Pending |
+| Use vertical MVP phases | Each phase must leave a working, auditable competition capability rather than an isolated technical layer | ✓ Phase 1 delivered and verified as a usable control plane |
+| Execute GPU work sequentially | A single quota and strict reserve are easier to protect with one active accelerator job | ✓ Enforced by the Phase 1 active-run guard |
 
 ## Evolution
 
@@ -105,4 +105,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-23 after initialization and live Kaggle audit*
+*Last updated: 2026-08-23 after Phase 1 verification and live Kaggle audit*
