@@ -8,11 +8,13 @@ from typing import Any, Mapping, Sequence
 
 from .io import canonical_json_bytes, sha256_bytes
 from .ledger import (
+    CpuAcceptanceStatus,
     EventType,
     Ledger,
     RunStatus,
     event_sha256,
     reconstruct_runs,
+    reconstruct_cpu_acceptances,
     validate_producer_registration_evidence,
     validate_producer_terminal_evidence,
 )
@@ -173,6 +175,7 @@ class ResolvedProducer:
     terminal: Mapping[str, Any]
     registration_event_sha256: str
     terminal_event_sha256: str
+    input_binding_event_sha256: str | None = None
 
 
 def load_prediction_set(path: str | Path) -> PredictionSetClaim:
@@ -199,7 +202,67 @@ def resolve_producer(
     runs = reconstruct_runs(events)
     state = runs.get(claim.producer_run_id)
     if state is None:
-        _fail("UNKNOWN_PRODUCER", claim.producer_run_id)
+        controls = reconstruct_cpu_acceptances(events)
+        control = controls.get(claim.producer_run_id)
+        if control is None:
+            _fail("UNKNOWN_PRODUCER", claim.producer_run_id)
+        if control.status is not CpuAcceptanceStatus.COMPLETED or control.terminal is None:
+            _fail("NONTERMINAL_PRODUCER", claim.producer_run_id)
+        if control.inputs_bound is None:
+            _fail("PRODUCER_NOT_EVIDENCE_ELIGIBLE", claim.producer_run_id)
+        fold = next(
+            (
+                item
+                for item in control.inputs_bound["folds"]
+                if item["fold_id"] == claim.fold_id
+            ),
+            None,
+        )
+        if fold is None:
+            _fail("REGISTERED_LINEAGE_MISMATCH", claim.producer_run_id)
+        registered = {
+            "manifest_sha256": control.inputs_bound["manifest_sha256"],
+            "fold_id": claim.fold_id,
+            "train_membership_sha256": fold["train_membership_sha256"],
+            "calibration_membership_sha256": fold["calibration_membership_sha256"],
+            "evaluation_membership_sha256": fold["evaluation_membership_sha256"],
+            "model_sha256": control.registered["control_model_sha256"],
+            "config_sha256": control.registered["config_sha256"],
+            "code_sha256": control.registered["code_sha256"],
+            "data_sha256": control.registered["data_source_sha256"],
+        }
+        terminal = {
+            "evidence_eligible": True,
+            "graph_inventory_sha256": control.terminal["graph_inventory_sha256"],
+            "artifact_hashes": control.terminal["artifact_hashes"],
+        }
+        if not _equal(registered, claim.registration_evidence()):
+            _fail("REGISTERED_LINEAGE_MISMATCH", claim.producer_run_id)
+        if not _equal(terminal, claim.terminal_evidence()):
+            _fail("TERMINAL_ARTIFACT_MISMATCH", claim.producer_run_id)
+        registered_event = next(
+            item
+            for item in control.events
+            if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+        )
+        binding_event = next(
+            item
+            for item in control.events
+            if item.event_type is EventType.CPU_ACCEPTANCE_INPUTS_BOUND
+        )
+        terminal_event = next(
+            item
+            for item in control.events
+            if item.event_type is EventType.CPU_ACCEPTANCE_COMPLETED
+        )
+        return ResolvedProducer(
+            claim.producer_run_id,
+            registered,
+            terminal,
+            event_sha256(registered_event),
+            event_sha256(terminal_event),
+            event_sha256(binding_event),
+        )
     if state.status is not RunStatus.COMPLETED or state.terminal is None:
         _fail("NONTERMINAL_PRODUCER", claim.producer_run_id)
     try:

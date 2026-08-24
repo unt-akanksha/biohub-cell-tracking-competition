@@ -12,9 +12,12 @@ from .io import canonical_json_bytes, sha256_bytes
 from .ledger import (
     EventType,
     ExactEvaluationStatus,
+    ExperimentEvent,
     Ledger,
     TransitionError,
     event_sha256,
+    exact_promotion_decision_payload,
+    exact_promotion_exception_payload,
     reconstruct_exact_evaluations,
     resolved_exact_member,
 )
@@ -509,3 +512,86 @@ def evaluate_promotion(
         input_sha,
         inputs,
     )
+
+
+def record_promotion(
+    report: ExactReport,
+    *,
+    policy_path: str | Path,
+    ledger_path: str | Path,
+    workspace_root: str | Path,
+    evaluation_run_id: str,
+) -> ExperimentEvent:
+    """Re-evaluate immediately, then append one evidence-bound exact decision."""
+
+    decision = evaluate_promotion(
+        report,
+        policy_path=policy_path,
+        ledger_path=ledger_path,
+        workspace_root=workspace_root,
+        evaluation_run_id=evaluation_run_id,
+    )
+    if report.core.get("evidence_kind") != "model_candidate":
+        _fail("NON_CANDIDATE_EVIDENCE_KIND", "only learned candidate evidence is decidable")
+    payload = exact_promotion_decision_payload(
+        evaluation_run_id=evaluation_run_id,
+        state=decision.state,
+        reason_codes=decision.reason_codes,
+        hard_integrity_passed=not decision.hard_failures,
+        report_core_sha256=decision.report_core_sha256,
+        policy_sha256=decision.policy_sha256,
+        decision_input_sha256=decision.decision_input_sha256,
+        scorer_lock_sha256=str(report.core["scorer_lock_sha256"]),
+        environment_lock_sha256=str(report.core["environment_lock_sha256"]),
+        manifest_sha256=str(report.core["manifest_sha256"]),
+        members=report.core["members"],
+    )
+    event = ExperimentEvent.create(
+        evaluation_run_id, EventType.EXACT_PROMOTION_DECISION, payload
+    )
+    Ledger(Path(ledger_path), Path(workspace_root)).append(event)
+    return event
+
+
+def record_review_exception(
+    *,
+    ledger_path: str | Path,
+    workspace_root: str | Path,
+    evaluation_run_id: str,
+    failed_gates: Mapping[str, Any],
+    quantitative_tradeoff: str,
+    approver: str,
+    reason: str,
+    downstream_authorization: str,
+) -> ExperimentEvent:
+    ledger = Ledger(Path(ledger_path), Path(workspace_root))
+    evaluations = reconstruct_exact_evaluations(ledger.read_events())
+    state = evaluations.get(evaluation_run_id)
+    if state is None or state.decision is None:
+        _fail("PROMOTION_DECISION_MISSING", evaluation_run_id)
+    decision_event = next(
+        item
+        for item in state.events
+        if item.event_type is EventType.EXACT_PROMOTION_DECISION
+    )
+    decision = state.decision
+    payload = exact_promotion_exception_payload(
+        evaluation_run_id=evaluation_run_id,
+        decision_event_sha256=event_sha256(decision_event),
+        failed_gates=failed_gates,
+        quantitative_tradeoff=quantitative_tradeoff,
+        approver=approver,
+        reason=reason,
+        downstream_authorization=downstream_authorization,
+        report_core_sha256=decision["report_core_sha256"],
+        policy_sha256=decision["policy_sha256"],
+        decision_input_sha256=decision["decision_input_sha256"],
+        scorer_lock_sha256=decision["scorer_lock_sha256"],
+        environment_lock_sha256=decision["environment_lock_sha256"],
+        manifest_sha256=decision["manifest_sha256"],
+    )
+    event = ExperimentEvent.create(
+        evaluation_run_id, EventType.EXACT_PROMOTION_EXCEPTION, payload
+    )
+    ledger.append(event)
+    return event

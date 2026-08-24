@@ -66,6 +66,13 @@ class EventType(StrEnum):
     EXACT_EVALUATION_STARTED = "exact_evaluation_started"
     EXACT_EVALUATION_COMPLETED = "exact_evaluation_completed"
     EXACT_EVALUATION_FAILED = "exact_evaluation_failed"
+    EXACT_PROMOTION_DECISION = "exact_promotion_decision"
+    EXACT_PROMOTION_EXCEPTION = "exact_promotion_exception"
+    CPU_ACCEPTANCE_REGISTERED = "cpu_acceptance_registered"
+    CPU_ACCEPTANCE_STARTED = "cpu_acceptance_started"
+    CPU_ACCEPTANCE_INPUTS_BOUND = "cpu_acceptance_inputs_bound"
+    CPU_ACCEPTANCE_COMPLETED = "cpu_acceptance_completed"
+    CPU_ACCEPTANCE_FAILED = "cpu_acceptance_failed"
 
 
 class RunStatus(StrEnum):
@@ -83,6 +90,14 @@ class ExactEvaluationStatus(StrEnum):
     FAILED = "failed"
 
 
+class CpuAcceptanceStatus(StrEnum):
+    REGISTERED = "registered"
+    RUNNING = "running"
+    INPUTS_BOUND = "inputs_bound"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
 EXACT_MEMBER_FIELDS = (
     "role",
     "fold_id",
@@ -93,6 +108,7 @@ EXACT_MEMBER_FIELDS = (
     "graph_inventory_sha256",
     "artifact_hashes",
 )
+CPU_EXACT_MEMBER_FIELD = "producer_input_binding_event_sha256"
 
 _EXACT_EVENT_TYPES = {
     EventType.EXACT_EVALUATION_REGISTERED,
@@ -100,7 +116,20 @@ _EXACT_EVENT_TYPES = {
     EventType.EXACT_EVALUATION_COMPLETED,
     EventType.EXACT_EVALUATION_FAILED,
 }
-_EXPERIMENT_EVENT_TYPES = set(EventType) - _EXACT_EVENT_TYPES
+_EXACT_DECISION_EVENT_TYPES = {
+    EventType.EXACT_PROMOTION_DECISION,
+    EventType.EXACT_PROMOTION_EXCEPTION,
+}
+_CPU_EVENT_TYPES = {
+    EventType.CPU_ACCEPTANCE_REGISTERED,
+    EventType.CPU_ACCEPTANCE_STARTED,
+    EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+    EventType.CPU_ACCEPTANCE_COMPLETED,
+    EventType.CPU_ACCEPTANCE_FAILED,
+}
+_EXPERIMENT_EVENT_TYPES = (
+    set(EventType) - _EXACT_EVENT_TYPES - _EXACT_DECISION_EVENT_TYPES - _CPU_EVENT_TYPES
+)
 
 
 @dataclass(frozen=True)
@@ -175,6 +204,19 @@ class ExactEvaluationState:
     status: ExactEvaluationStatus
     registered: dict[str, Any]
     events: list[ExperimentEvent] = field(default_factory=list)
+    terminal: dict[str, Any] | None = None
+    decision: dict[str, Any] | None = None
+    exceptions: list[dict[str, Any]] = field(default_factory=list)
+
+
+@dataclass
+class CpuAcceptanceState:
+    run_id: str
+    status: CpuAcceptanceStatus
+    registered: dict[str, Any]
+    events: list[ExperimentEvent] = field(default_factory=list)
+    started: dict[str, Any] | None = None
+    inputs_bound: dict[str, Any] | None = None
     terminal: dict[str, Any] | None = None
 
 
@@ -276,6 +318,13 @@ def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
         EventType.EXACT_EVALUATION_STARTED: 2,
         EventType.EXACT_EVALUATION_COMPLETED: 3,
         EventType.EXACT_EVALUATION_FAILED: 3,
+        EventType.EXACT_PROMOTION_DECISION: 4,
+        EventType.EXACT_PROMOTION_EXCEPTION: 5,
+        EventType.CPU_ACCEPTANCE_REGISTERED: 0,
+        EventType.CPU_ACCEPTANCE_STARTED: 1,
+        EventType.CPU_ACCEPTANCE_INPUTS_BOUND: 2,
+        EventType.CPU_ACCEPTANCE_COMPLETED: 3,
+        EventType.CPU_ACCEPTANCE_FAILED: 3,
     }
     return (_parse_time(event.created_at), precedence[event.event_type], event.event_id)
 
@@ -338,12 +387,64 @@ def event_sha256(event: ExperimentEvent) -> str:
     return sha256_bytes(canonical_json_bytes(event.to_dict()))
 
 
+def reconstruct_cpu_acceptances(
+    events: Iterable[ExperimentEvent],
+) -> dict[str, CpuAcceptanceState]:
+    grouped: dict[str, list[ExperimentEvent]] = {}
+    for event in events:
+        if event.event_type in _CPU_EVENT_TYPES:
+            grouped.setdefault(event.run_id, []).append(event)
+    result: dict[str, CpuAcceptanceState] = {}
+    for run_id in sorted(grouped):
+        ordered = sorted(grouped[run_id], key=_event_order)
+        registered = [
+            item for item in ordered if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+        ]
+        if len(registered) != 1:
+            raise TransitionError(f"CPU acceptance {run_id} must have exactly one registered event")
+        state = CpuAcceptanceState(
+            run_id=run_id,
+            status=CpuAcceptanceStatus.REGISTERED,
+            registered=dict(registered[0].payload),
+            events=ordered,
+        )
+        for item in ordered:
+            if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED:
+                continue
+            if item.event_type is EventType.CPU_ACCEPTANCE_STARTED:
+                if state.status is not CpuAcceptanceStatus.REGISTERED:
+                    raise TransitionError(f"CPU acceptance {run_id} has an illegal start")
+                state.status = CpuAcceptanceStatus.RUNNING
+                state.started = dict(item.payload)
+            elif item.event_type is EventType.CPU_ACCEPTANCE_INPUTS_BOUND:
+                if state.status is not CpuAcceptanceStatus.RUNNING:
+                    raise TransitionError(f"CPU acceptance {run_id} has an illegal input binding")
+                state.status = CpuAcceptanceStatus.INPUTS_BOUND
+                state.inputs_bound = dict(item.payload)
+            elif item.event_type is EventType.CPU_ACCEPTANCE_COMPLETED:
+                if state.status is not CpuAcceptanceStatus.INPUTS_BOUND:
+                    raise TransitionError(f"CPU acceptance {run_id} has an illegal completion")
+                state.status = CpuAcceptanceStatus.COMPLETED
+                state.terminal = dict(item.payload)
+            elif item.event_type is EventType.CPU_ACCEPTANCE_FAILED:
+                if state.status in {CpuAcceptanceStatus.COMPLETED, CpuAcceptanceStatus.FAILED}:
+                    raise TransitionError(f"CPU acceptance {run_id} has a late failure")
+                state.status = CpuAcceptanceStatus.FAILED
+                state.terminal = dict(item.payload)
+        result[run_id] = state
+    return result
+
+
 def _exact_member_sort_key(value: Mapping[str, Any]) -> tuple[str, str]:
     return (str(value.get("role", "")), str(value.get("fold_id", "")))
 
 
 def _normalize_exact_member(value: Any) -> dict[str, Any]:
-    if not isinstance(value, Mapping) or set(value) != set(EXACT_MEMBER_FIELDS):
+    fields = set(value) if isinstance(value, Mapping) else set()
+    if not isinstance(value, Mapping) or fields not in (
+        set(EXACT_MEMBER_FIELDS),
+        {*EXACT_MEMBER_FIELDS, CPU_EXACT_MEMBER_FIELD},
+    ):
         raise ValueError(f"exact evaluation member requires exactly {list(EXACT_MEMBER_FIELDS)}")
     role = _bounded_text(value["role"], "member role", 20)
     if role not in {"baseline", "candidate"}:
@@ -372,7 +473,13 @@ def _normalize_exact_member(value: Any) -> dict[str, Any]:
         value["graph_inventory_sha256"], "graph_inventory_sha256"
     )
     result["artifact_hashes"] = _artifact_hashes(value["artifact_hashes"])
-    return {name: result[name] for name in EXACT_MEMBER_FIELDS}
+    names = list(EXACT_MEMBER_FIELDS)
+    if CPU_EXACT_MEMBER_FIELD in value:
+        result[CPU_EXACT_MEMBER_FIELD] = _sha256_text(
+            value[CPU_EXACT_MEMBER_FIELD], CPU_EXACT_MEMBER_FIELD
+        )
+        names.insert(4, CPU_EXACT_MEMBER_FIELD)
+    return {name: result[name] for name in names}
 
 
 def _normalize_exact_members(value: Any) -> list[dict[str, Any]]:
@@ -397,24 +504,59 @@ def resolved_exact_member(
 ) -> dict[str, Any]:
     runs = reconstruct_runs(events)
     state = runs.get(producer_run_id)
-    if state is None:
+    if state is not None:
+        if state.status is not RunStatus.COMPLETED or state.terminal is None:
+            raise TransitionError(f"nonterminal exact-evaluation producer: {producer_run_id}")
+        try:
+            registered = validate_producer_registration_evidence(state.registered, required=True)
+            terminal = validate_producer_terminal_evidence(state.terminal, required=True)
+        except ValueError as exc:
+            raise TransitionError(f"ineligible exact-evaluation producer: {producer_run_id}") from exc
+        if registered["fold_id"] != fold_id:
+            raise TransitionError(
+                f"exact-evaluation producer {producer_run_id} belongs to {registered['fold_id']}, not {fold_id}"
+            )
+        registered_event = next(
+            item for item in state.events if item.event_type is EventType.REGISTERED
+        )
+        terminal_event = next(
+            item for item in state.events if item.event_type is EventType.COMPLETED
+        )
+        return _normalize_exact_member(
+            {
+                "role": role,
+                "fold_id": fold_id,
+                "producer_run_id": producer_run_id,
+                "producer_registration_event_sha256": event_sha256(registered_event),
+                "producer_terminal_event_sha256": event_sha256(terminal_event),
+                **registered,
+                "graph_inventory_sha256": terminal["graph_inventory_sha256"],
+                "artifact_hashes": terminal["artifact_hashes"],
+            }
+        )
+    controls = reconstruct_cpu_acceptances(events)
+    control = controls.get(producer_run_id)
+    if control is None:
         raise TransitionError(f"unknown exact-evaluation producer: {producer_run_id}")
-    if state.status is not RunStatus.COMPLETED or state.terminal is None:
+    if control.status is not CpuAcceptanceStatus.COMPLETED or control.terminal is None:
         raise TransitionError(f"nonterminal exact-evaluation producer: {producer_run_id}")
-    try:
-        registered = validate_producer_registration_evidence(state.registered, required=True)
-        terminal = validate_producer_terminal_evidence(state.terminal, required=True)
-    except ValueError as exc:
-        raise TransitionError(f"ineligible exact-evaluation producer: {producer_run_id}") from exc
-    if registered["fold_id"] != fold_id:
+    if control.inputs_bound is None:
+        raise TransitionError(f"ineligible exact-evaluation producer: {producer_run_id}")
+    fold = next(
+        (item for item in control.inputs_bound["folds"] if item["fold_id"] == fold_id), None
+    )
+    if fold is None:
         raise TransitionError(
-            f"exact-evaluation producer {producer_run_id} belongs to {registered['fold_id']}, not {fold_id}"
+            f"exact-evaluation producer {producer_run_id} has no bound fold {fold_id}"
         )
     registered_event = next(
-        item for item in state.events if item.event_type is EventType.REGISTERED
+        item for item in control.events if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+    )
+    binding_event = next(
+        item for item in control.events if item.event_type is EventType.CPU_ACCEPTANCE_INPUTS_BOUND
     )
     terminal_event = next(
-        item for item in state.events if item.event_type is EventType.COMPLETED
+        item for item in control.events if item.event_type is EventType.CPU_ACCEPTANCE_COMPLETED
     )
     return _normalize_exact_member(
         {
@@ -422,10 +564,18 @@ def resolved_exact_member(
             "fold_id": fold_id,
             "producer_run_id": producer_run_id,
             "producer_registration_event_sha256": event_sha256(registered_event),
+            CPU_EXACT_MEMBER_FIELD: event_sha256(binding_event),
             "producer_terminal_event_sha256": event_sha256(terminal_event),
-            **registered,
-            "graph_inventory_sha256": terminal["graph_inventory_sha256"],
-            "artifact_hashes": terminal["artifact_hashes"],
+            "manifest_sha256": control.inputs_bound["manifest_sha256"],
+            "train_membership_sha256": fold["train_membership_sha256"],
+            "calibration_membership_sha256": fold["calibration_membership_sha256"],
+            "evaluation_membership_sha256": fold["evaluation_membership_sha256"],
+            "model_sha256": control.registered["control_model_sha256"],
+            "config_sha256": control.registered["config_sha256"],
+            "code_sha256": control.registered["code_sha256"],
+            "data_sha256": control.registered["data_source_sha256"],
+            "graph_inventory_sha256": control.terminal["graph_inventory_sha256"],
+            "artifact_hashes": control.terminal["artifact_hashes"],
         }
     )
 
@@ -449,8 +599,9 @@ def _validate_registered_exact_members(
 def reconstruct_exact_evaluations(
     events: Iterable[ExperimentEvent],
 ) -> dict[str, ExactEvaluationState]:
+    materialized = list(events)
     grouped: dict[str, list[ExperimentEvent]] = {}
-    for event in events:
+    for event in materialized:
         if event.event_type in _EXACT_EVENT_TYPES:
             grouped.setdefault(event.run_id, []).append(event)
     result: dict[str, ExactEvaluationState] = {}
@@ -495,6 +646,22 @@ def reconstruct_exact_evaluations(
                 )
                 state.terminal = dict(event.payload)
         result[evaluation_run_id] = state
+    for event in sorted(
+        (item for item in materialized if item.event_type in _EXACT_DECISION_EVENT_TYPES),
+        key=_event_order,
+    ):
+        state = result.get(event.run_id)
+        if state is None:
+            raise TransitionError(f"decision for unknown exact evaluation {event.run_id}")
+        state.events.append(event)
+        if event.event_type is EventType.EXACT_PROMOTION_DECISION:
+            if state.decision is not None:
+                raise TransitionError(f"exact evaluation {event.run_id} has duplicate decisions")
+            state.decision = dict(event.payload)
+        else:
+            if state.decision is None or state.decision.get("state") != "review_required":
+                raise TransitionError(f"exact evaluation {event.run_id} has an illegal exception")
+            state.exceptions.append(dict(event.payload))
     return result
 
 
@@ -503,6 +670,12 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
         raise TransitionError(f"duplicate event ID: {event.event_id}")
     if event.event_type in _EXACT_EVENT_TYPES:
         _validate_exact_transition(events, event)
+        return
+    if event.event_type in _CPU_EVENT_TYPES:
+        _validate_cpu_transition(events, event)
+        return
+    if event.event_type in _EXACT_DECISION_EVENT_TYPES:
+        _validate_exact_decision_transition(events, event)
         return
     runs = reconstruct_runs(events) if events else {}
     existing = runs.get(event.run_id)
@@ -641,6 +814,7 @@ class Ledger:
                 raise LedgerCorruptionError(f"malformed ledger event on line {index + 1}") from exc
             events.append(event)
         reconstruct_runs(events)
+        reconstruct_cpu_acceptances(events)
         reconstruct_exact_evaluations(events)
         return events
 
@@ -808,6 +982,203 @@ def validate_producer_terminal_evidence(
     }
 
 
+def _owned_slug(value: Any, name: str) -> str:
+    text = _bounded_text(value, name, 160)
+    if re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9_-]+", text) is None:
+        raise ValueError(f"{name} must be an owned Kaggle owner/slug")
+    return text
+
+
+def cpu_acceptance_registration_payload(
+    *,
+    run_id: str,
+    purpose: str,
+    request_nonce: str,
+    acceptance_request_sha256: str,
+    evaluation_run_id: str,
+    kernel_slug: str,
+    runtime_dataset_slug: str,
+    scorer_lock_sha256: str,
+    environment_lock_sha256: str,
+    manifest_policy_sha256: str,
+    control_model_sha256: str,
+    config_sha256: str,
+    code_sha256: str,
+    data_source_sha256: str,
+    cpu_watchdog_minutes: Any,
+) -> dict[str, Any]:
+    try:
+        watchdog = int(cpu_watchdog_minutes)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("cpu_watchdog_minutes must be an integer") from exc
+    if watchdog < 1 or watchdog >= 720:
+        raise ValueError("cpu_watchdog_minutes must be between 1 and 719")
+    nonce = _sha256_text(request_nonce, "request_nonce")
+    return {
+        "run_id": _bounded_text(run_id, "run_id", 160),
+        "purpose": _bounded_text(purpose, "purpose", 160),
+        "request_nonce": nonce,
+        "acceptance_request_sha256": _sha256_text(
+            acceptance_request_sha256, "acceptance_request_sha256"
+        ),
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "kernel_slug": _owned_slug(kernel_slug, "kernel_slug"),
+        "runtime_dataset_slug": _owned_slug(
+            runtime_dataset_slug, "runtime_dataset_slug"
+        ),
+        "scorer_lock_sha256": _sha256_text(scorer_lock_sha256, "scorer_lock_sha256"),
+        "environment_lock_sha256": _sha256_text(
+            environment_lock_sha256, "environment_lock_sha256"
+        ),
+        "manifest_policy_sha256": _sha256_text(
+            manifest_policy_sha256, "manifest_policy_sha256"
+        ),
+        "control_model_sha256": _sha256_text(
+            control_model_sha256, "control_model_sha256"
+        ),
+        "config_sha256": _sha256_text(config_sha256, "config_sha256"),
+        "code_sha256": _sha256_text(code_sha256, "code_sha256"),
+        "data_source_sha256": _sha256_text(data_source_sha256, "data_source_sha256"),
+        "cpu_watchdog_minutes": watchdog,
+        "accelerator": "none",
+        "internet_enabled": False,
+        "competition_submission_allowed": False,
+    }
+
+
+def cpu_acceptance_started_payload(
+    *,
+    run_id: str,
+    registration_event_sha256: str,
+    kernel_ref: str,
+    runtime_dataset_ref: str,
+) -> dict[str, Any]:
+    return {
+        "run_id": _bounded_text(run_id, "run_id", 160),
+        "registration_event_sha256": _sha256_text(
+            registration_event_sha256, "registration_event_sha256"
+        ),
+        "kernel_ref": _bounded_text(kernel_ref, "kernel_ref", 240),
+        "runtime_dataset_ref": _bounded_text(
+            runtime_dataset_ref, "runtime_dataset_ref", 240
+        ),
+        "accelerator": "none",
+    }
+
+
+def _normalize_cpu_folds(value: Any) -> list[dict[str, str]]:
+    required = {
+        "fold_id",
+        "train_membership_sha256",
+        "calibration_membership_sha256",
+        "evaluation_membership_sha256",
+    }
+    if not isinstance(value, list) or len(value) != 2:
+        raise ValueError("CPU input binding requires exactly two folds")
+    result: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, Mapping) or set(item) != required:
+            raise ValueError("CPU input-binding fold fields are invalid")
+        result.append(
+            {
+                "fold_id": _bounded_text(item["fold_id"], "fold_id", 200),
+                "train_membership_sha256": _sha256_text(
+                    item["train_membership_sha256"], "train_membership_sha256"
+                ),
+                "calibration_membership_sha256": _sha256_text(
+                    item["calibration_membership_sha256"],
+                    "calibration_membership_sha256",
+                ),
+                "evaluation_membership_sha256": _sha256_text(
+                    item["evaluation_membership_sha256"],
+                    "evaluation_membership_sha256",
+                ),
+            }
+        )
+    result.sort(key=lambda item: item["fold_id"])
+    if len({item["fold_id"] for item in result}) != 2:
+        raise ValueError("CPU input-binding folds must be unique")
+    return result
+
+
+def cpu_acceptance_inputs_bound_payload(
+    *, run_id: str, manifest_sha256: str, folds: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
+    return {
+        "run_id": _bounded_text(run_id, "run_id", 160),
+        "manifest_sha256": _sha256_text(manifest_sha256, "manifest_sha256"),
+        "folds": _normalize_cpu_folds([dict(item) for item in folds]),
+    }
+
+
+def cpu_acceptance_completed_payload(
+    *,
+    run_id: str,
+    actual_cpu_runtime_seconds: Any,
+    peak_memory_mb: Any,
+    remote_job_identity: str,
+    graph_inventory_sha256: str,
+    artifact_hashes: Mapping[str, Any],
+    output_inventory_sha256: str,
+    pending_payload_sha256: str,
+    pending_envelope_sha256: str,
+    reconciliation_sha256: str,
+) -> dict[str, Any]:
+    return {
+        "run_id": _bounded_text(run_id, "run_id", 160),
+        "actual_cpu_runtime_seconds": decimal_text(
+            actual_cpu_runtime_seconds, "actual CPU runtime", positive=True
+        ),
+        "peak_memory_mb": decimal_text(peak_memory_mb, "peak memory", positive=True),
+        "remote_job_identity": _bounded_text(
+            remote_job_identity, "remote_job_identity", 240
+        ),
+        "graph_inventory_sha256": _sha256_text(
+            graph_inventory_sha256, "graph_inventory_sha256"
+        ),
+        "artifact_hashes": _artifact_hashes(artifact_hashes),
+        "output_inventory_sha256": _sha256_text(
+            output_inventory_sha256, "output_inventory_sha256"
+        ),
+        "pending_payload_sha256": _sha256_text(
+            pending_payload_sha256, "pending_payload_sha256"
+        ),
+        "pending_envelope_sha256": _sha256_text(
+            pending_envelope_sha256, "pending_envelope_sha256"
+        ),
+        "reconciliation_sha256": _sha256_text(
+            reconciliation_sha256, "reconciliation_sha256"
+        ),
+        "evidence_eligible": True,
+        "promotion_eligible": False,
+        "accelerator": "none",
+        "competition_submission_performed": False,
+    }
+
+
+def cpu_acceptance_failed_payload(
+    *,
+    run_id: str,
+    reason_code: str,
+    detail: str,
+    observed_artifact_hashes: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "run_id": _bounded_text(run_id, "run_id", 160),
+        "reason_code": _bounded_text(reason_code, "reason_code", 160),
+        "detail": _bounded_text(detail, "failure detail", 2000),
+        "observed_artifact_hashes": (
+            _artifact_hashes(observed_artifact_hashes)
+            if observed_artifact_hashes
+            else {}
+        ),
+        "evidence_eligible": False,
+        "promotion_eligible": False,
+        "accelerator": "none",
+        "competition_submission_performed": False,
+    }
+
+
 def exact_evaluation_registration_payload(
     *,
     evaluation_run_id: str,
@@ -916,6 +1287,102 @@ def exact_evaluation_failed_payload(
     }
 
 
+def exact_promotion_decision_payload(
+    *,
+    evaluation_run_id: str,
+    state: str,
+    reason_codes: Sequence[str],
+    hard_integrity_passed: bool,
+    report_core_sha256: str,
+    policy_sha256: str,
+    decision_input_sha256: str,
+    scorer_lock_sha256: str,
+    environment_lock_sha256: str,
+    manifest_sha256: str,
+    members: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    normalized_state = _bounded_text(state, "promotion state", 40)
+    if normalized_state not in {"promote", "review_required", "reject"}:
+        raise ValueError(f"invalid exact promotion state: {normalized_state}")
+    reasons = [_bounded_text(item, "promotion reason code", 160) for item in reason_codes]
+    if len(reasons) != len(set(reasons)):
+        raise ValueError("promotion reason codes must be unique")
+    if normalized_state == "promote" and reasons:
+        raise ValueError("promote cannot contain failed reason codes")
+    if normalized_state != "promote" and not reasons:
+        raise ValueError("non-promote decision requires reason codes")
+    if normalized_state in {"promote", "review_required"} and hard_integrity_passed is not True:
+        raise ValueError("non-reject decision requires passed hard integrity")
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "state": normalized_state,
+        "reason_codes": reasons,
+        "hard_integrity_passed": bool(hard_integrity_passed),
+        "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
+        "policy_sha256": _sha256_text(policy_sha256, "policy_sha256"),
+        "decision_input_sha256": _sha256_text(
+            decision_input_sha256, "decision_input_sha256"
+        ),
+        "scorer_lock_sha256": _sha256_text(scorer_lock_sha256, "scorer_lock_sha256"),
+        "environment_lock_sha256": _sha256_text(
+            environment_lock_sha256, "environment_lock_sha256"
+        ),
+        "manifest_sha256": _sha256_text(manifest_sha256, "manifest_sha256"),
+        "members": _normalize_exact_members([dict(item) for item in members]),
+        "authorized_for_submission": False,
+    }
+
+
+def exact_promotion_exception_payload(
+    *,
+    evaluation_run_id: str,
+    decision_event_sha256: str,
+    failed_gates: Mapping[str, Any],
+    quantitative_tradeoff: str,
+    approver: str,
+    reason: str,
+    downstream_authorization: str,
+    report_core_sha256: str,
+    policy_sha256: str,
+    decision_input_sha256: str,
+    scorer_lock_sha256: str,
+    environment_lock_sha256: str,
+    manifest_sha256: str,
+) -> dict[str, Any]:
+    if not isinstance(failed_gates, Mapping) or not failed_gates:
+        raise ValueError("review exception requires failed-gate values")
+    gates = {
+        _bounded_text(name, "failed gate", 160): normalize_exact_values(value)
+        for name, value in sorted(failed_gates.items(), key=lambda item: str(item[0]))
+    }
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "decision_event_sha256": _sha256_text(
+            decision_event_sha256, "decision_event_sha256"
+        ),
+        "failed_gates": gates,
+        "quantitative_tradeoff": _bounded_text(
+            quantitative_tradeoff, "quantitative_tradeoff", 2000
+        ),
+        "approver": _bounded_text(approver, "approver", 240),
+        "reason": _bounded_text(reason, "reason", 2000),
+        "downstream_authorization": _bounded_text(
+            downstream_authorization, "downstream_authorization", 500
+        ),
+        "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
+        "policy_sha256": _sha256_text(policy_sha256, "policy_sha256"),
+        "decision_input_sha256": _sha256_text(
+            decision_input_sha256, "decision_input_sha256"
+        ),
+        "scorer_lock_sha256": _sha256_text(scorer_lock_sha256, "scorer_lock_sha256"),
+        "environment_lock_sha256": _sha256_text(
+            environment_lock_sha256, "environment_lock_sha256"
+        ),
+        "manifest_sha256": _sha256_text(manifest_sha256, "manifest_sha256"),
+        "authorized_for_submission": False,
+    }
+
+
 def _validate_exact_transition(
     events: Sequence[ExperimentEvent], event: ExperimentEvent
 ) -> None:
@@ -998,6 +1465,220 @@ def _validate_exact_transition(
         raise TransitionError(str(exc)) from exc
     if event.payload != normalized_failure:
         raise TransitionError("exact evaluation failure payload is invalid")
+
+
+def _validate_cpu_transition(
+    events: Sequence[ExperimentEvent], event: ExperimentEvent
+) -> None:
+    controls = reconstruct_cpu_acceptances(events)
+    experiments = reconstruct_runs(events)
+    evaluations = reconstruct_exact_evaluations(events)
+    existing = controls.get(event.run_id)
+    if event.event_type is EventType.CPU_ACCEPTANCE_REGISTERED:
+        if existing is not None or event.run_id in experiments or event.run_id in evaluations:
+            raise TransitionError(f"duplicate CPU acceptance ID: {event.run_id}")
+        try:
+            normalized = cpu_acceptance_registration_payload(
+                run_id=event.payload.get("run_id"),
+                purpose=event.payload.get("purpose"),
+                request_nonce=event.payload.get("request_nonce"),
+                acceptance_request_sha256=event.payload.get("acceptance_request_sha256"),
+                evaluation_run_id=event.payload.get("evaluation_run_id"),
+                kernel_slug=event.payload.get("kernel_slug"),
+                runtime_dataset_slug=event.payload.get("runtime_dataset_slug"),
+                scorer_lock_sha256=event.payload.get("scorer_lock_sha256"),
+                environment_lock_sha256=event.payload.get("environment_lock_sha256"),
+                manifest_policy_sha256=event.payload.get("manifest_policy_sha256"),
+                control_model_sha256=event.payload.get("control_model_sha256"),
+                config_sha256=event.payload.get("config_sha256"),
+                code_sha256=event.payload.get("code_sha256"),
+                data_source_sha256=event.payload.get("data_source_sha256"),
+                cpu_watchdog_minutes=event.payload.get("cpu_watchdog_minutes"),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized or event.run_id != normalized["run_id"]:
+            raise TransitionError("CPU acceptance registration payload is invalid")
+        if any(
+            state.registered["request_nonce"] == normalized["request_nonce"]
+            for state in controls.values()
+        ):
+            raise TransitionError("CPU acceptance request nonce has already been used")
+        if normalized["evaluation_run_id"] in evaluations:
+            raise TransitionError("CPU acceptance proposed evaluation ID already exists")
+        return
+    if existing is None:
+        raise TransitionError(f"unknown CPU acceptance ID: {event.run_id}")
+    if event.event_type is EventType.CPU_ACCEPTANCE_FAILED:
+        if existing.status in {CpuAcceptanceStatus.COMPLETED, CpuAcceptanceStatus.FAILED}:
+            raise TransitionError(f"CPU acceptance {event.run_id} is already terminal")
+        try:
+            normalized_failure = cpu_acceptance_failed_payload(
+                run_id=event.payload.get("run_id"),
+                reason_code=event.payload.get("reason_code"),
+                detail=event.payload.get("detail"),
+                observed_artifact_hashes=event.payload.get("observed_artifact_hashes"),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized_failure or event.run_id != normalized_failure["run_id"]:
+            raise TransitionError("CPU acceptance failure payload is invalid")
+        return
+    if event.event_type is EventType.CPU_ACCEPTANCE_STARTED:
+        if existing.status is not CpuAcceptanceStatus.REGISTERED:
+            raise TransitionError(f"CPU acceptance {event.run_id} cannot start")
+        registered_event = next(
+            item
+            for item in existing.events
+            if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+        )
+        try:
+            normalized_start = cpu_acceptance_started_payload(
+                run_id=event.payload.get("run_id"),
+                registration_event_sha256=event.payload.get("registration_event_sha256"),
+                kernel_ref=event.payload.get("kernel_ref"),
+                runtime_dataset_ref=event.payload.get("runtime_dataset_ref"),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized_start or event.run_id != normalized_start["run_id"]:
+            raise TransitionError("CPU acceptance start payload is invalid")
+        if normalized_start["registration_event_sha256"] != event_sha256(registered_event):
+            raise TransitionError("CPU acceptance start registration hash mismatch")
+        if not normalized_start["kernel_ref"].startswith(existing.registered["kernel_slug"] + "/"):
+            raise TransitionError("CPU acceptance started unexpected kernel")
+        if not normalized_start["runtime_dataset_ref"].startswith(
+            existing.registered["runtime_dataset_slug"] + "/"
+        ):
+            raise TransitionError("CPU acceptance started unexpected runtime dataset")
+        return
+    if event.event_type is EventType.CPU_ACCEPTANCE_INPUTS_BOUND:
+        if existing.status is not CpuAcceptanceStatus.RUNNING:
+            raise TransitionError(f"CPU acceptance {event.run_id} cannot bind inputs")
+        try:
+            normalized_binding = cpu_acceptance_inputs_bound_payload(
+                run_id=event.payload.get("run_id"),
+                manifest_sha256=event.payload.get("manifest_sha256"),
+                folds=event.payload.get("folds", ()),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized_binding or event.run_id != normalized_binding["run_id"]:
+            raise TransitionError("CPU acceptance input binding payload is invalid")
+        return
+    if existing.status is not CpuAcceptanceStatus.INPUTS_BOUND:
+        raise TransitionError(f"CPU acceptance {event.run_id} cannot complete")
+    try:
+        normalized_completion = cpu_acceptance_completed_payload(
+            run_id=event.payload.get("run_id"),
+            actual_cpu_runtime_seconds=event.payload.get("actual_cpu_runtime_seconds"),
+            peak_memory_mb=event.payload.get("peak_memory_mb"),
+            remote_job_identity=event.payload.get("remote_job_identity"),
+            graph_inventory_sha256=event.payload.get("graph_inventory_sha256"),
+            artifact_hashes=event.payload.get("artifact_hashes", {}),
+            output_inventory_sha256=event.payload.get("output_inventory_sha256"),
+            pending_payload_sha256=event.payload.get("pending_payload_sha256"),
+            pending_envelope_sha256=event.payload.get("pending_envelope_sha256"),
+            reconciliation_sha256=event.payload.get("reconciliation_sha256"),
+        )
+    except ValueError as exc:
+        raise TransitionError(str(exc)) from exc
+    if event.payload != normalized_completion or event.run_id != normalized_completion["run_id"]:
+        raise TransitionError("CPU acceptance completion payload is invalid")
+
+
+def _validate_exact_decision_transition(
+    events: Sequence[ExperimentEvent], event: ExperimentEvent
+) -> None:
+    evaluations = reconstruct_exact_evaluations(events)
+    state = evaluations.get(event.run_id)
+    if state is None:
+        raise TransitionError(f"decision for unknown exact evaluation {event.run_id}")
+    if state.status is not ExactEvaluationStatus.COMPLETED or state.terminal is None:
+        raise TransitionError("exact promotion requires a completed aggregate evaluation")
+    if state.registered.get("evidence_kind") != "model_candidate":
+        raise TransitionError("non-candidate exact evidence cannot receive a promotion decision")
+    _validate_registered_exact_members(events, state.registered["members"])
+    if event.event_type is EventType.EXACT_PROMOTION_DECISION:
+        if state.decision is not None:
+            raise TransitionError("exact evaluation already has a promotion decision")
+        try:
+            normalized = exact_promotion_decision_payload(
+                evaluation_run_id=event.payload.get("evaluation_run_id"),
+                state=event.payload.get("state"),
+                reason_codes=event.payload.get("reason_codes", ()),
+                hard_integrity_passed=event.payload.get("hard_integrity_passed"),
+                report_core_sha256=event.payload.get("report_core_sha256"),
+                policy_sha256=event.payload.get("policy_sha256"),
+                decision_input_sha256=event.payload.get("decision_input_sha256"),
+                scorer_lock_sha256=event.payload.get("scorer_lock_sha256"),
+                environment_lock_sha256=event.payload.get("environment_lock_sha256"),
+                manifest_sha256=event.payload.get("manifest_sha256"),
+                members=event.payload.get("members", ()),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized or event.run_id != normalized["evaluation_run_id"]:
+            raise TransitionError("exact promotion decision payload is invalid")
+        for name in (
+            "report_core_sha256",
+            "scorer_lock_sha256",
+            "environment_lock_sha256",
+            "manifest_sha256",
+        ):
+            expected = (
+                state.terminal[name]
+                if name == "report_core_sha256"
+                else state.registered[name]
+            )
+            if normalized[name] != expected:
+                raise TransitionError(f"exact promotion {name} mismatch")
+        if canonical_json_bytes(normalized["members"]) != canonical_json_bytes(
+            state.registered["members"]
+        ):
+            raise TransitionError("exact promotion member table mismatch")
+        return
+    if state.decision is None or state.decision.get("state") != "review_required":
+        raise TransitionError("exception requires an immutable review_required decision")
+    if state.exceptions:
+        raise TransitionError("exact review exception is already recorded")
+    decision_event = next(
+        item
+        for item in state.events
+        if item.event_type is EventType.EXACT_PROMOTION_DECISION
+    )
+    try:
+        normalized_exception = exact_promotion_exception_payload(
+            evaluation_run_id=event.payload.get("evaluation_run_id"),
+            decision_event_sha256=event.payload.get("decision_event_sha256"),
+            failed_gates=event.payload.get("failed_gates", {}),
+            quantitative_tradeoff=event.payload.get("quantitative_tradeoff"),
+            approver=event.payload.get("approver"),
+            reason=event.payload.get("reason"),
+            downstream_authorization=event.payload.get("downstream_authorization"),
+            report_core_sha256=event.payload.get("report_core_sha256"),
+            policy_sha256=event.payload.get("policy_sha256"),
+            decision_input_sha256=event.payload.get("decision_input_sha256"),
+            scorer_lock_sha256=event.payload.get("scorer_lock_sha256"),
+            environment_lock_sha256=event.payload.get("environment_lock_sha256"),
+            manifest_sha256=event.payload.get("manifest_sha256"),
+        )
+    except ValueError as exc:
+        raise TransitionError(str(exc)) from exc
+    if event.payload != normalized_exception or event.run_id != normalized_exception["evaluation_run_id"]:
+        raise TransitionError("exact promotion exception payload is invalid")
+    if normalized_exception["decision_event_sha256"] != event_sha256(decision_event):
+        raise TransitionError("exact promotion exception decision hash mismatch")
+    for name in (
+        "report_core_sha256",
+        "policy_sha256",
+        "decision_input_sha256",
+        "scorer_lock_sha256",
+        "environment_lock_sha256",
+        "manifest_sha256",
+    ):
+        if normalized_exception[name] != state.decision[name]:
+            raise TransitionError(f"exact promotion exception {name} mismatch")
 
 
 def normalize_exact_values(value: Any) -> Any:

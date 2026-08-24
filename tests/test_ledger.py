@@ -8,6 +8,7 @@ import pytest
 
 from biohub_tracker.cli import main
 from biohub_tracker.ledger import (
+    CpuAcceptanceStatus,
     EventType,
     ExactEvaluationStatus,
     ExperimentEvent,
@@ -19,6 +20,11 @@ from biohub_tracker.ledger import (
     amendment_payload,
     artifact_record,
     completed_payload,
+    cpu_acceptance_completed_payload,
+    cpu_acceptance_failed_payload,
+    cpu_acceptance_inputs_bound_payload,
+    cpu_acceptance_registration_payload,
+    cpu_acceptance_started_payload,
     decision_payload,
     failed_payload,
     event_sha256,
@@ -27,6 +33,7 @@ from biohub_tracker.ledger import (
     exact_evaluation_registration_payload,
     exact_evaluation_started_payload,
     reconstruct_runs,
+    reconstruct_cpu_acceptances,
     reconstruct_exact_evaluations,
     registration_payload,
     start_payload,
@@ -565,3 +572,173 @@ def test_exact_evaluation_lifecycle_is_separate_immutable_and_fail_closed(tmp_pa
             )
         )
     assert ledger.path.read_bytes() == before
+
+
+def _cpu_registration(run_id="cpu-control-a", nonce="ab" * 32):
+    return cpu_acceptance_registration_payload(
+        run_id=run_id,
+        purpose="phase2_official_data_control",
+        request_nonce=nonce,
+        acceptance_request_sha256="1" * 64,
+        evaluation_run_id="eval-cpu-control-a",
+        kernel_slug="owner/biohub-phase2-cpu-acceptance",
+        runtime_dataset_slug="owner/biohub-phase2-runtime",
+        scorer_lock_sha256="2" * 64,
+        environment_lock_sha256="3" * 64,
+        manifest_policy_sha256="4" * 64,
+        control_model_sha256="5" * 64,
+        config_sha256="6" * 64,
+        code_sha256="7" * 64,
+        data_source_sha256="8" * 64,
+        cpu_watchdog_minutes=660,
+    )
+
+
+def _cpu_bind(run_id="cpu-control-a"):
+    return cpu_acceptance_inputs_bound_payload(
+        run_id=run_id,
+        manifest_sha256="9" * 64,
+        folds=[
+            {
+                "fold_id": "fold-44b6-to-6bba",
+                "train_membership_sha256": "a" * 64,
+                "calibration_membership_sha256": "b" * 64,
+                "evaluation_membership_sha256": "c" * 64,
+            },
+            {
+                "fold_id": "fold-6bba-to-44b6",
+                "train_membership_sha256": "d" * 64,
+                "calibration_membership_sha256": "e" * 64,
+                "evaluation_membership_sha256": "f" * 64,
+            },
+        ],
+    )
+
+
+def test_cpu_acceptance_lifecycle_is_separate_and_does_not_change_phase1_projection(tmp_path):
+    ledger = make_ledger(tmp_path)
+    ledger.append(ExperimentEvent.create("legacy", EventType.REGISTERED, payload()))
+    legacy_events = ledger.read_events()
+    legacy_runs = reconstruct_runs(legacy_events)
+    registration = ExperimentEvent.create(
+        "cpu-control-a", EventType.CPU_ACCEPTANCE_REGISTERED, _cpu_registration()
+    )
+    ledger.append(registration)
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_STARTED,
+            cpu_acceptance_started_payload(
+                run_id="cpu-control-a",
+                registration_event_sha256=event_sha256(registration),
+                kernel_ref="owner/biohub-phase2-cpu-acceptance/7",
+                runtime_dataset_ref="owner/biohub-phase2-runtime/3",
+            ),
+        )
+    )
+    binding = ExperimentEvent.create(
+        "cpu-control-a", EventType.CPU_ACCEPTANCE_INPUTS_BOUND, _cpu_bind()
+    )
+    ledger.append(binding)
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_COMPLETED,
+            cpu_acceptance_completed_payload(
+                run_id="cpu-control-a",
+                actual_cpu_runtime_seconds="12.5",
+                peak_memory_mb="256",
+                remote_job_identity="owner/kernel/7",
+                graph_inventory_sha256="0" * 64,
+                artifact_hashes={"graphs": "1" * 64},
+                output_inventory_sha256="2" * 64,
+                pending_payload_sha256="3" * 64,
+                pending_envelope_sha256="4" * 64,
+                reconciliation_sha256="5" * 64,
+            ),
+        )
+    )
+    state = reconstruct_cpu_acceptances(ledger.read_events())["cpu-control-a"]
+    assert state.status is CpuAcceptanceStatus.COMPLETED
+    assert state.inputs_bound["manifest_sha256"] == "9" * 64
+    assert reconstruct_runs(ledger.read_events()) == legacy_runs
+    assert all("quota" not in key and "gpu" not in key for event in state.events for key in event.payload)
+
+
+@pytest.mark.parametrize(
+    "event_type,payload_factory",
+    [
+        (EventType.CPU_ACCEPTANCE_INPUTS_BOUND, lambda registration: _cpu_bind()),
+        (
+            EventType.CPU_ACCEPTANCE_COMPLETED,
+            lambda registration: cpu_acceptance_completed_payload(
+                run_id="cpu-control-a",
+                actual_cpu_runtime_seconds="1",
+                peak_memory_mb="1",
+                remote_job_identity="owner/kernel/1",
+                graph_inventory_sha256="0" * 64,
+                artifact_hashes={"graphs": "1" * 64},
+                output_inventory_sha256="2" * 64,
+                pending_payload_sha256="3" * 64,
+                pending_envelope_sha256="4" * 64,
+                reconciliation_sha256="5" * 64,
+            ),
+        ),
+    ],
+)
+def test_cpu_acceptance_rejects_skipped_transitions(tmp_path, event_type, payload_factory):
+    ledger = make_ledger(tmp_path)
+    registration = ExperimentEvent.create(
+        "cpu-control-a", EventType.CPU_ACCEPTANCE_REGISTERED, _cpu_registration()
+    )
+    ledger.append(registration)
+    before = ledger.path.read_bytes()
+    with pytest.raises(TransitionError):
+        ledger.append(ExperimentEvent.create("cpu-control-a", event_type, payload_factory(registration)))
+    assert ledger.path.read_bytes() == before
+
+
+def test_cpu_acceptance_rejects_nonce_reuse_gpu_fields_and_reopen(tmp_path):
+    ledger = make_ledger(tmp_path)
+    first = ExperimentEvent.create(
+        "cpu-control-a", EventType.CPU_ACCEPTANCE_REGISTERED, _cpu_registration()
+    )
+    ledger.append(first)
+    with pytest.raises(TransitionError):
+        ledger.append(
+            ExperimentEvent.create(
+                "cpu-control-b",
+                EventType.CPU_ACCEPTANCE_REGISTERED,
+                _cpu_registration(run_id="cpu-control-b"),
+            )
+        )
+    invalid = _cpu_registration(run_id="cpu-control-b", nonce="cd" * 32)
+    invalid["quota_before_hours"] = "30"
+    with pytest.raises(TransitionError):
+        ledger.append(
+            ExperimentEvent.create(
+                "cpu-control-b", EventType.CPU_ACCEPTANCE_REGISTERED, invalid
+            )
+        )
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_FAILED,
+            cpu_acceptance_failed_payload(
+                run_id="cpu-control-a", reason_code="TEST", detail="terminal"
+            ),
+        )
+    )
+    with pytest.raises(TransitionError):
+        ledger.append(
+            ExperimentEvent.create(
+                "cpu-control-a",
+                EventType.CPU_ACCEPTANCE_STARTED,
+                cpu_acceptance_started_payload(
+                    run_id="cpu-control-a",
+                    registration_event_sha256=event_sha256(first),
+                    kernel_ref="owner/kernel/1",
+                    runtime_dataset_ref="owner/dataset/1",
+                ),
+            )
+        )

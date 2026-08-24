@@ -12,6 +12,7 @@ from biohub_tracker.ledger import (
     EventType,
     ExperimentEvent,
     Ledger,
+    TransitionError,
     completed_payload,
     event_sha256,
     exact_evaluation_completed_payload,
@@ -21,7 +22,13 @@ from biohub_tracker.ledger import (
     resolved_exact_member,
     start_payload,
 )
-from biohub_tracker.promotion import PromotionError, evaluate_promotion, load_promotion_policy
+from biohub_tracker.promotion import (
+    PromotionError,
+    evaluate_promotion,
+    load_promotion_policy,
+    record_promotion,
+    record_review_exception,
+)
 
 
 POLICY = Path("config/promotion-policy.json").resolve()
@@ -289,6 +296,31 @@ def _evaluate(ledger: Ledger, report: ExactReport):
     )
 
 
+def _replace_core_and_attachment(ledger: Ledger, report: ExactReport, core: dict) -> ExactReport:
+    core_sha = sha256_bytes(canonical_json_bytes(core))
+    rewritten = []
+    for event in ledger.read_events():
+        if event.event_type is EventType.EXACT_EVALUATION_COMPLETED:
+            payload = dict(event.payload)
+            payload["report_core_sha256"] = core_sha
+            payload["artifact_hashes"] = {
+                **payload["artifact_hashes"],
+                "core": core_sha,
+            }
+            event = ExperimentEvent.create(
+                event.run_id,
+                event.event_type,
+                payload,
+                created_at=event.created_at,
+                event_id=event.event_id,
+            )
+        rewritten.append(event)
+    ledger.path.write_bytes(
+        b"".join(canonical_json_bytes(event.to_dict()) + b"\n" for event in rewritten)
+    )
+    return replace(report, core=core, core_sha256=core_sha)
+
+
 def test_reject_integrity_gates_are_hard_and_deterministically_ordered(tmp_path):
     ledger, report = _completed_report(
         tmp_path,
@@ -414,3 +446,81 @@ def test_reject_policy_and_report_schema_or_hash_errors_without_decision(tmp_pat
     bad_core["unknown"] = float("nan")
     with pytest.raises(PromotionError):
         _evaluate(ledger, replace(report, core=bad_core))
+
+
+def test_promotion_and_review_required_threshold_boundary_are_frozen(tmp_path):
+    ledger, report = _completed_report(tmp_path)
+    assert _evaluate(ledger, report).state == "promote"
+    core = dict(report.core)
+    comparison = dict(core["comparison"])
+    pooled = dict(comparison["pooled"])
+    metrics = dict(pooled["metrics"])
+    metrics["score"] = _metric_delta("0.00000")
+    pooled["metrics"] = metrics
+    comparison["pooled"] = pooled
+    core["comparison"] = comparison
+    boundary = _replace_core_and_attachment(ledger, report, core)
+    decision = _evaluate(ledger, boundary)
+    assert decision.state == "review_required"
+    assert decision.reason_codes == ("POOLED_SCORE_NOT_POSITIVE",)
+    assert decision.hard_failures == ()
+
+
+def test_record_decision_and_review_exception_are_immutable_and_evidence_bound(tmp_path):
+    ledger, report = _completed_report(tmp_path)
+    core = dict(report.core)
+    comparison = dict(core["comparison"])
+    pooled = dict(comparison["pooled"])
+    metrics = dict(pooled["metrics"])
+    metrics["node_recall_micro"] = _metric_delta("-0.00001")
+    pooled["metrics"] = metrics
+    comparison["pooled"] = pooled
+    core["comparison"] = comparison
+    report = _replace_core_and_attachment(ledger, report, core)
+    decision_event = record_promotion(
+        report,
+        policy_path=POLICY,
+        ledger_path=ledger.path,
+        workspace_root=ledger.workspace_root,
+        evaluation_run_id="evaluation-candidate-v1",
+    )
+    assert decision_event.payload["state"] == "review_required"
+    exception = record_review_exception(
+        ledger_path=ledger.path,
+        workspace_root=ledger.workspace_root,
+        evaluation_run_id="evaluation-candidate-v1",
+        failed_gates={"NODE_RECALL_REGRESSION": {"delta": "-0.00001"}},
+        quantitative_tradeoff="score gain exceeds the small node-recall regression",
+        approver="competition-owner",
+        reason="explicitly reviewed for the next controlled experiment only",
+        downstream_authorization="phase3-experiment-only",
+    )
+    assert exception.payload["decision_event_sha256"] == event_sha256(decision_event)
+    before = ledger.path.read_bytes()
+    with pytest.raises(TransitionError):
+        ledger.append(exception)
+    assert ledger.path.read_bytes() == before
+
+
+def test_review_exception_missing_required_audit_fields_fails_without_append(tmp_path):
+    ledger, report = _completed_report(tmp_path)
+    record_promotion(
+        report,
+        policy_path=POLICY,
+        ledger_path=ledger.path,
+        workspace_root=ledger.workspace_root,
+        evaluation_run_id="evaluation-candidate-v1",
+    )
+    before = ledger.path.read_bytes()
+    with pytest.raises(PromotionError, match="PROMOTION_DECISION_MISSING"):
+        record_review_exception(
+            ledger_path=ledger.path,
+            workspace_root=ledger.workspace_root,
+            evaluation_run_id="missing",
+            failed_gates={},
+            quantitative_tradeoff="x",
+            approver="x",
+            reason="x",
+            downstream_authorization="x",
+        )
+    assert ledger.path.read_bytes() == before

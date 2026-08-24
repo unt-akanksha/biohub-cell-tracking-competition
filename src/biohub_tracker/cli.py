@@ -19,12 +19,19 @@ from .ledger import (
     amendment_payload,
     artifact_record,
     completed_payload,
+    cpu_acceptance_completed_payload,
+    cpu_acceptance_failed_payload,
+    cpu_acceptance_inputs_bound_payload,
+    cpu_acceptance_registration_payload,
+    cpu_acceptance_started_payload,
     decision_payload,
+    event_sha256,
     failed_payload,
     generate_run_id,
     git_state,
     rejected_payload,
     registration_payload,
+    reconstruct_cpu_acceptances,
     reconstruct_runs,
     start_payload,
 )
@@ -214,6 +221,28 @@ def build_parser() -> argparse.ArgumentParser:
     roundtrip.add_argument("--scorer-lock", type=Path)
     roundtrip.add_argument("--scorer-checkout", type=Path)
     roundtrip.add_argument("--tracksdata-checkout", type=Path)
+    cpu_acceptance = subparsers.add_parser(
+        "cpu-acceptance", help="manage the isolated CPU official-data control lifecycle"
+    )
+    cpu_commands = cpu_acceptance.add_subparsers(
+        dest="cpu_acceptance_command", required=True
+    )
+    cpu_register = cpu_commands.add_parser("register", help="pre-register a request")
+    cpu_register.add_argument("--request", type=Path, required=True)
+    cpu_start = cpu_commands.add_parser("start", help="bind owned asset versions")
+    cpu_start.add_argument("run_id")
+    cpu_start.add_argument("--kernel-ref", required=True)
+    cpu_start.add_argument("--runtime-dataset-ref", required=True)
+    cpu_reconcile = cpu_commands.add_parser(
+        "reconcile", help="append validated input and terminal reconciliation evidence"
+    )
+    cpu_reconcile.add_argument("run_id")
+    cpu_reconcile.add_argument("--evidence", type=Path, required=True)
+    cpu_fail = cpu_commands.add_parser("fail", help="terminate a nonterminal CPU control")
+    cpu_fail.add_argument("run_id")
+    cpu_fail.add_argument("--reason-code", required=True)
+    cpu_fail.add_argument("--detail", required=True)
+    cpu_fail.add_argument("--observed-artifacts")
     return parser
 
 
@@ -361,6 +390,126 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
         else:
             parser.error(f"unknown experiment command: {args.experiment_command}")
         ledger.append(event)
+        print(event.event_id)
+        return 0
+    if args.command == "cpu-acceptance":
+        ledger = Ledger(root / "experiments" / "events.jsonl", root)
+        if args.cpu_acceptance_command == "register":
+            request = _load_config(args.request)
+            payload = cpu_acceptance_registration_payload(
+                run_id=request.get("run_id"),
+                purpose=request.get("purpose"),
+                request_nonce=request.get("request_nonce"),
+                acceptance_request_sha256=request.get("acceptance_request_sha256"),
+                evaluation_run_id=request.get("evaluation_run_id"),
+                kernel_slug=request.get("kernel_slug"),
+                runtime_dataset_slug=request.get("runtime_dataset_slug"),
+                scorer_lock_sha256=request.get("scorer_lock_sha256"),
+                environment_lock_sha256=request.get("environment_lock_sha256"),
+                manifest_policy_sha256=request.get("manifest_policy_sha256"),
+                control_model_sha256=request.get("control_model_sha256"),
+                config_sha256=request.get("config_sha256"),
+                code_sha256=request.get("code_sha256"),
+                data_source_sha256=request.get("data_source_sha256"),
+                cpu_watchdog_minutes=request.get("cpu_watchdog_minutes"),
+            )
+            event = ExperimentEvent.create(
+                payload["run_id"], EventType.CPU_ACCEPTANCE_REGISTERED, payload
+            )
+            ledger.append(event)
+        elif args.cpu_acceptance_command == "start":
+            states = reconstruct_cpu_acceptances(ledger.read_events())
+            state = states.get(args.run_id)
+            if state is None:
+                raise ValueError(f"unknown CPU acceptance ID: {args.run_id}")
+            registration_event = next(
+                item
+                for item in state.events
+                if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+            )
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.CPU_ACCEPTANCE_STARTED,
+                cpu_acceptance_started_payload(
+                    run_id=args.run_id,
+                    registration_event_sha256=event_sha256(registration_event),
+                    kernel_ref=args.kernel_ref,
+                    runtime_dataset_ref=args.runtime_dataset_ref,
+                ),
+            )
+            ledger.append(event)
+        elif args.cpu_acceptance_command == "reconcile":
+            evidence = _load_config(args.evidence)
+            binding = evidence.get("input_binding")
+            completion = evidence.get("completion")
+            if not isinstance(binding, dict) or not isinstance(completion, dict):
+                raise ValueError("reconciliation evidence requires input_binding and completion")
+            states = reconstruct_cpu_acceptances(ledger.read_events())
+            state = states.get(args.run_id)
+            if state is None:
+                raise ValueError(f"unknown CPU acceptance ID: {args.run_id}")
+            if state.inputs_bound is None:
+                ledger.append(
+                    ExperimentEvent.create(
+                        args.run_id,
+                        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+                        cpu_acceptance_inputs_bound_payload(
+                            run_id=args.run_id,
+                            manifest_sha256=binding.get("manifest_sha256"),
+                            folds=binding.get("folds", ()),
+                        ),
+                    )
+                )
+            elif state.inputs_bound != cpu_acceptance_inputs_bound_payload(
+                run_id=args.run_id,
+                manifest_sha256=binding.get("manifest_sha256"),
+                folds=binding.get("folds", ()),
+            ):
+                raise ValueError("CPU input binding conflicts with immutable ledger state")
+            states = reconstruct_cpu_acceptances(ledger.read_events())
+            state = states[args.run_id]
+            if state.terminal is None:
+                event = ExperimentEvent.create(
+                    args.run_id,
+                    EventType.CPU_ACCEPTANCE_COMPLETED,
+                    cpu_acceptance_completed_payload(
+                        run_id=args.run_id,
+                        actual_cpu_runtime_seconds=completion.get(
+                            "actual_cpu_runtime_seconds"
+                        ),
+                        peak_memory_mb=completion.get("peak_memory_mb"),
+                        remote_job_identity=completion.get("remote_job_identity"),
+                        graph_inventory_sha256=completion.get("graph_inventory_sha256"),
+                        artifact_hashes=completion.get("artifact_hashes", {}),
+                        output_inventory_sha256=completion.get(
+                            "output_inventory_sha256"
+                        ),
+                        pending_payload_sha256=completion.get("pending_payload_sha256"),
+                        pending_envelope_sha256=completion.get(
+                            "pending_envelope_sha256"
+                        ),
+                        reconciliation_sha256=completion.get("reconciliation_sha256"),
+                    ),
+                )
+                ledger.append(event)
+            else:
+                event = state.events[-1]
+        else:
+            event = ExperimentEvent.create(
+                args.run_id,
+                EventType.CPU_ACCEPTANCE_FAILED,
+                cpu_acceptance_failed_payload(
+                    run_id=args.run_id,
+                    reason_code=args.reason_code,
+                    detail=args.detail,
+                    observed_artifact_hashes=(
+                        _json_value(args.observed_artifacts)
+                        if args.observed_artifacts
+                        else None
+                    ),
+                ),
+            )
+            ledger.append(event)
         print(event.event_id)
         return 0
     if args.command == "progress":

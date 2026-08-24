@@ -8,7 +8,16 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from .io import atomic_replace_json, atomic_replace_text
-from .ledger import EventType, ExperimentEvent, RunState, RunStatus, reconstruct_runs
+from .ledger import (
+    EventType,
+    ExperimentEvent,
+    RunState,
+    RunStatus,
+    event_sha256,
+    reconstruct_cpu_acceptances,
+    reconstruct_exact_evaluations,
+    reconstruct_runs,
+)
 
 
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
@@ -112,11 +121,12 @@ def select_next_gate(run_summaries: Iterable[Mapping[str, Any]]) -> dict[str, An
 
 
 def render_progress_json(events: Iterable[ExperimentEvent]) -> dict[str, Any]:
-    runs = reconstruct_runs(events)
+    materialized = list(events)
+    runs = reconstruct_runs(materialized)
     summaries = [_summarize_state(runs[run_id]) for run_id in sorted(runs)]
     summaries.sort(key=lambda item: (str(item["registered_at"]), str(item["run_id"])))
     next_run = select_next_gate(summaries)
-    return {
+    projection = {
         "schema_version": 1,
         "runs": summaries,
         "next_experiment": (
@@ -129,6 +139,45 @@ def render_progress_json(events: Iterable[ExperimentEvent]) -> dict[str, Any]:
             else None
         ),
     }
+    controls = reconstruct_cpu_acceptances(materialized)
+    evaluations = reconstruct_exact_evaluations(materialized)
+    if controls:
+        projection["cpu_acceptances"] = [
+            {
+                "run_id": run_id,
+                "status": state.status.value,
+                "purpose": state.registered["purpose"],
+                "evaluation_run_id": state.registered["evaluation_run_id"],
+                "accelerator": "none",
+                "inputs_bound": state.inputs_bound is not None,
+                "evidence_eligible": bool(
+                    state.terminal and state.terminal.get("evidence_eligible")
+                ),
+                "promotion_eligible": False,
+                "terminal_event_sha256": (
+                    event_sha256(state.events[-1]) if state.terminal is not None else None
+                ),
+            }
+            for run_id, state in sorted(controls.items())
+        ]
+    if evaluations:
+        projection["exact_evaluations"] = [
+            {
+                "evaluation_run_id": run_id,
+                "status": state.status.value,
+                "evidence_kind": state.registered["evidence_kind"],
+                "decision": state.decision["state"] if state.decision else None,
+                "reason_codes": list(state.decision["reason_codes"])
+                if state.decision
+                else [],
+                "review_exception_recorded": bool(state.exceptions),
+                "promotion_eligible": bool(
+                    state.terminal and state.terminal.get("promotion_eligible")
+                ),
+            }
+            for run_id, state in sorted(evaluations.items())
+        ]
+    return projection
 
 
 def _compact_evidence(value: Any) -> str:
@@ -202,6 +251,21 @@ def render_progress_markdown(events: Iterable[ExperimentEvent]) -> str:
                 "",
             ]
         )
+    if projection.get("cpu_acceptances"):
+        lines.extend(["", "## CPU Acceptance Controls", ""])
+        for control in projection["cpu_acceptances"]:
+            lines.append(
+                f"- `{_markdown(control['run_id'])}`: `{_markdown(control['status'])}`, "
+                f"accelerator `none`, promotion eligible `false`"
+            )
+    if projection.get("exact_evaluations"):
+        lines.extend(["", "## Aggregate Exact Evaluations", ""])
+        for evaluation in projection["exact_evaluations"]:
+            lines.append(
+                f"- `{_markdown(evaluation['evaluation_run_id'])}`: "
+                f"`{_markdown(evaluation['status'])}`, decision "
+                f"`{_markdown(evaluation.get('decision') or 'not recorded')}`"
+            )
     return "\n".join(lines)
 
 
