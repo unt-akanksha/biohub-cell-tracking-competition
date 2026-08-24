@@ -21,11 +21,11 @@
 
 ### Resource Safety
 
-- [ ] **SAFE-01**: A Kaggle GPU launch is rejected unless live quota is parseable, no conflicting GPU job is active, and a positive worst-case runtime is declared.
-- [ ] **SAFE-02**: A Kaggle GPU launch is rejected when `remaining GPU hours - declared maximum runtime < 8 hours`.
-- [ ] **SAFE-03**: Every GPU notebook stops before its declared wall-clock budget, flushes a resumable checkpoint, and emits a terminal status record.
-- [ ] **SAFE-04**: A long run cannot start until a short smoke test has verified imports, inputs, one batch, model forward/backward where applicable, checkpoint round trip, and output location.
-- [ ] **SAFE-05**: Dense-movie memory and complete dataset-coverage preflights run before any job with a declared runtime above one hour.
+- [x] **SAFE-01**: A Kaggle GPU launch is rejected unless live quota is parseable, no conflicting GPU job is active, and a positive worst-case runtime is declared.
+- [x] **SAFE-02**: A Kaggle GPU launch is rejected when `remaining GPU hours - declared maximum runtime < 8 hours`.
+- [x] **SAFE-03**: Every GPU notebook stops before its declared wall-clock budget, flushes a resumable checkpoint, and emits a terminal status record.
+- [x] **SAFE-04**: A long run cannot start until a short smoke test has verified imports, inputs, one batch, model forward/backward where applicable, checkpoint round trip, and output location.
+- [x] **SAFE-05**: Dense-movie memory and complete dataset-coverage preflights run before any job with a declared runtime above one hour.
 
 ### Exact Validation
 
@@ -101,11 +101,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TRACK-02 | Phase 1 | Complete |
 | TRACK-03 | Phase 1 | Complete |
 | TRACK-04 | Phase 1 | Complete |
-| SAFE-01 | Phase 1 | Pending |
-| SAFE-02 | Phase 1 | Pending |
-| SAFE-03 | Phase 1 | Pending |
-| SAFE-04 | Phase 1 | Pending |
-| SAFE-05 | Phase 1 | Pending |
+| SAFE-01 | Phase 1 | Complete |
+| SAFE-02 | Phase 1 | Complete |
+| SAFE-03 | Phase 1 | Complete |
+| SAFE-04 | Phase 1 | Complete |
+| SAFE-05 | Phase 1 | Complete |
 | VAL-01 | Phase 2 | Pending |
 | VAL-02 | Phase 2 | Pending |
 | VAL-03 | Phase 2 | Pending |
