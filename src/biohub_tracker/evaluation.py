@@ -9,13 +9,15 @@ import shutil
 import tempfile
 import time
 import tracemalloc
+import warnings
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from .evidence import resolve_producer
+from .comparison import build_paired_comparison
 from .diagnostics import aggregate_movie_diagnostics, diagnose_movie
+from .evidence import resolve_producer
 from .graphs import (
     PredictionInventory,
     artifact_tree_sha256,
@@ -55,6 +57,14 @@ _DIAGNOSTIC_POLICY_KEYS = {
     "displacement_boundaries_um",
     "division_offsets_frames",
     "no_event_encoding",
+}
+_BOOTSTRAP_POLICY_KEYS = {
+    "algorithm",
+    "percentiles",
+    "percentile_method",
+    "repetitions",
+    "seed",
+    "unit",
 }
 _CORE_KEYS = {
     "schema_version",
@@ -128,6 +138,20 @@ def _finite_tree(value: Any, path: str = "report") -> None:
         _fail("NONFINITE_METRIC", path)
     elif isinstance(value, Decimal) and not value.is_finite():
         _fail("NONFINITE_METRIC", path)
+
+
+def _forbidden_presentation_key(value: Any) -> bool:
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            if str(key).casefold() in {
+                "leaderboard_score",
+                "public_leaderboard_score",
+                "public_score",
+            } or _forbidden_presentation_key(item):
+                return True
+    elif isinstance(value, (list, tuple)):
+        return any(_forbidden_presentation_key(item) for item in value)
+    return False
 
 
 @dataclass(frozen=True)
@@ -205,6 +229,17 @@ def load_evaluation_policy(path: str | Path) -> tuple[dict[str, Any], str]:
         _fail("EVALUATION_POLICY_INVALID", "division offsets changed")
     if diagnostics["no_event_encoding"] != "not_applicable":
         _fail("EVALUATION_POLICY_INVALID", "no-event encoding changed")
+    if set(bootstrap) != _BOOTSTRAP_POLICY_KEYS:
+        _fail("EVALUATION_POLICY_INVALID", "bootstrap policy schema changed")
+    if (
+        bootstrap["algorithm"] != "numpy.Generator(PCG64)"
+        or bootstrap["percentile_method"] != "linear"
+        or bootstrap["unit"] != "complete_movie_within_embryo"
+        or bootstrap["seed"] != 20260824
+        or bootstrap["repetitions"] != 10000
+        or bootstrap["percentiles"] != ["2.5", "50", "97.5"]
+    ):
+        _fail("EVALUATION_POLICY_INVALID", "bootstrap semantics changed")
     _finite_tree(value, "evaluation_policy")
     return value, sha256_bytes(canonical_json_bytes(value))
 
@@ -404,6 +439,11 @@ def _score_movie(
         division_tp_forks=division_result.tp_forks,
         division_fp_forks=division_result.fp_forks,
     )
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore", message="No divisions present across any sample in this split*"
+        )
+        movie_summary = _canonical_summary(verified.summarise([organizer_row]))
     return {
         "organizer_row": organizer_row,
         "official_counts": counts,
@@ -413,9 +453,11 @@ def _score_movie(
         "node_recall": decimal_string(recall, "node_recall"),
         "node_count_ratio": decimal_string(organizer_row["total_node_ratio"], "node_count_ratio"),
         "edge_jaccard": decimal_string(organizer_row["edge_jaccard"], "edge_jaccard"),
+        "division_jaccard": movie_summary["division_jaccard"],
         "adjusted_edge_jaccard": decimal_string(
             organizer_row["adj_edge_jaccard"], "adjusted_edge_jaccard"
         ),
+        "score": movie_summary["score"],
         "diagnostic_state": diagnostic,
     }
 
@@ -528,8 +570,8 @@ def canonical_report_core(
     authoritative_inventories: Sequence[Mapping[str, Any]],
     official: Mapping[str, Any],
     expected_samples: Sequence[str],
-    diagnostics: Mapping[str, Any] | None = None,
-    comparison: Mapping[str, Any] | None = None,
+    diagnostics: Mapping[str, Any],
+    comparison: Mapping[str, Any],
 ) -> dict[str, Any]:
     core = {
         "schema_version": REPORT_SCHEMA,
@@ -550,8 +592,8 @@ def canonical_report_core(
             "complete": True,
         },
         "official": dict(official),
-        "diagnostics": dict(diagnostics or {"status": "pending_plan_02_03_02"}),
-        "comparison": dict(comparison or {"status": "pending_plan_02_03_03"}),
+        "diagnostics": dict(diagnostics),
+        "comparison": dict(comparison),
         "integrity_checks": {
             "producer_ledger_resolution": "passed",
             "aggregate_member_match": "passed",
@@ -603,6 +645,27 @@ def validate_exact_core(core: Any) -> dict[str, Any]:
         _fail("EXACT_REPORT_INCOMPLETE", "sample coverage")
     if core.get("promotion_eligible") is not False:
         _fail("EXACT_REPORT_SCHEMA_INVALID", "promotion eligibility attaches only after ledger completion")
+    diagnostics = core["diagnostics"]
+    if (
+        not isinstance(diagnostics, dict)
+        or diagnostics.get("authority") != "non_authoritative_diagnostic"
+        or diagnostics.get("organizer_input_eligible") is not False
+        or set(diagnostics) != {
+            "authority",
+            "organizer_input_eligible",
+            "baseline",
+            "candidate",
+        }
+    ):
+        _fail("EXACT_REPORT_SCHEMA_INVALID", "diagnostic authority boundary")
+    comparison = core["comparison"]
+    if (
+        not isinstance(comparison, dict)
+        or comparison.get("schema_version") != "biohub.exact-comparison.v1"
+        or comparison.get("direction") != "candidate_minus_baseline"
+        or _forbidden_presentation_key(comparison)
+    ):
+        _fail("EXACT_REPORT_SCHEMA_INVALID", "comparison boundary")
     _finite_tree(core)
     canonical_json_bytes(core)
     return core
@@ -670,7 +733,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             manifest,
             lock,
             policy,
-            _policy_sha,
+            policy_sha,
             inventories,
             members,
         ) = _preflight_request(request)
@@ -755,12 +818,25 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             },
         }
         state = reconstruct_exact_evaluations(ledger.read_events())[request.evaluation_run_id]
+        comparison = build_paired_comparison(
+            registration=state.registered,
+            aggregate_status=state.status.value,
+            members=members,
+            authoritative_inventories=authoritative,
+            baseline_movies=movies["baseline"],
+            candidate_movies=movies["candidate"],
+            expected_sample_ids=[item.sample_id for item in manifest.samples],
+            policy=policy,
+            policy_sha256=policy_sha,
+            aggregate=lambda rows: aggregate_official_rows(verified, rows),
+        )
         core = canonical_report_core(
             registration=state.registered,
             authoritative_inventories=authoritative,
             official=official,
             expected_samples=[item.sample_id for item in manifest.samples],
             diagnostics=diagnostics,
+            comparison=comparison,
         )
         core_sha = sha256_bytes(canonical_json_bytes(core))
         _, peak_bytes = tracemalloc.get_traced_memory()
