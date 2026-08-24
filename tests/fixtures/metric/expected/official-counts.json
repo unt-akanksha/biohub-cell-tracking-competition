@@ -1,0 +1,32 @@
+{
+  "attribution": {
+    "license": "BSD-3-Clause",
+    "source": "Frozen from tracking_cellmot at organizer commit 075fc5f5a52d11077f9dc2b074644618f26939e2"
+  },
+  "cases": {
+    "perfect_linear": {
+      "official_counts": {
+        "division_fn": 0,
+        "division_fp": 0,
+        "division_tp": 0,
+        "edge_fn": 0,
+        "edge_fp": 0,
+        "edge_tp": 2,
+        "num_pred_nodes": 3
+      },
+      "official_summary": {
+        "adj_edge_jaccard": "1",
+        "division_fn": 0,
+        "division_fp": 0,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "edge_jaccard": "1",
+        "n": 1,
+        "n_adj": 1,
+        "node_recall": "1",
+        "score": "1"
+      }
+    }
+  },
+  "schema_version": 1
+}

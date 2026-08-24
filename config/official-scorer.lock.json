@@ -1,0 +1,73 @@
+{
+  "api": {
+    "adapter_schema": "biohub.official-scorer-tracer.v1",
+    "module": "tracking_cellmot.metrics",
+    "symbols": [
+      "evaluate",
+      "per_sample_metrics",
+      "summarise",
+      "node_recall"
+    ]
+  },
+  "constants": {
+    "adjustment_alpha": "0.1",
+    "max_distance_um": "7",
+    "scale_zyx_um": [
+      "1.625",
+      "0.40625",
+      "0.40625"
+    ],
+    "score_division_weight": "0.1"
+  },
+  "environment": {
+    "lock_path": "requirements/evaluation-lock.txt",
+    "lock_sha256": "6290eea0cf0858aa80b1a94273428bdc573671768214a63e819fc02b1ffc4df0",
+    "packages": {
+      "geff": "1.3.0.1.2",
+      "numpy": "2.5.2",
+      "polars": "1.43.2",
+      "scipy": "1.18.1",
+      "tracking-cellmot": "0.1.0",
+      "tracksdata": "0.1.0rc7"
+    },
+    "python_requires": ">=3.11,<3.14"
+  },
+  "fixtures": {
+    "expected_path": "tests/fixtures/metric/expected/official-counts.json",
+    "expected_sha256": "04bac9b9c5cdda19093dc4272079952e9b2491791477eea54a41618fc3c086ab",
+    "perfect_linear_path": "tests/fixtures/metric/graph_specs/perfect-linear.json",
+    "perfect_linear_result_sha256": "8dd250c67ac988da0085c657814287e3218255614b88abbe1192c878f71ea0d4",
+    "perfect_linear_sha256": "1a22bb66e34941d7ca099339e7398d93a26e3ac4d67fd9380ac4b6122dacc922"
+  },
+  "license": {
+    "file": "LICENSE",
+    "file_sha256": "4cd604324b1a9f0c420786a92501430a7ff9189f46bdcdfc485aa43bfc16973b",
+    "spdx": "BSD-3-Clause",
+    "tracksdata_file_sha256": "5b7f155b2d37b54e732605086caa9807e0ae2fa4aaa52765e3e070fc3b8d6502"
+  },
+  "organizer": {
+    "commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+    "critical_files": {
+      "LICENSE": "4cd604324b1a9f0c420786a92501430a7ff9189f46bdcdfc485aa43bfc16973b",
+      "metrics.md": "22e025fac9e66bd97331b2ffdb5851ec867162dcfcda372fe3420260430cc3e0",
+      "pyproject.toml": "5ccfd14d33bccc855c5177feb174178ded95947c05c62df2a6df5e38e972b0f3",
+      "scripts/csv_to_geffs.py": "6ff289b978549c0745588a9f0fb455ae9d6507a3f1e570f3c3b77da36b853c20",
+      "scripts/evaluate.py": "0c259fd75ab7cc2174c266ac057ac8b901a19852c64e5ba2889867144ed3fc83",
+      "scripts/geffs_to_csv.py": "c3a9a3f2fdf8cac622221dce5ee1427c0e46157974ca37358e46ec318e7a421a",
+      "src/tracking_cellmot/division_metrics.py": "ef7472347a06842982bda795f896fd60fd7cb2e429fb87a72c6b9ede50c49d29",
+      "src/tracking_cellmot/io.py": "fef87f49a8cea1a7f943493e5eb61ebbba5049b5536749f82732b0e6ba57f2ed",
+      "src/tracking_cellmot/metrics.py": "ab11310db0ada78ebb408fcd913bd001aed0dd5f8c1179e0a45dbb7152d6ebde"
+    },
+    "patch_commit": "aa65e90aeb8a774ebb1b549e547787b87ac8a01c",
+    "repository": "https://github.com/royerlab/kaggle-cell-tracking-competition.git"
+  },
+  "parity_claims": {
+    "private_kaggle_scorer_container": "unproven",
+    "public_source": "verifiable"
+  },
+  "schema_version": 1,
+  "tracksdata": {
+    "commit": "39dccf3a243e44274759468cb31b2ad9e7fc1d09",
+    "repository": "https://github.com/royerlab/tracksdata.git"
+  }
+}

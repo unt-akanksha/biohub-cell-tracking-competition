@@ -168,6 +168,15 @@ def build_parser() -> argparse.ArgumentParser:
     execute_source = execute.add_mutually_exclusive_group()
     execute_source.add_argument("--live", action="store_true")
     execute_source.add_argument("--fixture-dir", type=Path)
+    scorer = subparsers.add_parser("scorer", help="verify the pinned official scorer")
+    scorer_commands = scorer.add_subparsers(dest="scorer_command", required=True)
+    scorer_verify = scorer_commands.add_parser("verify", help="verify provenance and run tracer")
+    scorer_verify.add_argument("--lock", type=Path)
+    scorer_verify.add_argument("--checkout", type=Path)
+    scorer_verify.add_argument("--tracksdata-checkout", type=Path)
+    scorer_verify.add_argument("--fixture", type=Path)
+    scorer_verify.add_argument("--expected", type=Path)
+    scorer_verify.add_argument("--live", action="store_true")
     return parser
 
 
@@ -417,6 +426,29 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
             push_runner=launch_runner or default_push_runner,
         )
         print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "scorer":
+        from .scorer import run_fixture_tracer
+        from .scorer_lock import corroborate_live, verify_scorer_lock
+
+        lock_path = args.lock or root / "config" / "official-scorer.lock.json"
+        checkout = args.checkout or root / ".biohub" / "vendor" / "kaggle-cell-tracking-competition"
+        tracksdata_checkout = args.tracksdata_checkout or root / ".biohub" / "vendor" / "tracksdata"
+        verified = verify_scorer_lock(
+            lock_path,
+            checkout,
+            tracksdata_checkout=tracksdata_checkout,
+        )
+        result = run_fixture_tracer(
+            verified,
+            args.fixture
+            or root / "tests" / "fixtures" / "metric" / "graph_specs" / "perfect-linear.json",
+            args.expected
+            or root / "tests" / "fixtures" / "metric" / "expected" / "official-counts.json",
+        )
+        if args.live:
+            result["live_provenance"] = corroborate_live(verified.lock)
+        print(json.dumps(result, sort_keys=True, separators=(",", ":")))
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2

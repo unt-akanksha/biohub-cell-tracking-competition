@@ -9,6 +9,8 @@ __pycache__/
 .biohub/cache/
 .biohub/snapshots/
 .biohub/authorizations/
+.biohub/vendor/
+.biohub/evaluation-venv/
 downloads/
 notebooks/downloaded/
 leaderboard-archives/
@@ -30,4 +32,3 @@ secrets/
 kaggle.json
 
 # Compact reports and the append-only experiment ledger are intentionally tracked.
-
