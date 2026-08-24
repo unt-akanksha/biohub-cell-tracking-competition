@@ -450,7 +450,7 @@ def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any])
     lines = [
         "# Biohub Competition Status",
         "",
-        f"Generated from snapshot: `{status['generated_from_snapshot_at']}`  ",
+        f"Generated from snapshot: `{status['generated_from_snapshot_at']}`",
         f"Snapshot SHA-256: `{status['snapshot_sha256']}`",
         "",
         "## Competition",

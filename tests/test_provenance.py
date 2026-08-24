@@ -40,6 +40,28 @@ def test_unknown_requires_source_before_automated_no_signature(tmp_path):
     assert "not_a_clean_score_claim" in scanned.evidence
 
 
+def test_negated_audit_flags_and_edge_placeholders_are_not_hack_signatures(tmp_path):
+    registry, patterns = policies()
+    source = tmp_path / "kernel.py"
+    source.write_text(
+        "audit = {'metric_hack_used': False}\n"
+        "edge_row = {'t': -1, 'z': -1, 'source_id': 1, 'target_id': 2}\n",
+        encoding="utf-8",
+    )
+    result = classify_notebook("owner/clean", "ordinary tracking", [source], registry, patterns)
+    assert result.provenance == ProvenanceClass.AUTOMATED_NO_KNOWN_SIGNATURE
+    assert result.matched_patterns == ()
+
+
+def test_enabled_metric_hack_flag_is_excluded(tmp_path):
+    registry, patterns = policies()
+    source = tmp_path / "kernel.py"
+    source.write_text("metric_hack_enabled = True\n", encoding="utf-8")
+    result = classify_notebook("owner/hack", "ordinary title", [source], registry, patterns)
+    assert result.provenance == ProvenanceClass.EXPLICIT_METRIC_HACK
+    assert "enabled-metric-hack-flag" in result.matched_patterns
+
+
 def test_curated_hash_change_invalidates_review(tmp_path):
     _, patterns = policies()
     source = tmp_path / "kernel.py"

@@ -3,8 +3,14 @@
   "patterns": [
     {
       "id": "explicit-metric-hack-language",
-      "scope": "both",
+      "scope": "title",
       "regex": "metric[ _-]*hack|score[ _-]*exploit",
+      "severity": "explicit"
+    },
+    {
+      "id": "enabled-metric-hack-flag",
+      "scope": "source",
+      "regex": "metric[ _-]*hack(?:[ _-]*(?:used|enabled|mode))?[\\\"']?\\s*[:=]\\s*(?:true|1|[\\\"'](?:on|enabled)[\\\"'])",
       "severity": "explicit"
     },
     {
@@ -16,7 +22,7 @@
     {
       "id": "negative-time-sentinel",
       "scope": "source",
-      "regex": "(?:time|frame|t)[\\\"']?\\s*[:=]\\s*-[1-9][0-9]*",
+      "regex": "(?:(?:sentinel|fake|exploit).{0,120}(?:time|frame|t)[\\\"']?\\s*[:=]\\s*-[1-9][0-9]*|(?:time|frame|t)[\\\"']?\\s*[:=]\\s*-[1-9][0-9]*.{0,120}(?:sentinel|fake|exploit))",
       "severity": "explicit"
     },
     {
@@ -27,4 +33,3 @@
     }
   ]
 }
-

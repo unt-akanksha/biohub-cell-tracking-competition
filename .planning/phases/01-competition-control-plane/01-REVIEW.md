@@ -11,7 +11,7 @@ findings:
   total: 0
 resolved_during_review:
   critical: 1
-  warning: 3
+  warning: 4
 reviewed_at: 2026-08-24T04:12:00Z
 review_commit: 3c8c693
 ---
@@ -57,6 +57,14 @@ The configured GSD reviewer agents are not installed and this session forbids au
 - **Resolution:** Every watch now collects `kaggle competitions pages --content`, stores full content in the immutable snapshot, and emits compact per-page SHA-256 fingerprints in the current report.
 - **Evidence:** `tests/fixtures/kaggle/pages.json`; `tests/test_watch.py`.
 
+### WR-04: Negated provenance flags were classified as exploit code
+
+- **Severity:** Warning
+- **Location:** `policies/metric_hack_patterns.json`
+- **Risk:** The broad source regex matched clean audit declarations such as `metric_hack_used = False` and ordinary submission edge placeholders such as `t = -1`, temporarily excluding all 20 current notebooks.
+- **Resolution:** Generic metric-hack language is title-only; source matching now requires an enabled/true flag, and negative-time detection requires nearby fake/sentinel/exploit context.
+- **Evidence:** `tests/test_provenance.py`; live top-20 audit resolved to 3 curated research candidates, 8 explicit hacks, and 9 conservative source-review items.
+
 ## Security and Behavior Checks
 
 - Subprocesses use argument arrays with `shell=False`; kernel refs and workspace paths are validated.
@@ -70,7 +78,7 @@ The configured GSD reviewer agents are not installed and this session forbids au
 
 ## Verification
 
-- `python -m pytest -q`: 55 passed after review fixes.
+- `python -m pytest -q`: 57 passed after review fixes.
 - `python -m compileall -q src`: passed.
 - `git diff --check`: passed.
 - Live guard proof before review fixes: zero active owned competition kernels; GPU remained 0.00 used / 30.00 remaining.
