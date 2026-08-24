@@ -116,6 +116,8 @@ def test_report_contains_required_status_and_quota_math(fixture_dir, competition
     assert "Spendable before reserve: 22.00 hours" in report
     assert "`xiaoleilian/biohub-ct-mix-divaug`" in report
     assert "Excluded Metric Hacks" in report
+    assert "Live Kaggle Page Fingerprints" in report
+    assert "`rules`:" in report
 
 
 def test_report_is_deterministic_and_missing_rank_is_explicit(fixture_dir, competition_config):
@@ -135,3 +137,17 @@ def test_report_is_deterministic_and_missing_rank_is_explicit(fixture_dir, compe
     projection = build_status_projection(snapshot, competition_config)
     assert projection["competition"]["rank"] is None
     assert projection["gpu"]["spendable_hours"] == "22.00"
+
+
+def test_report_escapes_external_markdown(fixture_dir, competition_config):
+    snapshot = collect_snapshot(
+        competition_config,
+        fixture_dir=fixture_dir,
+        root=Path.cwd(),
+        now=datetime(2026, 8, 23, 20, 0, tzinfo=timezone.utc),
+    )
+    snapshot["topics"][0]["title"] = "safe\n## injected <script> [link](javascript:x)"
+    report = render_status_report(snapshot, competition_config)
+    assert "\n## injected" not in report
+    assert "&lt;script&gt;" in report
+    assert "\\[link\\]" in report

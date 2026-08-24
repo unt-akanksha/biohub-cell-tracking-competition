@@ -47,9 +47,12 @@ def atomic_write_json(path: str | Path, value: Any) -> Path:
             handle.write(payload)
             handle.flush()
             os.fsync(handle.fileno())
-        if target.exists():
-            raise FileExistsError(f"refusing to overwrite immutable file: {target}")
-        os.replace(temporary, target)
+        try:
+            # Same-directory hard-link publication is atomic and cannot overwrite
+            # a destination another process created during this operation.
+            os.link(temporary, target)
+        except FileExistsError as exc:
+            raise FileExistsError(f"refusing to overwrite immutable file: {target}") from exc
     finally:
         temporary.unlink(missing_ok=True)
     return target

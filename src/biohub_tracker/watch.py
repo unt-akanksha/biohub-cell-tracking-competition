@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -18,6 +19,15 @@ from .provenance import classify_notebook, load_policy, unknown_notebook
 
 
 SCHEMA_VERSION = 1
+_MARKDOWN_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _markdown(value: Any) -> str:
+    text = " ".join(_MARKDOWN_CONTROL.sub(" ", str(value or "")).split())
+    text = text.replace("\\", "\\\\").replace("<", "&lt;").replace(">", "&gt;")
+    for character in ("`", "*", "_", "[", "]", "|"):
+        text = text.replace(character, f"\\{character}")
+    return text
 
 
 def _decimal_text(value: Any) -> str | None:
@@ -124,6 +134,23 @@ def normalize_topics(raw: Any) -> list[dict[str, Any]]:
     return rows
 
 
+def normalize_pages(raw: Any) -> list[dict[str, Any]]:
+    pages = []
+    for item in _records(raw):
+        name = str(item.get("name", "")).strip()
+        content = str(item.get("content", ""))
+        if not name:
+            continue
+        pages.append(
+            {
+                "name": name,
+                "content": content,
+                "content_sha256": sha256_bytes(content.encode("utf-8")),
+            }
+        )
+    return sorted(pages, key=lambda item: item["name"].casefold())
+
+
 def normalize_notebooks(raw: Any) -> list[dict[str, Any]]:
     return [
         {
@@ -149,6 +176,7 @@ def _command_specs(slug: str, notebook_limit: int) -> dict[str, list[str]]:
         "topics": [
             "competitions", "topics", "list", slug, "--format", "json", "--sort-by", "recent"
         ],
+        "pages": ["competitions", "pages", slug, "--content", "--format", "json"],
         "kernels": [
             "kernels", "list", "--competition", slug, "--format", "json",
             "--sort-by", "scoreDescending", "--page-size", str(notebook_limit)
@@ -257,6 +285,7 @@ def collect_snapshot(
         "leaderboard": normalize_leaderboard(raw["leaderboard"]),
         "leaderboard_top": normalize_leaderboard(raw["leaderboard_top"]),
         "topics": normalize_topics(raw["topics"]),
+        "competition_pages": normalize_pages(raw["pages"]),
         "notebooks": notebooks,
     }
     snapshot["content_sha256"] = sha256_bytes(canonical_json_bytes(snapshot))
@@ -395,14 +424,21 @@ def build_status_projection(
         "active_hypothesis": current.get("active_hypothesis", "not registered"),
         "next_gate": current.get("next_gate", "not registered"),
         "competition_policy": snapshot.get("competition_policy", {}),
+        "competition_pages": [
+            {
+                "name": page.get("name"),
+                "content_sha256": page.get("content_sha256"),
+            }
+            for page in snapshot.get("competition_pages", [])
+        ],
         "collection_status": snapshot.get("collection_status", {}),
     }
 
 
 def _value_or_unavailable(value: Any, reason: str | None = None) -> str:
     if value is not None and value != "":
-        return str(value)
-    return f"unavailable ({reason})" if reason else "unavailable"
+        return _markdown(value)
+    return _markdown(f"unavailable ({reason})" if reason else "unavailable")
 
 
 def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any]) -> str:
@@ -419,10 +455,10 @@ def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any])
         "",
         "## Competition",
         "",
-        f"- Slug: `{competition['slug']}`",
+        f"- Slug: `{_markdown(competition['slug'])}`",
         f"- Public rank: {_value_or_unavailable(competition['rank'], competition['rank_unavailable_reason'])}",
         f"- Best clean public score: {_value_or_unavailable(competition['best_clean_public_score'])}",
-        f"- Clean-score evidence: {competition['best_clean_score_evidence']}",
+        f"- Clean-score evidence: {_markdown(competition['best_clean_score_evidence'])}",
         f"- Current public leader score: {_value_or_unavailable(competition['leader_score'])}",
         f"- Final deadline: `{competition['final_deadline_utc']}`",
         "",
@@ -448,23 +484,30 @@ def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any])
         "",
     ]
     for row in provenance["clean_research_candidates"]:
-        lines.append(f"- `{row['ref']}` — {row['provenance']}; {row['evidence']}")
+        lines.append(
+            f"- `{_markdown(row['ref'])}` — {_markdown(row['provenance'])}; "
+            f"{_markdown(row['evidence'])}"
+        )
     if not provenance["clean_research_candidates"]:
         lines.append("- None in the collected notebook set.")
     lines.extend(["", "### Excluded Metric Hacks", ""])
     for row in provenance["excluded_metric_hacks"]:
-        lines.append(f"- `{row['ref']}` — {row['evidence']}")
+        lines.append(f"- `{_markdown(row['ref'])}` — {_markdown(row['evidence'])}")
     if not provenance["excluded_metric_hacks"]:
         lines.append("- None detected in the collected notebook set.")
     lines.extend(["", "### Needs Source Review", ""])
     for row in provenance["needs_source_review"]:
-        lines.append(f"- `{row['ref']}` — {row['provenance']}; {row['evidence']}")
+        lines.append(
+            f"- `{_markdown(row['ref'])}` — {_markdown(row['provenance'])}; "
+            f"{_markdown(row['evidence'])}"
+        )
     if not provenance["needs_source_review"]:
         lines.append("- None.")
     lines.extend(["", "## Recent Discussions", ""])
     for topic in status["recent_discussions"]:
         lines.append(
-            f"- {topic['posted_at']} — {topic['title']} (topic `{topic['id']}`, "
+            f"- {_markdown(topic['posted_at'])} — {_markdown(topic['title'])} "
+            f"(topic `{_markdown(topic['id'])}`, "
             f"{topic['comments']} comments, {topic['votes']} votes)"
         )
     if not status["recent_discussions"]:
@@ -475,8 +518,8 @@ def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any])
             "",
             "## Next Gate",
             "",
-            f"- Active hypothesis: {status['active_hypothesis']}",
-            f"- Gate: {status['next_gate']}",
+            f"- Active hypothesis: {_markdown(status['active_hypothesis'])}",
+            f"- Gate: {_markdown(status['next_gate'])}",
             "",
             "## Policy Provenance",
             "",
@@ -484,8 +527,16 @@ def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any])
             f"- Notebook registry SHA-256: `{status['competition_policy'].get('notebook_registry_sha256', 'unavailable')}`",
             f"- Metric-hack policy SHA-256: `{status['competition_policy'].get('metric_hack_policy_sha256', 'unavailable')}`",
             "",
+            "### Live Kaggle Page Fingerprints",
+            "",
         ]
     )
+    for page in status["competition_pages"]:
+        lines.append(f"- `{_markdown(page['name'])}`: `{page['content_sha256']}`")
+    if not status["competition_pages"]:
+        reason = status["collection_status"].get("pages", {}).get("reason")
+        lines.append(f"- {_value_or_unavailable(None, reason)}")
+    lines.append("")
     return "\n".join(lines)
 
 

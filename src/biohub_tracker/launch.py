@@ -227,8 +227,8 @@ def authorize_launch(
         declared_max_runtime_hours=runtime,
         now=current,
     )
-    quota = read_gpu_quota(runner)
     active = list_active_gpu_kernels(runner, str(config["slug"]))
+    quota = read_gpu_quota(runner)
     decision = evaluate_guard(
         run_id=run_id,
         registered_status=state.status,
@@ -317,8 +317,8 @@ def validate_authorization(
     )
     if not secrets.compare_digest(report.report_sha256, authorization.preflight_report_sha256):
         raise LaunchError("PREFLIGHT_CHANGED", "preflight report changed after authorization")
-    quota = read_gpu_quota(runner)
     active = list_active_gpu_kernels(runner, str(config["slug"]))
+    quota = read_gpu_quota(runner)
     decision = evaluate_guard(
         run_id=authorization.run_id,
         registered_status=state.status,
@@ -367,16 +367,21 @@ def push_kernel(
     )
     root = workspace_root.resolve()
     directory = _kernel_directory(root, authorization.kernel_directory, authorization.kernel_ref)
-    atomic_write_json(
-        consumed_path(root, authorization.authorization_id),
-        {
-            "schema_version": 1,
-            "authorization_id": authorization.authorization_id,
-            "run_id": authorization.run_id,
-            "consumed_at": _utc_text((now or utc_now()).astimezone(timezone.utc)),
-            "authorization_sha256": authorization.authorization_sha256,
-        },
-    )
+    try:
+        atomic_write_json(
+            consumed_path(root, authorization.authorization_id),
+            {
+                "schema_version": 1,
+                "authorization_id": authorization.authorization_id,
+                "run_id": authorization.run_id,
+                "consumed_at": _utc_text((now or utc_now()).astimezone(timezone.utc)),
+                "authorization_sha256": authorization.authorization_sha256,
+            },
+        )
+    except FileExistsError as exc:
+        raise LaunchError(
+            "AUTHORIZATION_CONSUMED", "authorization was consumed by another launcher"
+        ) from exc
     command = ["kaggle", "kernels", "push", "-p", str(directory)]
     try:
         result = push_runner(command)

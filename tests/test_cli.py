@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
@@ -204,3 +205,52 @@ def test_launch_failed_runner_is_consumed_and_audited(tmp_path):
         )
     assert failure.value.reason_code == "KERNEL_PUSH_FAILED"
     assert ledger.read_events()[-1].event_type is EventType.LAUNCH_FAILED
+
+
+def test_launch_consumption_race_invokes_exactly_one_push(tmp_path, monkeypatch):
+    import biohub_tracker.launch as launch_module
+
+    authorization, config, fixture, _, _, ledger = authorize_fixture(tmp_path)
+    original_validate = launch_module.validate_authorization
+    barrier = threading.Barrier(2)
+    calls = []
+    results = []
+    errors = []
+
+    def synchronized_validate(*args, **kwargs):
+        value = original_validate(*args, **kwargs)
+        barrier.wait()
+        return value
+
+    monkeypatch.setattr(launch_module, "validate_authorization", synchronized_validate)
+
+    def attempt():
+        try:
+            results.append(
+                push_kernel(
+                    authorization,
+                    workspace_root=tmp_path,
+                    ledger=ledger,
+                    runner=FixtureRunner(fixture),
+                    config=config,
+                    nonce=authorization.nonce,
+                    execute=True,
+                    push_runner=lambda command: calls.append(command)
+                    or SimpleNamespace(returncode=0),
+                    now=NOW,
+                )
+            )
+        except Exception as exc:  # exact loser type asserted below
+            errors.append(exc)
+
+    threads = [threading.Thread(target=attempt) for _ in range(2)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    assert len(results) == 1
+    assert len(calls) == 1
+    assert len(errors) == 1
+    assert isinstance(errors[0], LaunchError)
+    assert errors[0].reason_code == "AUTHORIZATION_CONSUMED"

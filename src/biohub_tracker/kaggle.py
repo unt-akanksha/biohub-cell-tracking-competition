@@ -160,6 +160,8 @@ def fixture_name(args: Sequence[str]) -> str:
         return "leaderboard"
     if "topics" in values:
         return "topics"
+    if "pages" in values:
+        return "pages"
     if values[:2] == ["kernels", "list"]:
         return "kernels"
     raise KeyError(f"no fixture mapping for Kaggle arguments: {values!r}")

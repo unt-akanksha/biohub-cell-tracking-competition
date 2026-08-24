@@ -139,7 +139,7 @@ def build_parser() -> argparse.ArgumentParser:
     guard = subparsers.add_parser("guard", help="evaluate quota-safe Kaggle launch eligibility")
     guard.add_argument("--run-id", required=True)
     guard.add_argument("--max-runtime-hours", required=True)
-    guard_source = guard.add_mutually_exclusive_group()
+    guard_source = guard.add_mutually_exclusive_group(required=True)
     guard_source.add_argument("--live", action="store_true", help="read authenticated Kaggle state")
     guard_source.add_argument("--fixture-dir", type=Path, help="read deterministic fixtures")
     guard.add_argument("--json", action="store_true", dest="json_output")
@@ -158,7 +158,7 @@ def build_parser() -> argparse.ArgumentParser:
     authorize.add_argument("--kernel-ref", required=True)
     authorize.add_argument("--preflight-report", type=Path, required=True)
     authorize.add_argument("--ttl-seconds", type=int, default=600)
-    authorize_source = authorize.add_mutually_exclusive_group()
+    authorize_source = authorize.add_mutually_exclusive_group(required=True)
     authorize_source.add_argument("--live", action="store_true")
     authorize_source.add_argument("--fixture-dir", type=Path)
     execute = launch_commands.add_parser("execute", help="consume an authorization and push")
@@ -332,8 +332,8 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
         active = []
         input_error = None
         try:
-            quota = read_gpu_quota(runner)
             active = list_active_gpu_kernels(runner, config["slug"])
+            quota = read_gpu_quota(runner)
         except GuardInputError as exc:
             input_error = exc.reason_code
         decision = evaluate_guard(

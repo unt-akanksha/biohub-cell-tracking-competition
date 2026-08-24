@@ -43,7 +43,7 @@ Inspect `authorized`, `projected_remaining_hours`, the kernel/source hashes, exp
 .\scripts\guarded-kaggle-launch.ps1 -AuthorizationId auth-REPLACE -Nonce REPLACE -Execute
 ```
 
-Execution rechecks live quota, all owned competition kernel statuses, policy, source tree, preflight evidence, expiry, run/path/ref, and nonce. The authorization is marked consumed before `kaggle kernels push` and cannot be replayed.
+Execution rechecks live quota, the 20 newest owned competition kernel statuses (far above Kaggle's concurrency capacity), policy, source tree, preflight evidence, expiry, run/path/ref, and nonce. The authorization is marked consumed before `kaggle kernels push` and cannot be replayed.
 
 ## 5. Integrate the notebook watchdog
 
