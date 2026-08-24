@@ -42,6 +42,7 @@ class EventType(StrEnum):
     DECISION = "decision"
     AMENDMENT = "amendment"
     GUARD_DECISION = "guard_decision"
+    LAUNCH_FAILED = "launch_failed"
 
 
 class RunStatus(StrEnum):
@@ -115,6 +116,7 @@ class RunState:
     decision_evidence: list[str] = field(default_factory=list)
     amendments: list[dict[str, Any]] = field(default_factory=list)
     guard_decisions: list[dict[str, Any]] = field(default_factory=list)
+    launch_failures: list[dict[str, Any]] = field(default_factory=list)
 
 
 def _iso_utc(value: datetime) -> str:
@@ -204,6 +206,7 @@ def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
     precedence = {
         EventType.REGISTERED: 0,
         EventType.GUARD_DECISION: 1,
+        EventType.LAUNCH_FAILED: 1,
         EventType.STARTED: 2,
         EventType.COMPLETED: 3,
         EventType.FAILED: 3,
@@ -256,6 +259,8 @@ def reconstruct_runs(events: Iterable[ExperimentEvent]) -> dict[str, RunState]:
                 state.amendments.append(dict(event.payload))
             elif event.event_type is EventType.GUARD_DECISION:
                 state.guard_decisions.append(dict(event.payload))
+            elif event.event_type is EventType.LAUNCH_FAILED:
+                state.launch_failures.append(dict(event.payload))
             seen_event_ids.add(event.event_id)
         runs[run_id] = state
     for state in runs.values():
@@ -323,6 +328,11 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
             )
         if not isinstance(event.payload.get("reason_codes"), list):
             raise TransitionError("guard decision requires reason_codes")
+    if event.event_type is EventType.LAUNCH_FAILED:
+        if existing.status is not RunStatus.REGISTERED:
+            raise TransitionError(f"run {event.run_id} cannot record launch failure from {existing.status}")
+        _bounded_text(event.payload.get("authorization_id"), "authorization ID", 240)
+        _bounded_text(event.payload.get("reason"), "launch failure reason", 2000)
 
 
 class _ExclusiveLock:

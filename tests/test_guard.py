@@ -87,6 +87,18 @@ def test_guard_distinct_rejections(status, runtime, active, code):
     assert not result.authorized and code in result.reason_codes
 
 
+def test_guard_rejects_runtime_different_from_registered_declaration():
+    result = evaluate_guard(
+        run_id="run-a",
+        registered_status="registered",
+        registered_declared_runtime="2.00",
+        declared_max_runtime="1.00",
+        quota=quota(),
+        active_kernels=[],
+    )
+    assert result.reason_codes == ("DECLARED_RUNTIME_MISMATCH",)
+
+
 def test_quota_reader_rejects_missing_and_malformed_gpu_rows(tmp_path):
     fixture = tmp_path / "fixtures"
     fixture.mkdir()

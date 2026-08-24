@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
@@ -166,6 +167,7 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
         raise GuardInputError("KERNEL_STATUS_UNAVAILABLE", "Kaggle kernels payload is not a list")
     active: list[ActiveKernel] = []
     seen: set[str] = set()
+    refs: list[str] = []
     for row in payload:
         if not isinstance(row, Mapping) or not str(row.get("ref", "")).strip():
             raise GuardInputError("KERNEL_STATUS_UNAVAILABLE", "kernel listing has a missing ref")
@@ -173,6 +175,9 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
         if ref in seen:
             continue
         seen.add(ref)
+        refs.append(ref)
+
+    def resolve_status(ref: str) -> ActiveKernel | None:
         try:
             status = str(runner.kernel_status(ref)).removeprefix("KernelWorkerStatus.").upper()
         except Exception as exc:
@@ -180,7 +185,17 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
                 "KERNEL_STATUS_UNAVAILABLE", f"could not resolve status for {ref}"
             ) from exc
         if status in ACTIVE_STATUSES:
-            active.append(ActiveKernel(ref=ref, status=status))
+            return ActiveKernel(ref=ref, status=status)
+        return None
+
+    # Status calls are independent authenticated reads; bounded concurrency keeps the
+    # fail-closed pre-launch check practical for accounts with a long kernel history.
+    with ThreadPoolExecutor(max_workers=min(12, max(1, len(refs)))) as pool:
+        futures = {pool.submit(resolve_status, ref): ref for ref in refs}
+        for future in as_completed(futures):
+            item = future.result()
+            if item is not None:
+                active.append(item)
     return sorted(active, key=lambda item: item.ref)
 
 
@@ -202,6 +217,7 @@ def evaluate_guard(
     *,
     run_id: str,
     registered_status: RunStatus | str | None,
+    registered_declared_runtime: Any | None = None,
     declared_max_runtime: Any,
     quota: QuotaSnapshot | None,
     active_kernels: Sequence[ActiveKernel],
@@ -217,6 +233,12 @@ def evaluate_guard(
         reasons.append("RUN_NOT_REGISTERED")
     elif RunStatus(registered_status) is not RunStatus.REGISTERED:
         reasons.append("RUN_NOT_LAUNCHABLE")
+    if registered_declared_runtime is not None:
+        registered_runtime = parse_hours(
+            registered_declared_runtime, field="registered declared maximum runtime"
+        )
+        if runtime != registered_runtime:
+            reasons.append("DECLARED_RUNTIME_MISMATCH")
     if runtime <= 0:
         reasons.append("RUNTIME_NOT_POSITIVE")
     elif runtime > maximum:

@@ -9,6 +9,7 @@ from typing import Sequence
 
 from .guard import GuardInputError, evaluate_guard, list_active_gpu_kernels, read_gpu_quota
 from .kaggle import FixtureRunner, KaggleRunner
+from .launch import authorize_launch, default_push_runner, load_authorization, push_kernel
 
 from .ledger import (
     EventType,
@@ -28,6 +29,7 @@ from .ledger import (
     start_payload,
 )
 from .progress import render_progress_json, render_progress_markdown, write_progress_reports
+from .preflight import validate_preflight
 from .watch import collect_snapshot, persist_snapshot, status_line, write_status_reports
 
 
@@ -141,10 +143,35 @@ def build_parser() -> argparse.ArgumentParser:
     guard_source.add_argument("--live", action="store_true", help="read authenticated Kaggle state")
     guard_source.add_argument("--fixture-dir", type=Path, help="read deterministic fixtures")
     guard.add_argument("--json", action="store_true", dest="json_output")
+    preflight = subparsers.add_parser("preflight", help="validate hashed preflight evidence")
+    preflight_commands = preflight.add_subparsers(dest="preflight_command", required=True)
+    preflight_validate = preflight_commands.add_parser("validate", help="validate a report")
+    preflight_validate.add_argument("--run-id", required=True)
+    preflight_validate.add_argument("--max-runtime-hours", required=True)
+    preflight_validate.add_argument("--report", type=Path, required=True)
+    preflight_validate.add_argument("--max-age-seconds", type=int, default=3600)
+    launch = subparsers.add_parser("launch", help="authorize or execute a guarded Kaggle launch")
+    launch_commands = launch.add_subparsers(dest="launch_command", required=True)
+    authorize = launch_commands.add_parser("authorize", help="create a short-lived authorization")
+    authorize.add_argument("--run-id", required=True)
+    authorize.add_argument("--kernel-dir", type=Path, required=True)
+    authorize.add_argument("--kernel-ref", required=True)
+    authorize.add_argument("--preflight-report", type=Path, required=True)
+    authorize.add_argument("--ttl-seconds", type=int, default=600)
+    authorize_source = authorize.add_mutually_exclusive_group()
+    authorize_source.add_argument("--live", action="store_true")
+    authorize_source.add_argument("--fixture-dir", type=Path)
+    execute = launch_commands.add_parser("execute", help="consume an authorization and push")
+    execute.add_argument("--authorization-id", required=True)
+    execute.add_argument("--nonce")
+    execute.add_argument("--execute", action="store_true", help="actually invoke the push runner")
+    execute_source = execute.add_mutually_exclusive_group()
+    execute_source.add_argument("--live", action="store_true")
+    execute_source.add_argument("--fixture-dir", type=Path)
     return parser
 
 
-def _main(argv: Sequence[str] | None = None) -> int:
+def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     root = args.root.resolve()
@@ -312,6 +339,9 @@ def _main(argv: Sequence[str] | None = None) -> int:
         decision = evaluate_guard(
             run_id=args.run_id,
             registered_status=state.status if state else None,
+            registered_declared_runtime=(
+                state.registered.get("declared_max_runtime_hours") if state else None
+            ),
             declared_max_runtime=args.max_runtime_hours,
             quota=quota,
             active_kernels=active,
@@ -325,13 +355,76 @@ def _main(argv: Sequence[str] | None = None) -> int:
             )
         print(json.dumps(decision.to_dict(), indent=2 if args.json_output else None, sort_keys=True))
         return 0 if decision.authorized else 2
+    if args.command == "preflight":
+        report = validate_preflight(
+            args.report,
+            root,
+            run_id=args.run_id,
+            declared_max_runtime_hours=args.max_runtime_hours,
+            max_age_seconds=args.max_age_seconds,
+        )
+        print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+        return 0
+    if args.command == "launch":
+        config = _load_config(root / "config" / "competition.json")
+        ledger = Ledger(root / "experiments" / "events.jsonl", root)
+        fixture_dir = args.fixture_dir or (root / "tests" / "fixtures" / "kaggle")
+        runner = KaggleRunner() if args.live else FixtureRunner(fixture_dir)
+        if args.launch_command == "authorize":
+            authorization, decision = authorize_launch(
+                workspace_root=root,
+                ledger=ledger,
+                runner=runner,
+                config=config,
+                run_id=args.run_id,
+                kernel_directory=args.kernel_dir,
+                kernel_ref=args.kernel_ref,
+                preflight_report=args.preflight_report,
+                ttl_seconds=args.ttl_seconds,
+            )
+            print(
+                json.dumps(
+                    {"authorization": authorization.to_dict(), "guard": decision.to_dict()},
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        authorization = load_authorization(root, args.authorization_id)
+        if not args.execute:
+            print(
+                json.dumps(
+                    {"executed": False, "authorization": authorization.to_dict()},
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
+            return 0
+        if not args.nonce:
+            raise ValueError("--nonce is required with --execute")
+        if not args.live and launch_runner is None:
+            raise ValueError(
+                "actual launch requires --live; fixtures are only accepted with an injected test runner"
+            )
+        result = push_kernel(
+            authorization,
+            workspace_root=root,
+            ledger=ledger,
+            runner=runner,
+            config=config,
+            nonce=args.nonce,
+            execute=True,
+            push_runner=launch_runner or default_push_runner,
+        )
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
     parser.error(f"unknown command: {args.command}")
     return 2
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
     try:
-        return _main(argv)
+        return _main(argv, launch_runner=launch_runner)
     except (GuardInputError, LedgerError, OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
