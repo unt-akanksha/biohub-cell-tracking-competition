@@ -177,6 +177,16 @@ def build_parser() -> argparse.ArgumentParser:
     scorer_verify.add_argument("--fixture", type=Path)
     scorer_verify.add_argument("--expected", type=Path)
     scorer_verify.add_argument("--live", action="store_true")
+    manifest = subparsers.add_parser("manifest", help="build or verify reciprocal manifests")
+    manifest_commands = manifest.add_subparsers(dest="manifest_command", required=True)
+    manifest_build = manifest_commands.add_parser("build", help="build an immutable manifest")
+    manifest_build.add_argument("--data-root", type=Path, required=True)
+    manifest_build.add_argument("--output", type=Path, required=True)
+    manifest_build.add_argument("--scorer-lock", type=Path)
+    manifest_verify = manifest_commands.add_parser("verify", help="verify a frozen manifest")
+    manifest_verify.add_argument("--manifest", type=Path, required=True)
+    manifest_verify.add_argument("--data-root", type=Path)
+    manifest_verify.add_argument("--scorer-lock", type=Path)
     return parser
 
 
@@ -449,6 +459,22 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
         if args.live:
             result["live_provenance"] = corroborate_live(verified.lock)
         print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+        return 0
+    if args.command == "manifest":
+        from .manifests import build_manifest, verify_manifest, write_manifest
+
+        scorer_lock = args.scorer_lock or root / "config" / "official-scorer.lock.json"
+        if args.manifest_command == "build":
+            manifest = build_manifest(args.data_root, scorer_lock)
+            path = write_manifest(args.output, manifest)
+            print(json.dumps({"manifest": str(path), "manifest_sha256": manifest.manifest_sha256}, sort_keys=True))
+            return 0
+        manifest = verify_manifest(
+            args.manifest,
+            data_root=args.data_root,
+            scorer_lock_path=scorer_lock if args.data_root is not None else None,
+        )
+        print(json.dumps({"manifest_sha256": manifest.manifest_sha256, "verified": True}, sort_keys=True))
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2

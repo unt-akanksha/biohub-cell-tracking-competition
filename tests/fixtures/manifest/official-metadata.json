@@ -1,0 +1,11 @@
+{
+  "samples": [
+    {"sample_id": "44b6_fov-a", "estimated_number_of_nodes": 12, "node_count": 3, "edge_count": 2},
+    {"sample_id": "44b6_fov-b", "estimated_number_of_nodes": 15, "node_count": 4, "edge_count": 3},
+    {"sample_id": "6bba_fov-a", "estimated_number_of_nodes": 11, "node_count": 3, "edge_count": 2},
+    {"sample_id": "6bba_fov-b", "estimated_number_of_nodes": 14, "node_count": 4, "edge_count": 3}
+  ],
+  "shape_tzyx": [3, 4, 8, 8],
+  "chunks_tzyx": [1, 4, 8, 8],
+  "scale_zyx_um": [1.625, 0.40625, 0.40625]
+}
