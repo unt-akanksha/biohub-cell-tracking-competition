@@ -11,7 +11,7 @@ The roadmap first makes competition work safe and measurable, then establishes l
 - Integer phases are planned milestone work.
 - Decimal phases are urgent insertions and are marked `INSERTED`.
 
-- [ ] **Phase 1: Competition Control Plane** - Make every session, experiment, and GPU launch observable, reproducible, and quota-safe.
+- [x] **Phase 1: Competition Control Plane** - Make every session, experiment, and GPU launch observable, reproducible, and quota-safe. (completed 2026-08-23)
 - [ ] **Phase 2: Exact Generalization Validation** - Make clean complete-movie, held-out-embryo evidence the authoritative promotion signal.
 - [ ] **Phase 3: ZebraHub Affinity Promotion Gate** - Calibrate and exactly evaluate the strongest unfinished prior model as the first end-to-end candidate.
 - [ ] **Phase 4: Strong Spatiotemporal Model** - Train reciprocal higher-capacity detector/linker folds within the guarded Kaggle budget.
@@ -32,7 +32,7 @@ The roadmap first makes competition work safe and measurable, then establishes l
   3. A launch with malformed quota, a conflicting GPU job, no declared maximum, or a worst case that crosses the 8-hour reserve is rejected before Kaggle execution.
   4. Long jobs cannot start until smoke, dense-memory, and coverage preflights pass, and launched notebooks stop and checkpoint before their declared budget.
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 
@@ -50,7 +50,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03: Build quota/active-run launch guard, notebook watchdog contract, and smoke/dense/coverage preflights.
+- [x] 01-03: Build quota/active-run launch guard, notebook watchdog contract, and smoke/dense/coverage preflights.
 
 ### Phase 2: Exact Generalization Validation
 
@@ -143,7 +143,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Competition Control Plane | 3/3 | In Progress|  |
+| 1. Competition Control Plane | 3/3 | Complete   | 2026-08-23 |
 | 2. Exact Generalization Validation | 0/3 | Not started | - |
 | 3. ZebraHub Affinity Promotion Gate | 0/2 | Not started | - |
 | 4. Strong Spatiotemporal Model | 0/4 | Not started | - |
