@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "patterns": [
+    {
+      "id": "explicit-metric-hack-language",
+      "scope": "both",
+      "regex": "metric[ _-]*hack|score[ _-]*exploit",
+      "severity": "explicit"
+    },
+    {
+      "id": "fake-division-language",
+      "scope": "source",
+      "regex": "fake.{0,40}(division|fork|hub)|(division|fork|hub).{0,40}fake",
+      "severity": "explicit"
+    },
+    {
+      "id": "negative-time-sentinel",
+      "scope": "source",
+      "regex": "(?:time|frame|t)[\\\"']?\\s*[:=]\\s*-[1-9][0-9]*",
+      "severity": "explicit"
+    },
+    {
+      "id": "out-of-volume-sentinel",
+      "scope": "source",
+      "regex": "(?:sentinel|fake|exploit).{0,80}(?:1e[6-9]|1000000|out.of.volume)",
+      "severity": "explicit"
+    }
+  ]
+}
+

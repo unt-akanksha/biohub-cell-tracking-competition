@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "audited_at": "2026-08-23T00:00:00Z",
+  "notebooks": [
+    {
+      "ref": "xiaoleilian/biohub-ct-mix-divaug",
+      "classification": "explicit_metric_hack",
+      "disposition": "excluded_metric_hack",
+      "evidence": "Manual source audit found explicit patched-metric division exploit logic.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "evgendvorkin/biohub-0-923-lb",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; displayed score is not reproduced evidence.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "yunusgmsoy/kimi-notebook-v17",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "yunusgmsoy/lb-0-920-biohub-cell-tracking-2-seed-ensemble",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "kunaldesale2408/biohub-cell-tracking",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "anhadmahajan06/biohub-track-your-cells-development",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "yusuketogashi/no-hack-biohub-cell-tracking-submission",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Manual source audit found no known exploit; title alone is not evidence and score is unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "pilkwang/biohub-cell-tracking-two-seeds-logit-blend",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "xiaoleilian/biohub-m001-ens3-sm6-sim2",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "reyhanksatria/graph-patches-biohub-cell-tracking",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "rockerritesh/0-926-biohub-cell-tracking",
+      "classification": "stale_or_ghost_risk",
+      "disposition": "needs_source_review",
+      "evidence": "Notebook title/page score conflicts with source-reported clean score near 0.913.",
+      "score_reproduced": false
+    }
+  ]
+}
+

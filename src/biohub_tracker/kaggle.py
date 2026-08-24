@@ -9,15 +9,16 @@ from typing import Any, Callable, Sequence
 
 
 _SECRET_PATTERNS = (
-    re.compile(r"(?i)(token|api[_ -]?key|password)\s*[:=]\s*\S+"),
-    re.compile(r"(?i)authorization:\s*\S+"),
+    (re.compile(r"(?i)(token|api[_ -]?key|password)\s*[:=]\s*\S+"), r"\1=[REDACTED]"),
+    (re.compile(r"(?i)authorization:\s*\S+"), "authorization: [REDACTED]"),
 )
+_KERNEL_REF = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 
 
 def redact_diagnostic(message: str) -> str:
     redacted = message
-    for pattern in _SECRET_PATTERNS:
-        redacted = pattern.sub(r"\1=[REDACTED]", redacted)
+    for pattern, replacement in _SECRET_PATTERNS:
+        redacted = pattern.sub(replacement, redacted)
     return redacted[:1000]
 
 
@@ -46,7 +47,7 @@ class KaggleRunner:
     executable: str = "kaggle"
     run_process: RunFunction = subprocess.run
 
-    def run_json(self, args: Sequence[str]) -> Any:
+    def run(self, args: Sequence[str]) -> subprocess.CompletedProcess[str]:
         command = [self.executable, *[str(item) for item in args]]
         completed = self.run_process(
             command,
@@ -58,11 +59,27 @@ class KaggleRunner:
         if completed.returncode != 0:
             detail = redact_diagnostic(completed.stderr or completed.stdout)
             raise KaggleCommandError(f"Kaggle read failed (exit {completed.returncode}): {detail}")
+        return completed
+
+    def run_json(self, args: Sequence[str]) -> Any:
+        completed = self.run(args)
         try:
             return extract_json_payload(completed.stdout)
         except ValueError as exc:
             detail = redact_diagnostic(completed.stderr)
             raise KaggleCommandError(f"Kaggle returned invalid JSON: {detail}") from exc
+
+    def pull_kernel_source(self, ref: str, cache_root: Path) -> Path:
+        if not _KERNEL_REF.fullmatch(ref):
+            raise ValueError(f"invalid Kaggle kernel reference: {ref!r}")
+        owner, slug = ref.split("/", 1)
+        root = cache_root.resolve()
+        target = (root / owner / slug).resolve()
+        if root != target and root not in target.parents:
+            raise ValueError("kernel cache path escaped its configured root")
+        target.mkdir(parents=True, exist_ok=True)
+        self.run(["kernels", "pull", ref, "--metadata", "-p", str(target)])
+        return target
 
 
 @dataclass
@@ -89,4 +106,3 @@ def fixture_name(args: Sequence[str]) -> str:
     if values[:2] == ["kernels", "list"]:
         return "kernels"
     raise KeyError(f"no fixture mapping for Kaggle arguments: {values!r}")
-

@@ -7,7 +7,7 @@ from typing import Any, Mapping
 
 from .io import atomic_write_json, canonical_json_bytes, sha256_bytes, utc_now
 from .kaggle import FixtureRunner, KaggleCommandError, KaggleRunner
-from .provenance import unknown_notebook
+from .provenance import classify_notebook, load_policy, unknown_notebook
 
 
 SCHEMA_VERSION = 1
@@ -151,6 +151,8 @@ def collect_snapshot(
     fixture_dir: Path | None = None,
     live: bool = False,
     notebook_limit: int = 20,
+    root: Path | None = None,
+    audit_notebook_sources: bool = False,
     now: datetime | None = None,
 ) -> dict[str, Any]:
     if live == (fixture_dir is not None):
@@ -167,6 +169,45 @@ def collect_snapshot(
             statuses[name] = {"status": "unavailable", "reason": str(exc)[:300]}
 
     collected = now or utc_now()
+    notebooks = normalize_notebooks(raw["kernels"])
+    policy_root = (root or Path.cwd()).resolve()
+    registry_path = policy_root / "policies" / "notebook_audits.json"
+    patterns_path = policy_root / "policies" / "metric_hack_patterns.json"
+    registry = load_policy(registry_path) if registry_path.exists() else {"notebooks": []}
+    patterns = load_policy(patterns_path) if patterns_path.exists() else {"patterns": []}
+    source_status: dict[str, str] = {}
+    for notebook in notebooks:
+        source_paths: list[Path] = []
+        if audit_notebook_sources:
+            try:
+                if live:
+                    source_paths = [
+                        runner.pull_kernel_source(
+                            notebook["ref"], policy_root / ".biohub" / "cache" / "notebooks"
+                        )
+                    ]
+                else:
+                    owner, slug = notebook["ref"].split("/", 1)
+                    candidate = Path(fixture_dir) / "notebook_sources" / owner / slug
+                    if candidate.exists():
+                        source_paths = [candidate]
+                source_status[notebook["ref"]] = "audited" if source_paths else "unavailable"
+            except (KaggleCommandError, OSError, ValueError) as exc:
+                source_status[notebook["ref"]] = f"unavailable: {str(exc)[:200]}"
+        audit = classify_notebook(
+            notebook["ref"], notebook["title"], source_paths, registry, patterns
+        )
+        notebook.update(audit.to_dict())
+    if audit_notebook_sources:
+        statuses["notebook_sources"] = {
+            "status": (
+                "ok"
+                if source_status and all(value == "audited" for value in source_status.values())
+                else "partial"
+            ),
+            "reason": "; ".join(f"{key}={value}" for key, value in source_status.items()),
+        }
+
     snapshot: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "competition_slug": config["slug"],
@@ -177,7 +218,7 @@ def collect_snapshot(
         "submissions": normalize_submissions(raw["submissions"]),
         "leaderboard": normalize_leaderboard(raw["leaderboard"]),
         "topics": normalize_topics(raw["topics"]),
-        "notebooks": normalize_notebooks(raw["kernels"]),
+        "notebooks": notebooks,
     }
     snapshot["content_sha256"] = sha256_bytes(canonical_json_bytes(snapshot))
     return snapshot

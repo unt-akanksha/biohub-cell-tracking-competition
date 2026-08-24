@@ -23,6 +23,11 @@ def build_parser() -> argparse.ArgumentParser:
     source.add_argument("--live", action="store_true", help="read the authenticated Kaggle CLI")
     source.add_argument("--fixture-dir", type=Path, help="read deterministic JSON fixtures")
     watch.add_argument("--top", type=int, default=20, help="number of public notebooks to inspect")
+    watch.add_argument(
+        "--audit-notebook-sources",
+        action="store_true",
+        help="pull and statically inspect notebook source without executing it",
+    )
     return parser
 
 
@@ -40,6 +45,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             fixture_dir=fixture_dir,
             live=args.live,
             notebook_limit=args.top,
+            root=root,
+            audit_notebook_sources=args.audit_notebook_sources,
         )
         path = persist_snapshot(snapshot, root)
         print(path)
@@ -47,4 +54,3 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2
-
