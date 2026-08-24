@@ -7,10 +7,10 @@
 
 ### Competition Intelligence
 
-- [ ] **INTEL-01**: The competitor can run one command that records a timestamped Kaggle snapshot containing accelerator quota, personal submissions, public leaderboard position, current high-scoring notebooks, and recent discussions.
-- [ ] **INTEL-02**: The competitor can see notebook score provenance classified as reproduced post-patch, reported post-patch, stale/ghost risk, explicit metric hack, or unknown.
-- [ ] **INTEL-03**: The project records changes to official rules, metric code, deadlines, data guidance, and organizer announcements without overwriting earlier snapshots.
-- [ ] **INTEL-04**: Every work session begins from a compact status report containing the best clean score, rank, remaining submission allowance, quota headroom, active hypothesis, and next gate.
+- [x] **INTEL-01**: The competitor can run one command that records a timestamped Kaggle snapshot containing accelerator quota, personal submissions, public leaderboard position, current high-scoring notebooks, and recent discussions.
+- [x] **INTEL-02**: The competitor can see notebook score provenance classified as reproduced post-patch, reported post-patch, stale/ghost risk, explicit metric hack, or unknown.
+- [x] **INTEL-03**: The project records changes to official rules, metric code, deadlines, data guidance, and organizer announcements without overwriting earlier snapshots.
+- [x] **INTEL-04**: Every work session begins from a compact status report containing the best clean score, rank, remaining submission allowance, quota headroom, active hypothesis, and next gate.
 
 ### Experiment Tracking
 
@@ -93,10 +93,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INTEL-01 | Phase 1 | Pending |
-| INTEL-02 | Phase 1 | Pending |
-| INTEL-03 | Phase 1 | Pending |
-| INTEL-04 | Phase 1 | Pending |
+| INTEL-01 | Phase 1 | Complete |
+| INTEL-02 | Phase 1 | Complete |
+| INTEL-03 | Phase 1 | Complete |
+| INTEL-04 | Phase 1 | Complete |
 | TRACK-01 | Phase 1 | Pending |
 | TRACK-02 | Phase 1 | Pending |
 | TRACK-03 | Phase 1 | Pending |
@@ -125,6 +125,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SHIP-05 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 30 total
 - Mapped to phases: 30
 - Unmapped: 0
