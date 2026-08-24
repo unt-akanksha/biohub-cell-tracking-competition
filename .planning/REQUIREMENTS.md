@@ -93,42 +93,42 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INTEL-01 | Pending | Pending |
-| INTEL-02 | Pending | Pending |
-| INTEL-03 | Pending | Pending |
-| INTEL-04 | Pending | Pending |
-| TRACK-01 | Pending | Pending |
-| TRACK-02 | Pending | Pending |
-| TRACK-03 | Pending | Pending |
-| TRACK-04 | Pending | Pending |
-| SAFE-01 | Pending | Pending |
-| SAFE-02 | Pending | Pending |
-| SAFE-03 | Pending | Pending |
-| SAFE-04 | Pending | Pending |
-| SAFE-05 | Pending | Pending |
-| VAL-01 | Pending | Pending |
-| VAL-02 | Pending | Pending |
-| VAL-03 | Pending | Pending |
-| VAL-04 | Pending | Pending |
-| VAL-05 | Pending | Pending |
-| MODEL-01 | Pending | Pending |
-| MODEL-02 | Pending | Pending |
-| MODEL-03 | Pending | Pending |
-| MODEL-04 | Pending | Pending |
-| MODEL-05 | Pending | Pending |
-| MODEL-06 | Pending | Pending |
-| MODEL-07 | Pending | Pending |
-| SHIP-01 | Pending | Pending |
-| SHIP-02 | Pending | Pending |
-| SHIP-03 | Pending | Pending |
-| SHIP-04 | Pending | Pending |
-| SHIP-05 | Pending | Pending |
+| INTEL-01 | Phase 1 | Pending |
+| INTEL-02 | Phase 1 | Pending |
+| INTEL-03 | Phase 1 | Pending |
+| INTEL-04 | Phase 1 | Pending |
+| TRACK-01 | Phase 1 | Pending |
+| TRACK-02 | Phase 1 | Pending |
+| TRACK-03 | Phase 1 | Pending |
+| TRACK-04 | Phase 1 | Pending |
+| SAFE-01 | Phase 1 | Pending |
+| SAFE-02 | Phase 1 | Pending |
+| SAFE-03 | Phase 1 | Pending |
+| SAFE-04 | Phase 1 | Pending |
+| SAFE-05 | Phase 1 | Pending |
+| VAL-01 | Phase 2 | Pending |
+| VAL-02 | Phase 2 | Pending |
+| VAL-03 | Phase 2 | Pending |
+| VAL-04 | Phase 2 | Pending |
+| VAL-05 | Phase 2 | Pending |
+| MODEL-01 | Phase 3 | Pending |
+| MODEL-02 | Phase 4 | Pending |
+| MODEL-03 | Phase 4 | Pending |
+| MODEL-04 | Phase 4 | Pending |
+| MODEL-05 | Phase 4 | Pending |
+| MODEL-06 | Phase 4 | Pending |
+| MODEL-07 | Phase 4 | Pending |
+| SHIP-01 | Phase 5 | Pending |
+| SHIP-02 | Phase 5 | Pending |
+| SHIP-03 | Phase 5 | Pending |
+| SHIP-04 | Phase 5 | Pending |
+| SHIP-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 30 total
-- Mapped to phases: 0
-- Unmapped: 30
+- Mapped to phases: 30
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-08-23*  
-*Last updated: 2026-08-23 after initial definition*
+*Last updated: 2026-08-23 after roadmap creation*
