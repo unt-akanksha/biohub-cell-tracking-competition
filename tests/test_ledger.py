@@ -9,6 +9,7 @@ import pytest
 from biohub_tracker.cli import main
 from biohub_tracker.ledger import (
     EventType,
+    ExactEvaluationStatus,
     ExperimentEvent,
     Ledger,
     LedgerCorruptionError,
@@ -20,7 +21,13 @@ from biohub_tracker.ledger import (
     completed_payload,
     decision_payload,
     failed_payload,
+    event_sha256,
+    exact_evaluation_completed_payload,
+    exact_evaluation_failed_payload,
+    exact_evaluation_registration_payload,
+    exact_evaluation_started_payload,
     reconstruct_runs,
+    reconstruct_exact_evaluations,
     registration_payload,
     start_payload,
     validate_producer_registration_evidence,
@@ -418,3 +425,143 @@ def test_partial_producer_evidence_is_rejected_without_changing_gpu_lifecycle(tm
     with pytest.raises(ValueError):
         ledger.append(ExperimentEvent.create("partial", EventType.REGISTERED, incomplete))
     assert not ledger.path.exists()
+
+
+def _evidence_producer(ledger, run_id, fold_id, token):
+    base = registration_payload(
+        hypothesis=run_id,
+        parent=None,
+        config={"token": token},
+        seeds=[1],
+        split=fold_id,
+        declared_max_runtime_hours="1",
+        code={"git_head": token},
+    )
+    lineage = {
+        "manifest_sha256": "1" * 64,
+        "fold_id": fold_id,
+        "train_membership_sha256": token * 64,
+        "calibration_membership_sha256": token * 64,
+        "evaluation_membership_sha256": token * 64,
+        "model_sha256": token * 64,
+        "config_sha256": base["config_sha256"],
+        "code_sha256": token * 64,
+        "data_sha256": token * 64,
+    }
+    registration = ExperimentEvent.create(
+        run_id,
+        EventType.REGISTERED,
+        registration_payload(
+            hypothesis=run_id,
+            parent=None,
+            config={"token": token},
+            seeds=[1],
+            split=fold_id,
+            declared_max_runtime_hours="1",
+            code={"git_head": token},
+            producer_evidence=lineage,
+        ),
+    )
+    ledger.append(registration)
+    ledger.append(
+        ExperimentEvent.create(
+            run_id,
+            EventType.STARTED,
+            start_payload(kaggle_ref="owner/kernel", authorization_id=run_id, quota_before_hours="30"),
+        )
+    )
+    terminal = ExperimentEvent.create(
+        run_id,
+        EventType.COMPLETED,
+        completed_payload(
+            actual_runtime_hours="1",
+            quota_after_hours="29",
+            metrics=complete_metrics(),
+            producer_evidence={
+                "evidence_eligible": True,
+                "graph_inventory_sha256": token * 64,
+                "artifact_hashes": {"predictions": token * 64},
+            },
+        ),
+    )
+    ledger.append(terminal)
+    return {
+        "role": "baseline",
+        "fold_id": fold_id,
+        "producer_run_id": run_id,
+        "producer_registration_event_sha256": event_sha256(registration),
+        "producer_terminal_event_sha256": event_sha256(terminal),
+        **lineage,
+        "graph_inventory_sha256": token * 64,
+        "artifact_hashes": {"predictions": token * 64},
+    }
+
+
+def test_exact_evaluation_lifecycle_is_separate_immutable_and_fail_closed(tmp_path):
+    ledger = make_ledger(tmp_path)
+    folds = ("fold-44b6-to-6bba", "fold-6bba-to-44b6")
+    members = []
+    for index, (role, fold) in enumerate(
+        (role_fold for role in ("baseline", "candidate") for role_fold in ((role, item) for item in folds))
+    ):
+        token = "2345"[index]
+        member = _evidence_producer(ledger, f"{role}-{index}", fold, token)
+        member["role"] = role
+        members.append(member)
+    registered = exact_evaluation_registration_payload(
+        evaluation_run_id="eval-a",
+        scorer_lock_sha256="a" * 64,
+        environment_lock_sha256="b" * 64,
+        manifest_sha256="1" * 64,
+        evaluation_policy_sha256="c" * 64,
+        evidence_kind="synthetic_fixture",
+        members=members,
+    )
+    ledger.append(
+        ExperimentEvent.create("eval-a", EventType.EXACT_EVALUATION_REGISTERED, registered)
+    )
+    ledger.append(
+        ExperimentEvent.create(
+            "eval-a",
+            EventType.EXACT_EVALUATION_STARTED,
+            exact_evaluation_started_payload(evaluation_run_id="eval-a"),
+        )
+    )
+    inventories = [
+        {
+            "role": item["role"],
+            "fold_id": item["fold_id"],
+            "producer_run_id": item["producer_run_id"],
+            "submission_graph_inventory_sha256": item["graph_inventory_sha256"],
+            "roundtrip_evidence_sha256": item["model_sha256"],
+            "csv_sha256": item["data_sha256"],
+        }
+        for item in members
+    ]
+    completed = exact_evaluation_completed_payload(
+        evaluation_run_id="eval-a",
+        members=members,
+        report_core_sha256="d" * 64,
+        envelope_sha256="e" * 64,
+        artifact_hashes={"core": "d" * 64, "envelope": "e" * 64},
+        authoritative_inventories=inventories,
+    )
+    ledger.append(
+        ExperimentEvent.create("eval-a", EventType.EXACT_EVALUATION_COMPLETED, completed)
+    )
+    state = reconstruct_exact_evaluations(ledger.read_events())["eval-a"]
+    assert state.status is ExactEvaluationStatus.COMPLETED
+    assert state.terminal["members"] == members
+    assert len(reconstruct_runs(ledger.read_events())) == 4
+    before = ledger.path.read_bytes()
+    with pytest.raises(TransitionError):
+        ledger.append(
+            ExperimentEvent.create(
+                "eval-a",
+                EventType.EXACT_EVALUATION_FAILED,
+                exact_evaluation_failed_payload(
+                    evaluation_run_id="eval-a", reason_code="LATE", detail="late failure"
+                ),
+            )
+        )
+    assert ledger.path.read_bytes() == before

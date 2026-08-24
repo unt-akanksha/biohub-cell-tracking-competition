@@ -8,8 +8,10 @@ from typing import Any, Mapping, Sequence
 
 from .io import canonical_json_bytes, sha256_bytes
 from .ledger import (
+    EventType,
     Ledger,
     RunStatus,
+    event_sha256,
     reconstruct_runs,
     validate_producer_registration_evidence,
     validate_producer_terminal_evidence,
@@ -169,6 +171,8 @@ class ResolvedProducer:
     run_id: str
     registered: Mapping[str, Any]
     terminal: Mapping[str, Any]
+    registration_event_sha256: str
+    terminal_event_sha256: str
 
 
 def load_prediction_set(path: str | Path) -> PredictionSetClaim:
@@ -210,4 +214,16 @@ def resolve_producer(
         _fail("REGISTERED_LINEAGE_MISMATCH", claim.producer_run_id)
     if not _equal(terminal, claim.terminal_evidence()):
         _fail("TERMINAL_ARTIFACT_MISMATCH", claim.producer_run_id)
-    return ResolvedProducer(claim.producer_run_id, state.registered, state.terminal)
+    registered_event = next(
+        item for item in state.events if item.event_type is EventType.REGISTERED
+    )
+    terminal_event = next(
+        item for item in state.events if item.event_type is EventType.COMPLETED
+    )
+    return ResolvedProducer(
+        claim.producer_run_id,
+        state.registered,
+        state.terminal,
+        event_sha256(registered_event),
+        event_sha256(terminal_event),
+    )

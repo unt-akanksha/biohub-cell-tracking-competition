@@ -62,6 +62,10 @@ class EventType(StrEnum):
     AMENDMENT = "amendment"
     GUARD_DECISION = "guard_decision"
     LAUNCH_FAILED = "launch_failed"
+    EXACT_EVALUATION_REGISTERED = "exact_evaluation_registered"
+    EXACT_EVALUATION_STARTED = "exact_evaluation_started"
+    EXACT_EVALUATION_COMPLETED = "exact_evaluation_completed"
+    EXACT_EVALUATION_FAILED = "exact_evaluation_failed"
 
 
 class RunStatus(StrEnum):
@@ -70,6 +74,33 @@ class RunStatus(StrEnum):
     COMPLETED = "completed"
     FAILED = "failed"
     REJECTED = "rejected"
+
+
+class ExactEvaluationStatus(StrEnum):
+    REGISTERED = "registered"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
+EXACT_MEMBER_FIELDS = (
+    "role",
+    "fold_id",
+    "producer_run_id",
+    "producer_registration_event_sha256",
+    "producer_terminal_event_sha256",
+    *(name for name in PRODUCER_REGISTRATION_FIELDS if name != "fold_id"),
+    "graph_inventory_sha256",
+    "artifact_hashes",
+)
+
+_EXACT_EVENT_TYPES = {
+    EventType.EXACT_EVALUATION_REGISTERED,
+    EventType.EXACT_EVALUATION_STARTED,
+    EventType.EXACT_EVALUATION_COMPLETED,
+    EventType.EXACT_EVALUATION_FAILED,
+}
+_EXPERIMENT_EVENT_TYPES = set(EventType) - _EXACT_EVENT_TYPES
 
 
 @dataclass(frozen=True)
@@ -136,6 +167,15 @@ class RunState:
     amendments: list[dict[str, Any]] = field(default_factory=list)
     guard_decisions: list[dict[str, Any]] = field(default_factory=list)
     launch_failures: list[dict[str, Any]] = field(default_factory=list)
+
+
+@dataclass
+class ExactEvaluationState:
+    evaluation_run_id: str
+    status: ExactEvaluationStatus
+    registered: dict[str, Any]
+    events: list[ExperimentEvent] = field(default_factory=list)
+    terminal: dict[str, Any] | None = None
 
 
 def _iso_utc(value: datetime) -> str:
@@ -232,6 +272,10 @@ def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
         EventType.REJECTED: 3,
         EventType.DECISION: 4,
         EventType.AMENDMENT: 5,
+        EventType.EXACT_EVALUATION_REGISTERED: 0,
+        EventType.EXACT_EVALUATION_STARTED: 2,
+        EventType.EXACT_EVALUATION_COMPLETED: 3,
+        EventType.EXACT_EVALUATION_FAILED: 3,
     }
     return (_parse_time(event.created_at), precedence[event.event_type], event.event_id)
 
@@ -239,6 +283,8 @@ def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
 def reconstruct_runs(events: Iterable[ExperimentEvent]) -> dict[str, RunState]:
     grouped: dict[str, list[ExperimentEvent]] = {}
     for event in events:
+        if event.event_type not in _EXPERIMENT_EVENT_TYPES:
+            continue
         grouped.setdefault(event.run_id, []).append(event)
     runs: dict[str, RunState] = {}
     for run_id in sorted(grouped):
@@ -288,9 +334,176 @@ def reconstruct_runs(events: Iterable[ExperimentEvent]) -> dict[str, RunState]:
     return runs
 
 
+def event_sha256(event: ExperimentEvent) -> str:
+    return sha256_bytes(canonical_json_bytes(event.to_dict()))
+
+
+def _exact_member_sort_key(value: Mapping[str, Any]) -> tuple[str, str]:
+    return (str(value.get("role", "")), str(value.get("fold_id", "")))
+
+
+def _normalize_exact_member(value: Any) -> dict[str, Any]:
+    if not isinstance(value, Mapping) or set(value) != set(EXACT_MEMBER_FIELDS):
+        raise ValueError(f"exact evaluation member requires exactly {list(EXACT_MEMBER_FIELDS)}")
+    role = _bounded_text(value["role"], "member role", 20)
+    if role not in {"baseline", "candidate"}:
+        raise ValueError(f"invalid exact evaluation member role: {role}")
+    result: dict[str, Any] = {
+        "role": role,
+        "fold_id": _bounded_text(value["fold_id"], "member fold_id", 200),
+        "producer_run_id": _bounded_text(
+            value["producer_run_id"], "member producer_run_id", 160
+        ),
+        "producer_registration_event_sha256": _sha256_text(
+            value["producer_registration_event_sha256"],
+            "producer_registration_event_sha256",
+        ),
+        "producer_terminal_event_sha256": _sha256_text(
+            value["producer_terminal_event_sha256"], "producer_terminal_event_sha256"
+        ),
+    }
+    for name in PRODUCER_REGISTRATION_FIELDS:
+        result[name] = (
+            _bounded_text(value[name], name, 200)
+            if name == "fold_id"
+            else _sha256_text(value[name], name)
+        )
+    result["graph_inventory_sha256"] = _sha256_text(
+        value["graph_inventory_sha256"], "graph_inventory_sha256"
+    )
+    result["artifact_hashes"] = _artifact_hashes(value["artifact_hashes"])
+    return {name: result[name] for name in EXACT_MEMBER_FIELDS}
+
+
+def _normalize_exact_members(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list) or len(value) != 4:
+        raise ValueError("exact evaluation requires four role/fold members")
+    members = [_normalize_exact_member(item) for item in value]
+    if members != sorted(members, key=_exact_member_sort_key):
+        raise ValueError("exact evaluation members must be in canonical role/fold order")
+    slots = [(item["role"], item["fold_id"]) for item in members]
+    if len(set(slots)) != 4:
+        raise ValueError("exact evaluation role/fold member slots must be unique")
+    folds = sorted({item["fold_id"] for item in members})
+    if len(folds) != 2 or set(slots) != {
+        (role, fold) for role in ("baseline", "candidate") for fold in folds
+    }:
+        raise ValueError("exact evaluation requires baseline and candidate for both folds")
+    return members
+
+
+def resolved_exact_member(
+    events: Sequence[ExperimentEvent], *, role: str, fold_id: str, producer_run_id: str
+) -> dict[str, Any]:
+    runs = reconstruct_runs(events)
+    state = runs.get(producer_run_id)
+    if state is None:
+        raise TransitionError(f"unknown exact-evaluation producer: {producer_run_id}")
+    if state.status is not RunStatus.COMPLETED or state.terminal is None:
+        raise TransitionError(f"nonterminal exact-evaluation producer: {producer_run_id}")
+    try:
+        registered = validate_producer_registration_evidence(state.registered, required=True)
+        terminal = validate_producer_terminal_evidence(state.terminal, required=True)
+    except ValueError as exc:
+        raise TransitionError(f"ineligible exact-evaluation producer: {producer_run_id}") from exc
+    if registered["fold_id"] != fold_id:
+        raise TransitionError(
+            f"exact-evaluation producer {producer_run_id} belongs to {registered['fold_id']}, not {fold_id}"
+        )
+    registered_event = next(
+        item for item in state.events if item.event_type is EventType.REGISTERED
+    )
+    terminal_event = next(
+        item for item in state.events if item.event_type is EventType.COMPLETED
+    )
+    return _normalize_exact_member(
+        {
+            "role": role,
+            "fold_id": fold_id,
+            "producer_run_id": producer_run_id,
+            "producer_registration_event_sha256": event_sha256(registered_event),
+            "producer_terminal_event_sha256": event_sha256(terminal_event),
+            **registered,
+            "graph_inventory_sha256": terminal["graph_inventory_sha256"],
+            "artifact_hashes": terminal["artifact_hashes"],
+        }
+    )
+
+
+def _validate_registered_exact_members(
+    events: Sequence[ExperimentEvent], members: Sequence[Mapping[str, Any]]
+) -> None:
+    for member in members:
+        expected = resolved_exact_member(
+            events,
+            role=str(member["role"]),
+            fold_id=str(member["fold_id"]),
+            producer_run_id=str(member["producer_run_id"]),
+        )
+        if canonical_json_bytes(expected) != canonical_json_bytes(member):
+            raise TransitionError(
+                f"exact-evaluation producer evidence mismatch: {member['role']}/{member['fold_id']}"
+            )
+
+
+def reconstruct_exact_evaluations(
+    events: Iterable[ExperimentEvent],
+) -> dict[str, ExactEvaluationState]:
+    grouped: dict[str, list[ExperimentEvent]] = {}
+    for event in events:
+        if event.event_type in _EXACT_EVENT_TYPES:
+            grouped.setdefault(event.run_id, []).append(event)
+    result: dict[str, ExactEvaluationState] = {}
+    for evaluation_run_id in sorted(grouped):
+        ordered = sorted(grouped[evaluation_run_id], key=_event_order)
+        registered = [
+            event
+            for event in ordered
+            if event.event_type is EventType.EXACT_EVALUATION_REGISTERED
+        ]
+        if len(registered) != 1:
+            raise TransitionError(
+                f"exact evaluation {evaluation_run_id} must have exactly one registered event"
+            )
+        state = ExactEvaluationState(
+            evaluation_run_id=evaluation_run_id,
+            status=ExactEvaluationStatus.REGISTERED,
+            registered=dict(registered[0].payload),
+            events=ordered,
+        )
+        for event in ordered:
+            if event.event_type is EventType.EXACT_EVALUATION_REGISTERED:
+                continue
+            if event.event_type is EventType.EXACT_EVALUATION_STARTED:
+                if state.status is not ExactEvaluationStatus.REGISTERED:
+                    raise TransitionError(
+                        f"exact evaluation {evaluation_run_id} has an illegal repeated/late start"
+                    )
+                state.status = ExactEvaluationStatus.RUNNING
+            elif event.event_type in {
+                EventType.EXACT_EVALUATION_COMPLETED,
+                EventType.EXACT_EVALUATION_FAILED,
+            }:
+                if state.status is not ExactEvaluationStatus.RUNNING:
+                    raise TransitionError(
+                        f"exact evaluation {evaluation_run_id} has an illegal terminal event"
+                    )
+                state.status = ExactEvaluationStatus(
+                    "completed"
+                    if event.event_type is EventType.EXACT_EVALUATION_COMPLETED
+                    else "failed"
+                )
+                state.terminal = dict(event.payload)
+        result[evaluation_run_id] = state
+    return result
+
+
 def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEvent) -> None:
     if any(existing.event_id == event.event_id for existing in events):
         raise TransitionError(f"duplicate event ID: {event.event_id}")
+    if event.event_type in _EXACT_EVENT_TYPES:
+        _validate_exact_transition(events, event)
+        return
     runs = reconstruct_runs(events) if events else {}
     existing = runs.get(event.run_id)
     if event.event_type is EventType.REGISTERED:
@@ -428,6 +641,7 @@ class Ledger:
                 raise LedgerCorruptionError(f"malformed ledger event on line {index + 1}") from exc
             events.append(event)
         reconstruct_runs(events)
+        reconstruct_exact_evaluations(events)
         return events
 
     def read_events(self) -> list[ExperimentEvent]:
@@ -592,6 +806,198 @@ def validate_producer_terminal_evidence(
         ),
         "artifact_hashes": _artifact_hashes(payload["artifact_hashes"]),
     }
+
+
+def exact_evaluation_registration_payload(
+    *,
+    evaluation_run_id: str,
+    scorer_lock_sha256: str,
+    environment_lock_sha256: str,
+    manifest_sha256: str,
+    evaluation_policy_sha256: str,
+    evidence_kind: str,
+    members: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    kind = _bounded_text(evidence_kind, "evidence_kind", 80)
+    if kind not in {"synthetic_fixture", "official_data_control", "model_candidate"}:
+        raise ValueError(f"invalid exact evaluation evidence kind: {kind}")
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "scorer_lock_sha256": _sha256_text(scorer_lock_sha256, "scorer_lock_sha256"),
+        "environment_lock_sha256": _sha256_text(
+            environment_lock_sha256, "environment_lock_sha256"
+        ),
+        "manifest_sha256": _sha256_text(manifest_sha256, "manifest_sha256"),
+        "evaluation_policy_sha256": _sha256_text(
+            evaluation_policy_sha256, "evaluation_policy_sha256"
+        ),
+        "evidence_kind": kind,
+        "members": _normalize_exact_members([dict(item) for item in members]),
+    }
+
+
+def exact_evaluation_started_payload(*, evaluation_run_id: str) -> dict[str, str]:
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160)
+    }
+
+
+def _normalize_authoritative_inventories(value: Any) -> list[dict[str, str]]:
+    required = {
+        "role",
+        "fold_id",
+        "producer_run_id",
+        "submission_graph_inventory_sha256",
+        "roundtrip_evidence_sha256",
+        "csv_sha256",
+    }
+    if not isinstance(value, list) or len(value) != 4:
+        raise ValueError("completion requires four authoritative inventories")
+    result: list[dict[str, str]] = []
+    for item in value:
+        if not isinstance(item, Mapping) or set(item) != required:
+            raise ValueError("authoritative inventory fields are invalid")
+        role = _bounded_text(item["role"], "inventory role", 20)
+        if role not in {"baseline", "candidate"}:
+            raise ValueError(f"invalid authoritative inventory role: {role}")
+        result.append(
+            {
+                "role": role,
+                "fold_id": _bounded_text(item["fold_id"], "inventory fold_id", 200),
+                "producer_run_id": _bounded_text(
+                    item["producer_run_id"], "inventory producer_run_id", 160
+                ),
+                "submission_graph_inventory_sha256": _sha256_text(
+                    item["submission_graph_inventory_sha256"],
+                    "submission_graph_inventory_sha256",
+                ),
+                "roundtrip_evidence_sha256": _sha256_text(
+                    item["roundtrip_evidence_sha256"], "roundtrip_evidence_sha256"
+                ),
+                "csv_sha256": _sha256_text(item["csv_sha256"], "csv_sha256"),
+            }
+        )
+    result.sort(key=_exact_member_sort_key)
+    if len({(item["role"], item["fold_id"]) for item in result}) != 4:
+        raise ValueError("authoritative inventory slots must be unique")
+    return result
+
+
+def exact_evaluation_completed_payload(
+    *,
+    evaluation_run_id: str,
+    members: Sequence[Mapping[str, Any]],
+    report_core_sha256: str,
+    envelope_sha256: str,
+    artifact_hashes: Mapping[str, Any],
+    authoritative_inventories: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "members": _normalize_exact_members([dict(item) for item in members]),
+        "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
+        "envelope_sha256": _sha256_text(envelope_sha256, "envelope_sha256"),
+        "artifact_hashes": _artifact_hashes(artifact_hashes),
+        "authoritative_inventories": _normalize_authoritative_inventories(
+            [dict(item) for item in authoritative_inventories]
+        ),
+        "promotion_eligible": True,
+    }
+
+
+def exact_evaluation_failed_payload(
+    *, evaluation_run_id: str, reason_code: str, detail: str
+) -> dict[str, Any]:
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "reason_code": _bounded_text(reason_code, "reason_code", 160),
+        "detail": _bounded_text(detail, "failure detail", 2000),
+        "promotion_eligible": False,
+    }
+
+
+def _validate_exact_transition(
+    events: Sequence[ExperimentEvent], event: ExperimentEvent
+) -> None:
+    experiments = reconstruct_runs(events)
+    evaluations = reconstruct_exact_evaluations(events)
+    existing = evaluations.get(event.run_id)
+    if event.payload.get("evaluation_run_id") != event.run_id:
+        raise TransitionError("exact evaluation event/run identity mismatch")
+    if event.event_type is EventType.EXACT_EVALUATION_REGISTERED:
+        if existing is not None or event.run_id in experiments:
+            raise TransitionError(f"duplicate exact evaluation ID: {event.run_id}")
+        try:
+            normalized = exact_evaluation_registration_payload(
+                evaluation_run_id=event.payload.get("evaluation_run_id"),
+                scorer_lock_sha256=event.payload.get("scorer_lock_sha256"),
+                environment_lock_sha256=event.payload.get("environment_lock_sha256"),
+                manifest_sha256=event.payload.get("manifest_sha256"),
+                evaluation_policy_sha256=event.payload.get("evaluation_policy_sha256"),
+                evidence_kind=event.payload.get("evidence_kind"),
+                members=event.payload.get("members", ()),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if set(event.payload) != set(normalized):
+            raise TransitionError("exact evaluation registration has unknown fields")
+        _validate_registered_exact_members(events, normalized["members"])
+        return
+    if existing is None:
+        raise TransitionError(f"unknown exact evaluation ID: {event.run_id}")
+    if event.event_type is EventType.EXACT_EVALUATION_STARTED:
+        if existing.status is not ExactEvaluationStatus.REGISTERED:
+            raise TransitionError(
+                f"exact evaluation {event.run_id} cannot start from {existing.status}"
+            )
+        if event.payload != exact_evaluation_started_payload(evaluation_run_id=event.run_id):
+            raise TransitionError("exact evaluation start payload is invalid")
+        _validate_registered_exact_members(events, existing.registered["members"])
+        return
+    if existing.status is not ExactEvaluationStatus.RUNNING:
+        raise TransitionError(
+            f"exact evaluation {event.run_id} cannot finish from {existing.status}"
+        )
+    _validate_registered_exact_members(events, existing.registered["members"])
+    if event.event_type is EventType.EXACT_EVALUATION_COMPLETED:
+        try:
+            normalized = exact_evaluation_completed_payload(
+                evaluation_run_id=event.run_id,
+                members=event.payload.get("members", ()),
+                report_core_sha256=event.payload.get("report_core_sha256"),
+                envelope_sha256=event.payload.get("envelope_sha256"),
+                artifact_hashes=event.payload.get("artifact_hashes", {}),
+                authoritative_inventories=event.payload.get("authoritative_inventories", ()),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized:
+            raise TransitionError("exact evaluation completion payload is invalid")
+        if canonical_json_bytes(normalized["members"]) != canonical_json_bytes(
+            existing.registered["members"]
+        ):
+            raise TransitionError("exact evaluation completion member table drifted")
+        registered_slots = {
+            (item["role"], item["fold_id"], item["producer_run_id"])
+            for item in existing.registered["members"]
+        }
+        inventory_slots = {
+            (item["role"], item["fold_id"], item["producer_run_id"])
+            for item in normalized["authoritative_inventories"]
+        }
+        if registered_slots != inventory_slots:
+            raise TransitionError("exact evaluation authoritative inventory member drifted")
+        return
+    try:
+        normalized_failure = exact_evaluation_failed_payload(
+            evaluation_run_id=event.run_id,
+            reason_code=event.payload.get("reason_code"),
+            detail=event.payload.get("detail"),
+        )
+    except ValueError as exc:
+        raise TransitionError(str(exc)) from exc
+    if event.payload != normalized_failure:
+        raise TransitionError("exact evaluation failure payload is invalid")
 
 
 def normalize_exact_values(value: Any) -> Any:

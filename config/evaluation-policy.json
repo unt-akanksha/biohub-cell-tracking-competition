@@ -1,0 +1,37 @@
+{
+  "authoritative_prediction_space": "integer-csv-rebuilt-geff",
+  "bootstrap": {
+    "algorithm": "numpy.Generator(PCG64)",
+    "percentiles": [
+      "2.5",
+      "50",
+      "97.5"
+    ],
+    "repetitions": 10000,
+    "seed": 20260824,
+    "unit": "complete_movie_within_embryo"
+  },
+  "diagnostics": {
+    "density_boundaries_per_mm3": [
+      "250",
+      "500",
+      "1000"
+    ],
+    "density_boundary_rule": "training-side-frozen-per-manifest-v1",
+    "displacement_boundaries_um": [
+      "2",
+      "4",
+      "8",
+      "16"
+    ],
+    "division_offsets_frames": [
+      -1,
+      0,
+      1
+    ],
+    "no_event_encoding": "not_applicable"
+  },
+  "native_prediction_space": "diagnostic_only",
+  "report_schema": "biohub.exact-report.v1",
+  "schema_version": 1
+}
