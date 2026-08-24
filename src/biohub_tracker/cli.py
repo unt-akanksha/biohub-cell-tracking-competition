@@ -201,6 +201,19 @@ def build_parser() -> argparse.ArgumentParser:
     graph_validate.add_argument("--scorer-lock", type=Path)
     graph_validate.add_argument("--scorer-checkout", type=Path)
     graph_validate.add_argument("--tracksdata-checkout", type=Path)
+    submission = subparsers.add_parser("submission", help="build authoritative submission space")
+    submission_commands = submission.add_subparsers(dest="submission_command", required=True)
+    roundtrip = submission_commands.add_parser("roundtrip", help="project CSV and rebuild GEFF")
+    roundtrip.add_argument("--pred-dir", type=Path, required=True)
+    roundtrip.add_argument("--producer-manifest", type=Path, required=True)
+    roundtrip.add_argument("--manifest", type=Path, required=True)
+    roundtrip.add_argument("--fold", required=True)
+    roundtrip.add_argument("--ledger", type=Path, required=True)
+    roundtrip.add_argument("--truth-root", type=Path, required=True)
+    roundtrip.add_argument("--output-dir", type=Path, required=True)
+    roundtrip.add_argument("--scorer-lock", type=Path)
+    roundtrip.add_argument("--scorer-checkout", type=Path)
+    roundtrip.add_argument("--tracksdata-checkout", type=Path)
     return parser
 
 
@@ -523,6 +536,31 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
             graph_loader=lambda path: load_geff_graph(path, verified),
         )
         print(json.dumps(asdict(result), sort_keys=True, separators=(",", ":")))
+        return 0
+    if args.command == "submission":
+        from .graphs import preflight_prediction_set
+        from .scorer_lock import verify_scorer_lock
+        from .submission_io import roundtrip_prediction_inventory
+
+        ledger_path = args.ledger if args.ledger.is_absolute() else root / args.ledger
+        inventory = preflight_prediction_set(
+            args.pred_dir,
+            args.producer_manifest,
+            args.manifest,
+            args.fold,
+            Ledger(ledger_path, root),
+        )
+        verified = verify_scorer_lock(
+            args.scorer_lock or root / "config" / "official-scorer.lock.json",
+            args.scorer_checkout
+            or root / ".biohub" / "vendor" / "kaggle-cell-tracking-competition",
+            tracksdata_checkout=args.tracksdata_checkout
+            or root / ".biohub" / "vendor" / "tracksdata",
+        )
+        evidence = roundtrip_prediction_inventory(
+            inventory, verified, args.truth_root, args.output_dir
+        )
+        print(json.dumps(evidence.to_dict(), sort_keys=True, separators=(",", ":")))
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2
