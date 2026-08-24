@@ -1,0 +1,213 @@
+{
+  "next_experiment": {
+    "hypothesis": "ZebraHub selective_ssm_medium parent-ranking gains survive reciprocal competition calibration and exact complete-graph OOF scoring.",
+    "next_gate": "reciprocal_competition_calibration_and_complete_graph_exact_metric",
+    "run_id": "prior-zebrahub-selective-ssm-medium"
+  },
+  "runs": [
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "exact_oof:pooled_delta_0.000367",
+        "division:no_regression"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {
+        "division_delta": "0",
+        "pooled_score_delta": "0.000367"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A strict dense-motion topology state guard improves pooled exact OOF without division regression.",
+      "imported_audit": true,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-01T00:00:00Z",
+      "run_id": "prior-dense-motion-state-guard",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "exact_oof:pooled_delta_0.001454",
+        "division:delta_-0.001364"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [
+        "prior-dense-motion-state-guard"
+      ],
+      "exact_evidence": {
+        "division_jaccard_delta": "-0.001364",
+        "pooled_score_delta": "0.001454"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A broader pairwise graph policy improves pooled score without damaging rare divisions.",
+      "imported_audit": true,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": "prior-dense-motion-state-guard",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-02T00:00:00Z",
+      "run_id": "prior-pairwise-graph-policy",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "audit:no_passing_policy"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "bilateral exact promotion gate",
+      "failure_reason": "No tested frozen dense topology policy passed.",
+      "hypothesis": "Frozen dense topology replication yields a policy that clears the bilateral exact gate.",
+      "imported_audit": true,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-03T00:00:00Z",
+      "run_id": "prior-frozen-topology-replication",
+      "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "inconclusive",
+      "decision_evidence": [
+        "embryo_audit:asymmetric"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {
+        "embryo_behavior": "asymmetric"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "V-JEPA parent-ranking features improve both held-out embryos consistently.",
+      "imported_audit": true,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-04T00:00:00Z",
+      "run_id": "prior-vjepa-parent-ranking",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "inconclusive",
+      "decision_evidence": [
+        "embryo_audit:asymmetric"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {
+        "embryo_behavior": "asymmetric"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "SEA-RAFT parent-ranking features improve both held-out embryos consistently.",
+      "imported_audit": true,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-05T00:00:00Z",
+      "run_id": "prior-sea-raft-parent-ranking",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": "2.0",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "failure:oom_dense_movie"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Out of memory on a dense movie after fallback patching.",
+      "hypothesis": "HOCT can process the dense movie within Kaggle memory after fallback patching.",
+      "imported_audit": true,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-06T00:00:00Z",
+      "run_id": "prior-hoct-dense-movie",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "11.3",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "failure:output_movie_coverage_changed"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Output movie coverage changed.",
+      "hypothesis": "The sparse-PU ranker completes with invariant output movie coverage.",
+      "imported_audit": true,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-07T00:00:00Z",
+      "run_id": "prior-ranker-coverage-failure",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "unknown",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "external_holdout:all_maturation_gates_passed_three_seeds",
+        "authorization:false"
+      ],
+      "declared_gpu_hours": "unknown",
+      "dependencies": [],
+      "exact_evidence": {
+        "mean_net_recoveries": "51.7",
+        "nearest_parent_top1": "0.932190",
+        "parent_top1": "0.932448"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "ZebraHub selective_ssm_medium parent-ranking gains survive reciprocal competition calibration and exact complete-graph OOF scoring.",
+      "imported_audit": true,
+      "lifecycle_status": "completed",
+      "next_gate": "reciprocal_competition_calibration_and_complete_graph_exact_metric",
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-08T00:00:00Z",
+      "run_id": "prior-zebrahub-selective-ssm-medium",
+      "status": "incomplete"
+    }
+  ],
+  "schema_version": 1
+}

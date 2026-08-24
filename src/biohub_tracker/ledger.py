@@ -229,18 +229,33 @@ def reconstruct_runs(events: Iterable[ExperimentEvent]) -> dict[str, RunState]:
             parent=registration.get("parent"),
             events=ordered,
         )
+        seen_event_ids: set[str] = {registered[0].event_id}
         for event in ordered:
+            if event.event_type is EventType.REGISTERED:
+                continue
             if event.event_type is EventType.STARTED:
+                if state.status is not RunStatus.REGISTERED:
+                    raise TransitionError(f"run {run_id} has an illegal repeated/late start")
                 state.status = RunStatus.RUNNING
             elif event.event_type in {EventType.COMPLETED, EventType.FAILED, EventType.REJECTED}:
+                if state.status is not RunStatus.RUNNING:
+                    raise TransitionError(f"run {run_id} has a terminal event before/after running")
                 state.status = RunStatus(event.event_type.value)
                 state.terminal = dict(event.payload)
             elif event.event_type is EventType.DECISION:
+                if state.status not in {RunStatus.COMPLETED, RunStatus.FAILED, RunStatus.REJECTED}:
+                    raise TransitionError(f"run {run_id} has a decision before a terminal event")
                 state.decision = str(event.payload.get("decision"))
                 state.decision_evidence = [str(item) for item in event.payload.get("evidence", [])]
             elif event.event_type is EventType.AMENDMENT:
+                if event.payload.get("target_event_id") not in seen_event_ids:
+                    raise TransitionError(f"run {run_id} amendment targets a later or unknown event")
                 state.amendments.append(dict(event.payload))
+            seen_event_ids.add(event.event_id)
         runs[run_id] = state
+    for state in runs.values():
+        if state.parent and state.parent not in runs:
+            raise TransitionError(f"run {state.run_id} has unknown parent {state.parent}")
     return runs
 
 

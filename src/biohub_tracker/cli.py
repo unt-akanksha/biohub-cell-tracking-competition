@@ -23,6 +23,7 @@ from .ledger import (
     registration_payload,
     start_payload,
 )
+from .progress import render_progress_json, render_progress_markdown, write_progress_reports
 from .watch import collect_snapshot, persist_snapshot, status_line, write_status_reports
 
 
@@ -127,6 +128,8 @@ def build_parser() -> argparse.ArgumentParser:
     amend.add_argument("--target-event-id", required=True)
     amend.add_argument("--reason", required=True)
     amend.add_argument("--replacement", required=True)
+    progress = subparsers.add_parser("progress", help="render immutable experiment lineage")
+    progress.add_argument("--json", action="store_true", dest="json_output")
     return parser
 
 
@@ -269,6 +272,16 @@ def _main(argv: Sequence[str] | None = None) -> int:
             parser.error(f"unknown experiment command: {args.experiment_command}")
         ledger.append(event)
         print(event.event_id)
+        return 0
+    if args.command == "progress":
+        ledger = Ledger(root / "experiments" / "events.jsonl", root)
+        events = ledger.read_events()
+        markdown_path, _ = write_progress_reports(events, root)
+        if args.json_output:
+            print(json.dumps(render_progress_json(events), indent=2, sort_keys=True))
+        else:
+            print(render_progress_markdown(events))
+            print(f"\nReport: {markdown_path}")
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2
