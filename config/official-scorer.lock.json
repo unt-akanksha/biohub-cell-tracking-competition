@@ -34,7 +34,7 @@
   },
   "fixtures": {
     "expected_path": "tests/fixtures/metric/expected/official-counts.json",
-    "expected_sha256": "04bac9b9c5cdda19093dc4272079952e9b2491791477eea54a41618fc3c086ab",
+    "expected_sha256": "ff079059762c8b223d15d6352c8ce6121399bbbad7b62b2810bd37ce9dfe8d42",
     "perfect_linear_path": "tests/fixtures/metric/graph_specs/perfect-linear.json",
     "perfect_linear_result_sha256": "8dd250c67ac988da0085c657814287e3218255614b88abbe1192c878f71ea0d4",
     "perfect_linear_sha256": "1a22bb66e34941d7ca099339e7398d93a26e3ac4d67fd9380ac4b6122dacc922"

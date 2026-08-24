@@ -5,12 +5,13 @@ import os
 import shutil
 import subprocess
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 import pytest
 
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
-from biohub_tracker.scorer import run_fixture_tracer
+from biohub_tracker.scorer import run_fixture_tracer, score_fixture_case, score_fixture_set
 from biohub_tracker.scorer_lock import ScorerVerificationError, verify_scorer_lock
 
 
@@ -20,6 +21,7 @@ CHECKOUT = ROOT / ".biohub" / "vendor" / "kaggle-cell-tracking-competition"
 TRACKSDATA = ROOT / ".biohub" / "vendor" / "tracksdata"
 FIXTURE = ROOT / "tests" / "fixtures" / "metric" / "graph_specs" / "perfect-linear.json"
 EXPECTED = ROOT / "tests" / "fixtures" / "metric" / "expected" / "official-counts.json"
+REGRESSIONS = ROOT / "tests" / "fixtures" / "metric" / "graph_specs" / "metric-regressions.json"
 
 
 def _write_lock(tmp_path: Path, mutate) -> Path:
@@ -162,3 +164,75 @@ def test_base_help_does_not_import_scientific_stack() -> None:
     )
     assert completed.returncode == 0, completed.stderr
     assert completed.stdout.rstrip().endswith("[]")
+
+
+@pytest.fixture(scope="module")
+def scorer_and_regressions():
+    verified = verify_scorer_lock(LOCK, CHECKOUT, tracksdata_checkout=TRACKSDATA)
+    fixture = json.loads(REGRESSIONS.read_text(encoding="utf-8"))
+    expected = json.loads(EXPECTED.read_text(encoding="utf-8"))["cases"]
+    return verified, fixture, expected
+
+
+@pytest.mark.parametrize(
+    "case_name",
+    [
+        "boundary_exact_7um",
+        "boundary_over_7um",
+        "time_mismatch",
+        "anisotropic_z_reject",
+        "missing_node",
+        "sparse_boundary_ignored",
+        "sparse_interior_penalty",
+    ],
+)
+def test_edge_matching_regressions(scorer_and_regressions, case_name: str) -> None:
+    verified, fixture, expected = scorer_and_regressions
+    assert score_fixture_case(verified, fixture["cases"][case_name]) == expected[case_name]
+
+
+@pytest.mark.parametrize("case_name", ["penalty_equal", "penalty_over", "penalty_under"])
+def test_penalty_regressions(scorer_and_regressions, case_name: str) -> None:
+    verified, fixture, expected = scorer_and_regressions
+    result = score_fixture_case(verified, fixture["cases"][case_name])
+    assert result == expected[case_name]
+    if case_name == "penalty_under":
+        assert Decimal(result["official_summary"]["adj_edge_jaccard"]) > Decimal("1")
+
+
+@pytest.mark.parametrize("case_name", ["division_ontime", "division_early", "division_late"])
+def test_division_regressions(scorer_and_regressions, case_name: str) -> None:
+    verified, fixture, expected = scorer_and_regressions
+    result = score_fixture_case(verified, fixture["cases"][case_name])
+    assert result == expected[case_name]
+    assert result["official_counts"]["division_tp"] == 1
+
+
+def test_aggregate_uses_official_weighted_micro_summary(scorer_and_regressions) -> None:
+    verified, fixture, expected = scorer_and_regressions
+    names = fixture["aggregation_sets"]["imbalanced"]
+    result = score_fixture_set(verified, [(name, fixture["cases"][name]) for name in names])
+    for key, value in expected["aggregate_imbalanced"].items():
+        assert result[key] == value
+    assert result["official_summary"]["score"] != result["arithmetic_movie_score"]
+    assert result["adjusted_edge_inputs"]["weights"] == [5, 2]
+
+
+def test_aggregate_no_division_drops_term_without_nan(scorer_and_regressions) -> None:
+    verified, fixture, expected = scorer_and_regressions
+    names = fixture["aggregation_sets"]["no_divisions"]
+    result = score_fixture_set(verified, [(name, fixture["cases"][name]) for name in names])
+    for key, value in expected["aggregate_no_divisions"].items():
+        assert result[key] == value
+    assert result["official_summary"]["division_jaccard"] is None
+    assert result["official_summary"]["score"] is not None
+
+
+def test_edge_fixture_evaluation_uses_fresh_copies(scorer_and_regressions) -> None:
+    verified, fixture, _ = scorer_and_regressions
+    case = fixture["cases"]["division_ontime"]
+    before = canonical_json_bytes(case)
+    first = score_fixture_case(verified, case)
+    second = score_fixture_case(verified, case)
+    assert first == second
+    assert canonical_json_bytes(case) == before

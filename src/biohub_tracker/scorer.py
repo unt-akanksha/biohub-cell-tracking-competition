@@ -125,7 +125,9 @@ def _canonical_summary(summary: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-def score_fixture_case(verified: VerifiedScorer, case: dict[str, Any]) -> dict[str, Any]:
+def _score_fixture_case_details(
+    verified: VerifiedScorer, case: dict[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any], int, int]:
     required = {
         "estimated_number_of_nodes",
         "max_distance",
@@ -160,9 +162,83 @@ def score_fixture_case(verified: VerifiedScorer, case: dict[str, Any]) -> dict[s
     row = verified.per_sample_metrics(official_result, estimate, recall)
     summary = verified.summarise([row])
     counts = {name: int(getattr(official_result, name)) for name in _COUNT_FIELDS}
+    measured = {"official_counts": counts, "official_summary": _canonical_summary(summary)}
+    matched_gt_nodes = round(float(recall) * scored_truth.num_nodes())
+    return measured, row, matched_gt_nodes, scored_truth.num_nodes()
+
+
+def score_fixture_case(verified: VerifiedScorer, case: dict[str, Any]) -> dict[str, Any]:
+    measured, _, _, _ = _score_fixture_case_details(verified, case)
+    return measured
+
+
+def _jaccard_text(tp: int, fp: int, fn: int) -> str | None:
+    denominator = tp + fp + fn
+    return _decimal_text(tp / denominator) if denominator else None
+
+
+def score_fixture_set(
+    verified: VerifiedScorer,
+    cases: list[tuple[str, dict[str, Any]]],
+) -> dict[str, Any]:
+    if not cases or len({name for name, _ in cases}) != len(cases):
+        raise ScorerVerificationError("fixture_schema_invalid", "fixture-set names must be unique")
+    rows: list[dict[str, Any]] = []
+    sample_outputs: list[dict[str, Any]] = []
+    matched_total = 0
+    gt_node_total = 0
+    totals = {name: 0 for name in _COUNT_FIELDS}
+    weights: list[int] = []
+    adjusted_weighted_terms: list[float] = []
+    movie_scores: list[float] = []
+
+    for name, case in cases:
+        measured, row, matched_nodes, gt_nodes = _score_fixture_case_details(verified, case)
+        rows.append(row)
+        matched_total += matched_nodes
+        gt_node_total += gt_nodes
+        for field in _COUNT_FIELDS:
+            totals[field] += measured["official_counts"][field]
+        weight = int(row["edge_tp"] + row["edge_fp"] + row["edge_fn"])
+        weights.append(weight)
+        adjusted_weighted_terms.append(weight * float(row["adj_edge_jaccard"]))
+        movie_scores.append(float(measured["official_summary"]["score"]))
+        sample_outputs.append(
+            {
+                "case_name": name,
+                "official_counts": measured["official_counts"],
+                "official_summary": measured["official_summary"],
+                "weight": weight,
+            }
+        )
+
+    summary = _canonical_summary(verified.summarise(rows))
+    total_weight = sum(weights)
+    edge_counts = {name: totals[name] for name in ("edge_tp", "edge_fp", "edge_fn")}
+    division_counts = {
+        name: totals[name] for name in ("division_tp", "division_fp", "division_fn")
+    }
+    division_jaccard = _jaccard_text(
+        division_counts["division_tp"],
+        division_counts["division_fp"],
+        division_counts["division_fn"],
+    )
     return {
-        "official_counts": counts,
-        "official_summary": _canonical_summary(summary),
+        "adjusted_edge_inputs": {
+            "total_weight": total_weight,
+            "weighted_sum": _decimal_text(sum(adjusted_weighted_terms)),
+            "weights": weights,
+        },
+        "arithmetic_movie_score": _decimal_text(sum(movie_scores) / len(movie_scores)),
+        "macro_organizer_node_recall": summary["node_recall"],
+        "micro_counts": {**edge_counts, **division_counts},
+        "micro_division_jaccard": division_jaccard,
+        "micro_edge_jaccard": _jaccard_text(
+            edge_counts["edge_tp"], edge_counts["edge_fp"], edge_counts["edge_fn"]
+        ),
+        "micro_node_recall": _decimal_text(matched_total / gt_node_total),
+        "official_summary": summary,
+        "samples": sample_outputs,
     }
 
 
