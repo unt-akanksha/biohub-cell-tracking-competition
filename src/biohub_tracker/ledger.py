@@ -33,6 +33,25 @@ class TransitionError(LedgerError):
     pass
 
 
+PRODUCER_REGISTRATION_FIELDS = (
+    "manifest_sha256",
+    "fold_id",
+    "train_membership_sha256",
+    "calibration_membership_sha256",
+    "evaluation_membership_sha256",
+    "model_sha256",
+    "config_sha256",
+    "code_sha256",
+    "data_sha256",
+)
+PRODUCER_TERMINAL_FIELDS = (
+    "evidence_eligible",
+    "graph_inventory_sha256",
+    "artifact_hashes",
+)
+_SHA256_RE = re.compile(r"[0-9a-f]{64}")
+
+
 class EventType(StrEnum):
     REGISTERED = "registered"
     STARTED = "started"
@@ -282,6 +301,7 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
             raise TransitionError(f"unknown parent run: {parent}")
         _bounded_text(event.payload.get("hypothesis"), "hypothesis", 1000)
         decimal_text(event.payload.get("declared_max_runtime_hours"), "declared runtime", positive=True)
+        validate_producer_registration_evidence(event.payload)
         return
     if not existing:
         raise TransitionError(f"unknown run ID: {event.run_id}")
@@ -298,6 +318,7 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
         decimal_text(event.payload.get("quota_after_hours"), "quota after")
         if event.event_type is EventType.COMPLETED:
             validate_complete_metrics(event.payload.get("metrics"))
+            validate_producer_terminal_evidence(event.payload)
         elif event.event_type is EventType.FAILED:
             _bounded_text(event.payload.get("failure_reason"), "failure reason", 2000)
         else:
@@ -485,6 +506,7 @@ def registration_payload(
     code: Mapping[str, Any],
     data_artifact: Mapping[str, Any] | None = None,
     model_artifact: Mapping[str, Any] | None = None,
+    producer_evidence: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     hypothesis = _bounded_text(hypothesis, "hypothesis", 1000)
     runtime = decimal_text(declared_max_runtime_hours, "declared runtime", positive=True)
@@ -501,7 +523,75 @@ def registration_payload(
         "declared_max_runtime_hours": runtime,
         "authorized_for_submission": False,
     }
+    if producer_evidence is not None:
+        normalized = validate_producer_registration_evidence(producer_evidence, required=True)
+        if normalized["config_sha256"] != payload["config_sha256"]:
+            raise ValueError("producer evidence config_sha256 does not match config")
+        payload.update(normalized)
     return payload
+
+
+def _sha256_text(value: Any, name: str) -> str:
+    digest = str(value).casefold()
+    if _SHA256_RE.fullmatch(digest) is None:
+        raise ValueError(f"{name} must be a lowercase SHA-256 digest")
+    return digest
+
+
+def _artifact_hashes(value: Any) -> dict[str, str]:
+    if not isinstance(value, Mapping) or not value:
+        raise ValueError("artifact_hashes must be a non-empty object")
+    result: dict[str, str] = {}
+    for name in sorted(value, key=str):
+        key = _bounded_text(name, "artifact hash name", 240)
+        result[key] = _sha256_text(value[name], f"artifact_hashes.{key}")
+    return result
+
+
+def validate_producer_registration_evidence(
+    payload: Mapping[str, Any], *, required: bool = False
+) -> dict[str, Any] | None:
+    """Validate the additive model-producer lineage projection.
+
+    A legacy registration contains ``config_sha256`` but none of the new
+    identity fields. It remains byte-for-byte readable and is deliberately
+    evidence-ineligible.
+    """
+
+    extension_fields = set(PRODUCER_REGISTRATION_FIELDS) - {"config_sha256"}
+    present = extension_fields.intersection(payload)
+    if not present and not required:
+        return None
+    missing = set(PRODUCER_REGISTRATION_FIELDS) - set(payload)
+    if missing:
+        raise ValueError(f"producer registration evidence missing {sorted(missing)}")
+    result = {
+        name: _sha256_text(payload[name], name)
+        for name in PRODUCER_REGISTRATION_FIELDS
+        if name != "fold_id"
+    }
+    result["fold_id"] = _bounded_text(payload["fold_id"], "fold_id", 200)
+    return {name: result[name] for name in PRODUCER_REGISTRATION_FIELDS}
+
+
+def validate_producer_terminal_evidence(
+    payload: Mapping[str, Any], *, required: bool = False
+) -> dict[str, Any] | None:
+    present = set(PRODUCER_TERMINAL_FIELDS).intersection(payload)
+    if not present and not required:
+        return None
+    missing = set(PRODUCER_TERMINAL_FIELDS) - set(payload)
+    if missing:
+        raise ValueError(f"producer terminal evidence missing {sorted(missing)}")
+    if payload["evidence_eligible"] is not True:
+        raise ValueError("evidence_eligible must be true when terminal evidence is supplied")
+    return {
+        "evidence_eligible": True,
+        "graph_inventory_sha256": _sha256_text(
+            payload["graph_inventory_sha256"], "graph_inventory_sha256"
+        ),
+        "artifact_hashes": _artifact_hashes(payload["artifact_hashes"]),
+    }
 
 
 def normalize_exact_values(value: Any) -> Any:
@@ -557,8 +647,9 @@ def completed_payload(
     artifacts: Sequence[Mapping[str, Any]] = (),
     reports: Sequence[Mapping[str, Any]] = (),
     public_score: Any | None = None,
+    producer_evidence: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
-    return {
+    payload = {
         "actual_runtime_hours": decimal_text(
             actual_runtime_hours, "actual runtime", positive=True
         ),
@@ -569,6 +660,9 @@ def completed_payload(
         "public_score": decimal_text(public_score, "public score") if public_score is not None else None,
         "authorized_for_submission": False,
     }
+    if producer_evidence is not None:
+        payload.update(validate_producer_terminal_evidence(producer_evidence, required=True))
+    return payload
 
 
 def failed_payload(

@@ -1,0 +1,27 @@
+{
+  "artifact_hashes": {
+    "model": "9999999999999999999999999999999999999999999999999999999999999999",
+    "predictions": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "calibration_membership_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "code_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "config_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "data_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "evaluation_membership_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "fold_id": "fold-44b6-to-6bba",
+  "graph_inventory_sha256": "28d756fa3a42f66c909823d4a25a62f8782dded48de90b66ea3ff051bcb5061b",
+  "graphs": [
+    {
+      "fold_id": "fold-44b6-to-6bba",
+      "path": "6bba_fixture.geff",
+      "producer_run_id": "fixture-producer",
+      "sample_id": "6bba_fixture",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "manifest_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+  "model_sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+  "producer_run_id": "fixture-producer",
+  "schema_version": 1,
+  "train_membership_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+}

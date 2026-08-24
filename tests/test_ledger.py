@@ -23,6 +23,8 @@ from biohub_tracker.ledger import (
     reconstruct_runs,
     registration_payload,
     start_payload,
+    validate_producer_registration_evidence,
+    validate_producer_terminal_evidence,
 )
 
 
@@ -361,3 +363,58 @@ def test_lifecycle_cli_and_amendment_output(tmp_path, capsys):
     assert state.status is RunStatus.COMPLETED
     assert state.decision == "retain"
     assert len(state.events) == 5
+
+
+def test_optional_producer_evidence_is_additive_and_legacy_bytes_are_unchanged():
+    legacy = payload()
+    assert validate_producer_registration_evidence(legacy) is None
+    legacy_completed = completed_payload(
+        actual_runtime_hours="1", quota_after_hours="29", metrics=complete_metrics()
+    )
+    assert validate_producer_terminal_evidence(legacy_completed) is None
+    assert "evidence_eligible" not in legacy_completed
+
+    lineage = {
+        "manifest_sha256": "1" * 64,
+        "fold_id": "fold-44b6-to-6bba",
+        "train_membership_sha256": "2" * 64,
+        "calibration_membership_sha256": "3" * 64,
+        "evaluation_membership_sha256": "4" * 64,
+        "model_sha256": "5" * 64,
+        "config_sha256": legacy["config_sha256"],
+        "code_sha256": "6" * 64,
+        "data_sha256": "7" * 64,
+    }
+    extended = registration_payload(
+        hypothesis="test",
+        parent=None,
+        config={"lr": "0.001"},
+        seeds=[1],
+        split="embryo-held-out",
+        declared_max_runtime_hours="1",
+        code={"git_head": "abc", "dirty": False, "dirty_state_sha256": "0" * 64},
+        producer_evidence=lineage,
+    )
+    assert validate_producer_registration_evidence(extended) == lineage
+    terminal = completed_payload(
+        actual_runtime_hours="1",
+        quota_after_hours="29",
+        metrics=complete_metrics(),
+        producer_evidence={
+            "evidence_eligible": True,
+            "graph_inventory_sha256": "8" * 64,
+            "artifact_hashes": {"model": "9" * 64},
+        },
+    )
+    assert terminal["actual_runtime_hours"] == legacy_completed["actual_runtime_hours"]
+    assert terminal["quota_after_hours"] == legacy_completed["quota_after_hours"]
+    assert validate_producer_terminal_evidence(terminal)["evidence_eligible"] is True
+
+
+def test_partial_producer_evidence_is_rejected_without_changing_gpu_lifecycle(tmp_path):
+    ledger = make_ledger(tmp_path)
+    incomplete = payload()
+    incomplete["manifest_sha256"] = "1" * 64
+    with pytest.raises(ValueError):
+        ledger.append(ExperimentEvent.create("partial", EventType.REGISTERED, incomplete))
+    assert not ledger.path.exists()

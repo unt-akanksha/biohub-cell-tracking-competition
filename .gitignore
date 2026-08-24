@@ -21,6 +21,11 @@ leaderboard-archives/
 weights/
 checkpoints/
 artifacts/models/
+predictions/
+roundtrip/
+round-trips/
+submission.csv
+submission-*.csv
 *.ckpt
 *.pt
 *.pth

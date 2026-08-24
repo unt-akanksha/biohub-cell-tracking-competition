@@ -94,6 +94,7 @@ def build_parser() -> argparse.ArgumentParser:
     register.add_argument("--data-sha256")
     register.add_argument("--model-path", type=Path)
     register.add_argument("--model-sha256")
+    register.add_argument("--producer-evidence", help="JSON object/file with immutable lineage")
     repair = experiment_commands.add_parser("repair", help="acknowledge a quarantined tail")
     repair.add_argument("--reason", required=True)
     start = experiment_commands.add_parser("start", help="record a launched experiment")
@@ -109,6 +110,7 @@ def build_parser() -> argparse.ArgumentParser:
     finish.add_argument("--artifact", type=Path, action="append", default=[])
     finish.add_argument("--report", type=Path, action="append", default=[])
     finish.add_argument("--public-score")
+    finish.add_argument("--producer-evidence", help="JSON object/file with terminal inventory evidence")
     fail = experiment_commands.add_parser("fail", help="record an experiment failure")
     fail.add_argument("run_id")
     fail.add_argument("--actual-runtime-hours", required=True)
@@ -187,6 +189,18 @@ def build_parser() -> argparse.ArgumentParser:
     manifest_verify.add_argument("--manifest", type=Path, required=True)
     manifest_verify.add_argument("--data-root", type=Path)
     manifest_verify.add_argument("--scorer-lock", type=Path)
+    graph = subparsers.add_parser("graph", help="validate ledger-bound prediction graphs")
+    graph_commands = graph.add_subparsers(dest="graph_command", required=True)
+    graph_validate = graph_commands.add_parser("validate", help="validate a complete prediction set")
+    graph_validate.add_argument("--pred-dir", type=Path, required=True)
+    graph_validate.add_argument("--producer-manifest", type=Path, required=True)
+    graph_validate.add_argument("--manifest", type=Path, required=True)
+    graph_validate.add_argument("--fold", required=True)
+    graph_validate.add_argument("--ledger", type=Path, required=True)
+    graph_validate.add_argument("--mode", choices=["native", "submission"], required=True)
+    graph_validate.add_argument("--scorer-lock", type=Path)
+    graph_validate.add_argument("--scorer-checkout", type=Path)
+    graph_validate.add_argument("--tracksdata-checkout", type=Path)
     return parser
 
 
@@ -237,6 +251,9 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
                 code=git_state(root),
                 data_artifact=data,
                 model_artifact=model,
+                producer_evidence=(
+                    _json_value(args.producer_evidence) if args.producer_evidence else None
+                ),
             )
             ledger.append(ExperimentEvent.create(run_id, EventType.REGISTERED, payload))
             print(run_id)
@@ -265,6 +282,9 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
                     artifacts=_artifact_records(root, args.artifact),
                     reports=_artifact_records(root, args.report),
                     public_score=args.public_score,
+                    producer_evidence=(
+                        _json_value(args.producer_evidence) if args.producer_evidence else None
+                    ),
                 ),
             )
         elif args.experiment_command == "fail":
@@ -475,6 +495,34 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
             scorer_lock_path=scorer_lock if args.data_root is not None else None,
         )
         print(json.dumps({"manifest_sha256": manifest.manifest_sha256, "verified": True}, sort_keys=True))
+        return 0
+    if args.command == "graph":
+        from dataclasses import asdict
+
+        from .graphs import load_geff_graph, preflight_prediction_set, validate_prediction_inventory
+        from .scorer_lock import verify_scorer_lock
+
+        ledger_path = args.ledger if args.ledger.is_absolute() else root / args.ledger
+        inventory = preflight_prediction_set(
+            args.pred_dir,
+            args.producer_manifest,
+            args.manifest,
+            args.fold,
+            Ledger(ledger_path, root),
+        )
+        verified = verify_scorer_lock(
+            args.scorer_lock or root / "config" / "official-scorer.lock.json",
+            args.scorer_checkout
+            or root / ".biohub" / "vendor" / "kaggle-cell-tracking-competition",
+            tracksdata_checkout=args.tracksdata_checkout
+            or root / ".biohub" / "vendor" / "tracksdata",
+        )
+        result = validate_prediction_inventory(
+            inventory,
+            mode=args.mode,
+            graph_loader=lambda path: load_geff_graph(path, verified),
+        )
+        print(json.dumps(asdict(result), sort_keys=True, separators=(",", ":")))
         return 0
     parser.error(f"unknown command: {args.command}")
     return 2
