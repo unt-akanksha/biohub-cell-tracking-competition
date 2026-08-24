@@ -1,0 +1,526 @@
+{
+  "active_hypothesis": "Reciprocal calibration can convert ZebraHub selective_ssm_medium parent-ranking gains into an exact complete-graph OOF improvement.",
+  "collection_status": {
+    "kernels": {
+      "status": "ok"
+    },
+    "leaderboard": {
+      "status": "ok"
+    },
+    "leaderboard_full": {
+      "status": "ok"
+    },
+    "quota": {
+      "status": "ok"
+    },
+    "submissions": {
+      "status": "ok"
+    },
+    "topics": {
+      "status": "ok"
+    }
+  },
+  "competition": {
+    "best_clean_public_score": "0.913",
+    "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
+    "final_deadline_utc": "2026-09-29T23:59:00Z",
+    "leader_score": "0.962",
+    "rank": 748,
+    "rank_unavailable_reason": null,
+    "slug": "biohub-cell-tracking-during-development"
+  },
+  "competition_policy": {
+    "content_sha256": "6ba56fd26b545e2852ea8b27eea74bd7b5caa13abf3444a1ee5545a9883f062f",
+    "daily_submission_limit": 5,
+    "entry_deadline_utc": "2026-09-22T23:59:00Z",
+    "final_deadline_utc": "2026-09-29T23:59:00Z",
+    "final_submission_slots": 2,
+    "gpu_reserve_hours": "8.00",
+    "metric_hack_policy_sha256": "d1305c97a9896ee88a45bd339c2dd345c2ef78e77fe7af7488dcf6db8f35d04b",
+    "notebook_registry_sha256": "83960097c4c95a44541c6c507d6cdc0521ed08069374d77337996afe53c1da9b",
+    "notebook_runtime_limit_hours": "12.00",
+    "official_sources": {
+      "baseline": "https://github.com/royerlab/kaggle-cell-tracking-competition",
+      "competition": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview",
+      "rules": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/rules"
+    }
+  },
+  "generated_from_snapshot_at": "2026-08-24T03:19:30.611856Z",
+  "gpu": {
+    "refresh_at": "2026-08-29T00:00:00",
+    "remaining_hours": "30.00",
+    "reserve_hours": "8.00",
+    "spendable_hours": "22.00"
+  },
+  "next_gate": "Run reciprocal competition-graph calibration, then the patched exact complete-movie bilateral metric gate.",
+  "notebook_provenance": {
+    "clean_research_candidates": [
+      {
+        "author": "Дворкин Евгений Владимирович",
+        "cli_order": 13,
+        "disposition": "research_candidate",
+        "evidence": "No known exploit found in manual source audit; displayed score is not reproduced evidence.",
+        "last_run_at": "2026-08-23T12:48:48.517000",
+        "matched_patterns": [],
+        "provenance": "reported_post_patch",
+        "ref": "evgendvorkin/biohub-0-923-lb",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub  0.923 LB",
+        "votes": 8
+      },
+      {
+        "author": "Yunus Gümüşsoy",
+        "cli_order": 14,
+        "disposition": "research_candidate",
+        "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+        "last_run_at": "2026-08-22T13:24:43.877000",
+        "matched_patterns": [],
+        "provenance": "reported_post_patch",
+        "ref": "yunusgmsoy/kimi-notebook-v17",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Kimi Notebook v17",
+        "votes": 111
+      },
+      {
+        "author": "Kunal Desale",
+        "cli_order": 18,
+        "disposition": "research_candidate",
+        "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+        "last_run_at": "2026-08-22T18:38:26.473000",
+        "matched_patterns": [],
+        "provenance": "reported_post_patch",
+        "ref": "kunaldesale2408/biohub-cell-tracking",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub Cell Tracking",
+        "votes": 74
+      }
+    ],
+    "excluded_metric_hacks": [
+      {
+        "author": "Xiaolei Lian",
+        "cli_order": 0,
+        "disposition": "excluded_metric_hack",
+        "evidence": "Manual source audit found explicit patched-metric division exploit logic.",
+        "last_run_at": "2026-07-20T07:41:33.157000",
+        "matched_patterns": [],
+        "provenance": "explicit_metric_hack",
+        "ref": "xiaoleilian/biohub-ct-mix-divaug",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "biohub ct mix divaug",
+        "votes": 237
+      },
+      {
+        "author": "Кирилл Алешин",
+        "cli_order": 2,
+        "disposition": "excluded_metric_hack",
+        "evidence": "matched explicit metric-hack policy",
+        "last_run_at": "2026-07-22T09:50:39.617000",
+        "matched_patterns": [
+          "explicit-metric-hack-language"
+        ],
+        "provenance": "explicit_metric_hack",
+        "ref": "kirneo/metric-hack-last-call-update",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Metric_hack_last_call_update",
+        "votes": 126
+      },
+      {
+        "author": "Aman Atar",
+        "cli_order": 3,
+        "disposition": "excluded_metric_hack",
+        "evidence": "matched explicit metric-hack policy",
+        "last_run_at": "2026-07-20T16:25:21.587000",
+        "matched_patterns": [
+          "explicit-metric-hack-language"
+        ],
+        "provenance": "explicit_metric_hack",
+        "ref": "amanatar/improved-metric-hack-last-call",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "improved-metric-hack-last-call",
+        "votes": 74
+      },
+      {
+        "author": "Ravindra",
+        "cli_order": 7,
+        "disposition": "excluded_metric_hack",
+        "evidence": "matched explicit metric-hack policy",
+        "last_run_at": "2026-07-20T04:20:13.213000",
+        "matched_patterns": [
+          "explicit-metric-hack-language"
+        ],
+        "provenance": "explicit_metric_hack",
+        "ref": "ravi123a321at/metric-hack-last-call",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Metric_hack_last_call",
+        "votes": 8
+      },
+      {
+        "author": "outwrest",
+        "cli_order": 8,
+        "disposition": "excluded_metric_hack",
+        "evidence": "matched explicit metric-hack policy",
+        "last_run_at": "2026-07-17T05:10:13.807000",
+        "matched_patterns": [
+          "explicit-metric-hack-language"
+        ],
+        "provenance": "explicit_metric_hack",
+        "ref": "outwrest/metric-hack-minimal-baseline-tta-2gpu",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "metric hack - minimal baseline-tta-2gpu",
+        "votes": 83
+      },
+      {
+        "author": "Anvith Pothula",
+        "cli_order": 11,
+        "disposition": "excluded_metric_hack",
+        "evidence": "matched explicit metric-hack policy",
+        "last_run_at": "2026-07-21T19:12:54.273000",
+        "matched_patterns": [
+          "explicit-metric-hack-language"
+        ],
+        "provenance": "explicit_metric_hack",
+        "ref": "anvithpothula/biohub-metric-hack",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub Metric Hack",
+        "votes": 12
+      }
+    ],
+    "needs_source_review": [
+      {
+        "author": "KAIWALYA RAUT",
+        "cli_order": 1,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-22T05:06:14.940000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "kaiwalyaatulraut/biohub-cell-tracking-solution",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub Cell Tracking Solution",
+        "votes": 210
+      },
+      {
+        "author": "KAIWALYA RAUT",
+        "cli_order": 4,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-22T17:13:56.723000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "kaiwalyaatulraut/biohub-solution",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub Solution",
+        "votes": 43
+      },
+      {
+        "author": "KAIWALYA RAUT",
+        "cli_order": 5,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-21T04:18:44.360000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "kaiwalyaatulraut/biohub-competition-solution",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub Competition Solution",
+        "votes": 67
+      },
+      {
+        "author": "Aman Atar",
+        "cli_order": 6,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-20T11:39:21.880000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "amanatar/biohub-v6-ultra-best",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "biohub-v6-ultra-best",
+        "votes": 16
+      },
+      {
+        "author": "Mr. Bruce",
+        "cli_order": 9,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-19T11:20:38.713000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "muhammaddanyalmalik/cell-tracking",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Cell tracking",
+        "votes": 5
+      },
+      {
+        "author": "Ravindra",
+        "cli_order": 10,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-07-19T10:57:56.347000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "ravi123a321at/dark-agi-biohub-cell-tracking-solution",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Dark-AGI-Biohub Cell Tracking Solution",
+        "votes": 7
+      },
+      {
+        "author": "Rocker Ritesh",
+        "cli_order": 12,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-08-23T08:20:17.300000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "rockerritesh/0-926-biohub-divsub",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "0.926-biohub-divsub",
+        "votes": 5
+      },
+      {
+        "author": "Yunus Gümüşsoy",
+        "cli_order": 15,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-08-21T12:33:00.767000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "yunusgmsoy/lb-0-920-biohub-cell-tracking-v17",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "[LB-0.920]biohub_cell_tracking_v17",
+        "votes": 28
+      },
+      {
+        "author": "navazsh fathi",
+        "cli_order": 16,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-08-22T11:24:14.570000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "navazshfathi/best-score",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "best-score",
+        "votes": 41
+      },
+      {
+        "author": "m-toshi desu",
+        "cli_order": 17,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-08-23T05:38:00.797000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "mtoshidesu/test-notebook-v17-d17ce0",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Test Notebook v17 d17ce0",
+        "votes": 9
+      },
+      {
+        "author": "xsong2020",
+        "cli_order": 19,
+        "disposition": "needs_source_review",
+        "evidence": "source_not_audited",
+        "last_run_at": "2026-08-23T19:46:52.257000",
+        "matched_patterns": [],
+        "provenance": "unknown",
+        "ref": "xstargate/biohub-v17-e3-primary-only",
+        "score_reproduced": false,
+        "source_sha256": null,
+        "title": "Biohub v17 E3 Primary Only",
+        "votes": 0
+      }
+    ]
+  },
+  "recent_discussions": [
+    {
+      "author": "",
+      "comments": 0,
+      "id": "737103",
+      "posted_at": "2026-08-23T09:59:31.382000",
+      "title": "Hand labeling - is it external data?",
+      "votes": 0
+    },
+    {
+      "author": "",
+      "comments": 3,
+      "id": "737101",
+      "posted_at": "2026-08-23T09:12:21.220000",
+      "title": "Stuck at 0.928",
+      "votes": 4
+    },
+    {
+      "author": "",
+      "comments": 0,
+      "id": "736937",
+      "posted_at": "2026-08-22T14:50:45.065000",
+      "title": "Public Notebook Rankings Need a Metric Refresh",
+      "votes": 0
+    },
+    {
+      "author": "",
+      "comments": 6,
+      "id": "735531",
+      "posted_at": "2026-08-16T15:43:39.090000",
+      "title": "so to get a score above the public baseline is training?",
+      "votes": -2
+    },
+    {
+      "author": "",
+      "comments": 11,
+      "id": "735352",
+      "posted_at": "2026-08-15T08:25:14.079000",
+      "title": "Possible big leaderboard shakeup",
+      "votes": 7
+    },
+    {
+      "author": "",
+      "comments": 3,
+      "id": "735307",
+      "posted_at": "2026-08-14T23:50:52.463000",
+      "title": "What is happening after submitting the notebook for the first time?",
+      "votes": -2
+    },
+    {
+      "author": "",
+      "comments": 5,
+      "id": "734604",
+      "posted_at": "2026-08-12T05:01:34.624000",
+      "title": "What is the best model for this domain so far?",
+      "votes": 2
+    },
+    {
+      "author": "",
+      "comments": 3,
+      "id": "734330",
+      "posted_at": "2026-08-11T00:18:51.970000",
+      "title": "Is public Zebrahub data allowed as external training data?",
+      "votes": 15
+    },
+    {
+      "author": "",
+      "comments": 6,
+      "id": "734237",
+      "posted_at": "2026-08-10T16:35:37.428000",
+      "title": "how long does the submission take?",
+      "votes": -1
+    },
+    {
+      "author": "",
+      "comments": 2,
+      "id": "734192",
+      "posted_at": "2026-08-10T12:04:24.138000",
+      "title": "How much points are you guys getting",
+      "votes": 3
+    },
+    {
+      "author": "",
+      "comments": 1,
+      "id": "734093",
+      "posted_at": "2026-08-09T20:23:41.311000",
+      "title": "Public case study: From Detection to Identity — 3D cell tracking reasoning and aggregate evidence",
+      "votes": 2
+    },
+    {
+      "author": "",
+      "comments": 0,
+      "id": "734053",
+      "posted_at": "2026-08-09T16:58:04.843000",
+      "title": "The voxels are 4:1 anisotropic in Z, and two other things sitting in zarr.json",
+      "votes": 1
+    },
+    {
+      "author": "",
+      "comments": 0,
+      "id": "734015",
+      "posted_at": "2026-08-09T14:38:41.253000",
+      "title": "training on patches or whole volume?",
+      "votes": 1
+    },
+    {
+      "author": "",
+      "comments": 0,
+      "id": "733973",
+      "posted_at": "2026-08-09T10:37:14.977000",
+      "title": "The linking radius is 8.4 µm, and divisions are one link in 853",
+      "votes": 0
+    },
+    {
+      "author": "",
+      "comments": 0,
+      "id": "733877",
+      "posted_at": "2026-08-08T19:52:11.586000",
+      "title": "A one-to-one linker scores 0.000 on divisions - four measurements on the metric itself",
+      "votes": 3
+    },
+    {
+      "author": "",
+      "comments": 2,
+      "id": "732474",
+      "posted_at": "2026-08-03T08:02:09.584000",
+      "title": "Errors on GT cell traces",
+      "votes": 6
+    },
+    {
+      "author": "",
+      "comments": 4,
+      "id": "732103",
+      "posted_at": "2026-08-01T21:12:10.502000",
+      "title": "[Free Dataset] 18.5 GB of fully-labelled synthetic 3D microscopy — 165k labelled divisions",
+      "votes": 39
+    },
+    {
+      "author": "",
+      "comments": 7,
+      "id": "724130",
+      "posted_at": "2026-07-09T16:55:59.111000",
+      "title": "Share a custom napari visualizer",
+      "votes": 40
+    },
+    {
+      "author": "",
+      "comments": 6,
+      "id": "716062",
+      "posted_at": "2026-06-30T02:16:18.647000",
+      "title": "Welcome to the Biohub - Cell Tracking During Development Challenge",
+      "votes": 72
+    },
+    {
+      "author": "",
+      "comments": 7,
+      "id": "714101",
+      "posted_at": "2026-06-25T16:44:43.592000",
+      "title": "How to get started + Competition's Official Discord",
+      "votes": 24
+    }
+  ],
+  "schema_version": 1,
+  "snapshot_sha256": "edffecd34f2e83558150a517784a1e6868e29db8739ab0d95d2698f8000d8437",
+  "submissions": {
+    "best_public_score": "0.913",
+    "best_submission_ref": "55155485",
+    "daily_limit": 5,
+    "remaining_today": 5,
+    "returned_total": 59,
+    "today": 0
+  }
+}

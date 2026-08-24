@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 from dataclasses import asdict, dataclass
 from enum import StrEnum
@@ -84,9 +85,10 @@ def audit_source_tree(
     digest = hashlib.sha256()
     matched: set[str] = set()
     names: list[str] = []
+    common_root = Path(os.path.commonpath([str(path.parent) for path in files]))
     for path in files:
         payload = path.read_bytes()
-        stable_name = path.as_posix()
+        stable_name = path.relative_to(common_root).as_posix()
         names.append(stable_name)
         digest.update(stable_name.encode("utf-8"))
         digest.update(b"\0")

@@ -5,7 +5,14 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Mapping
 
-from .io import atomic_write_json, canonical_json_bytes, sha256_bytes, utc_now
+from .io import (
+    atomic_replace_json,
+    atomic_replace_text,
+    atomic_write_json,
+    canonical_json_bytes,
+    sha256_bytes,
+    utc_now,
+)
 from .kaggle import FixtureRunner, KaggleCommandError, KaggleRunner
 from .provenance import classify_notebook, load_policy, unknown_notebook
 
@@ -74,16 +81,20 @@ def normalize_submissions(raw: Any) -> list[dict[str, Any]]:
 def normalize_leaderboard(raw: Any) -> list[dict[str, Any]]:
     rows = []
     for index, item in enumerate(_records(raw), start=1):
-        score = item.get("score", item.get("publicScore"))
-        team = item.get("teamName", item.get("team", item.get("name", "")))
-        rank = item.get("rank", index)
+        score = item.get("score", item.get("Score", item.get("publicScore")))
+        team = item.get(
+            "teamName", item.get("TeamName", item.get("team", item.get("name", "")))
+        )
+        rank = item.get("rank", item.get("Rank", index))
         rows.append(
             {
                 "rank": int(rank) if str(rank).isdigit() else None,
                 "team": str(team),
                 "score": _numeric_score(score),
-                "last_submission_at": item.get("lastSubmissionDate", item.get("date")),
-                "ref": str(item.get("teamId", team)),
+                "last_submission_at": item.get(
+                    "lastSubmissionDate", item.get("SubmissionDate", item.get("date"))
+                ),
+                "ref": str(item.get("teamId", item.get("TeamId", team))),
             }
         )
     # Stable sorts encode score desc, timestamp desc, reference asc without
@@ -168,6 +179,20 @@ def collect_snapshot(
             raw[name] = []
             statuses[name] = {"status": "unavailable", "reason": str(exc)[:300]}
 
+    raw["leaderboard_top"] = raw["leaderboard"]
+    if live:
+        try:
+            raw["leaderboard"] = runner.download_leaderboard(str(config["slug"]))
+            statuses["leaderboard_full"] = {"status": "ok"}
+        except (KaggleCommandError, OSError, ValueError) as exc:
+            raw["leaderboard"] = []
+            statuses["leaderboard_full"] = {
+                "status": "unavailable",
+                "reason": str(exc)[:300],
+            }
+    else:
+        statuses["leaderboard_full"] = {"status": statuses["leaderboard"]["status"]}
+
     collected = now or utc_now()
     notebooks = normalize_notebooks(raw["kernels"])
     policy_root = (root or Path.cwd()).resolve()
@@ -208,15 +233,29 @@ def collect_snapshot(
             "reason": "; ".join(f"{key}={value}" for key, value in source_status.items()),
         }
 
+    policy_projection = {
+        "entry_deadline_utc": config.get("entry_deadline_utc"),
+        "final_deadline_utc": config.get("final_deadline_utc"),
+        "daily_submission_limit": config.get("daily_submission_limit"),
+        "final_submission_slots": config.get("final_submission_slots"),
+        "notebook_runtime_limit_hours": config.get("notebook_runtime_limit_hours"),
+        "gpu_reserve_hours": config.get("gpu_reserve_hours"),
+        "official_sources": config.get("official_sources", {}),
+        "notebook_registry_sha256": sha256_bytes(canonical_json_bytes(registry)),
+        "metric_hack_policy_sha256": sha256_bytes(canonical_json_bytes(patterns)),
+    }
+    policy_projection["content_sha256"] = sha256_bytes(canonical_json_bytes(policy_projection))
     snapshot: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "competition_slug": config["slug"],
         "collected_at": collected.astimezone(timezone.utc).isoformat().replace("+00:00", "Z"),
         "source_mode": "live" if live else "fixture",
         "collection_status": statuses,
+        "competition_policy": policy_projection,
         "quota": normalize_quota(raw["quota"]),
         "submissions": normalize_submissions(raw["submissions"]),
         "leaderboard": normalize_leaderboard(raw["leaderboard"]),
+        "leaderboard_top": normalize_leaderboard(raw["leaderboard_top"]),
         "topics": normalize_topics(raw["topics"]),
         "notebooks": notebooks,
     }
@@ -248,3 +287,216 @@ def status_line(snapshot: Mapping[str, Any]) -> str:
         f"GPU remaining: {remaining}h | best public score: {best} | "
         f"notebooks reviewed: {len(snapshot.get('notebooks', []))}"
     )
+
+
+def _normalized_alias(value: Any) -> str:
+    return " ".join(str(value).casefold().split())
+
+
+def _parse_time(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00")).astimezone(timezone.utc)
+    except ValueError:
+        return None
+
+
+def build_status_projection(
+    snapshot: Mapping[str, Any], config: Mapping[str, Any]
+) -> dict[str, Any]:
+    collected = _parse_time(snapshot.get("collected_at"))
+    collected_date = collected.date() if collected else None
+    scored = [row for row in snapshot.get("submissions", []) if row.get("public_score") is not None]
+    scored.sort(key=lambda row: str(row.get("ref", "")))
+    scored.sort(key=lambda row: str(row.get("submitted_at") or ""), reverse=True)
+    scored.sort(key=lambda row: Decimal(row["public_score"]), reverse=True)
+    best_submission = scored[0] if scored else None
+
+    submissions_today = sum(
+        1
+        for row in snapshot.get("submissions", [])
+        if collected_date is not None
+        and (submitted := _parse_time(row.get("submitted_at"))) is not None
+        and submitted.date() == collected_date
+    )
+    daily_limit = int(config.get("daily_submission_limit", 5))
+
+    aliases = {_normalized_alias(value) for value in config.get("team_aliases", [])}
+    rank_row = next(
+        (
+            row
+            for row in snapshot.get("leaderboard", [])
+            if _normalized_alias(row.get("team")) in aliases
+        ),
+        None,
+    )
+    leaderboard_status = snapshot.get("collection_status", {}).get("leaderboard_full", {})
+    if rank_row:
+        rank_reason = None
+    elif leaderboard_status.get("status") != "ok":
+        rank_reason = leaderboard_status.get("reason", "leaderboard collection unavailable")
+    else:
+        rank_reason = "configured team alias is absent from the collected leaderboard page"
+
+    gpu = snapshot.get("quota", {}).get("resources", {}).get("GPU", {})
+    remaining_text = gpu.get("remaining_hours")
+    reserve = Decimal(str(config.get("gpu_reserve_hours", "8.00")))
+    remaining = Decimal(remaining_text) if remaining_text is not None else None
+    spendable = max(Decimal("0"), remaining - reserve) if remaining is not None else None
+
+    current = config.get("current_status", {})
+    notebooks = list(snapshot.get("notebooks", []))
+    return {
+        "schema_version": 1,
+        "generated_from_snapshot_at": snapshot.get("collected_at"),
+        "snapshot_sha256": snapshot.get("content_sha256"),
+        "competition": {
+            "slug": snapshot.get("competition_slug"),
+            "rank": rank_row.get("rank") if rank_row else None,
+            "rank_unavailable_reason": rank_reason,
+            "leader_score": (
+                snapshot.get("leaderboard_top", [{}])[0].get("score")
+                if snapshot.get("leaderboard_top")
+                else None
+            ),
+            "best_clean_public_score": current.get("best_clean_public_score"),
+            "best_clean_score_evidence": current.get(
+                "best_clean_score_evidence", "clean submission provenance not registered"
+            ),
+            "final_deadline_utc": config.get("final_deadline_utc"),
+        },
+        "submissions": {
+            "returned_total": len(snapshot.get("submissions", [])),
+            "today": submissions_today,
+            "daily_limit": daily_limit,
+            "remaining_today": max(0, daily_limit - submissions_today),
+            "best_public_score": best_submission.get("public_score") if best_submission else None,
+            "best_submission_ref": best_submission.get("ref") if best_submission else None,
+        },
+        "gpu": {
+            "remaining_hours": format(remaining, ".2f") if remaining is not None else None,
+            "reserve_hours": format(reserve, ".2f"),
+            "spendable_hours": format(spendable, ".2f") if spendable is not None else None,
+            "refresh_at": gpu.get("refresh_at"),
+        },
+        "notebook_provenance": {
+            "clean_research_candidates": [
+                row for row in notebooks if row.get("disposition") == "research_candidate"
+            ],
+            "excluded_metric_hacks": [
+                row for row in notebooks if row.get("disposition") == "excluded_metric_hack"
+            ],
+            "needs_source_review": [
+                row for row in notebooks if row.get("disposition") == "needs_source_review"
+            ],
+        },
+        "recent_discussions": list(snapshot.get("topics", [])),
+        "active_hypothesis": current.get("active_hypothesis", "not registered"),
+        "next_gate": current.get("next_gate", "not registered"),
+        "competition_policy": snapshot.get("competition_policy", {}),
+        "collection_status": snapshot.get("collection_status", {}),
+    }
+
+
+def _value_or_unavailable(value: Any, reason: str | None = None) -> str:
+    if value is not None and value != "":
+        return str(value)
+    return f"unavailable ({reason})" if reason else "unavailable"
+
+
+def render_status_report(snapshot: Mapping[str, Any], config: Mapping[str, Any]) -> str:
+    status = build_status_projection(snapshot, config)
+    competition = status["competition"]
+    submissions = status["submissions"]
+    gpu = status["gpu"]
+    provenance = status["notebook_provenance"]
+    lines = [
+        "# Biohub Competition Status",
+        "",
+        f"Generated from snapshot: `{status['generated_from_snapshot_at']}`  ",
+        f"Snapshot SHA-256: `{status['snapshot_sha256']}`",
+        "",
+        "## Competition",
+        "",
+        f"- Slug: `{competition['slug']}`",
+        f"- Public rank: {_value_or_unavailable(competition['rank'], competition['rank_unavailable_reason'])}",
+        f"- Best clean public score: {_value_or_unavailable(competition['best_clean_public_score'])}",
+        f"- Clean-score evidence: {competition['best_clean_score_evidence']}",
+        f"- Current public leader score: {_value_or_unavailable(competition['leader_score'])}",
+        f"- Final deadline: `{competition['final_deadline_utc']}`",
+        "",
+        "## GPU Safety",
+        "",
+        f"- Remaining: {_value_or_unavailable(gpu['remaining_hours'])} hours",
+        f"- Protected reserve: {gpu['reserve_hours']} hours",
+        f"- Spendable before reserve: {_value_or_unavailable(gpu['spendable_hours'])} hours",
+        f"- Quota refresh: {_value_or_unavailable(gpu['refresh_at'])}",
+        "",
+        "## Personal Submissions",
+        "",
+        f"- Returned by CLI: {submissions['returned_total']}",
+        f"- Submitted today (UTC): {submissions['today']} / {submissions['daily_limit']}",
+        f"- Remaining daily allowance: {submissions['remaining_today']}",
+        f"- Best personal public score: {_value_or_unavailable(submissions['best_public_score'])}",
+        "",
+        "## Notebook Provenance",
+        "",
+        "`research_candidate` means source was manually screened for known exploit logic; it does not reproduce the displayed score.",
+        "",
+        "### Clean Research Candidates",
+        "",
+    ]
+    for row in provenance["clean_research_candidates"]:
+        lines.append(f"- `{row['ref']}` — {row['provenance']}; {row['evidence']}")
+    if not provenance["clean_research_candidates"]:
+        lines.append("- None in the collected notebook set.")
+    lines.extend(["", "### Excluded Metric Hacks", ""])
+    for row in provenance["excluded_metric_hacks"]:
+        lines.append(f"- `{row['ref']}` — {row['evidence']}")
+    if not provenance["excluded_metric_hacks"]:
+        lines.append("- None detected in the collected notebook set.")
+    lines.extend(["", "### Needs Source Review", ""])
+    for row in provenance["needs_source_review"]:
+        lines.append(f"- `{row['ref']}` — {row['provenance']}; {row['evidence']}")
+    if not provenance["needs_source_review"]:
+        lines.append("- None.")
+    lines.extend(["", "## Recent Discussions", ""])
+    for topic in status["recent_discussions"]:
+        lines.append(
+            f"- {topic['posted_at']} — {topic['title']} (topic `{topic['id']}`, "
+            f"{topic['comments']} comments, {topic['votes']} votes)"
+        )
+    if not status["recent_discussions"]:
+        reason = status["collection_status"].get("topics", {}).get("reason")
+        lines.append(f"- {_value_or_unavailable(None, reason)}")
+    lines.extend(
+        [
+            "",
+            "## Next Gate",
+            "",
+            f"- Active hypothesis: {status['active_hypothesis']}",
+            f"- Gate: {status['next_gate']}",
+            "",
+            "## Policy Provenance",
+            "",
+            f"- Policy SHA-256: `{status['competition_policy'].get('content_sha256', 'unavailable')}`",
+            f"- Notebook registry SHA-256: `{status['competition_policy'].get('notebook_registry_sha256', 'unavailable')}`",
+            f"- Metric-hack policy SHA-256: `{status['competition_policy'].get('metric_hack_policy_sha256', 'unavailable')}`",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_status_reports(
+    snapshot: Mapping[str, Any], config: Mapping[str, Any], root: Path
+) -> tuple[Path, Path]:
+    report_dir = root / "reports"
+    markdown_path = atomic_replace_text(
+        report_dir / "competition-status.md", render_status_report(snapshot, config)
+    )
+    json_path = atomic_replace_json(
+        report_dir / "competition-status.json", build_status_projection(snapshot, config)
+    )
+    return markdown_path, json_path

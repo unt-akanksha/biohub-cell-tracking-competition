@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Sequence
 
-from .watch import collect_snapshot, persist_snapshot, status_line
+from .watch import collect_snapshot, persist_snapshot, status_line, write_status_reports
 
 
 def _load_config(path: Path) -> dict:
@@ -49,7 +49,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             audit_notebook_sources=args.audit_notebook_sources,
         )
         path = persist_snapshot(snapshot, root)
+        report_path, _ = write_status_reports(snapshot, config, root)
         print(path)
+        print(report_path)
         print(status_line(snapshot))
         return 0
     parser.error(f"unknown command: {args.command}")

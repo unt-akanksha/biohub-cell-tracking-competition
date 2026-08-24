@@ -4,7 +4,8 @@
   "team_aliases": [
     "IndarKumar",
     "Indar Kumar",
-    "indarkumar"
+    "indarkumar",
+    "Indar Karhana"
   ],
   "entry_deadline_utc": "2026-09-22T23:59:00Z",
   "final_deadline_utc": "2026-09-29T23:59:00Z",
@@ -13,10 +14,15 @@
   "final_submission_slots": 2,
   "notebook_runtime_limit_hours": "12.00",
   "gpu_reserve_hours": "8.00",
+  "current_status": {
+    "best_clean_public_score": "0.913",
+    "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
+    "active_hypothesis": "Reciprocal calibration can convert ZebraHub selective_ssm_medium parent-ranking gains into an exact complete-graph OOF improvement.",
+    "next_gate": "Run reciprocal competition-graph calibration, then the patched exact complete-movie bilateral metric gate."
+  },
   "official_sources": {
     "competition": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview",
     "rules": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/rules",
     "baseline": "https://github.com/royerlab/kaggle-cell-tracking-competition"
   }
 }
-

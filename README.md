@@ -20,5 +20,14 @@ Live Kaggle access is always explicit:
 biohub watch --live
 ```
 
-The tracker delegates authentication to the installed Kaggle CLI. It never reads or records Kaggle credential files.
+At the beginning of every work session, refresh live evidence and statically audit the current top notebook sources:
 
+```powershell
+biohub watch --live --audit-notebook-sources --top 20
+```
+
+Source classification is not score reproduction. `research_candidate` means no known exploit was found in the reviewed source; only an exact post-patch rerun can establish `reproduced_post_patch` evidence. Unknown, changed, or stale-source notebooks remain review items and cannot be treated as clean submissions.
+
+The watch rewrites the compact current projections at `reports/competition-status.md` and `reports/competition-status.json`, while preserving every raw snapshot under `.biohub/snapshots/`.
+
+The tracker delegates authentication to the installed Kaggle CLI. It never reads or records Kaggle credential files.

@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import csv
+import io
 import json
 import re
 import subprocess
+import tempfile
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Sequence
@@ -13,6 +17,7 @@ _SECRET_PATTERNS = (
     (re.compile(r"(?i)authorization:\s*\S+"), "authorization: [REDACTED]"),
 )
 _KERNEL_REF = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
+_COMPETITION_SLUG = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 
 def redact_diagnostic(message: str) -> str:
@@ -80,6 +85,39 @@ class KaggleRunner:
         target.mkdir(parents=True, exist_ok=True)
         self.run(["kernels", "pull", ref, "--metadata", "-p", str(target)])
         return target
+
+    def download_leaderboard(self, competition_slug: str) -> list[dict[str, str]]:
+        if not _COMPETITION_SLUG.fullmatch(competition_slug):
+            raise ValueError(f"invalid competition slug: {competition_slug!r}")
+        with tempfile.TemporaryDirectory(prefix="biohub-leaderboard-") as temporary_dir:
+            directory = Path(temporary_dir)
+            self.run(
+                [
+                    "competitions",
+                    "leaderboard",
+                    competition_slug,
+                    "--download",
+                    "--path",
+                    str(directory),
+                    "--quiet",
+                ]
+            )
+            archives = sorted(directory.glob("*.zip"))
+            csv_files = sorted(directory.glob("*.csv"))
+            if archives:
+                with zipfile.ZipFile(archives[0]) as archive:
+                    members = sorted(
+                        name for name in archive.namelist() if name.lower().endswith(".csv")
+                    )
+                    if not members:
+                        raise KaggleCommandError("downloaded leaderboard archive contained no CSV")
+                    with archive.open(members[0]) as handle:
+                        text = io.TextIOWrapper(handle, encoding="utf-8-sig", newline="")
+                        return list(csv.DictReader(text))
+            if csv_files:
+                with csv_files[0].open("r", encoding="utf-8-sig", newline="") as handle:
+                    return list(csv.DictReader(handle))
+            raise KaggleCommandError("Kaggle leaderboard download produced no CSV or ZIP")
 
 
 @dataclass

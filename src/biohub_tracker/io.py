@@ -54,3 +54,25 @@ def atomic_write_json(path: str | Path, value: Any) -> Path:
         temporary.unlink(missing_ok=True)
     return target
 
+
+def atomic_replace_text(path: str | Path, payload: str) -> Path:
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, temporary_name = tempfile.mkstemp(
+        prefix=f".{target.name}.", suffix=".tmp", dir=target.parent
+    )
+    temporary = Path(temporary_name)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, target)
+    finally:
+        temporary.unlink(missing_ok=True)
+    return target
+
+
+def atomic_replace_json(path: str | Path, value: Any) -> Path:
+    payload = json.dumps(value, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+    return atomic_replace_text(path, payload)
