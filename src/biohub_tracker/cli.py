@@ -71,6 +71,32 @@ def _artifact_records(root: Path, paths: Sequence[Path] | None) -> list[dict[str
     return [artifact_record(root, path) for path in (paths or [])]
 
 
+def _rooted(root: Path, path: Path) -> Path:
+    return (path if path.is_absolute() else root / path).resolve()
+
+
+def _prediction_refs(root: Path, values: Sequence[str]):
+    from .evaluation import PredictionSetRef
+
+    result = []
+    for value in values:
+        fold, separator, raw_path = value.partition("=")
+        if not separator or not fold.strip() or not raw_path.strip():
+            raise ValueError("prediction sets must use FOLD_ID=GRAPH_DIRECTORY")
+        directory = _rooted(root, Path(raw_path))
+        result.append(
+            PredictionSetRef(
+                fold_id=fold.strip(),
+                graph_dir=directory,
+                producer_manifest_path=directory / "prediction-set.json",
+            )
+        )
+    result.sort(key=lambda item: item.fold_id)
+    if len(result) != 2 or len({item.fold_id for item in result}) != 2:
+        raise ValueError("each role requires exactly two distinct reciprocal folds")
+    return tuple(result)
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="biohub", description="Biohub competition control plane")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="project root")
@@ -221,6 +247,28 @@ def build_parser() -> argparse.ArgumentParser:
     roundtrip.add_argument("--scorer-lock", type=Path)
     roundtrip.add_argument("--scorer-checkout", type=Path)
     roundtrip.add_argument("--tracksdata-checkout", type=Path)
+    evaluate = subparsers.add_parser("evaluate", help="run ledger-bound exact evaluation")
+    evaluate_commands = evaluate.add_subparsers(dest="evaluate_command", required=True)
+    evaluate_exact = evaluate_commands.add_parser("exact", help="run four-set reciprocal scoring")
+    evaluate_exact.add_argument("--ledger", type=Path, required=True)
+    evaluate_exact.add_argument("--evaluation-run-id", required=True)
+    evaluate_exact.add_argument("--truth-dir", type=Path, required=True)
+    evaluate_exact.add_argument("--manifest", type=Path, required=True)
+    evaluate_exact.add_argument("--scorer-lock", type=Path, required=True)
+    evaluate_exact.add_argument("--evaluation-policy", type=Path, required=True)
+    evaluate_exact.add_argument("--baseline-set", action="append", required=True)
+    evaluate_exact.add_argument("--candidate-set", action="append", required=True)
+    evaluate_exact.add_argument("--output-dir", type=Path, required=True)
+    evaluate_exact.add_argument("--scorer-checkout", type=Path)
+    evaluate_exact.add_argument("--tracksdata-checkout", type=Path)
+    promote = subparsers.add_parser("promote", help="evaluate exact candidate promotion")
+    promote_commands = promote.add_subparsers(dest="promote_command", required=True)
+    promote_evaluate = promote_commands.add_parser("evaluate", help="evaluate or record policy")
+    promote_evaluate.add_argument("--ledger", type=Path, required=True)
+    promote_evaluate.add_argument("--report", type=Path, required=True)
+    promote_evaluate.add_argument("--policy", type=Path, required=True)
+    promote_evaluate.add_argument("--evaluation-run-id", required=True)
+    promote_evaluate.add_argument("--record", action="store_true")
     cpu_acceptance = subparsers.add_parser(
         "cpu-acceptance", help="manage the isolated CPU official-data control lifecycle"
     )
@@ -228,7 +276,28 @@ def build_parser() -> argparse.ArgumentParser:
         dest="cpu_acceptance_command", required=True
     )
     cpu_register = cpu_commands.add_parser("register", help="pre-register a request")
-    cpu_register.add_argument("--request", type=Path, required=True)
+    cpu_register_source = cpu_register.add_mutually_exclusive_group(required=True)
+    cpu_register_source.add_argument("--request", type=Path)
+    cpu_register_source.add_argument("--config", type=Path)
+    cpu_register.add_argument("--run-id")
+    cpu_register.add_argument("--evaluation-run-id")
+    cpu_register.add_argument("--kernel-ref")
+    cpu_register.add_argument("--runtime-dataset-ref")
+    cpu_register.add_argument("--runtime-bundle", type=Path)
+    cpu_register.add_argument("--output", type=Path)
+    cpu_bundle = cpu_commands.add_parser(
+        "build-bundle", help="build one deterministic opaque runtime bundle"
+    )
+    cpu_bundle.add_argument("--source", type=Path, required=True)
+    cpu_bundle.add_argument("--output", type=Path, required=True)
+    cpu_verify_bundle = cpu_commands.add_parser(
+        "verify-bundle", help="securely extract and verify an opaque runtime bundle"
+    )
+    cpu_verify_bundle.add_argument("--bundle", type=Path, required=True)
+    cpu_verify_bundle.add_argument("--destination", type=Path, required=True)
+    cpu_preflight = cpu_commands.add_parser(
+        "preflight", help="reject any nonterminal CPU or exact acceptance lifecycle"
+    )
     cpu_start = cpu_commands.add_parser("start", help="bind owned asset versions")
     cpu_start.add_argument("run_id")
     cpu_start.add_argument("--kernel-ref", required=True)
@@ -238,11 +307,22 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cpu_reconcile.add_argument("run_id")
     cpu_reconcile.add_argument("--evidence", type=Path, required=True)
+    cpu_reconcile.add_argument("--quota-before", type=Path, required=True)
+    cpu_reconcile.add_argument("--quota-after", type=Path, required=True)
+    cpu_reconcile.add_argument(
+        "--manifest-output", type=Path, default=Path("manifests/reciprocal-embryo-v1.json")
+    )
+    cpu_reconcile.add_argument(
+        "--report-output",
+        type=Path,
+        default=Path("reports/exact/phase2-control-acceptance.json"),
+    )
     cpu_fail = cpu_commands.add_parser("fail", help="terminate a nonterminal CPU control")
     cpu_fail.add_argument("run_id")
     cpu_fail.add_argument("--reason-code", required=True)
     cpu_fail.add_argument("--detail", required=True)
     cpu_fail.add_argument("--observed-artifacts")
+    cpu_fail.add_argument("--evaluation-run-id")
     return parser
 
 
@@ -392,9 +472,163 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
         ledger.append(event)
         print(event.event_id)
         return 0
+    if args.command == "evaluate":
+        from .evaluation import ExactEvaluationRequest, evaluate_exact
+
+        request = ExactEvaluationRequest(
+            ledger_path=_rooted(root, args.ledger),
+            evaluation_run_id=args.evaluation_run_id,
+            truth_dir=_rooted(root, args.truth_dir),
+            manifest_path=_rooted(root, args.manifest),
+            scorer_lock_path=_rooted(root, args.scorer_lock),
+            evaluation_policy_path=_rooted(root, args.evaluation_policy),
+            baseline_sets=_prediction_refs(root, args.baseline_set),
+            candidate_sets=_prediction_refs(root, args.candidate_set),
+            output_dir=_rooted(root, args.output_dir),
+            scorer_checkout=_rooted(
+                root,
+                args.scorer_checkout
+                or Path(".biohub/vendor/kaggle-cell-tracking-competition"),
+            ),
+            tracksdata_checkout=_rooted(
+                root, args.tracksdata_checkout or Path(".biohub/vendor/tracksdata")
+            ),
+            workspace_root=root,
+        )
+        report = evaluate_exact(request)
+        print(
+            json.dumps(
+                {
+                    "report_core_sha256": report.core_sha256,
+                    "envelope_sha256": report.envelope_sha256,
+                    "core_path": str(report.core_path),
+                    "envelope_path": str(report.envelope_path),
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+    if args.command == "promote":
+        from .evaluation import ExactReport
+        from .promotion import evaluate_promotion, record_promotion
+
+        report_root = _rooted(root, args.report)
+        report = ExactReport.from_files(
+            report_root / "exact-report-core.json",
+            report_root / "exact-report-envelope.json",
+        )
+        kwargs = {
+            "policy_path": _rooted(root, args.policy),
+            "ledger_path": _rooted(root, args.ledger),
+            "workspace_root": root,
+            "evaluation_run_id": args.evaluation_run_id,
+        }
+        if args.record:
+            event = record_promotion(report, **kwargs)
+            result = {"recorded_event_id": event.event_id, **dict(event.payload)}
+        else:
+            result = evaluate_promotion(report, **kwargs).to_dict()
+        print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+        return 0
     if args.command == "cpu-acceptance":
         ledger = Ledger(root / "experiments" / "events.jsonl", root)
+        if args.cpu_acceptance_command == "build-bundle":
+            from .acceptance import build_runtime_bundle
+
+            result = build_runtime_bundle(
+                _rooted(root, args.source), _rooted(root, args.output)
+            )
+            print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.cpu_acceptance_command == "verify-bundle":
+            from .acceptance import (
+                _source_inventory_sha256,
+                extract_runtime_bundle,
+                inspect_runtime_bundle,
+            )
+
+            bundle_path = _rooted(root, args.bundle)
+            expected = inspect_runtime_bundle(bundle_path)
+            result = extract_runtime_bundle(
+                bundle_path,
+                _rooted(root, args.destination),
+                expected_sha256=expected["runtime_bundle_sha256"],
+                expected_inventory_sha256=expected[
+                    "runtime_bundle_inventory_sha256"
+                ],
+                expected_uncompressed_size_bytes=expected[
+                    "runtime_bundle_uncompressed_size_bytes"
+                ],
+                expected_file_count=expected["runtime_bundle_file_count"],
+            )
+            extracted_root = _rooted(root, args.destination) / "bundle"
+            if _source_inventory_sha256(extracted_root) != _source_inventory_sha256(
+                root
+            ):
+                raise ValueError("runtime bundle source identity differs from workspace")
+            extracted_config = _load_config(
+                extracted_root / "config" / "phase2-control.json"
+            )
+            local_config = _load_config(root / "config" / "phase2-control.json")
+            if extracted_config != local_config:
+                raise ValueError("runtime bundle control config differs from workspace")
+            print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+            return 0
+        if args.cpu_acceptance_command == "preflight":
+            from .ledger import (
+                CpuAcceptanceStatus,
+                ExactEvaluationStatus,
+                reconstruct_exact_evaluations,
+            )
+
+            events = ledger.read_events()
+            cpu_active = sorted(
+                run_id
+                for run_id, state in reconstruct_cpu_acceptances(events).items()
+                if state.status
+                not in {CpuAcceptanceStatus.COMPLETED, CpuAcceptanceStatus.FAILED}
+            )
+            exact_active = sorted(
+                run_id
+                for run_id, state in reconstruct_exact_evaluations(events).items()
+                if state.status is ExactEvaluationStatus.RUNNING
+            )
+            if cpu_active or exact_active:
+                raise ValueError(
+                    f"nonterminal acceptance lifecycle: cpu={cpu_active}, exact={exact_active}"
+                )
+            print(json.dumps({"cpu_active": [], "exact_active": []}, sort_keys=True))
+            return 0
         if args.cpu_acceptance_command == "register":
+            if args.config is not None:
+                from .acceptance import issue_acceptance_request
+
+                required = {
+                    "--run-id": args.run_id,
+                    "--evaluation-run-id": args.evaluation_run_id,
+                    "--kernel-ref": args.kernel_ref,
+                    "--runtime-dataset-ref": args.runtime_dataset_ref,
+                    "--runtime-bundle": args.runtime_bundle,
+                    "--output": args.output,
+                }
+                missing = [name for name, value in required.items() if value is None]
+                if missing:
+                    raise ValueError(
+                        f"config registration requires {', '.join(sorted(missing))}"
+                    )
+                _, event = issue_acceptance_request(
+                    workspace_root=root,
+                    ledger_path=ledger.path,
+                    config_path=_rooted(root, args.config),
+                    run_id=args.run_id,
+                    evaluation_run_id=args.evaluation_run_id,
+                    kernel_ref=args.kernel_ref,
+                    runtime_dataset_ref=args.runtime_dataset_ref,
+                    runtime_bundle_path=_rooted(root, args.runtime_bundle),
+                    output_path=_rooted(root, args.output),
+                )
+                print(event.event_id)
+                return 0
             request = _load_config(args.request)
             payload = cpu_acceptance_registration_payload(
                 run_id=request.get("run_id"),
@@ -404,6 +638,15 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
                 evaluation_run_id=request.get("evaluation_run_id"),
                 kernel_slug=request.get("kernel_slug"),
                 runtime_dataset_slug=request.get("runtime_dataset_slug"),
+                runtime_bundle_name=request.get("runtime_bundle_name"),
+                runtime_bundle_sha256=request.get("runtime_bundle_sha256"),
+                runtime_bundle_inventory_sha256=request.get(
+                    "runtime_bundle_inventory_sha256"
+                ),
+                runtime_bundle_uncompressed_size_bytes=request.get(
+                    "runtime_bundle_uncompressed_size_bytes"
+                ),
+                runtime_bundle_file_count=request.get("runtime_bundle_file_count"),
                 scorer_lock_sha256=request.get("scorer_lock_sha256"),
                 environment_lock_sha256=request.get("environment_lock_sha256"),
                 manifest_policy_sha256=request.get("manifest_policy_sha256"),
@@ -439,77 +682,69 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
             )
             ledger.append(event)
         elif args.cpu_acceptance_command == "reconcile":
-            evidence = _load_config(args.evidence)
-            binding = evidence.get("input_binding")
-            completion = evidence.get("completion")
-            if not isinstance(binding, dict) or not isinstance(completion, dict):
-                raise ValueError("reconciliation evidence requires input_binding and completion")
-            states = reconstruct_cpu_acceptances(ledger.read_events())
-            state = states.get(args.run_id)
+            from .acceptance import reconcile_pending_control
+
+            result = reconcile_pending_control(
+                pending_path=_rooted(root, args.evidence),
+                ledger_path=ledger.path,
+                workspace_root=root,
+                manifest_output_path=_rooted(root, args.manifest_output),
+                report_output_path=_rooted(root, args.report_output),
+                quota_before_path=_rooted(root, args.quota_before),
+                quota_after_path=_rooted(root, args.quota_after),
+            )
+            print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+            return 0
+        else:
+            from .ledger import CpuAcceptanceStatus, ExactEvaluationStatus
+
+            appended = []
+            state = reconstruct_cpu_acceptances(ledger.read_events()).get(args.run_id)
             if state is None:
                 raise ValueError(f"unknown CPU acceptance ID: {args.run_id}")
-            if state.inputs_bound is None:
-                ledger.append(
-                    ExperimentEvent.create(
-                        args.run_id,
-                        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
-                        cpu_acceptance_inputs_bound_payload(
-                            run_id=args.run_id,
-                            manifest_sha256=binding.get("manifest_sha256"),
-                            folds=binding.get("folds", ()),
-                        ),
-                    )
-                )
-            elif state.inputs_bound != cpu_acceptance_inputs_bound_payload(
-                run_id=args.run_id,
-                manifest_sha256=binding.get("manifest_sha256"),
-                folds=binding.get("folds", ()),
-            ):
-                raise ValueError("CPU input binding conflicts with immutable ledger state")
-            states = reconstruct_cpu_acceptances(ledger.read_events())
-            state = states[args.run_id]
-            if state.terminal is None:
+            if state.status not in {
+                CpuAcceptanceStatus.COMPLETED,
+                CpuAcceptanceStatus.FAILED,
+            }:
                 event = ExperimentEvent.create(
                     args.run_id,
-                    EventType.CPU_ACCEPTANCE_COMPLETED,
-                    cpu_acceptance_completed_payload(
+                    EventType.CPU_ACCEPTANCE_FAILED,
+                    cpu_acceptance_failed_payload(
                         run_id=args.run_id,
-                        actual_cpu_runtime_seconds=completion.get(
-                            "actual_cpu_runtime_seconds"
+                        reason_code=args.reason_code,
+                        detail=args.detail,
+                        observed_artifact_hashes=(
+                            _json_value(args.observed_artifacts)
+                            if args.observed_artifacts
+                            else None
                         ),
-                        peak_memory_mb=completion.get("peak_memory_mb"),
-                        remote_job_identity=completion.get("remote_job_identity"),
-                        graph_inventory_sha256=completion.get("graph_inventory_sha256"),
-                        artifact_hashes=completion.get("artifact_hashes", {}),
-                        output_inventory_sha256=completion.get(
-                            "output_inventory_sha256"
-                        ),
-                        pending_payload_sha256=completion.get("pending_payload_sha256"),
-                        pending_envelope_sha256=completion.get(
-                            "pending_envelope_sha256"
-                        ),
-                        reconciliation_sha256=completion.get("reconciliation_sha256"),
                     ),
                 )
                 ledger.append(event)
-            else:
-                event = state.events[-1]
-        else:
-            event = ExperimentEvent.create(
-                args.run_id,
-                EventType.CPU_ACCEPTANCE_FAILED,
-                cpu_acceptance_failed_payload(
-                    run_id=args.run_id,
-                    reason_code=args.reason_code,
-                    detail=args.detail,
-                    observed_artifact_hashes=(
-                        _json_value(args.observed_artifacts)
-                        if args.observed_artifacts
-                        else None
-                    ),
-                ),
-            )
-            ledger.append(event)
+                appended.append(event.event_id)
+            if args.evaluation_run_id:
+                from .ledger import (
+                    exact_evaluation_failed_payload,
+                    reconstruct_exact_evaluations,
+                )
+
+                evaluation = reconstruct_exact_evaluations(ledger.read_events()).get(
+                    args.evaluation_run_id
+                )
+                if evaluation and evaluation.status is ExactEvaluationStatus.RUNNING:
+                    exact_failure = ExperimentEvent.create(
+                        args.evaluation_run_id,
+                        EventType.EXACT_EVALUATION_FAILED,
+                        exact_evaluation_failed_payload(
+                            evaluation_run_id=args.evaluation_run_id,
+                            reason_code=args.reason_code,
+                            detail=args.detail,
+                        ),
+                    )
+                    ledger.append(exact_failure)
+                    appended.append(exact_failure.event_id)
+            print(json.dumps({"failed_events": appended}, sort_keys=True))
+            return 0
         print(event.event_id)
         return 0
     if args.command == "progress":

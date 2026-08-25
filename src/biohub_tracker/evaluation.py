@@ -918,3 +918,338 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
         tracemalloc.stop()
         if staging.exists():
             shutil.rmtree(staging)
+
+
+def evaluate_pending_control(
+    *,
+    acceptance_request: Mapping[str, Any],
+    competition_root: str | Path,
+    runtime_root: str | Path,
+    output_path: str | Path,
+) -> dict[str, Any]:
+    """Run truth/self on mounted official data and emit only untrusted pending evidence.
+
+    This deliberately has no ledger and cannot return :class:`ExactReport`. Local
+    reconciliation must replace provisional producer hashes with immutable event
+    hashes and attach a separately completed aggregate evaluation.
+    """
+
+    from .acceptance import (
+        PENDING_ENVELOPE_SCHEMA,
+        PENDING_SCHEMA,
+        _source_inventory_sha256,
+    )
+    from .evidence import GraphArtifact, PredictionSetClaim
+    from .graphs import PredictionInventory
+    from .manifests import build_manifest
+
+    started_at = time.perf_counter()
+    tracemalloc.start()
+    try:
+        request = dict(acceptance_request)
+        request_hash = str(request.get("acceptance_request_sha256", ""))
+        semantic_request = dict(request)
+        semantic_request.pop("acceptance_request_sha256", None)
+        semantic_request.pop("registration_event_sha256", None)
+        if len(request_hash) != 64 or request_hash != sha256_bytes(
+            canonical_json_bytes(semantic_request)
+        ):
+            _fail("ACCEPTANCE_REQUEST_HASH_MISMATCH", "remote request")
+        if (
+            request.get("accelerator") != "none"
+            or request.get("enable_gpu") is not False
+            or request.get("enable_tpu") is not False
+            or request.get("enable_internet") is not False
+            or request.get("competition_submission_allowed") is not False
+        ):
+            _fail("ACCEPTANCE_REQUEST_UNSAFE", "CPU/no-submission declarations")
+        runtime = Path(runtime_root).resolve(strict=True)
+        bundle = runtime / "bundle"
+        scorer_lock_path = bundle / "config" / "official-scorer.lock.json"
+        evaluation_policy_path = bundle / "config" / "evaluation-policy.json"
+        control_config_path = bundle / "config" / "phase2-control.json"
+        environment_lock_path = bundle / "requirements" / "evaluation-lock.txt"
+        scorer_checkout = bundle / "vendor" / "kaggle-cell-tracking-competition"
+        tracksdata_checkout = bundle / "vendor" / "tracksdata"
+        competition = Path(competition_root).resolve(strict=True)
+        data_root = competition / "train"
+        if not data_root.is_dir():
+            data_root = competition
+        manifest = build_manifest(data_root, scorer_lock_path)
+        verified = verify_scorer_lock(
+            scorer_lock_path,
+            scorer_checkout,
+            tracksdata_checkout=tracksdata_checkout,
+        )
+        policy, policy_sha = load_evaluation_policy(evaluation_policy_path)
+        identities = dict(request.get("source_identities", {}))
+        control_config = json.loads(control_config_path.read_text(encoding="utf-8"))
+        expected_identities = {
+            "scorer_lock_sha256": verified.lock_sha256,
+            "environment_lock_sha256": sha256_file(environment_lock_path),
+            "manifest_policy_sha256": sha256_bytes(
+                canonical_json_bytes(
+                    {"manifest_policy": control_config["manifest_policy"]}
+                )
+            ),
+            "control_model_sha256": sha256_bytes(
+                canonical_json_bytes({"control_model": control_config["control_model"]})
+            ),
+            "config_sha256": sha256_bytes(canonical_json_bytes(control_config)),
+            "code_sha256": _source_inventory_sha256(bundle),
+            "data_source_sha256": sha256_bytes(
+                canonical_json_bytes(
+                    {
+                        "competition_slug": control_config["competition_slug"],
+                        "source": "mounted-official-train",
+                    }
+                )
+            ),
+        }
+        if (
+            identities != expected_identities
+            or manifest.scorer_lock_sha256 != verified.lock_sha256
+        ):
+            _fail("ACCEPTANCE_SOURCE_MISMATCH", "scorer/config/source/data/manifest")
+
+        work = Path(output_path).resolve().parent / "control-work"
+        if work.exists():
+            raise FileExistsError(f"refusing existing pending control work: {work}")
+        work.mkdir(parents=True)
+        samples = {item.sample_id: item for item in manifest.samples}
+        fold_evidence: dict[str, RoundTripEvidence] = {}
+        fold_claims: dict[str, PredictionSetClaim] = {}
+        for fold in manifest.folds:
+            graph_items = []
+            graph_paths = []
+            for sample_id in fold.evaluation_membership:
+                path = (data_root / samples[sample_id].truth_relpath).resolve(strict=True)
+                digest = artifact_tree_sha256(path)
+                graph_items.append(
+                    GraphArtifact(
+                        sample_id=sample_id,
+                        path=samples[sample_id].truth_relpath,
+                        sha256=digest,
+                        producer_run_id=str(request["run_id"]),
+                        fold_id=fold.fold_id,
+                    )
+                )
+                graph_paths.append((sample_id, path))
+            graph_items.sort(key=lambda item: item.sample_id)
+            inventory_sha = sha256_bytes(
+                canonical_json_bytes([item.to_dict() for item in graph_items])
+            )
+            claim = PredictionSetClaim(
+                producer_run_id=str(request["run_id"]),
+                fold_id=fold.fold_id,
+                manifest_sha256=manifest.manifest_sha256,
+                train_membership_sha256=fold.train_membership_sha256,
+                calibration_membership_sha256=fold.calibration_membership_sha256,
+                evaluation_membership_sha256=fold.evaluation_membership_sha256,
+                model_sha256=str(identities["control_model_sha256"]),
+                config_sha256=str(identities["config_sha256"]),
+                code_sha256=str(identities["code_sha256"]),
+                data_sha256=str(identities["data_source_sha256"]),
+                graphs=tuple(graph_items),
+                graph_inventory_sha256=inventory_sha,
+                artifact_hashes=(("truth_graphs", inventory_sha),),
+            )
+            inventory = PredictionInventory(
+                pred_dir=data_root,
+                claim=claim,
+                manifest=manifest,
+                fold=fold,
+                graph_paths=tuple(graph_paths),
+            )
+            fold_claims[fold.fold_id] = claim
+            fold_evidence[fold.fold_id] = roundtrip_prediction_inventory(
+                inventory,
+                verified,
+                data_root,
+                work / fold.fold_id,
+            )
+
+        provisional_members = []
+        authoritative = []
+        registration_sha = str(request["registration_event_sha256"])
+        for role in ("baseline", "candidate"):
+            for fold in manifest.folds:
+                claim = fold_claims[fold.fold_id]
+                evidence = fold_evidence[fold.fold_id]
+                provisional_members.append(
+                    {
+                        "role": role,
+                        "fold_id": fold.fold_id,
+                        "producer_run_id": claim.producer_run_id,
+                        "producer_registration_event_sha256": registration_sha,
+                        "producer_input_binding_event_sha256": manifest.manifest_sha256,
+                        "producer_terminal_event_sha256": claim.graph_inventory_sha256,
+                        **claim.registration_evidence(),
+                        "graph_inventory_sha256": claim.graph_inventory_sha256,
+                        "artifact_hashes": dict(claim.artifact_hashes),
+                    }
+                )
+                authoritative.append(
+                    {
+                        "role": role,
+                        "fold_id": fold.fold_id,
+                        "producer_run_id": claim.producer_run_id,
+                        "submission_graph_inventory_sha256": evidence.submission_graph_inventory_sha256,
+                        "roundtrip_evidence_sha256": evidence.evidence_sha256,
+                        "csv_sha256": evidence.csv_sha256,
+                    }
+                )
+        provisional_members.sort(key=lambda item: (item["role"], item["fold_id"]))
+        authoritative.sort(key=lambda item: (item["role"], item["fold_id"]))
+
+        movie_rows = []
+        for fold in manifest.folds:
+            evidence = fold_evidence[fold.fold_id]
+            rebuilt = work / fold.fold_id / "graphs"
+            for sample_id in fold.evaluation_membership:
+                sample = samples[sample_id]
+                prediction = load_geff_graph(rebuilt / f"{sample_id}.geff", verified)
+                truth = load_geff_graph(data_root / sample.truth_relpath, verified)
+                row = _score_movie(verified, prediction, truth, sample, policy)
+                row.update(
+                    {
+                        "sample_id": sample_id,
+                        "embryo_id": sample.embryo_id,
+                        "fold_id": fold.fold_id,
+                        "roundtrip_evidence_sha256": evidence.evidence_sha256,
+                    }
+                )
+                movie_rows.append(row)
+        by_slot = {
+            (item["role"], item["fold_id"]): item for item in provisional_members
+        }
+        movies = {
+            role: [
+                {**row, "producer": by_slot[(role, row["fold_id"])]}
+                for row in movie_rows
+            ]
+            for role in ("baseline", "candidate")
+        }
+        official = {
+            role: _official_projection(verified, movies[role])
+            for role in ("baseline", "candidate")
+        }
+        diagnostics = {
+            "authority": "non_authoritative_diagnostic",
+            "organizer_input_eligible": False,
+            **{
+                role: _diagnostic_projection(movies[role])
+                for role in ("baseline", "candidate")
+            },
+        }
+        provisional_registration = {
+            "evaluation_run_id": request["evaluation_run_id"],
+            "scorer_lock_sha256": verified.lock_sha256,
+            "environment_lock_sha256": verified.lock.environment_lock_sha256,
+            "manifest_sha256": manifest.manifest_sha256,
+            "evaluation_policy_sha256": policy_sha,
+            "evidence_kind": "official_data_control",
+            "members": provisional_members,
+        }
+        comparison = build_paired_comparison(
+            registration=provisional_registration,
+            aggregate_status="running",
+            members=provisional_members,
+            authoritative_inventories=authoritative,
+            baseline_movies=movies["baseline"],
+            candidate_movies=movies["candidate"],
+            expected_sample_ids=[item.sample_id for item in manifest.samples],
+            policy=policy,
+            policy_sha256=policy_sha,
+            aggregate=lambda rows: aggregate_official_rows(verified, rows),
+        )
+        truth_inventory_sha = sha256_bytes(
+            canonical_json_bytes(
+                [
+                    {
+                        "fold_id": fold_id,
+                        "graph_inventory_sha256": claim.graph_inventory_sha256,
+                    }
+                    for fold_id, claim in sorted(fold_claims.items())
+                ]
+            )
+        )
+        _, peak_bytes = tracemalloc.get_traced_memory()
+        semantic = {
+            "schema_version": PENDING_SCHEMA,
+            "status": "pending_reconciliation",
+            "run_id": request["run_id"],
+            "evaluation_run_id": request["evaluation_run_id"],
+            "request_nonce": request["request_nonce"],
+            "acceptance_request_sha256": request_hash,
+            "registration_event_sha256": registration_sha,
+            "kernel_ref": request["kernel_ref"],
+            "runtime_dataset_ref": request["runtime_dataset_ref"],
+            "runtime_bundle_name": request["runtime_bundle_name"],
+            "runtime_bundle_sha256": request["runtime_bundle_sha256"],
+            "runtime_bundle_inventory_sha256": request[
+                "runtime_bundle_inventory_sha256"
+            ],
+            "runtime_bundle_uncompressed_size_bytes": request[
+                "runtime_bundle_uncompressed_size_bytes"
+            ],
+            "runtime_bundle_file_count": request["runtime_bundle_file_count"],
+            "accelerator": "none",
+            "internet_enabled": False,
+            "competition_submission_performed": False,
+            "watchdog_terminal_state": "completed",
+            "actual_cpu_runtime_seconds": decimal_string(
+                max(time.perf_counter() - started_at, 0.000001), "CPU runtime"
+            ),
+            "peak_memory_mb": decimal_string(
+                max(Decimal(peak_bytes) / Decimal(1024 * 1024), Decimal("0.000001")),
+                "peak memory",
+            ),
+            "source_identities": identities,
+            "manifest": {
+                "manifest_sha256": manifest.manifest_sha256,
+                "folds": [
+                    {
+                        "fold_id": fold.fold_id,
+                        "train_membership_sha256": fold.train_membership_sha256,
+                        "calibration_membership_sha256": fold.calibration_membership_sha256,
+                        "evaluation_membership_sha256": fold.evaluation_membership_sha256,
+                    }
+                    for fold in manifest.folds
+                ],
+                "sample_count": len(manifest.samples),
+                "overlap_count": 0,
+                "manifest_document": manifest.to_dict(),
+            },
+            "control": {
+                "graph_inventory_sha256": truth_inventory_sha,
+                "artifact_hashes": {"truth_graphs": truth_inventory_sha},
+                "authoritative_inventories": authoritative,
+                "expected_sample_ids": [item.sample_id for item in manifest.samples],
+                "official": official,
+                "diagnostics": diagnostics,
+                "comparison": comparison,
+                "evaluation_policy_sha256": policy_sha,
+                "provisional_members": provisional_members,
+            },
+        }
+        pending_payload_sha = sha256_bytes(canonical_json_bytes(semantic))
+        envelope = {
+            "schema_version": PENDING_ENVELOPE_SCHEMA,
+            "pending_payload_sha256": pending_payload_sha,
+            "authority": "remote_untrusted_pending",
+        }
+        result = {
+            **semantic,
+            "pending_payload_sha256": pending_payload_sha,
+            "pending_envelope": envelope,
+            "pending_envelope_sha256": sha256_bytes(canonical_json_bytes(envelope)),
+        }
+        result["output_inventory_sha256"] = sha256_bytes(canonical_json_bytes(result))
+        from .acceptance import validate_pending_control
+
+        validate_pending_control(result)
+        atomic_write_json(output_path, result)
+        return result
+    finally:
+        tracemalloc.stop()

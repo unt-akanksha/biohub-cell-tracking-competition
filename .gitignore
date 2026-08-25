@@ -6,11 +6,7 @@ __pycache__/
 .venv/
 
 # Runtime snapshots and downloaded Kaggle material
-.biohub/cache/
-.biohub/snapshots/
-.biohub/authorizations/
-.biohub/vendor/
-.biohub/evaluation-venv/
+.biohub/
 downloads/
 notebooks/downloaded/
 leaderboard-archives/

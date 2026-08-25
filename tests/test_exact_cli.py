@@ -1,0 +1,510 @@
+from __future__ import annotations
+
+import base64
+import inspect
+import json
+import runpy
+from pathlib import Path
+from types import SimpleNamespace
+
+import pytest
+
+from biohub_tracker.acceptance import (
+    AcceptanceError,
+    BUNDLE_NAME,
+    PendingControlReport,
+    _bundle_member_path,
+    assert_cpu_kernel_metadata,
+    assert_no_submission_source,
+    build_runtime_bundle,
+    extract_runtime_bundle,
+    validate_pending_control,
+)
+from biohub_tracker.cli import main
+from biohub_tracker.evaluation import (
+    ExactEvaluationRequest,
+    evaluate_pending_control,
+    validate_exact_report,
+)
+from biohub_tracker.io import canonical_json_bytes, sha256_bytes
+
+
+def _pending() -> dict:
+    payload = {
+        "schema_version": "biohub.pending-control-report.v1",
+        "status": "pending_reconciliation",
+        "run_id": "cpu-control-a",
+        "evaluation_run_id": "eval-control-a",
+        "request_nonce": "1" * 64,
+        "acceptance_request_sha256": "2" * 64,
+        "registration_event_sha256": "3" * 64,
+        "kernel_ref": "indarkarhana/biohub-phase-2-cpu-acceptance/1",
+        "runtime_dataset_ref": "indarkarhana/biohub-phase2-runtime/1",
+        "runtime_bundle_name": BUNDLE_NAME,
+        "runtime_bundle_sha256": "b" * 64,
+        "runtime_bundle_inventory_sha256": "c" * 64,
+        "runtime_bundle_uncompressed_size_bytes": 1000,
+        "runtime_bundle_file_count": 3,
+        "accelerator": "none",
+        "internet_enabled": False,
+        "competition_submission_performed": False,
+        "watchdog_terminal_state": "completed",
+        "actual_cpu_runtime_seconds": "10",
+        "peak_memory_mb": "100",
+        "source_identities": {
+            "scorer_lock_sha256": "4" * 64,
+            "environment_lock_sha256": "5" * 64,
+            "manifest_policy_sha256": "6" * 64,
+            "control_model_sha256": "7" * 64,
+            "config_sha256": "8" * 64,
+            "code_sha256": "9" * 64,
+            "data_source_sha256": "a" * 64,
+        },
+        "manifest": {
+            "manifest_sha256": "b" * 64,
+            "folds": [
+                {
+                    "fold_id": "fold-44b6-to-6bba",
+                    "train_membership_sha256": "c" * 64,
+                    "calibration_membership_sha256": "d" * 64,
+                    "evaluation_membership_sha256": "e" * 64,
+                },
+                {
+                    "fold_id": "fold-6bba-to-44b6",
+                    "train_membership_sha256": "f" * 64,
+                    "calibration_membership_sha256": "0" * 64,
+                    "evaluation_membership_sha256": "1" * 64,
+                },
+            ],
+            "sample_count": 2,
+            "overlap_count": 0,
+            "manifest_document": {"schema_version": 1},
+        },
+        "control": {
+            "graph_inventory_sha256": "2" * 64,
+            "artifact_hashes": {"truth_graphs": "3" * 64},
+            "authoritative_inventories": [],
+            "expected_sample_ids": ["44b6_a", "6bba_a"],
+            "official": {},
+            "diagnostics": {},
+            "comparison": {},
+        },
+    }
+    payload["pending_payload_sha256"] = sha256_bytes(canonical_json_bytes(payload))
+    envelope = {
+        "schema_version": "biohub.pending-control-envelope.v1",
+        "pending_payload_sha256": payload["pending_payload_sha256"],
+        "authority": "remote_untrusted_pending",
+    }
+    payload["pending_envelope"] = envelope
+    payload["pending_envelope_sha256"] = sha256_bytes(canonical_json_bytes(envelope))
+    semantic = dict(payload)
+    semantic.pop("output_inventory_sha256", None)
+    payload["output_inventory_sha256"] = sha256_bytes(canonical_json_bytes(semantic))
+    return payload
+
+
+def test_pending_control_is_strict_untrusted_and_not_an_exact_report():
+    value = _pending()
+    pending = validate_pending_control(value)
+    assert isinstance(pending, PendingControlReport)
+    assert pending.accelerator == "none"
+    with pytest.raises(Exception):
+        validate_exact_report(pending)  # type: ignore[arg-type]
+    tampered = dict(value)
+    tampered["request_nonce"] = "f" * 64
+    with pytest.raises(AcceptanceError, match="PENDING_PAYLOAD_HASH_MISMATCH"):
+        validate_pending_control(tampered)
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [("enable_gpu", True), ("enable_tpu", True), ("enable_internet", True)],
+)
+def test_cpu_kernel_metadata_fail_closed_on_accelerators_or_internet(field, value):
+    metadata = {
+        "id": "indarkarhana/biohub-phase-2-cpu-acceptance",
+        "code_file": "phase2_acceptance.py",
+        "language": "python",
+        "kernel_type": "script",
+        "is_private": True,
+        "enable_gpu": False,
+        "enable_tpu": False,
+        "enable_internet": False,
+        "dataset_sources": ["indarkarhana/biohub-phase2-runtime"],
+        "competition_sources": ["biohub-cell-tracking-during-development"],
+    }
+    metadata[field] = value
+    with pytest.raises(AcceptanceError):
+        assert_cpu_kernel_metadata(
+            metadata,
+            expected_kernel_slug="indarkarhana/biohub-phase-2-cpu-acceptance",
+            expected_dataset_slug="indarkarhana/biohub-phase2-runtime",
+            expected_competition_slug="biohub-cell-tracking-during-development",
+        )
+
+
+def test_submission_and_gpu_launch_tokens_are_unreachable():
+    safe = "kaggle kernels push -p owned_cpu_kernel\n# accelerator none"
+    assert_no_submission_source(safe)
+    for forbidden in (
+        "kaggle competitions submit -c biohub",
+        "torch.cuda.is_available()",
+        "biohub launch execute --execute",
+    ):
+        with pytest.raises(AcceptanceError):
+            assert_no_submission_source(forbidden)
+
+
+def test_exact_cli_builds_four_role_fold_refs_and_requires_ledger(tmp_path, monkeypatch):
+    captured: dict[str, ExactEvaluationRequest] = {}
+
+    def fake_evaluate(request):
+        captured["request"] = request
+        return type(
+            "Report",
+            (),
+            {
+                "core_sha256": "1" * 64,
+                "envelope_sha256": "2" * 64,
+                "core_path": tmp_path / "core.json",
+                "envelope_path": tmp_path / "envelope.json",
+            },
+        )()
+
+    monkeypatch.setattr("biohub_tracker.evaluation.evaluate_exact", fake_evaluate)
+    args = [
+        "--root",
+        str(tmp_path),
+        "evaluate",
+        "exact",
+        "--ledger",
+        "experiments/events.jsonl",
+        "--evaluation-run-id",
+        "eval-a",
+        "--truth-dir",
+        "truth",
+        "--manifest",
+        "manifest.json",
+        "--scorer-lock",
+        "lock.json",
+        "--evaluation-policy",
+        "policy.json",
+        "--output-dir",
+        "out",
+    ]
+    for role in ("baseline", "candidate"):
+        for fold in ("fold-a", "fold-b"):
+            args += [f"--{role}-set", f"{fold}={role}-{fold}"]
+    assert main(args) == 0
+    request = captured["request"]
+    assert request.ledger_path == (tmp_path / "experiments/events.jsonl").resolve()
+    assert [item.fold_id for item in request.baseline_sets] == ["fold-a", "fold-b"]
+    assert [item.fold_id for item in request.candidate_sets] == ["fold-a", "fold-b"]
+
+
+def test_tracked_kernel_metadata_and_source_have_cpu_tripwires():
+    metadata = json.loads(
+        Path("kaggle/phase2-cpu-acceptance/kernel-metadata.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert_cpu_kernel_metadata(
+        metadata,
+        expected_kernel_slug="indarkarhana/biohub-phase-2-cpu-acceptance",
+        expected_dataset_slug="indarkarhana/biohub-phase2-runtime",
+        expected_competition_slug="biohub-cell-tracking-during-development",
+    )
+    source = Path("kaggle/phase2-cpu-acceptance/phase2_acceptance.py").read_text(
+        encoding="utf-8"
+    )
+    assert_no_submission_source(source)
+    assert 'runtime / "control-work", package_root' in source
+    assert "generated_output_cleanup_failed" in source
+
+
+def test_pending_control_uses_the_validated_evaluation_policy_loader():
+    source = inspect.getsource(evaluate_pending_control)
+    assert "load_evaluation_policy(evaluation_policy_path)" in source
+    assert "_load_policy(" not in source
+
+
+def test_kernel_only_retry_embeds_a_fresh_request_without_changing_runtime_dataset():
+    source = Path("kaggle/phase2-cpu-acceptance/phase2_acceptance.py").read_text(
+        encoding="utf-8"
+    )
+    request = {"schema_version": "biohub.acceptance-request.v1", "run_id": "fresh"}
+    encoded = base64.b64encode(json.dumps(request).encode()).decode()
+    staged = source.replace(
+        'EMBEDDED_ACCEPTANCE_REQUEST_B64 = ""',
+        f'EMBEDDED_ACCEPTANCE_REQUEST_B64 = "{encoded}"',
+    )
+    assert staged != source
+    namespace: dict = {}
+    exec(compile(staged, "phase2_acceptance.py", "exec"), namespace)
+    runtime = Path("unused-because-the-request-is-embedded")
+    assert namespace["_acceptance_request"](runtime) == request
+
+
+def _kernel_script_namespace() -> dict:
+    return runpy.run_path("kaggle/phase2-cpu-acceptance/phase2_acceptance.py")
+
+
+def _kernel_state_namespace() -> dict:
+    return runpy.run_path("scripts/get-kaggle-kernel-state.py")
+
+
+def _dataset_state_namespace() -> dict:
+    return runpy.run_path("scripts/get-kaggle-dataset-state.py")
+
+
+def test_mount_discovery_accepts_direct_source(tmp_path):
+    marker = "bundle/config/official-scorer.lock.json"
+    source = tmp_path / "biohub-phase2-runtime"
+    (source / marker).parent.mkdir(parents=True)
+    (source / marker).write_text("{}", encoding="utf-8")
+    assert _kernel_script_namespace()["_one_with_marker"](marker, tmp_path) == source
+
+
+def test_mount_discovery_accepts_owner_qualified_source(tmp_path):
+    marker = "bundle/config/official-scorer.lock.json"
+    source = tmp_path / "indarkarhana" / "biohub-phase2-runtime"
+    (source / marker).parent.mkdir(parents=True)
+    (source / marker).write_text("{}", encoding="utf-8")
+    assert _kernel_script_namespace()["_one_with_marker"](marker, tmp_path) == source
+
+
+def test_mount_discovery_rejects_missing_source_with_safe_diagnostic(tmp_path):
+    marker = "bundle/config/official-scorer.lock.json"
+    with pytest.raises(RuntimeError) as caught:
+        _kernel_script_namespace()["_one_with_marker"](marker, tmp_path)
+    detail = str(caught.value)
+    assert detail == (
+        "mounted_source_cardinality: marker=official-scorer.lock.json "
+        "direct=0 owner_qualified=0 namespaced=0"
+    )
+    assert str(tmp_path) not in detail
+
+
+@pytest.mark.parametrize("owner_qualified", [False, True])
+def test_opaque_bundle_discovery_accepts_bounded_kaggle_layouts(
+    tmp_path, owner_qualified
+):
+    source = tmp_path / "biohub-phase2-runtime"
+    if owner_qualified:
+        source = tmp_path / "indarkarhana" / "biohub-phase2-runtime"
+    source.mkdir(parents=True)
+    bundle = source / BUNDLE_NAME
+    bundle.write_bytes(b"opaque")
+    assert _kernel_script_namespace()["_one_bundle"](BUNDLE_NAME, tmp_path) == bundle
+
+
+def test_current_kaggle_namespaced_mount_layouts_are_bounded(tmp_path):
+    namespace = _kernel_script_namespace()
+    bundle = (
+        tmp_path
+        / "datasets"
+        / "indarkarhana"
+        / "biohub-phase2-runtime"
+        / BUNDLE_NAME
+    )
+    bundle.parent.mkdir(parents=True)
+    bundle.write_bytes(b"opaque")
+    assert namespace["_one_bundle"](
+        BUNDLE_NAME,
+        tmp_path,
+        dataset_slug="indarkarhana/biohub-phase2-runtime",
+    ) == bundle
+
+    competition = tmp_path / "competitions" / "biohub-competition"
+    (competition / "train").mkdir(parents=True)
+    assert namespace["_one_with_marker"](
+        "train", tmp_path, competition_slug="biohub-competition"
+    ) == competition
+
+
+def test_opaque_bundle_discovery_rejects_zero_or_multiple(tmp_path):
+    discover = _kernel_script_namespace()["_one_bundle"]
+    with pytest.raises(RuntimeError, match="runtime_bundle_cardinality"):
+        discover(BUNDLE_NAME, tmp_path)
+    for name in ("first", "second"):
+        source = tmp_path / name
+        source.mkdir()
+        (source / BUNDLE_NAME).write_bytes(b"opaque")
+    with pytest.raises(RuntimeError, match="direct=2"):
+        discover(BUNDLE_NAME, tmp_path)
+
+
+def test_runtime_bundle_is_deterministic_and_securely_extracts(tmp_path):
+    first_source = tmp_path / "first-source"
+    second_source = tmp_path / "second-source"
+    for source in (first_source, second_source):
+        (source / "bundle" / "config").mkdir(parents=True)
+        (source / "bundle" / "src" / "biohub_tracker").mkdir(parents=True)
+        (source / "bundle" / "config" / "lock.json").write_text(
+            '{"pinned":true}\n', encoding="utf-8"
+        )
+        (source / "bundle" / "src" / "biohub_tracker" / "a.py").write_text(
+            "VALUE = 1\n", encoding="utf-8"
+        )
+    first_output = tmp_path / "one" / BUNDLE_NAME
+    second_output = tmp_path / "two" / BUNDLE_NAME
+    first = build_runtime_bundle(first_source, first_output)
+    second = build_runtime_bundle(second_source, second_output)
+    assert first == second
+    assert first_output.read_bytes() == second_output.read_bytes()
+    destination = tmp_path / "extracted"
+    actual = extract_runtime_bundle(
+        first_output,
+        destination,
+        expected_sha256=first["runtime_bundle_sha256"],
+        expected_inventory_sha256=first["runtime_bundle_inventory_sha256"],
+        expected_uncompressed_size_bytes=first[
+            "runtime_bundle_uncompressed_size_bytes"
+        ],
+        expected_file_count=first["runtime_bundle_file_count"],
+    )
+    assert actual == first
+    assert (destination / "bundle" / "config" / "lock.json").read_text(
+        encoding="utf-8"
+    ) == '{"pinned":true}\n'
+
+
+def test_runtime_bundle_rejects_hash_mismatch_and_unsafe_paths(tmp_path):
+    source = tmp_path / "source"
+    (source / "bundle" / "config").mkdir(parents=True)
+    (source / "bundle" / "config" / "lock.json").write_text(
+        "{}", encoding="utf-8"
+    )
+    output = tmp_path / BUNDLE_NAME
+    metadata = build_runtime_bundle(source, output)
+    with pytest.raises(AcceptanceError, match="RUNTIME_BUNDLE_HASH_MISMATCH"):
+        extract_runtime_bundle(
+            output,
+            tmp_path / "bad-extract",
+            expected_sha256="0" * 64,
+            expected_inventory_sha256=metadata["runtime_bundle_inventory_sha256"],
+            expected_uncompressed_size_bytes=metadata[
+                "runtime_bundle_uncompressed_size_bytes"
+            ],
+            expected_file_count=metadata["runtime_bundle_file_count"],
+        )
+    for path in ("/bundle/config/a", "bundle/../config/a", "bundle/secrets/a"):
+        with pytest.raises(AcceptanceError, match="RUNTIME_BUNDLE_PATH_INVALID"):
+            _bundle_member_path(path)
+    assert _bundle_member_path("bundle/tests/fixtures/metric.json").as_posix() == (
+        "bundle/tests/fixtures/metric.json"
+    )
+
+
+def test_kernel_only_retry_reuses_verified_runtime_dataset_and_dynamic_sdk_versions():
+    wrapper = Path("scripts/run-phase2-cpu-acceptance.ps1").read_text(
+        encoding="utf-8"
+    )
+    assert "$minimumRuntimeDatasetVersion = 9" in wrapper
+    assert "$targetKernelVersion = [int]$kernelState.next_version_number" in wrapper
+    assert "$kernelRef = [string]$kernelState.next_kernel_ref" in wrapper
+    assert '"datasets", "download", $datasetRef' in wrapper
+    assert "scripts/inspect-runtime-bundle.py" in wrapper
+    assert "fully verified immutable v9 evidence" in wrapper
+    assert '"datasets", "create"' not in wrapper
+    assert '"datasets", "version"' not in wrapper
+    assert wrapper.count('"kernels", "push"') == 1
+    assert '"-t", "30"' not in wrapper
+    assert '"-t", [string]$cpuWatchdogSeconds' in wrapper
+    assert "$cpuWatchdogSeconds -ge (12 * 60 * 60)" in wrapper
+    assert "Invoke-KaggleReadWithRetry" in wrapper
+    assert "KAGGLE_READ_RATE_LIMITED" in wrapper
+    assert "Start-Sleep -Seconds 60" in wrapper
+
+
+def test_dataset_inventory_paginates_and_preserves_exact_file_size():
+    class File:
+        def __init__(self, name, total_bytes):
+            self.name = name
+            self.total_bytes = total_bytes
+
+    class Page:
+        def __init__(self, files, token):
+            self.dataset_files = files
+            self.next_page_token = token
+
+    class Api:
+        def __init__(self):
+            self.calls = []
+
+        def dataset_list_files(self, dataset, page_token=None, page_size=20):
+            self.calls.append((dataset, page_token, page_size))
+            if page_token is None:
+                return Page([File(BUNDLE_NAME, 123)], "next")
+            return Page([], None)
+
+    api = Api()
+    result = _dataset_state_namespace()["inventory_dataset"](
+        "owner/runtime/3", api=api, page_size=1000
+    )
+    assert result["files"] == [{"name": BUNDLE_NAME, "total_bytes": 123}]
+    assert api.calls == [
+        ("owner/runtime/3", None, 1000),
+        ("owner/runtime/3", "next", 1000),
+    ]
+def test_mount_discovery_rejects_duplicate_direct_and_owner_qualified_sources(tmp_path):
+    marker = "bundle/config/official-scorer.lock.json"
+    sources = [
+        tmp_path / "biohub-phase2-runtime",
+        tmp_path / "indarkarhana" / "biohub-phase2-runtime",
+    ]
+    for source in sources:
+        (source / marker).parent.mkdir(parents=True)
+        (source / marker).write_text("{}", encoding="utf-8")
+    with pytest.raises(
+        RuntimeError,
+        match=r"direct=1 owner_qualified=1 namespaced=0$",
+    ):
+        _kernel_script_namespace()["_one_with_marker"](marker, tmp_path)
+
+
+def test_sdk_kernel_state_uses_current_version_and_absence_without_stale_reuse():
+    slug = "indarkarhana/biohub-phase-2-cpu-acceptance"
+    parser = _kernel_state_namespace()["kernel_state_from_sdk_response"]
+    absent = parser(slug, None)
+    assert absent["current_version_number"] is None
+    assert absent["next_version_number"] == 1
+    assert absent["next_kernel_ref"] == f"{slug}/1"
+
+    metadata = SimpleNamespace(
+        ref=slug,
+        current_version_number=2,
+        is_private=True,
+        enable_gpu=False,
+        enable_tpu=False,
+        enable_internet=False,
+        language="python",
+        kernel_type="script",
+        dataset_data_sources=["indarkarhana/biohub-phase2-runtime"],
+        competition_data_sources=["biohub-cell-tracking-during-development"],
+        kernel_data_sources=[],
+        model_data_sources=[],
+    )
+    current = parser(slug, SimpleNamespace(metadata=metadata))
+    assert current["current_version_number"] == 2
+    assert current["next_version_number"] == 3
+    assert current["next_kernel_ref"] == f"{slug}/3"
+
+
+def test_wrapper_uses_sdk_ref_and_verifies_post_push_before_start_and_reconcile():
+    source = Path("scripts/run-phase2-cpu-acceptance.ps1").read_text(encoding="utf-8")
+    assert "scripts/get-kaggle-kernel-state.py" in source
+    assert '"kernels", "pull"' in source
+    assert "$kernelRef = [string]$kernelState.next_kernel_ref" in source
+    assert '"$kernelSlug/$version"' not in source
+    assert "current_kernel_ref" not in source
+    assert "Get-CanonicalTextSha256" in source
+    assert "[BitConverter]::ToString" in source
+    assert "[Convert]::ToHexString" not in source
+    push = source.index('"kernels", "push", "-p", $kernelStage')
+    post_push = source.index("$postPush = Get-OwnedKernelState")
+    verify = source.index("Assert-OwnedKernelServerState $postPush")
+    start = source.index("cpu-acceptance start $runId")
+    reconcile = source.index("cpu-acceptance reconcile $runId")
+    assert push < post_push < verify < start < reconcile

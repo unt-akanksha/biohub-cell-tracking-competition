@@ -79,6 +79,33 @@ def test_lock_rejects_missing_checkout(tmp_path: Path) -> None:
     assert exc.value.reason_code == "checkout_missing"
 
 
+def test_clean_checkout_check_is_transport_portable(monkeypatch: pytest.MonkeyPatch) -> None:
+    import biohub_tracker.scorer_lock as scorer_lock_module
+
+    captured = {}
+
+    def fake_run_git(checkout, *arguments):
+        captured["checkout"] = checkout
+        captured["arguments"] = arguments
+        return ""
+
+    monkeypatch.setattr(scorer_lock_module, "_run_git", fake_run_git)
+    checkout = Path("portable-checkout")
+    scorer_lock_module._verify_clean_checkout(checkout)
+    assert captured == {
+        "checkout": checkout,
+        "arguments": (
+            "-c",
+            "core.autocrlf=true",
+            "-c",
+            "core.filemode=false",
+            "status",
+            "--porcelain",
+            "--untracked-files=all",
+        ),
+    }
+
+
 def test_lock_rejects_changed_source_bytes(tmp_path: Path) -> None:
     copied = tmp_path / "organizer"
     shutil.copytree(CHECKOUT, copied)

@@ -1,0 +1,20 @@
+{
+  "schema_version": "biohub.phase2-control-config.v1",
+  "purpose": "phase2_official_data_control",
+  "competition_slug": "biohub-cell-tracking-during-development",
+  "kernel_slug": "indarkarhana/biohub-phase-2-cpu-acceptance",
+  "runtime_dataset_slug": "indarkarhana/biohub-phase2-runtime",
+  "cpu_watchdog_minutes": 660,
+  "accelerator": "none",
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "competition_submission_allowed": false,
+  "control_model": "official-truth-self-identity-v1",
+  "scorer_lock_path": "config/official-scorer.lock.json",
+  "environment_lock_path": "requirements/evaluation-lock.txt",
+  "evaluation_policy_path": "config/evaluation-policy.json",
+  "manifest_policy": "reciprocal-complete-movie-embryo-held-out-v1",
+  "accepted_manifest_path": "manifests/reciprocal-embryo-v1.json",
+  "accepted_report_path": "reports/exact/phase2-control-acceptance.json"
+}

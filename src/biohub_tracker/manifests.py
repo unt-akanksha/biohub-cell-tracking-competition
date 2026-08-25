@@ -364,7 +364,12 @@ def _read_zarr_metadata(path: Path, expected_scale: tuple[str, str, str]) -> dic
     scale: Any = None
     axes = multiscales[0].get("axes") if isinstance(multiscales[0], Mapping) else None
     datasets = multiscales[0].get("datasets") if isinstance(multiscales[0], Mapping) else None
-    if not isinstance(axes, list) or [item.get("name") for item in axes if isinstance(item, Mapping)] != list(OFFICIAL_AXES):
+    axis_names = (
+        [str(item.get("name", "")).casefold() for item in axes]
+        if isinstance(axes, list) and all(isinstance(item, Mapping) for item in axes)
+        else []
+    )
+    if axis_names != list(OFFICIAL_AXES):
         _fail("INVALID_METADATA", f"{path}: axes")
     if isinstance(datasets, list) and len(datasets) == 1 and isinstance(datasets[0], Mapping):
         transforms = datasets[0].get("coordinateTransformations")

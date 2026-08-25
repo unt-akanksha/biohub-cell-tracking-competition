@@ -1,4 +1,160 @@
 {
+  "cpu_acceptances": [
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260824T094359Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260824T094359Z",
+      "status": "failed",
+      "terminal_event_sha256": "556869c88b4532d81e891045d9bacfed91101b94571108f2d3c2afb3aa1d6bee"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260824T095539Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260824T095539Z",
+      "status": "failed",
+      "terminal_event_sha256": "e24a84b2ac093df7a44eeaf7b32c907f4802714b35ad9d1234336c1369ada6df"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260824T101305Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260824T101305Z",
+      "status": "failed",
+      "terminal_event_sha256": "49c29eb6a92d8bd46bb5d66a757951bbaada6a1ab71edf97a2487373601eb0c8"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260824T104104Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260824T104104Z",
+      "status": "failed",
+      "terminal_event_sha256": "19edd88bee048d6b0061ae1089aea7adb25590178408ef30ab52d9037f181fbd"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260824T150753Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260824T150753Z",
+      "status": "failed",
+      "terminal_event_sha256": "5d1e59da256ccbd0482da9659fec376a9dc7151e5ca2415ddcc4b76c8439cb42"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T195412Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T195412Z",
+      "status": "failed",
+      "terminal_event_sha256": "b865e42fe3969c41944e4a33125656b96c58ffb9859eddb7a4a3580433c16bdf"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T202351Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T202351Z",
+      "status": "failed",
+      "terminal_event_sha256": "3c5ba6da5cc19eae222d9f0eaf01dd2273ba699fad376490dd6394b25e5d6969"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T204326Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T204326Z",
+      "status": "failed",
+      "terminal_event_sha256": "a9de853c50d0683804f11579a29b6416992f38e2194de7dbcf9c2f29f80cb4f1"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T205428Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T205428Z",
+      "status": "failed",
+      "terminal_event_sha256": "ecf201d549bc7aca5c41c5c91db22d8b89c6af85b2cac82ecc0537a7f39ae58a"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T211832Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T211832Z",
+      "status": "failed",
+      "terminal_event_sha256": "514014d07a8144584f825bdb83f85a31a4a1cad3e9e3afa1e3527ea397f18922"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T213542Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T213542Z",
+      "status": "failed",
+      "terminal_event_sha256": "01bae3d309b07858d787cc036576665d48fdddb4787f88466c198d2850d0fd51"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T215425Z",
+      "evidence_eligible": false,
+      "inputs_bound": false,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T215425Z",
+      "status": "failed",
+      "terminal_event_sha256": "d48674e2f6c449beea6a1f9c6affd8550ea7ad4e28f5eb83b3ee74d318bef538"
+    },
+    {
+      "accelerator": "none",
+      "evaluation_run_id": "phase2-control-evaluation-20260825T224606Z",
+      "evidence_eligible": true,
+      "inputs_bound": true,
+      "promotion_eligible": false,
+      "purpose": "phase2_official_data_control",
+      "run_id": "phase2-cpu-control-20260825T224606Z",
+      "status": "completed",
+      "terminal_event_sha256": "7aef03f45a9625c317b0eb59e6e4bf1b48f7ed2b827118007829015b141a1ea1"
+    }
+  ],
+  "exact_evaluations": [
+    {
+      "decision": null,
+      "evaluation_run_id": "phase2-control-evaluation-20260825T224606Z",
+      "evidence_kind": "official_data_control",
+      "promotion_eligible": false,
+      "reason_codes": [],
+      "review_exception_recorded": false,
+      "status": "completed"
+    }
+  ],
   "next_experiment": {
     "hypothesis": "ZebraHub selective_ssm_medium parent-ranking gains survive reciprocal competition calibration and exact complete-graph OOF scoring.",
     "next_gate": "reciprocal_competition_calibration_and_complete_graph_exact_metric",

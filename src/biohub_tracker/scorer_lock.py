@@ -231,7 +231,16 @@ def _contained_file(path: Path, root: Path) -> bool:
 
 
 def _verify_clean_checkout(checkout: Path) -> None:
-    if _run_git(checkout, "status", "--porcelain", "--untracked-files=all"):
+    if _run_git(
+        checkout,
+        "-c",
+        "core.autocrlf=true",
+        "-c",
+        "core.filemode=false",
+        "status",
+        "--porcelain",
+        "--untracked-files=all",
+    ):
         raise ScorerVerificationError("checkout_dirty", str(checkout))
 
 

@@ -66,6 +66,23 @@ def test_reciprocal_manifest_is_canonical_complete_and_timestamp_independent(tmp
     assert first.overlap_audit["passed"] is True
 
 
+def test_live_ome_zarr_uppercase_axis_names_normalize_to_tzyx(tmp_path):
+    data = materialize(tmp_path / "train")
+    units = {"t": "second", "z": "micrometer", "y": "micrometer", "x": "micrometer"}
+    for metadata_path in data.glob("*.zarr/zarr.json"):
+        value = json.loads(metadata_path.read_text(encoding="utf-8"))
+        axes = value["attributes"]["multiscales"][0]["axes"]
+        for axis in axes:
+            original = axis["name"]
+            axis["name"] = original.upper()
+            axis["unit"] = units[original]
+        _write_json(metadata_path, value)
+
+    manifest = build_manifest(data, LOCK)
+    assert manifest.samples
+    assert all(sample.shape_tzyx for sample in manifest.samples)
+
+
 def test_membership_hashes_change_with_corresponding_identity(tmp_path):
     original = build_manifest(materialize(tmp_path / "a"), LOCK)
     changed_root = materialize(tmp_path / "b")
@@ -103,8 +120,9 @@ def test_identity_overlap_and_pairing_fail_closed_without_output(tmp_path, mutat
         samples[2]["claimed_sample_id"] = None
     data = materialize(tmp_path / "train", samples=samples)
     if mutation == "unpaired":
-        moved = data / "44b6_fov-a.geff"
-        moved.rename(data / "unpaired.geff")
+        # A mismatched stem is sufficient to exercise the fail-closed pairing
+        # check and avoids flaky directory renames under Windows file scanners.
+        (data / "unpaired.geff").mkdir()
     if mutation == "duplicate_hash":
         left = data / "44b6_fov-a.geff"
         right = data / "6bba_fov-a.geff"

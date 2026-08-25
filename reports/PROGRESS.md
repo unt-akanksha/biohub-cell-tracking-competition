@@ -86,3 +86,24 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `not recorded`
+
+
+## CPU Acceptance Controls
+
+- `phase2-cpu-control-20260824T094359Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260824T095539Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260824T101305Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260824T104104Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260824T150753Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T195412Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T202351Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T204326Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T205428Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T211832Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T213542Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T215425Z`: `failed`, accelerator `none`, promotion eligible `false`
+- `phase2-cpu-control-20260825T224606Z`: `completed`, accelerator `none`, promotion eligible `false`
+
+## Aggregate Exact Evaluations
+
+- `phase2-control-evaluation-20260825T224606Z`: `completed`, decision `not recorded`

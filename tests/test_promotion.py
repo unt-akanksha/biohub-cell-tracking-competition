@@ -280,6 +280,7 @@ def _completed_report(
                 envelope_sha256=envelope_sha,
                 artifact_hashes={"core": core_sha, "envelope": envelope_sha},
                 authoritative_inventories=inventories,
+                promotion_eligible=evidence_kind == "model_candidate",
             ),
         )
     )

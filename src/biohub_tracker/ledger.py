@@ -998,6 +998,11 @@ def cpu_acceptance_registration_payload(
     evaluation_run_id: str,
     kernel_slug: str,
     runtime_dataset_slug: str,
+    runtime_bundle_name: str,
+    runtime_bundle_sha256: str,
+    runtime_bundle_inventory_sha256: str,
+    runtime_bundle_uncompressed_size_bytes: Any,
+    runtime_bundle_file_count: Any,
     scorer_lock_sha256: str,
     environment_lock_sha256: str,
     manifest_policy_sha256: str,
@@ -1013,6 +1018,16 @@ def cpu_acceptance_registration_payload(
         raise ValueError("cpu_watchdog_minutes must be an integer") from exc
     if watchdog < 1 or watchdog >= 720:
         raise ValueError("cpu_watchdog_minutes must be between 1 and 719")
+    try:
+        bundle_size = int(runtime_bundle_uncompressed_size_bytes)
+        bundle_count = int(runtime_bundle_file_count)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("runtime bundle size/count must be integers") from exc
+    if bundle_size < 1 or bundle_size > 2_147_483_648 or bundle_count < 1:
+        raise ValueError("runtime bundle size/count is outside frozen bounds")
+    bundle_name = _bounded_text(runtime_bundle_name, "runtime_bundle_name", 160)
+    if bundle_name != "biohub-runtime-v1.biohubbundle":
+        raise ValueError("runtime_bundle_name is not the canonical opaque bundle")
     nonce = _sha256_text(request_nonce, "request_nonce")
     return {
         "run_id": _bounded_text(run_id, "run_id", 160),
@@ -1026,6 +1041,15 @@ def cpu_acceptance_registration_payload(
         "runtime_dataset_slug": _owned_slug(
             runtime_dataset_slug, "runtime_dataset_slug"
         ),
+        "runtime_bundle_name": bundle_name,
+        "runtime_bundle_sha256": _sha256_text(
+            runtime_bundle_sha256, "runtime_bundle_sha256"
+        ),
+        "runtime_bundle_inventory_sha256": _sha256_text(
+            runtime_bundle_inventory_sha256, "runtime_bundle_inventory_sha256"
+        ),
+        "runtime_bundle_uncompressed_size_bytes": bundle_size,
+        "runtime_bundle_file_count": bundle_count,
         "scorer_lock_sha256": _sha256_text(scorer_lock_sha256, "scorer_lock_sha256"),
         "environment_lock_sha256": _sha256_text(
             environment_lock_sha256, "environment_lock_sha256"
@@ -1262,6 +1286,7 @@ def exact_evaluation_completed_payload(
     envelope_sha256: str,
     artifact_hashes: Mapping[str, Any],
     authoritative_inventories: Sequence[Mapping[str, Any]],
+    promotion_eligible: bool = True,
 ) -> dict[str, Any]:
     return {
         "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
@@ -1272,7 +1297,7 @@ def exact_evaluation_completed_payload(
         "authoritative_inventories": _normalize_authoritative_inventories(
             [dict(item) for item in authoritative_inventories]
         ),
-        "promotion_eligible": True,
+        "promotion_eligible": bool(promotion_eligible),
     }
 
 
@@ -1435,11 +1460,17 @@ def _validate_exact_transition(
                 envelope_sha256=event.payload.get("envelope_sha256"),
                 artifact_hashes=event.payload.get("artifact_hashes", {}),
                 authoritative_inventories=event.payload.get("authoritative_inventories", ()),
+                promotion_eligible=event.payload.get("promotion_eligible"),
             )
         except ValueError as exc:
             raise TransitionError(str(exc)) from exc
         if event.payload != normalized:
             raise TransitionError("exact evaluation completion payload is invalid")
+        if (
+            existing.registered["evidence_kind"] == "official_data_control"
+            and normalized["promotion_eligible"] is not False
+        ):
+            raise TransitionError("official-data control cannot be promotion eligible")
         if canonical_json_bytes(normalized["members"]) != canonical_json_bytes(
             existing.registered["members"]
         ):
@@ -1486,6 +1517,17 @@ def _validate_cpu_transition(
                 evaluation_run_id=event.payload.get("evaluation_run_id"),
                 kernel_slug=event.payload.get("kernel_slug"),
                 runtime_dataset_slug=event.payload.get("runtime_dataset_slug"),
+                runtime_bundle_name=event.payload.get("runtime_bundle_name"),
+                runtime_bundle_sha256=event.payload.get("runtime_bundle_sha256"),
+                runtime_bundle_inventory_sha256=event.payload.get(
+                    "runtime_bundle_inventory_sha256"
+                ),
+                runtime_bundle_uncompressed_size_bytes=event.payload.get(
+                    "runtime_bundle_uncompressed_size_bytes"
+                ),
+                runtime_bundle_file_count=event.payload.get(
+                    "runtime_bundle_file_count"
+                ),
                 scorer_lock_sha256=event.payload.get("scorer_lock_sha256"),
                 environment_lock_sha256=event.payload.get("environment_lock_sha256"),
                 manifest_policy_sha256=event.payload.get("manifest_policy_sha256"),
