@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 2
 current_phase_name: Exact Generalization Validation
-status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-08-24T08:41:26.227Z"
-last_activity: 2026-08-24
-last_activity_desc: Completed aggregate exact reports, diagnostics, and paired bootstrap
+status: verifying
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-08-25T23:21:36.592Z"
+last_activity: 2026-08-25
+last_activity_desc: Reconciled CPU-only official-data control on Kaggle kernel v13 with zero GPU use
 progress:
   total_phases: 2
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -27,32 +27,32 @@ See: .planning/PROJECT.md (updated 2026-08-23)
 
 ## Current Position
 
-Phase: 2 (Exact Generalization Validation) — EXECUTING
+Phase: 2 (Exact Generalization Validation) — VERIFYING
 Plan: 4 of 4
-Status: Ready to execute
-Last activity: 2026-08-24 — Completed 02-03 exact reports and paired bootstrap
+Status: Phase complete — ready for verification
+Last activity: 2026-08-25 — CPU-only official-data control completed and reconciled from Kaggle kernel v13
 
-Progress: [█████████░] 86%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 6
-- Average duration: 31 min
-- Total execution time: 185 min
+- Total plans completed: 7
+- Average duration: 348 min (live CPU acceptance retries dominate wall-clock duration)
+- Total execution time: 2,437 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 54 min | 18 min |
-| 02 | 3 | 131 min | 44 min |
+| 02 | 4 | 2,383 min | 596 min |
 
 **Recent Trend:**
 
-- Last 3 plans: 42 min, 35 min, 54 min
-- Trend: Exact report integration carries the largest verification surface because it replays the pinned scorer and production bootstrap
+- Last 3 plans: 35 min, 54 min, 37h32m
+- Trend: Plan 02-04 includes overnight live Kaggle diagnosis/retries; its successful CPU control runtime was 26m45s
 
 **Per-Plan Metrics:**
 
@@ -64,6 +64,7 @@ Progress: [█████████░] 86%
 | Phase 02 P01 | 42min | 3 tasks | 13 files |
 | Phase 02 P02 | 35m | 3 tasks | 16 files |
 | Phase 02 P03 | 54m | 3 tasks | 11 files |
+| Phase 02 P04 | 37h32m | 3 tasks | 27 files |
 
 ## Competition Snapshot
 
@@ -92,6 +93,10 @@ Decisions are logged in PROJECT.md Key Decisions table. Recent decisions affecti
 - [Phase 02]: Exact comparisons use a separate aggregate evaluation event family: compute against an immutable running registration, attach the report atomically as completion, and accept it only from the completed ledger state.
 - [Phase 02]: Endpoint/oracle/link/strata diagnostics are reconciled explanations with `organizer_input_eligible=false`; official sufficient statistics remain the only scoring inputs.
 - [Phase 02]: Paired uncertainty uses policy-frozen PCG64 seed 20260824, 10,000 complete-movie resamples stratified within embryo, and never resamples edges as independent evidence.
+- [Phase 02]: Promotion inputs exclude public leaderboard metadata by construction, and hard integrity rejection runs before scientific thresholds.
+- [Phase 02]: Remote Kaggle control output remains pending until a one-use local request completes CPU input-binding/terminal and aggregate registration/terminal reconciliation.
+- [Phase 02]: Official truth/self evidence proves evaluation infrastructure only and remains permanently non-promotable and non-submittable.
+- [Phase 02]: Cross-platform CRLF/filemode normalization is allowed only for checkout cleanliness; commit, ancestry, source, dependency, and imported-module provenance remain strict.
 
 ### Pending Todos
 
@@ -100,9 +105,8 @@ None yet.
 ### Blockers/Concerns
 
 - Kaggle quota is time-varying and must be re-read immediately before any launch.
-- The workspace does not yet contain the pinned official baseline or prior experiment source; Phase 2 must materialize reproducible inputs.
-- Several prior Kaggle jobs failed late from OOM or output coverage, motivating mandatory preflights.
-- Phase 2 cannot close until Plan 02-04 completes and locally reconciles the CPU-only Kaggle official-data acceptance control; fixture evidence is insufficient.
+- Phase 3 must import or reproduce real evidence-eligible ZebraHub model producers; the Phase 2 truth/self control cannot satisfy the learned-candidate gate.
+- GPU work has not started. Re-read live quota immediately before every launch and preserve the final 8.00-hour reserve.
 
 ## Deferred Items
 
@@ -114,6 +118,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-24T08:41:26.227Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-08-25T23:21:36.575Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None

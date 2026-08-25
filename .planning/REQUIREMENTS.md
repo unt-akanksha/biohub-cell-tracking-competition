@@ -29,11 +29,11 @@
 
 ### Exact Validation
 
-- [ ] **VAL-01**: The project pins the official patched scorer and verifies it against regression fixtures covering node matching, adjusted edge penalty, valid divisions, invalid fake forks, micro-averaging, and CSV↔GEFF round trips.
-- [ ] **VAL-02**: The project uses frozen leave-one-embryo-out manifests that prevent source-overlap leakage and are hashed into every training and evaluation record.
-- [ ] **VAL-03**: Every promotion candidate is scored on complete movies and reports pooled adjusted edge Jaccard, edge Jaccard, division Jaccard with TP/FP/FN, node recall, per-embryo results, per-fold results, and worst-movie delta.
-- [ ] **VAL-04**: The project reports detection endpoint availability, oracle-link ceiling, and conditional association accuracy so node errors are separated from linking errors.
-- [ ] **VAL-05**: A default promotion gate requires positive pooled score, nonnegative node recall, bilateral embryo evidence, bounded worst-movie regression, and nonnegative division behavior unless an explicit documented trade-off is approved.
+- [x] **VAL-01**: The project pins the official patched scorer and verifies it against regression fixtures covering node matching, adjusted edge penalty, valid divisions, invalid fake forks, micro-averaging, and CSV↔GEFF round trips.
+- [x] **VAL-02**: The project uses frozen leave-one-embryo-out manifests that prevent source-overlap leakage and are hashed into every training and evaluation record.
+- [x] **VAL-03**: Every promotion candidate is scored on complete movies and reports pooled adjusted edge Jaccard, edge Jaccard, division Jaccard with TP/FP/FN, node recall, per-embryo results, per-fold results, and worst-movie delta.
+- [x] **VAL-04**: The project reports detection endpoint availability, oracle-link ceiling, and conditional association accuracy so node errors are separated from linking errors.
+- [x] **VAL-05**: A default promotion gate requires positive pooled score, nonnegative node recall, bilateral embryo evidence, bounded worst-movie regression, and nonnegative division behavior unless an explicit documented trade-off is approved.
 
 ### Model Improvement
 
@@ -106,11 +106,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SAFE-03 | Phase 1 | Complete |
 | SAFE-04 | Phase 1 | Complete |
 | SAFE-05 | Phase 1 | Complete |
-| VAL-01 | Phase 2 | Pending |
-| VAL-02 | Phase 2 | Pending |
-| VAL-03 | Phase 2 | Pending |
-| VAL-04 | Phase 2 | Pending |
-| VAL-05 | Phase 2 | Pending |
+| VAL-01 | Phase 2 | Complete |
+| VAL-02 | Phase 2 | Complete |
+| VAL-03 | Phase 2 | Complete |
+| VAL-04 | Phase 2 | Complete |
+| VAL-05 | Phase 2 | Complete |
 | MODEL-01 | Phase 3 | Pending |
 | MODEL-02 | Phase 4 | Pending |
 | MODEL-03 | Phase 4 | Pending |
