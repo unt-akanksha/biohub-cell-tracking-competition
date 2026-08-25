@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -97,6 +98,29 @@ def test_membership_hashes_change_with_corresponding_identity(tmp_path):
     assert forward.train_membership_sha256 != changed_forward.train_membership_sha256
     assert forward.calibration_membership_sha256 != changed_forward.calibration_membership_sha256
     assert reverse.evaluation_membership_sha256 != changed_reverse.evaluation_membership_sha256
+
+
+@pytest.mark.parametrize("target_kind", ["file", "directory"])
+def test_manifest_rejects_geff_child_symlink_escapes(tmp_path, target_kind):
+    data = materialize(tmp_path / "train")
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    if target_kind == "file":
+        target = outside / "secret.bin"
+        target.write_bytes(b"not official data")
+    else:
+        target = outside / "secret-tree"
+        target.mkdir()
+        (target / "secret.bin").write_bytes(b"not official data")
+    link = data / "44b6_fov-a.geff" / f"escape-{target_kind}"
+    try:
+        os.symlink(target, link, target_is_directory=target_kind == "directory")
+    except (OSError, NotImplementedError) as exc:
+        pytest.skip(f"symlink creation is unavailable: {exc}")
+
+    with pytest.raises(ManifestError) as error:
+        build_manifest(data, LOCK)
+    assert error.value.reason_code == "PATH_ESCAPE"
 
 
 @pytest.mark.parametrize(

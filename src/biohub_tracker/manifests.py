@@ -4,6 +4,7 @@ import json
 import math
 import re
 import secrets
+import stat
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -59,9 +60,36 @@ def _decimal_text(value: Any) -> str:
     return format(result, ".15g")
 
 
-def _json(path: Path, reason: str = "INVALID_METADATA") -> Mapping[str, Any]:
+def _is_reparse_point(path: Path) -> bool:
+    attributes = getattr(path.lstat(), "st_file_attributes", 0)
+    return bool(attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+
+
+def _regular_contained_file(path: Path, root: Path) -> Path:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
+        mode = path.lstat().st_mode
+        if stat.S_ISLNK(mode) or _is_reparse_point(path) or not stat.S_ISREG(mode):
+            raise ValueError("symlink, reparse point, or non-regular file")
+        resolved = path.resolve(strict=True)
+        resolved.relative_to(root.resolve(strict=True))
+    except (OSError, ValueError) as exc:
+        raise ManifestError("PATH_ESCAPE", str(path)) from exc
+    return resolved
+
+
+def _json(
+    path: Path,
+    reason: str = "INVALID_METADATA",
+    *,
+    containment_root: Path | None = None,
+) -> Mapping[str, Any]:
+    try:
+        source = (
+            _regular_contained_file(path, containment_root)
+            if containment_root is not None
+            else path
+        )
+        value = json.loads(source.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ManifestError(reason, str(path)) from exc
     if not isinstance(value, Mapping):
@@ -79,10 +107,20 @@ def _contained(path: Path, root: Path) -> Path:
 
 
 def _tree_sha256(directory: Path) -> str:
-    files = sorted(
-        (path for path in directory.rglob("*") if path.is_file()),
-        key=lambda path: path.relative_to(directory).as_posix(),
-    )
+    files: list[Path] = []
+    for path in directory.rglob("*"):
+        try:
+            mode = path.lstat().st_mode
+        except OSError as exc:
+            raise ManifestError("PATH_ESCAPE", str(path)) from exc
+        if stat.S_ISLNK(mode) or _is_reparse_point(path):
+            _fail("PATH_ESCAPE", str(path))
+        if stat.S_ISDIR(mode):
+            continue
+        if not stat.S_ISREG(mode):
+            _fail("PATH_ESCAPE", str(path))
+        files.append(_regular_contained_file(path, directory))
+    files.sort(key=lambda path: path.relative_to(directory).as_posix())
     if not files:
         _fail("INVALID_METADATA", f"artifact tree is empty: {directory}")
     digest_input = bytearray()
@@ -96,7 +134,7 @@ def _tree_sha256(directory: Path) -> str:
 
 
 def _array_shape(root: Path, relative: str, *, dimensions: int) -> tuple[int, ...]:
-    metadata = _json(root / relative / "zarr.json")
+    metadata = _json(root / relative / "zarr.json", containment_root=root)
     return _positive_ints(metadata.get("shape"), f"{relative}.shape", dimensions)
 
 
@@ -356,7 +394,7 @@ def _validate_manifest(manifest: EvaluationManifest) -> None:
 
 
 def _read_zarr_metadata(path: Path, expected_scale: tuple[str, str, str]) -> dict[str, Any]:
-    root = _json(path / "zarr.json")
+    root = _json(path / "zarr.json", containment_root=path)
     attrs = _mapping(root.get("attributes"), f"{path}.attributes")
     multiscales = attrs.get("multiscales")
     if not isinstance(multiscales, list) or len(multiscales) != 1:
@@ -380,7 +418,7 @@ def _read_zarr_metadata(path: Path, expected_scale: tuple[str, str, str]) -> dic
     normalized_scale = tuple(_decimal_text(item) for item in scale[-3:])
     if normalized_scale != expected_scale:
         _fail("INVALID_METADATA", f"{path}: official scale changed")
-    array = _json(path / "0" / "zarr.json")
+    array = _json(path / "0" / "zarr.json", containment_root=path)
     shape = _positive_ints(array.get("shape"), f"{path}: shape", 4)
     chunk_grid = _mapping(array.get("chunk_grid"), f"{path}: chunk_grid")
     chunk_config = _mapping(chunk_grid.get("configuration"), f"{path}: chunk configuration")
@@ -392,7 +430,7 @@ def _read_zarr_metadata(path: Path, expected_scale: tuple[str, str, str]) -> dic
 
 
 def _read_geff_metadata(path: Path) -> dict[str, Any]:
-    root = _json(path / "zarr.json")
+    root = _json(path / "zarr.json", containment_root=path)
     attrs = _mapping(root.get("attributes"), f"{path}.attributes")
     geff = _mapping(attrs.get("geff"), f"{path}.geff")
     if geff.get("directed") is not True:
