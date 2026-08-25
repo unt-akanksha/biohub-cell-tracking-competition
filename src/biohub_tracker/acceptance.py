@@ -38,7 +38,8 @@ from .ledger import (
 )
 
 
-PENDING_SCHEMA = "biohub.pending-control-report.v1"
+LEGACY_PENDING_SCHEMA = "biohub.pending-control-report.v1"
+PENDING_SCHEMA = "biohub.pending-control-report.v2"
 PENDING_ENVELOPE_SCHEMA = "biohub.pending-control-envelope.v1"
 BUNDLE_SCHEMA = "biohub.runtime-bundle.v1"
 BUNDLE_MAGIC = b"BIOHUB-RUNTIME-BUNDLE\x00\x01"
@@ -86,6 +87,40 @@ _SOURCE_KEYS = {
     "code_sha256",
     "data_source_sha256",
 }
+_CONTROL_V1_KEYS = {
+    "graph_inventory_sha256",
+    "artifact_hashes",
+    "authoritative_inventories",
+    "expected_sample_ids",
+    "official",
+    "diagnostics",
+    "comparison",
+    "evaluation_policy_sha256",
+    "provisional_members",
+}
+_CONTROL_V2_KEYS = {
+    *_CONTROL_V1_KEYS,
+    "control_schema_version",
+    "movie_sufficient_statistics",
+}
+_CONTROL_MOVIE_KEYS = {
+    "organizer_row",
+    "official_counts",
+    "estimated_number_of_nodes",
+    "gt_node_count",
+    "matched_gt_node_count",
+    "node_recall",
+    "node_count_ratio",
+    "edge_jaccard",
+    "division_jaccard",
+    "adjusted_edge_jaccard",
+    "score",
+    "diagnostic_state",
+    "sample_id",
+    "embryo_id",
+    "fold_id",
+    "roundtrip_evidence_sha256",
+}
 _FORBIDDEN_SOURCE = (
     "kaggle competitions submit",
     "biohub launch execute",
@@ -118,6 +153,63 @@ def _text(value: Any, name: str, limit: int = 240) -> str:
     if not result or len(result) > limit:
         _fail("PENDING_CONTROL_SCHEMA_INVALID", name)
     return result
+
+
+def _validate_control_payload(value: Any, *, schema_version: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control")
+    expected = _CONTROL_V2_KEYS if schema_version == PENDING_SCHEMA else _CONTROL_V1_KEYS
+    if set(value) != expected:
+        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control fields")
+    for name in ("graph_inventory_sha256", "evaluation_policy_sha256"):
+        _sha(value[name], f"control.{name}")
+    artifacts = value["artifact_hashes"]
+    if not isinstance(artifacts, dict) or not artifacts:
+        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control.artifact_hashes")
+    for name, digest in sorted(artifacts.items()):
+        _text(name, "control artifact name")
+        _sha(digest, f"control.artifact_hashes.{name}")
+    if not isinstance(value["expected_sample_ids"], list) or value[
+        "expected_sample_ids"
+    ] != sorted(set(value["expected_sample_ids"])):
+        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control.expected_sample_ids")
+    for name in ("official", "diagnostics", "comparison"):
+        if not isinstance(value[name], dict):
+            _fail("PENDING_CONTROL_SCHEMA_INVALID", f"control.{name}")
+    if not isinstance(value["authoritative_inventories"], list) or not isinstance(
+        value["provisional_members"], list
+    ):
+        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control bindings")
+    if schema_version == PENDING_SCHEMA:
+        if (
+            value["control_schema_version"]
+            != "biohub.pending-control-sufficient-statistics.v2"
+        ):
+            _fail("PENDING_CONTROL_SCHEMA_INVALID", "control_schema_version")
+        movies = value["movie_sufficient_statistics"]
+        if (
+            not isinstance(movies, list)
+            or not movies
+            or movies != sorted(movies, key=lambda item: str(item.get("sample_id", "")))
+        ):
+            _fail("PENDING_CONTROL_SCHEMA_INVALID", "movie_sufficient_statistics")
+        seen: set[str] = set()
+        for movie in movies:
+            if not isinstance(movie, dict) or set(movie) != _CONTROL_MOVIE_KEYS:
+                _fail("PENDING_CONTROL_SCHEMA_INVALID", "movie sufficient statistic")
+            sample_id = _text(movie["sample_id"], "control.movie.sample_id")
+            if sample_id in seen:
+                _fail("PENDING_CONTROL_SCHEMA_INVALID", "duplicate sufficient statistic")
+            seen.add(sample_id)
+            _sha(
+                movie["roundtrip_evidence_sha256"],
+                "control.movie.roundtrip_evidence_sha256",
+            )
+            if not isinstance(movie["organizer_row"], dict) or not isinstance(
+                movie["official_counts"], dict
+            ) or not isinstance(movie["diagnostic_state"], dict):
+                _fail("PENDING_CONTROL_SCHEMA_INVALID", "movie sufficient payload")
+    return value
 
 
 def _positive_decimal(value: Any, name: str) -> str:
@@ -170,7 +262,7 @@ class PendingControlReport:
 def validate_pending_control(value: Any) -> PendingControlReport:
     if not isinstance(value, dict) or set(value) != _PENDING_KEYS:
         _fail("PENDING_CONTROL_SCHEMA_INVALID", "unknown or missing root field")
-    if value["schema_version"] != PENDING_SCHEMA:
+    if value["schema_version"] not in {LEGACY_PENDING_SCHEMA, PENDING_SCHEMA}:
         _fail("PENDING_CONTROL_SCHEMA_INVALID", "schema_version")
     if value["status"] != "pending_reconciliation":
         _fail("PENDING_CONTROL_SCHEMA_INVALID", "status")
@@ -234,8 +326,7 @@ def validate_pending_control(value: Any) -> PendingControlReport:
         _text(fold["fold_id"], "fold_id")
         for name in fold_keys - {"fold_id"}:
             _sha(fold[name], name)
-    if not isinstance(value["control"], dict):
-        _fail("PENDING_CONTROL_SCHEMA_INVALID", "control")
+    _validate_control_payload(value["control"], schema_version=value["schema_version"])
     _finite_tree(value)
 
     semantic = dict(value)
@@ -819,6 +910,274 @@ def _rebind_official_producers(
     return result
 
 
+def _assert_control_projection_matches(
+    control: Mapping[str, Any],
+    *,
+    official: Mapping[str, Any],
+    diagnostics: Mapping[str, Any],
+    comparison: Mapping[str, Any],
+) -> None:
+    for name, remote, local in (
+        ("official", control["official"], official),
+        ("diagnostics", control["diagnostics"], diagnostics),
+        ("comparison", control["comparison"], comparison),
+    ):
+        if canonical_json_bytes(remote) != canonical_json_bytes(local):
+            _fail("CONTROL_REVALIDATION_MISMATCH", name)
+
+
+def _validate_truth_self_sufficient_row(row: Mapping[str, Any], sample: Any) -> None:
+    counts = row["official_counts"]
+    expected_count_keys = {
+        "edge_tp",
+        "edge_fp",
+        "edge_fn",
+        "division_tp",
+        "division_fp",
+        "division_fn",
+        "num_pred_nodes",
+    }
+    if set(counts) != expected_count_keys or any(
+        isinstance(value, bool) or not isinstance(value, int) or value < 0
+        for value in counts.values()
+    ):
+        _fail("CONTROL_SUFFICIENT_STATISTICS_INVALID", row["sample_id"])
+    if (
+        counts["edge_tp"] != sample.gt_edge_count
+        or counts["edge_fp"] != 0
+        or counts["edge_fn"] != 0
+        or counts["division_fp"] != 0
+        or counts["division_fn"] != 0
+        or counts["num_pred_nodes"] != sample.gt_node_count
+        or int(row["matched_gt_node_count"]) != sample.gt_node_count
+        or Decimal(str(row["node_recall"])) != Decimal(1)
+    ):
+        _fail("CONTROL_TRUTH_SELF_INVARIANT_FAILED", row["sample_id"])
+    organizer_row = row["organizer_row"]
+    if any(organizer_row.get(name) != counts[name] for name in expected_count_keys):
+        _fail("CONTROL_SUFFICIENT_STATISTICS_INVALID", f"{row['sample_id']}:organizer")
+    reconciliation = row["diagnostic_state"].get("reconciliation")
+    if (
+        not isinstance(reconciliation, dict)
+        or reconciliation.get("status") != "passed"
+        or any(
+            reconciliation.get(name) != counts[name]
+            for name in expected_count_keys - {"num_pred_nodes"}
+        )
+    ):
+        _fail("CONTROL_SUFFICIENT_STATISTICS_INVALID", f"{row['sample_id']}:diagnostics")
+
+
+def _locally_revalidate_control(
+    *,
+    control: Mapping[str, Any],
+    manifest: Any,
+    pending: PendingControlReport,
+    identities: Mapping[str, Any],
+    members: list[dict[str, Any]],
+    workspace_root: Path,
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Rebuild every report projection from v2 compact sufficient statistics."""
+
+    from .comparison import build_paired_comparison
+    from .evaluation import (
+        _diagnostic_projection,
+        _official_projection,
+        aggregate_official_rows,
+        load_evaluation_policy,
+    )
+
+    if pending.value["schema_version"] != PENDING_SCHEMA:
+        _fail("LEGACY_PENDING_CONTROL_NOT_RECONCILABLE", pending.value["schema_version"])
+    policy, local_policy_sha = load_evaluation_policy(
+        workspace_root / "config" / "evaluation-policy.json"
+    )
+    if not secrets.compare_digest(
+        local_policy_sha,
+        _sha(control["evaluation_policy_sha256"], "control.evaluation_policy_sha256"),
+    ):
+        _fail("CONTROL_POLICY_HASH_MISMATCH", pending.run_id)
+
+    samples = {item.sample_id: item for item in manifest.samples}
+    expected_sample_ids = sorted(samples)
+    if control["expected_sample_ids"] != expected_sample_ids:
+        _fail("CONTROL_SAMPLE_BINDING_MISMATCH", pending.run_id)
+    rows = json.loads(json.dumps(control["movie_sufficient_statistics"]))
+    if [row["sample_id"] for row in rows] != expected_sample_ids:
+        _fail("CONTROL_SAMPLE_BINDING_MISMATCH", "sufficient statistics")
+    fold_by_sample = {
+        sample_id: fold
+        for fold in manifest.folds
+        for sample_id in fold.evaluation_membership
+    }
+    for row in rows:
+        sample = samples[row["sample_id"]]
+        fold = fold_by_sample.get(row["sample_id"])
+        if (
+            fold is None
+            or row["embryo_id"] != sample.embryo_id
+            or row["fold_id"] != fold.fold_id
+            or int(row["gt_node_count"]) != sample.gt_node_count
+            or Decimal(str(row["estimated_number_of_nodes"]))
+            != Decimal(str(sample.estimated_number_of_nodes))
+        ):
+            _fail("CONTROL_SAMPLE_BINDING_MISMATCH", row["sample_id"])
+        _validate_truth_self_sufficient_row(row, sample)
+
+    graph_inventory_by_fold: dict[str, str] = {}
+    for fold in manifest.folds:
+        graph_items = [
+            {
+                "sample_id": sample_id,
+                "path": samples[sample_id].truth_relpath,
+                "sha256": samples[sample_id].geff_tree_sha256,
+                "producer_run_id": pending.run_id,
+                "fold_id": fold.fold_id,
+            }
+            for sample_id in fold.evaluation_membership
+        ]
+        graph_inventory_by_fold[fold.fold_id] = sha256_bytes(
+            canonical_json_bytes(graph_items)
+        )
+    truth_inventory_sha = sha256_bytes(
+        canonical_json_bytes(
+            [
+                {"fold_id": fold_id, "graph_inventory_sha256": digest}
+                for fold_id, digest in sorted(graph_inventory_by_fold.items())
+            ]
+        )
+    )
+    if (
+        control["graph_inventory_sha256"] != truth_inventory_sha
+        or control["artifact_hashes"] != {"truth_graphs": truth_inventory_sha}
+    ):
+        _fail("CONTROL_GRAPH_INVENTORY_MISMATCH", pending.run_id)
+
+    provisional_members = []
+    for role in ("baseline", "candidate"):
+        for fold in manifest.folds:
+            graph_sha = graph_inventory_by_fold[fold.fold_id]
+            provisional_members.append(
+                {
+                    "role": role,
+                    "fold_id": fold.fold_id,
+                    "producer_run_id": pending.run_id,
+                    "producer_registration_event_sha256": pending.registration_event_sha256,
+                    "producer_input_binding_event_sha256": manifest.manifest_sha256,
+                    "producer_terminal_event_sha256": graph_sha,
+                    "manifest_sha256": manifest.manifest_sha256,
+                    "train_membership_sha256": fold.train_membership_sha256,
+                    "calibration_membership_sha256": fold.calibration_membership_sha256,
+                    "evaluation_membership_sha256": fold.evaluation_membership_sha256,
+                    "model_sha256": identities["control_model_sha256"],
+                    "config_sha256": identities["config_sha256"],
+                    "code_sha256": identities["code_sha256"],
+                    "data_sha256": identities["data_source_sha256"],
+                    "graph_inventory_sha256": graph_sha,
+                    "artifact_hashes": {"truth_graphs": graph_sha},
+                }
+            )
+    provisional_members.sort(key=lambda item: (item["role"], item["fold_id"]))
+    if canonical_json_bytes(control["provisional_members"]) != canonical_json_bytes(
+        provisional_members
+    ):
+        _fail("CONTROL_MEMBER_BINDING_MISMATCH", pending.run_id)
+
+    authoritative = sorted(
+        (dict(item) for item in control["authoritative_inventories"]),
+        key=lambda item: (str(item.get("role", "")), str(item.get("fold_id", ""))),
+    )
+    inventory_keys = {
+        "role",
+        "fold_id",
+        "producer_run_id",
+        "submission_graph_inventory_sha256",
+        "roundtrip_evidence_sha256",
+        "csv_sha256",
+    }
+    by_slot = {(item.get("role"), item.get("fold_id")): item for item in authoritative}
+    expected_slots = {
+        (role, fold.fold_id)
+        for role in ("baseline", "candidate")
+        for fold in manifest.folds
+    }
+    if len(authoritative) != 4 or set(by_slot) != expected_slots:
+        _fail("CONTROL_INVENTORY_BINDING_MISMATCH", "slots")
+    for item in authoritative:
+        if set(item) != inventory_keys or item["producer_run_id"] != pending.run_id:
+            _fail("CONTROL_INVENTORY_BINDING_MISMATCH", "schema/producer")
+        for name in inventory_keys - {"role", "fold_id", "producer_run_id"}:
+            _sha(item[name], f"control.inventory.{name}")
+    for fold in manifest.folds:
+        baseline = by_slot[("baseline", fold.fold_id)]
+        candidate = by_slot[("candidate", fold.fold_id)]
+        for name in inventory_keys - {"role"}:
+            if baseline[name] != candidate[name]:
+                _fail("CONTROL_INVENTORY_BINDING_MISMATCH", f"{fold.fold_id}:{name}")
+        evidence_sha = baseline["roundtrip_evidence_sha256"]
+        if any(
+            row["roundtrip_evidence_sha256"] != evidence_sha
+            for row in rows
+            if row["fold_id"] == fold.fold_id
+        ):
+            _fail("CONTROL_INVENTORY_BINDING_MISMATCH", f"{fold.fold_id}:movies")
+
+    def projections(bound_members: list[dict[str, Any]]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+        member_by_slot = {
+            (item["role"], item["fold_id"]): item for item in bound_members
+        }
+        movies = {
+            role: [
+                {**row, "producer": member_by_slot[(role, row["fold_id"])]}
+                for row in rows
+            ]
+            for role in ("baseline", "candidate")
+        }
+        official = {
+            role: _official_projection(None, movies[role])
+            for role in ("baseline", "candidate")
+        }
+        diagnostics = {
+            "authority": "non_authoritative_diagnostic",
+            "organizer_input_eligible": False,
+            **{
+                role: _diagnostic_projection(movies[role])
+                for role in ("baseline", "candidate")
+            },
+        }
+        registration = {
+            "evaluation_run_id": pending.evaluation_run_id,
+            "scorer_lock_sha256": identities["scorer_lock_sha256"],
+            "environment_lock_sha256": identities["environment_lock_sha256"],
+            "manifest_sha256": manifest.manifest_sha256,
+            "evaluation_policy_sha256": local_policy_sha,
+            "evidence_kind": "official_data_control",
+            "members": bound_members,
+        }
+        comparison = build_paired_comparison(
+            registration=registration,
+            aggregate_status="running",
+            members=bound_members,
+            authoritative_inventories=authoritative,
+            baseline_movies=movies["baseline"],
+            candidate_movies=movies["candidate"],
+            expected_sample_ids=expected_sample_ids,
+            policy=policy,
+            policy_sha256=local_policy_sha,
+            aggregate=lambda selected: aggregate_official_rows(None, selected),
+        )
+        return official, diagnostics, comparison
+
+    provisional = projections(provisional_members)
+    _assert_control_projection_matches(
+        control,
+        official=provisional[0],
+        diagnostics=provisional[1],
+        comparison=provisional[2],
+    )
+    return authoritative, *projections(members)
+
+
 def _gpu_quota_state(path: str | Path) -> dict[str, str]:
     try:
         value = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -1061,6 +1420,14 @@ def reconcile_pending_control(
         for fold in manifest.folds
     ]
     members.sort(key=lambda item: (item["role"], item["fold_id"]))
+    authoritative, official, diagnostics, comparison = _locally_revalidate_control(
+        control=control,
+        manifest=manifest,
+        pending=pending,
+        identities=identities,
+        members=members,
+        workspace_root=root,
+    )
     evaluation_policy_sha = _sha(
         control["evaluation_policy_sha256"], "control.evaluation_policy_sha256"
     )
@@ -1086,20 +1453,13 @@ def reconcile_pending_control(
         created_at=start_event.created_at,
     )
     aggregate_start, _ = _reuse_saga_event(events, expected_aggregate_start)
-    authoritative = list(control["authoritative_inventories"])
-    comparison = json.loads(json.dumps(control["comparison"]))
-    comparison["member_binding_sha256"] = sha256_bytes(canonical_json_bytes(members))
-    comparison["authoritative_inventory_binding_sha256"] = sha256_bytes(
-        canonical_json_bytes(authoritative)
-    )
-    official = _rebind_official_producers(control["official"], members)
     registration = dict(aggregate_registration.payload)
     core = canonical_report_core(
         registration=registration,
         authoritative_inventories=authoritative,
         official=official,
         expected_samples=control["expected_sample_ids"],
-        diagnostics=control["diagnostics"],
+        diagnostics=diagnostics,
         comparison=comparison,
     )
     core_sha = sha256_bytes(canonical_json_bytes(core))

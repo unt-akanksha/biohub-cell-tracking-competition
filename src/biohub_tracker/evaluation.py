@@ -462,11 +462,67 @@ def _score_movie(
     }
 
 
-def aggregate_official_rows(verified: Any, rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+def _summarise_official_sufficient_rows(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Reproduce the pinned organizer ``summarise`` from retained row statistics."""
+
+    organizer_rows = [dict(item["organizer_row"]) for item in rows]
+    count_names = (
+        "edge_tp",
+        "edge_fp",
+        "edge_fn",
+        "division_tp",
+        "division_fp",
+        "division_fn",
+    )
+    totals = {name: sum(int(row[name]) for row in organizer_rows) for name in count_names}
+    weights = [int(row["edge_tp"] + row["edge_fp"] + row["edge_fn"]) for row in organizer_rows]
+    total_weight = sum(weights)
+    if not organizer_rows or total_weight <= 0:
+        _fail("OFFICIAL_SUFFICIENT_STATISTICS_INVALID", "empty/zero adjusted-edge weight")
+    adjusted = sum(
+        weight * float(row["adj_edge_jaccard"])
+        for weight, row in zip(weights, organizer_rows, strict=True)
+    ) / total_weight
+    edge_denominator = totals["edge_tp"] + totals["edge_fp"] + totals["edge_fn"]
+    division_denominator = (
+        totals["division_tp"] + totals["division_fp"] + totals["division_fn"]
+    )
+    edge = totals["edge_tp"] / edge_denominator
+    division = (
+        totals["division_tp"] / division_denominator if division_denominator else None
+    )
+    score = adjusted if division is None else adjusted + 0.1 * division
+    return {
+        "n": len(organizer_rows),
+        "edge_jaccard": decimal_string(edge, "edge_jaccard"),
+        "division_jaccard": decimal_string(
+            division, "division_jaccard", allow_none=True
+        ),
+        "division_tp": totals["division_tp"],
+        "division_fp": totals["division_fp"],
+        "division_fn": totals["division_fn"],
+        "node_recall": decimal_string(
+            sum(float(row["node_recall"]) for row in organizer_rows)
+            / len(organizer_rows),
+            "node_recall",
+        ),
+        "adj_edge_jaccard": decimal_string(adjusted, "adj_edge_jaccard"),
+        "n_adj": len(organizer_rows),
+        "score": decimal_string(score, "score"),
+    }
+
+
+def aggregate_official_rows(
+    verified: Any | None, rows: Sequence[Mapping[str, Any]]
+) -> dict[str, Any]:
     if not rows:
         _fail("EMPTY_OFFICIAL_GROUP", "official aggregation requires complete movies")
     organizer_rows = [dict(item["organizer_row"]) for item in rows]
-    summary = _canonical_summary(verified.summarise(organizer_rows))
+    summary = (
+        _canonical_summary(verified.summarise(organizer_rows))
+        if verified is not None
+        else _summarise_official_sufficient_rows(rows)
+    )
     counts = {
         name: sum(int(item["official_counts"][name]) for item in rows)
         for name in (
@@ -1222,6 +1278,7 @@ def evaluate_pending_control(
                 "manifest_document": manifest.to_dict(),
             },
             "control": {
+                "control_schema_version": "biohub.pending-control-sufficient-statistics.v2",
                 "graph_inventory_sha256": truth_inventory_sha,
                 "artifact_hashes": {"truth_graphs": truth_inventory_sha},
                 "authoritative_inventories": authoritative,
@@ -1231,6 +1288,9 @@ def evaluate_pending_control(
                 "comparison": comparison,
                 "evaluation_policy_sha256": policy_sha,
                 "provisional_members": provisional_members,
+                "movie_sufficient_statistics": sorted(
+                    movie_rows, key=lambda item: item["sample_id"]
+                ),
             },
         }
         pending_payload_sha = sha256_bytes(canonical_json_bytes(semantic))

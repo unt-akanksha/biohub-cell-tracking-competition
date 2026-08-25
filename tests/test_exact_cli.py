@@ -13,9 +13,11 @@ from biohub_tracker.acceptance import (
     AcceptanceError,
     BUNDLE_NAME,
     PendingControlReport,
+    _assert_control_projection_matches,
     _preflight_immutable_json,
     _reuse_saga_event,
     _saga_event,
+    _validate_truth_self_sufficient_row,
     _bundle_member_path,
     assert_cpu_kernel_metadata,
     assert_no_submission_source,
@@ -92,6 +94,8 @@ def _pending() -> dict:
             "official": {},
             "diagnostics": {},
             "comparison": {},
+            "evaluation_policy_sha256": "4" * 64,
+            "provisional_members": [],
         },
     }
     payload["pending_payload_sha256"] = sha256_bytes(canonical_json_bytes(payload))
@@ -153,6 +157,62 @@ def test_reconciliation_saga_events_and_artifacts_are_retry_stable(tmp_path: Pat
     )
     with pytest.raises(AcceptanceError, match="RECONCILIATION_EVENT_CONFLICT"):
         _reuse_saga_event([first], conflicting)
+
+
+@pytest.mark.parametrize("section", ["official", "diagnostics", "comparison"])
+def test_remote_self_hashes_do_not_authorize_tampered_control_projection(section: str):
+    control = {
+        "official": {"pooled": {"edge_tp": 10}},
+        "diagnostics": {"pooled": {"endpoint_available": 10}},
+        "comparison": {"pooled": {"score_delta": "0"}},
+    }
+    trusted = json.loads(json.dumps(control))
+    control[section]["tampered"] = True
+
+    # A remote producer can recompute its own payload/envelope hashes. The local
+    # semantic recomputation is an independent equality boundary and still fails.
+    with pytest.raises(AcceptanceError, match=f"CONTROL_REVALIDATION_MISMATCH: {section}"):
+        _assert_control_projection_matches(
+            control,
+            official=trusted["official"],
+            diagnostics=trusted["diagnostics"],
+            comparison=trusted["comparison"],
+        )
+
+
+def test_truth_self_count_tamper_is_rejected_even_when_redundant_fields_match():
+    counts = {
+        "edge_tp": 4,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 1,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 5,
+    }
+    row = {
+        "sample_id": "embryo_movie",
+        "official_counts": dict(counts),
+        "organizer_row": dict(counts),
+        "matched_gt_node_count": 5,
+        "node_recall": "1",
+        "diagnostic_state": {
+            "reconciliation": {
+                "status": "passed",
+                **{name: value for name, value in counts.items() if name != "num_pred_nodes"},
+            }
+        },
+    }
+    sample = SimpleNamespace(gt_edge_count=4, gt_node_count=5)
+    _validate_truth_self_sufficient_row(row, sample)
+
+    # A producer can change every redundant remote count and all self-hashes,
+    # but it cannot change the locally reconstructed manifest edge total.
+    row["official_counts"]["edge_tp"] = 3
+    row["organizer_row"]["edge_tp"] = 3
+    row["diagnostic_state"]["reconciliation"]["edge_tp"] = 3
+    with pytest.raises(AcceptanceError, match="CONTROL_TRUTH_SELF_INVARIANT_FAILED"):
+        _validate_truth_self_sufficient_row(row, sample)
 
 
 @pytest.mark.parametrize(
