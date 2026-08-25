@@ -828,8 +828,16 @@ class Ledger:
         with _ExclusiveLock(self.lock_path, self.lock_timeout_seconds):
             existing_bytes = self.path.read_bytes() if self.path.exists() else b""
             events = self._decode(existing_bytes)
+            if events and _parse_time(event.created_at) < max(
+                _parse_time(existing.created_at) for existing in events
+            ):
+                raise TransitionError("event created_at precedes durable ledger history")
             validate_transition(events, event)
             payload = canonical_json_bytes(event.to_dict()) + b"\n"
+            # Validate the exact durable candidate, including reconstruction order,
+            # before writing a single byte. Caller-controlled timestamps must never
+            # be able to append an event that makes the ledger unreadable.
+            self._decode(existing_bytes + payload, quarantine=False)
             with self.path.open("ab") as handle:
                 handle.write(payload)
                 handle.flush()

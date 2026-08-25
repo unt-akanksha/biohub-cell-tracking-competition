@@ -108,6 +108,147 @@ def test_duplicate_nonpositive_unknown_parent_do_not_change_bytes(tmp_path):
     assert ledger.path.read_bytes() == original
 
 
+def test_backdated_lifecycle_events_are_rejected_without_changing_bytes(tmp_path):
+    def rejected(ledger, event):
+        before = ledger.path.read_bytes()
+        with pytest.raises(TransitionError, match="precedes durable ledger history"):
+            ledger.append(event)
+        assert ledger.path.read_bytes() == before
+
+    start_ledger = make_ledger(tmp_path / "start")
+    start_ledger.append(
+        ExperimentEvent.create(
+            "run-start", EventType.REGISTERED, payload(), created_at="2099-01-01T00:00:01Z"
+        )
+    )
+    rejected(
+        start_ledger,
+        ExperimentEvent.create(
+            "run-start",
+            EventType.STARTED,
+            start_payload(
+                kaggle_ref="owner/kernel", authorization_id="auth", quota_before_hours="30"
+            ),
+            created_at="2099-01-01T00:00:00Z",
+        ),
+    )
+
+    terminal_ledger = make_ledger(tmp_path / "terminal")
+    terminal_ledger.append(
+        ExperimentEvent.create(
+            "run-terminal", EventType.REGISTERED, payload(), created_at="2099-01-01T00:00:01Z"
+        )
+    )
+    terminal_ledger.append(
+        ExperimentEvent.create(
+            "run-terminal",
+            EventType.STARTED,
+            start_payload(
+                kaggle_ref="owner/kernel", authorization_id="auth", quota_before_hours="30"
+            ),
+            created_at="2099-01-01T00:00:02Z",
+        )
+    )
+    rejected(
+        terminal_ledger,
+        ExperimentEvent.create(
+            "run-terminal",
+            EventType.COMPLETED,
+            completed_payload(
+                actual_runtime_hours="1", quota_after_hours="29", metrics=complete_metrics()
+            ),
+            created_at="2099-01-01T00:00:01.500000Z",
+        ),
+    )
+
+    decision_ledger = make_ledger(tmp_path / "decision")
+    decision_ledger.append(
+        ExperimentEvent.create(
+            "run-decision", EventType.REGISTERED, payload(), created_at="2099-01-01T00:00:01Z"
+        )
+    )
+    decision_ledger.append(
+        ExperimentEvent.create(
+            "run-decision",
+            EventType.STARTED,
+            start_payload(
+                kaggle_ref="owner/kernel", authorization_id="auth", quota_before_hours="30"
+            ),
+            created_at="2099-01-01T00:00:02Z",
+        )
+    )
+    decision_ledger.append(
+        ExperimentEvent.create(
+            "run-decision",
+            EventType.COMPLETED,
+            completed_payload(
+                actual_runtime_hours="1", quota_after_hours="29", metrics=complete_metrics()
+            ),
+            created_at="2099-01-01T00:00:03Z",
+        )
+    )
+    rejected(
+        decision_ledger,
+        ExperimentEvent.create(
+            "run-decision",
+            EventType.DECISION,
+            decision_payload("retain", ["exact_oof:report.json"]),
+            created_at="2099-01-01T00:00:02.500000Z",
+        ),
+    )
+
+    cpu_ledger = make_ledger(tmp_path / "cpu")
+    cpu_registration = ExperimentEvent.create(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_REGISTERED,
+        _cpu_registration(),
+        created_at="2099-01-01T00:00:01Z",
+    )
+    cpu_ledger.append(cpu_registration)
+    rejected(
+        cpu_ledger,
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_STARTED,
+            cpu_acceptance_started_payload(
+                run_id="cpu-control-a",
+                registration_event_sha256=event_sha256(cpu_registration),
+                kernel_ref="owner/biohub-phase2-cpu-acceptance/1",
+                runtime_dataset_ref="owner/biohub-phase2-runtime/1",
+            ),
+            created_at="2099-01-01T00:00:00Z",
+        ),
+    )
+
+    exact_ledger = make_ledger(tmp_path / "exact")
+    folds = ("fold-44b6-to-6bba", "fold-6bba-to-44b6")
+    members = []
+    for index, (role, fold) in enumerate(
+        (role, fold) for role in ("baseline", "candidate") for fold in folds
+    ):
+        member = _evidence_producer(exact_ledger, f"producer-{index}", fold, str(index + 2))
+        member["role"] = role
+        members.append(member)
+    exact_registration = exact_evaluation_registration_payload(
+        evaluation_run_id="eval-backdated",
+        scorer_lock_sha256="a" * 64,
+        environment_lock_sha256="b" * 64,
+        manifest_sha256="c" * 64,
+        evaluation_policy_sha256="d" * 64,
+        evidence_kind="synthetic_fixture",
+        members=members,
+    )
+    rejected(
+        exact_ledger,
+        ExperimentEvent.create(
+            "eval-backdated",
+            EventType.EXACT_EVALUATION_REGISTERED,
+            exact_registration,
+            created_at="2000-01-01T00:00:00Z",
+        ),
+    )
+
+
 def test_artifact_path_outside_workspace_and_hash_mismatch_fail(tmp_path):
     inside = tmp_path / "artifact.bin"
     inside.write_bytes(b"model")
