@@ -179,6 +179,8 @@ def test_calibration_on_evaluation_side_and_overlap_tamper_are_rejected(tmp_path
 
 
 def test_manifest_cli_build_verify_is_immutable_and_no_real_fixture_claim(tmp_path, capsys):
+    accepted_path = Path("manifests/reciprocal-embryo-v1.json")
+    accepted_before = accepted_path.read_bytes()
     data = materialize(tmp_path / "train")
     output = tmp_path / "fixture-manifest.json"
     assert main(["manifest", "build", "--data-root", str(data), "--output", str(output), "--scorer-lock", str(LOCK)]) == 0
@@ -186,5 +188,5 @@ def test_manifest_cli_build_verify_is_immutable_and_no_real_fixture_claim(tmp_pa
     assert main(["manifest", "verify", "--manifest", str(output), "--data-root", str(data), "--scorer-lock", str(LOCK)]) == 0
     assert verify_manifest(output, data_root=data, scorer_lock_path=LOCK).manifest_sha256
     assert output.read_bytes() == first
-    assert not Path("manifests/reciprocal-embryo-v1.json").exists()
+    assert accepted_path.read_bytes() == accepted_before
     assert "manifest_sha256" in capsys.readouterr().out
