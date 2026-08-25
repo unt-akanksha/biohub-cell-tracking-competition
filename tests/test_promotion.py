@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from biohub_tracker.evaluation import ExactReport
+from biohub_tracker.evaluation import ExactReport, validate_exact_core
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
 from biohub_tracker.ledger import (
     EventType,
@@ -206,7 +206,7 @@ def _completed_report(
     }
     integrity.update(integrity_override or {})
     core = {
-        "schema_version": "biohub.exact-report.v1",
+        "schema_version": "biohub.exact-report.v2",
         "evaluation_run_id": "evaluation-candidate-v1",
         "evidence_kind": evidence_kind,
         "scorer_lock_sha256": "a" * 64,
@@ -337,6 +337,20 @@ def test_reject_integrity_gates_are_hard_and_deterministically_ordered(tmp_path)
         "INCOMPLETE_MOVIE_COVERAGE",
     )
     assert decision.soft_gates_evaluated is False
+
+
+def test_missing_metric_exploit_audit_is_rejected_but_legacy_v1_remains_readable(tmp_path):
+    ledger, report = _completed_report(tmp_path)
+    missing = dict(report.core)
+    missing["integrity_checks"] = dict(missing["integrity_checks"])
+    missing["integrity_checks"].pop("metric_exploit_audit")
+    rewritten = _replace_core_and_attachment(ledger, report, missing)
+    with pytest.raises(PromotionError, match="metric exploit audit is required"):
+        _evaluate(ledger, rewritten)
+
+    legacy = dict(missing)
+    legacy["schema_version"] = "biohub.exact-report.v1"
+    assert validate_exact_core(legacy)["schema_version"] == "biohub.exact-report.v1"
 
 
 @pytest.mark.parametrize("kind", ["synthetic_fixture", "official_data_control"])

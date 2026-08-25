@@ -54,6 +54,7 @@ _EXPECTED_INTEGRITY = {
     "native_graph_integrity": "passed",
     "submission_roundtrip": "passed",
     "official_count_parity": "passed",
+    "metric_exploit_audit": "passed",
     "authoritative_prediction_space": "integer-csv-rebuilt-geff",
     "native_prediction_space": "diagnostic_only",
 }
@@ -185,7 +186,7 @@ def load_promotion_policy(path: str | Path) -> PromotionPolicy:
     if (
         value["schema_version"] != POLICY_SCHEMA
         or value["decision_input_schema"] != INPUT_SCHEMA
-        or value["report_schema"] != "biohub.exact-report.v1"
+        or value["report_schema"] != "biohub.exact-report.v2"
         or value["required_evidence_kind"] != "model_candidate"
     ):
         _fail("PROMOTION_POLICY_SCHEMA_INVALID", "schema or evidence kind")
@@ -303,7 +304,7 @@ def _hard_failures(
             reasons.append("TERMINAL_ARTIFACT_MISMATCH")
 
     integrity = core["integrity_checks"]
-    if integrity.get("metric_exploit_audit") not in {None, "passed"}:
+    if integrity.get("metric_exploit_audit") != "passed":
         reasons.append("METRIC_EXPLOIT_SIGNATURE")
     if integrity.get("complete_coverage") != "passed" or core["coverage"].get("complete") is not True:
         reasons.append("INCOMPLETE_MOVIE_COVERAGE")
@@ -469,6 +470,8 @@ def evaluate_promotion(
         core = validate_exact_core(dict(report.core))
     except ExactEvaluationError as exc:
         raise PromotionError("PROMOTION_REPORT_SCHEMA_INVALID", str(exc)) from exc
+    if core["schema_version"] != policy.raw["report_schema"]:
+        _fail("PROMOTION_REPORT_SCHEMA_INVALID", "legacy report is audit-only")
     computed_core_sha = sha256_bytes(canonical_json_bytes(core))
     if not secrets.compare_digest(computed_core_sha, report.core_sha256):
         _fail("PROMOTION_REPORT_HASH_MISMATCH", "intrinsic exact core hash")

@@ -37,8 +37,8 @@
     "ROUNDTRIP_INVALID",
     "OFFICIAL_COUNT_PARITY_FAILURE"
   ],
-  "policy_sha256": "911f8e8c12070e29fc9a26119a184347db3f7fcc316093068f5c93adaa8f6d28",
-  "report_schema": "biohub.exact-report.v1",
+  "policy_sha256": "c532325774cb9d9294e30a3941c7d407e289ede2ba4c98ad65b6a31dba9d0960",
+  "report_schema": "biohub.exact-report.v2",
   "required_evidence_kind": "model_candidate",
   "required_integrity": {
     "aggregate_member_match": "passed",
@@ -46,6 +46,7 @@
     "complete_coverage": "passed",
     "native_graph_integrity": "passed",
     "native_prediction_space": "diagnostic_only",
+    "metric_exploit_audit": "passed",
     "official_count_parity": "passed",
     "producer_ledger_resolution": "passed",
     "submission_roundtrip": "passed"

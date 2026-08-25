@@ -41,7 +41,8 @@ from .scorer_lock import ScorerLock, verify_scorer_lock
 from .submission_io import RoundTripEvidence, roundtrip_prediction_inventory
 
 
-REPORT_SCHEMA = "biohub.exact-report.v1"
+LEGACY_REPORT_SCHEMA = "biohub.exact-report.v1"
+REPORT_SCHEMA = "biohub.exact-report.v2"
 _SHA256 = frozenset("0123456789abcdef")
 _POLICY_KEYS = {
     "schema_version",
@@ -657,6 +658,7 @@ def canonical_report_core(
             "native_graph_integrity": "passed",
             "submission_roundtrip": "passed",
             "official_count_parity": "passed",
+            "metric_exploit_audit": "passed",
             "authoritative_prediction_space": "integer-csv-rebuilt-geff",
             "native_prediction_space": "diagnostic_only",
         },
@@ -669,7 +671,7 @@ def canonical_report_core(
 def validate_exact_core(core: Any) -> dict[str, Any]:
     if not isinstance(core, dict) or set(core) != _CORE_KEYS:
         _fail("EXACT_REPORT_SCHEMA_INVALID", "unknown or missing core field")
-    if core["schema_version"] != REPORT_SCHEMA:
+    if core["schema_version"] not in {LEGACY_REPORT_SCHEMA, REPORT_SCHEMA}:
         _fail("EXACT_REPORT_SCHEMA_INVALID", "report schema changed")
     for name in (
         "scorer_lock_sha256",
@@ -722,6 +724,17 @@ def validate_exact_core(core: Any) -> dict[str, Any]:
         or _forbidden_presentation_key(comparison)
     ):
         _fail("EXACT_REPORT_SCHEMA_INVALID", "comparison boundary")
+    integrity = core["integrity_checks"]
+    if not isinstance(integrity, dict):
+        _fail("EXACT_REPORT_SCHEMA_INVALID", "integrity checks")
+    if (
+        core["schema_version"] == REPORT_SCHEMA
+        and integrity.get("metric_exploit_audit") not in {"passed", "failed"}
+    ):
+        _fail(
+            "EXACT_REPORT_SCHEMA_INVALID",
+            "metric exploit audit is required and must be an explicit passed/failed result",
+        )
     _finite_tree(core)
     canonical_json_bytes(core)
     return core

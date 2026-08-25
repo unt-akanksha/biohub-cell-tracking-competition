@@ -33,6 +33,6 @@
     "no_event_encoding": "not_applicable"
   },
   "native_prediction_space": "diagnostic_only",
-  "report_schema": "biohub.exact-report.v1",
+  "report_schema": "biohub.exact-report.v2",
   "schema_version": 1
 }
