@@ -13,6 +13,9 @@ from biohub_tracker.acceptance import (
     AcceptanceError,
     BUNDLE_NAME,
     PendingControlReport,
+    _preflight_immutable_json,
+    _reuse_saga_event,
+    _saga_event,
     _bundle_member_path,
     assert_cpu_kernel_metadata,
     assert_no_submission_source,
@@ -27,6 +30,7 @@ from biohub_tracker.evaluation import (
     validate_exact_report,
 )
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
+from biohub_tracker.ledger import EventType
 
 
 def _pending() -> dict:
@@ -115,6 +119,40 @@ def test_pending_control_is_strict_untrusted_and_not_an_exact_report():
     tampered["request_nonce"] = "f" * 64
     with pytest.raises(AcceptanceError, match="PENDING_PAYLOAD_HASH_MISMATCH"):
         validate_pending_control(tampered)
+
+
+def test_reconciliation_saga_events_and_artifacts_are_retry_stable(tmp_path: Path):
+    payload = {"run_id": "cpu-control-a", "manifest_sha256": "a" * 64, "folds": []}
+    first = _saga_event(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+        payload,
+        created_at="2026-08-25T00:00:00Z",
+    )
+    retry = _saga_event(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+        payload,
+        created_at="2026-08-25T00:00:00Z",
+    )
+    assert first == retry
+    assert _reuse_saga_event([first], retry) == (first, False)
+
+    target = tmp_path / "accepted.json"
+    assert _preflight_immutable_json(target, {"accepted": True}) is True
+    target.write_text('{"accepted": true}\n', encoding="utf-8")
+    assert _preflight_immutable_json(target, {"accepted": True}) is False
+    with pytest.raises(AcceptanceError, match="IMMUTABLE_ACCEPTANCE_OUTPUT_CONFLICT"):
+        _preflight_immutable_json(target, {"accepted": False})
+
+    conflicting = _saga_event(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+        {**payload, "manifest_sha256": "b" * 64},
+        created_at="2026-08-25T00:00:00Z",
+    )
+    with pytest.raises(AcceptanceError, match="RECONCILIATION_EVENT_CONFLICT"):
+        _reuse_saga_event([first], conflicting)
 
 
 @pytest.mark.parametrize(

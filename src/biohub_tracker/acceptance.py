@@ -839,6 +839,69 @@ def _gpu_quota_state(path: str | Path) -> dict[str, str]:
     return state
 
 
+def _saga_event(
+    run_id: str,
+    event_type: EventType,
+    payload: Mapping[str, Any],
+    *,
+    created_at: str,
+) -> ExperimentEvent:
+    """Create a retry-stable reconciliation event from immutable inputs."""
+
+    identity = sha256_bytes(
+        canonical_json_bytes(
+            {"run_id": run_id, "event_type": event_type.value, "payload": payload}
+        )
+    )
+    return ExperimentEvent.create(
+        run_id,
+        event_type,
+        payload,
+        created_at=created_at,
+        event_id=f"evt-reconcile-{identity[:32]}",
+    )
+
+
+def _reuse_saga_event(
+    events: list[ExperimentEvent], expected: ExperimentEvent
+) -> tuple[ExperimentEvent, bool]:
+    matches = [
+        event
+        for event in events
+        if event.run_id == expected.run_id and event.event_type is expected.event_type
+    ]
+    if len(matches) > 1:
+        _fail("RECONCILIATION_EVENT_CONFLICT", expected.event_type.value)
+    if matches:
+        existing = matches[0]
+        if canonical_json_bytes(existing.payload) != canonical_json_bytes(expected.payload):
+            _fail("RECONCILIATION_EVENT_CONFLICT", expected.event_type.value)
+        return existing, False
+    return expected, True
+
+
+def _preflight_immutable_json(path: Path, value: Mapping[str, Any]) -> bool:
+    """Return whether a canonical artifact must be written; reject drift up front."""
+
+    if not path.exists():
+        return True
+    try:
+        existing = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AcceptanceError("IMMUTABLE_ACCEPTANCE_OUTPUT_INVALID", str(path)) from exc
+    if canonical_json_bytes(existing) != canonical_json_bytes(value):
+        _fail("IMMUTABLE_ACCEPTANCE_OUTPUT_CONFLICT", str(path))
+    return False
+
+
+def _append_saga_event(ledger: Ledger, event: ExperimentEvent) -> ExperimentEvent:
+    current, missing = _reuse_saga_event(ledger.read_events(), event)
+    if missing:
+        ledger.append(event)
+        return event
+    return current
+
+
 def reconcile_pending_control(
     *,
     pending_path: str | Path,
@@ -871,14 +934,23 @@ def reconcile_pending_control(
     state = controls.get(pending.run_id)
     if state is None:
         _fail("UNKNOWN_ACCEPTANCE_REQUEST", pending.run_id)
-    if state.status in {CpuAcceptanceStatus.COMPLETED, CpuAcceptanceStatus.FAILED}:
+    if state.status is CpuAcceptanceStatus.FAILED:
         _fail("REQUEST_ALREADY_CONSUMED", pending.run_id)
-    if state.status is not CpuAcceptanceStatus.RUNNING or state.started is None:
+    if state.status not in {
+        CpuAcceptanceStatus.RUNNING,
+        CpuAcceptanceStatus.INPUTS_BOUND,
+        CpuAcceptanceStatus.COMPLETED,
+    } or state.started is None:
         _fail("ACCEPTANCE_REQUEST_NOT_STARTED", pending.run_id)
     registration_event = next(
         item
         for item in state.events
         if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+    )
+    start_event = next(
+        item
+        for item in state.events
+        if item.event_type is EventType.CPU_ACCEPTANCE_STARTED
     )
     if pending.registration_event_sha256 != event_sha256(registration_event):
         _fail("REQUEST_REGISTRATION_HASH_MISMATCH", pending.run_id)
@@ -930,7 +1002,7 @@ def reconcile_pending_control(
     ]
     if canonical_json_bytes(fold_binding) != canonical_json_bytes(manifest_value["folds"]):
         _fail("MANIFEST_RECONCILIATION_MISMATCH", "fold memberships")
-    binding_event = ExperimentEvent.create(
+    expected_binding = _saga_event(
         pending.run_id,
         EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
         cpu_acceptance_inputs_bound_payload(
@@ -938,8 +1010,9 @@ def reconcile_pending_control(
             manifest_sha256=manifest.manifest_sha256,
             folds=fold_binding,
         ),
+        created_at=start_event.created_at,
     )
-    ledger.append(binding_event)
+    binding_event, _ = _reuse_saga_event(events, expected_binding)
     control = pending.value["control"]
     reconciliation_sha = sha256_bytes(
         canonical_json_bytes(
@@ -948,19 +1021,13 @@ def reconcile_pending_control(
                 "pending_envelope_sha256": pending.pending_envelope_sha256,
                 "output_inventory_sha256": pending.output_inventory_sha256,
                 "registration_event_sha256": event_sha256(registration_event),
-                "start_event_sha256": event_sha256(
-                    next(
-                        item
-                        for item in state.events
-                        if item.event_type is EventType.CPU_ACCEPTANCE_STARTED
-                    )
-                ),
+                "start_event_sha256": event_sha256(start_event),
                 "input_binding_event_sha256": event_sha256(binding_event),
                 "gpu_quota_evidence_sha256": quota_evidence_sha,
             }
         )
     )
-    completion_event = ExperimentEvent.create(
+    expected_completion = _saga_event(
         pending.run_id,
         EventType.CPU_ACCEPTANCE_COMPLETED,
         cpu_acceptance_completed_payload(
@@ -975,12 +1042,17 @@ def reconcile_pending_control(
             pending_envelope_sha256=pending.pending_envelope_sha256,
             reconciliation_sha256=reconciliation_sha,
         ),
+        created_at=start_event.created_at,
     )
-    ledger.append(completion_event)
-    events = ledger.read_events()
+    completion_event, _ = _reuse_saga_event(events, expected_completion)
+    projected_events = [*events]
+    if binding_event not in projected_events:
+        projected_events.append(binding_event)
+    if completion_event not in projected_events:
+        projected_events.append(completion_event)
     members = [
         resolved_exact_member(
-            events,
+            projected_events,
             role=role,
             fold_id=fold.fold_id,
             producer_run_id=pending.run_id,
@@ -992,7 +1064,7 @@ def reconcile_pending_control(
     evaluation_policy_sha = _sha(
         control["evaluation_policy_sha256"], "control.evaluation_policy_sha256"
     )
-    aggregate_registration = ExperimentEvent.create(
+    expected_registration = _saga_event(
         pending.evaluation_run_id,
         EventType.EXACT_EVALUATION_REGISTERED,
         exact_evaluation_registration_payload(
@@ -1004,14 +1076,16 @@ def reconcile_pending_control(
             evidence_kind="official_data_control",
             members=members,
         ),
+        created_at=start_event.created_at,
     )
-    ledger.append(aggregate_registration)
-    aggregate_start = ExperimentEvent.create(
+    aggregate_registration, _ = _reuse_saga_event(events, expected_registration)
+    expected_aggregate_start = _saga_event(
         pending.evaluation_run_id,
         EventType.EXACT_EVALUATION_STARTED,
         exact_evaluation_started_payload(evaluation_run_id=pending.evaluation_run_id),
+        created_at=start_event.created_at,
     )
-    ledger.append(aggregate_start)
+    aggregate_start, _ = _reuse_saga_event(events, expected_aggregate_start)
     authoritative = list(control["authoritative_inventories"])
     comparison = json.loads(json.dumps(control["comparison"]))
     comparison["member_binding_sha256"] = sha256_bytes(canonical_json_bytes(members))
@@ -1019,9 +1093,7 @@ def reconcile_pending_control(
         canonical_json_bytes(authoritative)
     )
     official = _rebind_official_producers(control["official"], members)
-    registration = reconstruct_exact_evaluations(ledger.read_events())[
-        pending.evaluation_run_id
-    ].registered
+    registration = dict(aggregate_registration.payload)
     core = canonical_report_core(
         registration=registration,
         authoritative_inventories=authoritative,
@@ -1034,7 +1106,7 @@ def reconcile_pending_control(
     envelope = {
         "schema_version": "biohub.exact-report-envelope.v1",
         "report_core_sha256": core_sha,
-        "created_at": utc_now().isoformat().replace("+00:00", "Z"),
+        "created_at": aggregate_start.created_at,
         "runtime_seconds": pending.value["actual_cpu_runtime_seconds"],
         "peak_memory_bytes": int(Decimal(pending.value["peak_memory_mb"]) * 1024 * 1024),
         "presentation_metadata": {
@@ -1053,7 +1125,7 @@ def reconcile_pending_control(
         },
     }
     envelope_sha = sha256_bytes(canonical_json_bytes(envelope))
-    aggregate_completion = ExperimentEvent.create(
+    expected_aggregate_completion = _saga_event(
         pending.evaluation_run_id,
         EventType.EXACT_EVALUATION_COMPLETED,
         exact_evaluation_completed_payload(
@@ -1069,14 +1141,13 @@ def reconcile_pending_control(
             authoritative_inventories=authoritative,
             promotion_eligible=False,
         ),
+        created_at=start_event.created_at,
     )
-    ledger.append(aggregate_completion)
+    aggregate_completion, _ = _reuse_saga_event(events, expected_aggregate_completion)
     report = ExactReport(core, envelope, core_sha, envelope_sha)
     validate_exact_report(
         report,
-        ledger_path=ledger.path,
-        workspace_root=root,
-        require_completed=True,
+        require_completed=False,
     )
     accepted = {
         "schema_version": "biohub.phase2-control-acceptance.v1",
@@ -1120,8 +1191,24 @@ def reconcile_pending_control(
     }
     manifest_target = Path(manifest_output_path)
     report_target = Path(report_output_path)
-    if manifest_target.exists() or report_target.exists():
-        _fail("IMMUTABLE_ACCEPTANCE_OUTPUT_EXISTS", "manifest or report")
-    atomic_write_json(manifest_target, manifest.to_dict())
-    atomic_write_json(report_target, accepted)
+    write_manifest = _preflight_immutable_json(manifest_target, manifest.to_dict())
+    write_report = _preflight_immutable_json(report_target, accepted)
+    if write_manifest:
+        atomic_write_json(manifest_target, manifest.to_dict())
+    if write_report:
+        atomic_write_json(report_target, accepted)
+    for event in (
+        binding_event,
+        completion_event,
+        aggregate_registration,
+        aggregate_start,
+        aggregate_completion,
+    ):
+        _append_saga_event(ledger, event)
+    validate_exact_report(
+        report,
+        ledger_path=ledger.path,
+        workspace_root=root,
+        require_completed=True,
+    )
     return accepted
