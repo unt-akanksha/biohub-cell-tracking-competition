@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-finetuned-acceptance-v1",
+  "parent": "spotiflow-synthetic-finetune-v1",
+  "kernel_ref": "indarkarhana/biohub-spotiflow-finetuned-acceptance-v1",
+  "notebook_sha256": "16fd84be8e729acfab0177094f4d0fb4826bc800c89f251a97160267ba550ff9",
+  "kernel_metadata_sha256": "edea18d3538ef4369e0fd1273c887257ae524c4dbe87ef19a9405f6f80fde8cf",
+  "evaluator_sha256": "1c6d0d50ac3222446510c6f78730eff6af3680a31399c2c061b33841fd79541a",
+  "runtime_manifest_sha256": "7c7cccdc811503ee6b3869f486384e56d65963c2278ff9d1867b57cc60962f2a",
+  "learned_checkpoint_sha256": "8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac",
+  "training_result_sha256": "c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "evaluator_max_wall_seconds": 6300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spotiflow-detector-runtime-v1@version5",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version4",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-spotiflow-synthetic-finetune-v1@version1"
+  ],
+  "acceptance": {
+    "stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "complete_movies": true,
+    "normalization": "spotiflow_auto fixed before labels",
+    "threshold_calibration": "12 uniform frames using image predictions plus estimated_number_of_nodes only",
+    "ground_truth_read_after_threshold_freeze": true,
+    "match_radius_um": 7.0,
+    "pretrained_acceptance_recall": 0.7776834959694527,
+    "baseline_raw_graph_recall": 0.96902842596521,
+    "public_leaderboard_used": false
+  },
+  "promotion_rule": "retain learned detector only if it improves the frozen pretrained Spotiflow acceptance recall; replace public detections only if it also beats the same-movie raw public graph without material per-movie regression",
+  "submission_policy": "acceptance only; no submission is created"
+}

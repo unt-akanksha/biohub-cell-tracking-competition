@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-synthetic-finetune-v1",
+  "status": "completed",
+  "pooled": {
+    "adjusted_edge_jaccard": null,
+    "edge_jaccard": null,
+    "division_jaccard": null,
+    "node_recall": null
+  },
+  "division_counts": {"tp": null, "fp": null, "fn": null},
+  "by_embryo": {},
+  "by_fold": {},
+  "worst_movie_delta": null,
+  "parameter_count": 35489892,
+  "epochs": 4,
+  "global_steps": 3072,
+  "weights_changed": true,
+  "budget_stop_requested": false,
+  "launcher_elapsed_seconds": 384.078,
+  "trainer_elapsed_seconds": 300.888,
+  "base_weight_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+  "best_weight_sha256": "8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac",
+  "result_sha256": "c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919",
+  "terminal_sha256": "fe5b1779573fc9361ed4dee9a7ca7d51627cf2898aac051cf68629c38b27ff17",
+  "final_epoch": {
+    "train_loss": 1.1627275943756104,
+    "flow_loss": 0.18817086517810822,
+    "heatmap_loss": 0.9745568633079529,
+    "val_loss": 2.9409303665161133,
+    "val_acc": 0.8056281805038452,
+    "val_f1": 0.8833800554275513
+  },
+  "best_observed_synthetic_validation": {
+    "epoch": 2,
+    "val_loss": 2.3044614791870117,
+    "val_acc": 0.8202484250068665,
+    "val_f1": 0.892428994178772
+  },
+  "quota_after_hours": 29.21,
+  "promotion_state": "awaiting frozen real-movie detector acceptance"
+}

@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-finetuned-acceptance-v1",
+  "created_at": "2026-08-26T07:49:22Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/spotiflow_biohub/evaluate_finetuned_detector.py", "sha256": "1c6d0d50ac3222446510c6f78730eff6af3680a31399c2c061b33841fd79541a"},
+        {"path": "kaggle/biohub-spotiflow-finetuned-acceptance-v1/biohub-spotiflow-finetuned-acceptance-v1.ipynb", "sha256": "16fd84be8e729acfab0177094f4d0fb4826bc800c89f251a97160267ba550ff9"}
+      ],
+      "detail": "Evaluator and generated notebook code cells compile; focused evaluator imports and tests pass."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-spotiflow-finetuned-acceptance-v1/kernel-metadata.json", "sha256": "edea18d3538ef4369e0fd1273c887257ae524c4dbe87ef19a9405f6f80fde8cf"},
+        {"path": "config/experiments/spotiflow-finetuned-acceptance-v1.json", "sha256": "3263d5a2bb504c107aad155a3dec237d01e04784ec01c195a003662cc23f8de0"},
+        {"path": ".biohub/staging/biohub-spotiflow-detector-runtime-v1/SOURCE_MANIFEST.json", "sha256": "7c7cccdc811503ee6b3869f486384e56d65963c2278ff9d1867b57cc60962f2a"}
+      ],
+      "detail": "Ready runtime v5, complete learned kernel output, complete validator graphs, offline support wheels, and competition input are attached with GPU on and Internet/TPU off."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "tests/test_spotiflow_finetuned_acceptance.py", "sha256": "4f7aa026fa38f8a995acb55d794c02dd627b0438ad40eff5ef242ef9a9dafd9c"},
+        {"path": "reports/experiments/spotiflow-synthetic-finetune-v1-smoke.json", "sha256": "0da97637437158324a772e1f9b185b50d5ed302ef0129a0ef7a04452ab84e95f"}
+      ],
+      "detail": "Threshold calibration and score aggregation are covered; the exact 32x64x64 model path completed forward/backward locally."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/spotiflow-synthetic-finetune-v1-result.json", "sha256": "eb8b8a3877c8ae8e2987c79453b764a6abce8e58a4eaff8e513f1a27dee4e0c1"},
+        {"path": ".biohub/cache/kernel-outputs/spotiflow-synthetic-finetune-v1/spotiflow_synthetic_finetune/synthetic_finetune_result.json", "sha256": "c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919"}
+      ],
+      "detail": "The guarded T4 run completed 3,072 optimizer updates, changed weights, and produced finite train/validation metrics."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": ".biohub/cache/kernel-outputs/spotiflow-synthetic-finetune-v1/spotiflow_synthetic_finetune/best.pt", "sha256": "8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac"},
+        {"path": ".biohub/cache/kernel-outputs/spotiflow-synthetic-finetune-v1/spotiflow_synthetic_finetune/synthetic_finetune_result.json", "sha256": "c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919"}
+      ],
+      "detail": "The learned output checkpoint exists and its SHA-256 reciprocally matches the completed training result consumed by the evaluator."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-spotiflow-finetuned-acceptance-v1/biohub-spotiflow-finetuned-acceptance-v1.ipynb", "sha256": "16fd84be8e729acfab0177094f4d0fb4826bc800c89f251a97160267ba550ff9"},
+        {"path": "research/spotiflow_biohub/evaluate_finetuned_detector.py", "sha256": "1c6d0d50ac3222446510c6f78730eff6af3680a31399c2c061b33841fd79541a"}
+      ],
+      "detail": "Acceptance partials, final JSON, and terminal evidence remain under /kaggle/working; the notebook contains no submission path or API call."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/spotiflow_biohub/evaluate_finetuned_detector.py", "sha256": "1c6d0d50ac3222446510c6f78730eff6af3680a31399c2c061b33841fd79541a"},
+        {"path": "reports/experiments/spotiflow-detector-acceptance-v3-result.json", "sha256": "cee43c3edbd7a5dae65dc1db705229e3de0b44de6153ea971028fad5cfbaba39"}
+      ],
+      "detail": "Movies are processed sequentially, predictions are frame-streamed, and the same complete-movie path finished pretrained acceptance in 220 seconds."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/spotiflow-finetuned-acceptance-v1.json", "sha256": "3263d5a2bb504c107aad155a3dec237d01e04784ec01c195a003662cc23f8de0"},
+        {"path": "tests/test_spotiflow_finetuned_acceptance.py", "sha256": "4f7aa026fa38f8a995acb55d794c02dd627b0438ad40eff5ef242ef9a9dafd9c"}
+      ],
+      "detail": "All four complete acceptance movies across both embryo prefixes are evaluated; normalization and metadata-only thresholds are fixed before ground truth is read."
+    }
+  ],
+  "report_sha256": "f7749d7d5a92c44c967aec7f788a1a6e5da2e24434a1e50d9c8950ecb6fb9f9a"
+}
