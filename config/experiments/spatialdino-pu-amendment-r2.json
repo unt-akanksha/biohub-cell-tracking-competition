@@ -1,0 +1,12 @@
+{
+  "config_path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+  "config_file_sha256": "5e16fed29c821c2f90096a23a550742b08c49a08e83982325e2f4a56b627d4e0",
+  "runtime_manifest_sha256": "8cd76890807198ab9d960f46de9ab876e708b3c86a78c86d02917ee0d5c9f2f6",
+  "model_sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e",
+  "trainer_sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93",
+  "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r2.json",
+  "preflight_report_sha256": "c94c379e7d38b7f2f1dbc03487fbff2c7e362e306e0f18232a364fdb8f478dcd",
+  "runtime_dataset_version": 4,
+  "initial_foreground_logit_bias": -4.0,
+  "ema_warmup": true
+}
