@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-08-23T00:00:00Z",
+  "audited_at": "2026-08-26T02:15:00Z",
   "notebooks": [
     {
       "ref": "xiaoleilian/biohub-ct-mix-divaug",
@@ -14,6 +14,22 @@
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "No known exploit found in manual source audit; displayed score is not reproduced evidence.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "evgendvorkin/biohub-0-927-lb",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Manual source audit found no metric exploit: test submission generation is label-free; held-out training labels are accessed only by a post-submission validator with explicit train/test stem exclusion. Completed output has valid indegree/outdegree topology and no sentinel coordinates. The reported public score is not yet reproduced under our account.",
+      "reviewed_sha256": "b04b9bce7b74566d5d0c99147f5fa480af7f69aef1bace29ded4dd24c6a837af",
+      "score_reproduced": false
+    },
+    {
+      "ref": "indarkarhana/biohub-clean-0927-repro-v1",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Private fork has 33 scientific cells exactly matching the audited public source and adds only a quota watchdog plus terminal evidence. Score reproduction is pending our guarded Kaggle run.",
+      "reviewed_sha256": "be79b44b3424e2fd9d61e8179a83f630026c1676553d5c958fc5c5f4a859e48e",
       "score_reproduced": false
     },
     {
@@ -81,4 +97,3 @@
     }
   ]
 }
-

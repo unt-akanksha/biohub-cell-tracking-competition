@@ -11,7 +11,7 @@
       "status": "ok"
     },
     "notebook_sources": {
-      "reason": "xiaoleilian/biohub-ct-mix-divaug=audited; kaiwalyaatulraut/biohub-cell-tracking-solution=audited; kirneo/metric-hack-last-call-update=audited; amanatar/improved-metric-hack-last-call=audited; kaiwalyaatulraut/biohub-solution=audited; kaiwalyaatulraut/biohub-competition-solution=audited; amanatar/biohub-v6-ultra-best=audited; ravi123a321at/metric-hack-last-call=audited; outwrest/metric-hack-minimal-baseline-tta-2gpu=audited; muhammaddanyalmalik/cell-tracking=audited; ravi123a321at/dark-agi-biohub-cell-tracking-solution=audited; anvithpothula/biohub-metric-hack=audited; rockerritesh/0-926-biohub-divsub=audited; evgendvorkin/biohub-0-923-lb=audited; yunusgmsoy/kimi-notebook-v17=audited; yunusgmsoy/lb-0-920-biohub-cell-tracking-v17=audited; navazshfathi/best-score=audited; mtoshidesu/test-notebook-v17-d17ce0=audited; kunaldesale2408/biohub-cell-tracking=audited; xstargate/biohub-v17-e2-reverse020=audited",
+      "reason": "kirneo/metric-hack-last-call-update=audited; amanatar/improved-metric-hack-last-call=audited; kaiwalyaatulraut/biohub-solution=audited; kaiwalyaatulraut/biohub-competition-solution=audited; amanatar/biohub-v6-ultra-best=audited; ravi123a321at/metric-hack-last-call=audited; outwrest/metric-hack-minimal-baseline-tta-2gpu=audited; muhammaddanyalmalik/cell-tracking=audited; ravi123a321at/dark-agi-biohub-cell-tracking-solution=audited; anvithpothula/biohub-metric-hack=audited; evgendvorkin/biohub-0-927-lb=audited; kunaldesale2408/biohub-cell-tracking=audited; flexonafft/biohub-harmonic-fusion=audited; rockerritesh/0-926-biohub-divsub=audited; andressantossanz/biohub-harness-0926-probe=audited; ahmetyasreminolu/biohub-last-version=audited; arnav170/biohub-923=audited; yunusgmsoy/kimi-notebook-v17=audited; arnav170/biohub-bi40=audited; yunusgmsoy/lb-0-920-biohub-cell-tracking-v17=audited",
       "status": "ok"
     },
     "pages": {
@@ -32,7 +32,7 @@
     "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
     "final_deadline_utc": "2026-09-29T23:59:00Z",
     "leader_score": "0.962",
-    "rank": 751,
+    "rank": 798,
     "rank_unavailable_reason": null,
     "slug": "biohub-cell-tracking-during-development"
   },
@@ -86,7 +86,7 @@
       "rules": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/rules"
     }
   },
-  "generated_from_snapshot_at": "2026-08-24T04:12:19.297839Z",
+  "generated_from_snapshot_at": "2026-08-26T01:55:10.248501Z",
   "gpu": {
     "refresh_at": "2026-08-29T00:00:00",
     "remaining_hours": "30.00",
@@ -97,22 +97,22 @@
   "notebook_provenance": {
     "clean_research_candidates": [
       {
-        "author": "Дворкин Евгений Владимирович",
-        "cli_order": 13,
+        "author": "Kunal Desale",
+        "cli_order": 11,
         "disposition": "research_candidate",
-        "evidence": "No known exploit found in manual source audit; displayed score is not reproduced evidence.",
-        "last_run_at": "2026-08-23T12:48:48.517000",
+        "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+        "last_run_at": "2026-08-24T10:02:37.967000",
         "matched_patterns": [],
         "provenance": "reported_post_patch",
-        "ref": "evgendvorkin/biohub-0-923-lb",
+        "ref": "kunaldesale2408/biohub-cell-tracking",
         "score_reproduced": false,
-        "source_sha256": "9690883652604a2fb4135a17bcb5a1ed04ad0cd52c41b271e2c749f173ba88db",
-        "title": "Biohub  0.923 LB",
-        "votes": 8
+        "source_sha256": "8525bfff6fa43a0b81703d3f954fa7c046edae8f9808db590f1124ce4bdd3176",
+        "title": "Biohub Cell Tracking",
+        "votes": 90
       },
       {
         "author": "Yunus Gümüşsoy",
-        "cli_order": 14,
+        "cli_order": 17,
         "disposition": "research_candidate",
         "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
         "last_run_at": "2026-08-22T13:24:43.877000",
@@ -123,43 +123,12 @@
         "source_sha256": "c730cfa8ca555142fe0ccae15a2e0e4e81729180a9832823a6c66f4d7e45c1d3",
         "title": "Kimi Notebook v17",
         "votes": 111
-      },
-      {
-        "author": "Kunal Desale",
-        "cli_order": 18,
-        "disposition": "research_candidate",
-        "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
-        "last_run_at": "2026-08-22T18:38:26.473000",
-        "matched_patterns": [],
-        "provenance": "reported_post_patch",
-        "ref": "kunaldesale2408/biohub-cell-tracking",
-        "score_reproduced": false,
-        "source_sha256": "cbf20ac96f0d10e597c3b30bb80c2c24620310ffce96549b4b6dbdf9ef123393",
-        "title": "Biohub Cell Tracking",
-        "votes": 74
       }
     ],
     "excluded_metric_hacks": [
       {
-        "author": "Xiaolei Lian",
-        "cli_order": 0,
-        "disposition": "excluded_metric_hack",
-        "evidence": "matched explicit metric-hack policy",
-        "last_run_at": "2026-07-20T07:41:33.157000",
-        "matched_patterns": [
-          "fake-division-language",
-          "out-of-volume-sentinel"
-        ],
-        "provenance": "explicit_metric_hack",
-        "ref": "xiaoleilian/biohub-ct-mix-divaug",
-        "score_reproduced": false,
-        "source_sha256": "82bedef1eb6e94a0f28fd17977cf90659cff2ed15c99fce4cfc86b75ff10333d",
-        "title": "biohub ct mix divaug",
-        "votes": 238
-      },
-      {
         "author": "Кирилл Алешин",
-        "cli_order": 2,
+        "cli_order": 0,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-22T09:50:39.617000",
@@ -176,7 +145,7 @@
       },
       {
         "author": "Aman Atar",
-        "cli_order": 3,
+        "cli_order": 1,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-20T16:25:21.587000",
@@ -189,11 +158,11 @@
         "score_reproduced": false,
         "source_sha256": "bd8ac6deae587b73c906bb5d1a0bf059ddc7388802f037b4a5fbdc3a3430e3ae",
         "title": "improved-metric-hack-last-call",
-        "votes": 74
+        "votes": 75
       },
       {
         "author": "KAIWALYA RAUT",
-        "cli_order": 4,
+        "cli_order": 2,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-22T17:13:56.723000",
@@ -210,7 +179,7 @@
       },
       {
         "author": "Aman Atar",
-        "cli_order": 6,
+        "cli_order": 4,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-20T11:39:21.880000",
@@ -226,7 +195,7 @@
       },
       {
         "author": "Ravindra",
-        "cli_order": 7,
+        "cli_order": 5,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-20T04:20:13.213000",
@@ -243,7 +212,7 @@
       },
       {
         "author": "outwrest",
-        "cli_order": 8,
+        "cli_order": 6,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-17T05:10:13.807000",
@@ -255,11 +224,11 @@
         "score_reproduced": false,
         "source_sha256": "39e913b2201b9b5b2fa344e5e686a52cbda4a519f94c41b88e3470e8ffcdd468",
         "title": "metric hack - minimal baseline-tta-2gpu",
-        "votes": 83
+        "votes": 84
       },
       {
         "author": "Anvith Pothula",
-        "cli_order": 11,
+        "cli_order": 9,
         "disposition": "excluded_metric_hack",
         "evidence": "matched explicit metric-hack policy",
         "last_run_at": "2026-07-21T19:12:54.273000",
@@ -277,21 +246,7 @@
     "needs_source_review": [
       {
         "author": "KAIWALYA RAUT",
-        "cli_order": 1,
-        "disposition": "needs_source_review",
-        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
-        "last_run_at": "2026-07-22T05:06:14.940000",
-        "matched_patterns": [],
-        "provenance": "automated_no_known_signature",
-        "ref": "kaiwalyaatulraut/biohub-cell-tracking-solution",
-        "score_reproduced": false,
-        "source_sha256": "c194d03b4970462a05e950def4378ce6410d566c2c2a93480ca69087491af658",
-        "title": "Biohub Cell Tracking Solution",
-        "votes": 210
-      },
-      {
-        "author": "KAIWALYA RAUT",
-        "cli_order": 5,
+        "cli_order": 3,
         "disposition": "needs_source_review",
         "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
         "last_run_at": "2026-07-21T04:18:44.360000",
@@ -305,7 +260,7 @@
       },
       {
         "author": "Mr. Bruce",
-        "cli_order": 9,
+        "cli_order": 7,
         "disposition": "needs_source_review",
         "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
         "last_run_at": "2026-07-19T11:20:38.713000",
@@ -315,11 +270,11 @@
         "score_reproduced": false,
         "source_sha256": "37571585795c96f3ba0f6bcf937a14b2d90cff2316e9811a0018859f0cf54790",
         "title": "Cell tracking",
-        "votes": 5
+        "votes": 6
       },
       {
         "author": "Ravindra",
-        "cli_order": 10,
+        "cli_order": 8,
         "disposition": "needs_source_review",
         "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
         "last_run_at": "2026-07-19T10:57:56.347000",
@@ -332,8 +287,36 @@
         "votes": 7
       },
       {
-        "author": "Rocker Ritesh",
+        "author": "Дворкин Евгений Владимирович",
+        "cli_order": 10,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T19:33:47.597000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "evgendvorkin/biohub-0-927-lb",
+        "score_reproduced": false,
+        "source_sha256": "458da5c2967940454ca7e6708a227d28ae2f81cdd417fa515a818d41da3d30ca",
+        "title": "Biohub  0.927 LB",
+        "votes": 36
+      },
+      {
+        "author": "Igor Zharov",
         "cli_order": 12,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T07:52:06.430000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "flexonafft/biohub-harmonic-fusion",
+        "score_reproduced": false,
+        "source_sha256": "0c8cc0c9a85d129d83b02871b2400e6df4f0a4c625ed66d13805f827b24f981b",
+        "title": "Biohub Harmonic Fusion",
+        "votes": 33
+      },
+      {
+        "author": "Rocker Ritesh",
+        "cli_order": 13,
         "disposition": "needs_source_review",
         "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
         "last_run_at": "2026-08-23T08:20:17.300000",
@@ -343,11 +326,67 @@
         "score_reproduced": false,
         "source_sha256": "7eb377d8cafc686a092d6c7a05a04047b6a6ae72c2883f48274bf9349ed2a191",
         "title": "0.926-biohub-divsub",
-        "votes": 8
+        "votes": 69
+      },
+      {
+        "author": "Andrés Santos Sanz",
+        "cli_order": 14,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T11:08:51.973000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "andressantossanz/biohub-harness-0926-probe",
+        "score_reproduced": false,
+        "source_sha256": "6dc9fc409678fa01b83020cd06a2eb3cf91f7ab8d19fbf8adf9d2548acd778c7",
+        "title": "Biohub Harness 0926 Probe",
+        "votes": 4
+      },
+      {
+        "author": "Ahmet Yasır Eminoğlu",
+        "cli_order": 15,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T12:47:42.713000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "ahmetyasreminolu/biohub-last-version",
+        "score_reproduced": false,
+        "source_sha256": "da40932d8472cbfa2e5c970895e1542a4f13d1b20062ae956d8372f22fd09e18",
+        "title": "biohub_last_version",
+        "votes": 0
+      },
+      {
+        "author": "Arnav170",
+        "cli_order": 16,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T01:08:54.180000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "arnav170/biohub-923",
+        "score_reproduced": false,
+        "source_sha256": "be0c2fe89c5004f0c798b4b71b99c0ecd2569a7cf7fc4a8aeb6a703ad26a998a",
+        "title": "biohub-923",
+        "votes": 2
+      },
+      {
+        "author": "Arnav170",
+        "cli_order": 18,
+        "disposition": "needs_source_review",
+        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
+        "last_run_at": "2026-08-25T07:17:06.090000",
+        "matched_patterns": [],
+        "provenance": "automated_no_known_signature",
+        "ref": "arnav170/biohub-bi40",
+        "score_reproduced": false,
+        "source_sha256": "42ddc3c53b6a08d601388e3a10a882bd4f98dabafe109fd911cfcbf2a78be584",
+        "title": "biohub-bi40",
+        "votes": 1
       },
       {
         "author": "Yunus Gümüşsoy",
-        "cli_order": 15,
+        "cli_order": 19,
         "disposition": "needs_source_review",
         "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
         "last_run_at": "2026-08-21T12:33:00.767000",
@@ -358,48 +397,6 @@
         "source_sha256": "05c6f69cc71e5b6a773b0c8947ea649542b3c1c1fd9538f654693a182137cc31",
         "title": "[LB-0.920]biohub_cell_tracking_v17",
         "votes": 28
-      },
-      {
-        "author": "navazsh fathi",
-        "cli_order": 16,
-        "disposition": "needs_source_review",
-        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
-        "last_run_at": "2026-08-22T11:24:14.570000",
-        "matched_patterns": [],
-        "provenance": "automated_no_known_signature",
-        "ref": "navazshfathi/best-score",
-        "score_reproduced": false,
-        "source_sha256": "8462e6f19abc63f61f725e5ce3ba2d1411e3decc944fab717cd86f1512bf271a",
-        "title": "best-score",
-        "votes": 41
-      },
-      {
-        "author": "m-toshi desu",
-        "cli_order": 17,
-        "disposition": "needs_source_review",
-        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
-        "last_run_at": "2026-08-23T05:38:00.797000",
-        "matched_patterns": [],
-        "provenance": "automated_no_known_signature",
-        "ref": "mtoshidesu/test-notebook-v17-d17ce0",
-        "score_reproduced": false,
-        "source_sha256": "eb63e7128fcb88b5177421745cdb5ec7378daabe22a45bb95ff1c58b660cac84",
-        "title": "Test Notebook v17 d17ce0",
-        "votes": 9
-      },
-      {
-        "author": "xsong2020",
-        "cli_order": 19,
-        "disposition": "needs_source_review",
-        "evidence": "static_scan_no_known_signature_not_a_clean_score_claim",
-        "last_run_at": "2026-08-23T19:46:50.523000",
-        "matched_patterns": [],
-        "provenance": "automated_no_known_signature",
-        "ref": "xstargate/biohub-v17-e2-reverse020",
-        "score_reproduced": false,
-        "source_sha256": "3771ca85f9f201a3e9e4dec238a48c138e01466238827481617472622c49222a",
-        "title": "Biohub v17 E2 Reverse020",
-        "votes": 0
       }
     ]
   },
@@ -407,10 +404,18 @@
     {
       "author": "",
       "comments": 0,
+      "id": "737438",
+      "posted_at": "2026-08-25T14:20:22.701000",
+      "title": "does anyone have a different design for divisions",
+      "votes": 0
+    },
+    {
+      "author": "",
+      "comments": 5,
       "id": "737103",
       "posted_at": "2026-08-23T09:59:31.382000",
       "title": "Hand labeling - is it external data?",
-      "votes": 1
+      "votes": 7
     },
     {
       "author": "",
@@ -418,7 +423,7 @@
       "id": "737101",
       "posted_at": "2026-08-23T09:12:21.220000",
       "title": "Stuck at 0.928",
-      "votes": 4
+      "votes": 6
     },
     {
       "author": "",
@@ -426,7 +431,7 @@
       "id": "736937",
       "posted_at": "2026-08-22T14:50:45.065000",
       "title": "Public Notebook Rankings Need a Metric Refresh",
-      "votes": 0
+      "votes": 1
     },
     {
       "author": "",
@@ -442,7 +447,7 @@
       "id": "735352",
       "posted_at": "2026-08-15T08:25:14.079000",
       "title": "Possible big leaderboard shakeup",
-      "votes": 7
+      "votes": 9
     },
     {
       "author": "",
@@ -518,14 +523,6 @@
     },
     {
       "author": "",
-      "comments": 0,
-      "id": "733877",
-      "posted_at": "2026-08-08T19:52:11.586000",
-      "title": "A one-to-one linker scores 0.000 on divisions - four measurements on the metric itself",
-      "votes": 3
-    },
-    {
-      "author": "",
       "comments": 2,
       "id": "732474",
       "posted_at": "2026-08-03T08:02:09.584000",
@@ -542,11 +539,11 @@
     },
     {
       "author": "",
-      "comments": 7,
+      "comments": 8,
       "id": "724130",
       "posted_at": "2026-07-09T16:55:59.111000",
       "title": "Share a custom napari visualizer",
-      "votes": 40
+      "votes": 43
     },
     {
       "author": "",
@@ -566,7 +563,7 @@
     }
   ],
   "schema_version": 1,
-  "snapshot_sha256": "19677aa0ac27165ea5c89aff03da4d7a96289729631a5c838e8c1d478c535eab",
+  "snapshot_sha256": "a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1c6a",
   "submissions": {
     "best_public_score": "0.913",
     "best_submission_ref": "55155485",
