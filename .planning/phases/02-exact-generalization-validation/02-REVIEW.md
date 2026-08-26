@@ -1,8 +1,11 @@
 ---
 phase: 02-exact-generalization-validation
-reviewed: "2026-08-25T23:35:20Z"
+reviewed: "2026-08-26T00:49:04Z"
 depth: standard
 diff_base: "79e9670^"
+reviewed_head: "49aba966cc27c193cb6eec240dcb2d60b59f4a49"
+fix_range: "12df198..49aba96"
+re_review_iteration: 2
 files_reviewed: 43
 files_reviewed_list:
   - ".gitignore"
@@ -49,134 +52,97 @@ files_reviewed_list:
   - "tests/test_scorer.py"
   - "tests/test_submission_io.py"
 findings:
-  critical: 6
-  warning: 7
+  critical: 5
+  warning: 2
   info: 0
-  total: 13
+  total: 7
 status: issues_found
 ---
 
-# Phase 2 Code Review
+# Phase 2: Code Review Report
 
-## Summary
+**Reviewed:** 2026-08-26T00:49:04Z
+**Depth:** standard
+**Files Reviewed:** 43
+**Status:** issues_found
 
-Phase 2 is not ready to close. The exact-evidence boundary has several strong components, but the CPU reconciliation path is neither recoverable nor independently authoritative, the manifest builder can hash data outside the mounted source, the ledger can persist an event that makes itself unreadable, and the production promotion path silently passes a missing metric-exploit audit. The checked-in test suite is also currently red.
+## Narrative Findings (AI reviewer)
 
-Validation performed:
+### Summary
 
-- `.biohub/evaluation-venv/Scripts/python.exe -m pytest -q`: **179 passed, 1 failed**. The failure is `tests/test_manifests.py:165`.
-- `git diff --check 79e9670^ -- <all 43 reviewed files>`: passed.
-- A focused ledger reproduction appended a backdated terminal event successfully; the immediately following `read_events()` failed with `TransitionError: run r has a terminal event before/after running`.
-- Ruff was not available in the evaluation environment (`No module named ruff`), so no Ruff result is claimed.
+Phase 2 is still not safe to close at `49aba96`. The fixes genuinely resolve the original symlink escape, red tracked-manifest test, exception-to-gate binding, lineage-based division pairing, pooled diagnostic omissions, global ID reservations, and canonical request validation. Candidate-ledger reconstruction also fixes the original durable-corruption defect. However, the CPU control still authenticates important remote values from the remote values themselves; the new global timestamp rule conflicts with the retry saga; exact-report crash recovery can bless a self-hashed replacement report; stale-lock recovery has a lock-stealing race; and the new metric-exploit gate is fed by an unconditional `"passed"` literal rather than an audit.
 
-## Critical Issues
+Independent verification supplied for this iteration reports **207 passed, 2 skipped** (the skips are Windows symlink-privilege cases), with compile and diff checks passing. I independently reran `git diff --check` for the exact 43-file scope and reproduced the reconciliation timestamp failure described in CR-02. Passing tests do not cover the trust and interleaving failures below.
 
-### CR-01 — Reconciliation consumes the one-use acceptance request before validation and cannot resume
+### Critical Issues
 
-**Files/lines:** `src/biohub_tracker/acceptance.py:867-877`, `src/biohub_tracker/acceptance.py:933-979`, `src/biohub_tracker/acceptance.py:995-1079`, `src/biohub_tracker/acceptance.py:1121-1126`
+#### CR-01: Local reconciliation still trusts remote division, score, diagnostic, and inventory evidence
 
-`reconcile_pending_control` only accepts a CPU lifecycle in `RUNNING`. It then appends `CPU_ACCEPTANCE_INPUTS_BOUND`, `CPU_ACCEPTANCE_COMPLETED`, exact registration, exact start, and exact completion as separate durable writes before final report validation and before checking whether the immutable output paths already exist. Any exception or process termination after the first append strands the request in `INPUTS_BOUND`, `COMPLETED`, or a partially completed exact lifecycle. A retry then fails with `ACCEPTANCE_REQUEST_NOT_STARTED` or `REQUEST_ALREADY_CONSUMED`. Even the ordinary case of an existing output file is detected only after both lifecycles have been terminally committed.
+**Classification:** BLOCKER
+**Files:** `src/biohub_tracker/acceptance.py:1030-1069`, `src/biohub_tracker/acceptance.py:1102-1126`, `src/biohub_tracker/acceptance.py:1187-1224`, `src/biohub_tracker/acceptance.py:1226-1279`, `src/biohub_tracker/evaluation.py:536-583`
 
-**Concrete fix:** Turn reconciliation into a state-aware, idempotent saga. Validate all pending content and output targets before the first transition; on retry, accept and verify `RUNNING`, `INPUTS_BOUND`, and compatible `COMPLETED` states; deterministically recreate and compare each expected event; append only missing events. Publish validated artifacts before the irreversible terminal transition, or add an explicit materialization transition. Prefer a ledger batch append under one lock for transitions that must be atomic. Add crash-injection tests after every append and before each artifact write.
+**Issue:** `_validate_truth_self_sufficient_row` independently anchors edge totals and node totals to the manifest, but the manifest contains no ground-truth division count. The validator therefore accepts any nonnegative `division_tp` as long as the remote producer copies it into `organizer_row` and diagnostic reconciliation; it also does not independently validate the row's Jaccards, adjusted score, final score, node-count ratio, or the rest of `diagnostic_state`. `_locally_revalidate_control` then rebuilds official summaries, diagnostics, comparison, and bootstrap from those same remote rows. This proves internal consistency, not truth. The four authoritative inventory digests are likewise only schema-checked and compared between identical baseline/candidate slots; they are not derived from a locally trusted graph/CSV artifact. A producer can alter these values, recompute the pending self-hashes and projections, and receive locally branded exact evidence. The current regression test even demonstrates the gap by accepting `division_tp = 1` against a local sample object that has only edge and node counts.
 
-### CR-02 — Remote “untrusted” control evidence is self-authenticated and never independently revalidated
+**Fix:** Extend the trusted manifest/source evidence with topology sufficient statistics such as the exact ground-truth division/fork count, and recompute every truth/self scalar from those trusted counts. Independently rebuild diagnostic state rather than copying it from each remote row. Bind authoritative inventory hashes to locally available content-addressed artifacts, or retrieve and verify the remote CSV/GEFF artifacts before completion. Reject reconciliation unless all organizer scalars, division totals, diagnostics, and inventories can be reproduced from independently trusted inputs. Add tamper tests for `division_tp`, per-movie Jaccards/score, a non-reconciliation diagnostic field, and every inventory digest while all remote hashes/projections are recomputed.
 
-**Files/lines:** `src/biohub_tracker/acceptance.py:170-276`, `src/biohub_tracker/acceptance.py:943-1079`, `src/biohub_tracker/evaluation.py:613-670`
+#### CR-02: The global timestamp guard makes the deterministic reconciliation saga non-resumable
 
-`validate_pending_control` applies a strict schema to the envelope but only checks that `control` is a dictionary and that the overall tree is finite. Its payload, envelope, and inventory hashes are all computed by the same remote producer and have no trusted signature or locally recomputed semantic counterpart. Reconciliation then copies remote `official`, `diagnostics`, `comparison`, inventories, expected sample IDs, artifact hashes, and evaluation-policy hash directly into locally branded exact evidence. `validate_exact_core` checks coverage markers and authority labels but does not reconcile official sufficient statistics, diagnostic totals, comparison deltas/bootstrap values, or inventory hashes. An altered remote result can therefore recompute its own three hashes and be accepted as a locally reconciled official-data control.
+**Classification:** BLOCKER
+**Files:** `src/biohub_tracker/ledger.py:970-984`, `src/biohub_tracker/acceptance.py:1465-1474`, `src/biohub_tracker/acceptance.py:1490-1506`, `src/biohub_tracker/acceptance.py:1535-1555`, `src/biohub_tracker/acceptance.py:1589-1606`
 
-**Concrete fix:** Define and enforce an exact `control` schema, bind its policy hash to the locally loaded policy, and locally recompute all official summaries, paired deltas, bootstrap results, diagnostic reconciliations, and inventory/member bindings from independently validated compact sufficient statistics. If those statistics are not sufficient for independent reproduction, retrieve content-addressed graph artifacts and run the pure evaluator locally. Do not append CPU or exact terminal events until this revalidation passes. Add tamper tests that change counts, diagnostics, comparison values, and inventories while recomputing all remote self-hashes.
+**Issue:** Every reconciliation saga event is deliberately backdated to the CPU start event so retries produce stable hashes. `Ledger.append`, however, rejects an event whose timestamp is earlier than the maximum timestamp of **any** durable event, including unrelated experiment, CPU, or exact lifecycles. Consequently, if any other ledger event is appended while the Kaggle CPU job is running—or between a partial reconciliation and its retry—the first missing saga event fails with `event created_at precedes durable ledger history`. I reproduced this with a CPU registration/start, one unrelated experiment registration one second later, and a valid input-binding event at the start timestamp. This strands the one-use acceptance lifecycle and defeats CR-01's recovery design.
 
-### CR-03 — Manifest hashing follows child symlinks outside the official data root
+**Fix:** Remove the global cross-lifecycle timestamp comparison. The already-added candidate decode at lines 981-984 is sufficient to reject an event that would make its own lifecycle unreconstructable. If chronology must be enforced, validate only relative to events in the same lifecycle, or add a separate monotonic append ordinal/hash-chain that is not used as semantic event time. Add an integration test that starts a CPU control, appends unrelated experiment/exact activity, then completes and retries reconciliation successfully.
 
-**Files/lines:** `src/biohub_tracker/manifests.py:72-95`, `src/biohub_tracker/manifests.py:446-466`
+#### CR-03: Crash recovery can promote an arbitrary self-hashed report to durable exact evidence
 
-Containment is checked only for the top-level `.geff` path. `_tree_sha256` subsequently enumerates descendants and hashes each `path` without resolving it or checking it against the tree root. A file symlink inside a `.geff` directory can therefore point outside the official mount and have external bytes incorporated into the canonical manifest. This violates the required path-escape rejection and can make source identity depend on unauthorized or mutable files. `graphs.artifact_tree_sha256` already performs the missing per-child resolve-and-containment check.
+**Classification:** BLOCKER
+**Files:** `src/biohub_tracker/evaluation.py:335-398`, `src/biohub_tracker/evaluation.py:741-810`, `src/biohub_tracker/evaluation.py:857-864`, `src/biohub_tracker/evaluation.py:993-1018`
 
-**Concrete fix:** For every descendant, use `lstat`, reject symlinks/reparse points and non-regular files, resolve the file, and require `resolved.relative_to(directory.resolve(strict=True))` before hashing. Apply the same rule to metadata files. Add Linux/Kaggle tests for file and directory symlink escapes and assert that manifest construction fails with a stable reason code.
+**Issue:** When the output directory already exists, `_published_report` validates the report's own core/envelope hashes and checks registration identities and members, but it does not rerun scoring, round-trip validation, diagnostics, comparison, or verify that this exact report was durably materialized before the crash. `validate_exact_core` is intentionally shallow for the large `official`, `diagnostics`, and `comparison` trees. While the exact lifecycle is `RUNNING`, recovery then constructs and appends `EXACT_EVALUATION_COMPLETED` from whatever files are present. After a kill between `os.rename` and the completion append, a modified or replacement core with arbitrary scores/comparison can update its envelope reference and be blessed as the canonical completed report. Promotion subsequently accepts the ledger hash because recovery itself created that binding.
 
-### CR-04 — `Ledger.append` can durably write a transition that makes the ledger unreadable
+**Fix:** Before publishing the directory, append a durable materialization event containing the core hash, envelope hash, and a full artifact inventory, then permit recovery only when every published byte matches that event. Alternatively, recovery must rerun the full scorer/round-trip/diagnostic/comparison pipeline and compare the complete result before appending completion. File existence plus self-hashes must never authorize a terminal event. Add a kill-after-rename test that mutates a score and recomputes the core/envelope hashes; recovery must reject it without completing the lifecycle.
 
-**Files/lines:** `src/biohub_tracker/ledger.py:306-329`, `src/biohub_tracker/ledger.py:332-383`, `src/biohub_tracker/ledger.py:668-705`, `src/biohub_tracker/ledger.py:826-836`
+#### CR-04: Stale-lock recovery can steal a newly acquired active lock
 
-Append validation reconstructs only the existing state. Reconstruction later sorts all events by caller-controlled `created_at`, but `append` never reconstructs the candidate ledger including the new event. A terminal event with a timestamp before its start therefore passes validation against the current `RUNNING` state, is written and fsynced, and makes every later read fail because reconstruction processes the terminal before the start. Clock rollback is enough to trigger this; no malformed JSON is required. This was reproduced during review.
+**Classification:** BLOCKER
+**File:** `src/biohub_tracker/ledger.py:823-877`
 
-**Concrete fix:** While holding the lock, validate the full candidate sequence before writing, for example by reconstructing `events + [event]` through all lifecycle projections or by decoding `existing_bytes + payload` with quarantine disabled. Also enforce monotonic append metadata (or introduce an append ordinal/hash chain) so semantic order cannot move behind durable history. Add backdated start, terminal, decision, CPU, and exact-event tests that assert bytes remain unchanged on rejection.
+**Issue:** `_recover_stale` stats and reads the stale lock, checks its owner, stats it again, and then calls `os.replace(self.path, quarantine)`. The identity checks and rename are not a compare-and-swap. Another contender can remove the stale file and acquire a fresh active lock after line 862 but before line 867; the recovering process then moves that live lock out of the lock path. The byte comparison detects the race only after the active lock has disappeared. Although it tries to restore the file, a third contender can acquire during that gap, leaving the original active writer without visible ownership while another writer enters the ledger critical section. That breaks mutual exclusion and risks interleaved or semantically conflicting ledger writes.
 
-### CR-05 — The production metric-exploit hard gate is absent and absence is treated as success
+**Fix:** Use an OS-backed advisory/exclusive file lock with process-death release (through a vetted cross-platform locking implementation), so stale recovery does not rename a pathname owned by another process. If pathname locks must remain, implement a platform-specific atomic identity/CAS protocol; otherwise fail closed and require explicit manual stale-lock recovery. Add a multiprocess race test that pauses a recoverer after its final stat, lets another process recover/acquire, then resumes the first recoverer and proves the live lock is never moved.
 
-**Files/lines:** `src/biohub_tracker/evaluation.py:597-606`, `src/biohub_tracker/promotion.py:305-307`, `config/promotion-policy.json:33-58`
+#### CR-05: The metric-exploit hard gate is still an unconditional pass marker
 
-`canonical_report_core` never emits `metric_exploit_audit`. The promotion policy does not require it, and `_hard_failures` explicitly accepts either `None` or `"passed"`. Consequently every production-generated report reaches the named metric-exploit hard gate with no affirmative audit evidence and silently passes. The tests only exercise the gate by manually injecting a field that production does not produce. This is fail-open behavior at the competition’s most important integrity boundary.
+**Classification:** BLOCKER
+**Files:** `src/biohub_tracker/evaluation.py:694-738`, `src/biohub_tracker/promotion.py:306-320`, `config/promotion-policy.json:45-59`
 
-**Concrete fix:** Generate an explicit audit result from the patched-scorer identity, exploit regression fixtures, graph integrity checks, and any submission-specific exploit signatures. Add `metric_exploit_audit: passed` to `required_integrity`, require the exact field in report validation, and change promotion to reject missing as well as failed values. Recompute the frozen policy hash and add a test proving a production-shaped core without the field is rejected.
+**Issue:** Production report generation always writes `"metric_exploit_audit": "passed"` in `canonical_report_core`; there is no candidate-specific audit function or failing production path for this field. Promotion now correctly rejects a missing or explicit failed value, but every report produced by the evaluator receives the pass literal regardless of graph topology or exploit signature. The scorer-lock and graph/round-trip gates are valuable separate controls, but they do not make this named hard gate an audit result. The fix therefore changes absence into an assertion without establishing the evidence that assertion claims.
 
-### CR-06 — The checked-in Phase 2 test suite cannot pass with the tracked accepted manifest
+**Fix:** Compute a deterministic exploit-audit result from the pinned patched-scorer provenance, frozen exploit regression identity, graph-integrity findings, and candidate-specific known-signature checks. Persist the underlying evidence/hash in the report schema and derive `passed` only when every required check succeeds; otherwise emit `failed` and the reason code. Add a production-shaped candidate fixture containing a known exploit signature and prove the evaluator emits a failed audit that promotion rejects.
 
-**File/line:** `tests/test_manifests.py:165`
+### Warnings
 
-The test asserts that `manifests/reciprocal-embryo-v1.json` does not exist. That accepted official-data manifest is now tracked, so the assertion deterministically fails in the current repository. The full review run ended with 1 failure and 179 passes. A red suite invalidates the phase’s completion claim and masks regressions in later workflows.
+#### WR-01: Reconciliation publishes `accepted: true` before any terminal evidence is durable
 
-**Concrete fix:** Preserve the original intent without asserting global absence: hash/read the tracked manifest before the temporary CLI build, write the fixture manifest only under `tmp_path`, and assert afterward that the tracked manifest is byte-identical. If the intended policy is that no real manifest may be tracked, remove it and update the Phase 2 evidence design consistently; do not leave code, evidence, and test expectations contradictory.
+**Classification:** WARNING
+**File:** `src/biohub_tracker/acceptance.py:1613-1668`
 
-## Warnings
+**Issue:** The final acceptance document, including `accepted: true` and hashes for five events that may not yet exist, is written at lines 1657-1660. Only afterward are the input binding, CPU completion, exact registration, exact start, and exact completion appended one by one. A process kill during that sequence leaves a stable, apparently accepted report on disk while the ledger remains partial. Retry support may eventually repair it, but until then any consumer that reads the acceptance artifact without separately resolving all hashes against the ledger sees a false terminal claim.
 
-### WR-01 — Review exceptions are not bound to the gates that actually failed
+**Fix:** Publish a non-authoritative `.pending`/prepared artifact first and atomically expose the `accepted: true` document only after terminal completion, or add a durable materialized/committed transition and require all consumers to verify it. Add kill-point assertions that no terminal-looking acceptance path is visible before ledger completion.
 
-**Files/lines:** `src/biohub_tracker/promotion.py:556-596`, `src/biohub_tracker/ledger.py:1361-1408`, `src/biohub_tracker/ledger.py:1683-1723`
+#### WR-02: Versioned manifest and ledger decoders silently discard unknown fields
 
-An exception for a `review_required` decision accepts any non-empty `failed_gates` mapping and any non-empty downstream authorization string. Neither recording nor transition validation requires the gate keys to equal the immutable decision’s `reason_codes`, and the submitted values are not verified against the decision inputs. A caller can therefore document `{"unrelated": 0}` while omitting the real node-recall, division, or worst-movie regression.
+**Classification:** WARNING
+**Files:** `src/biohub_tracker/manifests.py:164-187`, `src/biohub_tracker/manifests.py:216-236`, `src/biohub_tracker/manifests.py:270-288`, `src/biohub_tracker/ledger.py:165-181`
 
-**Concrete fix:** Derive failed gates server-side. Require an exact key-set match with `reason_codes`, bind canonical observed values and thresholds into the decision event (or load and verify the hashed decision inputs), and restrict downstream authorization to a closed enum. Add omission, substitution, wrong-value, and extra-gate rejection tests.
+**Issue:** The manifest root, `evidence`, sample, and fold decoders read required fields but never require an exact key set. `ExperimentEvent.from_dict` similarly checks only that required fields are a subset. Unknown v1 fields are silently dropped before semantic hashes and event hashes are recomputed. This permits two different on-disk documents to validate as the same normalized object, undermines frozen-schema drift detection, and can hide producer/tool disagreement about which fields are authoritative.
 
-### WR-02 — Division timing diagnostics pair forks by time instead of organizer correspondence
-
-**File/lines:** `src/biohub_tracker/diagnostics.py:253-293`
-
-Recovered truth divisions and true-positive predicted forks are cross-joined, then greedily paired by the smallest absolute frame offset. The available `prediction_to_truth` correspondence is ignored for this step. With multiple nearby divisions, a predicted fork can be assigned to a different truth division, producing incorrect early/on-time/late diagnostic counts while all TP/FP/FN reconciliation checks still pass.
-
-**Concrete fix:** Use the organizer scorer’s explicit division pairing if available; otherwise derive each TP fork’s truth division through the validated node match/descendant correspondence and reject missing or duplicate assignments. Add a two-division fixture where temporal greedy matching swaps the true pairs.
-
-### WR-03 — Pooled, embryo, and fold diagnostic comparisons silently omit core diagnostic metrics
-
-**File/lines:** `src/biohub_tracker/comparison.py:129-159`, `src/biohub_tracker/comparison.py:202-248`, `src/biohub_tracker/comparison.py:571-574`, `src/biohub_tracker/comparison.py:615-620`
-
-Movie-level diagnostics contain conditional association recall, conditional valid-edge precision/Jaccard, node-count ratio, and oracle gap. `_pooled_diagnostic` retains only endpoint availability and strata, while `_diagnostic_delta` treats all other scalars as optional. The aggregate, by-embryo, and by-fold reports therefore silently drop those diagnostic deltas instead of supplying the complete generalization comparison promised by the evaluation design.
-
-**Concrete fix:** Pool the stored numerators and denominators for all conditional ratios, aggregate node counts rather than averaging ratios, and recompute oracle components/gaps from sufficient statistics. Make required diagnostic fields explicit per comparison level and add tests that assert they appear in pooled, embryo, fold, and movie outputs.
-
-### WR-04 — Exact report publication has an unrecoverable process-crash window
-
-**File/lines:** `src/biohub_tracker/evaluation.py:718-727`, `src/biohub_tracker/evaluation.py:853-878`, `src/biohub_tracker/evaluation.py:892-920`
-
-The output directory is renamed into its immutable final location before the exact completion event is appended. Python exceptions are cleaned up, but a process kill or machine loss between those operations leaves a final output directory plus a `RUNNING` ledger state. A retry refuses the existing directory before it can reconcile or complete the lifecycle.
-
-**Concrete fix:** Make publication resumable: when a matching exact evaluation is running and output exists, verify both report files and their hashes, then append the missing completion event. Alternatively, add a durable materialized event and deterministic recovery protocol. Add kill-point tests immediately before and after the rename and completion append.
-
-### WR-05 — A crashed writer leaves a permanent ledger lock
-
-**File/lines:** `src/biohub_tracker/ledger.py:745-766`
-
-The exclusive lock records a PID but never validates it or its age. If the writer dies before `__exit__`, all future appends time out forever until a human deletes the lock file, which undermines autonomous experiment tracking and recovery.
-
-**Concrete fix:** Record PID, process-start identity, creation time, and a random ownership token. After timeout, recover only a demonstrably stale lock (dead PID/start mismatch and minimum age) through an atomic quarantine/replace operation; never steal an active lock. Test active-lock refusal and stale-lock recovery.
-
-### WR-06 — Run identity uniqueness is asymmetric across CPU and exact lifecycles
-
-**File/lines:** `src/biohub_tracker/ledger.py:1411-1421`, `src/biohub_tracker/ledger.py:1501-1550`
-
-Exact registration rejects collisions with experiments and exact evaluations but does not check CPU acceptance IDs. CPU registration checks its own run ID across all three families, but only checks a proposed `evaluation_run_id` against already-created exact evaluations, not against other pending CPU registrations. This permits CPU/exact ID collisions when CPU is registered first and permits multiple pending controls to reserve the same future exact evaluation ID; the later reconciliation then fails after earlier irreversible events.
-
-**Concrete fix:** Enforce a single global run-ID namespace in every registration direction and reserve proposed evaluation IDs across all nonterminal and terminal CPU registrations. Add symmetric collision tests and two-pending-control reservation tests.
-
-### WR-07 — `cpu-acceptance register --request` cannot parse the request emitted by the canonical registration path
-
-**Files/lines:** `src/biohub_tracker/acceptance.py:750-807`, `src/biohub_tracker/cli.py:632-657`
-
-`issue_acceptance_request` writes source hashes under `source_identities`. The `--request` branch reads `scorer_lock_sha256`, `environment_lock_sha256`, and the other identity hashes from the request root, so the canonical emitted document supplies `None` and fails payload validation. The public CLI option therefore does not consume the project’s own acceptance-request schema.
-
-**Concrete fix:** Parse and strictly validate the request schema, pull hashes from `request["source_identities"]`, independently recompute `acceptance_request_sha256`, and verify `registration_event_sha256` semantics. If importing already-registered requests is not a supported operation, remove the option instead of exposing a broken path. Add a round-trip test from `issue_acceptance_request` output into the CLI branch.
+**Fix:** Define exact allowed-key sets for each versioned object and reject unknown or missing keys before constructing dataclasses. Require `manifest.evidence` to contain exactly `created_at`; require event root keys to match the v1 schema exactly. If forward-compatible extensions are intended, place them in an explicitly hashed extension object and advance the schema version. Add one unknown-field rejection test at every nesting level.
 
 ---
 
-_Reviewer: gsd-code-reviewer (generic-agent role workaround), standard depth, read-only source review._
+_Reviewed: 2026-08-26T00:49:04Z_
+_Reviewer: the agent (gsd-code-reviewer, generic-agent role workaround)_
+_Depth: standard_
