@@ -1,6 +1,6 @@
 # LSM-FM feature-diverse ensemble candidate
 
-Status: implemented and staged offline; not uploaded or launched.
+Status: implemented and uploaded as a verified private runtime; not launched.
 
 ## Hypothesis
 
@@ -29,14 +29,17 @@ frozen, and the existing promotion gates remain unchanged.
 ## Staging evidence
 
 - Private runtime: `biohub-lsm-fm-ensemble-runtime-v1`
+- Kaggle dataset: `indarkarhana/biohub-lsm-fm-ensemble-runtime-v1@version1`
 - Runtime manifest SHA-256:
   `81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1`
 - Runtime bytes: `220186177`
 - Focused tests: `12 passed`
+- Independent remote verification: 21 top-level manifest files and all 428
+  extracted MONAI members hash correctly; ensemble and both model imports pass
 - Public leaderboard used for selection: no
 - Public predictions or Kaggle code copied: no
 - Competition submission path: absent
 
-The runtime will only be uploaded and the evaluator built if the active
-feature-36 run produces a valid hash-bound checkpoint and the quota guard still
-preserves the protected reserve.
+The evaluator kernel will only be built if the active feature-36 run produces a
+valid hash-bound checkpoint and the quota guard still preserves the protected
+reserve.
