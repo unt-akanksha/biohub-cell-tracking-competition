@@ -60,7 +60,7 @@ SOURCE_OUTPUT = (
     / "kernel-outputs"
     / "lsm-fm-image-text-pu-adaptation-v1"
 )
-OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}.json"
+OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r2.json"
 
 
 def sha256_file(path: Path) -> str:
@@ -256,6 +256,15 @@ def main() -> None:
                 ROOT / "tests" / "test_lsm_fm_center_enhancement_training.py",
             ],
             "Training uses geometry-consistent augmentation, dense center loss, robust residual loss, gradient clipping, and EMA weights.",
+        ),
+        check(
+            "dense_memory",
+            [
+                CONFIG,
+                REMOTE / "train_center_enhancement.py",
+                REMOTE / "evaluate_center_enhancement.py",
+            ],
+            "The 35.1M detector runs with batch size one; 7x7x7 refiner patches use batches of 128 for training and 512 for inference, well within a 16 GB T4.",
         ),
         check(
             "checkpoint_roundtrip",
