@@ -87,6 +87,34 @@ _SOURCE_KEYS = {
     "code_sha256",
     "data_source_sha256",
 }
+_ACCEPTANCE_REQUEST_SEMANTIC_KEYS = {
+    "schema_version",
+    "run_id",
+    "evaluation_run_id",
+    "purpose",
+    "request_nonce",
+    "competition_slug",
+    "kernel_slug",
+    "runtime_dataset_slug",
+    "kernel_ref",
+    "runtime_dataset_ref",
+    "runtime_bundle_name",
+    "runtime_bundle_sha256",
+    "runtime_bundle_inventory_sha256",
+    "runtime_bundle_uncompressed_size_bytes",
+    "runtime_bundle_file_count",
+    "cpu_watchdog_minutes",
+    "accelerator",
+    "enable_gpu",
+    "enable_tpu",
+    "enable_internet",
+    "competition_submission_allowed",
+    "source_identities",
+}
+_ACCEPTANCE_REQUEST_KEYS = _ACCEPTANCE_REQUEST_SEMANTIC_KEYS | {
+    "acceptance_request_sha256",
+    "registration_event_sha256",
+}
 _CONTROL_V1_KEYS = {
     "graph_inventory_sha256",
     "artifact_hashes",
@@ -897,6 +925,79 @@ def issue_acceptance_request(
     }
     atomic_write_json(output_path, request)
     return request, event
+
+
+def validate_registered_acceptance_request(
+    request: Mapping[str, Any], events: list[ExperimentEvent]
+) -> ExperimentEvent:
+    """Validate a canonical request against its already-durable registration event."""
+
+    if not isinstance(request, Mapping) or set(request) != _ACCEPTANCE_REQUEST_KEYS:
+        _fail("ACCEPTANCE_REQUEST_SCHEMA_INVALID", "unknown or missing root field")
+    if request.get("schema_version") != "biohub.acceptance-request.v1":
+        _fail("ACCEPTANCE_REQUEST_SCHEMA_INVALID", "schema_version")
+    identities = request.get("source_identities")
+    if not isinstance(identities, Mapping) or set(identities) != _SOURCE_KEYS:
+        _fail("ACCEPTANCE_REQUEST_SCHEMA_INVALID", "source_identities")
+    normalized_identities = {
+        name: _sha(identities[name], f"source_identities.{name}")
+        for name in sorted(_SOURCE_KEYS)
+    }
+    if (
+        request.get("accelerator") != "none"
+        or request.get("enable_gpu") is not False
+        or request.get("enable_tpu") is not False
+        or request.get("enable_internet") is not False
+        or request.get("competition_submission_allowed") is not False
+    ):
+        _fail("ACCEPTANCE_REQUEST_UNSAFE", "CPU/no-submission declarations")
+    semantic = {name: request[name] for name in _ACCEPTANCE_REQUEST_SEMANTIC_KEYS}
+    expected_request_sha = sha256_bytes(canonical_json_bytes(semantic))
+    observed_request_sha = _sha(
+        request["acceptance_request_sha256"], "acceptance_request_sha256"
+    )
+    if not secrets.compare_digest(observed_request_sha, expected_request_sha):
+        _fail("ACCEPTANCE_REQUEST_HASH_MISMATCH", str(request.get("run_id")))
+    expected_payload = cpu_acceptance_registration_payload(
+        run_id=request["run_id"],
+        purpose=request["purpose"],
+        request_nonce=request["request_nonce"],
+        acceptance_request_sha256=observed_request_sha,
+        evaluation_run_id=request["evaluation_run_id"],
+        kernel_slug=request["kernel_slug"],
+        runtime_dataset_slug=request["runtime_dataset_slug"],
+        runtime_bundle_name=request["runtime_bundle_name"],
+        runtime_bundle_sha256=request["runtime_bundle_sha256"],
+        runtime_bundle_inventory_sha256=request["runtime_bundle_inventory_sha256"],
+        runtime_bundle_uncompressed_size_bytes=request[
+            "runtime_bundle_uncompressed_size_bytes"
+        ],
+        runtime_bundle_file_count=request["runtime_bundle_file_count"],
+        scorer_lock_sha256=normalized_identities["scorer_lock_sha256"],
+        environment_lock_sha256=normalized_identities["environment_lock_sha256"],
+        manifest_policy_sha256=normalized_identities["manifest_policy_sha256"],
+        control_model_sha256=normalized_identities["control_model_sha256"],
+        config_sha256=normalized_identities["config_sha256"],
+        code_sha256=normalized_identities["code_sha256"],
+        data_source_sha256=normalized_identities["data_source_sha256"],
+        cpu_watchdog_minutes=request["cpu_watchdog_minutes"],
+    )
+    state = reconstruct_cpu_acceptances(events).get(str(request["run_id"]))
+    if state is None:
+        _fail("UNKNOWN_ACCEPTANCE_REQUEST", str(request["run_id"]))
+    registration = next(
+        item
+        for item in state.events
+        if item.event_type is EventType.CPU_ACCEPTANCE_REGISTERED
+    )
+    if canonical_json_bytes(registration.payload) != canonical_json_bytes(expected_payload):
+        _fail("ACCEPTANCE_REQUEST_BINDING_MISMATCH", str(request["run_id"]))
+    observed_event_sha = _sha(
+        request["registration_event_sha256"], "registration_event_sha256"
+    )
+    if not secrets.compare_digest(observed_event_sha, event_sha256(registration)):
+        _fail("ACCEPTANCE_REQUEST_EVENT_MISMATCH", str(request["run_id"]))
+    return registration
 
 
 def _rebind_official_producers(

@@ -23,6 +23,7 @@ from biohub_tracker.acceptance import (
     assert_no_submission_source,
     build_runtime_bundle,
     extract_runtime_bundle,
+    issue_acceptance_request,
     validate_pending_control,
 )
 from biohub_tracker.cli import main
@@ -32,7 +33,12 @@ from biohub_tracker.evaluation import (
     validate_exact_report,
 )
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
-from biohub_tracker.ledger import EventType
+from biohub_tracker.ledger import (
+    EventType,
+    ExperimentEvent,
+    cpu_acceptance_registration_payload,
+    event_sha256,
+)
 
 
 def _pending() -> dict:
@@ -493,6 +499,155 @@ def test_runtime_bundle_rejects_hash_mismatch_and_unsafe_paths(tmp_path):
     assert _bundle_member_path("bundle/tests/fixtures/metric.json").as_posix() == (
         "bundle/tests/fixtures/metric.json"
     )
+
+
+def test_issue_acceptance_request_round_trips_through_cli_request_branch(
+    tmp_path, monkeypatch, capsys
+):
+    import biohub_tracker.acceptance as acceptance_module
+
+    config = {
+        "schema_version": "biohub.phase2-control-config.v1",
+        "purpose": "phase2_official_data_control",
+        "competition_slug": "biohub-cell-tracking-during-development",
+        "kernel_slug": "owner/biohub-phase2-cpu-acceptance",
+        "runtime_dataset_slug": "owner/biohub-phase2-runtime",
+        "scorer_lock_path": "config/scorer.json",
+        "environment_lock_path": "config/environment.txt",
+        "evaluation_policy_path": "config/evaluation.json",
+        "manifest_policy": {"mode": "reciprocal"},
+        "control_model": {"mode": "truth_self"},
+        "cpu_watchdog_minutes": 660,
+        "accelerator": "none",
+        "enable_gpu": False,
+        "enable_tpu": False,
+        "enable_internet": False,
+        "competition_submission_allowed": False,
+    }
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
+    config_path = config_dir / "control.json"
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+    (config_dir / "scorer.json").write_text('{"lock":true}', encoding="utf-8")
+    (config_dir / "environment.txt").write_text("pinned\n", encoding="utf-8")
+    (config_dir / "evaluation.json").write_text('{"policy":true}', encoding="utf-8")
+    bundle = tmp_path / BUNDLE_NAME
+    bundle.write_bytes(b"opaque")
+    monkeypatch.setattr(acceptance_module, "_source_inventory_sha256", lambda _root: "7" * 64)
+    monkeypatch.setattr(
+        acceptance_module,
+        "inspect_runtime_bundle",
+        lambda _path: {
+            "runtime_bundle_name": BUNDLE_NAME,
+            "runtime_bundle_sha256": "8" * 64,
+            "runtime_bundle_inventory_sha256": "9" * 64,
+            "runtime_bundle_uncompressed_size_bytes": 100,
+            "runtime_bundle_file_count": 3,
+        },
+    )
+    request_path = tmp_path / "request.json"
+    request, event = issue_acceptance_request(
+        workspace_root=tmp_path,
+        ledger_path=tmp_path / "experiments" / "events.jsonl",
+        config_path=config_path,
+        run_id="cpu-control-roundtrip",
+        evaluation_run_id="eval-control-roundtrip",
+        kernel_ref="owner/biohub-phase2-cpu-acceptance/1",
+        runtime_dataset_ref="owner/biohub-phase2-runtime/1",
+        runtime_bundle_path=bundle,
+        output_path=request_path,
+    )
+    before = (tmp_path / "experiments" / "events.jsonl").read_bytes()
+    assert main(
+        [
+            "--root",
+            str(tmp_path),
+            "cpu-acceptance",
+            "register",
+            "--request",
+            str(request_path),
+        ]
+    ) == 0
+    assert capsys.readouterr().out.strip() == event.event_id
+    assert (tmp_path / "experiments" / "events.jsonl").read_bytes() == before
+    assert request["source_identities"]["scorer_lock_sha256"]
+
+
+@pytest.mark.parametrize("tamper", ["request_hash", "source_identity", "event_hash"])
+def test_cli_request_branch_fails_closed_on_request_tampering(tamper):
+    from biohub_tracker.acceptance import validate_registered_acceptance_request
+
+    request = {
+        "schema_version": "biohub.acceptance-request.v1",
+        "run_id": "cpu-a",
+        "evaluation_run_id": "eval-a",
+        "purpose": "phase2_official_data_control",
+        "request_nonce": "1" * 64,
+        "competition_slug": "competition",
+        "kernel_slug": "owner/kernel",
+        "runtime_dataset_slug": "owner/dataset",
+        "kernel_ref": "owner/kernel/1",
+        "runtime_dataset_ref": "owner/dataset/1",
+        "runtime_bundle_name": BUNDLE_NAME,
+        "runtime_bundle_sha256": "2" * 64,
+        "runtime_bundle_inventory_sha256": "3" * 64,
+        "runtime_bundle_uncompressed_size_bytes": 100,
+        "runtime_bundle_file_count": 3,
+        "cpu_watchdog_minutes": 660,
+        "accelerator": "none",
+        "enable_gpu": False,
+        "enable_tpu": False,
+        "enable_internet": False,
+        "competition_submission_allowed": False,
+        "source_identities": {
+            "scorer_lock_sha256": "4" * 64,
+            "environment_lock_sha256": "5" * 64,
+            "manifest_policy_sha256": "6" * 64,
+            "control_model_sha256": "7" * 64,
+            "config_sha256": "8" * 64,
+            "code_sha256": "9" * 64,
+            "data_source_sha256": "a" * 64,
+        },
+    }
+    semantic = dict(request)
+    request["acceptance_request_sha256"] = sha256_bytes(canonical_json_bytes(semantic))
+    identities = request["source_identities"]
+    payload = cpu_acceptance_registration_payload(
+        run_id=request["run_id"],
+        purpose=request["purpose"],
+        request_nonce=request["request_nonce"],
+        acceptance_request_sha256=request["acceptance_request_sha256"],
+        evaluation_run_id=request["evaluation_run_id"],
+        kernel_slug=request["kernel_slug"],
+        runtime_dataset_slug=request["runtime_dataset_slug"],
+        runtime_bundle_name=request["runtime_bundle_name"],
+        runtime_bundle_sha256=request["runtime_bundle_sha256"],
+        runtime_bundle_inventory_sha256=request["runtime_bundle_inventory_sha256"],
+        runtime_bundle_uncompressed_size_bytes=request[
+            "runtime_bundle_uncompressed_size_bytes"
+        ],
+        runtime_bundle_file_count=request["runtime_bundle_file_count"],
+        scorer_lock_sha256=identities["scorer_lock_sha256"],
+        environment_lock_sha256=identities["environment_lock_sha256"],
+        manifest_policy_sha256=identities["manifest_policy_sha256"],
+        control_model_sha256=identities["control_model_sha256"],
+        config_sha256=identities["config_sha256"],
+        code_sha256=identities["code_sha256"],
+        data_source_sha256=identities["data_source_sha256"],
+        cpu_watchdog_minutes=request["cpu_watchdog_minutes"],
+    )
+    registration = ExperimentEvent.create(
+        "cpu-a", EventType.CPU_ACCEPTANCE_REGISTERED, payload
+    )
+    request["registration_event_sha256"] = event_sha256(registration)
+    if tamper == "request_hash":
+        request["acceptance_request_sha256"] = "c" * 64
+    elif tamper == "source_identity":
+        request["source_identities"]["code_sha256"] = "d" * 64
+    else:
+        request["registration_event_sha256"] = "e" * 64
+    with pytest.raises(AcceptanceError):
+        validate_registered_acceptance_request(request, [registration])
 
 
 def test_kernel_only_retry_reuses_verified_runtime_dataset_and_dynamic_sdk_versions():

@@ -22,7 +22,6 @@ from .ledger import (
     cpu_acceptance_completed_payload,
     cpu_acceptance_failed_payload,
     cpu_acceptance_inputs_bound_payload,
-    cpu_acceptance_registration_payload,
     cpu_acceptance_started_payload,
     decision_payload,
     event_sha256,
@@ -277,7 +276,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cpu_register = cpu_commands.add_parser("register", help="pre-register a request")
     cpu_register_source = cpu_register.add_mutually_exclusive_group(required=True)
-    cpu_register_source.add_argument("--request", type=Path)
+    cpu_register_source.add_argument(
+        "--request", type=Path, help="verify a canonical already-registered request"
+    )
     cpu_register_source.add_argument("--config", type=Path)
     cpu_register.add_argument("--run-id")
     cpu_register.add_argument("--evaluation-run-id")
@@ -629,37 +630,12 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
                 )
                 print(event.event_id)
                 return 0
-            request = _load_config(args.request)
-            payload = cpu_acceptance_registration_payload(
-                run_id=request.get("run_id"),
-                purpose=request.get("purpose"),
-                request_nonce=request.get("request_nonce"),
-                acceptance_request_sha256=request.get("acceptance_request_sha256"),
-                evaluation_run_id=request.get("evaluation_run_id"),
-                kernel_slug=request.get("kernel_slug"),
-                runtime_dataset_slug=request.get("runtime_dataset_slug"),
-                runtime_bundle_name=request.get("runtime_bundle_name"),
-                runtime_bundle_sha256=request.get("runtime_bundle_sha256"),
-                runtime_bundle_inventory_sha256=request.get(
-                    "runtime_bundle_inventory_sha256"
-                ),
-                runtime_bundle_uncompressed_size_bytes=request.get(
-                    "runtime_bundle_uncompressed_size_bytes"
-                ),
-                runtime_bundle_file_count=request.get("runtime_bundle_file_count"),
-                scorer_lock_sha256=request.get("scorer_lock_sha256"),
-                environment_lock_sha256=request.get("environment_lock_sha256"),
-                manifest_policy_sha256=request.get("manifest_policy_sha256"),
-                control_model_sha256=request.get("control_model_sha256"),
-                config_sha256=request.get("config_sha256"),
-                code_sha256=request.get("code_sha256"),
-                data_source_sha256=request.get("data_source_sha256"),
-                cpu_watchdog_minutes=request.get("cpu_watchdog_minutes"),
+            from .acceptance import validate_registered_acceptance_request
+
+            request = _load_config(_rooted(root, args.request))
+            event = validate_registered_acceptance_request(
+                request, ledger.read_events()
             )
-            event = ExperimentEvent.create(
-                payload["run_id"], EventType.CPU_ACCEPTANCE_REGISTERED, payload
-            )
-            ledger.append(event)
         elif args.cpu_acceptance_command == "start":
             states = reconstruct_cpu_acceptances(ledger.read_events())
             state = states.get(args.run_id)
