@@ -246,6 +246,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--secondary-teacher", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--steps", type=int, default=1024)
+    parser.add_argument("--min-steps", type=int, default=256)
     parser.add_argument("--warmup-steps", type=int, default=256)
     parser.add_argument("--pairs-per-movie", type=int, default=3)
     parser.add_argument("--learning-rate", type=float, default=1e-5)
@@ -256,7 +257,9 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    if args.steps <= 0 or not 0 <= args.warmup_steps < args.steps:
+    if args.steps <= 0 or not 0 < args.min_steps <= args.steps:
+        raise ValueError("min-steps must lie in [1, steps]")
+    if not 0 <= args.warmup_steps < args.steps:
         raise ValueError("steps must be positive and warmup-steps must be smaller")
     if not 0 < args.learning_rate <= 3e-5:
         raise ValueError("learning rate is outside the conservative PU range")
@@ -317,6 +320,7 @@ def main() -> None:
         "validation_overlap": sorted(set(by_stem) & VALIDATION_STEMS),
         "frame_pairs_per_cycle": len(frame_pairs),
         "steps": args.steps,
+        "minimum_steps": args.min_steps,
         "warmup_steps": args.warmup_steps,
         "pairs_per_movie": args.pairs_per_movie,
         "learning_rate": args.learning_rate,
@@ -358,12 +362,18 @@ def main() -> None:
     deep_trainable = warm_trainable
     optimizer.zero_grad(set_to_none=True)
 
+    actual_steps = 0
+    budget_stop_requested = False
     for step in range(args.steps):
         elapsed = time.monotonic() - started
-        if elapsed >= args.max_wall_seconds:
-            raise TimeoutError(
-                f"PU training reached wall guard at step {step}/{args.steps}"
+        if elapsed >= args.max_wall_seconds and step >= args.min_steps:
+            budget_stop_requested = True
+            print(
+                "PU BUDGET STOP",
+                json.dumps({"step": step, "target_steps": args.steps, "elapsed": elapsed}),
+                flush=True,
             )
+            break
         if step == args.warmup_steps:
             deep_trainable = set_training_phase(student, deep_decoder=True)
             deep_unfrozen = True
@@ -472,6 +482,7 @@ def main() -> None:
         scaler.step(optimizer)
         scaler.update()
         optimizer.zero_grad(set_to_none=True)
+        actual_steps = step + 1
 
         if (step + 1) % 16 == 0 or step == 0:
             row = {
@@ -502,13 +513,19 @@ def main() -> None:
             )
             print("PU TRAIN", json.dumps(row, sort_keys=True), flush=True)
 
+    if actual_steps < args.min_steps or not metrics:
+        raise RuntimeError(
+            f"PU training stopped before minimum evidence: {actual_steps}/{args.min_steps}"
+        )
     torch.save({"state_dict": student.state_dict()}, args.output_dir / "best.pt")
     best_hash = sha256_file(args.output_dir / "best.pt")
     result = {
         "schema_version": 1,
         "status": "completed",
         "elapsed_seconds": round(time.monotonic() - started, 3),
-        "steps": args.steps,
+        "target_steps": args.steps,
+        "actual_steps": actual_steps,
+        "budget_stop_requested": budget_stop_requested,
         "parameter_count": parameter_count,
         "warm_trainable_parameters": warm_trainable,
         "deep_trainable_parameters": deep_trainable,

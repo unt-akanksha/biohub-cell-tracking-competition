@@ -1,0 +1,172 @@
+{
+  "checks": [
+    {
+      "detail": "All runtime modules and notebook cells compile; the focused 18-test PU/model/policy suite passes.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/pu_targets.py",
+          "sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f"
+        },
+        {
+          "path": "research/spotiflow_biohub/public_teacher.py",
+          "sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989"
+        },
+        {
+          "path": "research/spotiflow_biohub/train_pu_detector.py",
+          "sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5"
+        },
+        {
+          "path": "research/spotiflow_biohub/evaluate_pu_detector.py",
+          "sha256": "39bcd34c59380eb51dff07428314d56e1256933ff3df4012ef819adc558fbb30"
+        },
+        {
+          "path": "kaggle/biohub-spotiflow-pu-adaptation-v1/biohub-spotiflow-pu-adaptation-v1.ipynb",
+          "sha256": "75ba2314d02a359d8bc0fb0958b45e6f7bd594e5ef7634e9644d1352b77e6e6f"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtime, public teacher weights, frozen baseline graphs, and competition input are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
+          "sha256": "0ca99acdfdea9e59f6c58745425d11758ef499077fba70821169dbaa6022f8af"
+        },
+        {
+          "path": "kaggle/biohub-spotiflow-pu-adaptation-v1/kernel-metadata.json",
+          "sha256": "be2247932f15be2b058276eb9ee76e68eb7c4ed7efa375d07564b04a8b635742"
+        },
+        {
+          "path": ".biohub/staging/biohub-spotiflow-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "1347712d81b05ff8840d11ec2d24b5da69bca3aa1ce63b5e6b0d587c62286646"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Consensus positives, forced annotations, unknown support, capped safe background, and coordinate-consistent transforms pass deterministic tests.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/pu_targets.py",
+          "sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f"
+        },
+        {
+          "path": "tests/test_pu_targets.py",
+          "sha256": "9636e29865e0140b70b286e732df2ba333014424fc6776ad0029bf9fe0c9dbd4"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The official 35,489,892-parameter Spotiflow checkpoint completes a finite forward, backward, and AdamW optimizer step on the exact crop shape.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/train_pu_detector.py",
+          "sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5"
+        },
+        {
+          "path": "research/spotiflow_biohub/smoke_model_step.py",
+          "sha256": "c4f1c694bb0e6fbefd130ecea668b8cf295d3450b3b7382d813804b4aa5d4423"
+        },
+        {
+          "path": "reports/experiments/spotiflow-synthetic-finetune-v1-smoke.json",
+          "sha256": "0da97637437158324a772e1f9b185b50d5ed302ef0129a0ef7a04452ab84e95f"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Both teacher checkpoints strict-load into the detection subset, and reconstructed primary logits are bit-identical to the audited public source.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/public_teacher.py",
+          "sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        },
+        {
+          "path": ".biohub/cache/models/spotiflow-0.6.0/smfish_3d/best.pt",
+          "sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only learned checkpoint and validation evidence are written under /kaggle/working; submission artifacts cause failure and no submit API is present.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-spotiflow-pu-adaptation-v1/biohub-spotiflow-pu-adaptation-v1.ipynb",
+          "sha256": "75ba2314d02a359d8bc0fb0958b45e6f7bd594e5ef7634e9644d1352b77e6e6f"
+        },
+        {
+          "path": "research/spotiflow_biohub/evaluate_pu_detector.py",
+          "sha256": "39bcd34c59380eb51dff07428314d56e1256933ff3df4012ef819adc558fbb30"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Training holds one two-frame crop, frozen teachers, and two student views at a time; a 5,200-second soft stop preserves validation time.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/train_pu_detector.py",
+          "sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5"
+        },
+        {
+          "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
+          "sha256": "0ca99acdfdea9e59f6c58745425d11758ef499077fba70821169dbaa6022f8af"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "All twelve selection/acceptance movies are excluded from training; eight selection movies gate access to four untouched acceptance movies.",
+      "evidence": [
+        {
+          "path": "research/spotiflow_biohub/train_pu_detector.py",
+          "sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5"
+        },
+        {
+          "path": "research/spotiflow_biohub/evaluate_pu_detector.py",
+          "sha256": "39bcd34c59380eb51dff07428314d56e1256933ff3df4012ef819adc558fbb30"
+        },
+        {
+          "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
+          "sha256": "0ca99acdfdea9e59f6c58745425d11758ef499077fba70821169dbaa6022f8af"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T14:52:43.204724Z",
+  "report_sha256": "a41390920dc6b01f5185537e75dcf05fbb899e7a236be76bc07b6a91acb6fef1",
+  "run_id": "spotiflow-pu-adaptation-v1",
+  "schema_version": 1
+}

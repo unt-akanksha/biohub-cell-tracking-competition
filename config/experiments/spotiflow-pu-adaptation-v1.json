@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-pu-adaptation-v1",
+  "parent": "spatialdino-appearance-validation-v1",
+  "kernel_ref": "indarkarhana/biohub-spotiflow-pu-adaptation-v1",
+  "notebook_sha256": "75ba2314d02a359d8bc0fb0958b45e6f7bd594e5ef7634e9644d1352b77e6e6f",
+  "kernel_metadata_sha256": "be2247932f15be2b058276eb9ee76e68eb7c4ed7efa375d07564b04a8b635742",
+  "kernel_builder_sha256": "f3b3e9b3824a707c4572a9aece0a654f8a29fcf84370c659643e478ac8c30287",
+  "runtime_builder_sha256": "9b33431c4ee48ad17211200732b0f6a568aa7a7107a4ac4ebc69e3ee55c6140f",
+  "runtime_manifest_sha256": "1347712d81b05ff8840d11ec2d24b5da69bca3aa1ce63b5e6b0d587c62286646",
+  "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+  "target_builder_sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f",
+  "teacher_reconstruction_sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989",
+  "trainer_sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5",
+  "evaluator_sha256": "39bcd34c59380eb51dff07428314d56e1256933ff3df4012ef819adc558fbb30",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "trainer_soft_stop_seconds": 5200,
+  "evaluator_max_wall_seconds": 1300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spotiflow-pu-runtime-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version11",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "pilkwang/biohub-temporal-unet3d-seed314159-v1"
+  ],
+  "kernel_sources": [],
+  "student": {
+    "name": "Spotiflow smfish_3d release 0.6.0",
+    "base_checkpoint_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+    "parameter_count": 35489892,
+    "source_repository": "weigertlab/spotiflow",
+    "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+    "license": "BSD-3-Clause",
+    "training_schedule": {
+      "target_steps": 1024,
+      "minimum_steps": 256,
+      "detection_head_and_final_decoder_warmup_steps": 256,
+      "then_unfreeze": "all decoder blocks and multiscale detection heads; encoder remains frozen",
+      "learning_rate": 0.00001,
+      "optimizer": "AdamW",
+      "weak_strong_consistency_weight": 0.05
+    }
+  },
+  "teachers": [
+    {
+      "name": "public TemporalUNet3D primary seed",
+      "checkpoint_sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771",
+      "role": "frozen pseudo-label teacher only"
+    },
+    {
+      "name": "public TemporalUNet3D seed 314159",
+      "checkpoint_sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f",
+      "role": "frozen independent pseudo-label teacher only"
+    }
+  ],
+  "positive_unlabeled_targets": {
+    "high_confidence_threshold": 0.96875,
+    "low_support_threshold": 0.10,
+    "one_to_one_teacher_consensus_radius_um": 5.0,
+    "force_all_organizer_annotations_positive": true,
+    "teacher_support_dilation_output_voxels": 2,
+    "unknown_voxel_loss_weight": 0.0,
+    "safe_background_loss_weight": 0.01,
+    "safe_background_weight_cap": 0.02,
+    "yx_flip_tta_for_teachers": true
+  },
+  "validation": {
+    "training_movies": "all available training movies except the twelve frozen selection and acceptance stems",
+    "selection_stems": [
+      "44b6_d29c9ab2",
+      "44b6_3a861e03",
+      "44b6_d5e7d891",
+      "44b6_ddf577ad",
+      "6bba_09961292",
+      "6bba_bb9f20c3",
+      "6bba_784a78c9",
+      "6bba_57b7cc1e"
+    ],
+    "selection_gate": "pooled annotated recall at least 0.80 and worst-movie recall at least 0.65",
+    "acceptance_stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "acceptance_read_only_if_selection_passes": true,
+    "promotion_gate": "pooled recall at least 0.96902842596521, each embryo prefix within 0.01 of its public baseline, and no movie delta below -0.01",
+    "threshold_calibration": "image responses plus organizer estimated node counts only; labels opened after each movie threshold is fixed",
+    "public_leaderboard_used_for_selection": false
+  },
+  "independence": {
+    "public_checkpoints_used_as_frozen_teachers": true,
+    "student_architecture_is_public_teacher_architecture": false,
+    "student_checkpoint_initialized_from_public_submission": false,
+    "candidate_predictions_copied_from_public_output": false,
+    "learned_candidate_required": true
+  },
+  "promotion_rule": "only clean untouched acceptance may authorize building a separate two-GPU non-replica submission kernel",
+  "submission_policy": "training and validation only; no submission file and no competition submit API"
+}
