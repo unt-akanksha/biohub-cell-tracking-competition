@@ -769,20 +769,38 @@ def hybrid_link_movie(
     config: HybridLinkConfig,
     *,
     submission_edge_probability: float = 0.80,
+    use_stored_edge_probabilities: bool = False,
 ) -> list[tuple[int, int]]:
-    """Rerank an exported submission graph with learned association scores.
+    """Rerank a base graph with learned association scores.
 
     Competition CSVs do not retain the detector's edge probabilities.  Clean
-    validation therefore assigns every base edge the same fixed pseudo-score,
-    exactly matching the information available at test-time.  No validation
-    label can enter the per-movie linking operation.
+    validation may assign every base edge the same fixed pseudo-score.  When a
+    hash-bound pre-postprocessing GEFF is also available, its probability can
+    instead be transferred by stable node/edge ID; missing postprocess-only
+    edges still receive the fixed fallback.  No validation label can enter the
+    per-movie linking operation.
     """
     output: list[tuple[int, int]] = []
+    probability_by_edge = {
+        (int(source), int(target)): float(probability)
+        for (source, target), probability in zip(
+            video.edges.tolist(), video.edge_probabilities.tolist()
+        )
+        if np.isfinite(probability)
+    }
     for _time, (source_ids, target_ids, scores) in sorted(pair_scores.items()):
         source_set = set(map(int, source_ids.tolist()))
         target_set = set(map(int, target_ids.tolist()))
         base_edges = [
-            (int(source), int(target), float(submission_edge_probability))
+            (
+                int(source),
+                int(target),
+                probability_by_edge.get(
+                    (int(source), int(target)), float(submission_edge_probability)
+                )
+                if use_stored_edge_probabilities
+                else float(submission_edge_probability),
+            )
             for source, target in video.edges.tolist()
             if int(source) in source_set and int(target) in target_set
         ]
@@ -1029,6 +1047,33 @@ def aggregate_scores(rows: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def summarize_stored_edge_probabilities(
+    videos: dict[str, GraphVideo],
+) -> dict[str, dict[str, Any]]:
+    """Describe the confidence signal available before any validation scoring."""
+    summary: dict[str, dict[str, Any]] = {}
+    for stem, video in sorted(videos.items()):
+        probabilities = np.asarray(video.edge_probabilities, dtype=np.float64)
+        finite = probabilities[np.isfinite(probabilities)]
+        row: dict[str, Any] = {
+            "edges": len(video.edges),
+            "finite_edge_probabilities": len(finite),
+            "finite_probability_coverage": len(finite) / max(len(video.edges), 1),
+        }
+        if len(finite):
+            row.update(
+                {
+                    "probability_min": float(np.min(finite)),
+                    "probability_p10": float(np.quantile(finite, 0.10)),
+                    "probability_median": float(np.median(finite)),
+                    "probability_p90": float(np.quantile(finite, 0.90)),
+                    "probability_max": float(np.max(finite)),
+                }
+            )
+        summary[stem] = row
+    return summary
+
+
 def complete_movie_validation(
     model,
     validation_predictions: Path,
@@ -1145,6 +1190,50 @@ def complete_movie_validation(
                         }
                     )
 
+    # The owned production output retains its pre-postprocessing GEFF graphs.
+    # Stable edge IDs transfer learned public confidence onto nearly all final
+    # CSV edges, with the fixed pseudo-probability reserved for relinked edges.
+    # Keep this grid deliberately small and select it on selection movies only.
+    for edge_threshold in (0.03, 0.08):
+        for base_lock_probability in (0.94, 0.98):
+            for base_keep_probability in (0.65, 0.80):
+                for base_bonus in (0.02, 0.05):
+                    for division_threshold in (0.12, 0.18):
+                        config = HybridLinkConfig(
+                            edge_threshold=edge_threshold,
+                            base_lock_probability=base_lock_probability,
+                            base_keep_probability=base_keep_probability,
+                            base_bonus=base_bonus,
+                            division_threshold=division_threshold,
+                            division_ratio=0.50,
+                            base_division_keep_probability=0.95,
+                        )
+                        edges_by_stem = {
+                            stem: hybrid_link_movie(
+                                predictions[stem],
+                                pair_scores[stem],
+                                config,
+                                use_stored_edge_probabilities=True,
+                            )
+                            for stem in SELECTION_STEMS
+                        }
+                        configurations.append(
+                            {
+                                "method": "raw_confidence_hybrid",
+                                "edge_threshold": edge_threshold,
+                                "base_bonus": base_bonus,
+                                "base_pseudo_probability": 0.80,
+                                "base_lock_probability": base_lock_probability,
+                                "base_keep_probability": base_keep_probability,
+                                "division_threshold": division_threshold,
+                                "division_ratio": 0.50,
+                                "base_division_keep_probability": 0.95,
+                                "selection_summary": score_partition(
+                                    edges_by_stem, SELECTION_STEMS
+                                ),
+                            }
+                        )
+
     selected = max(
         configurations,
         key=lambda item: (
@@ -1178,7 +1267,12 @@ def complete_movie_validation(
         )
         selected_edges = {
             stem: hybrid_link_movie(
-                predictions[stem], pair_scores[stem], selected_config
+                predictions[stem],
+                pair_scores[stem],
+                selected_config,
+                use_stored_edge_probabilities=(
+                    selected["method"] == "raw_confidence_hybrid"
+                ),
             )
             for stem in VALIDATION_STEMS
         }
@@ -1211,6 +1305,9 @@ def complete_movie_validation(
             "movies scored once after freeze; public leaderboard unused"
         ),
         "public_processed_reference_proxy": BASELINE_PROXY,
+        "stored_edge_probability_evidence": summarize_stored_edge_probabilities(
+            predictions
+        ),
         "base_raw_graph": base_summary,
         "selected": selected,
         "selection_delta_vs_base_raw": selection_delta,

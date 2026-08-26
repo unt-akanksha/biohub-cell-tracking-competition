@@ -1,7 +1,7 @@
 {
-  "id": "indarkarhana/biohub-trackastra-submission-candidate-v1",
-  "title": "Biohub Trackastra Submission Candidate v1",
-  "code_file": "biohub-trackastra-submission-candidate-v1.ipynb",
+  "id": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
+  "title": "Biohub Trackastra Raw Confidence Acceptance v1",
+  "code_file": "biohub-trackastra-raw-confidence-acceptance-v1.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,
@@ -11,15 +11,14 @@
   "keywords": [
     "gpu",
     "cell-tracking",
-    "trackastra"
+    "validation"
   ],
   "dataset_sources": [
-    "indarkarhana/biohub-trackastra-graph-runtime-v1"
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
   ],
   "kernel_sources": [
-    "indarkarhana/biohub-clean-0-927-reproduction-v1",
-    "indarkarhana/biohub-trackastra-graph-finetune-v5",
-    "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1"
+    "indarkarhana/biohub-trackastra-graph-finetune-v5"
   ],
   "competition_sources": [
     "biohub-cell-tracking-during-development"

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-raw-confidence-acceptance-v1",
+  "parent": "trackastra-graph-finetune-v5",
+  "kernel_ref": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
+  "notebook_sha256": "67a312f9de857b448d185ec229dd2ca51c2701726b16b4a8e3b3b5aba481eb8c",
+  "kernel_metadata_sha256": "0a22d834a0d2160da76297ab55d52020c0d948230c5ede85301c0a897dcab882",
+  "trainer_sha256": "382b530ce0220d9a1c224c801f3d965f8fa74e2737960e54c2f3cf38b4b25dec",
+  "posthoc_validator_sha256": "7cac26f4b8938a967a0c2e89eb9fbc9bf5d59689067b9135731afc46289ace60",
+  "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
+  "submission_reranker_sha256": "8b02a1e466f8e6bd85bedbc2cc1cb047c8efeaa12aa458e074b310a42e303f46",
+  "runtime_manifest_sha256": "640b9ae0236f893002ddf94223409f9c38cb1f9a5688f8e4753ee3b94b92fcb6",
+  "declared_max_runtime_hours": "1.50",
+  "watchdog_hard_stop_seconds": 5100,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "submission_created": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version6",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-trackastra-graph-finetune-v5"
+  ],
+  "source_model_binding": {
+    "required_training_status": "completed",
+    "model_sha256_must_match_training_terminal": true,
+    "training_acceptance_result_is_not_reused": true
+  },
+  "validation": {
+    "prediction_source": "frozen pre-postprocessing public detector GEFFs with stored edge_prob",
+    "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
+    "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
+    "methods_selected": [
+      "trackastra_only",
+      "submission_graph_hybrid",
+      "raw_confidence_hybrid"
+    ],
+    "raw_confidence_grid": {
+      "edge_threshold": [0.03, 0.08],
+      "base_lock_probability": [0.94, 0.98],
+      "base_keep_probability": [0.65, 0.80],
+      "base_bonus": [0.02, 0.05],
+      "division_threshold": [0.12, 0.18],
+      "division_ratio": 0.50,
+      "postprocess_only_edge_fallback_probability": 0.80
+    },
+    "acceptance_read_after_configuration_freeze": true,
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "accept only if the frozen two-movie acceptance proxy delta versus the same-node raw base graph is positive and the worst acceptance movie regresses by no more than 0.01",
+  "candidate_binding": {
+    "acceptance_terminal_name": "acceptance_terminal.json",
+    "model_sha256_must_match": true,
+    "raw_test_graph_tree_sha256": "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e",
+    "base_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+    "exact_replica_refused": true
+  }
+}

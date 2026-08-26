@@ -29,3 +29,9 @@ A full-capacity local smoke used the official 27.5M checkpoint with 126 true
 nodes, 386 distractors, and 92 retained positive edges. Forward and backward
 completed with finite loss and gradients, establishing that the new density
 regime fits the exact 512-token training path before Kaggle GPU launch.
+
+While V5 trains, a hash-bound audit of the owned baseline kernel output found
+that stable edge IDs retain the original public link confidence for 92.85% to
+97.63% of the final CSV edges. A probability-aware hybrid path is now tested in
+source, but it remains disabled for submission until the same selection/frozen
+acceptance protocol validates it; the running V5 artifact is unchanged.

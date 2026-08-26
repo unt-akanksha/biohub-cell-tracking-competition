@@ -83,6 +83,7 @@ import sys
 import zipfile
 
 BASE_SHA256 = "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
+RAW_GRAPH_TREE_SHA256 = "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e"
 input_root = Path("/kaggle/input")
 runtime = next(
     (
@@ -159,6 +160,37 @@ if len(base_candidates) != 1:
     )
 base_submission = base_candidates[0]
 
+
+def artifact_tree_sha256(root):
+    files = sorted(
+        (path for path in root.rglob("*") if path.is_file()),
+        key=lambda path: path.relative_to(root).as_posix(),
+    )
+    if not files:
+        raise RuntimeError(f"Empty raw graph tree: {root}")
+    value = bytearray()
+    for path in files:
+        value.extend(path.relative_to(root).as_posix().encode("utf-8"))
+        value.extend(b"\0")
+        value.extend(hashlib.sha256(path.read_bytes()).digest())
+        value.extend(b"\0")
+    return hashlib.sha256(bytes(value)).hexdigest()
+
+
+raw_graph_roots = {
+    path.parent
+    for path in input_root.rglob("44b6_0113de3b.geff")
+    if (path / "zarr.json").is_file()
+}
+raw_graph_roots = [
+    path for path in raw_graph_roots if artifact_tree_sha256(path) == RAW_GRAPH_TREE_SHA256
+]
+if len(raw_graph_roots) != 1:
+    raise FileNotFoundError(
+        f"Expected one hash-pinned raw confidence graph root, found {raw_graph_roots}"
+    )
+raw_graph_root = raw_graph_roots[0]
+
 training_terminals = []
 for path in input_root.rglob("training_terminal.json"):
     try:
@@ -177,17 +209,37 @@ model_path = model_dir / "model.pt"
 if hashlib.sha256(model_path.read_bytes()).hexdigest() != training_payload["model_sha256"]:
     raise RuntimeError("Learned association model hash mismatch")
 if not training_payload["association_acceptance_passed"]:
-    raise RuntimeError("Learned association candidate did not pass clean acceptance")
+    print("Training-time acceptance did not pass; checking independent posthoc evidence.")
+
+acceptance_terminals = []
+for path in input_root.rglob("acceptance_terminal.json"):
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        continue
+    if payload.get("evaluation_kind") == "posthoc_complete_movie_acceptance":
+        acceptance_terminals.append((path, payload))
+if len(acceptance_terminals) != 1:
+    raise FileNotFoundError(
+        f"Expected one posthoc acceptance terminal, found {[str(p) for p, _ in acceptance_terminals]}"
+    )
+acceptance_terminal, acceptance_payload = acceptance_terminals[0]
+if acceptance_payload.get("model_sha256") != training_payload["model_sha256"]:
+    raise RuntimeError("Posthoc acceptance evidence is bound to another model")
+if not acceptance_payload.get("association_acceptance_passed"):
+    raise RuntimeError("Learned association candidate did not pass frozen posthoc acceptance")
 if not __import__("torch").cuda.is_available():
     raise RuntimeError("CUDA is unavailable")
 print(json.dumps({
     "runtime": str(runtime),
     "trackastra_dir": str(trackastra_dir),
     "base_submission": str(base_submission),
+    "raw_graph_root": str(raw_graph_root),
     "model_dir": str(model_dir),
+    "acceptance_terminal": str(acceptance_terminal),
     "base_sha256": BASE_SHA256,
     "model_sha256": training_payload["model_sha256"],
-    "selected_method": training_payload["complete_movie_selected"]["method"],
+    "selected_method": acceptance_payload["complete_movie_selected"]["method"],
 }, indent=2))
 '''
 
@@ -198,7 +250,9 @@ command = [
     str(runtime / "rerank_submission.py"),
     "--base-submission", str(base_submission),
     "--model-dir", str(model_dir),
+    "--acceptance-terminal", str(acceptance_terminal),
     "--trackastra-dir", str(trackastra_dir),
+    "--base-graph-root", str(raw_graph_root),
     "--output-dir", str(output_dir),
     "--max-tokens", "512",
     "--candidate-radius", "80",
@@ -259,8 +313,9 @@ def main() -> None:
             markdown_cell(
                 "# Learned Trackastra submission candidate\n\n"
                 "This candidate preserves the clean baseline detector coordinates and replaces "
-                "associations with a Biohub-fine-tuned Trackastra model. It can run only after a "
-                "frozen heldout acceptance improvement and refuses an exact replica.\n"
+                "associations with a Biohub-fine-tuned Trackastra model using hash-pinned raw "
+                "edge confidence. It can run only after a frozen heldout acceptance improvement "
+                "and refuses an exact replica.\n"
             ),
             code_cell(SETUP),
             code_cell(INFER),
@@ -285,6 +340,7 @@ def main() -> None:
         "kernel_sources": [
             "indarkarhana/biohub-clean-0-927-reproduction-v1",
             "indarkarhana/biohub-trackastra-graph-finetune-v5",
+            "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
         ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],

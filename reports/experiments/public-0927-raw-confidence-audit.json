@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "completed",
+  "source_kernel": "indarkarhana/biohub-clean-0-927-reproduction-v1",
+  "source_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+  "raw_graph_manifest": {
+    "path": "tracking_repo/predictions/unknown/unet_transformer/split_0",
+    "files": 132,
+    "bytes": 1583021,
+    "sha256": "d090336a5c2c95fe7a28aee780445603f38bf548bb2489aa3c418dd7e337b851"
+  },
+  "datasets": {
+    "44b6_0113de3b": {
+      "csv_nodes": 25485,
+      "node_id_coverage": 0.9978418677653522,
+      "csv_edges": 24768,
+      "raw_confidence_edges": 24140,
+      "edge_confidence_coverage": 0.9746447028423773,
+      "postprocess_only_edges": 628,
+      "retained_probability_p10": 0.8883610188961029,
+      "retained_probability_median": 0.9788918495178223,
+      "retained_probability_p90": 0.9966616988182068
+    },
+    "44b6_0b24845f": {
+      "csv_nodes": 19905,
+      "node_id_coverage": 0.9837226827430294,
+      "csv_edges": 18653,
+      "raw_confidence_edges": 17319,
+      "edge_confidence_coverage": 0.9284833538840938,
+      "postprocess_only_edges": 1334,
+      "retained_probability_p10": 0.616481614112854,
+      "retained_probability_median": 0.8535624742507935,
+      "retained_probability_p90": 0.9565415263175965
+    },
+    "6bba_05b6850b": {
+      "csv_nodes": 6142,
+      "node_id_coverage": 0.9959296646043634,
+      "csv_edges": 5943,
+      "raw_confidence_edges": 5802,
+      "edge_confidence_coverage": 0.9762746087834427,
+      "postprocess_only_edges": 141,
+      "retained_probability_p10": 0.6967661857604981,
+      "retained_probability_median": 0.917360246181488,
+      "retained_probability_p90": 0.9807874500751496
+    },
+    "6bba_05db0fb1": {
+      "csv_nodes": 70675,
+      "node_id_coverage": 0.9946232755571277,
+      "csv_edges": 68555,
+      "raw_confidence_edges": 65094,
+      "edge_confidence_coverage": 0.9495149879658669,
+      "postprocess_only_edges": 3461,
+      "retained_probability_p10": 0.7352362275123596,
+      "retained_probability_median": 0.9197269082069397,
+      "retained_probability_p90": 0.9812956631183625
+    }
+  },
+  "conclusion": "Stable edge IDs transfer the original learned confidence to 92.85%-97.63% of final CSV edges; postprocess-only edges receive an explicit fixed fallback. This is materially more informative than assigning every base edge probability 0.80.",
+  "selection_policy": "Raw-confidence fusion remains disabled until its thresholds are selected on the two frozen selection movies and pass the disjoint two-movie acceptance gate.",
+  "public_leaderboard_used_for_selection": false
+}

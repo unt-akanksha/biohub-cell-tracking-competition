@@ -15,6 +15,7 @@ from research.trackastra_graph.train_biohub_graph_transformer import (
     read_synthetic_graph_video,
     sample_window,
     select_synthetic_sequence_paths,
+    summarize_stored_edge_probabilities,
     video_plain,
 )
 
@@ -120,6 +121,20 @@ def test_clean_validator_scores_perfect_edges_and_division() -> None:
     assert compute_division_confusion(
         nodes, edges, nodes, edges, pred_to_gt, gt_to_pred
     ) == (1, 0, 0)
+
+
+def test_stored_edge_probability_evidence_ignores_missing_values() -> None:
+    video = build_synthetic_video()
+    probabilities = np.full(len(video.edges), np.nan, dtype=np.float32)
+    probabilities[:3] = [0.25, 0.50, 1.00]
+    video.edge_probabilities = probabilities
+
+    evidence = summarize_stored_edge_probabilities({video.stem: video})[video.stem]
+
+    assert evidence["edges"] == len(video.edges)
+    assert evidence["finite_edge_probabilities"] == 3
+    assert evidence["finite_probability_coverage"] == 3 / len(video.edges)
+    assert evidence["probability_median"] == 0.5
 
 
 def test_synthetic_graph_selection_and_geometry_repair(tmp_path: Path) -> None:
