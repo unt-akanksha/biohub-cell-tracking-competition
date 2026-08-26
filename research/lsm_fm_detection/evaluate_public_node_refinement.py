@@ -406,6 +406,8 @@ def main() -> None:
         "promotion_passed": False,
         "competition_submission_performed": False,
         "public_leaderboard_used_for_selection": False,
+        "public_graph_used_as_base": True,
+        "exact_public_replica": False,
         "public_graph_topology_preserved": True,
         "provenance": {
             "detector_checkpoint_sha256": sha256_file(args.model_path),

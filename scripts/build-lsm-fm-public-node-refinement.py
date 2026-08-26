@@ -60,6 +60,14 @@ def main() -> None:
         if watchdog.count(old) != 1:
             raise ValueError(f"watchdog template changed: {old}")
         watchdog = watchdog.replace(old, new)
+    provenance = '        "public_predictions_copied": False,\n'
+    replacement = (
+        '        "public_graph_used_as_base": True,\n'
+        '        "exact_public_replica": False,\n'
+    )
+    if watchdog.count(provenance) != 1:
+        raise ValueError("watchdog provenance template changed")
+    watchdog = watchdog.replace(provenance, replacement)
     set_source(notebook["cells"][0], watchdog)
 
     set_source(

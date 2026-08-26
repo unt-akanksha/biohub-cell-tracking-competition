@@ -53,6 +53,8 @@ def test_public_node_kernel_has_no_submission_path() -> None:
     metadata = json.loads((KERNEL / "kernel-metadata.json").read_text(encoding="ascii"))
     assert "evaluate_public_node_refinement.py" in source
     assert "--public-predictions" in source
+    assert '"public_graph_used_as_base": True' in source
+    assert '"exact_public_replica": False' in source
     assert "kaggle competitions submit" not in source.lower()
     assert metadata["enable_gpu"] is True
     assert metadata["enable_internet"] is False
