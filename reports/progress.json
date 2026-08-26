@@ -1582,7 +1582,7 @@
       "status": "failed"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.21",
       "amendments": [
         {
           "correction_reason": "Bind the nine-check v2 preflight and prove the retry changes only the trainer/evaluator subprocess MONAI path after v1 failed before model construction.",
@@ -1607,22 +1607,24 @@
         }
       ],
       "authorized_for_submission": false,
-      "decision": null,
-      "decision_evidence": [],
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-pu-adaptation-v2-result.json"
+      ],
       "declared_gpu_hours": "2.00",
       "dependencies": [],
       "exact_evidence": {},
-      "failed_gate": null,
-      "failure_reason": null,
+      "failed_gate": "selection_worst_movie_recall",
+      "failure_reason": "The independent 3D LSM-FM detector completed 768 steps and improved the limiting movie to 0.622061 versus SpatialDINO v1 0.611212 and v2 0.602170, but remained below the immutable 0.65 worst-movie gate. Pooled recall was 0.884206, acceptance stayed sealed, and no submission was created.",
       "hypothesis": "After propagating the already hash-verified MONAI import root into trainer and evaluator subprocesses, the unchanged geometry-matched 3D LSM-FM experiment can produce its first scientific localization evidence.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "rejected",
       "next_gate": null,
       "parent": "lsm-fm-pu-adaptation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T19:03:01.267590Z",
       "run_id": "lsm-fm-pu-adaptation-v2",
-      "status": "running"
+      "status": "rejected"
     }
   ],
   "schema_version": 1
