@@ -113,7 +113,7 @@ def test_duplicate_nonpositive_unknown_parent_do_not_change_bytes(tmp_path):
 def test_backdated_lifecycle_events_are_rejected_without_changing_bytes(tmp_path):
     def rejected(ledger, event):
         before = ledger.path.read_bytes()
-        with pytest.raises(TransitionError, match="precedes durable ledger history"):
+        with pytest.raises(TransitionError):
             ledger.append(event)
         assert ledger.path.read_bytes() == before
 
@@ -240,15 +240,69 @@ def test_backdated_lifecycle_events_are_rejected_without_changing_bytes(tmp_path
         evidence_kind="synthetic_fixture",
         members=members,
     )
-    rejected(
-        exact_ledger,
+    exact_ledger.append(
         ExperimentEvent.create(
             "eval-backdated",
             EventType.EXACT_EVALUATION_REGISTERED,
             exact_registration,
             created_at="2000-01-01T00:00:00Z",
-        ),
+        )
     )
+
+
+def test_unrelated_lifecycle_activity_does_not_block_deterministic_cpu_saga(tmp_path):
+    ledger = make_ledger(tmp_path)
+    registration = ExperimentEvent.create(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_REGISTERED,
+        _cpu_registration(),
+        created_at="2026-08-25T00:00:00Z",
+    )
+    ledger.append(registration)
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_STARTED,
+            cpu_acceptance_started_payload(
+                run_id="cpu-control-a",
+                registration_event_sha256=event_sha256(registration),
+                kernel_ref="owner/biohub-phase2-cpu-acceptance/1",
+                runtime_dataset_ref="owner/biohub-phase2-runtime/1",
+            ),
+            created_at="2026-08-25T00:00:00Z",
+        )
+    )
+    ledger.append(
+        ExperimentEvent.create(
+            "unrelated-run",
+            EventType.REGISTERED,
+            payload(),
+            created_at="2026-08-25T00:00:10Z",
+        )
+    )
+
+    folds = [
+        {
+            "fold_id": f"fold-{token}",
+            "train_membership_sha256": token * 64,
+            "calibration_membership_sha256": token * 64,
+            "evaluation_membership_sha256": token * 64,
+        }
+        for token in ("a", "b")
+    ]
+    saga_event = ExperimentEvent.create(
+        "cpu-control-a",
+        EventType.CPU_ACCEPTANCE_INPUTS_BOUND,
+        cpu_acceptance_inputs_bound_payload(
+            run_id="cpu-control-a", manifest_sha256="3" * 64, folds=folds
+        ),
+        created_at="2026-08-25T00:00:00Z",
+    )
+    ledger.append(saga_event)
+    before = ledger.path.read_bytes()
+    with pytest.raises(TransitionError, match="duplicate event ID"):
+        ledger.append(saga_event)
+    assert ledger.path.read_bytes() == before
 
 
 def test_artifact_path_outside_workspace_and_hash_mismatch_fail(tmp_path):

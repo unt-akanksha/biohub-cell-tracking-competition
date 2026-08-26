@@ -972,10 +972,11 @@ class Ledger:
         with _ExclusiveLock(self.lock_path, self.lock_timeout_seconds):
             existing_bytes = self.path.read_bytes() if self.path.exists() else b""
             events = self._decode(existing_bytes)
-            if events and _parse_time(event.created_at) < max(
-                _parse_time(existing.created_at) for existing in events
+            lifecycle_events = [item for item in events if item.run_id == event.run_id]
+            if lifecycle_events and _parse_time(event.created_at) < max(
+                _parse_time(item.created_at) for item in lifecycle_events
             ):
-                raise TransitionError("event created_at precedes durable ledger history")
+                raise TransitionError("event created_at precedes its lifecycle history")
             validate_transition(events, event)
             payload = canonical_json_bytes(event.to_dict()) + b"\n"
             # Validate the exact durable candidate, including reconstruction order,
