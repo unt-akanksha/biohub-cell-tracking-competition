@@ -14,6 +14,13 @@
   "final_submission_slots": 2,
   "notebook_runtime_limit_hours": "12.00",
   "gpu_reserve_hours": "8.00",
+  "submission_execution_policy": {
+    "required_cuda_devices": 2,
+    "require_movie_sharding_across_devices": true,
+    "runtime_soft_stop_hours": "10.50",
+    "runtime_hard_stop_hours": "11.25",
+    "require_non_replica_output": true
+  },
   "current_status": {
     "best_clean_public_score": "0.913",
     "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",

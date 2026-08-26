@@ -36,10 +36,26 @@ A real checkpoint load matched all 174 tensors. A CPU forward pass on a
 single-channel 64 x 64 x 64 volume returned finite
 `[1, 390, 8, 8, 8]` features in 0.291 seconds: 384 patch channels plus six
 attention-head channels. The tracked adapter samples only the patch channels,
-maps raw Biohub z into a four-times isotropic encoder grid, L2-normalizes node
-embeddings, and derives candidate-local cosine margins. Unit tests cover patch
+maps Biohub data into an isotropic grid (the runtime equivalently downsamples
+y/x fourfold), L2-normalizes node embeddings, and derives candidate-local
+cosine margins. Unit tests cover patch
 center alignment, trilinear interpolation, candidate grouping, and fail-closed
 shape/bounds checks.
+
+The execution runtime now uses a dependency-light exact ViT-S/8 implementation
+whose 174 state-dict keys and 21,501,312 parameters strictly match the upstream
+checkpoint. Its normalized patch tokens were bit-identical to the upstream
+encoder on the same input (`max_abs = 0`). This avoids the released no-xFormers
+import defect without changing model arithmetic or weights.
+
+The first clean experiment is more conservative than the initial generic
+margin proposal. It only swaps two disjoint ordinary links in the same frame
+transition. Every node, edge count, and per-node in/out degree is invariant, so
+existing divisions and gaps cannot be created, removed, or changed. Strong
+base-confidence edges are locked, both cross links must remain within 12 um,
+and the total geometric displacement may increase by at most a small selected
+bound. A two-movie worst-embryo rule freezes the configuration before any
+acceptance label is opened.
 
 ## Experiment contract
 

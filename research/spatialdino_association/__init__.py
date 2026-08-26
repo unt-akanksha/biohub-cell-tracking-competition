@@ -5,9 +5,15 @@ from .appearance import (
     parent_choice_margins,
     sample_patch_embeddings,
 )
+from .encoder import SpatialDinoViTS8, load_spatialdino_vits8
+from .correction import SwapConfig, appearance_pair_swaps
 
 __all__ = [
     "edge_cosine_scores",
     "parent_choice_margins",
     "sample_patch_embeddings",
+    "SpatialDinoViTS8",
+    "load_spatialdino_vits8",
+    "SwapConfig",
+    "appearance_pair_swaps",
 ]
