@@ -29,7 +29,13 @@ def test_research_refresh_is_regular_source_based_and_leaderboard_blind() -> Non
 def test_launch_research_guard_rejects_stale_audit(tmp_path: Path) -> None:
     (tmp_path / "policies").mkdir()
     (tmp_path / "policies" / "notebook_audits.json").write_text(
-        json.dumps({"audited_at": "2026-08-24T00:00:00Z"}), encoding="utf-8"
+        json.dumps(
+            {
+                "audited_at": "2026-08-24T00:00:00Z",
+                "discussions_audited_at": "2026-08-24T00:00:00Z",
+            }
+        ),
+        encoding="utf-8",
     )
     config = {"research_refresh_policy": {"max_audit_age_hours": 24}}
 
@@ -46,10 +52,48 @@ def test_launch_research_guard_rejects_stale_audit(tmp_path: Path) -> None:
 def test_launch_research_guard_accepts_recent_source_audit(tmp_path: Path) -> None:
     (tmp_path / "policies").mkdir()
     (tmp_path / "policies" / "notebook_audits.json").write_text(
-        json.dumps({"audited_at": "2026-08-25T12:00:00Z"}), encoding="utf-8"
+        json.dumps(
+            {
+                "audited_at": "2026-08-25T12:00:00Z",
+                "discussions_audited_at": "2026-08-25T12:00:00Z",
+                "notebooks": [{"reviewed_sha256": "a" * 64}],
+            }
+        ),
+        encoding="utf-8",
     )
     validate_research_refresh(
         tmp_path,
-        {"research_refresh_policy": {"max_audit_age_hours": 24}},
+        {
+            "research_refresh_policy": {
+                "max_audit_age_hours": 24,
+                "require_source_review": True,
+            }
+        },
         now=datetime(2026, 8, 26, tzinfo=timezone.utc),
     )
+
+
+def test_launch_research_guard_rejects_timestamp_only_audit(tmp_path: Path) -> None:
+    (tmp_path / "policies").mkdir()
+    (tmp_path / "policies" / "notebook_audits.json").write_text(
+        json.dumps(
+            {
+                "audited_at": "2026-08-25T12:00:00Z",
+                "discussions_audited_at": "2026-08-25T12:00:00Z",
+                "notebooks": [],
+            }
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(LaunchError) as error:
+        validate_research_refresh(
+            tmp_path,
+            {
+                "research_refresh_policy": {
+                    "max_audit_age_hours": 24,
+                    "require_source_review": True,
+                }
+            },
+            now=datetime(2026, 8, 26, tzinfo=timezone.utc),
+        )
+    assert error.value.reason_code == "RESEARCH_AUDIT_UNAVAILABLE"

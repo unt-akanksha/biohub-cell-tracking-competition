@@ -118,16 +118,37 @@ def validate_research_refresh(
     try:
         audit = json.loads(audit_path.read_text(encoding="utf-8"))
         audited_at = _parse_time(str(audit["audited_at"]))
-    except (FileNotFoundError, json.JSONDecodeError, KeyError) as exc:
+        discussions_audited_at = _parse_time(str(audit["discussions_audited_at"]))
+    except (FileNotFoundError, json.JSONDecodeError, KeyError, LaunchError) as exc:
         raise LaunchError(
             "RESEARCH_AUDIT_UNAVAILABLE", "source-based notebook audit is unavailable"
         ) from exc
+    if policy.get("require_source_review") is True:
+        notebooks = audit.get("notebooks")
+        source_reviews = [
+            row.get("reviewed_sha256")
+            for row in notebooks
+            if isinstance(row, Mapping)
+        ] if isinstance(notebooks, list) else []
+        if not any(
+            isinstance(value, str)
+            and len(value) == 64
+            and all(character in "0123456789abcdef" for character in value)
+            for value in source_reviews
+        ):
+            raise LaunchError(
+                "RESEARCH_AUDIT_UNAVAILABLE",
+                "research audit has no hash-bound notebook source review",
+            )
     current = now.astimezone(timezone.utc)
-    if audited_at > current + timedelta(minutes=5):
+    if max(audited_at, discussions_audited_at) > current + timedelta(minutes=5):
         raise LaunchError(
             "RESEARCH_AUDIT_FUTURE", "notebook audit timestamp is in the future"
         )
-    if current - audited_at > timedelta(hours=max_age):
+    if any(
+        current - timestamp > timedelta(hours=max_age)
+        for timestamp in (audited_at, discussions_audited_at)
+    ):
         raise LaunchError(
             "RESEARCH_AUDIT_STALE", "refresh notebooks and discussions before GPU launch"
         )

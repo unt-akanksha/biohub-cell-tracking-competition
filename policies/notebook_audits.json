@@ -1,6 +1,8 @@
 {
   "schema_version": 1,
   "audited_at": "2026-08-26T16:23:00Z",
+  "discussions_audited_at": "2026-08-26T16:23:00Z",
+  "discussion_refs": ["730160", "734604", "730924", "735352"],
   "notebooks": [
     {
       "ref": "xiaoleilian/biohub-ct-mix-divaug",
