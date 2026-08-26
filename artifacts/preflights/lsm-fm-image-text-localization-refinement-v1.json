@@ -1,0 +1,159 @@
+{
+  "checks": [
+    {
+      "detail": "Notebook cells compile, remote modules import, and focused refinement and two-GPU policy tests pass.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-localization-refinement-v1/biohub-lsm-fm-image-text-localization-refinement-v1.ipynb",
+          "sha256": "39914a129db751d85f6dc21a786451a9361356faa081ef0f653ad733d427aca3"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/evaluate_localization_refinement.py",
+          "sha256": "a58a79f0f24574803ccd324a5be5138d294b916957102dd59d01d5910355e5b6"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/localization_refinement.py",
+          "sha256": "528bed55386a34a9e30d5a200cc22453092bf5be7627307b4b433501fc098279"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/monai-1.5.1/monai/__init__.py",
+          "sha256": "3b018ef27d5eaea7ce26c2e897586cb8735d73b00eb0e6fcdca33b9b3d554337"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtime and completed feature-36 checkpoint are exact-hash bound; competition input remains attached with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-image-text-localization-refinement-v1.json",
+          "sha256": "43333d8496d912f814d274d3398ab936ea6467db9bc8eff61e0758c4a2c5bd25"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-localization-refinement-v1/kernel-metadata.json",
+          "sha256": "c254609c2dbfc87fdce9c0afcc78f3f433a86e2713ca01c7eda3f1dba1e393a2"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/SOURCE_MANIFEST.json",
+          "sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The learned state strict-loads and synthetic sub-voxel tests cover every refinement implementation.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": "tests/test_lsm_fm_localization_refinement.py",
+          "sha256": "3faba8af2726707e33f8c3803901fe9dca2fd0eb681850f29682d2cf2122f8d6"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only experiment: no parameter update occurs.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "The base and learned checkpoints strict-load with exact 35,072,515 parameters and clean terminal provenance.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only validation evidence is written; submission artifacts cause failure and no submission call exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-localization-refinement-v1/biohub-lsm-fm-image-text-localization-refinement-v1.ipynb",
+          "sha256": "39914a129db751d85f6dc21a786451a9361356faa081ef0f653ad733d427aca3"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/evaluate_localization_refinement.py",
+          "sha256": "a58a79f0f24574803ccd324a5be5138d294b916957102dd59d01d5910355e5b6"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "One global strategy is selected on eight movies before four disjoint acceptance movies can open.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-image-text-localization-refinement-v1.json",
+          "sha256": "43333d8496d912f814d274d3398ab936ea6467db9bc8eff61e0758c4a2c5bd25"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/evaluate_localization_refinement.py",
+          "sha256": "a58a79f0f24574803ccd324a5be5138d294b916957102dd59d01d5910355e5b6"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Only our independently trained feature-36 checkpoint and raw images are used; no public predictions or Kaggle code are copied.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-image-text-localization-refinement-v1.json",
+          "sha256": "43333d8496d912f814d274d3398ab936ea6467db9bc8eff61e0758c4a2c5bd25"
+        },
+        {
+          "path": "licenses/LSM_FM_WEIGHTS_ATTRIBUTION.md",
+          "sha256": "91d081f0bf9365062dc8a7623523dfb489d87fbf03bd18504ce44a6f2227c522"
+        },
+        {
+          "path": "reports/experiments/lsm-fm-ensemble-validation-v1-result.json",
+          "sha256": "c73d1b447eca37852825f766df9da15e1002ebd6631372a203ec797ef4f060db"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T21:12:03.619419Z",
+  "report_sha256": "38def18b9e36f0f3463a29f4deffaa5fc461c6adf211c3c144b1709a57ec53d7",
+  "run_id": "lsm-fm-image-text-localization-refinement-v1",
+  "schema_version": 1
+}

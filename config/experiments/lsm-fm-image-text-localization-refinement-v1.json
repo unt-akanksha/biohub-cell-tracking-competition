@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-image-text-localization-refinement-v1",
+  "parent": "lsm-fm-ensemble-validation-v1",
+  "hypothesis": "A single global raw-intensity-aware or wider-radius sub-voxel refinement of the frozen feature-36 LSM-FM peaks will recover the 14 additional limiting-movie matches needed to cross the unchanged 0.65 gate while preserving all other movies within 0.01 recall.",
+  "accelerator": "NvidiaTeslaT4",
+  "declared_max_runtime_hours": "1.00",
+  "watchdog_hard_stop_seconds": 3300,
+  "evaluator_max_wall_seconds": 3000,
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-image-text-localization-refinement-v1",
+  "kernel_builder_sha256": "bdff7f39767f801e3e18788c3332b98c41e2d92009e84b470464ba1eb6c28785",
+  "notebook_sha256": "39914a129db751d85f6dc21a786451a9361356faa081ef0f653ad733d427aca3",
+  "kernel_metadata_sha256": "c254609c2dbfc87fdce9c0afcc78f3f433a86e2713ca01c7eda3f1dba1e393a2",
+  "runtime_manifest_sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1",
+  "evaluator_sha256": "a58a79f0f24574803ccd324a5be5138d294b916957102dd59d01d5910355e5b6",
+  "localization_refinement_sha256": "528bed55386a34a9e30d5a200cc22453092bf5be7627307b4b433501fc098279",
+  "parent_result_report_sha256": "c73d1b447eca37852825f766df9da15e1002ebd6631372a203ec797ef4f060db",
+  "dataset_sources": [
+    "indarkarhana/biohub-lsm-fm-ensemble-runtime-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
+    "indarkarhana/biohub-lsm-fm-image-text-pu-adaptation-v1"
+  ],
+  "model": {
+    "architecture": "LSM-FM image-text SwinUNETR feature-36 plus Biohub heatmap head",
+    "parameters": 35072515,
+    "base_checkpoint_sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7",
+    "learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a",
+    "launcher_terminal_sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+  },
+  "strategies": [
+    "probability_r1_p2",
+    "probability_r2_p2",
+    "probability_r2_p4",
+    "joint_r1_p2_i1",
+    "joint_r2_p2_i1",
+    "joint_r2_p4_i1",
+    "concave_quadratic_3x3x3",
+    "log_probability_quadratic_3x3x3"
+  ],
+  "strategy_selection": "one global strategy only; no per-movie choice",
+  "validation": {
+    "selection_movies": 8,
+    "untouched_acceptance_movies": 4,
+    "selection_pooled_recall_min": 0.8,
+    "selection_worst_movie_recall_min": 0.65,
+    "minimum_movie_delta_from_control": -0.01,
+    "acceptance_public_pooled_recall": 0.96902842596521,
+    "public_leaderboard_used_for_selection": false
+  },
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false,
+  "promotion_rule": "only clean held-out acceptance can authorize later hybrid graph validation; every eventual submission requires exactly two CUDA devices and whole-movie sharding"
+}
