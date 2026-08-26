@@ -1322,6 +1322,27 @@
       "registered_at": "2026-08-26T14:13:34.437632Z",
       "run_id": "spatialdino-appearance-validation-v1",
       "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Positive-unlabeled adaptation of the official 35.5M Spotiflow detector using conservative two-seed teacher consensus, forced organizer positives, weak-strong consistency, and frozen-base flow preservation can match the public detector's clean recall without copying public predictions.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "spatialdino-appearance-validation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T15:01:54.263805Z",
+      "run_id": "spotiflow-pu-adaptation-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1
