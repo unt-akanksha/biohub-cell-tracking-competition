@@ -1,6 +1,7 @@
 # Positive-unlabeled detector adaptation — next high-upside lane
 
-Status: designed, not scheduled ahead of the active HOCT gate.
+Status: target construction implemented locally; GPU training remains queued
+behind the active SpatialDINO validation gate.
 
 ## Why this lane exists
 
@@ -23,7 +24,9 @@ positive-unlabeled rather than another synthetic-only or fully supervised run.
 - Exclude all four validation stems from every teacher/student training read.
 - Use the public two-seed detector only as a teacher. The primary checkpoint is
   `pilkwang/biohub-tracking-support-pack-50ep-v1`'s
-  `checkpoint_last.pth`; the independent secondary is
+  `edge_predictor_best.pth` (SHA-256
+  `12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771`);
+  the independent secondary is
   `pilkwang/biohub-temporal-unet3d-seed314159-v1` with weight SHA-256
   `9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f`.
   Intersections of the two seed peak sets are high-confidence
@@ -47,7 +50,23 @@ keep projected node counts within the predeclared density envelope. A larger
 network or changed checkpoint hash alone is not evidence. No leaderboard score
 may promote the lane.
 
-This experiment is intentionally deferred until HOCT returns clean association
-evidence. If HOCT passes, the detector student can be composed with the accepted
-linker; if it fails, the detector can still be evaluated independently without
-reusing acceptance labels.
+HOCT has now failed its clean association gate and is retired. The detector
+student remains independent of that rejected output. Its first GPU training run
+is queued behind SpatialDINO so experiments remain sequential and the quota
+reserve is protected.
+
+## Implemented target guardrails (2026-08-26)
+
+`research/spotiflow_biohub/pu_targets.py` now implements the model-independent
+part of the lane. It extracts deterministic local maxima from each teacher,
+forms one-to-one spatial consensus labels, and lets organizer annotations
+replace nearby pseudo-labels or add missed positives. A Gaussian positive
+region receives full supervision; any support from either teacher remains
+unknown and is spatially buffered by two voxels; only voxels outside both
+low-probability supports receive the capped 0.02 background weight. Positive
+and background losses are normalized
+separately so the much larger background volume cannot dominate by voxel count.
+
+Y/X flips and rotations transform coordinates with the volume. Unit tests pin
+the one-to-one matching, forced-positive behavior, unknown-region masking,
+background cap, plateau handling, augmentation geometry, and masked loss.
