@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "run_id": "spatialdino-pu-selective-distillation-v2",
+  "status": "rejected",
+  "actual_gpu_hours": "0.18",
+  "quota_before_hours": "26.59",
+  "quota_after_hours": "26.41",
+  "launcher_elapsed_seconds": 615.016,
+  "resolved_kernel_ref": "indarkarhana/biohub-spatialdino-selective-distillation-v2",
+  "training": {
+    "status": "completed",
+    "actual_steps": 768,
+    "target_steps": 768,
+    "training_movies": 187,
+    "validation_overlap": [],
+    "parameter_count": 29521225,
+    "decoder_warmup_trainable_parameters": 8019913,
+    "deep_trainable_parameters": 15121609,
+    "ema_checkpoint": true,
+    "weights_changed": true,
+    "base_encoder_sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8",
+    "best_weight_sha256": "2540dc2d9d02a344b987f32aa5c683a87e8fe1f43f1cb2d63ac4efbcc97168d7",
+    "elapsed_seconds": 315.913,
+    "final_distillation_support_fraction": 0.049716949462890625,
+    "final_distillation_mean_agreement": 0.688726007938385,
+    "final_distillation_loss": 0.47186219692230225
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "matched_gt_nodes": 9900,
+    "annotated_node_recall": 0.8859060402684564,
+    "pooled_recall_min": 0.8,
+    "worst_movie_recall": 0.6021699819168174,
+    "worst_movie_recall_min": 0.65,
+    "worst_movie": "6bba_57b7cc1e",
+    "worst_movie_projected_count_ratio": 0.9989416535645412,
+    "worst_movie_mean_match_distance_um": 2.58526380005969,
+    "by_embryo": {
+      "44b6": {
+        "annotated_gt_nodes": 3853,
+        "matched_gt_nodes": 3565,
+        "annotated_node_recall": 0.9252530495717622
+      },
+      "6bba": {
+        "annotated_gt_nodes": 7322,
+        "matched_gt_nodes": 6335,
+        "annotated_node_recall": 0.8652007648183556
+      }
+    },
+    "per_movie_recall": {
+      "44b6_d29c9ab2": 0.9933481152993349,
+      "44b6_3a861e03": 0.9700534759358289,
+      "44b6_d5e7d891": 0.7693156732891833,
+      "44b6_ddf577ad": 0.936267071320182,
+      "6bba_09961292": 0.9425641025641026,
+      "6bba_bb9f20c3": 0.9101298701298701,
+      "6bba_784a78c9": 0.9765100671140939,
+      "6bba_57b7cc1e": 0.6021699819168174
+    },
+    "passed": false
+  },
+  "paired_delta_vs_v1": {
+    "pooled_recall": 0.0002684563758389,
+    "worst_movie_recall": -0.0090415913200723,
+    "embryo_44b6_recall": -0.0010381520892812,
+    "embryo_6bba_recall": 0.0009560229445506
+  },
+  "acceptance": {
+    "opened": false,
+    "reason": "worst-movie selection recall missed the immutable 0.65 gate"
+  },
+  "diagnosis": {
+    "optimization_collapsed": false,
+    "pooled_gate_passed": true,
+    "worst_movie_gap": -0.0478300180831826,
+    "interpretation": "Selective teacher distillation left pooled recall essentially unchanged and regressed the same dense 6bba movie. Correct projected count and slightly shorter matched distances do not offset lower recall; the remaining failure is model-family localization transfer, not count calibration or insufficient imitation of the existing teachers."
+  },
+  "decision": {
+    "state": "retire",
+    "reason": "The paired distillation ablation failed the unchanged worst-movie gate and was worse than its parent on the limiting movie. Further tuning of the same teacher loss is not evidence-gated.",
+    "next_test": "Use the audited CC-BY-4.0 3D light-sheet SwinUNETR image-only student as a different 64-cubed microscopy initialization, attach a Biohub-owned one-channel detector head, and evaluate under the same sealed split and gates."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false,
+  "evidence": {
+    "launcher_terminal_sha256": "89952ed22b15ab4f64397f7a5530469e2bcfc0b85cf7902355d4b71489cdc865",
+    "training_result_sha256": "8c796856ae05aeffc6eb9a1e2dbf620a0f15b244b35190fc0606cc749446810b",
+    "validation_result_sha256": "88d7fe657d2268a0969bc9f0287b91d6b3e77733dfc7720925d1378d835a27cc",
+    "kernel_log_sha256": "b1ee6f0536655022cd66f5da4b1b3fc53520e401707d3e3504338ac5f61ec091",
+    "checkpoint_sha256": "2540dc2d9d02a344b987f32aa5c683a87e8fe1f43f1cb2d63ac4efbcc97168d7"
+  }
+}
