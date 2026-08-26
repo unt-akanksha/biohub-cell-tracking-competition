@@ -1,12 +1,12 @@
 # Biohub Competition Status
 
-Generated from snapshot: `2026-08-26T15:54:30.976231Z`
-Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675abe1`
+Generated from snapshot: `2026-08-26T18:55:18.795887Z`
+Snapshot SHA-256: `28ad9e2e41ffb83ad5537d8cede50746d5326f27a93c514327e88c4396b57ae1`
 
 ## Competition
 
 - Slug: `biohub-cell-tracking-during-development`
-- Public rank: 815
+- Public rank: 821
 - Best clean public score: 0.913
 - Clean-score evidence: Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.
 - Current public leader score: 0.962
@@ -14,9 +14,9 @@ Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675a
 
 ## GPU Safety
 
-- Remaining: 26.79 hours
+- Remaining: 26.37 hours
 - Protected reserve: 8.00 hours
-- Spendable before reserve: 18.79 hours
+- Spendable before reserve: 18.37 hours
 - Quota refresh: 2026-08-29T00:00:00
 
 ## Personal Submissions
@@ -36,7 +36,7 @@ Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675a
 
 ### Excluded Metric Hacks
 
-- `kirneo/metric-hack-last-call-update` — matched explicit metric-hack policy
+- None detected in the collected notebook set.
 
 ### Needs Source Review
 
@@ -44,6 +44,7 @@ Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675a
 
 ## Recent Discussions
 
+- 2026-08-26T16:27:51.320000 — Scoring after notebook ran (topic `737659`, 2 comments, 0 votes)
 - 2026-08-26T08:00:08.592000 — division jaccard (topic `737577`, 2 comments, 1 votes)
 - 2026-08-26T03:10:45.084000 — what layer did ur gains actually come from (topic `737543`, 0 comments, 1 votes)
 - 2026-08-25T14:20:22.701000 — does anyone have a different design for divisions (topic `737438`, 0 comments, 1 votes)
@@ -59,7 +60,6 @@ Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675a
 - 2026-08-10T12:04:24.138000 — How much points are you guys getting (topic `734192`, 2 comments, 3 votes)
 - 2026-08-09T20:23:41.311000 — Public case study: From Detection to Identity — 3D cell tracking reasoning and aggregate evidence (topic `734093`, 1 comments, 2 votes)
 - 2026-08-09T16:58:04.843000 — The voxels are 4:1 anisotropic in Z, and two other things sitting in zarr.json (topic `734053`, 0 comments, 1 votes)
-- 2026-08-09T14:38:41.253000 — training on patches or whole volume? (topic `734015`, 0 comments, 1 votes)
 - 2026-08-03T08:02:09.584000 — Errors on GT cell traces (topic `732474`, 2 comments, 6 votes)
 - 2026-07-09T16:55:59.111000 — Share a custom napari visualizer (topic `724130`, 8 comments, 43 votes)
 - 2026-06-30T02:16:18.647000 — Welcome to the Biohub - Cell Tracking During Development Challenge (topic `716062`, 6 comments, 72 votes)
@@ -72,8 +72,8 @@ Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675a
 
 ## Policy Provenance
 
-- Policy SHA-256: `48663565884697b15bed2423e1a6ebc6d989c6d32406bf2d3e6183988a7a6319`
-- Notebook registry SHA-256: `902e6dd4f3cb3811d1cc9ec62cbc668920cc3dbb44138a3d52149099240cb2f5`
+- Policy SHA-256: `41bf1b8428738f80c26f679952bbe95e312c960b68fee67e89e8e7b4b3e639af`
+- Notebook registry SHA-256: `1f10b7801ce0ce5b048719b98012e6e55cdc8ee34c37394bebfbad0c78f189ee`
 - Metric-hack policy SHA-256: `0b3652a0912cbaff53cbde372bebd2976476156a432dc35a3ce88ccb03fd9374`
 
 ### Live Kaggle Page Fingerprints

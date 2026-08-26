@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-pu-adaptation-v2",
+  "parent": "lsm-fm-pu-adaptation-v1",
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
+  "notebook_sha256": "aa4b87ca6e5c0cbd5e181c0030f5ce07483c04a311185b6572ec22a6e7420f89",
+  "kernel_metadata_sha256": "f41f9d835a2f528c4bfae7405bd697291bdc712d9236d738cc8498740db65f0f",
+  "kernel_builder_sha256": "28bcc71b01ea6ee16fd061a4cda28eaa4d24abb36ca14fd939574229cb375e94",
+  "repair_builder_sha256": "e7ba0993abb3703766b02366a331f768980395e629e8722f836ee906ce65e6ae",
+  "runtime_builder_sha256": "7d21768b4b27cf55f76acf75fd02cc8dc02a5c90855170908cd62b618de0802e",
+  "runtime_manifest_sha256": "fe6077dd0618f4fd2e6b026d88bf18323a66b27b7cebd5bb9431b2e1d3d6735c",
+  "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+  "model_sha256": "62580122ac968e695d49d4af0146b4e92de7d3cd0e38afa9f6d744a7bea13356",
+  "data_sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371",
+  "trainer_sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f",
+  "distillation_sha256": "51693320eb3f6a41867b04f0dc3f0d1f0d44c939244c8c315148120ab73b51e4",
+  "inference_sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e",
+  "evaluator_sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b",
+  "target_builder_sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f",
+  "teacher_reconstruction_sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989",
+  "checkpoint_extractor_sha256": "93e9b8b93be75f2cc3454c2e25abbab424416449c990c784744d1b29ffba5269",
+  "attribution_sha256": "cdb29a3064a66cc34debc3b6ca005ff1e75ec9ffeb2736b22e9480ae51e41963",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "trainer_max_wall_seconds": 5200,
+  "evaluator_max_wall_seconds": 1300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-lsm-fm-pu-runtime-v1@version2",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "pilkwang/biohub-temporal-unet3d-seed314159-v1"
+  ],
+  "hypothesis": "After propagating the already hash-verified MONAI import root into trainer and evaluator subprocesses, the unchanged geometry-matched 3D LSM-FM experiment can produce its first scientific localization evidence.",
+  "repair_from_v1": {
+    "scientific_change": false,
+    "failure_stage": "before model construction and before optimizer step zero",
+    "failure_result_sha256": "736b044f59ca73edfae4070e4fd1de470d1feef7d4d44b31a7e406ea25bc6da0",
+    "launcher_terminal_sha256": "5157b3b1ffef4864c3ae632eae8887430d0129bf2f9cdf262911691d1b18b14c",
+    "kernel_log_sha256": "00c2e419d8243d59e08d848d0ad24852378429cfe249b84b60c04f73866df86a",
+    "only_change": "prepend the already verified monai_import_root to the shared trainer/evaluator subprocess PYTHONPATH"
+  },
+  "student": {
+    "name": "LSM-FM image-only SwinUNETR heatmap detector",
+    "architecture": "MONAI SwinUNETR feature-24 with a Biohub-owned one-channel output head",
+    "source_checkpoint_sha256": "ef0f3d100f9a9aaa5d9a48bb9b07e7f1b0e0d1cc690cdcd308b1e0446bd01634",
+    "stripped_checkpoint_sha256": "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0",
+    "source_doi": "10.5281/zenodo.20146516",
+    "weights_license": "CC-BY-4.0",
+    "implementation": "MONAI 1.5.1",
+    "implementation_license": "Apache-2.0",
+    "pretrained_parameter_count": 16656946,
+    "detector_parameter_count": 15702979,
+    "decoder_warmup_trainable_parameters": 13531513,
+    "deep_phase_encoder_trainable_parameters": 2013480,
+    "deep_phase_total_trainable_parameters": 15544993,
+    "pretraining_input_shape": [64, 64, 64],
+    "biohub_input_shape": [64, 64, 64],
+    "public_predictions_copied": false,
+    "public_kaggle_code_copied": false
+  },
+  "teachers": [
+    {
+      "role": "frozen conservative positive-unlabeled teacher",
+      "checkpoint_sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+    },
+    {
+      "role": "frozen independent-seed consensus teacher",
+      "checkpoint_sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+    }
+  ],
+  "training": {
+    "paired_ablation_seed": 20260827,
+    "target_steps": 768,
+    "minimum_steps": 192,
+    "encoder_unfreeze_step": 192,
+    "encoder_stages_unfrozen": 2,
+    "pairs_per_training_movie": 1,
+    "training_movies": 187,
+    "decoder_learning_rate": 0.0002,
+    "encoder_learning_rate": 0.000002,
+    "ema_decay": 0.995,
+    "teacher_target_cache": true,
+    "teacher_disagreements_are_unknown_for_pu_loss": true,
+    "selective_soft_distillation": false,
+    "activation_strategy": "serialized weak/strong backpropagation; detached weak view is the strong-view consistency target",
+    "validation_movies_excluded": 12
+  },
+  "previous_family_diagnosis": {
+    "run_id": "spatialdino-pu-selective-distillation-v2",
+    "selection_pooled_recall": 0.8859060402684564,
+    "selection_worst_movie_recall": 0.6021699819168174,
+    "worst_movie": "6bba_57b7cc1e",
+    "worst_movie_projected_count_ratio": 0.9989416535645412,
+    "worst_movie_mean_match_distance_um": 2.58526380005969,
+    "interpretation": "same-teacher soft distillation preserved counts but did not repair localization, so the detector family is changed rather than retuned"
+  },
+  "validation": {
+    "selection_movies": 8,
+    "untouched_acceptance_movies": 4,
+    "threshold_source": "image responses plus organizer estimated node counts before label read",
+    "public_leaderboard_used_for_selection": false,
+    "selection_pooled_recall_min": 0.8,
+    "selection_worst_movie_recall_min": 0.65,
+    "acceptance_public_pooled_recall": 0.96902842596521,
+    "worst_movie_delta_min": -0.01
+  },
+  "promotion_rule": "only clean-heldout acceptance can authorize a separate non-replica candidate; any later submission must use two GPUs with whole-movie sharding",
+  "submission_policy": "training and validation only; no submission file or competition API call"
+}

@@ -1539,7 +1539,7 @@
       "status": "rejected"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.04",
       "amendments": [
         {
           "correction_reason": "Bind the strict eight-check preflight, independent Kaggle version-2 runtime download, archive expansion inventory, and scientific family change before GPU launch.",
@@ -1570,16 +1570,59 @@
       "dependencies": [],
       "exact_evidence": {},
       "failed_gate": null,
-      "failure_reason": null,
+      "failure_reason": "Kaggle setup verified MONAI in the notebook, but the trainer subprocess omitted the verified MONAI import root from PYTHONPATH and failed before model construction or any optimizer step; no checkpoint, validation, or submission artifact was produced.",
       "hypothesis": "A geometry-matched 3D light-sheet foundation model will improve dim-cell localization beyond the retired 2D SpatialDINO hybrid while retaining conservative independent PU supervision.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "failed",
       "next_gate": null,
       "parent": "spatialdino-pu-selective-distillation-v2",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T18:44:49.552808Z",
       "run_id": "lsm-fm-pu-adaptation-v1",
-      "status": "running"
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Bind the nine-check v2 preflight and prove the retry changes only the trainer/evaluator subprocess MONAI path after v1 failed before model construction.",
+          "replacement_fields": {
+            "base_focused_tests_passed": 36,
+            "config_file_sha256": "25c633cc3b612652914409856e0b8c663f0ef03b9a64ee0cd8d722dc18e2b238",
+            "config_path": "config/experiments/lsm-fm-pu-adaptation-v2.json",
+            "only_change": "prepend verified monai_import_root to shared trainer/evaluator subprocess PYTHONPATH",
+            "preflight_builder_sha256": "f7784ea2c27722cc796ce1cebb6577d45318ceacad5db4e3f0379b811e5af780",
+            "preflight_file_sha256": "648db52a347304dafbdb9ba4a4512c6fb2eae37d3dd5118e37035b821e646b93",
+            "preflight_report": "artifacts/preflights/lsm-fm-pu-adaptation-v2.json",
+            "preflight_report_sha256": "cb754b0b28f5fa0f803c0cd4bde6fc662cbbc9d5f09d81777713ee2b359bba86",
+            "remote_dataset_download_verified": true,
+            "repair_tests_passed": 1,
+            "runtime_dataset": "indarkarhana/biohub-lsm-fm-pu-runtime-v1",
+            "runtime_dataset_version": 2,
+            "runtime_manifest_sha256": "fe6077dd0618f4fd2e6b026d88bf18323a66b27b7cebd5bb9431b2e1d3d6735c",
+            "scientific_change_from_v1": false,
+            "staging_report_sha256": "230d6bb7376935a7dcc6b6e7f1eb1f1b79878237c10827dacc673c0a5113d6cd"
+          },
+          "target_event_id": "evt-8f783918999644d696a94c826c3bbd66"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "After propagating the already hash-verified MONAI import root into trainer and evaluator subprocesses, the unchanged geometry-matched 3D LSM-FM experiment can produce its first scientific localization evidence.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "lsm-fm-pu-adaptation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T19:03:01.267590Z",
+      "run_id": "lsm-fm-pu-adaptation-v2",
+      "status": "registered"
     }
   ],
   "schema_version": 1

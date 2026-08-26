@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-pu-adaptation-v1",
+  "status": "failed",
+  "failure_class": "subprocess_environment",
+  "scientific_evidence": false,
+  "actual_gpu_hours": 0.04,
+  "quota_before_hours": 26.41,
+  "quota_after_hours": 26.37,
+  "launcher_elapsed_seconds": 122.481,
+  "training_result_exists": false,
+  "validation_result_exists": false,
+  "optimizer_steps": 0,
+  "checkpoint_created": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false,
+  "cause": "The notebook process hash-verified and imported the Kaggle-extracted MONAI 1.5.1 package, but the trainer subprocess PYTHONPATH omitted monai_import_root and failed before model construction.",
+  "repair": "Add the already verified monai_import_root to the trainer/evaluator subprocess PYTHONPATH; preserve runtime, model, teachers, split, seed, schedule, inference, and gates.",
+  "evidence": {
+    "launcher_terminal_sha256": "5157b3b1ffef4864c3ae632eae8887430d0129bf2f9cdf262911691d1b18b14c",
+    "kernel_log_sha256": "00c2e419d8243d59e08d848d0ad24852378429cfe249b84b60c04f73866df86a",
+    "terminal_path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v1-attempt1/launcher_terminal.json",
+    "log_path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v1-attempt1/biohub-lsm-fm-pu-adaptation-v1.log"
+  }
+}
