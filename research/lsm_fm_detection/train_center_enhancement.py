@@ -49,6 +49,8 @@ PATCH_SHAPE = (7, 7, 7)
 LOW_PROBABILITY_THRESHOLD = 0.02
 MAXIMUM_LABEL_OFFSET_VOXELS = 3.0
 EXPECTED_DETECTOR_PARAMETERS = 35_072_515
+CONTROL_REFINEMENT_RADIUS = 2
+CONTROL_PROBABILITY_POWER = 2.0
 
 
 def sha256_file(path: Path) -> str:
@@ -177,8 +179,8 @@ def build_training_examples(
                 control_points = refine_peaks_weighted(
                     probability,
                     peak_set.coords,
-                    radius=1,
-                    probability_power=2.0,
+                    radius=CONTROL_REFINEMENT_RADIUS,
+                    probability_power=CONTROL_PROBABILITY_POWER,
                 )
                 matched = match_annotated_peaks(
                     control_points, record.annotations[frame]
@@ -386,6 +388,7 @@ def main() -> None:
             "unmatched_peaks_used_as_negatives": False,
             "maximum_match_distance_um": 5.0,
             "maximum_label_offset_voxels": MAXIMUM_LABEL_OFFSET_VOXELS,
+            "residual_control": "probability_r2_p2",
         },
         "selection_labels_read_during_training": False,
         "acceptance_labels_read_during_training": False,

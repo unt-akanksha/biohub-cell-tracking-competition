@@ -6,12 +6,13 @@ Stage an independently implemented learned residual center enhancer as the next
 detector experiment if the inference-only refinement run does not cross its
 frozen worst-movie gate. Do not import CELLECT implementation code or weights.
 
-The retained feature-36 LSM-FM detector already projects the limiting movie's
-node count almost exactly, yet its annotated-node recall is `0.6419529837`:
-`1,065 / 1,659` matches, only 14 matches below the `0.65` gate. This makes a
-count-preserving localization correction a more targeted next experiment than
-another density threshold, similar heatmap ensemble, or larger association
-model.
+The frozen feature-36 LSM-FM detector already projects the limiting movie's
+node count almost exactly. A global radius-2 probability-squared centroid
+improved its annotated-node recall from `1,065 / 1,659` (`0.6419529837`) to
+`1,078 / 1,659` (`0.6497890295`), exactly one match below the `0.65` gate, while
+improving every selection movie. This makes a learned count-preserving residual
+correction more targeted than another density threshold, similar heatmap
+ensemble, or larger association model.
 
 ## Research basis
 
@@ -33,9 +34,9 @@ probability map. A spatial-softmax center volume produces a bounded sub-voxel
 offset. Training uses dense Gaussian center cross-entropy plus robust offset
 regression.
 
-The target is a residual from the exact retained feature-36 control
-(`radius=1`, probability-squared weighted centroid), not from the integer local
-maximum. This keeps the control numerically comparable with prior evidence.
+The target is a residual from the globally stronger feature-36 centroid
+(`radius=2`, probability-squared weighting), not from the integer local maximum.
+This keeps the control numerically comparable with the near-gate evidence.
 
 ## Sparse-label and selection rules
 

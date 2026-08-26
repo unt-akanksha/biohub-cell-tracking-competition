@@ -41,6 +41,8 @@ try:
         EXPECTED_DETECTOR_PARAMETERS,
         LOW_PROBABILITY_THRESHOLD,
         PATCH_SHAPE,
+        CONTROL_PROBABILITY_POWER,
+        CONTROL_REFINEMENT_RADIUS,
         sha256_file,
     )
     from train_spatialdino_pu_detector import normalize_spatialdino_frame
@@ -65,6 +67,8 @@ except ModuleNotFoundError:
         EXPECTED_DETECTOR_PARAMETERS,
         LOW_PROBABILITY_THRESHOLD,
         PATCH_SHAPE,
+        CONTROL_PROBABILITY_POWER,
+        CONTROL_REFINEMENT_RADIUS,
         sha256_file,
     )
     from research.spatialdino_detection.inference import predict_probability_batch
@@ -192,8 +196,8 @@ def predict_candidates(
             control_points = refine_peaks_weighted(
                 probability,
                 peaks.coords,
-                radius=1,
-                probability_power=2.0,
+                radius=CONTROL_REFINEMENT_RADIUS,
+                probability_power=CONTROL_PROBABILITY_POWER,
             )
             patches = extract_center_patches(
                 loaded[local_index],
@@ -404,6 +408,7 @@ def main() -> None:
             "count_preserving": True,
             "confidence_preserving": True,
             "maximum_applied_offset_voxels": MAXIMUM_APPLIED_OFFSET_VOXELS,
+            "residual_control": "probability_r2_p2",
         },
     }
     if selected is not None:
