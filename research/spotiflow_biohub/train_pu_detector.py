@@ -11,6 +11,7 @@ excluded from every training image and label read.
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import random
@@ -195,14 +196,17 @@ def load_pair(record: MovieRecord, frame: int, z_start: int) -> np.ndarray:
     return values
 
 
-def spotiflow_heatmap_logits(model, images):
-    """Forward only the heatmap branch, skipping the unused flow head."""
-
+def spotiflow_backbone_features(model, images):
     values = model._bg_remover(images)
     if model._downsampler is not None:
         values = model._downsampler(values)
-    features = model._backbone(values)
-    return tuple(model._post(features))[0]
+    return model._backbone(values)
+
+
+def spotiflow_heatmap_logits(model, images):
+    """Forward the heatmap branch while preserving access to backbone features."""
+
+    return tuple(model._post(spotiflow_backbone_features(model, images)))[0]
 
 
 def candidate_parameters(model) -> list[tuple[str, Any]]:
@@ -298,6 +302,10 @@ def main() -> None:
     parameter_count = sum(parameter.numel() for parameter in student.parameters())
     if parameter_count != EXPECTED_SPOTIFLOW_PARAMETERS:
         raise RuntimeError(f"unexpected Spotiflow parameter count: {parameter_count}")
+    # Decoder adaptation changes the feature map consumed by Spotiflow's frozen
+    # stereographic-flow head.  Preserve the official subpixel-localization
+    # behavior with an immutable base-model feature/flow target.
+    base_student = copy.deepcopy(student).requires_grad_(False).eval()
 
     all_candidates = candidate_parameters(student)
     if not all_candidates:
@@ -323,8 +331,8 @@ def main() -> None:
         "minimum_steps": args.min_steps,
         "warmup_steps": args.warmup_steps,
         "pairs_per_movie": args.pairs_per_movie,
-        "learning_rate": args.learning_rate,
-        "max_wall_seconds": args.max_wall_seconds,
+            "learning_rate": args.learning_rate,
+            "max_wall_seconds": args.max_wall_seconds,
         "student": {
             "base_best_sha256": sha256_file(args.spotiflow_model / "best.pt"),
             "parameter_count": parameter_count,
@@ -332,6 +340,7 @@ def main() -> None:
             "candidate_parameter_names_sha256": hashlib.sha256(
                 "\n".join(sorted(deep_names)).encode("utf-8")
             ).hexdigest(),
+            "base_flow_distillation_weight": 0.10,
         },
         "teachers": {
             "primary_sha256": sha256_file(args.primary_teacher),
@@ -458,8 +467,10 @@ def main() -> None:
         unknown_tensor = unknown_tensor.unsqueeze(0).unsqueeze(0)
 
         with torch.autocast("cuda", dtype=torch.float16):
-            weak_logits = spotiflow_heatmap_logits(student, weak)
-            strong_logits = spotiflow_heatmap_logits(student, strong)
+            weak_features = spotiflow_backbone_features(student, weak)
+            strong_features = spotiflow_backbone_features(student, strong)
+            weak_logits = tuple(student._post(weak_features))[0]
+            strong_logits = tuple(student._post(strong_features))[0]
             weak_loss = weighted_pu_bce_with_logits(
                 weak_logits, target_tensor, weight_tensor
             )
@@ -473,7 +484,20 @@ def main() -> None:
                 )
             else:
                 consistency = weak_logits.sum() * 0.0
-            loss = 0.5 * (weak_loss + strong_loss) + 0.05 * consistency
+            weak_flow = torch_functional.normalize(
+                student._flow(weak_features[0]), dim=1
+            )
+            with torch.no_grad():
+                base_features = spotiflow_backbone_features(base_student, weak)
+                base_flow = torch_functional.normalize(
+                    base_student._flow(base_features[0]), dim=1
+                )
+            flow_preservation = torch_functional.mse_loss(weak_flow, base_flow)
+            loss = (
+                0.5 * (weak_loss + strong_loss)
+                + 0.05 * consistency
+                + 0.10 * flow_preservation
+            )
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(
@@ -495,6 +519,7 @@ def main() -> None:
                 "weak_pu_loss": float(weak_loss.detach().cpu()),
                 "strong_pu_loss": float(strong_loss.detach().cpu()),
                 "consistency_loss": float(consistency.detach().cpu()),
+                "flow_preservation_loss": float(flow_preservation.detach().cpu()),
                 "consensus_positives": targets.consensus_count,
                 "forced_annotations": targets.forced_annotation_count,
                 "positive_voxels": int(targets.positive_mask.sum()),

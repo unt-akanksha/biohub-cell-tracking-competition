@@ -7,11 +7,11 @@
   "kernel_metadata_sha256": "be2247932f15be2b058276eb9ee76e68eb7c4ed7efa375d07564b04a8b635742",
   "kernel_builder_sha256": "f3b3e9b3824a707c4572a9aece0a654f8a29fcf84370c659643e478ac8c30287",
   "runtime_builder_sha256": "9b33431c4ee48ad17211200732b0f6a568aa7a7107a4ac4ebc69e3ee55c6140f",
-  "runtime_manifest_sha256": "1347712d81b05ff8840d11ec2d24b5da69bca3aa1ce63b5e6b0d587c62286646",
+  "runtime_manifest_sha256": "b38f81d8f8545cce7b5e398d02190d6932c7f081a182aa225d26826e68746280",
   "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
   "target_builder_sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f",
   "teacher_reconstruction_sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989",
-  "trainer_sha256": "3f999a5d71dbd4c786e91371dff5335fb3af707a79cca2fce2c44b03352768f5",
+  "trainer_sha256": "ed65cbe50361a45eb30838884ff1cf0f34e1b4fe080ae11e0bbdbf4b54904c90",
   "evaluator_sha256": "39bcd34c59380eb51dff07428314d56e1256933ff3df4012ef819adc558fbb30",
   "declared_max_runtime_hours": "2.00",
   "watchdog_hard_stop_seconds": 6900,
@@ -21,7 +21,7 @@
   "internet_enabled": false,
   "tpu_enabled": false,
   "dataset_sources": [
-    "indarkarhana/biohub-spotiflow-pu-runtime-v1@version1",
+    "indarkarhana/biohub-spotiflow-pu-runtime-v1@version2",
     "indarkarhana/biohub-trackastra-graph-runtime-v1@version11",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-temporal-unet3d-seed314159-v1"
@@ -41,7 +41,9 @@
       "then_unfreeze": "all decoder blocks and multiscale detection heads; encoder remains frozen",
       "learning_rate": 0.00001,
       "optimizer": "AdamW",
-      "weak_strong_consistency_weight": 0.05
+      "weak_strong_consistency_weight": 0.05,
+      "frozen_base_flow_distillation_weight": 0.10,
+      "flow_distillation_reason": "decoder updates must preserve the official stereographic-flow subpixel localization used at inference"
     }
   },
   "teachers": [
