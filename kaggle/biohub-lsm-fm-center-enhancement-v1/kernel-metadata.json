@@ -12,7 +12,7 @@
   "enable_gpu": true,
   "enable_internet": false,
   "enable_tpu": false,
-  "id": "indarkarhana/biohub-lsm-fm-center-enhance-v1",
+  "id": "indarkarhana/biohub-lsm-fm-cen-residual-v1",
   "is_private": true,
   "kernel_sources": [
     "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
@@ -28,5 +28,5 @@
   "language": "python",
   "machine_shape": "NvidiaTeslaT4",
   "model_sources": [],
-  "title": "Biohub LSM-FM Center Enhancement v1"
+  "title": "Biohub LSM-FM CEN Residual v1"
 }

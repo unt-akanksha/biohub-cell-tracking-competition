@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN_ID = "lsm-fm-center-enhancement-v1"
-KAGGLE_SLUG = "biohub-lsm-fm-center-enhance-v1"
+KAGGLE_SLUG = "biohub-lsm-fm-cen-residual-v1"
 RUNTIME_NAME = "biohub-lsm-fm-center-enhancement-v1"
 RUNTIME = ROOT / ".biohub" / "staging" / RUNTIME_NAME
 TEMPLATE = (
@@ -176,7 +176,7 @@ def main() -> None:
     )
     metadata = {
         "id": f"indarkarhana/{KAGGLE_SLUG}",
-        "title": "Biohub LSM-FM Center Enhancement v1",
+        "title": "Biohub LSM-FM CEN Residual v1",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

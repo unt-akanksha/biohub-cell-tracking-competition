@@ -27,7 +27,7 @@ def test_builder_emits_offline_training_and_selection_gated_kernel() -> None:
         if cell["cell_type"] == "code"
     )
     compile(code, str(KERNEL_DIR), "exec")
-    assert metadata["id"] == "indarkarhana/biohub-lsm-fm-center-enhance-v1"
+    assert metadata["id"] == "indarkarhana/biohub-lsm-fm-cen-residual-v1"
     assert metadata["enable_gpu"] is True
     assert metadata["enable_tpu"] is False
     assert metadata["enable_internet"] is False

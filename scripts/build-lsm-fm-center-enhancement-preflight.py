@@ -60,7 +60,7 @@ SOURCE_OUTPUT = (
     / "kernel-outputs"
     / "lsm-fm-image-text-pu-adaptation-v1"
 )
-OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r2.json"
+OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r3.json"
 
 
 def sha256_file(path: Path) -> str:

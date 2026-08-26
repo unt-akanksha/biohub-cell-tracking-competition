@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-center-enhancement-v1",
+  "classification": "execution_metadata_only",
+  "failed_launch_event_id": "evt-762fe2fa075349e797c5c1acad41a529",
+  "old_kernel_ref": "indarkarhana/biohub-lsm-fm-center-enhance-v1",
+  "new_kernel_ref": "indarkarhana/biohub-lsm-fm-cen-residual-v1",
+  "reason": "Kaggle SaveKernel returned HTTP 409 before kernel creation and the old private slug is inaccessible. The unique replacement changes only the Kaggle execution slug and title.",
+  "scientific_notebook_sha256": "19c1c031322f1bfc73a08cafa068c5105381c6a9a38c299388bf205a62ca883c",
+  "scientific_notebook_changed": false,
+  "new_kernel_builder_sha256": "a1ff8248408246be006aea524fa2293e06ab1c6c40a3adc80ee63ba1f7276819",
+  "new_kernel_metadata_sha256": "a6329e7803b18c9ca0bd0d415326559daa3115e4d92206577600b707a346d355",
+  "new_config_sha256": "32c98897279c7d53d5c52302ed06fa21252062a1efa988ad715b112571ee7007",
+  "replacement_preflight_report": "artifacts/preflights/lsm-fm-center-enhancement-v1-r3.json",
+  "replacement_preflight_report_sha256": "67de1770cad4e9dc5e9e9f6d7dbebebd1449c4ac10965bc5ddfee9864938b4ff",
+  "replacement_preflight_file_sha256": "36576a46335ee4decb25a2e8436cf6778f0a36af85d3cfd8646171f3f824422f",
+  "competition_submission_performed": false
+}
