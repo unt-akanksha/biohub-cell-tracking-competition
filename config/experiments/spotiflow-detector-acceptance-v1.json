@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-detector-acceptance-v1",
+  "parent": "public-0927-clean-repro-v2",
+  "kernel_ref": "indarkarhana/biohub-spotiflow-detector-acceptance-v1",
+  "notebook_sha256": "c36cdaeb8d5603026dcabcfc8b8c834ec7adf539dc912afe91a192ae37c75aef",
+  "kernel_metadata_sha256": "92ff3eab23a695a2c4a4850fe3e716a8e493d01fa565a13bcdd8c7abd1bd0e95",
+  "evaluator_sha256": "44448f862786342aa92556f9194ce246e1def333e56f76a07a5d9a509f147f2c",
+  "density_calibration_sha256": "2911cddd349d302510b144df997aa45f98e97afb4d499003a29618e179e5355c",
+  "runtime_manifest_sha256": "2b55f535ce37c3c8cd153f1dcc5a1fc546abf7b2f2717e850e22c471e504d55a",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "evaluator_max_wall_seconds": 6300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spotiflow-detector-runtime-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version2",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "candidate_models": [
+    {
+      "name": "Spotiflow synth_3d release 0.6.0",
+      "source_repository": "weigertlab/spotiflow",
+      "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+      "package_wheel_version": "0.6.2",
+      "license": "BSD-3-Clause",
+      "model_sha256": "846d1ef438f872d50f160ad6cfb8be5b99f3f837600c52843a1391ca4eae7d4c",
+      "parameter_count": 35489892
+    },
+    {
+      "name": "Spotiflow smfish_3d release 0.6.0",
+      "source_repository": "weigertlab/spotiflow",
+      "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+      "package_wheel_version": "0.6.2",
+      "license": "BSD-3-Clause",
+      "model_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+      "parameter_count": 35489892
+    }
+  ],
+  "selection": {
+    "movies": [
+      "44b6_d29c9ab2",
+      "44b6_3a861e03",
+      "44b6_d5e7d891",
+      "44b6_ddf577ad",
+      "6bba_09961292",
+      "6bba_bb9f20c3",
+      "6bba_784a78c9",
+      "6bba_57b7cc1e"
+    ],
+    "uniform_frames_per_movie": 12,
+    "arms": [
+      "synth_3d + Biohub global normalization",
+      "synth_3d + Spotiflow automatic normalization",
+      "smfish_3d + Biohub global normalization",
+      "smfish_3d + Spotiflow automatic normalization"
+    ],
+    "selection_metric": "metadata-density-calibrated annotated-node recall; mean physical match distance is the first tiebreaker"
+  },
+  "acceptance": {
+    "movies": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "complete_movies": true,
+    "selection_overlap": [],
+    "calibration_frames_per_movie": 12,
+    "threshold_source": "uniform image-frame predictions plus organizer-provided estimated_number_of_nodes only",
+    "match_radius_um": 5.0,
+    "baseline": "frozen raw public 0.927 detector graphs",
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "advance to positive-unlabeled Biohub fine-tuning only if clean complete-movie annotated recall is competitive with the frozen public detector and count behavior is stable",
+  "submission_policy": "detector_acceptance_only_no_submission"
+}

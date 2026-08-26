@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-detector-acceptance-v1",
+  "status": "passed",
+  "tests": {
+    "command": "python -m pytest tests/test_density_calibration.py tests/test_spotiflow_detector_acceptance.py tests/test_hybrid_linker.py tests/test_trackastra_graph.py -q",
+    "result": "16 passed",
+    "notebook_code_cells_compiled": 4,
+    "selection_acceptance_overlap": []
+  },
+  "runtime": {
+    "file_count": 26,
+    "uncompressed_bytes": 318881592,
+    "manifest_sha256": "2b55f535ce37c3c8cd153f1dcc5a1fc546abf7b2f2717e850e22c471e504d55a",
+    "private_dataset": "indarkarhana/biohub-spotiflow-detector-runtime-v1"
+  },
+  "models": {
+    "synth_3d_sha256": "846d1ef438f872d50f160ad6cfb8be5b99f3f837600c52843a1391ca4eae7d4c",
+    "smfish_3d_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+    "parameter_count_each": 35489892
+  },
+  "memory_bound": "single 64x64x64 frame, one 35.5M model loaded at a time; tiled OOM fallback",
+  "dataset_coverage": "8 disjoint selection movies plus 4 complete acceptance movies across both embryos"
+}
