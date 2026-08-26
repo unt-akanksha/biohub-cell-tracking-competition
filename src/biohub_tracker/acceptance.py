@@ -1359,8 +1359,23 @@ def _append_saga_event(ledger: Ledger, event: ExperimentEvent) -> ExperimentEven
     current, missing = _reuse_saga_event(ledger.read_events(), event)
     if missing:
         ledger.append(event)
-        return event
     return current
+
+
+def _append_events_then_publish_acceptance(
+    *,
+    ledger: Ledger,
+    events: tuple[ExperimentEvent, ...],
+    report_target: Path,
+    accepted: Mapping[str, Any],
+    write_report: bool,
+) -> None:
+    """Expose terminal acceptance only after every terminal event is durable."""
+
+    for event in events:
+        _append_saga_event(ledger, event)
+    if write_report:
+        atomic_write_json(report_target, accepted)
 
 
 def reconcile_pending_control(
@@ -1690,17 +1705,20 @@ def reconcile_pending_control(
     write_report = _preflight_immutable_json(report_target, accepted)
     if write_manifest:
         atomic_write_json(manifest_target, manifest.to_dict())
-    if write_report:
-        atomic_write_json(report_target, accepted)
-    for event in (
-        binding_event,
-        completion_event,
-        aggregate_registration,
-        aggregate_start,
-        aggregate_materialization,
-        aggregate_completion,
-    ):
-        _append_saga_event(ledger, event)
+    _append_events_then_publish_acceptance(
+        ledger=ledger,
+        events=(
+            binding_event,
+            completion_event,
+            aggregate_registration,
+            aggregate_start,
+            aggregate_materialization,
+            aggregate_completion,
+        ),
+        report_target=report_target,
+        accepted=accepted,
+        write_report=write_report,
+    )
     validate_exact_report(
         report,
         ledger_path=ledger.path,

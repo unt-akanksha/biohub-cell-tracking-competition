@@ -14,6 +14,7 @@ from biohub_tracker.acceptance import (
     BUNDLE_NAME,
     PendingControlReport,
     _assert_control_projection_matches,
+    _append_events_then_publish_acceptance,
     _preflight_immutable_json,
     _reuse_saga_event,
     _saga_event,
@@ -163,6 +164,51 @@ def test_reconciliation_saga_events_and_artifacts_are_retry_stable(tmp_path: Pat
     )
     with pytest.raises(AcceptanceError, match="RECONCILIATION_EVENT_CONFLICT"):
         _reuse_saga_event([first], conflicting)
+
+
+def test_acceptance_is_not_published_before_all_terminal_events(monkeypatch, tmp_path):
+    import biohub_tracker.acceptance as acceptance_module
+
+    appended = []
+    writes = []
+    events = tuple(object() for _ in range(3))
+
+    def interrupted(_ledger, event):
+        appended.append(event)
+        if len(appended) == 2:
+            raise SystemExit("kill during ledger commit")
+
+    monkeypatch.setattr(acceptance_module, "_append_saga_event", interrupted)
+    monkeypatch.setattr(
+        acceptance_module,
+        "atomic_write_json",
+        lambda path, value: writes.append((path, value)),
+    )
+    with pytest.raises(SystemExit, match="ledger commit"):
+        _append_events_then_publish_acceptance(
+            ledger=object(),
+            events=events,
+            report_target=tmp_path / "accepted.json",
+            accepted={"accepted": True},
+            write_report=True,
+        )
+    assert writes == []
+
+    appended.clear()
+    monkeypatch.setattr(
+        acceptance_module,
+        "_append_saga_event",
+        lambda _ledger, event: appended.append(event),
+    )
+    _append_events_then_publish_acceptance(
+        ledger=object(),
+        events=events,
+        report_target=tmp_path / "accepted.json",
+        accepted={"accepted": True},
+        write_report=True,
+    )
+    assert appended == list(events)
+    assert writes == [(tmp_path / "accepted.json", {"accepted": True})]
 
 
 @pytest.mark.parametrize("section", ["official", "diagnostics", "comparison"])
