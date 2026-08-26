@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "run_id": "public-0927-clean-repro-v2",
+  "kernel_ref": "indarkarhana/biohub-clean-0-927-reproduction-v1",
+  "kernel_version": 1,
+  "kernel_status": "COMPLETE",
+  "watchdog": {
+    "status": "completed",
+    "elapsed_seconds": 2021.781,
+    "declared_budget_seconds": 3600,
+    "safety_margin_seconds": 600,
+    "sha256": "02215f5ccad11267fdfdc366f96868b779b1743cdb34d7702a2efcab3cd221cb"
+  },
+  "quota": {
+    "before_hours": "30.00",
+    "after_hours": "29.43",
+    "charged_hours": "0.57",
+    "protected_reserve_hours": "8.00"
+  },
+  "submission": {
+    "rows": 240126,
+    "nodes": 122207,
+    "edges": 117919,
+    "sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+    "upstream_exact_match": true,
+    "datasets": ["44b6_0113de3b", "44b6_0b24845f", "6bba_05b6850b", "6bba_05db0fb1"]
+  },
+  "integrity": {
+    "ground_truth_accessed_during_test_generation": false,
+    "checkpoint_hashes_match": true,
+    "runtime_integrity_sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d",
+    "retention_guard_sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42",
+    "validator_results_sha256": "b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777"
+  },
+  "graph_audit": {
+    "valid": true,
+    "ids_unique": true,
+    "ids_contiguous_zero_based": true,
+    "duplicate_nodes": 0,
+    "duplicate_edges": 0,
+    "missing_endpoints": 0,
+    "self_edges": 0,
+    "nonconsecutive_edges": 0,
+    "nonfinite_nodes": 0,
+    "negative_coordinate_nodes": 0,
+    "maximum_indegree": 1,
+    "maximum_outdegree": 2
+  },
+  "kaggle_submission": {
+    "id": 55784044,
+    "status": "PENDING",
+    "submitted_at": "2026-08-26T03:03:22.783Z",
+    "description": "clean-0927-repro-v2 dual-seed harmonic centroid+division"
+  }
+}

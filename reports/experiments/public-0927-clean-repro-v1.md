@@ -1,6 +1,6 @@
 # public-0927-clean-repro-v1
 
-Status: preflight retry (`public-0927-clean-repro-v2`)
+Status: completed and submitted (`public-0927-clean-repro-v2`); Kaggle score pending
 
 ## Hypothesis
 
@@ -84,3 +84,16 @@ Validator CSV SHA-256: `b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0
 - Root cause: the local notebook utility emitted raw UTF-8, while Kaggle CLI on Windows opened the source with cp1252 and raised `UnicodeDecodeError` on multilingual markdown.
 - `public-0927-clean-repro-v2` ASCII-escapes notebook JSON without changing any parsed scientific cell. A local default-codec read now passes.
 - The launcher now records sanitized Kaggle stderr for any future nonzero push exit.
+
+## Owned terminal result
+
+- Canonical kernel: `indarkarhana/biohub-clean-0-927-reproduction-v1`, version `1`
+- Kernel status: `COMPLETE`
+- Watchdog status: `completed`
+- Wall runtime: `2021.781 s` (`0.5616 h`)
+- GPU quota: `30.00 h -> 29.43 h` (`0.57 h` charged)
+- Owned submission SHA-256: `33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a`
+- Upstream audited submission SHA-256: exact match
+- Owned validator CSV SHA-256: exact match
+- Graph audit: passed for 240,126 rows; zero duplicate nodes/edges, missing endpoints, self-edges, nonconsecutive edges, non-finite coordinates, or negative node coordinates; maximum indegree `1`, maximum outdegree `2`.
+- Kaggle notebook submission: `55784044`, accepted at `2026-08-26T03:03:22.783Z`; scoring status remains `PENDING`.

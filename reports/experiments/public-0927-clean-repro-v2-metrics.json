@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_id": "public-0927-clean-repro-v2",
+  "evidence_scope": "four complete embryo-held training movies; exact owned output matches audited upstream output",
+  "pooled": {
+    "adjusted_edge_jaccard": 0.9151575278536992,
+    "edge_jaccard": 0.9104539775093711,
+    "division_jaccard": 0.14285714285714285,
+    "node_recall": null,
+    "proxy_score": 0.9294432421394134
+  },
+  "division_counts": {
+    "tp": 1,
+    "fp": 2,
+    "fn": 4
+  },
+  "by_embryo": {
+    "44b6": {
+      "adjusted_edge_jaccard": 0.8910900942367352,
+      "division_jaccard": 0.0,
+      "proxy_score": 0.8910900942367352
+    },
+    "6bba": {
+      "adjusted_edge_jaccard": 0.9365550101410081,
+      "division_jaccard": 0.25,
+      "proxy_score": 0.9615550101410081
+    }
+  },
+  "by_fold": {
+    "44b6_12dfb391": {"score": 0.934126868799285},
+    "44b6_267148e4": {"score": 0.7802295420408002},
+    "6bba_062c8d37": {"score": 1.0770587342596099},
+    "6bba_07e24132": {"score": 0.8356295217465801}
+  },
+  "worst_movie_delta": -0.14921370009861323,
+  "validator_results_sha256": "b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777",
+  "note": "node_recall is null because the compact upstream validator did not emit the ground-truth node denominator; no value is imputed."
+}

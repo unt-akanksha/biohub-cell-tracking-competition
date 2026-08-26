@@ -26,11 +26,11 @@
     },
     {
       "ref": "indarkarhana/biohub-clean-0927-repro-v1",
-      "classification": "reported_post_patch",
+      "classification": "reproduced_post_patch",
       "disposition": "research_candidate",
-      "evidence": "Private fork has 33 scientific cells exactly matching the audited public source and adds only a quota watchdog plus terminal evidence. Score reproduction is pending our guarded Kaggle run.",
+      "evidence": "Owned private version completed label-free inference and produced a byte-identical match to the audited public submission and held-out validator. All 240126 graph rows passed topology and coordinate integrity checks; Kaggle submission 55784044 is pending scoring.",
       "reviewed_sha256": "6d1219c5bbaabff08272e17846f4fdcbb21bd69b60e9ce0acde58ad0a184d719",
-      "score_reproduced": false
+      "score_reproduced": true
     },
     {
       "ref": "yunusgmsoy/kimi-notebook-v17",
