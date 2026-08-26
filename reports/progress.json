@@ -1420,13 +1420,13 @@
       "failure_reason": null,
       "hypothesis": "An independent 29.5M-parameter microscopy-pretrained SpatialDINO/UNETR hybrid, trained on conservative positive-unlabeled consensus across every non-validation movie, will improve clean complete-movie detection recall and complement Spotiflow without copying public predictions.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "spotiflow-pu-adaptation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T15:28:44.522267Z",
       "run_id": "spatialdino-pu-adaptation-v1",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
