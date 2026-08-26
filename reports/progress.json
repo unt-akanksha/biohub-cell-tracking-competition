@@ -1339,13 +1339,13 @@
       "failure_reason": null,
       "hypothesis": "Positive-unlabeled adaptation of the official 35.5M Spotiflow detector using conservative two-seed teacher consensus, forced organizer positives, weak-strong consistency, and frozen-base flow preservation can match the public detector's clean recall without copying public predictions.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "spatialdino-appearance-validation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T15:01:54.263805Z",
       "run_id": "spotiflow-pu-adaptation-v1",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
