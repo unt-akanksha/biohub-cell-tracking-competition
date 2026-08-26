@@ -138,6 +138,57 @@ def test_displacement_density_and_division_rows_cover_each_event_once():
     assert recovered["divisions"]["excluded_count"] == 0
 
 
+def test_division_timing_uses_lineage_correspondence_not_temporal_greedy_pairing():
+    truth = _graph(
+        (
+            (10, 1, 0.0, 0.0, 0.0),
+            (11, 2, 0.0, 0.0, 1.0),
+            (12, 2, 0.0, 0.0, 2.0),
+            (20, 4, 0.0, 0.0, 3.0),
+            (21, 5, 0.0, 0.0, 4.0),
+            (22, 5, 0.0, 0.0, 5.0),
+        ),
+        ((10, 11), (10, 12), (20, 21), (20, 22)),
+    )
+    prediction = _graph(
+        (
+            (100, 1, 0.0, 0.0, 3.0),
+            (101, 2, 0.0, 0.0, 4.0),
+            (102, 2, 0.0, 0.0, 5.0),
+            (200, 4, 0.0, 0.0, 0.0),
+            (201, 5, 0.0, 0.0, 1.0),
+            (202, 5, 0.0, 0.0, 2.0),
+        ),
+        ((100, 101), (100, 102), (200, 201), (200, 202)),
+    )
+    result = diagnose_movie(
+        prediction=prediction,
+        truth=truth,
+        prediction_to_truth={100: 20, 101: 21, 102: 22, 200: 10, 201: 11, 202: 12},
+        official_counts={
+            "edge_tp": 4,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 2,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 6,
+        },
+        official_adjusted_edge_jaccard="1",
+        estimated_number_of_nodes="6",
+        shape_tzyx=(6, 10, 10, 10),
+        scale_zyx_um=("1", "1", "1"),
+        adjustment_alpha="0.1",
+        displacement_boundaries_um=("2", "4", "8"),
+        density_boundaries_per_mm3=("1000", "2000", "3000"),
+        division_scores={10: 1, 20: 1},
+        division_tp_forks=(100, 200),
+    )
+    categories = {row["category"]: row["count"] for row in result["divisions"]["rows"]}
+    assert categories["support_offset_0"] == 0
+    assert categories["support_offset_outside_window"] == 2
+
+
 def test_no_event_state_is_explicit_finite_and_aggregates_without_nan():
     graph = _graph(((0, 0, 0.0, 0.0, 0.0),), ())
     result = _diagnose(

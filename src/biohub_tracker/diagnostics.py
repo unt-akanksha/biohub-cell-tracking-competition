@@ -100,6 +100,71 @@ def _sum_rows(rows: Sequence[Mapping[str, Any]], fields: Sequence[str]) -> dict[
     return {field: sum(int(row[field]) for row in rows) for field in fields}
 
 
+def _descendants(adjacency: Mapping[int, Sequence[int]], start: int) -> set[int]:
+    result: set[int] = set()
+    pending = [start]
+    while pending:
+        node = pending.pop()
+        if node in result:
+            continue
+        result.add(node)
+        pending.extend(adjacency.get(node, ()))
+    return result
+
+
+def _pair_division_forks(
+    *,
+    pred_edges: set[tuple[int, int]],
+    truth_edges: set[tuple[int, int]],
+    matches: Mapping[int, int],
+    tp_forks: Sequence[int],
+    recovered_divisions: Sequence[int],
+) -> list[tuple[int, int]]:
+    pred_children: dict[int, list[int]] = defaultdict(list)
+    truth_children: dict[int, list[int]] = defaultdict(list)
+    for source, target in pred_edges:
+        pred_children[source].append(target)
+    for source, target in truth_edges:
+        truth_children[source].append(target)
+    truth_branches = {
+        division: [_descendants(truth_children, child) for child in truth_children[division]]
+        for division in recovered_divisions
+    }
+    pairs: list[tuple[int, int]] = []
+    used_truth: set[int] = set()
+    for fork in sorted(tp_forks):
+        children = pred_children.get(fork, [])
+        if len(children) != 2:
+            _fail("division TP fork must have exactly two children")
+        mapped_branches = [
+            {
+                matches[node]
+                for node in _descendants(pred_children, child)
+                if node in matches
+            }
+            for child in children
+        ]
+        candidates: list[int] = []
+        for division, branches in truth_branches.items():
+            direct = matches.get(fork) == division
+            branch_match = (
+                bool(mapped_branches[0] & branches[0])
+                and bool(mapped_branches[1] & branches[1])
+            ) or (
+                bool(mapped_branches[0] & branches[1])
+                and bool(mapped_branches[1] & branches[0])
+            )
+            if direct or branch_match:
+                candidates.append(division)
+        if len(candidates) != 1 or candidates[0] in used_truth:
+            _fail("division correspondence missing, ambiguous, or duplicated")
+        used_truth.add(candidates[0])
+        pairs.append((candidates[0], fork))
+    if used_truth != set(recovered_divisions):
+        _fail("division correspondence does not cover recovered truth forks")
+    return pairs
+
+
 def diagnose_movie(
     *,
     prediction: GraphData,
@@ -269,27 +334,19 @@ def diagnose_movie(
         _fail("division fork node")
 
     recovered_divisions = sorted(key for key, value in normalized_scores.items() if value == 1)
-    candidate_pairs = sorted(
-        (
-            abs(int(pred_nodes[pred].t) - int(truth_nodes[gt].t)),
-            int(pred_nodes[pred].t) - int(truth_nodes[gt].t),
-            gt,
-            pred,
-        )
-        for gt in recovered_divisions
-        for pred in tp_forks
+    division_pairs = _pair_division_forks(
+        pred_edges=pred_edges,
+        truth_edges=truth_edges,
+        matches=matches,
+        tp_forks=tp_forks,
+        recovered_divisions=recovered_divisions,
     )
-    paired_gt: set[int] = set()
-    paired_pred: set[int] = set()
     timing_counts = {"-1": 0, "0": 0, "+1": 0, "outside_window": 0}
-    for _distance, offset, gt, pred in candidate_pairs:
-        if gt in paired_gt or pred in paired_pred:
-            continue
-        paired_gt.add(gt)
-        paired_pred.add(pred)
+    for gt, pred in division_pairs:
+        offset = int(pred_nodes[pred].t) - int(truth_nodes[gt].t)
         key = f"{offset:+d}" if offset in {-1, 1} else str(offset)
         timing_counts[key if key in timing_counts else "outside_window"] += 1
-    if len(paired_gt) != counts["division_tp"]:
+    if len(division_pairs) != counts["division_tp"]:
         _fail("division pairing")
     division_rows = [
         {"category": f"support_offset_{key}", "count": timing_counts[key]}
