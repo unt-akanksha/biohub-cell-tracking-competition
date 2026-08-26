@@ -56,6 +56,12 @@ graph-repair implementation. Every current source explicitly records
 model. This strengthens the decision to spend GPU only on owned SpatialDINO,
 temporal-contrastive, or other independently learned candidates.
 
+The repeatable implementation of this comparison is tracked in
+`research/public_notebook_lineage.py`; it hashes each source, ignores markdown,
+normalizes and deduplicates nonempty code lines, and emits every pairwise
+Jaccard score as JSON. This makes future daily audits comparable instead of
+depending on notebook titles or manual impressions.
+
 ## Discussion evidence that changes our plan
 
 Current competition discussions independently reinforce the same direction:
