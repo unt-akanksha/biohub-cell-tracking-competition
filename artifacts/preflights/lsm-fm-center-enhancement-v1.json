@@ -1,0 +1,172 @@
+{
+  "checks": [
+    {
+      "detail": "Notebook cells compile, remote modules import, and focused center-enhancement plus two-GPU policy tests pass.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-center-enhancement-v1/biohub-lsm-fm-center-enhancement-v1.ipynb",
+          "sha256": "19c1c031322f1bfc73a08cafa068c5105381c6a9a38c299388bf205a62ca883c"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/center_enhancement.py",
+          "sha256": "04230dd6f2ae302d16eed81e0b11e9a3a94e257e2b73ba0ffd4461dc9a885c46"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/train_center_enhancement.py",
+          "sha256": "1c90099d6a81619ae342e0a452f6f2a99891419c26ba014119ace0d0cede2945"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/evaluate_center_enhancement.py",
+          "sha256": "b01b35bd925850f57306b24f07c5fd560c4ade40284d7045311de9843ab8311d"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtime and frozen feature-36 checkpoint are exact-hash bound; competition input remains attached with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-center-enhancement-v1.json",
+          "sha256": "895782aedbfa50d7515fda275faabd00d2a54ee381c706afdfd8c1d447ff6096"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-center-enhancement-v1/kernel-metadata.json",
+          "sha256": "c27dcb90be709e5c5dd15b98ae08daf10cccf4a52a7d24fde44f18d16cf2b269"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/SOURCE_MANIFEST.json",
+          "sha256": "9827e58c5f66415c177ad05593db387316cf596c13ccf10fb3d053b180b7439c"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The frozen detector strict-loads and the 112,673-parameter refiner completes a two-example 3D forward pass.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": "tests/test_lsm_fm_center_enhancement.py",
+          "sha256": "f38bb3c82fd704ee2b88608608bf10b958ee6d84a4b1e14787d6afe88471bd8d"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Training uses geometry-consistent augmentation, dense center loss, robust residual loss, gradient clipping, and EMA weights.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/train_center_enhancement.py",
+          "sha256": "1c90099d6a81619ae342e0a452f6f2a99891419c26ba014119ace0d0cede2945"
+        },
+        {
+          "path": "tests/test_lsm_fm_center_enhancement_training.py",
+          "sha256": "9fd287f6b4e93f13b96c5f3f60e3f6f090021e407795b8bf3008fb154a369877"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The frozen base and learned detector checkpoint strict-load with exact 35,072,515-parameter provenance; the refiner loader is schema and hash gated.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only training and validation evidence is written; submission artifacts cause failure and no submission call exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-center-enhancement-v1/biohub-lsm-fm-center-enhancement-v1.ipynb",
+          "sha256": "19c1c031322f1bfc73a08cafa068c5105381c6a9a38c299388bf205a62ca883c"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/evaluate_center_enhancement.py",
+          "sha256": "b01b35bd925850f57306b24f07c5fd560c4ade40284d7045311de9843ab8311d"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "All twelve validation movies are excluded from sparse-label training; one global scale is chosen on eight movies before four disjoint acceptance movies can open.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-center-enhancement-v1.json",
+          "sha256": "895782aedbfa50d7515fda275faabd00d2a54ee381c706afdfd8c1d447ff6096"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-center-enhancement-v1-version1/evaluate_center_enhancement.py",
+          "sha256": "b01b35bd925850f57306b24f07c5fd560c4ade40284d7045311de9843ab8311d"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "The refiner is independently implemented and trained; no CELLECT weights/code, public Kaggle code, public predictions, or leaderboard selection are used.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-center-enhancement-v1.json",
+          "sha256": "895782aedbfa50d7515fda275faabd00d2a54ee381c706afdfd8c1d447ff6096"
+        },
+        {
+          "path": "licenses/LSM_FM_WEIGHTS_ATTRIBUTION.md",
+          "sha256": "91d081f0bf9365062dc8a7623523dfb489d87fbf03bd18504ce44a6f2227c522"
+        },
+        {
+          "path": "reports/experiments/lsm-fm-center-enhancement-design-2026-08-26.md",
+          "sha256": "08e7841e6a1eaa092d1ec360bf6a184f8537627a6a095d7d1945683fed75edbc"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T21:56:20.967195Z",
+  "report_sha256": "f925f39db71398a22f2e3d626f49e3ce98336e004840b3b3a8ef4616857920af",
+  "run_id": "lsm-fm-center-enhancement-v1",
+  "schema_version": 1
+}

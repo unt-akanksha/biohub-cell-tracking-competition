@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-center-enhancement-v1",
+  "parent": "lsm-fm-image-text-localization-refinement-v1",
+  "hypothesis": "A learned, count-preserving 3D center-enhancement head trained only on one-to-one sparse annotation matches from non-validation movies will add the single limiting-movie match needed beyond the globally stronger probability_r2_p2 centroid without regressing another selection movie by more than 0.01.",
+  "accelerator": "NvidiaTeslaT4",
+  "declared_max_runtime_hours": "1.25",
+  "watchdog_hard_stop_seconds": 4200,
+  "training_max_wall_seconds": 2400,
+  "evaluator_max_wall_seconds": 3000,
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-center-enhance-v1",
+  "kernel_builder_sha256": "97839b3e57f1d273abdff51902fec2dba36320c8c65322fb3e699e5257e1bb1b",
+  "notebook_sha256": "19c1c031322f1bfc73a08cafa068c5105381c6a9a38c299388bf205a62ca883c",
+  "kernel_metadata_sha256": "c27dcb90be709e5c5dd15b98ae08daf10cccf4a52a7d24fde44f18d16cf2b269",
+  "runtime_manifest_sha256": "9827e58c5f66415c177ad05593db387316cf596c13ccf10fb3d053b180b7439c",
+  "center_enhancement_sha256": "04230dd6f2ae302d16eed81e0b11e9a3a94e257e2b73ba0ffd4461dc9a885c46",
+  "trainer_sha256": "1c90099d6a81619ae342e0a452f6f2a99891419c26ba014119ace0d0cede2945",
+  "evaluator_sha256": "b01b35bd925850f57306b24f07c5fd560c4ade40284d7045311de9843ab8311d",
+  "parent_result_report_sha256": "503645048fcae31591204e57713e357621ebbf625bfae12cae08e6829aaed7c0",
+  "dataset_sources": [
+    "indarkarhana/biohub-lsm-fm-center-enhancement-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
+    "indarkarhana/biohub-lsm-fm-image-text-pu-adaptation-v1"
+  ],
+  "frozen_detector": {
+    "architecture": "LSM-FM image-text SwinUNETR feature-36 plus Biohub heatmap head",
+    "parameters": 35072515,
+    "base_checkpoint_sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7",
+    "learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a",
+    "launcher_terminal_sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+  },
+  "center_enhancement": {
+    "architecture": "two-channel residual 3D CNN with spatial-softmax sub-voxel center head",
+    "parameters": 112673,
+    "patch_shape": [7, 7, 7],
+    "input_channels": [
+      "locally_normalized_raw_intensity",
+      "normalized_frozen_feature36_probability"
+    ],
+    "residual_control": "probability_r2_p2",
+    "training_frames_per_movie": 12,
+    "steps": 768,
+    "batch_size": 128,
+    "learning_rate": 0.0002,
+    "seed": 20260828,
+    "maximum_match_distance_um": 5.0,
+    "maximum_label_offset_voxels": 3.0,
+    "maximum_applied_offset_voxels": 2.0,
+    "unmatched_sparse_peaks_used_as_negatives": false,
+    "validation_movies_excluded_from_training": 12
+  },
+  "candidates": {
+    "feature36_control": 0.0,
+    "center_enhancement_half": 0.5,
+    "center_enhancement_full": 1.0
+  },
+  "candidate_selection": "one global residual scale only; no per-movie choice",
+  "validation": {
+    "selection_movies": 8,
+    "untouched_acceptance_movies": 4,
+    "selection_pooled_recall_min": 0.8,
+    "selection_worst_movie_recall_min": 0.65,
+    "minimum_movie_delta_from_control": -0.01,
+    "parent_limiting_movie_recall": 0.6497890295358649,
+    "parent_limiting_movie_matches": 1078,
+    "matches_required_for_gate": 1079,
+    "acceptance_public_pooled_recall": 0.96902842596521,
+    "public_leaderboard_used_for_selection": false
+  },
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false,
+  "promotion_rule": "only clean held-out acceptance can authorize later hybrid graph validation; every eventual submission requires exactly two CUDA devices and whole-movie sharding"
+}
