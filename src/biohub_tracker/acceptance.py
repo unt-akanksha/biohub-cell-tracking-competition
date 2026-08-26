@@ -1028,7 +1028,13 @@ def _assert_control_projection_matches(
             _fail("CONTROL_REVALIDATION_MISMATCH", name)
 
 
-def _validate_truth_self_sufficient_row(row: Mapping[str, Any], sample: Any) -> None:
+def _validate_truth_self_sufficient_row(
+    row: Mapping[str, Any], sample: Any, *, trusted_row: Mapping[str, Any] | None = None
+) -> None:
+    if trusted_row is None:
+        _fail("LOCAL_CONTROL_TRUST_REQUIRED", str(row.get("sample_id", "unknown")))
+    if canonical_json_bytes(row) != canonical_json_bytes(trusted_row):
+        _fail("CONTROL_TRUST_BINDING_MISMATCH", str(row.get("sample_id", "unknown")))
     counts = row["official_counts"]
     expected_count_keys = {
         "edge_tp",
@@ -1070,6 +1076,190 @@ def _validate_truth_self_sufficient_row(row: Mapping[str, Any], sample: Any) -> 
         _fail("CONTROL_SUFFICIENT_STATISTICS_INVALID", f"{row['sample_id']}:diagnostics")
 
 
+def _local_control_trust(
+    trust_dir: Path, manifest: Any, pending: PendingControlReport
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Load locally staged, content-addressed truth/self rows and round-trip artifacts."""
+
+    from .graphs import artifact_tree_sha256
+
+    try:
+        root = trust_dir.resolve(strict=True)
+    except OSError as exc:
+        raise AcceptanceError("LOCAL_CONTROL_TRUST_REQUIRED", str(trust_dir)) from exc
+    trust_path = root / "control-trust.json"
+    try:
+        trust = json.loads(trust_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AcceptanceError("LOCAL_CONTROL_TRUST_INVALID", str(trust_path)) from exc
+    trust_keys = {
+        "schema_version",
+        "manifest_sha256",
+        "movie_rows_relpath",
+        "movie_rows_sha256",
+        "fold_artifacts",
+        "control_trust_sha256",
+    }
+    if not isinstance(trust, dict) or set(trust) != trust_keys:
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "trust schema")
+    semantic_trust = dict(trust)
+    declared_trust_sha = _sha(
+        semantic_trust.pop("control_trust_sha256"), "control trust"
+    )
+    if (
+        trust["schema_version"] != "biohub.local-control-trust.v1"
+        or trust["manifest_sha256"] != manifest.manifest_sha256
+        or declared_trust_sha != sha256_bytes(canonical_json_bytes(semantic_trust))
+    ):
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "trust binding")
+
+    def contained(relative: Any, name: str) -> Path:
+        raw = Path(_text(relative, name, 500))
+        if raw.is_absolute() or ".." in raw.parts:
+            _fail("LOCAL_CONTROL_TRUST_INVALID", f"unsafe {name}")
+        try:
+            result = (root / raw).resolve(strict=True)
+            result.relative_to(root)
+        except (OSError, ValueError) as exc:
+            raise AcceptanceError("LOCAL_CONTROL_TRUST_INVALID", name) from exc
+        return result
+
+    rows_path = contained(trust["movie_rows_relpath"], "movie rows")
+    if not rows_path.is_file() or sha256_file(rows_path) != _sha(
+        trust["movie_rows_sha256"], "movie rows"
+    ):
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "movie rows content hash")
+    try:
+        trusted_rows = json.loads(rows_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise AcceptanceError("LOCAL_CONTROL_TRUST_INVALID", "movie rows JSON") from exc
+    if not isinstance(trusted_rows, list):
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "movie rows schema")
+
+    fold_entries = trust["fold_artifacts"]
+    if not isinstance(fold_entries, list) or len(fold_entries) != len(manifest.folds):
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "fold artifacts")
+    expected_folds = {fold.fold_id for fold in manifest.folds}
+    evidence_by_fold: dict[str, dict[str, Any]] = {}
+    evidence_keys = {
+        "producer_run_id",
+        "fold_id",
+        "manifest_sha256",
+        "source_graph_inventory_sha256",
+        "submission_graph_inventory_sha256",
+        "csv_sha256",
+        "source_space",
+        "authoritative_space",
+        "semantic_parity",
+        "official_counts_parity",
+        "source_lineage",
+        "graphs",
+        "per_movie",
+        "aggregate",
+        "evidence_sha256",
+        "schema_version",
+    }
+    for entry in fold_entries:
+        if not isinstance(entry, dict) or set(entry) != {
+            "fold_id",
+            "artifact_relpath",
+            "artifact_tree_sha256",
+        }:
+            _fail("LOCAL_CONTROL_TRUST_INVALID", "fold artifact schema")
+        fold_id = _text(entry["fold_id"], "trusted fold", 200)
+        artifact_root = contained(entry["artifact_relpath"], "fold artifact")
+        if not artifact_root.is_dir() or artifact_tree_sha256(artifact_root) != _sha(
+            entry["artifact_tree_sha256"], "fold artifact tree"
+        ):
+            _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:artifact tree")
+        evidence_path = artifact_root / "roundtrip-evidence.json"
+        csv_path = artifact_root / "submission.csv"
+        try:
+            evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise AcceptanceError(
+                "LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:roundtrip evidence"
+            ) from exc
+        if not isinstance(evidence, dict) or set(evidence) != evidence_keys:
+            _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:evidence schema")
+        semantic_evidence = dict(evidence)
+        declared_evidence_sha = _sha(
+            semantic_evidence.pop("evidence_sha256"), "roundtrip evidence"
+        )
+        graphs = evidence["graphs"]
+        if not isinstance(graphs, list):
+            _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:graphs")
+        for graph in graphs:
+            if not isinstance(graph, dict) or set(graph) != {
+                "sample_id",
+                "path",
+                "sha256",
+                "node_count",
+                "edge_count",
+            }:
+                _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:graph record")
+            graph_path = (artifact_root / Path(graph["path"])).resolve(strict=True)
+            try:
+                graph_path.relative_to(artifact_root)
+            except ValueError as exc:
+                raise AcceptanceError(
+                    "LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:graph escape"
+                ) from exc
+            if artifact_tree_sha256(graph_path) != _sha(
+                graph["sha256"], "roundtrip graph"
+            ):
+                _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:graph hash")
+        if (
+            fold_id not in expected_folds
+            or evidence["fold_id"] != fold_id
+            or evidence["manifest_sha256"] != manifest.manifest_sha256
+            or evidence["semantic_parity"] is not True
+            or evidence["official_counts_parity"] is not True
+            or not csv_path.is_file()
+            or sha256_file(csv_path) != evidence["csv_sha256"]
+            or sha256_bytes(canonical_json_bytes(graphs))
+            != evidence["submission_graph_inventory_sha256"]
+            or sha256_bytes(canonical_json_bytes(semantic_evidence))
+            != declared_evidence_sha
+        ):
+            _fail("LOCAL_CONTROL_TRUST_INVALID", f"{fold_id}:evidence binding")
+        evidence_by_fold[fold_id] = evidence
+    if set(evidence_by_fold) != expected_folds:
+        _fail("LOCAL_CONTROL_TRUST_INVALID", "fold coverage")
+
+    authoritative = [
+        {
+            "role": role,
+            "fold_id": fold_id,
+            "producer_run_id": pending.run_id,
+            "submission_graph_inventory_sha256": evidence[
+                "submission_graph_inventory_sha256"
+            ],
+            "roundtrip_evidence_sha256": evidence["evidence_sha256"],
+            "csv_sha256": evidence["csv_sha256"],
+        }
+        for role in ("baseline", "candidate")
+        for fold_id, evidence in sorted(evidence_by_fold.items())
+    ]
+    authoritative.sort(key=lambda item: (item["role"], item["fold_id"]))
+    return trusted_rows, authoritative
+
+
+def _assert_trusted_control_matches(
+    *,
+    remote_rows: Any,
+    trusted_rows: Any,
+    remote_authoritative: Any,
+    trusted_authoritative: Any,
+) -> None:
+    if canonical_json_bytes(remote_rows) != canonical_json_bytes(trusted_rows):
+        _fail("CONTROL_TRUST_BINDING_MISMATCH", "movie sufficient statistics")
+    if canonical_json_bytes(remote_authoritative) != canonical_json_bytes(
+        trusted_authoritative
+    ):
+        _fail("CONTROL_INVENTORY_BINDING_MISMATCH", "trusted artifacts")
+
+
 def _locally_revalidate_control(
     *,
     control: Mapping[str, Any],
@@ -1078,6 +1268,7 @@ def _locally_revalidate_control(
     identities: Mapping[str, Any],
     members: list[dict[str, Any]],
     workspace_root: Path,
+    trust_dir: Path,
 ) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any], dict[str, Any]]:
     """Rebuild every report projection from v2 compact sufficient statistics."""
 
@@ -1104,7 +1295,18 @@ def _locally_revalidate_control(
     expected_sample_ids = sorted(samples)
     if control["expected_sample_ids"] != expected_sample_ids:
         _fail("CONTROL_SAMPLE_BINDING_MISMATCH", pending.run_id)
-    rows = json.loads(json.dumps(control["movie_sufficient_statistics"]))
+    rows, authoritative = _local_control_trust(trust_dir, manifest, pending)
+    remote_rows = control["movie_sufficient_statistics"]
+    remote_authoritative = sorted(
+        (dict(item) for item in control["authoritative_inventories"]),
+        key=lambda item: (str(item.get("role", "")), str(item.get("fold_id", ""))),
+    )
+    _assert_trusted_control_matches(
+        remote_rows=remote_rows,
+        trusted_rows=rows,
+        remote_authoritative=remote_authoritative,
+        trusted_authoritative=authoritative,
+    )
     if [row["sample_id"] for row in rows] != expected_sample_ids:
         _fail("CONTROL_SAMPLE_BINDING_MISMATCH", "sufficient statistics")
     fold_by_sample = {
@@ -1124,7 +1326,7 @@ def _locally_revalidate_control(
             != Decimal(str(sample.estimated_number_of_nodes))
         ):
             _fail("CONTROL_SAMPLE_BINDING_MISMATCH", row["sample_id"])
-        _validate_truth_self_sufficient_row(row, sample)
+        _validate_truth_self_sufficient_row(row, sample, trusted_row=row)
 
     graph_inventory_by_fold: dict[str, str] = {}
     for fold in manifest.folds:
@@ -1185,10 +1387,6 @@ def _locally_revalidate_control(
     ):
         _fail("CONTROL_MEMBER_BINDING_MISMATCH", pending.run_id)
 
-    authoritative = sorted(
-        (dict(item) for item in control["authoritative_inventories"]),
-        key=lambda item: (str(item.get("role", "")), str(item.get("fold_id", ""))),
-    )
     inventory_keys = {
         "role",
         "fold_id",
@@ -1394,7 +1592,7 @@ def reconcile_pending_control(
         unavailable_metric_exploit_audit,
         validate_exact_report,
     )
-    from .manifests import EvaluationManifest
+    from .manifests import EvaluationManifest, load_manifest
 
     root = Path(workspace_root).resolve(strict=True)
     quota_before = _gpu_quota_state(quota_before_path)
@@ -1461,7 +1659,15 @@ def reconcile_pending_control(
     if canonical_json_bytes(identities) != canonical_json_bytes(registered_identity):
         _fail("ACCEPTANCE_SOURCE_MISMATCH", pending.run_id)
     manifest_value = pending.value["manifest"]
-    manifest = EvaluationManifest.from_dict(manifest_value["manifest_document"])
+    remote_manifest = EvaluationManifest.from_dict(manifest_value["manifest_document"])
+    manifest_target = Path(manifest_output_path)
+    if not manifest_target.is_file():
+        _fail("LOCAL_TRUSTED_MANIFEST_REQUIRED", str(manifest_target))
+    manifest = load_manifest(manifest_target)
+    if canonical_json_bytes(remote_manifest.to_dict()) != canonical_json_bytes(
+        manifest.to_dict()
+    ):
+        _fail("MANIFEST_RECONCILIATION_MISMATCH", "local trusted manifest")
     if (
         manifest.manifest_sha256 != manifest_value["manifest_sha256"]
         or len(manifest.samples) != manifest_value["sample_count"]
@@ -1545,6 +1751,7 @@ def reconcile_pending_control(
         identities=identities,
         members=members,
         workspace_root=root,
+        trust_dir=manifest_target.with_name(f"{manifest_target.stem}-control-trust"),
     )
     evaluation_policy_sha = _sha(
         control["evaluation_policy_sha256"], "control.evaluation_policy_sha256"
@@ -1699,7 +1906,6 @@ def reconcile_pending_control(
         },
         "exact_report": {"core": core, "envelope": envelope},
     }
-    manifest_target = Path(manifest_output_path)
     report_target = Path(report_output_path)
     write_manifest = _preflight_immutable_json(manifest_target, manifest.to_dict())
     write_report = _preflight_immutable_json(report_target, accepted)

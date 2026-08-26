@@ -15,6 +15,8 @@ from biohub_tracker.acceptance import (
     PendingControlReport,
     _assert_control_projection_matches,
     _append_events_then_publish_acceptance,
+    _assert_trusted_control_matches,
+    _local_control_trust,
     _preflight_immutable_json,
     _reuse_saga_event,
     _saga_event,
@@ -33,7 +35,8 @@ from biohub_tracker.evaluation import (
     evaluate_pending_control,
     validate_exact_report,
 )
-from biohub_tracker.io import canonical_json_bytes, sha256_bytes
+from biohub_tracker.io import canonical_json_bytes, sha256_bytes, sha256_file
+from biohub_tracker.graphs import artifact_tree_sha256
 from biohub_tracker.ledger import (
     EventType,
     ExperimentEvent,
@@ -256,15 +259,139 @@ def test_truth_self_count_tamper_is_rejected_even_when_redundant_fields_match():
         },
     }
     sample = SimpleNamespace(gt_edge_count=4, gt_node_count=5)
-    _validate_truth_self_sufficient_row(row, sample)
+    trusted = json.loads(json.dumps(row))
+    _validate_truth_self_sufficient_row(row, sample, trusted_row=trusted)
 
     # A producer can change every redundant remote count and all self-hashes,
     # but it cannot change the locally reconstructed manifest edge total.
     row["official_counts"]["edge_tp"] = 3
     row["organizer_row"]["edge_tp"] = 3
     row["diagnostic_state"]["reconciliation"]["edge_tp"] = 3
-    with pytest.raises(AcceptanceError, match="CONTROL_TRUTH_SELF_INVARIANT_FAILED"):
-        _validate_truth_self_sufficient_row(row, sample)
+    with pytest.raises(AcceptanceError, match="CONTROL_TRUST_BINDING_MISMATCH"):
+        _validate_truth_self_sufficient_row(row, sample, trusted_row=trusted)
+
+
+@pytest.mark.parametrize(
+    "target",
+    [
+        "division_tp",
+        "score",
+        "diagnostic",
+        "submission_graph_inventory_sha256",
+        "roundtrip_evidence_sha256",
+        "csv_sha256",
+    ],
+)
+def test_remote_rehash_cannot_change_locally_content_bound_control_evidence(target):
+    trusted_rows = [
+        {
+            "sample_id": "44b6_a",
+            "official_counts": {"division_tp": 2},
+            "organizer_row": {"score": "1.1"},
+            "diagnostic_state": {"density": {"observed": 3}},
+        }
+    ]
+    trusted_authoritative = [
+        {
+            "role": "candidate",
+            "fold_id": "fold-a",
+            "producer_run_id": "cpu-control-a",
+            "submission_graph_inventory_sha256": "1" * 64,
+            "roundtrip_evidence_sha256": "2" * 64,
+            "csv_sha256": "3" * 64,
+        }
+    ]
+    remote_rows = json.loads(json.dumps(trusted_rows))
+    remote_authoritative = json.loads(json.dumps(trusted_authoritative))
+    if target == "division_tp":
+        remote_rows[0]["official_counts"]["division_tp"] = 999
+    elif target == "score":
+        remote_rows[0]["organizer_row"]["score"] = "999"
+    elif target == "diagnostic":
+        remote_rows[0]["diagnostic_state"]["density"]["observed"] = 999
+    else:
+        remote_authoritative[0][target] = "f" * 64
+
+    # A remote producer may recompute all pending envelope/projection hashes;
+    # these values still cannot differ from the independently staged artifacts.
+    with pytest.raises(AcceptanceError, match="CONTROL_(TRUST|INVENTORY)_BINDING_MISMATCH"):
+        _assert_trusted_control_matches(
+            remote_rows=remote_rows,
+            trusted_rows=trusted_rows,
+            remote_authoritative=remote_authoritative,
+            trusted_authoritative=trusted_authoritative,
+        )
+
+
+def test_local_control_trust_verifies_actual_csv_geff_and_evidence_bytes(tmp_path):
+    trust_root = tmp_path / "manifest-control-trust"
+    artifact_root = trust_root / "fold-a"
+    graph_root = artifact_root / "graphs" / "44b6_a.geff"
+    graph_root.mkdir(parents=True)
+    (graph_root / "zarr.json").write_text("{}", encoding="utf-8")
+    csv_path = artifact_root / "submission.csv"
+    csv_path.write_text("id,dataset\n", encoding="utf-8")
+    graph_records = [
+        {
+            "sample_id": "44b6_a",
+            "path": "graphs/44b6_a.geff",
+            "sha256": artifact_tree_sha256(graph_root),
+            "node_count": 1,
+            "edge_count": 0,
+        }
+    ]
+    evidence = {
+        "producer_run_id": "trusted-builder",
+        "fold_id": "fold-a",
+        "manifest_sha256": "a" * 64,
+        "source_graph_inventory_sha256": "b" * 64,
+        "submission_graph_inventory_sha256": sha256_bytes(
+            canonical_json_bytes(graph_records)
+        ),
+        "csv_sha256": sha256_file(csv_path),
+        "source_space": "native-geff",
+        "authoritative_space": "integer-csv-rebuilt-geff",
+        "semantic_parity": True,
+        "official_counts_parity": True,
+        "source_lineage": {},
+        "graphs": graph_records,
+        "per_movie": [],
+        "aggregate": {},
+        "schema_version": 1,
+    }
+    evidence["evidence_sha256"] = sha256_bytes(canonical_json_bytes(evidence))
+    (artifact_root / "roundtrip-evidence.json").write_bytes(
+        canonical_json_bytes(evidence) + b"\n"
+    )
+    rows_path = trust_root / "movie-rows.json"
+    rows_path.write_text("[]", encoding="utf-8")
+    semantic_trust = {
+        "schema_version": "biohub.local-control-trust.v1",
+        "manifest_sha256": "a" * 64,
+        "movie_rows_relpath": "movie-rows.json",
+        "movie_rows_sha256": sha256_file(rows_path),
+        "fold_artifacts": [
+            {
+                "fold_id": "fold-a",
+                "artifact_relpath": "fold-a",
+                "artifact_tree_sha256": artifact_tree_sha256(artifact_root),
+            }
+        ],
+    }
+    trust = dict(semantic_trust)
+    trust["control_trust_sha256"] = sha256_bytes(canonical_json_bytes(semantic_trust))
+    (trust_root / "control-trust.json").write_bytes(canonical_json_bytes(trust) + b"\n")
+    manifest = SimpleNamespace(
+        manifest_sha256="a" * 64, folds=(SimpleNamespace(fold_id="fold-a"),)
+    )
+    pending = SimpleNamespace(run_id="cpu-control-a")
+
+    rows, inventories = _local_control_trust(trust_root, manifest, pending)
+    assert rows == []
+    assert len(inventories) == 2
+    csv_path.write_text("tampered", encoding="utf-8")
+    with pytest.raises(AcceptanceError, match="LOCAL_CONTROL_TRUST_INVALID"):
+        _local_control_trust(trust_root, manifest, pending)
 
 
 @pytest.mark.parametrize(
