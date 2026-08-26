@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v1",
+  "parent": "public-0927-clean-repro-v2",
+  "kernel_ref": "indarkarhana/biohub-trackastra-graph-finetune-v1",
+  "notebook_sha256": "eaca0f9c70c629e7ccf582c38c9b250fff984d2868bf8454bf74e1c05c72e9f3",
+  "kernel_metadata_sha256": "131dee91a2578c0a8a2990d9670c6b42b1be0f3acb8018ab35c6c0c8bd929c9e",
+  "trainer_sha256": "c99a557efc43caacf3c40af0dc659da87670a7e3e1818c23c234e84438f9cfca",
+  "runtime_manifest_sha256": "16888efc8ab6eb332c569785b297fd35776ec9ecc7525f9431de36934bc694b8",
+  "declared_max_runtime_hours": "4.00",
+  "watchdog_hard_stop_seconds": 14100,
+  "trainer_max_wall_seconds": 13200,
+  "validation_reserve_seconds": 1800,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "pretrained_model": {
+    "name": "Trackastra ctc v0.3.0",
+    "source_repository": "weigertlab/trackastra",
+    "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+    "license": "BSD-3-Clause",
+    "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+    "parameter_count": 27456880
+  },
+  "training": {
+    "selection": "24 deterministic movies per embryo prefix; four complete validation movies excluded",
+    "window_frames": 4,
+    "max_tokens": 512,
+    "target_steps": 6000,
+    "learning_rate": 1e-5,
+    "weight_decay": 1e-5,
+    "gradient_accumulation": 4,
+    "node_drop_probability": 0.04,
+    "false_positive_probability": 0.03,
+    "jitter_sigma_scaled_voxels": 2.0,
+    "division_sampling_probability": 0.5,
+    "hard_negative_radius_scaled_voxels": 64.0,
+    "physical_z_to_xy_scale": 4.0
+  },
+  "validation": {
+    "stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "complete_movies": true,
+    "match_radius_um": 7.0,
+    "baseline_proxy": 0.9294432421394134,
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "promote only after a positive complete-movie clean proxy delta with no material worst-movie regression; otherwise retain diagnostics and redesign",
+  "submission_policy": "training_and_validation_only_no_submission"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v1",
+  "executed_at": "2026-08-26T04:32:00Z",
+  "device": "cpu",
+  "pretrained_model": "Trackastra ctc v0.3.0",
+  "pretrained_model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+  "parameter_count": 27456880,
+  "forward_backward": {
+    "status": "passed",
+    "loss": 2.08474,
+    "parameter_tensors_with_gradients": 280,
+    "input": "deterministic Biohub-style synthetic four-frame graph sample"
+  },
+  "runtime_load": {
+    "status": "passed",
+    "source": ".biohub/staging/biohub-trackastra-graph-runtime-v1",
+    "loaded_parameter_count": 27456880
+  },
+  "dense_memory_bound": {
+    "status": "passed",
+    "max_tokens": 512,
+    "batch_size": 1,
+    "gradient_accumulation": 4,
+    "mechanism": "recursive source tiling with target halo; every source covered exactly once",
+    "test": "tests/test_trackastra_graph.py::test_recursive_tiles_cover_each_source_and_respect_budget"
+  }
+}

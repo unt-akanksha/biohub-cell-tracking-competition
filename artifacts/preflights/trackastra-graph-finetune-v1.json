@@ -1,0 +1,136 @@
+{
+  "checks": [
+    {
+      "detail": "Trainer compiles and four focused regression tests pass.",
+      "evidence": [
+        {
+          "path": "research/trackastra_graph/train_biohub_graph_transformer.py",
+          "sha256": "c99a557efc43caacf3c40af0dc659da87670a7e3e1818c23c234e84438f9cfca"
+        },
+        {
+          "path": "tests/test_trackastra_graph.py",
+          "sha256": "5dddef2d76ee189b173dbf56a8029da6a19e454f00c22ab5e7147b242f73b55f"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Private pinned runtime, offline wheels, and competition train input attached; GPU on, Internet and TPU off.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-trackastra-graph-finetune-v1/kernel-metadata.json",
+          "sha256": "131dee91a2578c0a8a2990d9670c6b42b1be0f3acb8018ab35c6c0c8bd929c9e"
+        },
+        {
+          "path": "config/experiments/trackastra-graph-finetune-v1.json",
+          "sha256": "9913cf74cf1caad6cdaebe4ced9ca942ae3049149f09ab64ed39fb564c2a8d97"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "16888efc8ab6eb332c569785b297fd35776ec9ecc7525f9431de36934bc694b8"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Deterministic four-frame Biohub-style sample builds positive association and division targets.",
+      "evidence": [
+        {
+          "path": "reports/experiments/trackastra-graph-finetune-v1-smoke.json",
+          "sha256": "8bbbb2f10920426c00c34b440a51bcadd7578d2f43382b3851198aa06a2616e0"
+        },
+        {
+          "path": "tests/test_trackastra_graph.py",
+          "sha256": "5dddef2d76ee189b173dbf56a8029da6a19e454f00c22ab5e7147b242f73b55f"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Official 27.5M CTC checkpoint completed a real forward/backward step with 280 parameter tensors receiving gradients.",
+      "evidence": [
+        {
+          "path": "reports/experiments/trackastra-graph-finetune-v1-smoke.json",
+          "sha256": "8bbbb2f10920426c00c34b440a51bcadd7578d2f43382b3851198aa06a2616e0"
+        },
+        {
+          "path": "research/trackastra_graph/train_biohub_graph_transformer.py",
+          "sha256": "c99a557efc43caacf3c40af0dc659da87670a7e3e1818c23c234e84438f9cfca"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Packaged official checkpoint hash verified and reloaded at 27,456,880 parameters.",
+      "evidence": [
+        {
+          "path": "reports/experiments/trackastra-graph-finetune-v1-smoke.json",
+          "sha256": "8bbbb2f10920426c00c34b440a51bcadd7578d2f43382b3851198aa06a2616e0"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "16888efc8ab6eb332c569785b297fd35776ec9ecc7525f9431de36934bc694b8"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Notebook writes checkpoints, histories, complete-movie validation, and terminal evidence below /kaggle/working.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-trackastra-graph-finetune-v1/biohub-trackastra-graph-finetune-v1.ipynb",
+          "sha256": "eaca0f9c70c629e7ccf582c38c9b250fff984d2868bf8454bf74e1c05c72e9f3"
+        },
+        {
+          "path": "kaggle/biohub-trackastra-graph-finetune-v1/kernel-metadata.json",
+          "sha256": "131dee91a2578c0a8a2990d9670c6b42b1be0f3acb8018ab35c6c0c8bd929c9e"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Batch one, 512-token hard cap, mixed precision, and recursively tested dense tiling bound attention memory while covering each source once.",
+      "evidence": [
+        {
+          "path": "reports/experiments/trackastra-graph-finetune-v1-smoke.json",
+          "sha256": "8bbbb2f10920426c00c34b440a51bcadd7578d2f43382b3851198aa06a2616e0"
+        },
+        {
+          "path": "tests/test_trackastra_graph.py",
+          "sha256": "5dddef2d76ee189b173dbf56a8029da6a19e454f00c22ab5e7147b242f73b55f"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "Training draws 24 deterministic movies per embryo prefix and excludes four full heldout movies across both prefixes; validation scores every frame.",
+      "evidence": [
+        {
+          "path": "config/experiments/trackastra-graph-finetune-v1.json",
+          "sha256": "9913cf74cf1caad6cdaebe4ced9ca942ae3049149f09ab64ed39fb564c2a8d97"
+        },
+        {
+          "path": "research/trackastra_graph/train_biohub_graph_transformer.py",
+          "sha256": "c99a557efc43caacf3c40af0dc659da87670a7e3e1818c23c234e84438f9cfca"
+        },
+        {
+          "path": "tests/test_trackastra_graph.py",
+          "sha256": "5dddef2d76ee189b173dbf56a8029da6a19e454f00c22ab5e7147b242f73b55f"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T05:09:03.311630Z",
+  "report_sha256": "8a39dad4ab1e98987efb40eb7ac9c435e836af48146eb2c780506529fbfb72e6",
+  "run_id": "trackastra-graph-finetune-v1",
+  "schema_version": 1
+}
