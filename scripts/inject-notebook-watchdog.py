@@ -100,7 +100,10 @@ def inject(notebook_path: Path, run_id: str, budget_seconds: int, safety_margin_
 
     temporary = notebook_path.with_suffix(f"{notebook_path.suffix}.tmp")
     temporary.write_text(
-        json.dumps(notebook, ensure_ascii=False, separators=(",", ":")),
+        # Kaggle CLI currently opens notebook source with the Windows default
+        # codec before uploading. ASCII escapes keep multilingual notebooks
+        # readable on that path while preserving their parsed JSON content.
+        json.dumps(notebook, ensure_ascii=True, separators=(",", ":")),
         encoding="utf-8",
     )
     temporary.replace(notebook_path)

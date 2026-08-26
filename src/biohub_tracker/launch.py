@@ -22,6 +22,7 @@ from .guard import (
     snapshot_hash,
 )
 from .io import atomic_write_json, canonical_json_bytes, sha256_bytes, sha256_file, utc_now
+from .kaggle import redact_diagnostic
 from .ledger import EventType, ExperimentEvent, Ledger, reconstruct_runs, start_payload
 from .preflight import validate_preflight
 
@@ -387,7 +388,11 @@ def push_kernel(
         result = push_runner(command)
         return_code = getattr(result, "returncode", 0)
         if return_code not in (None, 0):
-            raise RuntimeError(f"kaggle kernels push exited {return_code}")
+            diagnostic = redact_diagnostic(
+                str(getattr(result, "stderr", "") or getattr(result, "stdout", "")).strip()
+            )
+            suffix = f": {diagnostic}" if diagnostic else ""
+            raise RuntimeError(f"kaggle kernels push exited {return_code}{suffix}")
     except Exception as exc:
         ledger.append(
             ExperimentEvent.create(

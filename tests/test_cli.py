@@ -207,6 +207,27 @@ def test_launch_failed_runner_is_consumed_and_audited(tmp_path):
     assert ledger.read_events()[-1].event_type is EventType.LAUNCH_FAILED
 
 
+def test_launch_nonzero_exit_records_redacted_push_diagnostic(tmp_path):
+    authorization, config, fixture, _, _, ledger = authorize_fixture(tmp_path)
+    result = SimpleNamespace(returncode=1, stderr="API token=do-not-record-this", stdout="")
+    with pytest.raises(LaunchError) as failure:
+        push_kernel(
+            authorization,
+            workspace_root=tmp_path,
+            ledger=ledger,
+            runner=FixtureRunner(fixture),
+            config=config,
+            nonce=authorization.nonce,
+            execute=True,
+            push_runner=lambda command: result,
+            now=NOW,
+        )
+    assert failure.value.reason_code == "KERNEL_PUSH_FAILED"
+    reason = ledger.read_events()[-1].payload["reason"]
+    assert "token=[REDACTED]" in reason
+    assert "do-not-record-this" not in reason
+
+
 def test_launch_consumption_race_invokes_exactly_one_push(tmp_path, monkeypatch):
     import biohub_tracker.launch as launch_module
 
