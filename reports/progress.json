@@ -1365,6 +1365,17 @@
             "trainer_sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93"
           },
           "target_event_id": "evt-57a33e23f2944a2c84011a9fa3cd8e8b"
+        },
+        {
+          "correction_reason": "Preflight hardening: add an explicit finite forward/backward gradient check and AdamW optimizer step for the hybrid detector; scientific runtime and GPU budget are unchanged.",
+          "replacement_fields": {
+            "adamw_optimizer_step_completed": true,
+            "finite_forward_backward_gradients": true,
+            "model_step_test_sha256": "02397f61835f09095e26c30f100b3295c9deb8e8dbce16061e8bf30ec4997a3d",
+            "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r3.json",
+            "preflight_report_sha256": "073dcbcb287bdb23b6512750bc0fe47ddb5e3b66ba63dc0d07c90cec7031719c"
+          },
+          "target_event_id": "evt-f6eaa6ae5a4e46f0bc26c12cb0ff284f"
         }
       ],
       "authorized_for_submission": false,
