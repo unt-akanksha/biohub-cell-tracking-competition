@@ -17,12 +17,14 @@ from biohub_tracker.graphs import artifact_tree_sha256
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
 from biohub_tracker.ledger import (
     EventType,
+    ExactEvaluationStatus,
     ExperimentEvent,
     Ledger,
     completed_payload,
     exact_evaluation_registration_payload,
     exact_evaluation_started_payload,
     registration_payload,
+    reconstruct_exact_evaluations,
     resolved_exact_member,
     start_payload,
 )
@@ -286,22 +288,29 @@ def _fixture(tmp_path: Path, verified):
     return manifest_path, truth, ledger, refs
 
 
-def test_exact_canonical_complete_movie_report_is_pooled_and_ledger_attached(tmp_path, verified):
+def _request(tmp_path: Path, verified) -> tuple[ExactEvaluationRequest, Ledger]:
     manifest_path, truth, ledger, refs = _fixture(tmp_path, verified)
-    request = ExactEvaluationRequest(
-        ledger_path=ledger.path,
-        evaluation_run_id="eval-fixture",
-        truth_dir=truth,
-        manifest_path=manifest_path,
-        scorer_lock_path=LOCK,
-        evaluation_policy_path=POLICY,
-        baseline_sets=tuple(refs["baseline"]),
-        candidate_sets=tuple(refs["candidate"]),
-        output_dir=tmp_path / "exact-output",
-        scorer_checkout=CHECKOUT,
-        tracksdata_checkout=TRACKSDATA,
-        workspace_root=tmp_path,
+    return (
+        ExactEvaluationRequest(
+            ledger_path=ledger.path,
+            evaluation_run_id="eval-fixture",
+            truth_dir=truth,
+            manifest_path=manifest_path,
+            scorer_lock_path=LOCK,
+            evaluation_policy_path=POLICY,
+            baseline_sets=tuple(refs["baseline"]),
+            candidate_sets=tuple(refs["candidate"]),
+            output_dir=tmp_path / "exact-output",
+            scorer_checkout=CHECKOUT,
+            tracksdata_checkout=TRACKSDATA,
+            workspace_root=tmp_path,
+        ),
+        ledger,
     )
+
+
+def test_exact_canonical_complete_movie_report_is_pooled_and_ledger_attached(tmp_path, verified):
+    request, ledger = _request(tmp_path, verified)
     report = evaluate_exact(request)
     assert report.core["evidence_kind"] == "synthetic_fixture"
     assert report.core["coverage"]["complete"] is True
@@ -318,6 +327,81 @@ def test_exact_canonical_complete_movie_report_is_pooled_and_ledger_attached(tmp
         ledger_path=ledger.path,
         workspace_root=tmp_path,
     ).core_sha256 == report.core_sha256
+
+
+def test_exact_publication_retries_after_kill_immediately_before_rename(
+    tmp_path, verified, monkeypatch
+):
+    request, ledger = _request(tmp_path, verified)
+    import biohub_tracker.evaluation as evaluation_module
+
+    real_rename = evaluation_module.os.rename
+
+    def kill_before_rename(source, destination):
+        raise SystemExit("kill before rename")
+
+    monkeypatch.setattr(evaluation_module.os, "rename", kill_before_rename)
+    with pytest.raises(SystemExit, match="before rename"):
+        evaluate_exact(request)
+    assert not request.output_dir.exists()
+    monkeypatch.setattr(evaluation_module.os, "rename", real_rename)
+    report = evaluate_exact(request)
+    assert report.core_path == request.output_dir / "exact-report-core.json"
+    assert reconstruct_exact_evaluations(ledger.read_events())["eval-fixture"].status is (
+        ExactEvaluationStatus.COMPLETED
+    )
+
+
+def test_exact_publication_recovers_kill_after_rename_before_completion(
+    tmp_path, verified, monkeypatch
+):
+    request, ledger = _request(tmp_path, verified)
+    real_append = Ledger.append
+
+    def kill_before_completion(self, event):
+        if event.event_type is EventType.EXACT_EVALUATION_COMPLETED:
+            raise SystemExit("kill before completion")
+        return real_append(self, event)
+
+    monkeypatch.setattr(Ledger, "append", kill_before_completion)
+    with pytest.raises(SystemExit, match="before completion"):
+        evaluate_exact(request)
+    assert request.output_dir.is_dir()
+    assert reconstruct_exact_evaluations(ledger.read_events())["eval-fixture"].status is (
+        ExactEvaluationStatus.RUNNING
+    )
+    monkeypatch.setattr(Ledger, "append", real_append)
+    report = evaluate_exact(request)
+    assert validate_exact_report(
+        report, ledger_path=ledger.path, workspace_root=tmp_path
+    ).core_sha256 == report.core_sha256
+
+
+def test_exact_publication_retries_kill_after_completion_append(
+    tmp_path, verified, monkeypatch
+):
+    request, ledger = _request(tmp_path, verified)
+    import biohub_tracker.evaluation as evaluation_module
+
+    real_validate = evaluation_module.validate_exact_report
+
+    def kill_after_completion(report, **kwargs):
+        if kwargs.get("require_completed", True):
+            raise SystemExit("kill after completion")
+        return real_validate(report, **kwargs)
+
+    monkeypatch.setattr(evaluation_module, "validate_exact_report", kill_after_completion)
+    with pytest.raises(SystemExit, match="after completion"):
+        evaluate_exact(request)
+    assert request.output_dir.is_dir()
+    assert reconstruct_exact_evaluations(ledger.read_events())["eval-fixture"].status is (
+        ExactEvaluationStatus.COMPLETED
+    )
+    monkeypatch.setattr(evaluation_module, "validate_exact_report", real_validate)
+    recovered = evaluate_exact(request)
+    assert recovered.core_sha256 == ExactReport.from_files(
+        recovered.core_path, recovered.envelope_path
+    ).core_sha256
 
 
 def test_exact_report_unknown_and_nonfinite_fields_fail_closed():

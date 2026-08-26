@@ -271,6 +271,10 @@ def _member(role: str, inventory: PredictionInventory, ledger: Ledger) -> dict[s
 
 def _preflight_request(
     request: ExactEvaluationRequest,
+    *,
+    allowed_statuses: frozenset[ExactEvaluationStatus] = frozenset(
+        {ExactEvaluationStatus.RUNNING}
+    ),
 ) -> tuple[
     Ledger,
     EvaluationManifest,
@@ -312,7 +316,7 @@ def _preflight_request(
     state = reconstruct_exact_evaluations(events).get(request.evaluation_run_id)
     if state is None:
         _fail("UNKNOWN_EXACT_EVALUATION", request.evaluation_run_id)
-    if state.status is not ExactEvaluationStatus.RUNNING:
+    if state.status not in allowed_statuses:
         _fail("EXACT_EVALUATION_NOT_STARTED", f"{request.evaluation_run_id}:{state.status}")
     expected_registration = exact_evaluation_registration_payload(
         evaluation_run_id=request.evaluation_run_id,
@@ -326,6 +330,72 @@ def _preflight_request(
     if canonical_json_bytes(expected_registration) != canonical_json_bytes(state.registered):
         _fail("EXACT_EVALUATION_REGISTRATION_MISMATCH", request.evaluation_run_id)
     return ledger, manifest, lock, policy, policy_sha, inventories, members
+
+
+def _published_report(request: ExactEvaluationRequest, output: Path) -> ExactReport:
+    """Finish or verify a report whose immutable directory is already published."""
+
+    core_path = output / "exact-report-core.json"
+    envelope_path = output / "exact-report-envelope.json"
+    report = validate_exact_report(
+        ExactReport.from_files(core_path, envelope_path), require_completed=False
+    )
+    (
+        ledger,
+        _manifest,
+        _lock,
+        _policy,
+        _policy_sha,
+        _inventories,
+        members,
+    ) = _preflight_request(
+        request,
+        allowed_statuses=frozenset(
+            {ExactEvaluationStatus.RUNNING, ExactEvaluationStatus.COMPLETED}
+        ),
+    )
+    state = reconstruct_exact_evaluations(ledger.read_events())[request.evaluation_run_id]
+    for name in (
+        "evaluation_run_id",
+        "evidence_kind",
+        "scorer_lock_sha256",
+        "environment_lock_sha256",
+        "manifest_sha256",
+        "evaluation_policy_sha256",
+    ):
+        if report.core.get(name) != state.registered.get(name):
+            _fail("EXACT_EVALUATION_REGISTRATION_MISMATCH", f"published report {name}")
+    if canonical_json_bytes(report.core.get("members")) != canonical_json_bytes(members):
+        _fail("EXACT_EVALUATION_REGISTRATION_MISMATCH", "published report members")
+    authoritative = report.core.get("authoritative_inventories")
+    if not isinstance(authoritative, list):
+        _fail("EXACT_REPORT_SCHEMA_INVALID", "authoritative inventories")
+    completion = exact_evaluation_completed_payload(
+        evaluation_run_id=request.evaluation_run_id,
+        members=members,
+        report_core_sha256=report.core_sha256,
+        envelope_sha256=report.envelope_sha256,
+        artifact_hashes={
+            "report_core_file": sha256_file(core_path),
+            "report_envelope_file": sha256_file(envelope_path),
+        },
+        authoritative_inventories=authoritative,
+    )
+    if state.status is ExactEvaluationStatus.RUNNING:
+        ledger.append(
+            ExperimentEvent.create(
+                request.evaluation_run_id,
+                EventType.EXACT_EVALUATION_COMPLETED,
+                completion,
+            )
+        )
+    elif canonical_json_bytes(state.terminal) != canonical_json_bytes(completion):
+        _fail("EXACT_REPORT_HASH_MISMATCH", "published report completion")
+    return validate_exact_report(
+        report,
+        ledger_path=request.ledger_path,
+        workspace_root=request.workspace_root,
+    )
 
 
 def _canonical_summary(summary: Mapping[str, Any]) -> dict[str, Any]:
@@ -790,10 +860,11 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
     started_at = time.perf_counter()
     output = request.output_dir.resolve()
     if output.exists():
-        raise FileExistsError(f"refusing to overwrite immutable exact report: {output}")
+        return _published_report(request, output)
     output.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix=".e-", dir=output.parent))
     published = False
+    completion_attached = False
     ledger: Ledger | None = None
     tracemalloc.start()
     try:
@@ -945,6 +1016,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
                 completion,
             )
         )
+        completion_attached = True
         report = ExactReport(
             core,
             envelope,
@@ -959,7 +1031,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             workspace_root=request.workspace_root,
         )
     except Exception as exc:
-        if published and output.exists():
+        if published and not completion_attached and output.exists():
             shutil.rmtree(output)
         elif staging.exists():
             shutil.rmtree(staging)
