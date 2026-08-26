@@ -11,6 +11,15 @@ Every GPU experiment follows this order: register, preflight, authorize, execute
 - A run strictly greater than 1.00 hour requires both `dense_memory` and `dataset_coverage` preflight evidence in addition to the smoke checks.
 - When Kaggle reaches the protected 8.00-hour reserve, stop Kaggle GPU work and hand the same registered manifest to the user's cloud GPU. Never spend the reserve while waiting for cloud access.
 
+For every competition submission kernel, metadata must request
+`machine_shape: NvidiaTeslaT4`, and startup must fail closed unless
+`torch.cuda.device_count() == 2`. Build a deterministic whole-movie shard plan,
+run one isolated worker per visible CUDA token, and validate exact, disjoint
+movie coverage before assembling the submission. The metadata name alone is
+not accepted as proof of two devices. Kaggle's current CLI documents
+`NvidiaTeslaT4` as the supported T4 accelerator; the runtime device-count check
+is the authoritative guard.
+
 ## 1. Register
 
 ```powershell

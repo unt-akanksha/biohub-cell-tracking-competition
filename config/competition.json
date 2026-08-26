@@ -15,6 +15,7 @@
   "notebook_runtime_limit_hours": "12.00",
   "gpu_reserve_hours": "8.00",
   "submission_execution_policy": {
+    "required_machine_shape": "NvidiaTeslaT4",
     "required_cuda_devices": 2,
     "require_movie_sharding_across_devices": true,
     "runtime_soft_stop_hours": "10.50",
