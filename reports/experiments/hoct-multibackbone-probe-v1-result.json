@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "run_id": "hoct-multibackbone-probe-v1",
+  "status": "rejected",
+  "launcher_elapsed_seconds": 4296.166,
+  "trainer_elapsed_seconds": 3076.8292428359996,
+  "actual_gpu_hours": 1.1934,
+  "remaining_gpu_hours": 26.95,
+  "launcher_terminal_sha256": "dba40bccca19fab0c337ac9ad390e93a7dce47daed59095cd93223e394754e31",
+  "training_terminal_sha256": "8ddd87ca0dd748b668e8c4f61409930d071ef84f9dd82d96fd750e8b98943f69",
+  "complete_movie_validation_sha256": "ea42d2976f4530684c38dc172b3fca5a70f1072a09dc52bdbe686eddafc53599",
+  "probe_checkpoint_sha256": "7f0d2f64d3103880edf9913956e3ab51f0be6d731ba68fd2f355c04e4b2907c2",
+  "selected": {
+    "variant": "general_ctc_blend_w0.75:biohub_probe",
+    "method": "hoct_only",
+    "selection_proxy": 0.9574151260407429,
+    "selection_delta_vs_base": -0.053837273809722586,
+    "selection_worst_movie_delta_vs_base": -0.0792991487990995,
+    "acceptance_adjusted_edge_jaccard": 0.8175411753651174,
+    "base_acceptance_adjusted_edge_jaccard": 0.8218808364281963,
+    "acceptance_delta_vs_base": -0.004339661063078926,
+    "acceptance_division_tp": 0,
+    "acceptance_division_fp": 10,
+    "acceptance_division_fn": 3,
+    "base_acceptance_division_tp": 0,
+    "base_acceptance_division_fp": 3,
+    "base_acceptance_division_fn": 3
+  },
+  "training": {
+    "candidate_recall": 0.9999368038549649,
+    "captured_consecutive_gt_edges": 126582,
+    "eligible_consecutive_gt_edges": 126590,
+    "selected_examples_per_backbone": 273916,
+    "general_bce_before": 0.13267602026462555,
+    "general_bce_after": 0.0214995164424181,
+    "ctc_bce_before": 0.6072952151298523,
+    "ctc_bce_after": 0.22573590278625488
+  },
+  "decision": {
+    "state": "retire",
+    "reason": "The independently adapted HOCT association family regressed both selection and untouched acceptance despite successful training and near-complete candidate recall.",
+    "next_test": "Lock the accepted base and test a bounded correction only on competing-parent ambiguities using frozen SpatialDINO appearance features."
+  },
+  "acceptance_ground_truth_loaded_after_selection_freeze": true,
+  "public_leaderboard_used_for_selection": false,
+  "submission_created": false
+}

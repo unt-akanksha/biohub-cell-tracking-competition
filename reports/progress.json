@@ -1015,25 +1015,79 @@
       "status": "failed"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.5619",
       "amendments": [],
       "authorized_for_submission": false,
-      "decision": null,
-      "decision_evidence": [],
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/trackastra-graph-finetune-v6-result.json"
+      ],
       "declared_gpu_hours": "4.00",
       "dependencies": [],
-      "exact_evidence": {},
+      "exact_evidence": {
+        "actual_gpu_hours": "0.5619",
+        "by_embryo": {},
+        "by_fold": {},
+        "complete_movie_validation_sha256": "186350e9209d5f284da77e8769ca2fca47d8afb954edc4852cf71dcdbc1f2926",
+        "decision": {
+          "next_test": "Run trackastra-raw-confidence-acceptance-v1 once; retire immediately unless its disjoint processed-topology acceptance gate passes.",
+          "reason": "Raw-graph validation failed, but the experiment contract explicitly made it provisional because the submission candidate uses the audited processed final topology with transferred raw confidences.",
+          "state": "retain_only_for_predeclared_exact_processed_topology_gate"
+        },
+        "division_counts": {
+          "fn": 3,
+          "fp": 5,
+          "tp": 0
+        },
+        "launcher_elapsed_seconds": "2022.8",
+        "launcher_terminal_sha256": "f9acbb15ea0ce7caa16ab627659e06b8996eb1a316e5f8e39d1962940058bfbb",
+        "model_sha256": "255b3600a4926db6af36a7bddf6f1d84b711fca597602a4bdc511f5f4fd9166f",
+        "parameter_count": 27456880,
+        "pooled": {
+          "adjusted_edge_jaccard": "0.7799176488499155",
+          "division_jaccard": "0.0",
+          "edge_jaccard": null,
+          "node_recall": null
+        },
+        "provisional_raw_graph_validation": {
+          "acceptance_delta_vs_base_raw": "-0.06579806240598918",
+          "association_acceptance_passed": false,
+          "base_acceptance_proxy": "0.8457157112559047",
+          "base_worst_movie": "0.8431698208567855",
+          "selected_acceptance_proxy": "0.7799176488499155",
+          "selected_worst_movie": "0.7349797799364375",
+          "selection_delta_vs_base_raw": "-0.0029035865932345306"
+        },
+        "public_leaderboard_used_for_selection": false,
+        "real_steps": 7000,
+        "remaining_gpu_hours": "28.55",
+        "run_id": "trackastra-graph-finetune-v6",
+        "schema_version": 1,
+        "status": "completed",
+        "submission_created": false,
+        "synthetic_steps": 1200,
+        "trainer_elapsed_seconds": "1695.045306839",
+        "training_diagnostics": {
+          "final_window_loss": "0.05353495265201976",
+          "final_window_positive_probability": "0.843684564034144",
+          "initial_window_loss": "0.00953277984800177",
+          "note": "The tiny positive-only window check degraded after real fine-tuning and did not contain negatives; the complete-movie gate is the relevant provisional evidence.",
+          "post_synthetic_window_loss": "0.004059034490118729"
+        },
+        "training_terminal_sha256": "c6c2843a2640b7ab55dadf9f19e2b6535ece50845e15b4cee8498734ca123d23",
+        "worst_movie_delta": "-0.108190040920348"
+      },
       "failed_gate": null,
       "failure_reason": null,
       "hypothesis": "CUDA-safe density-matched fine-tuning of the 27.5M Trackastra model can learn independent associations that improve the exact processed-topology heldout proxy over the frozen public graph.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "completed",
       "next_gate": null,
       "parent": "trackastra-graph-finetune-v5",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T08:54:48.754904Z",
       "run_id": "trackastra-graph-finetune-v6",
-      "status": "running"
+      "status": "completed"
     },
     {
       "actual_gpu_hours": null,
@@ -1055,6 +1109,198 @@
       "registered_at": "2026-08-26T09:18:03.442218Z",
       "run_id": "hoct-probe-finetune-v1",
       "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.22264",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "1.50",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Frozen topology materializer omitted the hash-pinned public preset cell and selected DeepCenter checkpoint_last.pt epoch 500; expected node-count guard failed before Trackastra inference, so no scientific acceptance result or submission was produced.",
+      "hypothesis": "The independently fine-tuned 27.5M Trackastra checkpoint plus transferred raw detector confidence improves the exact processed final-topology association proxy on disjoint clean acceptance movies without leaderboard feedback.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v6",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T09:39:19.284171Z",
+      "run_id": "trackastra-raw-confidence-acceptance-v1",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "0.175548",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "1.50",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Frozen public topology materialization produced 21,843 nodes for 44b6_267148e4, a 0.34% drift from the earlier validator artifact's 21,768 count; model inference never started. This is comparator-integrity failure, not Trackastra model evidence; no submission was created.",
+      "hypothesis": "The independently fine-tuned 27.5M Trackastra checkpoint plus transferred raw detector confidence improves exact processed final-topology association on disjoint clean acceptance movies; v2 repairs only the pre-inference frozen-preset materialization failure.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v6",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T10:15:00.840324Z",
+      "run_id": "trackastra-raw-confidence-acceptance-v2",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "1.1933794444",
+      "amendments": [
+        {
+          "correction_reason": "Trackastra V2 exposed 0.34 percent environment-sensitive public topology drift before model inference; bind complete graph runtime version 11 and a predeclared 0.5 percent fail-closed drift envelope.",
+          "replacement_fields": {
+            "code": {
+              "dirty": true,
+              "dirty_state_sha256": "065ec0894fcbd55c3429077cdcb7f619f2a67a6b51e262f0a424d7d12f1d0af8",
+              "git_head": "ce7f24752248c70b1b08223f5a60123286a67872"
+            },
+            "config": {
+              "accelerator": "NvidiaTeslaT4",
+              "adaptation": {
+                "feature_extraction": "independent for each backbone with model-specific hard negatives",
+                "frozen_backbones": true,
+                "learned_parameter_count_per_backbone": 289,
+                "maximum_examples_per_backbone": 600000,
+                "probe_config": "identical to hoct-probe-finetune-v1",
+                "sampling_policy": "scan all 195 movies for candidate recall, then apply a deterministic balanced per-movie cap before concatenation",
+                "training_movies": "all 195 non-validation Biohub movies"
+              },
+              "adapter_sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698",
+              "association_ensemble_sha256": "17c6dfb67e8ba45dc1ef884d05490eef0943ac616c8e653d12358720941a00a3",
+              "base_probe_trainer_sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8",
+              "dataset_sources": [
+                "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version6",
+                "indarkarhana/biohub-trackastra-graph-runtime-v1@version11",
+                "pilkwang/biohub-tracking-support-pack-50ep-v1",
+                "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
+              ],
+              "declared_max_runtime_hours": "4.00",
+              "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+              "internet_enabled": false,
+              "kernel_builder_sha256": "d089d82a588c4c078aee8fc12c8218410a40f1239d15dfa31f05c27b0628a8c2",
+              "kernel_metadata_sha256": "2584c73994fdd8b094279c17d3d7dbccf1a8f114728e338c758089988a68cf17",
+              "kernel_ref": "indarkarhana/biohub-hoct-multibackbone-probe-v1",
+              "kernel_sources": [
+                "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2"
+              ],
+              "launch_condition": "Run directly after the active sequential gate: this lane strictly subsumes the unlaunched general-only probe and avoids duplicating its feature-extraction GPU cost.",
+              "multibackbone_grid_sha256": "977ea2c64e52135ec340ac021e6f43904bb4c6e27100b2052b6eb691e988ae52",
+              "multibackbone_trainer_sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa",
+              "notebook_sha256": "587b050e38b37f745e48209675c6f596aee926fe56e42fd98feaf683fc2c2241",
+              "parent": "trackastra-graph-finetune-v6",
+              "pretrained_models": {
+                "ctc": {
+                  "model_sha256": "b9be3d976e2d51ae946128ded99142a81b5ba99fb87a0da67c38de2934944000",
+                  "name": "HOCT ctc_v0",
+                  "parameter_count": 6252593,
+                  "release": "weights-v0"
+                },
+                "general": {
+                  "model_sha256": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33",
+                  "name": "HOCT general_v1",
+                  "parameter_count": 6252593,
+                  "release": "weights-v1"
+                },
+                "shared": {
+                  "edge_feature_dimension": 288,
+                  "license": "MIT",
+                  "source_commit": "2ccc5040823bc944ab67790abd1f56eea7cd4f05",
+                  "source_paper": "https://arxiv.org/abs/2607.11754",
+                  "source_repository": "royerlab/hoct"
+                }
+              },
+              "processed_topology_cache": {
+                "fallback": "rerun the exact in-kernel public comparator materializer with the same 0.5% source-reference drift bound",
+                "ground_truth_labels_in_cache": false,
+                "producer_run_id": "trackastra-raw-confidence-acceptance-v2",
+                "reuse_if": "producer terminal, exact source hashes, DeepCenter epoch/hash, source-reference node counts within a predeclared 0.5% bound, and CSV hash all verify"
+              },
+              "promotion_rule": "candidate must beat the frozen processed-topology comparator on disjoint acceptance movies",
+              "public_validation_materializer_sha256": "c3450c5e37e245cfbc28c4eb00b83f6ac57627124ec376b43220cf5f66849cbc",
+              "run_id": "hoct-multibackbone-probe-v1",
+              "runtime_manifest_sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265",
+              "schema_version": 1,
+              "submission_policy": "training and clean acceptance only; no submission code",
+              "tpu_enabled": false,
+              "trainer_max_wall_seconds": 13200,
+              "validation": {
+                "acceptance_ground_truth_loaded_after_selection_freeze": true,
+                "acceptance_read_after_configuration_freeze": true,
+                "acceptance_rule": "positive proxy delta and worst-movie regression no worse than 0.01",
+                "acceptance_stems": [
+                  "44b6_267148e4",
+                  "6bba_07e24132"
+                ],
+                "public_leaderboard_used_for_selection": false,
+                "selection_objective": "maximize the minimum per-movie proxy delta versus base across the two embryo prefixes, then pooled score and worst movie",
+                "selection_stems": [
+                  "44b6_12dfb391",
+                  "6bba_062c8d37"
+                ],
+                "topology": "hash-bound audited public final-CSV postprocessor output with stable raw edge confidence transfer and a maximum 0.5% node-count drift from the prior validator artifact"
+              },
+              "variant_grid": {
+                "linker_grid": "includes conservative 0.80 postprocess-division preservation and a correction-only high-base-support arm",
+                "minimum_consensus": [
+                  "general_ctc_consensus_min:pretrained",
+                  "general_ctc_consensus_min:biohub_probe"
+                ],
+                "single_backbone": [
+                  "general:pretrained",
+                  "general:biohub_probe",
+                  "ctc:pretrained",
+                  "ctc:biohub_probe"
+                ],
+                "support_aware_log_odds_blends": {
+                  "general_weights": [
+                    "0.25",
+                    "0.5",
+                    "0.75"
+                  ],
+                  "heads": [
+                    "pretrained",
+                    "biohub_probe"
+                  ]
+                },
+                "total_variants": 12,
+                "zero_policy": "an exact zero means outside candidate support; preserve the available model instead of treating missing support as negative evidence"
+              },
+              "watchdog_hard_stop_seconds": 14100
+            },
+            "config_sha256": "fac145b30dd7a8d8cbcbd2c1287ca6267a6d2392cc9f4cbc687a502bfb4746d0"
+          },
+          "target_event_id": "evt-28f0cf9a24224c709318906d39f48c9b"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/hoct-multibackbone-probe-v1-result.json",
+        ".biohub/cache/kernel-outputs/hoct-multibackbone-probe-v1/hoct_multibackbone_v1/complete_movie_validation.json"
+      ],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "clean held-out association acceptance",
+      "failure_reason": "Training completed and candidate recall was 0.99994, but the frozen general_ctc_blend_w0.75 Biohub probe regressed the base by 0.05384 on selection and 0.004340 on untouched acceptance. Acceptance adjusted edge Jaccard was 0.81754 versus 0.82188; division false positives rose from 3 to 10. No submission was created.",
+      "hypothesis": "Complementary HOCT general and CTC backbones with independently fitted Biohub probes and a robust worst-embryo selection rule improve exact processed-topology association over the frozen public comparator without leaderboard feedback.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v6",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T10:45:20.722516Z",
+      "run_id": "hoct-multibackbone-probe-v1",
+      "status": "rejected"
     }
   ],
   "schema_version": 1

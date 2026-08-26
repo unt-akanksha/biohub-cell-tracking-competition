@@ -1,7 +1,7 @@
 # hoct-multibackbone-probe-v1
 
-Status: staged as the next sequential independent experiment. It is not
-launched concurrently with the active Trackastra gate.
+Status: completed and rejected at the clean association gate on 2026-08-26.
+No submission was created.
 
 The official `general_v1` and CTC-specialized `ctc_v0` checkpoints are not
 replica-like seeds. A label-free CPU audit on the exact owned test topology
@@ -52,3 +52,36 @@ lane now runs directly instead of first spending another four-hour budget on
 the general-only probe: it contains that exact backbone/head option as well as
 the complementary CTC option, so the smaller run would duplicate GPU work
 without adding a stronger scientific gate.
+
+## Terminal result
+
+The kernel completed in 4,296.166 seconds (1.1934 GPU hours), leaving 26.95
+Kaggle GPU hours. Both probes learned the training task: the general probe BCE
+fell from 0.1327 to 0.0215 and the CTC probe BCE from 0.6073 to 0.2257. Candidate
+generation retained 126,582 of 126,590 eligible consecutive ground-truth edges
+(0.99994 recall) before balanced sampling. The failure is therefore clean
+generalization evidence, not a broken training run.
+
+The frozen selection winner was
+`general_ctc_blend_w0.75:biohub_probe` with the HOCT-only linker. It regressed
+the base proxy by 0.05384 pooled on the two selection movies, including a
+0.07930 worst-movie regression. On the two untouched acceptance movies its
+adjusted edge Jaccard was 0.81754 versus 0.82188 for the frozen base, a
+0.004340 delta. It also introduced seven additional false-positive divisions
+(10 versus 3) without recovering a true division. The predeclared acceptance
+gate consequently failed.
+
+Decision: retire all HOCT-only and HOCT-dominant submission paths. Preserve the
+probe checkpoint only as negative evidence and as a possible diagnostic
+feature source. The next association experiment must be correction-only: keep
+the accepted base edges locked except where multiple parents are locally
+ambiguous, then test frozen SpatialDINO appearance evidence with a strictly
+bounded adjustment. This directly addresses the missing morphology/intensity
+signal in the point-only HOCT adapter.
+
+Bound outputs:
+
+- launcher terminal SHA-256: `dba40bccca19fab0c337ac9ad390e93a7dce47daed59095cd93223e394754e31`
+- training terminal SHA-256: `8ddd87ca0dd748b668e8c4f61409930d071ef84f9dd82d96fd750e8b98943f69`
+- complete validation SHA-256: `ea42d2976f4530684c38dc172b3fca5a70f1072a09dc52bdbe686eddafc53599`
+- probe checkpoint SHA-256: `7f0d2f64d3103880edf9913956e3ab51f0be6d731ba68fd2f355c04e4b2907c2`
