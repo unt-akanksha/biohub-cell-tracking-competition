@@ -71,6 +71,13 @@ def test_register_appends_one_canonical_event(tmp_path):
     assert json.loads(raw)["event_type"] == "registered"
 
 
+def test_v1_event_decoder_rejects_unknown_root_field():
+    event = ExperimentEvent.create("run-a", EventType.REGISTERED, payload()).to_dict()
+    event["future_unhashed_field"] = "must-not-be-discarded"
+    with pytest.raises(ValueError, match="unknown or missing fields"):
+        ExperimentEvent.from_dict(event)
+
+
 def test_register_cli_prints_run_id_and_records_git_state(tmp_path, capsys):
     (tmp_path / "experiments").mkdir()
     exit_code = main(

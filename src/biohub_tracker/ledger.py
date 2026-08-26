@@ -167,8 +167,8 @@ class ExperimentEvent:
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "ExperimentEvent":
         required = {"schema_version", "event_id", "run_id", "event_type", "created_at", "payload"}
-        if not required <= value.keys() or not isinstance(value.get("payload"), Mapping):
-            raise ValueError("event is missing required fields")
+        if set(value) != required or not isinstance(value.get("payload"), Mapping):
+            raise ValueError("event has unknown or missing fields")
         event = cls(
             schema_version=int(value["schema_version"]),
             event_id=_bounded_text(value["event_id"], "event_id", 160),

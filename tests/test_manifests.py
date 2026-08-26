@@ -9,7 +9,14 @@ import pytest
 
 from biohub_tracker.cli import main
 from biohub_tracker.io import canonical_json_bytes
-from biohub_tracker.manifests import ManifestError, build_manifest, load_manifest, verify_manifest, write_manifest
+from biohub_tracker.manifests import (
+    EvaluationManifest,
+    ManifestError,
+    build_manifest,
+    load_manifest,
+    verify_manifest,
+    write_manifest,
+)
 
 
 FIXTURE = Path("tests/fixtures/manifest/official-metadata.json")
@@ -176,6 +183,20 @@ def test_calibration_on_evaluation_side_and_overlap_tamper_are_rejected(tmp_path
     with pytest.raises(ManifestError) as error:
         load_manifest(path)
     assert error.value.reason_code in {"SOURCE_OVERLAP", "IDENTITY_CONFLICT"}
+
+
+@pytest.mark.parametrize("nesting", ["root", "evidence", "sample", "fold"])
+def test_v1_manifest_rejects_unknown_fields_at_every_versioned_nesting(tmp_path, nesting):
+    value = build_manifest(materialize(tmp_path / "train"), LOCK).to_dict()
+    target = {
+        "root": value,
+        "evidence": value["evidence"],
+        "sample": value["samples"][0],
+        "fold": value["folds"][0],
+    }[nesting]
+    target["future_unhashed_field"] = "must-not-be-discarded"
+    with pytest.raises(ManifestError, match="MANIFEST_SCHEMA_INVALID"):
+        EvaluationManifest.from_dict(value)
 
 
 def test_manifest_cli_build_verify_is_immutable_and_no_real_fixture_claim(tmp_path, capsys):

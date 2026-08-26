@@ -18,6 +18,45 @@ OFFICIAL_EMBRYOS = ("44b6", "6bba")
 OFFICIAL_AXES = ("t", "z", "y", "x")
 _SAMPLE_ID = re.compile(r"^(44b6|6bba)_(.+)$")
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
+_SAMPLE_KEYS = {
+    "sample_id",
+    "embryo_id",
+    "field_of_view_id",
+    "image_relpath",
+    "truth_relpath",
+    "shape_tzyx",
+    "dtype",
+    "chunks_tzyx",
+    "scale_zyx_um",
+    "estimated_number_of_nodes",
+    "gt_node_count",
+    "gt_edge_count",
+    "image_metadata_sha256",
+    "geff_tree_sha256",
+}
+_FOLD_KEYS = {
+    "fold_id",
+    "train_embryo_id",
+    "evaluation_embryo_id",
+    "train_membership",
+    "calibration_membership",
+    "threshold_selection_membership",
+    "early_stopping_membership",
+    "evaluation_membership",
+    "train_membership_sha256",
+    "calibration_membership_sha256",
+    "evaluation_membership_sha256",
+}
+_MANIFEST_KEYS = {
+    "schema_version",
+    "scorer_lock_sha256",
+    "source_inventory_sha256",
+    "samples",
+    "folds",
+    "overlap_audit",
+    "manifest_sha256",
+    "evidence",
+}
 
 
 class ManifestError(ValueError):
@@ -164,6 +203,8 @@ class SampleRecord:
     @classmethod
     def from_dict(cls, value: Any) -> "SampleRecord":
         data = dict(_mapping(value, "sample"))
+        if set(data) != _SAMPLE_KEYS:
+            _fail("MANIFEST_SCHEMA_INVALID", "sample fields")
         try:
             record = cls(
                 sample_id=str(data["sample_id"]),
@@ -216,6 +257,8 @@ class FoldRecord:
     @classmethod
     def from_dict(cls, value: Any) -> "FoldRecord":
         data = dict(_mapping(value, "fold"))
+        if set(data) != _FOLD_KEYS:
+            _fail("MANIFEST_SCHEMA_INVALID", "fold fields")
         try:
             return cls(
                 fold_id=str(data["fold_id"]),
@@ -270,7 +313,11 @@ class EvaluationManifest:
     @classmethod
     def from_dict(cls, value: Any) -> "EvaluationManifest":
         data = dict(_mapping(value, "manifest"))
+        if set(data) != _MANIFEST_KEYS:
+            _fail("MANIFEST_SCHEMA_INVALID", "manifest fields")
         evidence = _mapping(data.get("evidence"), "manifest.evidence")
+        if set(evidence) != {"created_at"}:
+            _fail("MANIFEST_SCHEMA_INVALID", "manifest evidence fields")
         try:
             manifest = cls(
                 schema_version=int(data["schema_version"]),
