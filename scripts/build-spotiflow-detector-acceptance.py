@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-spotiflow-detector-acceptance-v1"
-NOTEBOOK = TARGET / "biohub-spotiflow-detector-acceptance-v1.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-spotiflow-detector-acceptance-v2"
+NOTEBOOK = TARGET / "biohub-spotiflow-detector-acceptance-v2.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,7 +31,7 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "spotiflow-detector-acceptance-v1"
+RUN_ID = "spotiflow-detector-acceptance-v2"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
@@ -117,17 +117,30 @@ if None in (runtime, graph_runtime, competition, support):
 support_wheels = sorted({p.parent for p in support.rglob("*.whl")})
 if not support_wheels:
     raise FileNotFoundError(f"No support wheels found under {support}")
-base_cmd = [sys.executable, "-m", "pip", "install", "--no-index"]
+numpy_before = importlib.import_module("numpy").__version__
+if numpy_before != "2.0.2":
+    raise RuntimeError(f"Unexpected Kaggle NumPy before offline install: {numpy_before}")
+
+# Preserve Kaggle's compiled NumPy/SciPy stack.  The support pack's latest
+# imagecodecs wheel requires NumPy >=2.1 and tracksdata declares NumPy >2, so a
+# normal resolver either fails or upgrades NumPy incompatibly.  These are the
+# exact graph-IO wheels needed by the acceptance evaluator.
+base_cmd = [sys.executable, "-m", "pip", "install", "--no-index", "--no-deps"]
 for wheel_dir in support_wheels:
     base_cmd.extend(["--find-links", str(wheel_dir)])
 base_cmd.extend([
-    "numpy==2.0.2",
-    "tracksdata",
-    "zarr>=3.0.10,<4",
-    "polars>=1.36",
-    "blosc2",
-    "dask[array]",
-    "pyyaml",
+    "bidict==0.23.1",
+    "donfig==0.8.1.post1",
+    "geff==1.2.0.1.1",
+    "geff-spec==1.1.1",
+    "ilpy==0.6.0",
+    "numcodecs==0.15.1",
+    "polars==1.42.0",
+    "polars-runtime-32==1.42.0",
+    "pyscipopt==6.2.1",
+    "rustworkx==0.18.0",
+    "tracksdata==0.1.0rc6.dev3+g980c2d30a",
+    "zarr==3.2.1",
 ])
 subprocess.run(base_cmd, check=True)
 
@@ -146,6 +159,19 @@ sys.path.insert(0, str(support_repo.parent))
 for module in ("numpy", "scipy", "torch", "tracksdata", "zarr", "spotiflow"):
     imported = importlib.import_module(module)
     print(module, getattr(imported, "__version__", "unknown"))
+numpy_after = importlib.import_module("numpy").__version__
+if numpy_after != numpy_before:
+    raise RuntimeError(f"Offline install changed NumPy: {numpy_before} -> {numpy_after}")
+from scipy.optimize import linear_sum_assignment
+linear_sum_assignment([[0.0, 1.0], [1.0, 0.0]])
+
+probe = importlib.import_module("tracksdata").graph.IndexedRXGraph.from_geff(
+    graph_runtime / "validator_raw" / "44b6_12dfb391.geff"
+)
+probe = probe[0] if isinstance(probe, tuple) else probe
+if probe.node_attrs().height <= 0 or probe.edge_attrs().height <= 0:
+    raise RuntimeError("Offline graph-IO probe returned an empty validation graph")
+print("Offline numerical stack and complete GEFF graph probe passed.")
 
 manifest = json.loads((runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
 for model_name in ("synth_3d", "smfish_3d"):
@@ -244,8 +270,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-spotiflow-detector-acceptance-v1",
-        "title": "Biohub Spotiflow Detector Acceptance v1",
+        "id": "indarkarhana/biohub-spotiflow-detector-acceptance-v2",
+        "title": "Biohub Spotiflow Detector Acceptance v2",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

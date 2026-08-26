@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v2"
-NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v2.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v3"
+NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v3.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,14 +31,14 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-graph-finetune-v2"
+RUN_ID = "trackastra-graph-finetune-v3"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
 
 
 def write_terminal(status, error=None):
-    training_terminal = Path("/kaggle/working/trackastra_graph_v2/training_terminal.json")
+    training_terminal = Path("/kaggle/working/trackastra_graph_v3/training_terminal.json")
     payload = {
         "run_id": RUN_ID,
         "status": status,
@@ -136,22 +136,49 @@ validation_dir = materialize_runtime_directory(
 wheel_dirs = sorted({p.parent for p in support.rglob("*.whl")})
 if not wheel_dirs:
     raise FileNotFoundError(f"No offline wheels found below {support}")
-pip_cmd = [sys.executable, "-m", "pip", "install", "--no-index"]
+numpy_before = importlib.import_module("numpy").__version__
+if numpy_before != "2.0.2":
+    raise RuntimeError(f"Unexpected Kaggle NumPy before offline install: {numpy_before}")
+
+# The support pack was resolved against a newer NumPy and tracksdata declares
+# ``numpy>2`` even though its graph IO works with Kaggle's NumPy 2.0.2.  Letting
+# pip resolve the pack either rejects 2.0.2 or replaces it with 2.4.6, breaking
+# Kaggle's compiled SciPy stack.  Install only the graph-IO wheels we need and
+# deliberately leave the live numerical stack untouched.
+pip_cmd = [sys.executable, "-m", "pip", "install", "--no-index", "--no-deps"]
 for wheel_dir in wheel_dirs:
     pip_cmd.extend(["--find-links", str(wheel_dir)])
 pip_cmd.extend([
-    "numpy==2.0.2",
-    "tracksdata",
-    "zarr>=3.0.10,<4",
-    "polars>=1.36",
-    "blosc2",
-    "dask[array]",
-    "pyyaml",
+    "bidict==0.23.1",
+    "donfig==0.8.1.post1",
+    "geff==1.2.0.1.1",
+    "geff-spec==1.1.1",
+    "ilpy==0.6.0",
+    "numcodecs==0.15.1",
+    "polars==1.42.0",
+    "polars-runtime-32==1.42.0",
+    "pyscipopt==6.2.1",
+    "rustworkx==0.18.0",
+    "tracksdata==0.1.0rc6.dev3+g980c2d30a",
+    "zarr==3.2.1",
 ])
 print("Installing verified offline dependencies from", support)
 subprocess.run(pip_cmd, check=True)
-for module in ("tracksdata", "zarr", "polars", "dask", "yaml"):
+for module in ("numpy", "scipy", "tracksdata", "zarr", "polars", "dask", "yaml"):
     importlib.import_module(module)
+numpy_after = importlib.import_module("numpy").__version__
+if numpy_after != numpy_before:
+    raise RuntimeError(f"Offline install changed NumPy: {numpy_before} -> {numpy_after}")
+from scipy.optimize import linear_sum_assignment
+linear_sum_assignment([[0.0, 1.0], [1.0, 0.0]])
+
+probe = importlib.import_module("tracksdata").graph.IndexedRXGraph.from_geff(
+    validation_dir / "44b6_12dfb391.geff"
+)
+probe = probe[0] if isinstance(probe, tuple) else probe
+if probe.node_attrs().height <= 0 or probe.edge_attrs().height <= 0:
+    raise RuntimeError("Offline graph-IO probe returned an empty validation graph")
+print("Offline numerical stack and complete GEFF graph probe passed.")
 
 manifest = json.loads((runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
 expected_model_hash = manifest["pretrained_model"]["model_sha256"]
@@ -167,7 +194,7 @@ print(json.dumps({
 '''
 
 
-TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v2")
+TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v3")
 command = [
     sys.executable,
     str(runtime / "trainer.py"),
@@ -207,7 +234,7 @@ print(json.dumps({
 FINISH = r'''FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
-print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v2"))
+print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v3"))
 '''
 
 
@@ -244,8 +271,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-trackastra-graph-finetune-v1",
-        "title": "Biohub Trackastra Graph Finetune v2",
+        "id": "indarkarhana/biohub-trackastra-graph-finetune-v3",
+        "title": "Biohub Trackastra Graph Finetune v3",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",
