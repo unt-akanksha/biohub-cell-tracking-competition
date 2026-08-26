@@ -150,3 +150,74 @@ def refine_peaks_quadratic(
         refined[index] = center.astype(np.float32) + delta.astype(np.float32)
     return refined
 
+
+def refine_peaks_log_quadratic(
+    probability: np.ndarray,
+    coords: np.ndarray | Sequence[Sequence[float]],
+    *,
+    maximum_offset: float = 1.25,
+    minimum_probability: float = 1e-6,
+) -> np.ndarray:
+    """Fit a concave quadratic to local log-probability around each maximum.
+
+    A Gaussian target is exactly quadratic in log space. This gives a
+    theory-matched sub-voxel estimate without changing peak identities or
+    confidences. Degenerate or non-concave fits fail closed to the input peak.
+    """
+
+    heatmap = _volume(probability, "probability")
+    points = _points(coords)
+    if maximum_offset <= 0:
+        raise ValueError("maximum_offset must be positive")
+    if not 0.0 < minimum_probability < 1.0:
+        raise ValueError("minimum_probability must lie in (0, 1)")
+    surface = np.log(np.clip(heatmap, minimum_probability, None)).astype(np.float64)
+    refined = points.copy()
+    shape = np.asarray(surface.shape, dtype=np.int64)
+    offsets = np.asarray(
+        [
+            (z, y, x)
+            for z in (-1.0, 0.0, 1.0)
+            for y in (-1.0, 0.0, 1.0)
+            for x in (-1.0, 0.0, 1.0)
+        ],
+        dtype=np.float64,
+    )
+    design = np.column_stack(
+        [
+            np.ones(len(offsets)),
+            offsets,
+            offsets[:, 0] ** 2,
+            offsets[:, 1] ** 2,
+            offsets[:, 2] ** 2,
+            offsets[:, 0] * offsets[:, 1],
+            offsets[:, 0] * offsets[:, 2],
+            offsets[:, 1] * offsets[:, 2],
+        ]
+    )
+    for index, point in enumerate(points):
+        center = np.rint(point).astype(np.int64)
+        if np.any(center <= 0) or np.any(center >= shape - 1):
+            continue
+        window = surface[
+            center[0] - 1 : center[0] + 2,
+            center[1] - 1 : center[1] + 2,
+            center[2] - 1 : center[2] + 2,
+        ]
+        coefficients, *_ = np.linalg.lstsq(design, window.reshape(-1), rcond=None)
+        gradient = coefficients[1:4]
+        zz, yy, xx, zy, zx, yx = coefficients[4:]
+        hessian = np.asarray(
+            [[2.0 * zz, zy, zx], [zy, 2.0 * yy, yx], [zx, yx, 2.0 * xx]],
+            dtype=np.float64,
+        )
+        if np.max(np.linalg.eigvalsh(hessian)) >= -1e-8:
+            continue
+        try:
+            delta = -np.linalg.solve(hessian, gradient)
+        except np.linalg.LinAlgError:
+            continue
+        if not np.isfinite(delta).all() or np.max(np.abs(delta)) > maximum_offset:
+            continue
+        refined[index] = center.astype(np.float32) + delta.astype(np.float32)
+    return refined

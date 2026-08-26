@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from research.lsm_fm_detection.localization_refinement import (
+    refine_peaks_log_quadratic,
     refine_peaks_quadratic,
     refine_peaks_weighted,
 )
@@ -57,6 +58,16 @@ def test_quadratic_refinement_recovers_concave_gaussian_vertex() -> None:
     integer = np.rint(center)[None]
     refined = refine_peaks_quadratic(probability, integer)
     assert np.linalg.norm(refined[0] - center) < np.linalg.norm(integer[0] - center)
+
+
+def test_log_quadratic_is_exact_for_an_unclipped_gaussian_peak() -> None:
+    center = np.asarray([4.31, 3.84, 4.22], dtype=np.float32)
+    probability = 0.8 * gaussian((9, 9, 9), center, sigma=1.1)
+    integer = np.rint(center)[None]
+    direct = refine_peaks_quadratic(probability, integer)
+    refined = refine_peaks_log_quadratic(probability, integer)
+    assert np.linalg.norm(refined[0] - center) < 1e-4
+    assert np.linalg.norm(refined[0] - center) < np.linalg.norm(direct[0] - center)
 
 
 def test_invalid_joint_configuration_fails_closed() -> None:

@@ -40,3 +40,17 @@ strategy and thresholds are frozen.
 This path requires no new teacher labels, no public prediction copy, and only a
 short validation GPU run. It directly attacks the observed localization error
 instead of spending another long run on density or same-teacher loss changes.
+
+## Frozen implementation update
+
+The packaged strategy set also includes one log-probability quadratic fit.
+The detector is trained against Gaussian-like heatmaps, whose logarithm is a
+quadratic around an isolated peak; this gives a theory-matched sub-voxel fit
+while preserving the exact peak identities and confidence values. A synthetic
+off-grid Gaussian test recovers its center to below `1e-4` voxel error.
+
+The private runtime staging directory is
+`biohub-lsm-fm-image-text-refinement-runtime-v1`. Its source manifest SHA-256
+is `73682dbeb5ae4a0e97e103f3214adb4cd77f5f1ff1ad161e18d8590dc6eaedf2`.
+Eight focused tests pass. The runtime is staged only: it has not been uploaded
+or launched, and it contains no submission path.

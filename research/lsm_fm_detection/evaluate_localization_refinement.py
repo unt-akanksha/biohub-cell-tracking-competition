@@ -24,12 +24,17 @@ try:
         score_predictions,
     )
     from inference import predict_probability_batch
-    from localization_refinement import refine_peaks_quadratic, refine_peaks_weighted
+    from localization_refinement import (
+        refine_peaks_log_quadratic,
+        refine_peaks_quadratic,
+        refine_peaks_weighted,
+    )
     from pu_targets import extract_local_peaks
     from train_spatialdino_pu_detector import normalize_spatialdino_frame
 except ModuleNotFoundError:
     from research.density_calibration import read_estimated_node_count, uniform_frame_indices
     from research.lsm_fm_detection.localization_refinement import (
+        refine_peaks_log_quadratic,
         refine_peaks_quadratic,
         refine_peaks_weighted,
     )
@@ -74,6 +79,7 @@ STRATEGIES = (
     Strategy("joint_r2_p2_i1", "weighted", 2, 2.0, 1.0),
     Strategy("joint_r2_p4_i1", "weighted", 2, 4.0, 1.0),
     Strategy("concave_quadratic_3x3x3", "quadratic"),
+    Strategy("log_probability_quadratic_3x3x3", "log_quadratic"),
 )
 
 
@@ -117,6 +123,8 @@ def summarize_rows(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
 def refine(strategy: Strategy, probability: np.ndarray, intensity: np.ndarray, coords: np.ndarray) -> np.ndarray:
     if strategy.method == "quadratic":
         return refine_peaks_quadratic(probability, coords)
+    if strategy.method == "log_quadratic":
+        return refine_peaks_log_quadratic(probability, coords)
     return refine_peaks_weighted(
         probability,
         coords,
