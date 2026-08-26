@@ -69,6 +69,15 @@ This yields an approximately 32.4M-parameter starting system before the new
 temporal heads, whose final checkpoint is learned on Biohub and whose outputs
 are not copied from either CELLECT or the public Kaggle notebooks.
 
+The Biohub-owned implementation skeleton is staged in
+`research/temporal_contrastive/`. It fuses adjacent high-resolution feature
+maps using direction, change, and multiplicative persistence features; emits
+normalized 64-channel link embeddings and sparse-prior division logits; and
+trains links with masked InfoNCE against only geometrically feasible hard
+negatives. It rejects any training batch whose candidate graph omitted a
+ground-truth link. Four focused tests pass. No upstream CELLECT source was
+copied into this module.
+
 ## Launch order
 
 Do not contend with the active `spatialdino-pu-adaptation-v1` run. First consume
