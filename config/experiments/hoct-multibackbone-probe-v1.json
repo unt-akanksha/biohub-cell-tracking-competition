@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "run_id": "hoct-multibackbone-probe-v1",
-  "parent": "hoct-probe-finetune-v1",
+  "parent": "trackastra-graph-finetune-v6",
   "kernel_ref": "indarkarhana/biohub-hoct-multibackbone-probe-v1",
-  "notebook_sha256": "795ff78dae11f119caedfbe1773580f109510eedeefb73b1f3fcb34cf0689688",
+  "notebook_sha256": "c4378c515e79a9605f270b9e01d7acbe829207696b42e16e0c67ba2c1df35ad3",
   "kernel_metadata_sha256": "9b9f1552fb9ccd312b09a3620d979c48bd8ee6ca1f2f4aec737ae1139f7d9318",
   "adapter_sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698",
-  "base_probe_trainer_sha256": "5b6f50548066793b54486d347869b398b202ada4cbca75f0a7004220b7771882",
-  "multibackbone_trainer_sha256": "9618feef914a6af3b050dd3876a3103a4631598f02f57f70581d742874584bd4",
+  "base_probe_trainer_sha256": "95b34393684a6420913a587aad0408d635706184edc61b0d288140b00431333c",
+  "multibackbone_trainer_sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa",
   "multibackbone_grid_sha256": "34c997dca77b243e5d7911ca65898edde87f4eec230973d47f93a91d9dee4e04",
   "association_ensemble_sha256": "c2ce915c1c647488a6fb551a0d677650e99d2d3ddfd7bfebe2ffb82bcd99bc3b",
-  "runtime_manifest_sha256": "b6ad5520d9294a75b98757b71436b16198798d7e961c545199f9e009dc7ae372",
+  "runtime_manifest_sha256": "72351839eaec6c16311c52f5bacf26325d48fa24fc6c8df90f157340d8e49d5e",
   "declared_max_runtime_hours": "4.00",
   "watchdog_hard_stop_seconds": 14100,
   "trainer_max_wall_seconds": 13200,
@@ -18,8 +18,8 @@
   "internet_enabled": false,
   "tpu_enabled": false,
   "dataset_sources": [
-    "indarkarhana/biohub-hoct-multibackbone-runtime-v1",
-    "indarkarhana/biohub-trackastra-graph-runtime-v1@version8",
+    "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version4",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version9",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
@@ -63,6 +63,7 @@
       "general_weights": [0.25, 0.50, 0.75]
     },
     "total_variants": 10,
+    "linker_grid": "includes conservative 0.80 postprocess-division preservation and a correction-only high-base-support arm",
     "zero_policy": "an exact zero means outside candidate support; preserve the available model instead of treating missing support as negative evidence"
   },
   "validation": {
@@ -71,10 +72,11 @@
     "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
     "selection_objective": "maximize the minimum per-movie proxy delta versus base across the two embryo prefixes, then pooled score and worst movie",
     "acceptance_read_after_configuration_freeze": true,
+    "acceptance_ground_truth_loaded_after_selection_freeze": true,
     "acceptance_rule": "positive proxy delta and worst-movie regression no worse than 0.01",
     "public_leaderboard_used_for_selection": false
   },
-  "launch_condition": "Run only after hoct-probe-finetune-v1 terminal evidence shows useful HOCT signal or an architecture-specific failure that the CTC checkpoint can address.",
+  "launch_condition": "Run directly after the active sequential gate: this lane strictly subsumes the unlaunched general-only probe and avoids duplicating its feature-extraction GPU cost.",
   "promotion_rule": "candidate must beat the frozen processed-topology comparator on disjoint acceptance movies",
   "submission_policy": "training and clean acceptance only; no submission code"
 }

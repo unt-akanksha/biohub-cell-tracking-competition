@@ -10,19 +10,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".biohub" / "staging"
 TARGET = STAGING_ROOT / "biohub-hoct-candidate-runtime-v1"
-BASE_RUNTIME = STAGING_ROOT / "biohub-hoct-runtime-v1"
+BASE_RUNTIME = STAGING_ROOT / "biohub-hoct-multibackbone-runtime-v1"
 SOURCES = {
+    "association_ensemble.py": ROOT / "research" / "association_ensemble.py",
     "biohub_adapter.py": ROOT / "research" / "hoct_graph" / "biohub_adapter.py",
+    "multibackbone.py": ROOT / "research" / "hoct_graph" / "multibackbone.py",
     "train_biohub_hoct_probe.py": ROOT
     / "research"
     / "hoct_graph"
     / "train_biohub_hoct_probe.py",
-    "rerank_hoct_submission.py": ROOT
+    "rerank_hoct_multibackbone_submission.py": ROOT
     / "research"
     / "hoct_graph"
-    / "rerank_hoct_submission.py",
+    / "rerank_hoct_multibackbone_submission.py",
 }
-EXPECTED_MODEL_SHA256 = "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33"
+EXPECTED_MODELS = {
+    "general_v1.pt": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33",
+    "ctc_v0.pt": "b9be3d976e2d51ae946128ded99142a81b5ba99fb87a0da67c38de2934944000",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -58,11 +63,12 @@ def main() -> None:
         shutil.rmtree(target)
     target.mkdir(parents=True)
 
-    model = BASE_RUNTIME / "general_v1.pt"
     license_path = BASE_RUNTIME / "HOCT_LICENSE"
-    if sha256_file(model) != EXPECTED_MODEL_SHA256:
-        raise RuntimeError("Pinned HOCT model is missing or changed")
-    shutil.copy2(model, target / model.name)
+    for name, expected_hash in EXPECTED_MODELS.items():
+        model = BASE_RUNTIME / name
+        if sha256_file(model) != expected_hash:
+            raise RuntimeError(f"Pinned HOCT model is missing or changed: {name}")
+        shutil.copy2(model, target / name)
     shutil.copy2(license_path, target / license_path.name)
     for name, source in SOURCES.items():
         shutil.copy2(source, target / name)
@@ -85,10 +91,17 @@ def main() -> None:
                 "commit": "2ccc5040823bc944ab67790abd1f56eea7cd4f05",
                 "license": "MIT",
             },
-            "pretrained_model": {
-                "name": "general_v1",
-                "sha256": EXPECTED_MODEL_SHA256,
-                "parameters": 6252593,
+            "pretrained_models": {
+                "general": {
+                    "name": "general_v1",
+                    "sha256": EXPECTED_MODELS["general_v1.pt"],
+                    "parameters": 6252593,
+                },
+                "ctc": {
+                    "name": "ctc_v0",
+                    "sha256": EXPECTED_MODELS["ctc_v0.pt"],
+                    "parameters": 6252593,
+                },
             },
             "gate": {
                 "requires_positive_clean_acceptance": True,

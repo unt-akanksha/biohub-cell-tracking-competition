@@ -89,7 +89,7 @@ import zipfile
 
 BASE_SHA256 = "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
 RAW_GRAPH_TREE_SHA256 = "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e"
-RERANKER_SHA256 = "9934ad959f7a255e604ea2cc743049eb5b2a2b038e3683c40b906e83dc1262b6"
+RERANKER_SHA256 = "4bbd74c32935faefa17870255d2f1f68f66e83a157bcee935fddedfe2bdddd36"
 input_root = Path("/kaggle/input")
 hoct_runtime = next((path for path in (
     Path("/kaggle/input/datasets/indarkarhana/biohub-hoct-candidate-runtime-v1"),
@@ -126,8 +126,22 @@ def materialize_root(runtime, name):
 
 hoct_runtime = materialize_root(hoct_runtime, "hoct")
 graph_runtime = materialize_root(graph_runtime, "graph")
-if hashlib.sha256((hoct_runtime / "rerank_hoct_submission.py").read_bytes()).hexdigest() != RERANKER_SHA256:
-    raise RuntimeError("HOCT candidate reranker hash mismatch")
+hoct_manifest = json.loads((hoct_runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
+for name in (
+    "association_ensemble.py", "biohub_adapter.py", "multibackbone.py",
+    "train_biohub_hoct_probe.py", "rerank_hoct_multibackbone_submission.py",
+    "general_v1.pt", "ctc_v0.pt",
+):
+    actual = hashlib.sha256((hoct_runtime / name).read_bytes()).hexdigest()
+    if actual != hoct_manifest["files"][name]["sha256"]:
+        raise RuntimeError(f"HOCT candidate runtime hash mismatch: {name}")
+if hoct_manifest["files"]["rerank_hoct_multibackbone_submission.py"]["sha256"] != RERANKER_SHA256:
+    raise RuntimeError("HOCT candidate reranker binding mismatch")
+graph_manifest = json.loads((graph_runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
+for name in ("trainer.py", "hybrid_linker.py", "rerank_submission.py"):
+    actual = hashlib.sha256((graph_runtime / name).read_bytes()).hexdigest()
+    if actual != graph_manifest["files"][name]["sha256"]:
+        raise RuntimeError(f"Graph runtime hash mismatch: {name}")
 
 wheel_dirs = sorted({path.parent for path in support.rglob("*.whl")})
 numpy_before = importlib.import_module("numpy").__version__
@@ -192,13 +206,13 @@ for terminal_path in input_root.rglob("training_terminal.json"):
         payload = json.loads(terminal_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         continue
-    probe_path = terminal_path.parent / "hoct_probe.pt"
+    probe_path = terminal_path.parent / "hoct_multibackbone_probes.pt"
     if (
         payload.get("status") == "completed"
         and payload.get("association_acceptance_passed") is True
-        and payload.get("probe_sha256")
+        and payload.get("probe_checkpoint_sha256")
         and probe_path.is_file()
-        and hashlib.sha256(probe_path.read_bytes()).hexdigest() == payload["probe_sha256"]
+        and hashlib.sha256(probe_path.read_bytes()).hexdigest() == payload["probe_checkpoint_sha256"]
     ):
         accepted.append((terminal_path, probe_path, payload))
 if len(accepted) != 1:
@@ -216,11 +230,12 @@ print(json.dumps({
 
 INFER = r'''command = [
     sys.executable,
-    str(hoct_runtime / "rerank_hoct_submission.py"),
+    str(hoct_runtime / "rerank_hoct_multibackbone_submission.py"),
     "--base-submission", str(base_submission),
     "--raw-graph-root", str(raw_graph_root),
-    "--pretrained-model", str(hoct_runtime / "general_v1.pt"),
-    "--probe", str(probe_path),
+    "--general-model", str(hoct_runtime / "general_v1.pt"),
+    "--ctc-model", str(hoct_runtime / "ctc_v0.pt"),
+    "--probes", str(probe_path),
     "--acceptance-terminal", str(acceptance_terminal),
     "--output", "/kaggle/working/submission.csv",
     "--report", "/kaggle/working/hoct_candidate_report.json",
@@ -274,8 +289,8 @@ def main() -> None:
             code_cell(WATCHDOG),
             markdown_cell(
                 "# Clean-accepted HOCT submission candidate\n\n"
-                "This notebook preserves the frozen detector nodes and uses an independent "
-                "edge-centric HOCT backbone plus a Biohub-supervised probe. It can run only "
+                "This notebook preserves the frozen detector nodes and uses independent "
+                "complementary HOCT backbones plus Biohub-supervised probes. It can run only "
                 "after disjoint complete-movie acceptance improves and refuses an edge-identical "
                 "public replica.\n"
             ),
@@ -305,7 +320,7 @@ def main() -> None:
         ],
         "kernel_sources": [
             "indarkarhana/biohub-clean-0-927-reproduction-v1",
-            "indarkarhana/biohub-hoct-probe-finetune-v1",
+            "indarkarhana/biohub-hoct-multibackbone-probe-v1",
         ],
         "competition_sources": [],
         "model_sources": [],

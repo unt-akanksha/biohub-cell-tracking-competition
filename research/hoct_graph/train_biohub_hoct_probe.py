@@ -458,19 +458,36 @@ def _selection_configurations() -> list[dict[str, Any]]:
             for base_lock_probability in (0.94, 0.98):
                 for base_keep_probability in (0.65, 0.80):
                     for base_bonus in (0.02, 0.05):
-                        configs.append(
-                            {
-                                "variant": variant,
-                                "method": "raw_confidence_hybrid",
-                                "edge_threshold": edge_threshold,
-                                "base_lock_probability": base_lock_probability,
-                                "base_keep_probability": base_keep_probability,
-                                "base_bonus": base_bonus,
-                                "division_threshold": 0.14,
-                                "division_ratio": 0.50,
-                                "base_division_keep_probability": 0.95,
-                            }
-                        )
+                        for base_division_keep_probability in (0.80, 0.95):
+                            configs.append(
+                                {
+                                    "variant": variant,
+                                    "method": "raw_confidence_hybrid",
+                                    "edge_threshold": edge_threshold,
+                                    "base_lock_probability": base_lock_probability,
+                                    "base_keep_probability": base_keep_probability,
+                                    "base_bonus": base_bonus,
+                                    "division_threshold": 0.14,
+                                    "division_ratio": 0.50,
+                                    "base_division_keep_probability": base_division_keep_probability,
+                                }
+                            )
+        # A single correction-only arm protects the documented 0.80 fallback
+        # assigned to postprocess-created edges and admits only stronger HOCT
+        # alternatives. This is frozen before either acceptance movie is read.
+        configs.append(
+            {
+                "variant": variant,
+                "method": "raw_confidence_hybrid",
+                "edge_threshold": 0.10,
+                "base_lock_probability": 0.90,
+                "base_keep_probability": 0.80,
+                "base_bonus": 0.10,
+                "division_threshold": 0.18,
+                "division_ratio": 0.55,
+                "base_division_keep_probability": 0.80,
+            }
+        )
     return configs
 
 
@@ -500,6 +517,18 @@ def link_configuration(
     )
 
 
+def robust_selection_key(row: dict[str, Any]) -> tuple[float, float, float, int, bool]:
+    """Prefer gains that transfer across both held-out embryo prefixes."""
+    summary = row["selection_summary"]
+    return (
+        float(row["selection_min_delta_vs_base"]),
+        float(summary["proxy_score"]),
+        float(summary["worst_movie"]),
+        -int(summary["div_fp"]),
+        row["method"] == "raw_confidence_hybrid",
+    )
+
+
 def validate_complete_movies(
     model: torch.nn.Module,
     probe: torch.nn.Linear,
@@ -510,8 +539,9 @@ def validate_complete_movies(
     output_dir: Path,
     core_size: np.ndarray,
 ) -> dict[str, Any]:
-    truths = {
-        stem: read_graph_video(train_dir / f"{stem}.geff") for stem in VALIDATION_STEMS
+    selection_truths = {
+        stem: read_graph_video(train_dir / f"{stem}.geff")
+        for stem in SELECTION_STEMS
     }
     selection_scores: dict[
         str, dict[str, dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]]
@@ -522,18 +552,26 @@ def validate_complete_movies(
             model, probe, predictions[stem], device, config, core_size=core_size
         )
 
-    base_edges = {
+    selection_base_edges = {
         stem: [tuple(map(int, edge)) for edge in predictions[stem].edges.tolist()]
-        for stem in VALIDATION_STEMS
+        for stem in SELECTION_STEMS
     }
-    base_summary = {
-        "selection": _score_partition(
-            predictions, truths, train_dir, base_edges, SELECTION_STEMS
-        ),
-        "acceptance": _score_partition(
-            predictions, truths, train_dir, base_edges, ACCEPTANCE_STEMS
-        ),
-        "all": _score_partition(predictions, truths, train_dir, base_edges, VALIDATION_STEMS),
+    base_selection_summary = _score_partition(
+        predictions,
+        selection_truths,
+        train_dir,
+        selection_base_edges,
+        SELECTION_STEMS,
+    )
+    base_selection_by_stem = {
+        stem: _score_partition(
+            predictions,
+            selection_truths,
+            train_dir,
+            selection_base_edges,
+            (stem,),
+        )
+        for stem in SELECTION_STEMS
     }
     configurations: list[dict[str, Any]] = []
     for candidate in _selection_configurations():
@@ -545,23 +583,33 @@ def validate_complete_movies(
             )
             for stem in SELECTION_STEMS
         }
+        by_stem = {
+            stem: _score_partition(
+                predictions, selection_truths, train_dir, edges, (stem,)
+            )
+            for stem in SELECTION_STEMS
+        }
+        deltas = {
+            stem: by_stem[stem]["proxy_score"]
+            - base_selection_by_stem[stem]["proxy_score"]
+            for stem in SELECTION_STEMS
+        }
         configurations.append(
             {
                 **candidate,
                 "selection_summary": _score_partition(
-                    predictions, truths, train_dir, edges, SELECTION_STEMS
+                    predictions,
+                    selection_truths,
+                    train_dir,
+                    edges,
+                    SELECTION_STEMS,
                 ),
+                "selection_by_stem": by_stem,
+                "selection_delta_by_stem": deltas,
+                "selection_min_delta_vs_base": min(deltas.values()),
             }
         )
-    selected = max(
-        configurations,
-        key=lambda row: (
-            row["selection_summary"]["proxy_score"],
-            row["selection_summary"]["worst_movie"],
-            -row["selection_summary"]["div_fp"],
-            row["method"] == "raw_confidence_hybrid",
-        ),
-    )
+    selected = max(configurations, key=robust_selection_key)
 
     # Acceptance inference happens only after backbone/head/method/thresholds
     # have been frozen on the two selection movies.
@@ -583,6 +631,26 @@ def validate_complete_movies(
             selected,
         )
         for stem in VALIDATION_STEMS
+    }
+    # Load acceptance labels only after the head, method, and thresholds are
+    # immutable. Selection code cannot inspect even comparator acceptance scores.
+    acceptance_truths = {
+        stem: read_graph_video(train_dir / f"{stem}.geff")
+        for stem in ACCEPTANCE_STEMS
+    }
+    truths = {**selection_truths, **acceptance_truths}
+    base_edges = {
+        stem: [tuple(map(int, edge)) for edge in predictions[stem].edges.tolist()]
+        for stem in VALIDATION_STEMS
+    }
+    base_summary = {
+        "selection": base_selection_summary,
+        "acceptance": _score_partition(
+            predictions, truths, train_dir, base_edges, ACCEPTANCE_STEMS
+        ),
+        "all": _score_partition(
+            predictions, truths, train_dir, base_edges, VALIDATION_STEMS
+        ),
     }
     acceptance_summary = _score_partition(
         predictions, truths, train_dir, selected_edges, ACCEPTANCE_STEMS
@@ -616,6 +684,8 @@ def validate_complete_movies(
         "acceptance_stems": list(ACCEPTANCE_STEMS),
         "selection_rule": "head/method/thresholds selected on selection movies; acceptance scored once after freeze",
         "base_graph": base_summary,
+        "base_selection_by_stem": base_selection_by_stem,
+        "acceptance_ground_truth_loaded_after_selection_freeze": True,
         "selected": selected,
         "selection_delta_vs_base": selection_delta,
         "acceptance_delta_vs_base": acceptance_delta,

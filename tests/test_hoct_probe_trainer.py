@@ -3,7 +3,9 @@ from __future__ import annotations
 import numpy as np
 
 from research.hoct_graph.train_biohub_hoct_probe import (
+    _selection_configurations,
     covering_window_starts,
+    robust_selection_key,
     select_probe_examples,
 )
 
@@ -37,3 +39,44 @@ def test_probe_sampling_keeps_positives_and_hard_negatives() -> None:
     assert {0, 1, 2, 3}.issubset(selected_rows)
     assert selected_labels.sum() == 2
     assert len(selected_labels) == 6
+
+
+def test_single_backbone_selection_prioritizes_transfer_between_embryos() -> None:
+    concentrated = {
+        "selection_min_delta_vs_base": -0.03,
+        "selection_summary": {
+            "proxy_score": 1.15,
+            "worst_movie": 0.72,
+            "div_fp": 0,
+        },
+        "method": "hoct_only",
+    }
+    transferable = {
+        "selection_min_delta_vs_base": 0.002,
+        "selection_summary": {
+            "proxy_score": 0.96,
+            "worst_movie": 0.91,
+            "div_fp": 1,
+        },
+        "method": "raw_confidence_hybrid",
+    }
+
+    assert robust_selection_key(transferable) > robust_selection_key(concentrated)
+
+
+def test_linker_grid_can_preserve_postprocess_fallback_divisions() -> None:
+    configurations = _selection_configurations()
+
+    conservative = [
+        row
+        for row in configurations
+        if row["method"] == "raw_confidence_hybrid"
+        and row["base_division_keep_probability"] == 0.80
+    ]
+    assert conservative
+    assert any(
+        row["base_lock_probability"] == 0.90
+        and row["base_bonus"] == 0.10
+        and row["edge_threshold"] == 0.10
+        for row in conservative
+    )

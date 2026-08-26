@@ -95,6 +95,8 @@ def robust_selection_key(row: dict[str, Any]) -> tuple[float, float, float, int,
         -int(summary["div_fp"]),
         row["method"] == "raw_confidence_hybrid",
     )
+
+
 def validate_multibackbone_movies(
     models: dict[str, torch.nn.Module],
     probes: dict[str, torch.nn.Linear],
@@ -105,9 +107,9 @@ def validate_multibackbone_movies(
     output_dir: Path,
     core_size: np.ndarray,
 ) -> dict[str, Any]:
-    truths = {
+    selection_truths = {
         stem: read_graph_video(train_dir / f"{stem}.geff")
-        for stem in VALIDATION_STEMS
+        for stem in SELECTION_STEMS
     }
     selection_scores: dict[
         str, dict[str, dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]]
@@ -130,24 +132,24 @@ def validate_multibackbone_movies(
     variant_names = sorted(next(iter(selection_scores.values())))
     if any(sorted(scores) != variant_names for scores in selection_scores.values()):
         raise RuntimeError("HOCT V2 selection movies produced inconsistent variants")
-    base_edges = {
+    selection_base_edges = {
         stem: [tuple(map(int, edge)) for edge in predictions[stem].edges.tolist()]
-        for stem in VALIDATION_STEMS
+        for stem in SELECTION_STEMS
     }
-    base_summary = {
-        "selection": _score_partition(
-            predictions, truths, train_dir, base_edges, SELECTION_STEMS
-        ),
-        "acceptance": _score_partition(
-            predictions, truths, train_dir, base_edges, ACCEPTANCE_STEMS
-        ),
-        "all": _score_partition(
-            predictions, truths, train_dir, base_edges, VALIDATION_STEMS
-        ),
-    }
+    base_selection_summary = _score_partition(
+        predictions,
+        selection_truths,
+        train_dir,
+        selection_base_edges,
+        SELECTION_STEMS,
+    )
     base_by_stem = {
         stem: _score_partition(
-            predictions, truths, train_dir, base_edges, (stem,)
+            predictions,
+            selection_truths,
+            train_dir,
+            selection_base_edges,
+            (stem,),
         )
         for stem in SELECTION_STEMS
     }
@@ -162,7 +164,7 @@ def validate_multibackbone_movies(
         }
         by_stem = {
             stem: _score_partition(
-                predictions, truths, train_dir, edges, (stem,)
+                predictions, selection_truths, train_dir, edges, (stem,)
             )
             for stem in SELECTION_STEMS
         }
@@ -175,7 +177,11 @@ def validate_multibackbone_movies(
             {
                 **candidate,
                 "selection_summary": _score_partition(
-                    predictions, truths, train_dir, edges, SELECTION_STEMS
+                    predictions,
+                    selection_truths,
+                    train_dir,
+                    edges,
+                    SELECTION_STEMS,
                 ),
                 "selection_by_stem": by_stem,
                 "selection_delta_by_stem": deltas,
@@ -221,6 +227,24 @@ def validate_multibackbone_movies(
         )
         for stem in VALIDATION_STEMS
     }
+    acceptance_truths = {
+        stem: read_graph_video(train_dir / f"{stem}.geff")
+        for stem in ACCEPTANCE_STEMS
+    }
+    truths = {**selection_truths, **acceptance_truths}
+    base_edges = {
+        stem: [tuple(map(int, edge)) for edge in predictions[stem].edges.tolist()]
+        for stem in VALIDATION_STEMS
+    }
+    base_summary = {
+        "selection": base_selection_summary,
+        "acceptance": _score_partition(
+            predictions, truths, train_dir, base_edges, ACCEPTANCE_STEMS
+        ),
+        "all": _score_partition(
+            predictions, truths, train_dir, base_edges, VALIDATION_STEMS
+        ),
+    }
     acceptance_summary = _score_partition(
         predictions, truths, train_dir, selected_edges, ACCEPTANCE_STEMS
     )
@@ -257,6 +281,7 @@ def validate_multibackbone_movies(
         "selection_rule": "backbone/head/blend/linker/thresholds selected on selection movies; acceptance inferred and scored once after freeze",
         "base_graph": base_summary,
         "base_selection_by_stem": base_by_stem,
+        "acceptance_ground_truth_loaded_after_selection_freeze": True,
         "selected": selected,
         "selection_delta_vs_base": selection_delta,
         "acceptance_delta_vs_base": acceptance_delta,
