@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "status": "feasible_not_scheduled",
+  "source_model": "HOCT general_v1",
+  "source_model_sha256": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33",
+  "test": {
+    "nodes": 40,
+    "candidate_edges": 116,
+    "loss": 2.0517008304595947,
+    "forward_backward_seconds_cpu": 0.3048896999680437,
+    "parameter_tensors_with_gradients": 114,
+    "all_selected_gradients_finite": true,
+    "last_edge_block_fc2_weight_grad_norm": 0.17478030920028687,
+    "head_weight_grad_norm": 7.800964832305908
+  },
+  "finding": "The official scripted checkpoint supports end-to-end autograd; a later low-learning-rate edge-block fine-tune is technically possible without reconstructing unpublished training source.",
+  "decision": "Do not schedule concurrently or preempt the lower-risk frozen-feature probe. Consider only after its disjoint acceptance result, because dense detector topology differs sharply from sparse ground-truth graphs."
+}
