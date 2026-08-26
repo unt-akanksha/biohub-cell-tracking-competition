@@ -1573,13 +1573,13 @@
       "failure_reason": null,
       "hypothesis": "A geometry-matched 3D light-sheet foundation model will improve dim-cell localization beyond the retired 2D SpatialDINO hybrid while retaining conservative independent PU supervision.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "spatialdino-pu-selective-distillation-v2",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T18:44:49.552808Z",
       "run_id": "lsm-fm-pu-adaptation-v1",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
