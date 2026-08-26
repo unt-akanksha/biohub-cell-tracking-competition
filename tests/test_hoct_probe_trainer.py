@@ -4,6 +4,7 @@ import numpy as np
 
 from research.hoct_graph.train_biohub_hoct_probe import (
     _selection_configurations,
+    balanced_cap_examples,
     covering_window_starts,
     robust_selection_key,
     select_probe_examples,
@@ -39,6 +40,40 @@ def test_probe_sampling_keeps_positives_and_hard_negatives() -> None:
     assert {0, 1, 2, 3}.issubset(selected_rows)
     assert selected_labels.sum() == 2
     assert len(selected_labels) == 6
+
+
+def test_balanced_cap_bounds_dense_movie_without_erasing_positives() -> None:
+    features = np.arange(100 * 3, dtype=np.float32).reshape(100, 3)
+    labels = np.asarray([1] * 40 + [0] * 60, dtype=np.float32)
+
+    capped_features, capped_labels = balanced_cap_examples(
+        features,
+        labels,
+        max_examples=20,
+        negative_ratio=3.0,
+        rng=np.random.default_rng(17),
+    )
+
+    assert capped_features.shape == (20, 3)
+    assert capped_labels.sum() == 5
+    assert (capped_labels == 0).sum() == 15
+    assert len({tuple(row) for row in capped_features.tolist()}) == 20
+
+
+def test_balanced_cap_uses_spare_capacity_when_negatives_are_rare() -> None:
+    features = np.arange(12 * 2, dtype=np.float32).reshape(12, 2)
+    labels = np.asarray([1] * 10 + [0] * 2, dtype=np.float32)
+
+    _capped_features, capped_labels = balanced_cap_examples(
+        features,
+        labels,
+        max_examples=8,
+        negative_ratio=3.0,
+        rng=np.random.default_rng(3),
+    )
+
+    assert len(capped_labels) == 8
+    assert capped_labels.sum() == 6
 
 
 def test_single_backbone_selection_prioritizes_transfer_between_embryos() -> None:

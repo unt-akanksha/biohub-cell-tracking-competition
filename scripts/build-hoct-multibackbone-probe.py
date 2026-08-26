@@ -41,6 +41,20 @@ def main() -> None:
             '"source_model_sha256": hoct_manifest["pretrained_model"]["sha256"],',
             '"source_model_sha256": {name: value["sha256"] for name, value in hoct_manifest["pretrained_models"].items()},',
         )
+        .replace(
+            'deepcenter = first_existing([\n'
+            '    Path("/kaggle/input/datasets/pilkwang/biohub-deepcenter-unet3d-center-prior-v1"),\n'
+            '    Path("/kaggle/input/biohub-deepcenter-unet3d-center-prior-v1"),\n'
+            '])',
+            'deepcenter = first_existing([\n'
+            '    Path("/kaggle/input/datasets/pilkwang/biohub-deepcenter-unet3d-center-prior-v1"),\n'
+            '    Path("/kaggle/input/biohub-deepcenter-unet3d-center-prior-v1"),\n'
+            '])\n'
+            'trackastra_validation_output = first_existing([\n'
+            '    Path("/kaggle/input/biohub-trackastra-raw-confidence-acceptance-v2"),\n'
+            '    Path("/kaggle/input/kernels/indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2"),\n'
+            '])',
+        )
     )
     train = (
         source["TRAIN"]
@@ -56,6 +70,112 @@ def main() -> None:
             '"feature_extraction": training["feature_extraction"],',
             '"training_evidence": training["training_evidence"],',
         )
+    )
+    cached_topology = r'''EXPECTED_PROCESSED_NODES = {
+    "44b6_12dfb391": 44139,
+    "44b6_267148e4": 21768,
+    "6bba_062c8d37": 5812,
+    "6bba_07e24132": 26204,
+}
+EXPECTED_DEEPCENTER_SHA256 = "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0"
+
+
+def sha256_file(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validated_cached_topology(root):
+    if root is None:
+        return None
+    launcher_candidates = list(root.rglob("launcher_terminal.json"))
+    if not launcher_candidates:
+        return None
+    valid_launcher = False
+    for path in launcher_candidates:
+        try:
+            terminal = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (
+            terminal.get("run_id") == "trackastra-raw-confidence-acceptance-v2"
+            and terminal.get("status") in {"completed", "failed", "aborted", "budget_expired"}
+            and terminal.get("submission_created") is False
+        ):
+            valid_launcher = True
+            break
+    if not valid_launcher:
+        return None
+    for report_path in sorted(root.rglob("processed_validation_report.json")):
+        csv_path = report_path.with_name("processed_validation.csv")
+        if not csv_path.is_file():
+            continue
+        try:
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            csv_sha256 = sha256_file(csv_path)
+        except (OSError, ValueError):
+            continue
+        expected_hashes = {
+            "public_preset_source_sha256": graph_manifest["files"]["public_preset_source.py"]["sha256"],
+            "public_config_source_sha256": graph_manifest["files"]["public_config_source.py"]["sha256"],
+            "public_postprocess_source_sha256": graph_manifest["files"]["public_postprocess_source.py"]["sha256"],
+        }
+        checks = [
+            report.get("schema_version") == 1,
+            report.get("status") == "completed",
+            report.get("source_notebook") == "evgendvorkin/biohub-0-927-lb",
+            report.get("role") == "frozen comparator postprocessing only",
+            report.get("ground_truth_read_for_postprocessing") is False,
+            report.get("public_leaderboard_used_for_selection") is False,
+            report.get("processed_validation_sha256") == csv_sha256,
+            report.get("deepcenter_checkpoint", {}).get("sha256") == EXPECTED_DEEPCENTER_SHA256,
+            report.get("deepcenter_checkpoint", {}).get("expected_epoch") == 2,
+            all(report.get(key) == value for key, value in expected_hashes.items()),
+            all(
+                report.get("datasets", {}).get(stem, {}).get("processed_nodes") == count
+                and report.get("datasets", {}).get(stem, {}).get("expected_processed_nodes") == count
+                for stem, count in EXPECTED_PROCESSED_NODES.items()
+            ),
+        ]
+        if all(checks):
+            print(json.dumps({
+                "processed_topology_source": "hash_verified_trackastra_v2_kernel_output",
+                "processed_validation_csv": str(csv_path),
+                "processed_validation_sha256": report["processed_validation_sha256"],
+            }, indent=2))
+            return csv_path
+    return None
+
+
+cached_processed_csv = validated_cached_topology(trackastra_validation_output)
+if cached_processed_csv is None:
+    print("No valid cached topology found; using the exact in-kernel materializer.")
+'''
+    train = train.replace(
+        'processed_dir = Path("/kaggle/working/processed_validation")\n'
+        'materialize_command = [',
+        cached_topology
+        + '\nprocessed_dir = Path("/kaggle/working/processed_validation")\n'
+        + 'materialize_command = [',
+    ).replace(
+        'print("Materializing final-topology clean validation:", " ".join(materialize_command))\n'
+        'try:\n'
+        '    subprocess.run(materialize_command, check=True)\n'
+        'except Exception as exc:\n'
+        '    write_terminal("failed", exc)\n'
+        '    raise',
+        'if cached_processed_csv is None:\n'
+        '    print("Materializing final-topology clean validation:", " ".join(materialize_command))\n'
+        '    try:\n'
+        '        subprocess.run(materialize_command, check=True)\n'
+        '    except Exception as exc:\n'
+        '        write_terminal("failed", exc)\n'
+        '        raise\n'
+        '    processed_validation_csv = processed_dir / "processed_validation.csv"\n'
+        'else:\n'
+        '    processed_validation_csv = cached_processed_csv',
+    ).replace(
+        '"--processed-validation-csv", str(processed_dir / "processed_validation.csv"),',
+        '"--processed-validation-csv", str(processed_validation_csv),',
     )
     finish = source["FINISH"].replace(
         "HOCT probe experiment", "HOCT multibackbone experiment"
@@ -87,9 +207,11 @@ def main() -> None:
                 "# Biohub HOCT multi-backbone association adaptation\n\n"
                 "This private experiment fits independent linear probes on the official "
                 "general_v1 and CTC-specialized ctc_v0 HOCT backbones. It selects among "
-                "four single-model heads and six support-aware blends using two complete "
+                "four single-model heads and eight ensemble variants using two complete "
                 "movies, then reads two disjoint acceptance movies once. It creates no "
-                "competition submission and uses no leaderboard feedback.\n"
+                "competition submission and uses no leaderboard feedback. When available, "
+                "it reuses the preceding run's hash-verified comparator topology to reserve "
+                "the GPU window for HOCT feature extraction.\n"
             ),
             code_cell(setup),
             code_cell(train),
@@ -117,7 +239,9 @@ def main() -> None:
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
             "pilkwang/biohub-deepcenter-unet3d-center-prior-v1",
         ],
-        "kernel_sources": [],
+        "kernel_sources": [
+            "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2"
+        ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],
         "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",

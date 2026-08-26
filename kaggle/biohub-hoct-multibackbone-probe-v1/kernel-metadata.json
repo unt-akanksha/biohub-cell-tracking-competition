@@ -20,7 +20,9 @@
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
-  "kernel_sources": [],
+  "kernel_sources": [
+    "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2"
+  ],
   "competition_sources": [
     "biohub-cell-tracking-during-development"
   ],

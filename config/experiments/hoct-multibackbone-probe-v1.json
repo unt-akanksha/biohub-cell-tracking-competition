@@ -3,14 +3,15 @@
   "run_id": "hoct-multibackbone-probe-v1",
   "parent": "trackastra-graph-finetune-v6",
   "kernel_ref": "indarkarhana/biohub-hoct-multibackbone-probe-v1",
-  "notebook_sha256": "c4378c515e79a9605f270b9e01d7acbe829207696b42e16e0c67ba2c1df35ad3",
-  "kernel_metadata_sha256": "9b9f1552fb9ccd312b09a3620d979c48bd8ee6ca1f2f4aec737ae1139f7d9318",
+  "notebook_sha256": "7f36bd8a49b32ae2f68c500430912b30912a58f1639c56d4c06fed9af2afd77c",
+  "kernel_metadata_sha256": "2584c73994fdd8b094279c17d3d7dbccf1a8f114728e338c758089988a68cf17",
+  "kernel_builder_sha256": "03556c6bd7b569eb3ef2912f18f2074d73e9653863f1573349e1ade27efdaafd",
   "adapter_sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698",
-  "base_probe_trainer_sha256": "95b34393684a6420913a587aad0408d635706184edc61b0d288140b00431333c",
+  "base_probe_trainer_sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8",
   "multibackbone_trainer_sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa",
   "multibackbone_grid_sha256": "977ea2c64e52135ec340ac021e6f43904bb4c6e27100b2052b6eb691e988ae52",
   "association_ensemble_sha256": "17c6dfb67e8ba45dc1ef884d05490eef0943ac616c8e653d12358720941a00a3",
-  "runtime_manifest_sha256": "8a84aaf96c90e3953fdbf15b914aa0f12d8e7f1d42c0ca2b6e0259c0f4bc6e34",
+  "runtime_manifest_sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265",
   "declared_max_runtime_hours": "4.00",
   "watchdog_hard_stop_seconds": 14100,
   "trainer_max_wall_seconds": 13200,
@@ -18,11 +19,20 @@
   "internet_enabled": false,
   "tpu_enabled": false,
   "dataset_sources": [
-    "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version5",
+    "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version6",
     "indarkarhana/biohub-trackastra-graph-runtime-v1@version9",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
+  "kernel_sources": [
+    "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2"
+  ],
+  "processed_topology_cache": {
+    "producer_run_id": "trackastra-raw-confidence-acceptance-v2",
+    "reuse_if": "producer terminal, exact source hashes, DeepCenter epoch/hash, expected node counts, and CSV hash all verify",
+    "fallback": "rerun the exact in-kernel public comparator materializer",
+    "ground_truth_labels_in_cache": false
+  },
   "pretrained_models": {
     "general": {
       "name": "HOCT general_v1",
@@ -49,7 +59,9 @@
     "learned_parameter_count_per_backbone": 289,
     "training_movies": "all 195 non-validation Biohub movies",
     "feature_extraction": "independent for each backbone with model-specific hard negatives",
-    "probe_config": "identical to hoct-probe-finetune-v1"
+    "probe_config": "identical to hoct-probe-finetune-v1",
+    "maximum_examples_per_backbone": 600000,
+    "sampling_policy": "scan all 195 movies for candidate recall, then apply a deterministic balanced per-movie cap before concatenation"
   },
   "variant_grid": {
     "single_backbone": [

@@ -11,7 +11,13 @@ testing them together on Biohub's clean held-out topology.
 
 V2 freezes both 6,252,593-parameter backbones and fits an independent
 289-parameter probe for each on all 195 non-validation ground-truth movies.
-The selection grid contains only ten association variants: four individual
+Every movie is still fully scanned for candidate-recall evidence, but feature
+examples are now capped deterministically and evenly per movie before global
+concatenation. This hard-bounds each backbone at 600,000 examples (about 691 MB
+of float32 features), prevents dense movies from dominating the probe, and
+removes the prior risk of accumulating an unbounded multi-gigabyte list before
+the cap was applied.
+The selection grid contains only twelve association variants: four individual
 backbone/head choices, three support-aware log-odds weights for each of the two
 head types, and one minimum-consensus variant per head. The latter dampens an
 edge to the weaker model probability when both evaluated it, giving selection
@@ -30,6 +36,16 @@ backbone or backbones required by the frozen winner. Their ground-truth graphs,
 including base-comparator scores, are not loaded until after the entire choice
 is frozen. Acceptance requires a positive proxy delta and no more than a 0.01
 worst-movie regression. No submission or leaderboard read occurs.
+
+The notebook now attaches the preceding Trackastra acceptance kernel solely as
+a topology cache. It reuses `processed_validation.csv` even if Trackastra's
+later model gate rejects, but only after verifying the producer terminal, the
+exact public preset/config/postprocessor hashes, the DeepCenter epoch-2 hash,
+all four expected node counts, the CSV hash, and the absence of a submission.
+This artifact contains no ground-truth labels. If any check fails, HOCT runs the
+same exact materializer itself. The reuse avoids repeating the expensive
+DeepCenter pass and reserves more of the four-hour GPU window for both HOCT
+backbones.
 
 The runtime and private GPU notebook are staged with a four-hour hard cap. This
 lane now runs directly instead of first spending another four-hour budget on

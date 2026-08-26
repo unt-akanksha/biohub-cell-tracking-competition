@@ -152,6 +152,49 @@ def select_probe_examples(
     return features[chosen], labels[chosen]
 
 
+def balanced_cap_examples(
+    features: np.ndarray,
+    labels: np.ndarray,
+    *,
+    max_examples: int,
+    negative_ratio: float,
+    rng: np.random.Generator,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Bound one movie's memory contribution while preserving class balance."""
+    features = np.asarray(features, dtype=np.float32)
+    labels = np.asarray(labels, dtype=np.float32).reshape(-1)
+    if features.shape[0] != len(labels):
+        raise ValueError("Balanced-cap arrays have inconsistent lengths")
+    if max_examples <= 0 or negative_ratio < 0:
+        raise ValueError("Balanced-cap limits must be positive")
+    if len(labels) <= max_examples:
+        return features, labels
+
+    positive = np.flatnonzero(labels > 0.5)
+    negative = np.flatnonzero(labels <= 0.5)
+    wanted_positive = min(
+        len(positive),
+        max(1, int(round(max_examples / (1.0 + negative_ratio)))),
+    )
+    wanted_negative = min(len(negative), max_examples - wanted_positive)
+    remaining = max_examples - wanted_positive - wanted_negative
+    if remaining:
+        extra_positive = min(len(positive) - wanted_positive, remaining)
+        wanted_positive += extra_positive
+        remaining -= extra_positive
+    if remaining:
+        wanted_negative += min(len(negative) - wanted_negative, remaining)
+
+    chosen = np.concatenate(
+        [
+            rng.choice(positive, size=wanted_positive, replace=False),
+            rng.choice(negative, size=wanted_negative, replace=False),
+        ]
+    )
+    rng.shuffle(chosen)
+    return features[chosen], labels[chosen]
+
+
 def initialize_probe(model: torch.nn.Module, device: torch.device) -> torch.nn.Linear:
     head = torch.nn.Linear(288, 1)
     parameters = dict(model.named_parameters())
@@ -257,10 +300,19 @@ def extract_training_examples(
     eligible_positive_edges: set[tuple[str, int, int]] = set()
     windows = 0
     candidate_edges_count = 0
+    selected_examples_before_cap = 0
+    capped_movies = 0
+    per_movie_base, per_movie_remainder = divmod(
+        config.max_examples, len(train_paths)
+    )
+    if per_movie_base <= 0:
+        raise ValueError("max_examples must allocate at least one example per movie")
     started = time.monotonic()
     for movie_index, path in enumerate(train_paths):
         video = read_graph_video(path)
         true_edges = {(int(source), int(target)) for source, target in video.edges.tolist()}
+        movie_feature_chunks: list[np.ndarray] = []
+        movie_label_chunks: list[np.ndarray] = []
         for source, target in true_edges:
             if video.time_by_id.get(target) == video.time_by_id.get(source, -2) + 1:
                 eligible_positive_edges.add((video.stem, source, target))
@@ -290,8 +342,8 @@ def extract_training_examples(
             )
             if len(selected_labels) == 0:
                 continue
-            feature_chunks.append(selected_features)
-            label_chunks.append(selected_labels)
+            movie_feature_chunks.append(selected_features)
+            movie_label_chunks.append(selected_labels)
             candidate_edges_count += len(window.edge_indices)
             windows += 1
             for edge_index in np.flatnonzero(window.edge_labels > 0.5):
@@ -303,24 +355,33 @@ def extract_training_examples(
                         int(window.node_ids[target_local]),
                     )
                 )
+        if movie_label_chunks:
+            movie_features = np.concatenate(movie_feature_chunks, axis=0)
+            movie_labels = np.concatenate(movie_label_chunks, axis=0)
+            selected_examples_before_cap += len(movie_labels)
+            movie_cap = per_movie_base + int(movie_index < per_movie_remainder)
+            if len(movie_labels) > movie_cap:
+                capped_movies += 1
+            movie_features, movie_labels = balanced_cap_examples(
+                movie_features,
+                movie_labels,
+                max_examples=movie_cap,
+                negative_ratio=config.negative_ratio,
+                rng=rng,
+            )
+            feature_chunks.append(movie_features)
+            label_chunks.append(movie_labels)
         print(
             f"HOCT FEATURE EXTRACTION {movie_index + 1}/{len(train_paths)}: "
             f"{video.stem} examples={sum(len(chunk) for chunk in label_chunks)}",
             flush=True,
         )
+    if not feature_chunks:
+        raise RuntimeError("HOCT extraction produced no labeled examples")
     features = np.concatenate(feature_chunks, axis=0)
     labels = np.concatenate(label_chunks, axis=0)
     if len(labels) > config.max_examples:
-        positive = np.flatnonzero(labels > 0.5)
-        negative = np.flatnonzero(labels <= 0.5)
-        remaining = max(0, config.max_examples - len(positive))
-        chosen_negative = rng.choice(
-            negative, size=min(remaining, len(negative)), replace=False
-        )
-        chosen = np.concatenate([positive, chosen_negative])
-        rng.shuffle(chosen)
-        features = features[chosen]
-        labels = labels[chosen]
+        raise RuntimeError("Per-movie caps failed to enforce max_examples")
     evidence = {
         "movies": len(train_paths),
         "windows": windows,
@@ -330,6 +391,11 @@ def extract_training_examples(
         "candidate_recall": len(captured_positive_edges)
         / max(len(eligible_positive_edges), 1),
         "selected_examples": len(labels),
+        "selected_examples_before_movie_cap": selected_examples_before_cap,
+        "per_movie_base_cap": per_movie_base,
+        "per_movie_remainder_slots": per_movie_remainder,
+        "movies_requiring_cap": capped_movies,
+        "sampling_policy": "deterministic balanced per-movie cap",
         "selected_positive_examples": int(labels.sum()),
         "elapsed_seconds": time.monotonic() - started,
     }
