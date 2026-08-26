@@ -1,0 +1,132 @@
+{
+  "checks": [
+    {
+      "detail": "All 35 fork code cells compile; exact upstream scientific cells completed with the required offline dependency bundle.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-clean-0927-repro-v1/biohub-0-927-lb.ipynb",
+          "sha256": "7dadd3550698659cc458136dff9c31128200cc13afbb1f1a666b0f5b3d779a3f"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Competition input and all three public checkpoint datasets are attached; GPU on, TPU/internet off.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-clean-0927-repro-v1/kernel-metadata.json",
+          "sha256": "d78bae3287a6c489be2c8342d12efac1273472f7b7c79e10d07215216dd5cb87"
+        },
+        {
+          "path": "config/experiments/public-0927-clean-repro-v1.json",
+          "sha256": "c49a0fb06dd22824c32b32ffa7d86bd9a529b890585b1c6b737a0face6bf07d3"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Exact scientific source completed learned inference on all test movies; diagnostics cover 400 frames.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/dual_seed_frame_retention_guard_report.json",
+          "sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/run_stats.csv",
+          "sha256": "f77eec83a6a0652af141982da3dd7b65d5210893f7fa6cce8bbac55fa7e9baea"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only reproduction loads immutable pretrained checkpoints and performs no optimization or backward pass.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "Upstream runtime verified all three checkpoint hashes; downloaded secondary checkpoint matches 9bac2f... exactly.",
+      "evidence": [
+        {
+          "path": "config/experiments/public-0927-clean-repro-v1.json",
+          "sha256": "c49a0fb06dd22824c32b32ffa7d86bd9a529b890585b1c6b737a0face6bf07d3"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/secondary_seed_weights/unet_transformer/split_0/SNAPSHOT_MANIFEST.json",
+          "sha256": "11a09cf761999695f5da2dd06d7a7ad32886dc7617d3fde3c8efe081041c9fd2"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Exact source writes /kaggle/working/submission.csv; upstream output is a complete 240126-row graph submission.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-clean-0927-repro-v1/biohub-0-927-lb.ipynb",
+          "sha256": "7dadd3550698659cc458136dff9c31128200cc13afbb1f1a666b0f5b3d779a3f"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/submission.csv",
+          "sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/dual_seed_frame_retention_guard_report.json",
+          "sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Four test movies x 100 frames and four complete held-out embryo movies are evidenced.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/dual_seed_frame_retention_guard_report.json",
+          "sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/run_stats.csv",
+          "sha256": "f77eec83a6a0652af141982da3dd7b65d5210893f7fa6cce8bbac55fa7e9baea"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/validator_results.csv",
+          "sha256": "b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/evgendvorkin-biohub-0-927-lb/submission.csv",
+          "sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T02:15:21.451914Z",
+  "report_sha256": "f8f12079d51748c9d9b1233eb32b3b545b0db8fbc76c7fdf41bd3e8a669c0dbc",
+  "run_id": "public-0927-clean-repro-v1",
+  "schema_version": 1
+}

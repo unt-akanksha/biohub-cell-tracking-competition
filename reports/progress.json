@@ -384,6 +384,27 @@
       "registered_at": "2026-08-24T03:55:56.321151Z",
       "run_id": "phase1-live-guard-readonly-smoke",
       "status": "registered"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "1.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Intensity-weighted centroid refinement plus constrained division repair on the clean dual-seed harmonic TemporalUNet3D pipeline improves the owned public score beyond 0.913 without metric manipulation.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T02:14:19.264072Z",
+      "run_id": "public-0927-clean-repro-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1
