@@ -21,9 +21,13 @@ positive-unlabeled rather than another synthetic-only or fully supervised run.
 - Initialize from the original official `smfish_3d` Spotiflow checkpoint, not
   the failed synthetic checkpoint.
 - Exclude all four validation stems from every teacher/student training read.
-- Use the public two-seed detector only as a teacher. Intersections of the two
-  seed peak sets are high-confidence pseudo-positives; their union is an
-  uncertainty band, not background.
+- Use the public two-seed detector only as a teacher. The primary checkpoint is
+  `pilkwang/biohub-tracking-support-pack-50ep-v1`'s
+  `checkpoint_last.pth`; the independent secondary is
+  `pilkwang/biohub-temporal-unet3d-seed314159-v1` with weight SHA-256
+  `9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f`.
+  Intersections of the two seed peak sets are high-confidence
+  pseudo-positives; their union is an uncertainty band, not background.
 - Force every annotated Biohub node to be a positive even when the teacher
   misses it.
 - Apply a background loss only outside both seeds' low-probability support and
