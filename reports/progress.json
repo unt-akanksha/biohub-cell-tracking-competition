@@ -1477,13 +1477,13 @@
       "failure_reason": null,
       "hypothesis": "The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "spatialdino-appearance-validation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T16:09:57.111892Z",
       "run_id": "spatialdino-appearance-validation-v2",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
