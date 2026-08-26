@@ -31,8 +31,8 @@ has weight 0.01.
   0.995, so an early guarded stop does not preserve random decoder weights.
 - One deterministic frame pair from every non-validation movie supplies broad
   embryo coverage; both pair frames are visited across cycles.
-- Teacher targets and raw frame pairs are cached on CPU. This converts repeated
-  teacher inference after the first coverage cycle into cheap cache hits.
+- Teacher targets and raw frame pairs are cached on CPU. Each expensive teacher
+  call predicts and caches both frames at once, then later cycles are cache hits.
 - Training is batch-one; clean inference is batch-four with Y/X flip TTA.
 - A 5,200-second trainer guard and 1,300-second evaluator guard fit inside the
   6,900-second notebook watchdog.
@@ -57,10 +57,10 @@ positive-unlabeled masking, sub-voxel inference, clean-result provenance, and
 the future two-GPU submission policy.
 
 Preflight report SHA-256:
-`073dcbcb287bdb23b6512750bc0fe47ddb5e3b66ba63dc0d07c90cec7031719c`
+`b77ae8fcf71ca8cab5d7c63bab61ae16a5c59fc155b91f3c3ba9e0c183313baa`
 
-The earlier immutable preflights remain retained. Revision 3 adds an explicit
-finite forward/backward AdamW step before any GPU launch.
+The earlier immutable preflights remain retained. Revision 4 also binds the
+two-frame-per-teacher-forward cache optimization before any GPU launch.
 
 ## Launch rule
 

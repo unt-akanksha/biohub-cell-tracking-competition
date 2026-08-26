@@ -225,6 +225,7 @@ def main() -> None:
             "pseudo_labels_only": True,
             "yx_flip_tta": True,
             "probability_cache": True,
+            "both_pair_frames_cached_per_teacher_forward": True,
         },
         "targets": {
             "teacher_high_threshold": 0.96875,
@@ -294,22 +295,26 @@ def main() -> None:
             with torch.inference_mode(), torch.autocast("cuda", dtype=torch.float16):
                 primary_probability = teacher_probabilities(primary, teacher_tensor, yx_tta=True)
                 secondary_probability = teacher_probabilities(secondary, teacher_tensor, yx_tta=True)
-            annotations = annotations_to_isotropic_grid(
-                record.annotations.get(pair_frame + frame_offset, np.empty((0, 3)))
-            )
-            target_cache[target_key] = build_pu_targets(
-                primary_probability[0, frame_offset].float().cpu().numpy(),
-                secondary_probability[0, frame_offset].float().cpu().numpy(),
-                annotations,
-                high_threshold=0.96875,
-                low_support_threshold=0.10,
-                consensus_radius=5.0,
-                annotation_merge_radius=5.0,
-                positive_sigma=1.0,
-                support_dilation_voxels=2,
-                background_weight=0.01,
-                voxel_size=INPUT_VOXEL_UM,
-            )
+            # One TemporalUNet call already predicts both frames. Cache both PU
+            # targets now so the opposite frame never repeats eight TTA teacher
+            # forwards on the next training cycle.
+            for cached_offset in (0, 1):
+                annotations = annotations_to_isotropic_grid(
+                    record.annotations.get(pair_frame + cached_offset, np.empty((0, 3)))
+                )
+                target_cache[(stem, pair_frame, cached_offset)] = build_pu_targets(
+                    primary_probability[0, cached_offset].float().cpu().numpy(),
+                    secondary_probability[0, cached_offset].float().cpu().numpy(),
+                    annotations,
+                    high_threshold=0.96875,
+                    low_support_threshold=0.10,
+                    consensus_radius=5.0,
+                    annotation_merge_radius=5.0,
+                    positive_sigma=1.0,
+                    support_dilation_voxels=2,
+                    background_weight=0.01,
+                    voxel_size=INPUT_VOXEL_UM,
+                )
             del teacher_tensor, primary_probability, secondary_probability
         targets = target_cache[target_key]
 
