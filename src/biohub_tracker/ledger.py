@@ -109,6 +109,9 @@ EXACT_MEMBER_FIELDS = (
     "artifact_hashes",
 )
 CPU_EXACT_MEMBER_FIELD = "producer_input_binding_event_sha256"
+REVIEW_EXCEPTION_AUTHORIZATIONS = frozenset(
+    {"diagnostic-only", "phase3-experiment-only", "phase4-experiment-only"}
+)
 
 _EXACT_EVENT_TYPES = {
     EventType.EXACT_EVALUATION_REGISTERED,
@@ -1333,6 +1336,7 @@ def exact_promotion_decision_payload(
     environment_lock_sha256: str,
     manifest_sha256: str,
     members: Sequence[Mapping[str, Any]],
+    failed_gate_evidence: Mapping[str, Any],
 ) -> dict[str, Any]:
     normalized_state = _bounded_text(state, "promotion state", 40)
     if normalized_state not in {"promote", "review_required", "reject"}:
@@ -1346,6 +1350,14 @@ def exact_promotion_decision_payload(
         raise ValueError("non-promote decision requires reason codes")
     if normalized_state in {"promote", "review_required"} and hard_integrity_passed is not True:
         raise ValueError("non-reject decision requires passed hard integrity")
+    if not isinstance(failed_gate_evidence, Mapping):
+        raise ValueError("promotion failed-gate evidence must be an object")
+    gate_evidence = {
+        _bounded_text(name, "failed gate", 160): normalize_exact_values(value)
+        for name, value in sorted(failed_gate_evidence.items(), key=lambda item: str(item[0]))
+    }
+    if set(gate_evidence) != set(reasons):
+        raise ValueError("promotion failed-gate evidence must match reason codes exactly")
     return {
         "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
         "state": normalized_state,
@@ -1362,6 +1374,7 @@ def exact_promotion_decision_payload(
         ),
         "manifest_sha256": _sha256_text(manifest_sha256, "manifest_sha256"),
         "members": _normalize_exact_members([dict(item) for item in members]),
+        "failed_gate_evidence": gate_evidence,
         "authorized_for_submission": False,
     }
 
@@ -1388,6 +1401,11 @@ def exact_promotion_exception_payload(
         _bounded_text(name, "failed gate", 160): normalize_exact_values(value)
         for name, value in sorted(failed_gates.items(), key=lambda item: str(item[0]))
     }
+    authorization = _bounded_text(
+        downstream_authorization, "downstream_authorization", 500
+    )
+    if authorization not in REVIEW_EXCEPTION_AUTHORIZATIONS:
+        raise ValueError(f"invalid downstream authorization: {authorization}")
     return {
         "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
         "decision_event_sha256": _sha256_text(
@@ -1399,9 +1417,7 @@ def exact_promotion_exception_payload(
         ),
         "approver": _bounded_text(approver, "approver", 240),
         "reason": _bounded_text(reason, "reason", 2000),
-        "downstream_authorization": _bounded_text(
-            downstream_authorization, "downstream_authorization", 500
-        ),
+        "downstream_authorization": authorization,
         "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
         "policy_sha256": _sha256_text(policy_sha256, "policy_sha256"),
         "decision_input_sha256": _sha256_text(
@@ -1665,6 +1681,7 @@ def _validate_exact_decision_transition(
                 environment_lock_sha256=event.payload.get("environment_lock_sha256"),
                 manifest_sha256=event.payload.get("manifest_sha256"),
                 members=event.payload.get("members", ()),
+                failed_gate_evidence=event.payload.get("failed_gate_evidence", {}),
             )
         except ValueError as exc:
             raise TransitionError(str(exc)) from exc
@@ -1719,6 +1736,15 @@ def _validate_exact_decision_transition(
         raise TransitionError("exact promotion exception payload is invalid")
     if normalized_exception["decision_event_sha256"] != event_sha256(decision_event):
         raise TransitionError("exact promotion exception decision hash mismatch")
+    expected_gates = state.decision.get("failed_gate_evidence")
+    if (
+        not isinstance(expected_gates, Mapping)
+        or set(normalized_exception["failed_gates"])
+        != set(state.decision.get("reason_codes", ()))
+        or canonical_json_bytes(normalized_exception["failed_gates"])
+        != canonical_json_bytes(expected_gates)
+    ):
+        raise TransitionError("exact promotion exception failed gates do not match decision")
     for name in (
         "report_core_sha256",
         "policy_sha256",

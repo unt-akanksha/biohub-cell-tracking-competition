@@ -457,6 +457,54 @@ def _decision_inputs(
     }
 
 
+def _failed_gate_evidence(
+    decision: PromotionDecision, policy: PromotionPolicy
+) -> dict[str, Any]:
+    comparison = decision.decision_inputs["comparison"]
+    pooled = comparison["pooled"]
+    thresholds = policy.thresholds
+    evidence: dict[str, Any] = {}
+    for reason in decision.reason_codes:
+        if reason == "POOLED_SCORE_NOT_POSITIVE":
+            observed = pooled["metrics"]["score"]["delta"]
+            threshold = thresholds["pooled_final_score_delta_min_exclusive"]
+        elif reason == "BILATERAL_EMBRYO_REGRESSION":
+            observed = {
+                name: group["metrics"]["score"]["delta"]
+                for name, group in sorted(comparison["by_embryo"].items())
+            }
+            threshold = thresholds["bilateral_score_delta_min"]
+        elif reason == "BOOTSTRAP_LOWER_BOUND_UNSTABLE":
+            observed = comparison["bootstrap"]["metrics"]["score"]["percentiles"]["2.5"]
+            threshold = thresholds["bootstrap_lower_score_delta_min"]
+        elif reason == "BOOTSTRAP_PROBABILITY_LOW":
+            observed = comparison["bootstrap"]["metrics"]["score"][
+                "probability_candidate_gt_baseline"
+            ]
+            threshold = thresholds["bootstrap_probability_min"]
+        elif reason == "NODE_RECALL_REGRESSION":
+            observed = pooled["metrics"]["node_recall_micro"]["delta"]
+            threshold = thresholds["node_recall_micro_delta_min"]
+        elif reason == "DIVISION_JACCARD_REGRESSION":
+            observed = pooled["metrics"]["division_jaccard"]
+            threshold = thresholds["division_jaccard_delta_min"]
+        elif reason == "DIVISION_TP_REGRESSION":
+            observed = pooled["counts"]["division_tp"]["delta"]
+            threshold = thresholds["division_tp_delta_min"]
+        elif reason == "WORST_MOVIE_COLLAPSE":
+            observed = comparison["worst_paired_movie"]["metrics"]["score"]["delta"]
+            threshold = thresholds["worst_movie_delta_min"]
+        else:
+            observed = "failed"
+            threshold = "hard-integrity-pass-required"
+        evidence[reason] = {
+            "observed": observed,
+            "threshold": threshold,
+            "decision_input_sha256": decision.decision_input_sha256,
+        }
+    return evidence
+
+
 def evaluate_promotion(
     report: ExactReport,
     *,
@@ -534,6 +582,7 @@ def record_promotion(
         workspace_root=workspace_root,
         evaluation_run_id=evaluation_run_id,
     )
+    policy = load_promotion_policy(policy_path)
     if report.core.get("evidence_kind") != "model_candidate":
         _fail("NON_CANDIDATE_EVIDENCE_KIND", "only learned candidate evidence is decidable")
     payload = exact_promotion_decision_payload(
@@ -548,6 +597,7 @@ def record_promotion(
         environment_lock_sha256=str(report.core["environment_lock_sha256"]),
         manifest_sha256=str(report.core["manifest_sha256"]),
         members=report.core["members"],
+        failed_gate_evidence=_failed_gate_evidence(decision, policy),
     )
     event = ExperimentEvent.create(
         evaluation_run_id, EventType.EXACT_PROMOTION_DECISION, payload
@@ -561,7 +611,7 @@ def record_review_exception(
     ledger_path: str | Path,
     workspace_root: str | Path,
     evaluation_run_id: str,
-    failed_gates: Mapping[str, Any],
+    failed_gates: Mapping[str, Any] | None,
     quantitative_tradeoff: str,
     approver: str,
     reason: str,
@@ -578,10 +628,17 @@ def record_review_exception(
         if item.event_type is EventType.EXACT_PROMOTION_DECISION
     )
     decision = state.decision
+    expected_failed_gates = decision.get("failed_gate_evidence")
+    if not isinstance(expected_failed_gates, Mapping):
+        _fail("PROMOTION_EXCEPTION_GATE_MISMATCH", "decision lacks failed-gate evidence")
+    if failed_gates is not None and canonical_json_bytes(
+        dict(failed_gates)
+    ) != canonical_json_bytes(expected_failed_gates):
+        _fail("PROMOTION_EXCEPTION_GATE_MISMATCH", "caller-supplied gates drifted")
     payload = exact_promotion_exception_payload(
         evaluation_run_id=evaluation_run_id,
         decision_event_sha256=event_sha256(decision_event),
-        failed_gates=failed_gates,
+        failed_gates=expected_failed_gates,
         quantitative_tradeoff=quantitative_tradeoff,
         approver=approver,
         reason=reason,

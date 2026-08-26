@@ -504,16 +504,94 @@ def test_record_decision_and_review_exception_are_immutable_and_evidence_bound(t
         ledger_path=ledger.path,
         workspace_root=ledger.workspace_root,
         evaluation_run_id="evaluation-candidate-v1",
-        failed_gates={"NODE_RECALL_REGRESSION": {"delta": "-0.00001"}},
+        failed_gates=None,
         quantitative_tradeoff="score gain exceeds the small node-recall regression",
         approver="competition-owner",
         reason="explicitly reviewed for the next controlled experiment only",
         downstream_authorization="phase3-experiment-only",
     )
     assert exception.payload["decision_event_sha256"] == event_sha256(decision_event)
+    assert set(exception.payload["failed_gates"]) == {"NODE_RECALL_REGRESSION"}
+    assert exception.payload["failed_gates"]["NODE_RECALL_REGRESSION"]["observed"] == "-0.00001"
     before = ledger.path.read_bytes()
     with pytest.raises(TransitionError):
         ledger.append(exception)
+    assert ledger.path.read_bytes() == before
+
+
+@pytest.mark.parametrize("mutation", ["omission", "substitution", "wrong_value", "extra"])
+def test_review_exception_rejects_failed_gate_drift(tmp_path, mutation):
+    ledger, report = _completed_report(tmp_path)
+    core = dict(report.core)
+    comparison = dict(core["comparison"])
+    pooled = dict(comparison["pooled"])
+    metrics = dict(pooled["metrics"])
+    metrics["node_recall_micro"] = _metric_delta("-0.00001")
+    pooled["metrics"] = metrics
+    comparison["pooled"] = pooled
+    core["comparison"] = comparison
+    report = _replace_core_and_attachment(ledger, report, core)
+    decision = record_promotion(
+        report,
+        policy_path=POLICY,
+        ledger_path=ledger.path,
+        workspace_root=ledger.workspace_root,
+        evaluation_run_id="evaluation-candidate-v1",
+    )
+    supplied = json.loads(json.dumps(decision.payload["failed_gate_evidence"]))
+    if mutation == "omission":
+        supplied = {}
+    elif mutation == "substitution":
+        supplied = {"WORST_MOVIE_COLLAPSE": next(iter(supplied.values()))}
+    elif mutation == "wrong_value":
+        supplied["NODE_RECALL_REGRESSION"]["observed"] = "0"
+    else:
+        supplied["EXTRA_GATE"] = {"observed": "0", "threshold": "0"}
+    before = ledger.path.read_bytes()
+    with pytest.raises(PromotionError, match="PROMOTION_EXCEPTION_GATE_MISMATCH"):
+        record_review_exception(
+            ledger_path=ledger.path,
+            workspace_root=ledger.workspace_root,
+            evaluation_run_id="evaluation-candidate-v1",
+            failed_gates=supplied,
+            quantitative_tradeoff="reviewed",
+            approver="competition-owner",
+            reason="controlled experiment only",
+            downstream_authorization="phase3-experiment-only",
+        )
+    assert ledger.path.read_bytes() == before
+
+
+def test_review_exception_rejects_unknown_downstream_authorization(tmp_path):
+    ledger, report = _completed_report(tmp_path)
+    core = dict(report.core)
+    comparison = dict(core["comparison"])
+    pooled = dict(comparison["pooled"])
+    metrics = dict(pooled["metrics"])
+    metrics["node_recall_micro"] = _metric_delta("-0.00001")
+    pooled["metrics"] = metrics
+    comparison["pooled"] = pooled
+    core["comparison"] = comparison
+    report = _replace_core_and_attachment(ledger, report, core)
+    record_promotion(
+        report,
+        policy_path=POLICY,
+        ledger_path=ledger.path,
+        workspace_root=ledger.workspace_root,
+        evaluation_run_id="evaluation-candidate-v1",
+    )
+    before = ledger.path.read_bytes()
+    with pytest.raises(ValueError, match="invalid downstream authorization"):
+        record_review_exception(
+            ledger_path=ledger.path,
+            workspace_root=ledger.workspace_root,
+            evaluation_run_id="evaluation-candidate-v1",
+            failed_gates=None,
+            quantitative_tradeoff="reviewed",
+            approver="competition-owner",
+            reason="controlled experiment only",
+            downstream_authorization="submission-allowed",
+        )
     assert ledger.path.read_bytes() == before
 
 
