@@ -212,6 +212,7 @@ def main() -> None:
             raise ValueError("--lsm-fm-checkpoint is required for the LSM foundation model")
         try:
             from lsm_fm_model import (
+                ARCHITECTURE_DESCRIPTION as lsm_architecture,
                 EXPECTED_DETECTOR_PARAMETERS as expected_lsm_parameters,
                 EXPECTED_PRETRAINED_PARAMETERS as expected_lsm_pretrained,
                 build_lsm_fm_detector,
@@ -219,6 +220,7 @@ def main() -> None:
             )
         except ModuleNotFoundError:
             from research.lsm_fm_detection.model import (
+                ARCHITECTURE_DESCRIPTION as lsm_architecture,
                 EXPECTED_DETECTOR_PARAMETERS as expected_lsm_parameters,
                 EXPECTED_PRETRAINED_PARAMETERS as expected_lsm_pretrained,
                 build_lsm_fm_detector,
@@ -236,7 +238,7 @@ def main() -> None:
         phase_setter = set_lsm_training_phase
         base_checkpoint = args.lsm_fm_checkpoint
         base_checkpoint_sha256 = args.lsm_fm_checkpoint_sha256
-        architecture = "LSM-FM image-only SwinUNETR feature-24 + Biohub heatmap head"
+        architecture = lsm_architecture
 
     if sum(parameter.numel() for parameter in student.parameters()) != model_parameter_count:
         raise RuntimeError("unexpected detector parameter count")

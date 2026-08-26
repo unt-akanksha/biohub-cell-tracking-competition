@@ -20,6 +20,7 @@ if str(MONAI_DEPS) not in sys.path:
     sys.path.insert(0, str(MONAI_DEPS))
 
 from research.lsm_fm_detection.image_text_model import (  # noqa: E402
+    ARCHITECTURE_DESCRIPTION,
     EXPECTED_DETECTOR_PARAMETERS,
     EXPECTED_PRETRAINED_PARAMETERS,
     build_lsm_fm_detector,
@@ -31,6 +32,8 @@ CHECKPOINT_SHA256 = "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3
 
 
 def test_image_text_checkpoint_transfers_every_non_head_tensor() -> None:
+    assert "image-text" in ARCHITECTURE_DESCRIPTION
+    assert "feature-36" in ARCHITECTURE_DESCRIPTION
     model = build_lsm_fm_detector(CHECKPOINT, expected_sha256=CHECKPOINT_SHA256)
     assert sum(parameter.numel() for parameter in model.parameters()) == EXPECTED_DETECTOR_PARAMETERS
     source = torch.load(CHECKPOINT, map_location="cpu", weights_only=True)["state_dict"]
@@ -61,4 +64,3 @@ def test_image_text_training_phase_has_expected_capacity() -> None:
         "decoder_trainable_parameters": 30_445_381,
         "total_trainable_parameters": 35_072_191,
     }
-
