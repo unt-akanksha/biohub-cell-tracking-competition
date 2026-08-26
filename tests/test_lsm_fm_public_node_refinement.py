@@ -74,3 +74,10 @@ def test_selection_fails_closed_without_strict_gain() -> None:
         }
     )
     assert selected is None
+
+
+def test_strategy_rejects_invalid_blend() -> None:
+    import pytest
+
+    with pytest.raises(ValueError, match="blend"):
+        PublicNodeStrategy("invalid", 1, 2.0, 1.01)

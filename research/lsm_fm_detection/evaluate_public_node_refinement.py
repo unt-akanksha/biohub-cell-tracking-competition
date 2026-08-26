@@ -24,6 +24,7 @@ try:
         SCREEN_STEMS,
         FramePeaks,
         SPATIAL_DOWNSAMPLE,
+        graph_from_geff,
         graph_points_by_frame,
         score_predictions,
     )
@@ -47,6 +48,7 @@ except ModuleNotFoundError:
         SCREEN_STEMS,
         FramePeaks,
         SPATIAL_DOWNSAMPLE,
+        graph_from_geff,
         graph_points_by_frame,
         score_predictions,
     )
@@ -208,6 +210,54 @@ def predict_strategies(
     return results
 
 
+def write_refined_graph(
+    public_graph: Path,
+    predictions: Sequence[FramePeaks],
+    output_path: Path,
+) -> dict[str, Any]:
+    """Write a topology-identical GEFF with only native coordinates updated."""
+
+    graph = graph_from_geff(public_graph)
+    predicted_by_frame = {
+        int(frame.frame): np.asarray(frame.points_input, dtype=np.float64).reshape(-1, 3)
+        for frame in predictions
+    }
+    consumed = {frame: 0 for frame in predicted_by_frame}
+    node_ids: list[int] = []
+    native_points: list[np.ndarray] = []
+    for row in graph.node_attrs().iter_rows(named=True):
+        frame = int(row["t"])
+        if frame not in predicted_by_frame:
+            raise RuntimeError(f"refined predictions omit graph frame {frame}")
+        index = consumed[frame]
+        points = predicted_by_frame[frame]
+        if index >= len(points):
+            raise RuntimeError(f"refined predictions omit nodes in frame {frame}")
+        node_ids.append(int(row["node_id"]))
+        native_points.append(points[index] * SPATIAL_DOWNSAMPLE)
+        consumed[frame] = index + 1
+    for frame, points in predicted_by_frame.items():
+        if consumed.get(frame, 0) != len(points):
+            raise RuntimeError(f"refined predictions add nodes in frame {frame}")
+    coordinates = np.asarray(native_points, dtype=np.float64).reshape(-1, 3)
+    graph.update_node_attrs(
+        attrs={
+            "z": coordinates[:, 0].tolist(),
+            "y": coordinates[:, 1].tolist(),
+            "x": coordinates[:, 2].tolist(),
+        },
+        node_ids=node_ids,
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    graph.to_geff(output_path)
+    return {
+        "path": str(output_path),
+        "nodes": int(graph.num_nodes()),
+        "edges": int(graph.num_edges()),
+        "topology_preserved": True,
+    }
+
+
 def evaluate_movies(
     model,
     competition_dir: Path,
@@ -220,6 +270,8 @@ def evaluate_movies(
     partial_path: Path,
     started: float,
     max_wall_seconds: float,
+    output_graph_dir: Path | None = None,
+    output_graph_strategy: str | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
     import zarr
 
@@ -253,6 +305,12 @@ def evaluate_movies(
                     "frame_count": frame_count,
                 }
             )
+            if output_graph_dir is not None and strategy.name == output_graph_strategy:
+                rows[strategy.name][-1]["refined_graph"] = write_refined_graph(
+                    public_graph,
+                    predictions[strategy.name],
+                    output_graph_dir / f"{stem}.geff",
+                )
         partial_path.write_text(
             json.dumps(rows, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
@@ -372,6 +430,8 @@ def main() -> None:
             partial_path=args.output_dir / "acceptance_public_node_refinement_partial.json",
             started=started,
             max_wall_seconds=args.max_wall_seconds,
+            output_graph_dir=args.output_dir / "refined_acceptance_graphs",
+            output_graph_strategy=selected,
         )
         acceptance = {
             name: summarize_rows(rows) for name, rows in acceptance_rows.items()
