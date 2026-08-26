@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN_ID = "lsm-fm-image-text-localization-refinement-v1"
+KAGGLE_SLUG = "biohub-lsm-fm-f36-refinement-v1"
 TEMPLATE = (
     ROOT
     / "kaggle"
@@ -124,8 +125,8 @@ def main() -> None:
         encoding="ascii",
     )
     metadata = {
-        "id": f"indarkarhana/biohub-{RUN_ID}",
-        "title": "Biohub LSM-FM Image-Text Localization Refinement v1",
+        "id": f"indarkarhana/{KAGGLE_SLUG}",
+        "title": "Biohub LSM-FM F36 Refinement v1",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

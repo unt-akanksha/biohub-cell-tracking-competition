@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-image-text-localization-refinement-v1",
+  "classification": "execution_metadata_only",
+  "failed_launch_event_id": "evt-42b8b847753d45599d30b6ac2e6a232b",
+  "old_kernel_ref": "indarkarhana/biohub-lsm-fm-image-text-localization-refinement-v1",
+  "new_kernel_ref": "indarkarhana/biohub-lsm-fm-f36-refinement-v1",
+  "old_slug_length": 51,
+  "new_slug_length": 33,
+  "reason": "Kaggle SaveKernel returned HTTP 400 before kernel creation; the original slug exceeded the 50-character API limit. The shorter slug changes only Kaggle execution metadata.",
+  "scientific_notebook_sha256": "39914a129db751d85f6dc21a786451a9361356faa081ef0f653ad733d427aca3",
+  "scientific_notebook_changed": false,
+  "new_kernel_metadata_sha256": "c07e36b1c0771f2be6985c77886880d747eff398bdafa2b57fb7c672d92a5f28",
+  "new_config_sha256": "dd6be6e9c0f56d4c0c7087710dbf104fcaaf4037d9e6aa78ed05d8900483a131",
+  "replacement_preflight_report": "artifacts/preflights/lsm-fm-image-text-localization-refinement-v1-r2.json",
+  "replacement_preflight_report_sha256": "3e100c06a7f64085f1298cb860620e4eea2924ed29325962ba6179a767cead26",
+  "competition_submission_performed": false
+}
