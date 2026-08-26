@@ -31,6 +31,17 @@ except ModuleNotFoundError:
         division_prior_weight,
     )
 
+try:
+    from hybrid_linker import HybridLinkConfig, hybrid_link_pair
+except ModuleNotFoundError:
+    repository_root = Path(__file__).resolve().parents[2]
+    if str(repository_root) not in sys.path:
+        sys.path.insert(0, str(repository_root))
+    from research.trackastra_graph.hybrid_linker import (
+        HybridLinkConfig,
+        hybrid_link_pair,
+    )
+
 
 VOXEL_SCALE_UM = np.array((1.625, 0.40625, 0.40625), dtype=np.float32)
 MODEL_SPATIAL_SCALE = VOXEL_SCALE_UM / VOXEL_SCALE_UM[-1]
@@ -40,6 +51,8 @@ VALIDATION_STEMS = (
     "6bba_062c8d37",
     "6bba_07e24132",
 )
+SELECTION_STEMS = ("44b6_12dfb391", "6bba_062c8d37")
+ACCEPTANCE_STEMS = ("44b6_267148e4", "6bba_07e24132")
 BASELINE_PROXY = 0.9294432421394134
 
 
@@ -77,6 +90,7 @@ class GraphVideo:
     times: np.ndarray
     coords_voxel: np.ndarray
     edges: np.ndarray
+    edge_probabilities: np.ndarray | None = None
     ids_by_time: dict[int, np.ndarray] = field(init=False)
     coord_by_id: dict[int, np.ndarray] = field(init=False)
     time_by_id: dict[int, int] = field(init=False)
@@ -89,8 +103,16 @@ class GraphVideo:
         self.times = np.asarray(self.times, dtype=np.int32)
         self.coords_voxel = np.asarray(self.coords_voxel, dtype=np.float32)
         self.edges = np.asarray(self.edges, dtype=np.int64).reshape(-1, 2)
+        if self.edge_probabilities is None:
+            self.edge_probabilities = np.full(len(self.edges), np.nan, dtype=np.float32)
+        else:
+            self.edge_probabilities = np.asarray(
+                self.edge_probabilities, dtype=np.float32
+            ).reshape(-1)
         if len(self.node_ids) != len(self.times) or len(self.node_ids) != len(self.coords_voxel):
             raise ValueError(f"{self.stem}: inconsistent node arrays")
+        if len(self.edge_probabilities) != len(self.edges):
+            raise ValueError(f"{self.stem}: inconsistent edge probability array")
         if len(np.unique(self.node_ids)) != len(self.node_ids):
             raise ValueError(f"{self.stem}: duplicate node IDs")
 
@@ -145,16 +167,19 @@ def read_graph_video(path: Path) -> GraphVideo:
         node_ids.append(int(row["node_id"]))
         times.append(int(row["t"]))
         coords.append((float(row["z"]), float(row["y"]), float(row["x"])))
-    edges = [
-        (int(row["source_id"]), int(row["target_id"]))
-        for row in graph.edge_attrs().iter_rows(named=True)
-    ]
+    edges: list[tuple[int, int]] = []
+    edge_probabilities: list[float] = []
+    for row in graph.edge_attrs().iter_rows(named=True):
+        edges.append((int(row["source_id"]), int(row["target_id"])))
+        value = row.get("edge_prob") if hasattr(row, "get") else None
+        edge_probabilities.append(float(value) if value is not None else math.nan)
     return GraphVideo(
         stem=path.stem,
         node_ids=np.asarray(node_ids),
         times=np.asarray(times),
         coords_voxel=np.asarray(coords),
         edges=np.asarray(edges),
+        edge_probabilities=np.asarray(edge_probabilities),
     )
 
 
@@ -650,6 +675,40 @@ def link_movie(
     return edges
 
 
+def hybrid_link_movie(
+    video: GraphVideo,
+    pair_scores: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+    config: HybridLinkConfig,
+    *,
+    submission_edge_probability: float = 0.80,
+) -> list[tuple[int, int]]:
+    """Rerank an exported submission graph with learned association scores.
+
+    Competition CSVs do not retain the detector's edge probabilities.  Clean
+    validation therefore assigns every base edge the same fixed pseudo-score,
+    exactly matching the information available at test-time.  No validation
+    label can enter the per-movie linking operation.
+    """
+    output: list[tuple[int, int]] = []
+    for _time, (source_ids, target_ids, scores) in sorted(pair_scores.items()):
+        source_set = set(map(int, source_ids.tolist()))
+        target_set = set(map(int, target_ids.tolist()))
+        base_edges = [
+            (int(source), int(target), float(submission_edge_probability))
+            for source, target in video.edges.tolist()
+            if int(source) in source_set and int(target) in target_set
+        ]
+        result = hybrid_link_pair(
+            source_ids,
+            target_ids,
+            scores,
+            base_edges,
+            config,
+        )
+        output.extend(result.edges)
+    return sorted(set(output))
+
+
 def match_nodes_bipartite(pred_nodes: dict, gt_nodes: dict, max_dist: float = 7.0):
     pred_by_t: dict[int, list[int]] = {}
     for pid, (t, *_rest) in pred_nodes.items():
@@ -911,51 +970,164 @@ def complete_movie_validation(
             candidate_radius=candidate_radius,
         )
 
+    def score_partition(
+        edges_by_stem: dict[str, list[tuple[int, int]]], stems: Iterable[str]
+    ) -> dict[str, Any]:
+        rows = [
+            score_linked_video(
+                predictions[stem],
+                truths[stem],
+                edges_by_stem[stem],
+                read_true_node_count(train_dir / f"{stem}.geff"),
+            )
+            for stem in stems
+        ]
+        return aggregate_scores(rows)
+
+    base_edges_by_stem = {
+        stem: [tuple(map(int, edge)) for edge in predictions[stem].edges.tolist()]
+        for stem in VALIDATION_STEMS
+    }
+    base_summary = {
+        "selection": score_partition(base_edges_by_stem, SELECTION_STEMS),
+        "acceptance": score_partition(base_edges_by_stem, ACCEPTANCE_STEMS),
+        "all": score_partition(base_edges_by_stem, VALIDATION_STEMS),
+    }
+
+    # Only the selection movies choose the association method and thresholds.
+    # Acceptance movies are scored once, after the winning configuration is
+    # frozen.  This prevents a broad grid from masquerading as generalization.
     configurations: list[dict[str, Any]] = []
     for edge_threshold in (0.03, 0.05, 0.08, 0.12, 0.18):
         for division_threshold in (0.05, 0.08, 0.12, 0.18, 0.25):
             for division_ratio in (0.25, 0.50):
-                rows: list[dict[str, Any]] = []
-                for stem in VALIDATION_STEMS:
-                    edges = link_movie(
+                edges_by_stem: dict[str, list[tuple[int, int]]] = {}
+                for stem in SELECTION_STEMS:
+                    edges_by_stem[stem] = link_movie(
                         pair_scores[stem],
                         edge_threshold=edge_threshold,
                         division_threshold=division_threshold,
                         division_ratio=division_ratio,
                     )
-                    rows.append(
-                        score_linked_video(
-                            predictions[stem],
-                            truths[stem],
-                            edges,
-                            read_true_node_count(train_dir / f"{stem}.geff"),
-                        )
-                    )
-                summary = aggregate_scores(rows)
                 configurations.append(
                     {
+                        "method": "trackastra_only",
                         "edge_threshold": edge_threshold,
                         "division_threshold": division_threshold,
                         "division_ratio": division_ratio,
-                        "summary": summary,
-                        "movies": rows,
+                        "selection_summary": score_partition(
+                            edges_by_stem, SELECTION_STEMS
+                        ),
                     }
                 )
-    best = max(
+
+    for edge_threshold in (0.03, 0.05, 0.08):
+        for base_bonus in (0.02, 0.05, 0.10):
+            for division_threshold in (0.08, 0.12, 0.18):
+                for division_ratio in (0.25, 0.50):
+                    config = HybridLinkConfig(
+                        edge_threshold=edge_threshold,
+                        base_lock_probability=1.01,
+                        base_keep_probability=0.75,
+                        base_bonus=base_bonus,
+                        division_threshold=division_threshold,
+                        division_ratio=division_ratio,
+                        base_division_keep_probability=0.95,
+                    )
+                    edges_by_stem = {
+                        stem: hybrid_link_movie(
+                            predictions[stem], pair_scores[stem], config
+                        )
+                        for stem in SELECTION_STEMS
+                    }
+                    configurations.append(
+                        {
+                            "method": "submission_graph_hybrid",
+                            "edge_threshold": edge_threshold,
+                            "base_bonus": base_bonus,
+                            "base_pseudo_probability": 0.80,
+                            "base_lock_probability": 1.01,
+                            "base_keep_probability": 0.75,
+                            "division_threshold": division_threshold,
+                            "division_ratio": division_ratio,
+                            "base_division_keep_probability": 0.95,
+                            "selection_summary": score_partition(
+                                edges_by_stem, SELECTION_STEMS
+                            ),
+                        }
+                    )
+
+    selected = max(
         configurations,
         key=lambda item: (
-            item["summary"]["proxy_score"],
-            item["summary"]["worst_movie"],
-            -item["summary"]["div_fp"],
+            item["selection_summary"]["proxy_score"],
+            item["selection_summary"]["worst_movie"],
+            -item["selection_summary"]["div_fp"],
+            item["method"] == "submission_graph_hybrid",
         ),
     )
+
+    selected_edges: dict[str, list[tuple[int, int]]] = {}
+    if selected["method"] == "trackastra_only":
+        for stem in VALIDATION_STEMS:
+            selected_edges[stem] = link_movie(
+                pair_scores[stem],
+                edge_threshold=float(selected["edge_threshold"]),
+                division_threshold=float(selected["division_threshold"]),
+                division_ratio=float(selected["division_ratio"]),
+            )
+    else:
+        selected_config = HybridLinkConfig(
+            edge_threshold=float(selected["edge_threshold"]),
+            base_lock_probability=float(selected["base_lock_probability"]),
+            base_keep_probability=float(selected["base_keep_probability"]),
+            base_bonus=float(selected["base_bonus"]),
+            division_threshold=float(selected["division_threshold"]),
+            division_ratio=float(selected["division_ratio"]),
+            base_division_keep_probability=float(
+                selected["base_division_keep_probability"]
+            ),
+        )
+        selected_edges = {
+            stem: hybrid_link_movie(
+                predictions[stem], pair_scores[stem], selected_config
+            )
+            for stem in VALIDATION_STEMS
+        }
+
+    selected = {
+        **selected,
+        "acceptance_summary": score_partition(selected_edges, ACCEPTANCE_STEMS),
+        "all_summary": score_partition(selected_edges, VALIDATION_STEMS),
+    }
+    selection_delta = (
+        selected["selection_summary"]["proxy_score"]
+        - base_summary["selection"]["proxy_score"]
+    )
+    acceptance_delta = (
+        selected["acceptance_summary"]["proxy_score"]
+        - base_summary["acceptance"]["proxy_score"]
+    )
+    acceptance_passed = bool(
+        acceptance_delta > 0.0
+        and selected["acceptance_summary"]["worst_movie"]
+        >= base_summary["acceptance"]["worst_movie"] - 0.01
+    )
     payload = {
-        "schema_version": 1,
+        "schema_version": 2,
         "validation_stems": list(VALIDATION_STEMS),
-        "selection": "complete-movie official-formula proxy; public leaderboard unused",
-        "baseline_proxy": BASELINE_PROXY,
-        "best": best,
-        "delta_proxy_vs_public_0927_baseline": best["summary"]["proxy_score"] - BASELINE_PROXY,
+        "selection_stems": list(SELECTION_STEMS),
+        "acceptance_stems": list(ACCEPTANCE_STEMS),
+        "selection_rule": (
+            "method and thresholds selected on selection movies only; acceptance "
+            "movies scored once after freeze; public leaderboard unused"
+        ),
+        "public_processed_reference_proxy": BASELINE_PROXY,
+        "base_raw_graph": base_summary,
+        "selected": selected,
+        "selection_delta_vs_base_raw": selection_delta,
+        "acceptance_delta_vs_base_raw": acceptance_delta,
+        "acceptance_passed": acceptance_passed,
         "configurations": configurations,
     }
     atomic_json(output_dir / "complete_movie_validation.json", payload)
@@ -1311,10 +1483,11 @@ def train_main(args: argparse.Namespace) -> None:
         "initial_window_validation": initial_validation,
         "post_synthetic_window_validation": post_synthetic_validation,
         "final_window_validation": final_validation,
-        "complete_movie_best": complete["best"],
-        "delta_proxy_vs_public_0927_baseline": complete[
-            "delta_proxy_vs_public_0927_baseline"
-        ],
+        "complete_movie_selected": complete["selected"],
+        "complete_movie_base_raw": complete["base_raw_graph"],
+        "selection_delta_vs_base_raw": complete["selection_delta_vs_base_raw"],
+        "acceptance_delta_vs_base_raw": complete["acceptance_delta_vs_base_raw"],
+        "association_acceptance_passed": complete["acceptance_passed"],
     }
     atomic_json(args.output_dir / "training_terminal.json", terminal)
     print(json.dumps(_plain(terminal), indent=2), flush=True)

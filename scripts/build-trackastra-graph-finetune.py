@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v3"
-NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v3.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v4"
+NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v4.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,14 +31,14 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-graph-finetune-v3"
+RUN_ID = "trackastra-graph-finetune-v4"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
 
 
 def write_terminal(status, error=None):
-    training_terminal = Path("/kaggle/working/trackastra_graph_v3/training_terminal.json")
+    training_terminal = Path("/kaggle/working/trackastra_graph_v4/training_terminal.json")
     payload = {
         "run_id": RUN_ID,
         "status": status,
@@ -107,7 +107,15 @@ synthetic = next(
     None,
 )
 if runtime is None:
-    runtime = next((p for p in input_root.iterdir() if (p / "SOURCE_MANIFEST.json").is_file()), None)
+    runtime = next(
+        (
+            p
+            for p in input_root.iterdir()
+            if (p / "SOURCE_MANIFEST.json").is_file()
+            or (p / "runtime_bundle.zip").is_file()
+        ),
+        None,
+    )
 if support is None:
     support = next((p for p in input_root.iterdir() if (p / "wheels").is_dir()), None)
 if runtime is None or competition is None or support is None or synthetic is None:
@@ -117,6 +125,18 @@ if runtime is None or competition is None or support is None or synthetic is Non
         "support": support,
         "synthetic": synthetic,
     })
+
+runtime_bundle = runtime / "runtime_bundle.zip"
+if runtime_bundle.is_file():
+    materialized_runtime = Path("/kaggle/working/runtime_bundle")
+    if materialized_runtime.exists():
+        shutil.rmtree(materialized_runtime)
+    materialized_runtime.mkdir(parents=True)
+    with zipfile.ZipFile(runtime_bundle) as handle:
+        handle.extractall(materialized_runtime)
+    runtime = materialized_runtime
+if not (runtime / "SOURCE_MANIFEST.json").is_file():
+    raise FileNotFoundError(f"Runtime manifest missing after materialization: {runtime}")
 
 
 def materialize_runtime_directory(name, marker):
@@ -208,7 +228,7 @@ print(json.dumps({
 '''
 
 
-TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v3")
+TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v4")
 command = [
     sys.executable,
     str(runtime / "trainer.py"),
@@ -217,8 +237,8 @@ command = [
     "--pretrained-dir", str(ctc_dir),
     "--validation-predictions", str(validation_dir),
     "--output-dir", str(output_dir),
-    "--steps", "5000",
-    "--train-per-prefix", "24",
+    "--steps", "7000",
+    "--train-per-prefix", "128",
     "--max-tokens", "512",
     "--gradient-accumulation", "4",
     "--validation-samples", "24",
@@ -244,8 +264,11 @@ result = json.loads(training_terminal.read_text(encoding="utf-8"))
 print(json.dumps({
     "step": result["step"],
     "elapsed_seconds": result["elapsed_seconds"],
-    "delta_proxy_vs_public_0927_baseline": result["delta_proxy_vs_public_0927_baseline"],
-    "best_summary": result["complete_movie_best"]["summary"],
+    "association_acceptance_passed": result["association_acceptance_passed"],
+    "selection_delta_vs_base_raw": result["selection_delta_vs_base_raw"],
+    "acceptance_delta_vs_base_raw": result["acceptance_delta_vs_base_raw"],
+    "selected_method": result["complete_movie_selected"]["method"],
+    "acceptance_summary": result["complete_movie_selected"]["acceptance_summary"],
 }, indent=2))
 '''
 
@@ -253,7 +276,7 @@ print(json.dumps({
 FINISH = r'''FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
-print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v3"))
+print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v4"))
 '''
 
 
@@ -291,8 +314,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-trackastra-graph-finetune-v3",
-        "title": "Biohub Trackastra Graph Finetune v3",
+        "id": "indarkarhana/biohub-trackastra-graph-finetune-v4",
+        "title": "Biohub Trackastra Graph Finetune v4",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

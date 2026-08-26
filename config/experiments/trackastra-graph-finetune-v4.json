@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v4",
+  "parent": "trackastra-graph-finetune-v3",
+  "retry_of": "trackastra-graph-finetune-v3",
+  "kernel_ref": "indarkarhana/biohub-trackastra-graph-finetune-v4",
+  "notebook_sha256": "81d9db340ba0fc90ffdf5176b98bd26390a588728fa730d6446ce15ab81882c1",
+  "kernel_metadata_sha256": "a0cbb4baa11bcdbdcc790e3de7fc11153d1badcb66565797b7aca06eb086de8f",
+  "trainer_sha256": "3acf7580ceab4a80c0323b29f9df878bbd23fa8f6b99ccefb8278f8aa38a1245",
+  "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
+  "submission_reranker_sha256": "c8551d49535a19dbc536db4c938a2d0c8cb2da7f6b1267cccb4b433f14f20275",
+  "synthetic_adapter_sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be",
+  "runtime_manifest_sha256": "ef3cda2f19ba8297bf8b38d30441ea6195803beab6493c60d6b9b54d166b15e1",
+  "declared_max_runtime_hours": "4.00",
+  "watchdog_hard_stop_seconds": 14100,
+  "trainer_max_wall_seconds": 13200,
+  "validation_reserve_seconds": 1800,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version4",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "josefreitasalvesneto/biohub-synthetic-dataset"
+  ],
+  "pretrained_model": {
+    "name": "Trackastra ctc v0.3.0",
+    "source_repository": "weigertlab/trackastra",
+    "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+    "license": "BSD-3-Clause",
+    "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+    "parameter_count": 27456880
+  },
+  "synthetic_pretraining": {
+    "license": "CC0",
+    "selection": "384 deterministic six-frame sequence graphs",
+    "target_steps": 1200,
+    "learning_rate": 0.00002,
+    "division_sampling_probability": 0.15,
+    "division_loss_prior_multiplier": 0.063812,
+    "coordinate_repair": "divide already-pooled sequence node Y/X by four exactly once",
+    "image_arrays_loaded": false
+  },
+  "real_finetuning": {
+    "selection": "all available movies from both embryo prefixes; four complete validation movies excluded",
+    "window_frames": 4,
+    "max_tokens": 512,
+    "target_steps": 7000,
+    "learning_rate": 0.00001,
+    "weight_decay": 0.00001,
+    "gradient_accumulation": 4,
+    "node_drop_probability": 0.04,
+    "false_positive_probability": 0.03,
+    "jitter_sigma_scaled_voxels": 2.0,
+    "division_sampling_probability": 0.5,
+    "hard_negative_radius_scaled_voxels": 64.0,
+    "physical_z_to_xy_scale": 4.0
+  },
+  "validation": {
+    "checkpoints": ["initial", "post_synthetic", "post_real"],
+    "complete_movies": true,
+    "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
+    "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
+    "methods_selected": ["trackastra_only", "submission_graph_hybrid"],
+    "base_edge_information": "constant 0.80 pseudo-probability matching exported CSV information",
+    "match_radius_um": 7.0,
+    "public_leaderboard_used_for_selection": false,
+    "acceptance_read_after_configuration_freeze": true
+  },
+  "promotion_rule": "promote only if the frozen two-movie acceptance proxy delta versus the same-node raw base graph is positive and worst-movie regression is no more than 0.01",
+  "submission_policy": "training and clean validation only; separate reranker refuses exact replicas and runs only after acceptance passes"
+}

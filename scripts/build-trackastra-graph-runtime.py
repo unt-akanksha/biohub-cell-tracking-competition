@@ -26,6 +26,8 @@ VALIDATION_ROOT = (
 )
 TRAINER = ROOT / "research" / "trackastra_graph" / "train_biohub_graph_transformer.py"
 SYNTHETIC_ADAPTER = ROOT / "research" / "synthetic_pretrain" / "data.py"
+HYBRID_LINKER = ROOT / "research" / "trackastra_graph" / "hybrid_linker.py"
+SUBMISSION_RERANKER = ROOT / "research" / "trackastra_graph" / "rerank_submission.py"
 VALIDATION_STEMS = (
     "44b6_12dfb391",
     "44b6_267148e4",
@@ -78,6 +80,8 @@ def main() -> None:
 
     shutil.copy2(TRAINER, target / "trainer.py")
     shutil.copy2(SYNTHETIC_ADAPTER, target / "synthetic_data.py")
+    shutil.copy2(HYBRID_LINKER, target / "hybrid_linker.py")
+    shutil.copy2(SUBMISSION_RERANKER, target / "rerank_submission.py")
     shutil.copy2(TRACKASTRA_REPO / "LICENSE", target / "TRACKASTRA_LICENSE")
     for relative in TRACKASTRA_FILES:
         source = TRACKASTRA_REPO / relative
