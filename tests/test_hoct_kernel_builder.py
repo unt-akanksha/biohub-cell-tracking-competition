@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from pathlib import Path
 
 
@@ -108,6 +109,7 @@ def _write_valid_cache(root: Path) -> Path:
             stem: {
                 "processed_nodes": count,
                 "expected_processed_nodes": count,
+                "processed_node_tolerance": max(1, math.ceil(count * 0.005)),
             }
             for stem, count in EXPECTED_NODES.items()
         },
@@ -139,4 +141,18 @@ def test_cached_topology_tamper_or_malformed_report_falls_back(
 
     report_path = csv_path.with_name("processed_validation_report.json")
     report_path.write_text("{malformed", encoding="utf-8")
+    assert validator(tmp_path / "cache") is None
+
+
+def test_cached_topology_allows_only_bounded_node_count_drift(tmp_path: Path) -> None:
+    _graph_manifest, validator = _cache_validator()
+    csv_path = _write_valid_cache(tmp_path / "cache")
+    report_path = csv_path.with_name("processed_validation_report.json")
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    report["datasets"]["44b6_267148e4"]["processed_nodes"] = 21_843
+    report_path.write_text(json.dumps(report), encoding="utf-8")
+    assert validator(tmp_path / "cache") == csv_path
+
+    report["datasets"]["44b6_267148e4"]["processed_nodes"] = 21_878
+    report_path.write_text(json.dumps(report), encoding="utf-8")
     assert validator(tmp_path / "cache") is None

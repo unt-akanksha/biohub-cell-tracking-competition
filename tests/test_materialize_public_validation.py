@@ -5,6 +5,8 @@ from pathlib import Path
 
 from research.trackastra_graph.materialize_public_validation import (
     load_public_namespace,
+    processed_node_tolerance,
+    validate_processed_node_count,
 )
 
 
@@ -37,3 +39,15 @@ def test_public_preset_executes_before_config_and_postprocess(
     assert namespace["POSTPROCESSED"] == "frozen-value-postprocessed"
     assert namespace["TEST_DIR"] == tmp_path / "competition" / "train"
     assert os.environ[key] == "frozen-value"
+
+
+def test_processed_node_count_allows_only_bounded_reference_drift() -> None:
+    assert processed_node_tolerance(21_768) == 109
+    assert validate_processed_node_count("movie", 21_843, 21_768) == 109
+
+    try:
+        validate_processed_node_count("movie", 21_878, 21_768)
+    except RuntimeError as exc:
+        assert "outside the hash-pinned public validator reference" in str(exc)
+    else:
+        raise AssertionError("out-of-tolerance topology drift was accepted")

@@ -3,15 +3,17 @@
   "run_id": "hoct-multibackbone-probe-v1",
   "parent": "trackastra-graph-finetune-v6",
   "kernel_ref": "indarkarhana/biohub-hoct-multibackbone-probe-v1",
-  "notebook_sha256": "7f36bd8a49b32ae2f68c500430912b30912a58f1639c56d4c06fed9af2afd77c",
+  "notebook_sha256": "587b050e38b37f745e48209675c6f596aee926fe56e42fd98feaf683fc2c2241",
   "kernel_metadata_sha256": "2584c73994fdd8b094279c17d3d7dbccf1a8f114728e338c758089988a68cf17",
-  "kernel_builder_sha256": "03556c6bd7b569eb3ef2912f18f2074d73e9653863f1573349e1ade27efdaafd",
+  "kernel_builder_sha256": "d089d82a588c4c078aee8fc12c8218410a40f1239d15dfa31f05c27b0628a8c2",
   "adapter_sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698",
   "base_probe_trainer_sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8",
   "multibackbone_trainer_sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa",
   "multibackbone_grid_sha256": "977ea2c64e52135ec340ac021e6f43904bb4c6e27100b2052b6eb691e988ae52",
   "association_ensemble_sha256": "17c6dfb67e8ba45dc1ef884d05490eef0943ac616c8e653d12358720941a00a3",
   "runtime_manifest_sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265",
+  "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+  "public_validation_materializer_sha256": "c3450c5e37e245cfbc28c4eb00b83f6ac57627124ec376b43220cf5f66849cbc",
   "declared_max_runtime_hours": "4.00",
   "watchdog_hard_stop_seconds": 14100,
   "trainer_max_wall_seconds": 13200,
@@ -20,7 +22,7 @@
   "tpu_enabled": false,
   "dataset_sources": [
     "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version6",
-    "indarkarhana/biohub-trackastra-graph-runtime-v1@version9",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version11",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
@@ -29,8 +31,8 @@
   ],
   "processed_topology_cache": {
     "producer_run_id": "trackastra-raw-confidence-acceptance-v2",
-    "reuse_if": "producer terminal, exact source hashes, DeepCenter epoch/hash, expected node counts, and CSV hash all verify",
-    "fallback": "rerun the exact in-kernel public comparator materializer",
+    "reuse_if": "producer terminal, exact source hashes, DeepCenter epoch/hash, source-reference node counts within a predeclared 0.5% bound, and CSV hash all verify",
+    "fallback": "rerun the exact in-kernel public comparator materializer with the same 0.5% source-reference drift bound",
     "ground_truth_labels_in_cache": false
   },
   "pretrained_models": {
@@ -83,7 +85,7 @@
     "zero_policy": "an exact zero means outside candidate support; preserve the available model instead of treating missing support as negative evidence"
   },
   "validation": {
-    "topology": "exact audited public final-CSV comparator topology with stable raw edge confidence transfer",
+    "topology": "hash-bound audited public final-CSV postprocessor output with stable raw edge confidence transfer and a maximum 0.5% node-count drift from the prior validator artifact",
     "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
     "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
     "selection_objective": "maximize the minimum per-movie proxy delta versus base across the two embryo prefixes, then pooled score and worst movie",

@@ -65,7 +65,17 @@ def verify_sources() -> None:
 
     assert config["notebook_sha256"] == sha256_file(NOTEBOOK)
     assert config["kernel_metadata_sha256"] == sha256_file(METADATA)
+    assert config["kernel_builder_sha256"] == sha256_file(
+        ROOT / "scripts" / "build-hoct-multibackbone-probe.py"
+    )
     assert config["runtime_manifest_sha256"] == sha256_file(HOCT_MANIFEST)
+    assert config["graph_runtime_manifest_sha256"] == sha256_file(GRAPH_MANIFEST)
+    assert config["public_validation_materializer_sha256"] == sha256_file(
+        ROOT / "research" / "trackastra_graph" / "materialize_public_validation.py"
+    )
+    assert "indarkarhana/biohub-trackastra-graph-runtime-v1@version11" in config[
+        "dataset_sources"
+    ]
     assert metadata["enable_gpu"] is True
     assert metadata["enable_tpu"] is False
     assert metadata["enable_internet"] is False
@@ -83,6 +93,7 @@ def verify_sources() -> None:
     )
     compile(code, str(NOTEBOOK), "exec")
     assert "validated_cached_topology" in code
+    assert "MAX_REFERENCE_NODE_DRIFT_FRACTION = 0.005" in code
     assert "No valid cached topology found; using the exact in-kernel materializer." in code
     assert "submission.csv" in code
 

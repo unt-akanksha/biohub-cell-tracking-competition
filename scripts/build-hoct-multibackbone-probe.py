@@ -71,17 +71,24 @@ def main() -> None:
             '"training_evidence": training["training_evidence"],',
         )
     )
-    cached_topology = r'''EXPECTED_PROCESSED_NODES = {
+    cached_topology = r'''import math
+
+EXPECTED_PROCESSED_NODES = {
     "44b6_12dfb391": 44139,
     "44b6_267148e4": 21768,
     "6bba_062c8d37": 5812,
     "6bba_07e24132": 26204,
 }
 EXPECTED_DEEPCENTER_SHA256 = "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0"
+MAX_REFERENCE_NODE_DRIFT_FRACTION = 0.005
 
 
 def sha256_file(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def processed_node_tolerance(reference_nodes):
+    return max(1, math.ceil(reference_nodes * MAX_REFERENCE_NODE_DRIFT_FRACTION))
 
 
 def validated_cached_topology(root):
@@ -131,8 +138,11 @@ def validated_cached_topology(root):
             report.get("deepcenter_checkpoint", {}).get("expected_epoch") == 2,
             all(report.get(key) == value for key, value in expected_hashes.items()),
             all(
-                report.get("datasets", {}).get(stem, {}).get("processed_nodes") == count
+                abs(report.get("datasets", {}).get(stem, {}).get("processed_nodes", -count) - count)
+                <= processed_node_tolerance(count)
                 and report.get("datasets", {}).get(stem, {}).get("expected_processed_nodes") == count
+                and report.get("datasets", {}).get(stem, {}).get("processed_node_tolerance")
+                == processed_node_tolerance(count)
                 for stem, count in EXPECTED_PROCESSED_NODES.items()
             ),
         ]

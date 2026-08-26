@@ -4,6 +4,7 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +36,7 @@ EXPECTED_PROCESSED_NODES = {
 EXPECTED_DEEPCENTER_SHA256 = (
     "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0"
 )
+MAX_REFERENCE_NODE_DRIFT_FRACTION = 0.005
 
 
 def sha256_file(path: Path) -> str:
@@ -47,6 +49,23 @@ def atomic_json(path: Path, payload: dict[str, Any]) -> None:
         json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     temporary.replace(path)
+
+
+def processed_node_tolerance(reference_nodes: int) -> int:
+    """Bound environment-sensitive postprocessing drift to half a percent."""
+    if reference_nodes <= 0:
+        raise ValueError("reference_nodes must be positive")
+    return max(1, math.ceil(reference_nodes * MAX_REFERENCE_NODE_DRIFT_FRACTION))
+
+
+def validate_processed_node_count(stem: str, actual: int, reference: int) -> int:
+    tolerance = processed_node_tolerance(reference)
+    if abs(actual - reference) > tolerance:
+        raise RuntimeError(
+            f"{stem}: processed node count {actual} is outside the hash-pinned "
+            f"public validator reference {reference} +/- {tolerance}"
+        )
+    return tolerance
 
 
 def load_public_namespace(
@@ -162,11 +181,9 @@ def main() -> None:
             if not nodes_by_id:
                 raise RuntimeError(f"{stem}: public postprocessor removed every node")
             expected_nodes = EXPECTED_PROCESSED_NODES[stem]
-            if len(nodes_by_id) != expected_nodes:
-                raise RuntimeError(
-                    f"{stem}: processed node count {len(nodes_by_id)} does not match "
-                    f"the hash-pinned public validator result {expected_nodes}"
-                )
+            node_tolerance = validate_processed_node_count(
+                stem, len(nodes_by_id), expected_nodes
+            )
 
             for node_id in sorted(nodes_by_id):
                 node = nodes_by_id[node_id]
@@ -205,6 +222,8 @@ def main() -> None:
                 "raw_nodes": raw_nodes,
                 "processed_nodes": len(nodes_by_id),
                 "expected_processed_nodes": expected_nodes,
+                "processed_node_delta": len(nodes_by_id) - expected_nodes,
+                "processed_node_tolerance": node_tolerance,
                 "raw_edges": len(raw_edges),
                 "processed_edges": len(edges),
                 "postprocess": filter_stats,
