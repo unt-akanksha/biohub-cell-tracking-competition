@@ -756,13 +756,17 @@ def test_exact_evaluation_lifecycle_is_separate_immutable_and_fail_closed(tmp_pa
     assert ledger.path.read_bytes() == before
 
 
-def _cpu_registration(run_id="cpu-control-a", nonce="ab" * 32):
+def _cpu_registration(
+    run_id="cpu-control-a",
+    nonce="ab" * 32,
+    evaluation_run_id="eval-cpu-control-a",
+):
     return cpu_acceptance_registration_payload(
         run_id=run_id,
         purpose="phase2_official_data_control",
         request_nonce=nonce,
         acceptance_request_sha256="1" * 64,
-        evaluation_run_id="eval-cpu-control-a",
+        evaluation_run_id=evaluation_run_id,
         kernel_slug="owner/biohub-phase2-cpu-acceptance",
         runtime_dataset_slug="owner/biohub-phase2-runtime",
         runtime_bundle_name="biohub-runtime-v1.biohubbundle",
@@ -927,5 +931,119 @@ def test_cpu_acceptance_rejects_nonce_reuse_gpu_fields_and_reopen(tmp_path):
                     kernel_ref="owner/kernel/1",
                     runtime_dataset_ref="owner/dataset/1",
                 ),
+            )
+        )
+
+
+def test_cpu_and_exact_run_ids_collide_symmetrically(tmp_path):
+    ledger = make_ledger(tmp_path)
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a", EventType.CPU_ACCEPTANCE_REGISTERED, _cpu_registration()
+        )
+    )
+    before = ledger.path.read_bytes()
+    with pytest.raises(TransitionError, match="duplicate exact evaluation ID"):
+        ledger.append(
+            ExperimentEvent.create(
+                "cpu-control-a",
+                EventType.EXACT_EVALUATION_REGISTERED,
+                {"evaluation_run_id": "cpu-control-a"},
+            )
+        )
+    assert ledger.path.read_bytes() == before
+
+    other = make_ledger(tmp_path / "other")
+    members = []
+    for index, (role, fold_id) in enumerate(
+        (
+            ("baseline", "fold-a"),
+            ("baseline", "fold-b"),
+            ("candidate", "fold-a"),
+            ("candidate", "fold-b"),
+        )
+    ):
+        member = _evidence_producer(
+            other, f"producer-{index}", fold_id, str(index + 1)
+        )
+        member["role"] = role
+        members.append(member)
+    other.append(
+        ExperimentEvent.create(
+            "eval-existing",
+            EventType.EXACT_EVALUATION_REGISTERED,
+            exact_evaluation_registration_payload(
+                evaluation_run_id="eval-existing",
+                scorer_lock_sha256="a" * 64,
+                environment_lock_sha256="b" * 64,
+                manifest_sha256="c" * 64,
+                evaluation_policy_sha256="d" * 64,
+                evidence_kind="synthetic_fixture",
+                members=members,
+            ),
+        )
+    )
+    with pytest.raises(TransitionError, match="duplicate CPU acceptance ID"):
+        other.append(
+            ExperimentEvent.create(
+                "eval-existing",
+                EventType.CPU_ACCEPTANCE_REGISTERED,
+                _cpu_registration(
+                    run_id="eval-existing",
+                    nonce="cd" * 32,
+                    evaluation_run_id="eval-future",
+                ),
+            )
+        )
+
+
+def test_cpu_evaluation_reservations_are_global_and_survive_terminal_state(tmp_path):
+    ledger = make_ledger(tmp_path)
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a", EventType.CPU_ACCEPTANCE_REGISTERED, _cpu_registration()
+        )
+    )
+    ledger.append(
+        ExperimentEvent.create(
+            "cpu-control-a",
+            EventType.CPU_ACCEPTANCE_FAILED,
+            cpu_acceptance_failed_payload(
+                run_id="cpu-control-a", reason_code="TEST", detail="terminal"
+            ),
+        )
+    )
+    for run_id, evaluation_run_id in (
+        ("cpu-control-b", "eval-cpu-control-a"),
+        ("eval-cpu-control-a", "eval-other"),
+    ):
+        with pytest.raises(TransitionError):
+            ledger.append(
+                ExperimentEvent.create(
+                    run_id,
+                    EventType.CPU_ACCEPTANCE_REGISTERED,
+                    _cpu_registration(
+                        run_id=run_id,
+                        nonce=("cd" if run_id == "cpu-control-b" else "ef") * 32,
+                        evaluation_run_id=evaluation_run_id,
+                    ),
+                )
+            )
+    with pytest.raises(TransitionError, match="duplicate run ID"):
+        ledger.append(
+            ExperimentEvent.create(
+                "eval-cpu-control-a", EventType.REGISTERED, payload()
+            )
+        )
+
+
+def test_cpu_registration_rejects_self_reserved_evaluation_id(tmp_path):
+    ledger = make_ledger(tmp_path)
+    with pytest.raises(TransitionError, match="must differ"):
+        ledger.append(
+            ExperimentEvent.create(
+                "cpu-control-a",
+                EventType.CPU_ACCEPTANCE_REGISTERED,
+                _cpu_registration(evaluation_run_id="cpu-control-a"),
             )
         )

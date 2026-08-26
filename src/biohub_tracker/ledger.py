@@ -683,7 +683,17 @@ def validate_transition(events: Sequence[ExperimentEvent], event: ExperimentEven
     runs = reconstruct_runs(events) if events else {}
     existing = runs.get(event.run_id)
     if event.event_type is EventType.REGISTERED:
-        if existing:
+        evaluations = reconstruct_exact_evaluations(events)
+        controls = reconstruct_cpu_acceptances(events)
+        reserved_evaluation_ids = {
+            str(state.registered["evaluation_run_id"]) for state in controls.values()
+        }
+        if (
+            existing
+            or event.run_id in evaluations
+            or event.run_id in controls
+            or event.run_id in reserved_evaluation_ids
+        ):
             raise TransitionError(f"duplicate run ID: {event.run_id}")
         parent = event.payload.get("parent")
         if parent and parent not in runs:
@@ -1568,11 +1578,12 @@ def _validate_exact_transition(
 ) -> None:
     experiments = reconstruct_runs(events)
     evaluations = reconstruct_exact_evaluations(events)
+    controls = reconstruct_cpu_acceptances(events)
     existing = evaluations.get(event.run_id)
     if event.payload.get("evaluation_run_id") != event.run_id:
         raise TransitionError("exact evaluation event/run identity mismatch")
     if event.event_type is EventType.EXACT_EVALUATION_REGISTERED:
-        if existing is not None or event.run_id in experiments:
+        if existing is not None or event.run_id in experiments or event.run_id in controls:
             raise TransitionError(f"duplicate exact evaluation ID: {event.run_id}")
         try:
             normalized = exact_evaluation_registration_payload(
@@ -1661,7 +1672,15 @@ def _validate_cpu_transition(
     evaluations = reconstruct_exact_evaluations(events)
     existing = controls.get(event.run_id)
     if event.event_type is EventType.CPU_ACCEPTANCE_REGISTERED:
-        if existing is not None or event.run_id in experiments or event.run_id in evaluations:
+        reserved_evaluation_ids = {
+            str(state.registered["evaluation_run_id"]) for state in controls.values()
+        }
+        if (
+            existing is not None
+            or event.run_id in experiments
+            or event.run_id in evaluations
+            or event.run_id in reserved_evaluation_ids
+        ):
             raise TransitionError(f"duplicate CPU acceptance ID: {event.run_id}")
         try:
             normalized = cpu_acceptance_registration_payload(
@@ -1701,7 +1720,15 @@ def _validate_cpu_transition(
             for state in controls.values()
         ):
             raise TransitionError("CPU acceptance request nonce has already been used")
-        if normalized["evaluation_run_id"] in evaluations:
+        proposed_evaluation_id = normalized["evaluation_run_id"]
+        if proposed_evaluation_id == normalized["run_id"]:
+            raise TransitionError("CPU acceptance and proposed evaluation IDs must differ")
+        if (
+            proposed_evaluation_id in experiments
+            or proposed_evaluation_id in evaluations
+            or proposed_evaluation_id in controls
+            or proposed_evaluation_id in reserved_evaluation_ids
+        ):
             raise TransitionError("CPU acceptance proposed evaluation ID already exists")
         return
     if existing is None:
