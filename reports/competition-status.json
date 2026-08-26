@@ -2,7 +2,8 @@
   "active_hypothesis": "Reciprocal calibration can convert ZebraHub selective_ssm_medium parent-ranking gains into an exact complete-graph OOF improvement.",
   "collection_status": {
     "kernels": {
-      "status": "ok"
+      "reason": "Kaggle read failed (exit 1): Page size must be >= 1\n",
+      "status": "unavailable"
     },
     "leaderboard": {
       "status": "ok"
@@ -28,7 +29,7 @@
     "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
     "final_deadline_utc": "2026-09-29T23:59:00Z",
     "leader_score": "0.962",
-    "rank": 815,
+    "rank": 821,
     "rank_unavailable_reason": null,
     "slug": "biohub-cell-tracking-during-development"
   },
@@ -67,14 +68,14 @@
     }
   ],
   "competition_policy": {
-    "content_sha256": "48663565884697b15bed2423e1a6ebc6d989c6d32406bf2d3e6183988a7a6319",
+    "content_sha256": "41bf1b8428738f80c26f679952bbe95e312c960b68fee67e89e8e7b4b3e639af",
     "daily_submission_limit": 5,
     "entry_deadline_utc": "2026-09-22T23:59:00Z",
     "final_deadline_utc": "2026-09-29T23:59:00Z",
     "final_submission_slots": 2,
     "gpu_reserve_hours": "8.00",
     "metric_hack_policy_sha256": "0b3652a0912cbaff53cbde372bebd2976476156a432dc35a3ce88ccb03fd9374",
-    "notebook_registry_sha256": "902e6dd4f3cb3811d1cc9ec62cbc668920cc3dbb44138a3d52149099240cb2f5",
+    "notebook_registry_sha256": "1f10b7801ce0ce5b048719b98012e6e55cdc8ee34c37394bebfbad0c78f189ee",
     "notebook_runtime_limit_hours": "12.00",
     "official_sources": {
       "baseline": "https://github.com/royerlab/kaggle-cell-tracking-competition",
@@ -82,37 +83,28 @@
       "rules": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/rules"
     }
   },
-  "generated_from_snapshot_at": "2026-08-26T15:54:30.976231Z",
+  "generated_from_snapshot_at": "2026-08-26T18:55:18.795887Z",
   "gpu": {
     "refresh_at": "2026-08-29T00:00:00",
-    "remaining_hours": "26.79",
+    "remaining_hours": "26.37",
     "reserve_hours": "8.00",
-    "spendable_hours": "18.79"
+    "spendable_hours": "18.37"
   },
   "next_gate": "Run reciprocal competition-graph calibration, then the patched exact complete-movie bilateral metric gate.",
   "notebook_provenance": {
     "clean_research_candidates": [],
-    "excluded_metric_hacks": [
-      {
-        "author": "Кирилл Алешин",
-        "cli_order": 0,
-        "disposition": "excluded_metric_hack",
-        "evidence": "matched explicit metric-hack policy",
-        "last_run_at": "2026-07-22T09:50:39.617000",
-        "matched_patterns": [
-          "explicit-metric-hack-language"
-        ],
-        "provenance": "explicit_metric_hack",
-        "ref": "kirneo/metric-hack-last-call-update",
-        "score_reproduced": false,
-        "source_sha256": null,
-        "title": "Metric_hack_last_call_update",
-        "votes": 130
-      }
-    ],
+    "excluded_metric_hacks": [],
     "needs_source_review": []
   },
   "recent_discussions": [
+    {
+      "author": "",
+      "comments": 2,
+      "id": "737659",
+      "posted_at": "2026-08-26T16:27:51.320000",
+      "title": "Scoring after notebook ran",
+      "votes": 0
+    },
     {
       "author": "",
       "comments": 2,
@@ -235,14 +227,6 @@
     },
     {
       "author": "",
-      "comments": 0,
-      "id": "734015",
-      "posted_at": "2026-08-09T14:38:41.253000",
-      "title": "training on patches or whole volume?",
-      "votes": 1
-    },
-    {
-      "author": "",
       "comments": 2,
       "id": "732474",
       "posted_at": "2026-08-03T08:02:09.584000",
@@ -275,7 +259,7 @@
     }
   ],
   "schema_version": 1,
-  "snapshot_sha256": "0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675abe1",
+  "snapshot_sha256": "28ad9e2e41ffb83ad5537d8cede50746d5326f27a93c514327e88c4396b57ae1",
   "submissions": {
     "best_public_score": "0.913",
     "best_submission_ref": "55155485",
