@@ -1,7 +1,7 @@
 {
-  "id": "indarkarhana/biohub-trackastra-graph-finetune-v3",
-  "title": "Biohub Trackastra Graph Finetune v3",
-  "code_file": "biohub-trackastra-graph-finetune-v3.ipynb",
+  "id": "indarkarhana/biohub-spotiflow-synthetic-finetune-v1",
+  "title": "Biohub Spotiflow Synthetic Finetune v1",
+  "code_file": "biohub-spotiflow-synthetic-finetune-v1.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "is_private": true,
@@ -10,19 +10,17 @@
   "enable_internet": false,
   "keywords": [
     "gpu",
-    "cell-tracking",
-    "transformer"
+    "cell-detection",
+    "spotiflow",
+    "synthetic-data"
   ],
   "dataset_sources": [
-    "indarkarhana/biohub-trackastra-graph-runtime-v1",
-    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+    "indarkarhana/biohub-spotiflow-detector-runtime-v1"
   ],
   "kernel_sources": [
     "josefreitasalvesneto/biohub-synthetic-dataset"
   ],
-  "competition_sources": [
-    "biohub-cell-tracking-during-development"
-  ],
+  "competition_sources": [],
   "model_sources": [],
   "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
   "machine_shape": "NvidiaTeslaT4"

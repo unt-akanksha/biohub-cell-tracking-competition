@@ -55,3 +55,19 @@ the same XY stride/downscale used by Biohub; its temporal coordinates require a
 documented Y/X divide-by-four repair. If pretrained Spotiflow is viable, this is
 the preferred dense-supervision stage before positive-unlabeled real-data
 adaptation. See `research/SYNTHETIC_PRETRAIN_AUDIT.md`.
+
+## Implemented candidate (2026-08-26)
+
+`train_synthetic_detector.py` now implements the dense-supervision stage rather
+than merely proposing it. It warm-starts the selected official 35,489,892
+parameter checkpoint and trains on 1,200 deterministic corrected static
+volumes, with 128 disjoint synthetic validation volumes. The first guarded run
+uses 3,072 optimizer batches (four epochs of 768 replacement samples), batch
+size one, `32x64x64` crops, AdamW at `3e-5`, and a two-hour wall envelope.
+
+The static source remains attached as a Kaggle kernel output and is streamed.
+Metadata-aware lazy array proxies prevent Spotiflow's shape-validation passes
+from decompressing the full 13 GB static collection several times before the
+first optimizer step. The run writes a source/hash manifest, incremental
+metrics, best/last checkpoints, and terminal evidence, and has no submission
+code. It is a new learned candidate, not a repackaged public prediction.

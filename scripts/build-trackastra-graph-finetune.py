@@ -98,12 +98,25 @@ support = first_existing([
     Path("/kaggle/input/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1"),
     Path("/kaggle/input/biohub-tracking-support-pack-50ep-v1"),
 ])
+synthetic = next(
+    (
+        path.parent
+        for path in input_root.rglob("manifest.json")
+        if (path.parent / "sequences").is_dir()
+    ),
+    None,
+)
 if runtime is None:
     runtime = next((p for p in input_root.iterdir() if (p / "SOURCE_MANIFEST.json").is_file()), None)
 if support is None:
     support = next((p for p in input_root.iterdir() if (p / "wheels").is_dir()), None)
-if runtime is None or competition is None or support is None:
-    raise FileNotFoundError({"runtime": runtime, "competition": competition, "support": support})
+if runtime is None or competition is None or support is None or synthetic is None:
+    raise FileNotFoundError({
+        "runtime": runtime,
+        "competition": competition,
+        "support": support,
+        "synthetic": synthetic,
+    })
 
 
 def materialize_runtime_directory(name, marker):
@@ -189,6 +202,7 @@ print(json.dumps({
     "runtime": str(runtime),
     "competition": str(competition),
     "support": str(support),
+    "synthetic": str(synthetic),
     "model_sha256": actual_model_hash,
 }, indent=2))
 '''
@@ -203,13 +217,18 @@ command = [
     "--pretrained-dir", str(ctc_dir),
     "--validation-predictions", str(validation_dir),
     "--output-dir", str(output_dir),
-    "--steps", "6000",
+    "--steps", "5000",
     "--train-per-prefix", "24",
     "--max-tokens", "512",
     "--gradient-accumulation", "4",
     "--validation-samples", "24",
     "--max-wall-seconds", "13200",
     "--validation-reserve-seconds", "1800",
+    "--synthetic-root", str(synthetic),
+    "--synthetic-graphs", "384",
+    "--synthetic-steps", "1200",
+    "--synthetic-learning-rate-multiplier", "2.0",
+    "--synthetic-prefer-division-probability", "0.15",
 ]
 print("Launching Biohub-native Trackastra fine-tuning:", " ".join(command))
 try:
@@ -259,8 +278,9 @@ def main() -> None:
             code_cell(WATCHDOG),
             markdown_cell(
                 "# Biohub-native Trackastra association fine-tuning\n\n"
-                "This is a new candidate trained on Biohub graph supervision. Public 0.927 outputs "
-                "are used only as frozen detector inputs for clean validation.\n"
+                "This is a new candidate pretrained on corrected CC0 synthetic sequence graphs, "
+                "then fine-tuned on Biohub graph supervision. Public 0.927 outputs are used only "
+                "as frozen detector inputs for clean validation.\n"
             ),
             code_cell(SETUP),
             code_cell(TRAIN),
@@ -285,6 +305,7 @@ def main() -> None:
             "indarkarhana/biohub-trackastra-graph-runtime-v1",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],
+        "kernel_sources": ["josefreitasalvesneto/biohub-synthetic-dataset"],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],
         "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",

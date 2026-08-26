@@ -10,6 +10,7 @@ from research.synthetic_pretrain.data import (
     PooledImageSequence,
     SyntheticStaticStore,
     corrected_sequence_sample,
+    corrected_sequence_graph,
     corrected_static_sample,
     division_prior_weight,
     split_static_paths,
@@ -64,6 +65,20 @@ def test_temporal_out_of_range_graph_reference_fails(tmp_path: Path) -> None:
         corrected_sequence_sample(path)
 
 
+def test_graph_only_loader_does_not_require_volume_member(tmp_path: Path) -> None:
+    path = tmp_path / "seq_graph_only.npz"
+    np.savez(
+        path,
+        nodes=np.asarray([[0, 3, 120, 200, 7], [1, 4, 124, 204, 7]], dtype=np.float32),
+        edges=np.asarray([[0, 1]], dtype=np.int32),
+        divisions=np.asarray([], dtype=np.int32),
+        voxel_um_pooled=np.asarray([1.625, 1.625, 1.625], dtype=np.float32),
+    )
+    graph = corrected_sequence_graph(path, pooled_shape=(8, 64, 64), timepoints=2)
+    np.testing.assert_allclose(graph.nodes[:, 1:4], [[3, 30, 50], [4, 31, 51]])
+    np.testing.assert_array_equal(graph.edges, [[0, 1]])
+
+
 def test_lazy_sequences_share_the_corrected_store(tmp_path: Path) -> None:
     path = tmp_path / "vol_00001.npz"
     write_static(path, x=200.0)
@@ -72,6 +87,30 @@ def test_lazy_sequences_share_the_corrected_store(tmp_path: Path) -> None:
     points = PointSequence(store)
     assert images[0].shape == (8, 64, 64)
     np.testing.assert_allclose(points[0], [[3.0, 32.0, 50.0]])
+    assert store.load.cache_info().hits >= 1
+
+
+def test_metadata_lazy_sequences_avoid_loading_until_materialized(tmp_path: Path) -> None:
+    path = tmp_path / "vol_00002.npz"
+    write_static(path, x=180.0)
+    store = SyntheticStaticStore(
+        [path], pooled_shape=(8, 64, 64), point_counts=[1]
+    )
+    images = PooledImageSequence(store, lazy=True)
+    points = PointSequence(store, lazy=True)
+    misses_before = store.load.cache_info().misses
+
+    assert images[0].shape == (8, 64, 64)
+    assert images[0].ndim == 3
+    assert points[0].shape == (1, 3)
+    assert points[0].ndim == 2
+    assert len(list(images)) == 1
+    assert len(list(points)) == 1
+    assert store.load.cache_info().misses == misses_before
+
+    np.testing.assert_allclose(np.asarray(points[0]), [[3.0, 32.0, 45.0]])
+    assert store.load.cache_info().misses == misses_before + 1
+    assert np.asarray(images[0]).shape == (8, 64, 64)
     assert store.load.cache_info().hits >= 1
 
 

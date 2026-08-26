@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 
 from research.trackastra_graph.train_biohub_graph_transformer import (
@@ -9,7 +12,9 @@ from research.trackastra_graph.train_biohub_graph_transformer import (
     compute_edge_confusion,
     link_movie,
     match_nodes_bipartite,
+    read_synthetic_graph_video,
     sample_window,
+    select_synthetic_sequence_paths,
     video_plain,
 )
 
@@ -89,3 +94,46 @@ def test_clean_validator_scores_perfect_edges_and_division() -> None:
     assert compute_division_confusion(
         nodes, edges, nodes, edges, pred_to_gt, gt_to_pred
     ) == (1, 0, 0)
+
+
+def test_synthetic_graph_selection_and_geometry_repair(tmp_path: Path) -> None:
+    sequences = tmp_path / "sequences"
+    sequences.mkdir()
+    records = []
+    for sequence_index in range(3):
+        path = sequences / f"seq_{sequence_index:04d}.npz"
+        nodes = np.asarray(
+            [
+                [0, 3, 120, 200, 7],
+                [1, 4, 124, 204, 7],
+                [2, 5, 128, 208, 7],
+                [3, 6, 132, 212, 7],
+            ],
+            dtype=np.float32,
+        )
+        np.savez(
+            path,
+            nodes=nodes,
+            edges=np.asarray([[0, 1], [1, 2], [2, 3]], dtype=np.int32),
+            divisions=np.asarray([], dtype=np.int32),
+            voxel_um_pooled=np.asarray([1.625, 1.625, 1.625], dtype=np.float32),
+        )
+        records.append(
+            {
+                "file": f"sequences/{path.name}",
+                "T": 4,
+                "n_nodes": 4,
+                "n_edges": 3,
+                "n_divisions": 0,
+            }
+        )
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"sequences": records}), encoding="utf-8")
+
+    selected_manifest, paths = select_synthetic_sequence_paths(tmp_path, limit=2)
+    assert selected_manifest == manifest
+    assert len(paths) == 2
+    video = read_synthetic_graph_video(paths[0])
+    np.testing.assert_allclose(video.coords_voxel[0], [3, 30, 50])
+    np.testing.assert_allclose(video.scaled_coords[0], [12, 30, 50])
+    np.testing.assert_array_equal(video.edges, [[0, 1], [1, 2], [2, 3]])

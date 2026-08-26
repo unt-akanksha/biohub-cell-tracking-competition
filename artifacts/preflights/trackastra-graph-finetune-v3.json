@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v3",
+  "created_at": "2026-08-26T06:54:00Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "5399a2431189fc06bf098dde4781d71f2b6281619282d2ea87e30996c965055b"},
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v3/biohub-trackastra-graph-finetune-v3.ipynb", "sha256": "7a4428f32f0b571cedc16acea30bb3750c5fca2083ec487cad6b7f5b6caeee45"}
+      ],
+      "detail": "Trainer self-test passes and every generated notebook code cell compiles."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v3/kernel-metadata.json", "sha256": "fe4ff7069e704d646996dd9a6c87fa3bf63cfac02f6aa3d5e9d1187ad03230d5"},
+        {"path": "config/experiments/trackastra-graph-finetune-v3.json", "sha256": "c6d28c63b6b939ab1e5a0a1fa7bc51ceaebc0130a892d822c92c320247fc35a4"},
+        {"path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json", "sha256": "b5ab398526aec759bdb46ef3be94933cd46f36a4a06d371d9862a8404601a089"},
+        {"path": "research/synthetic_pretrain/data.py", "sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be"}
+      ],
+      "detail": "Runtime version 3 packages the pinned model, graph-only synthetic adapter, trainer, and complete validator; CC0 kernel source, competition, and offline wheels are attached."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v2-smoke.json", "sha256": "8d8d2b3b773c7f56b493afb9168d767751eeaf103c5b512813a92cb8f49782ca"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "bf9b59074ef3f38ed641237bd7587c5aa53b0ca1c0890259606fd5050e976eb3"}
+      ],
+      "detail": "Synthetic and real-style windows build compatible targets; graph-only coordinates are repaired and physically scaled in focused tests."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v2-smoke.json", "sha256": "8d8d2b3b773c7f56b493afb9168d767751eeaf103c5b512813a92cb8f49782ca"},
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "5399a2431189fc06bf098dde4781d71f2b6281619282d2ea87e30996c965055b"}
+      ],
+      "detail": "The official 27.5M model completed forward/backward with gradients; the new division-prior argument preserves that default path and is covered by the same loss."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v2-smoke.json", "sha256": "8d8d2b3b773c7f56b493afb9168d767751eeaf103c5b512813a92cb8f49782ca"},
+        {"path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json", "sha256": "b5ab398526aec759bdb46ef3be94933cd46f36a4a06d371d9862a8404601a089"}
+      ],
+      "detail": "Official checkpoint hash and 27,456,880-parameter reload are pinned; synthetic and final checkpoints use the verified state-dict path."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v3/biohub-trackastra-graph-finetune-v3.ipynb", "sha256": "7a4428f32f0b571cedc16acea30bb3750c5fca2083ec487cad6b7f5b6caeee45"},
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v3/kernel-metadata.json", "sha256": "fe4ff7069e704d646996dd9a6c87fa3bf63cfac02f6aa3d5e9d1187ad03230d5"}
+      ],
+      "detail": "Histories, checkpoints, three validation stages, complete-movie results, and terminal evidence remain under /kaggle/working; no submission is created."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "5399a2431189fc06bf098dde4781d71f2b6281619282d2ea87e30996c965055b"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "bf9b59074ef3f38ed641237bd7587c5aa53b0ca1c0890259606fd5050e976eb3"}
+      ],
+      "detail": "Batch one, 512-token cap, mixed precision, recursive inference tiling, and graph-only NPZ reads bound GPU and host memory."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/trackastra-graph-finetune-v3.json", "sha256": "c6d28c63b6b939ab1e5a0a1fa7bc51ceaebc0130a892d822c92c320247fc35a4"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "bf9b59074ef3f38ed641237bd7587c5aa53b0ca1c0890259606fd5050e976eb3"},
+        {"path": "scripts/build-trackastra-graph-runtime.py", "sha256": "a328b341c5bb1933d315eb54558d610ed065a5dd4ae535951cebe6552d0f9816"}
+      ],
+      "detail": "384 deterministic synthetic graphs precede 48 real training movies; four complete heldout movies across both prefixes are excluded from training."
+    }
+  ],
+  "report_sha256": "6993126c564a303df9d2f45b62199a2146a3708d40a20da07b431058648335f7"
+}

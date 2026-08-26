@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v3",
+  "parent": "trackastra-graph-finetune-v2",
+  "retry_of": "trackastra-graph-finetune-v2",
+  "kernel_ref": "indarkarhana/biohub-trackastra-graph-finetune-v3",
+  "notebook_sha256": "7a4428f32f0b571cedc16acea30bb3750c5fca2083ec487cad6b7f5b6caeee45",
+  "kernel_metadata_sha256": "fe4ff7069e704d646996dd9a6c87fa3bf63cfac02f6aa3d5e9d1187ad03230d5",
+  "trainer_sha256": "5399a2431189fc06bf098dde4781d71f2b6281619282d2ea87e30996c965055b",
+  "synthetic_adapter_sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be",
+  "runtime_manifest_sha256": "b5ab398526aec759bdb46ef3be94933cd46f36a4a06d371d9862a8404601a089",
+  "declared_max_runtime_hours": "4.00",
+  "watchdog_hard_stop_seconds": 14100,
+  "trainer_max_wall_seconds": 13200,
+  "validation_reserve_seconds": 1800,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version3",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "josefreitasalvesneto/biohub-synthetic-dataset"
+  ],
+  "pretrained_model": {
+    "name": "Trackastra ctc v0.3.0",
+    "source_repository": "weigertlab/trackastra",
+    "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+    "license": "BSD-3-Clause",
+    "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+    "parameter_count": 27456880
+  },
+  "synthetic_pretraining": {
+    "license": "CC0",
+    "selection": "384 deterministic six-frame sequence graphs",
+    "target_steps": 1200,
+    "learning_rate": 2e-5,
+    "division_sampling_probability": 0.15,
+    "division_loss_prior_multiplier": 0.063812,
+    "coordinate_repair": "divide already-pooled sequence node Y/X by four exactly once",
+    "image_arrays_loaded": false
+  },
+  "real_finetuning": {
+    "selection": "24 deterministic movies per embryo prefix; four complete validation movies excluded",
+    "window_frames": 4,
+    "max_tokens": 512,
+    "target_steps": 5000,
+    "learning_rate": 1e-5,
+    "weight_decay": 1e-5,
+    "gradient_accumulation": 4,
+    "node_drop_probability": 0.04,
+    "false_positive_probability": 0.03,
+    "jitter_sigma_scaled_voxels": 2.0,
+    "division_sampling_probability": 0.5,
+    "hard_negative_radius_scaled_voxels": 64.0,
+    "physical_z_to_xy_scale": 4.0
+  },
+  "validation": {
+    "checkpoints": ["initial", "post_synthetic", "post_real"],
+    "stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "complete_movies": true,
+    "match_radius_um": 7.0,
+    "baseline_proxy": 0.9294432421394134,
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "promote only after a positive complete-movie clean proxy delta with no material worst-movie regression; otherwise retain diagnostics and redesign",
+  "submission_policy": "training_and_validation_only_no_submission"
+}

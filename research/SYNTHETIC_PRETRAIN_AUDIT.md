@@ -51,3 +51,16 @@ This is useful, but it is not plug-and-play.
 The source is higher-upside than further public post-processing, but its large
 volume should be streamed directly as an attached Kaggle kernel output rather
 than copied into our private runtime.
+
+## Implemented association stage (2026-08-26)
+
+The Trackastra trainer now reads only the graph members of 384 deterministic
+six-frame NPZ sequences; it does not decompress their unused image arrays. Node
+Y/X is divided by four exactly once and the resulting pooled coordinates are
+converted by the same physical scale as real Biohub nodes. The schedule applies
+1,200 synthetic representation-learning steps before 5,000 real Biohub graph
+steps. Synthetic division loss is multiplied by the audited prior ratio
+(`~0.064`) and division-window preference is limited to 0.15 before the real
+stage restores its native supervision. Initial, post-synthetic, and post-real
+validation are all recorded, followed by the existing four complete clean
+movies and official-formula proxy grid.

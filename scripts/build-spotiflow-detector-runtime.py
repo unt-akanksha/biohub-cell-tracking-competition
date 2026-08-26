@@ -75,11 +75,18 @@ def main() -> None:
     if len(spotiflow_wheels) != 1:
         raise RuntimeError(f"Expected one Spotiflow wheel, found {spotiflow_wheels}")
 
-    shutil.copy2(
-        ROOT / "research" / "spotiflow_biohub" / "evaluate_pretrained_detector.py",
-        target / "evaluate_pretrained_detector.py",
-    )
-    shutil.copy2(ROOT / "research" / "density_calibration.py", target / "density_calibration.py")
+    script_sources = {
+        "evaluate_pretrained_detector.py": (
+            ROOT / "research" / "spotiflow_biohub" / "evaluate_pretrained_detector.py"
+        ),
+        "density_calibration.py": ROOT / "research" / "density_calibration.py",
+        "train_synthetic_detector.py": (
+            ROOT / "research" / "spotiflow_biohub" / "train_synthetic_detector.py"
+        ),
+        "synthetic_data.py": ROOT / "research" / "synthetic_pretrain" / "data.py",
+    }
+    for name, source in script_sources.items():
+        shutil.copy2(source, target / name)
     license_path = next((path for path in (REPO / "LICENSE", REPO / "LICENSE.txt") if path.is_file()), None)
     if license_path is None:
         raise FileNotFoundError("Spotiflow license file not found")
@@ -94,7 +101,7 @@ def main() -> None:
     manifest = {
         "schema_version": 1,
         "dataset_slug": "indarkarhana/biohub-spotiflow-detector-runtime-v1",
-        "purpose": "official Spotiflow 3D detector acceptance on Biohub clean heldout fields",
+        "purpose": "official Spotiflow 3D detector acceptance and corrected synthetic fine-tuning",
         "spotiflow_repository": {
             "url": "https://github.com/weigertlab/spotiflow",
             "commit": commit,
@@ -103,10 +110,7 @@ def main() -> None:
         },
         "spotiflow_models": models_manifest,
         "wheels": wheels_manifest,
-        "scripts": {
-            name: file_hash(target / name)
-            for name in ("evaluate_pretrained_detector.py", "density_calibration.py")
-        },
+        "scripts": {name: file_hash(target / name) for name in script_sources},
     }
     (target / "SOURCE_MANIFEST.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"

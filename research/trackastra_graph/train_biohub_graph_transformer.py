@@ -20,6 +20,17 @@ import torch.nn.functional as F
 from scipy.optimize import linear_sum_assignment
 from scipy.spatial import cKDTree
 
+try:
+    from synthetic_data import corrected_sequence_graph, division_prior_weight
+except ModuleNotFoundError:
+    repository_root = Path(__file__).resolve().parents[2]
+    if str(repository_root) not in sys.path:
+        sys.path.insert(0, str(repository_root))
+    from research.synthetic_pretrain.data import (
+        corrected_sequence_graph,
+        division_prior_weight,
+    )
+
 
 VOXEL_SCALE_UM = np.array((1.625, 0.40625, 0.40625), dtype=np.float32)
 MODEL_SPATIAL_SCALE = VOXEL_SCALE_UM / VOXEL_SCALE_UM[-1]
@@ -144,6 +155,48 @@ def read_graph_video(path: Path) -> GraphVideo:
         times=np.asarray(times),
         coords_voxel=np.asarray(coords),
         edges=np.asarray(edges),
+    )
+
+
+def select_synthetic_sequence_paths(root: Path, limit: int) -> tuple[Path, list[Path]]:
+    manifests = []
+    for path in ([root / "manifest.json"] if (root / "manifest.json").is_file() else root.rglob("manifest.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(payload, dict) and payload.get("sequences"):
+            manifests.append((path, payload))
+    if len(manifests) != 1:
+        raise FileNotFoundError(
+            f"Expected one synthetic sequence manifest below {root}, found "
+            f"{[str(path) for path, _payload in manifests]}"
+        )
+    manifest_path, payload = manifests[0]
+    records = [
+        record
+        for record in payload["sequences"]
+        if int(record.get("T", 0)) >= 4 and int(record.get("n_edges", 0)) > 0
+    ]
+    ranked = sorted(
+        records,
+        key=lambda record: hashlib.sha256(str(record["file"]).encode("utf-8")).hexdigest(),
+    )
+    selected = [manifest_path.parent / record["file"] for record in ranked[:limit]]
+    if not selected or any(not path.is_file() for path in selected):
+        raise FileNotFoundError("synthetic sequence selection contains missing files")
+    return manifest_path, selected
+
+
+def read_synthetic_graph_video(path: Path) -> GraphVideo:
+    graph = corrected_sequence_graph(path)
+    node_ids = np.arange(len(graph.nodes), dtype=np.int64)
+    return GraphVideo(
+        stem=f"synthetic_{path.stem}",
+        node_ids=node_ids,
+        times=graph.nodes[:, 0].astype(np.int32),
+        coords_voxel=graph.nodes[:, 1:4],
+        edges=graph.edges,
     )
 
 
@@ -343,7 +396,13 @@ def sample_window(
     raise RuntimeError("Could not draw a nonempty positive training window")
 
 
-def association_loss(model, sample: WindowSample, device: torch.device) -> tuple[torch.Tensor, dict[str, float]]:
+def association_loss(
+    model,
+    sample: WindowSample,
+    device: torch.device,
+    *,
+    division_weight_scale: float = 1.0,
+) -> tuple[torch.Tensor, dict[str, float]]:
     coords = torch.from_numpy(sample.coords).unsqueeze(0).to(device)
     features = torch.from_numpy(sample.features).unsqueeze(0).to(device)
     target = torch.from_numpy(sample.target).to(device)
@@ -356,7 +415,7 @@ def association_loss(model, sample: WindowSample, device: torch.device) -> tuple
     probabilities = probabilities.clamp(1e-6, 1.0 - 1e-6)
     bce = F.binary_cross_entropy(probabilities, target, reduction="none")
     focal = torch.where(target > 0, (1.0 - probabilities).square(), probabilities.square())
-    weights = 1.0 + 4.0 * target + 8.0 * division
+    weights = 1.0 + 4.0 * target + 8.0 * division * division_weight_scale
     loss = (bce * focal * weights)[valid].mean()
 
     with torch.no_grad():
@@ -996,6 +1055,19 @@ def train_main(args: argparse.Namespace) -> None:
     training_videos = [read_graph_video(path) for path in training_paths]
     print(f"Loading {len(validation_paths)} clean validation graphs...", flush=True)
     validation_videos = [read_graph_video(path) for path in validation_paths]
+    synthetic_manifest: Path | None = None
+    synthetic_paths: list[Path] = []
+    synthetic_videos: list[GraphVideo] = []
+    if args.synthetic_steps > 0:
+        if args.synthetic_root is None:
+            raise ValueError("--synthetic-root is required when --synthetic-steps is positive")
+        if args.resume:
+            raise ValueError("resume is disabled for the two-stage synthetic/real schedule")
+        synthetic_manifest, synthetic_paths = select_synthetic_sequence_paths(
+            args.synthetic_root, args.synthetic_graphs
+        )
+        print(f"Loading {len(synthetic_paths)} synthetic graph-only sequences...", flush=True)
+        synthetic_videos = [read_synthetic_graph_video(path) for path in synthetic_paths]
 
     model = TrackingTransformer.from_folder(args.pretrained_dir, map_location="cpu").to(device)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
@@ -1033,6 +1105,24 @@ def train_main(args: argparse.Namespace) -> None:
         "jitter_sigma": args.jitter_sigma,
         "hard_negative_radius": args.hard_negative_radius,
         "candidate_radius": args.candidate_radius,
+        "synthetic": {
+            "enabled": bool(synthetic_videos),
+            "manifest": str(synthetic_manifest) if synthetic_manifest else None,
+            "manifest_sha256": sha256_file(synthetic_manifest) if synthetic_manifest else None,
+            "graphs": len(synthetic_videos),
+            "graph_names_sha256": (
+                hashlib.sha256(
+                    "\n".join(path.name for path in synthetic_paths).encode("utf-8")
+                ).hexdigest()
+                if synthetic_paths
+                else None
+            ),
+            "steps_target": args.synthetic_steps,
+            "learning_rate_multiplier": args.synthetic_learning_rate_multiplier,
+            "division_weight_scale": division_prior_weight(),
+            "prefer_division_probability": args.synthetic_prefer_division_probability,
+            "image_members_loaded": False,
+        },
     }
     atomic_json(args.output_dir / "training_config.json", config)
     history_path = args.output_dir / "history.csv"
@@ -1061,10 +1151,87 @@ def train_main(args: argparse.Namespace) -> None:
 
     model.train()
     optimizer.zero_grad(set_to_none=True)
+    stop_for_time = False
+    synthetic_step = 0
+    post_synthetic_validation = None
+    if synthetic_videos:
+        synthetic_history_path = args.output_dir / "synthetic_history.csv"
+        synthetic_rng = np.random.default_rng(args.seed + 7001)
+        synthetic_sample_kwargs = {
+            **sample_kwargs,
+            "prefer_division_probability": args.synthetic_prefer_division_probability,
+        }
+        for group in optimizer.param_groups:
+            group["lr"] = args.learning_rate * args.synthetic_learning_rate_multiplier
+        synthetic_losses: list[float] = []
+        while synthetic_step < args.synthetic_steps:
+            elapsed = time.monotonic() - start_time
+            if elapsed >= args.max_wall_seconds - args.validation_reserve_seconds:
+                stop_for_time = True
+                print("Stopping synthetic stage to preserve complete-movie validation time.", flush=True)
+                break
+            sample = sample_window(synthetic_videos, synthetic_rng, **synthetic_sample_kwargs)
+            with torch.autocast(
+                device_type=device.type, dtype=torch.float16, enabled=device.type == "cuda"
+            ):
+                loss, stats = association_loss(
+                    model,
+                    sample,
+                    device,
+                    division_weight_scale=division_prior_weight(),
+                )
+                scaled_loss = loss / args.gradient_accumulation
+            scaler.scale(scaled_loss).backward()
+            synthetic_step += 1
+            if synthetic_step % args.gradient_accumulation == 0:
+                scaler.unscale_(optimizer)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), args.gradient_clip)
+                scaler.step(optimizer)
+                scaler.update()
+                optimizer.zero_grad(set_to_none=True)
+            synthetic_losses.append(float(loss.item()))
+            if synthetic_step % args.log_every == 0:
+                row = {
+                    "phase": "synthetic",
+                    "step": synthetic_step,
+                    "elapsed_seconds": round(time.monotonic() - start_time, 3),
+                    "train_loss": float(np.mean(synthetic_losses[-args.log_every :])),
+                    **stats,
+                }
+                append_history(synthetic_history_path, row)
+                print(f"SYNTHETIC TRAIN {row}", flush=True)
+
+        if synthetic_step % args.gradient_accumulation:
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), args.gradient_clip)
+            scaler.step(optimizer)
+            scaler.update()
+            optimizer.zero_grad(set_to_none=True)
+        synthetic_model = args.output_dir / "model_synthetic.pt"
+        temporary_synthetic = synthetic_model.with_suffix(".tmp")
+        torch.save(model.state_dict(), temporary_synthetic)
+        temporary_synthetic.replace(synthetic_model)
+        post_synthetic_validation = evaluate_sample_loss(
+            model,
+            validation_videos,
+            device,
+            args.seed + 202,
+            args.validation_samples,
+            sample_kwargs,
+        )
+        atomic_json(
+            args.output_dir / "post_synthetic_window_validation.json",
+            post_synthetic_validation,
+        )
+        print(f"POST-SYNTHETIC WINDOW VALIDATION: {post_synthetic_validation}", flush=True)
+        for group in optimizer.param_groups:
+            group["lr"] = args.learning_rate
+        model.train()
+        optimizer.zero_grad(set_to_none=True)
+
     rolling_loss: list[float] = []
     last_log = time.monotonic()
-    stop_for_time = False
-    while step < args.steps:
+    while step < args.steps and not stop_for_time:
         elapsed = time.monotonic() - start_time
         if elapsed >= args.max_wall_seconds - args.validation_reserve_seconds:
             stop_for_time = True
@@ -1087,6 +1254,7 @@ def train_main(args: argparse.Namespace) -> None:
         if step % args.log_every == 0:
             now = time.monotonic()
             row = {
+                "phase": "real",
                 "step": step,
                 "elapsed_seconds": round(now - start_time, 3),
                 "train_loss": float(np.mean(rolling_loss[-args.log_every :])),
@@ -1136,10 +1304,12 @@ def train_main(args: argparse.Namespace) -> None:
         "status": "completed",
         "stopped_for_time": stop_for_time,
         "step": step,
+        "synthetic_step": synthetic_step,
         "elapsed_seconds": time.monotonic() - start_time,
         "parameter_count": parameter_count,
         "model_sha256": sha256_file(final_model_path),
         "initial_window_validation": initial_validation,
+        "post_synthetic_window_validation": post_synthetic_validation,
         "final_window_validation": final_validation,
         "complete_movie_best": complete["best"],
         "delta_proxy_vs_public_0927_baseline": complete[
@@ -1171,6 +1341,11 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--prefer-division-probability", type=float, default=0.5)
     result.add_argument("--hard-negative-radius", type=float, default=64.0)
     result.add_argument("--candidate-radius", type=float, default=80.0)
+    result.add_argument("--synthetic-root", type=Path)
+    result.add_argument("--synthetic-graphs", type=int, default=384)
+    result.add_argument("--synthetic-steps", type=int, default=0)
+    result.add_argument("--synthetic-learning-rate-multiplier", type=float, default=2.0)
+    result.add_argument("--synthetic-prefer-division-probability", type=float, default=0.15)
     result.add_argument("--checkpoint-every", type=int, default=250)
     result.add_argument("--log-every", type=int, default=25)
     result.add_argument("--validation-samples", type=int, default=24)
