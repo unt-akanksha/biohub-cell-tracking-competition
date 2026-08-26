@@ -1327,25 +1327,28 @@
       "status": "failed"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.15005",
       "amendments": [],
       "authorized_for_submission": false,
-      "decision": null,
-      "decision_evidence": [],
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/spotiflow-pu-adaptation-v1-result.json",
+        ".biohub/cache/kernel-outputs/spotiflow-pu-adaptation-v1/spotiflow_pu_validation/pu_detector_validation.json"
+      ],
       "declared_gpu_hours": "2.00",
       "dependencies": [],
       "exact_evidence": {},
-      "failed_gate": null,
-      "failure_reason": null,
+      "failed_gate": "selection_pooled_and_worst_movie_recall",
+      "failure_reason": "Independent PU training completed all 1,024 steps across 187 non-validation movies, but clean selection recall was 0.779239 versus the 0.80 pooled gate and 0.486438 versus the 0.65 worst-movie gate. Acceptance remained unopened and no submission was created.",
       "hypothesis": "Positive-unlabeled adaptation of the official 35.5M Spotiflow detector using conservative two-seed teacher consensus, forced organizer positives, weak-strong consistency, and frozen-base flow preservation can match the public detector's clean recall without copying public predictions.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "rejected",
       "next_gate": null,
       "parent": "spatialdino-appearance-validation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T15:01:54.263805Z",
       "run_id": "spotiflow-pu-adaptation-v1",
-      "status": "running"
+      "status": "rejected"
     },
     {
       "actual_gpu_hours": null,

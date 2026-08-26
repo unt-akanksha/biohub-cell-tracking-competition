@@ -1,12 +1,12 @@
 # Biohub Competition Status
 
-Generated from snapshot: `2026-08-26T01:55:10.248501Z`
-Snapshot SHA-256: `a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1c6a`
+Generated from snapshot: `2026-08-26T15:54:30.976231Z`
+Snapshot SHA-256: `0b53f9cf7ecbd64c4803bfa56bf1dcd14c96b818d1761af4988feab36675abe1`
 
 ## Competition
 
 - Slug: `biohub-cell-tracking-during-development`
-- Public rank: 798
+- Public rank: 815
 - Best clean public score: 0.913
 - Clean-score evidence: Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.
 - Current public leader score: 0.962
@@ -14,16 +14,16 @@ Snapshot SHA-256: `a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1
 
 ## GPU Safety
 
-- Remaining: 30.00 hours
+- Remaining: 26.79 hours
 - Protected reserve: 8.00 hours
-- Spendable before reserve: 22.00 hours
+- Spendable before reserve: 18.79 hours
 - Quota refresh: 2026-08-29T00:00:00
 
 ## Personal Submissions
 
-- Returned by CLI: 59
-- Submitted today (UTC): 0 / 5
-- Remaining daily allowance: 5
+- Returned by CLI: 60
+- Submitted today (UTC): 1 / 5
+- Remaining daily allowance: 4
 - Best personal public score: 0.913
 
 ## Notebook Provenance
@@ -32,39 +32,24 @@ Snapshot SHA-256: `a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1
 
 ### Clean Research Candidates
 
-- `kunaldesale2408/biohub-cell-tracking` — reported\_post\_patch; No known exploit found in manual source audit; score claim remains unverified.
-- `yunusgmsoy/kimi-notebook-v17` — reported\_post\_patch; No known exploit found in manual source audit; score claim remains unverified.
+- None in the collected notebook set.
 
 ### Excluded Metric Hacks
 
 - `kirneo/metric-hack-last-call-update` — matched explicit metric-hack policy
-- `amanatar/improved-metric-hack-last-call` — matched explicit metric-hack policy
-- `kaiwalyaatulraut/biohub-solution` — matched explicit metric-hack policy
-- `amanatar/biohub-v6-ultra-best` — matched explicit metric-hack policy
-- `ravi123a321at/metric-hack-last-call` — matched explicit metric-hack policy
-- `outwrest/metric-hack-minimal-baseline-tta-2gpu` — matched explicit metric-hack policy
-- `anvithpothula/biohub-metric-hack` — matched explicit metric-hack policy
 
 ### Needs Source Review
 
-- `kaiwalyaatulraut/biohub-competition-solution` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `muhammaddanyalmalik/cell-tracking` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `ravi123a321at/dark-agi-biohub-cell-tracking-solution` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `evgendvorkin/biohub-0-927-lb` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `flexonafft/biohub-harmonic-fusion` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `rockerritesh/0-926-biohub-divsub` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `andressantossanz/biohub-harness-0926-probe` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `ahmetyasreminolu/biohub-last-version` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `arnav170/biohub-923` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `arnav170/biohub-bi40` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
-- `yunusgmsoy/lb-0-920-biohub-cell-tracking-v17` — automated\_no\_known\_signature; static\_scan\_no\_known\_signature\_not\_a\_clean\_score\_claim
+- None.
 
 ## Recent Discussions
 
-- 2026-08-25T14:20:22.701000 — does anyone have a different design for divisions (topic `737438`, 0 comments, 0 votes)
+- 2026-08-26T08:00:08.592000 — division jaccard (topic `737577`, 2 comments, 1 votes)
+- 2026-08-26T03:10:45.084000 — what layer did ur gains actually come from (topic `737543`, 0 comments, 1 votes)
+- 2026-08-25T14:20:22.701000 — does anyone have a different design for divisions (topic `737438`, 0 comments, 1 votes)
 - 2026-08-23T09:59:31.382000 — Hand labeling - is it external data? (topic `737103`, 5 comments, 7 votes)
 - 2026-08-23T09:12:21.220000 — Stuck at 0.928 (topic `737101`, 3 comments, 6 votes)
-- 2026-08-22T14:50:45.065000 — Public Notebook Rankings Need a Metric Refresh (topic `736937`, 0 comments, 1 votes)
+- 2026-08-22T14:50:45.065000 — Public Notebook Rankings Need a Metric Refresh (topic `736937`, 0 comments, 2 votes)
 - 2026-08-16T15:43:39.090000 — so to get a score above the public baseline is training? (topic `735531`, 6 comments, -2 votes)
 - 2026-08-15T08:25:14.079000 — Possible big leaderboard shakeup (topic `735352`, 11 comments, 9 votes)
 - 2026-08-14T23:50:52.463000 — What is happening after submitting the notebook for the first time? (topic `735307`, 3 comments, -2 votes)
@@ -75,9 +60,7 @@ Snapshot SHA-256: `a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1
 - 2026-08-09T20:23:41.311000 — Public case study: From Detection to Identity — 3D cell tracking reasoning and aggregate evidence (topic `734093`, 1 comments, 2 votes)
 - 2026-08-09T16:58:04.843000 — The voxels are 4:1 anisotropic in Z, and two other things sitting in zarr.json (topic `734053`, 0 comments, 1 votes)
 - 2026-08-09T14:38:41.253000 — training on patches or whole volume? (topic `734015`, 0 comments, 1 votes)
-- 2026-08-09T10:37:14.977000 — The linking radius is 8.4 µm, and divisions are one link in 853 (topic `733973`, 0 comments, 0 votes)
 - 2026-08-03T08:02:09.584000 — Errors on GT cell traces (topic `732474`, 2 comments, 6 votes)
-- 2026-08-01T21:12:10.502000 — \[Free Dataset\] 18.5 GB of fully-labelled synthetic 3D microscopy — 165k labelled divisions (topic `732103`, 4 comments, 39 votes)
 - 2026-07-09T16:55:59.111000 — Share a custom napari visualizer (topic `724130`, 8 comments, 43 votes)
 - 2026-06-30T02:16:18.647000 — Welcome to the Biohub - Cell Tracking During Development Challenge (topic `716062`, 6 comments, 72 votes)
 - 2026-06-25T16:44:43.592000 — How to get started + Competition's Official Discord (topic `714101`, 7 comments, 24 votes)
@@ -89,8 +72,8 @@ Snapshot SHA-256: `a1fa458bb517edc2b7dcfd225d7e16e1f665850f59914d906e5417184cfa1
 
 ## Policy Provenance
 
-- Policy SHA-256: `0793506ac0241135a50a0ca282094ab6a1cb07d2fa9842ec18f93f48718f79dd`
-- Notebook registry SHA-256: `83960097c4c95a44541c6c507d6cdc0521ed08069374d77337996afe53c1da9b`
+- Policy SHA-256: `48663565884697b15bed2423e1a6ebc6d989c6d32406bf2d3e6183988a7a6319`
+- Notebook registry SHA-256: `902e6dd4f3cb3811d1cc9ec62cbc668920cc3dbb44138a3d52149099240cb2f5`
 - Metric-hack policy SHA-256: `0b3652a0912cbaff53cbde372bebd2976476156a432dc35a3ce88ccb03fd9374`
 
 ### Live Kaggle Page Fingerprints

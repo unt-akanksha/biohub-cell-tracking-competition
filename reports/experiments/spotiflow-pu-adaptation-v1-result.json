@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-pu-adaptation-v1",
+  "status": "rejected",
+  "actual_gpu_hours": "0.15005",
+  "quota_before_hours": "26.94",
+  "quota_after_hours": "26.79",
+  "launcher_elapsed_seconds": 540.178,
+  "training": {
+    "status": "completed",
+    "actual_steps": 1024,
+    "target_steps": 1024,
+    "training_movies": 187,
+    "validation_overlap": [],
+    "parameter_count": 35489892,
+    "warm_trainable_parameters": 193856,
+    "deep_trainable_parameters": 8324608,
+    "weights_changed": true,
+    "base_weight_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+    "best_weight_sha256": "57dcd18695c685c48f7f112ccf8ba7efd92a040d5afcd42cb5bac5481f350aba",
+    "elapsed_seconds": 369.054
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "matched_gt_nodes": 8708,
+    "annotated_node_recall": 0.7792393736017897,
+    "pooled_recall_min": 0.8,
+    "worst_movie_recall": 0.4864376130198915,
+    "worst_movie_recall_min": 0.65,
+    "by_embryo": {
+      "44b6": {
+        "annotated_gt_nodes": 3853,
+        "matched_gt_nodes": 3149,
+        "annotated_node_recall": 0.8172852322865299
+      },
+      "6bba": {
+        "annotated_gt_nodes": 7322,
+        "matched_gt_nodes": 5559,
+        "annotated_node_recall": 0.7592187926795957
+      }
+    },
+    "per_movie_recall": {
+      "44b6_d29c9ab2": 0.934220251293422,
+      "44b6_3a861e03": 0.8973262032085562,
+      "44b6_d5e7d891": 0.5794701986754967,
+      "44b6_ddf577ad": 0.7905918057663126,
+      "6bba_09961292": 0.8487179487179487,
+      "6bba_bb9f20c3": 0.8467532467532467,
+      "6bba_784a78c9": 0.8204697986577181,
+      "6bba_57b7cc1e": 0.4864376130198915
+    },
+    "passed": false
+  },
+  "acceptance": {
+    "opened": false,
+    "reason": "selection pooled and worst-movie recall gates failed"
+  },
+  "decision": {
+    "state": "retire",
+    "reason": "The independently learned checkpoint completed correctly but missed both predeclared clean selection gates; using it in a submission would be unsupported.",
+    "next_test": "Run the preflighted full-frame 29.5M SpatialDINO/UNETR PU detector with sparse-head initialization, EMA warm-up, both-frame teacher caching, and diverse temporal coverage."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "competition_submission_performed": false,
+  "evidence": {
+    "launcher_terminal_sha256": "f0bc1f1074a807da6c701399e61e9afe7625f2a3951895658f13420b92cf6150",
+    "training_result_sha256": "4b4deeb60468b66c635d9ab04256e1be922270ccf752226c92435e791a893ea3",
+    "validation_result_sha256": "dba2765d0217f68773ce2876ad7f9b9fd8671e215d44887edaaa52c3b5c14c09",
+    "kernel_log_sha256": "07e19c6a5adde92b4a0e2e692379de4cb2b2876bfff571ae20e8358558058b09"
+  }
+}
