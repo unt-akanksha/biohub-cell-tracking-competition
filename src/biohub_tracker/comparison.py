@@ -136,27 +136,42 @@ def _diagnostic_delta(
         or candidate.get("organizer_input_eligible") is not False
     ):
         _fail("diagnostic authority")
-    values = {
-        "endpoint_availability": (
-            _diagnostic_scalar(baseline["endpoint_availability"], "endpoint_availability"),
-            _diagnostic_scalar(candidate["endpoint_availability"], "endpoint_availability"),
-        ),
-    }
+    values = {}
     for name in (
+        "endpoint_availability",
         "conditional_association_recall",
         "conditional_valid_edge_precision",
         "conditional_valid_edge_jaccard",
         "oracle_gap_adjusted_edge",
     ):
-        if name in baseline and name in candidate:
-            values[name] = (
-                _diagnostic_scalar(baseline[name], name),
-                _diagnostic_scalar(candidate[name], name),
-            )
-    if "node_count_ratio" in baseline and "node_count_ratio" in candidate:
-        values["node_count_ratio"] = (
-            baseline["node_count_ratio"], candidate["node_count_ratio"]
+        if not isinstance(baseline.get(name), Mapping) or not isinstance(
+            candidate.get(name), Mapping
+        ):
+            _fail(f"required diagnostic field {name}")
+        values[name] = (
+            _diagnostic_scalar(baseline[name], name),
+            _diagnostic_scalar(candidate[name], name),
         )
+    for role, diagnostic in (("baseline", baseline), ("candidate", candidate)):
+        oracle = diagnostic.get("oracle_link_ceiling")
+        if not isinstance(oracle, Mapping):
+            _fail(f"required diagnostic field {role}.oracle_link_ceiling")
+        for component in ("raw", "adjusted"):
+            if not isinstance(oracle.get(component), Mapping):
+                _fail(f"required diagnostic field {role}.oracle_link_ceiling.{component}")
+    values["oracle_link_ceiling_raw"] = (
+        _diagnostic_scalar(baseline["oracle_link_ceiling"]["raw"], "oracle.raw"),
+        _diagnostic_scalar(candidate["oracle_link_ceiling"]["raw"], "oracle.raw"),
+    )
+    values["oracle_link_ceiling_adjusted"] = (
+        _diagnostic_scalar(baseline["oracle_link_ceiling"]["adjusted"], "oracle.adjusted"),
+        _diagnostic_scalar(candidate["oracle_link_ceiling"]["adjusted"], "oracle.adjusted"),
+    )
+    if "node_count_ratio" not in baseline or "node_count_ratio" not in candidate:
+        _fail("required diagnostic field node_count_ratio")
+    values["node_count_ratio"] = (
+        baseline["node_count_ratio"], candidate["node_count_ratio"]
+    )
     result = {
         name: _delta(pair[0], pair[1], f"diagnostic.{name}")
         for name, pair in sorted(values.items())
@@ -200,15 +215,41 @@ def _diagnostic_delta(
 
 
 def _pooled_diagnostic(movies: Mapping[str, Mapping[str, Any]]) -> dict[str, Any]:
-    numerator = denominator = 0
+    ratio_names = (
+        "endpoint_availability",
+        "conditional_association_recall",
+        "conditional_valid_edge_precision",
+        "conditional_valid_edge_jaccard",
+    )
+    ratios = {name: [0, 0] for name in ratio_names}
+    predicted_nodes = Decimal(0)
+    estimated_nodes = Decimal(0)
+    adjusted_edge_weighted_sum = Decimal(0)
+    adjusted_edge_weight = 0
     displacement: dict[str, dict[str, Any]] = {}
     density: dict[str, dict[str, Any]] = {}
     divisions: dict[str, int] = {}
     for row in movies.values():
         diagnostic = row["diagnostic_state"]
-        endpoint = diagnostic["endpoint_availability"]
-        numerator += int(endpoint["numerator"])
-        denominator += int(endpoint["denominator"])
+        for name in ratio_names:
+            value = diagnostic.get(name)
+            if not isinstance(value, Mapping):
+                _fail(f"required diagnostic field {name}")
+            ratios[name][0] += int(value["numerator"])
+            ratios[name][1] += int(value["denominator"])
+        counts = row.get("official_counts")
+        if not isinstance(counts, Mapping):
+            _fail("official_counts")
+        predicted_nodes += _decimal(counts["num_pred_nodes"], "num_pred_nodes")
+        estimated_nodes += _decimal(
+            row["estimated_number_of_nodes"], "estimated_number_of_nodes"
+        )
+        edge_weight = sum(int(counts[name]) for name in ("edge_tp", "edge_fp", "edge_fn"))
+        adjusted_edge_weight += edge_weight
+        adjusted_edge_weighted_sum += (
+            _decimal(row["adjusted_edge_jaccard"], "adjusted_edge_jaccard")
+            * Decimal(edge_weight)
+        )
         for item in diagnostic.get("displacement", {}).get("rows", []):
             target = displacement.setdefault(
                 str(item["bin"]),
@@ -226,18 +267,64 @@ def _pooled_diagnostic(movies: Mapping[str, Mapping[str, Any]]) -> dict[str, Any
         for item in diagnostic.get("divisions", {}).get("rows", []):
             category = str(item["category"])
             divisions[category] = divisions.get(category, 0) + int(item["count"])
+    def pooled_ratio(name: str, reason: str) -> dict[str, Any]:
+        numerator, denominator = ratios[name]
+        return {
+            "status": "applicable" if denominator else "not_applicable",
+            "reason": None if denominator else reason,
+            "numerator": numerator,
+            "denominator": denominator,
+            "value": _text(Decimal(numerator) / Decimal(denominator), f"pooled.{name}")
+            if denominator
+            else None,
+        }
+
+    endpoint = pooled_ratio("endpoint_availability", "no_gt_edges")
+    if estimated_nodes <= 0:
+        _fail("estimated_number_of_nodes")
+    node_ratio = (predicted_nodes - estimated_nodes) / estimated_nodes
+    if endpoint["value"] is None:
+        oracle_adjusted = {
+            "status": "not_applicable",
+            "reason": "no_gt_edges",
+            "value": None,
+        }
+        oracle_gap = dict(oracle_adjusted)
+    else:
+        penalty = max(Decimal(0), Decimal(1) - Decimal("0.1") * node_ratio)
+        oracle_adjusted_value = _decimal(endpoint["value"], "pooled.oracle.raw") * penalty
+        oracle_adjusted = {
+            "status": "applicable",
+            "reason": None,
+            "value": _text(oracle_adjusted_value, "pooled.oracle.adjusted"),
+        }
+        if adjusted_edge_weight <= 0:
+            _fail("adjusted edge weight")
+        official_adjusted = adjusted_edge_weighted_sum / Decimal(adjusted_edge_weight)
+        oracle_gap = {
+            "status": "applicable",
+            "reason": None,
+            "value": _text(oracle_adjusted_value - official_adjusted, "pooled.oracle.gap"),
+        }
     return {
         "authority": "non_authoritative_diagnostic",
         "organizer_input_eligible": False,
-        "endpoint_availability": {
-            "status": "applicable" if denominator else "not_applicable",
-            "reason": None if denominator else "no_gt_edges",
-            "numerator": numerator,
-            "denominator": denominator,
-            "value": _text(Decimal(numerator) / Decimal(denominator), "pooled.endpoint")
-            if denominator
-            else None,
+        "endpoint_availability": endpoint,
+        "conditional_association_recall": pooled_ratio(
+            "conditional_association_recall", "no_available_gt_edges"
+        ),
+        "conditional_valid_edge_precision": pooled_ratio(
+            "conditional_valid_edge_precision", "no_valid_prediction_edges"
+        ),
+        "conditional_valid_edge_jaccard": pooled_ratio(
+            "conditional_valid_edge_jaccard", "empty_conditional_union"
+        ),
+        "node_count_ratio": _text(node_ratio, "pooled.node_count_ratio"),
+        "oracle_link_ceiling": {
+            "raw": dict(endpoint),
+            "adjusted": oracle_adjusted,
         },
+        "oracle_gap_adjusted_edge": oracle_gap,
         "displacement": {"rows": [displacement[key] for key in sorted(displacement)]},
         "density": {"rows": [density[key] for key in sorted(density)]},
         "divisions": {

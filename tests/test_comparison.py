@@ -65,6 +65,14 @@ def _diagnostic(tp, fn):
         "conditional_association_recall": scalar,
         "conditional_valid_edge_precision": scalar,
         "conditional_valid_edge_jaccard": scalar,
+        "oracle_link_ceiling": {
+            "raw": scalar,
+            "adjusted": {
+                "status": status,
+                "reason": None if denominator else "no_gt_edges",
+                "value": value,
+            },
+        },
         "oracle_gap_adjusted_edge": {
             "status": status,
             "reason": None if denominator else "no_gt_edges",
@@ -256,7 +264,64 @@ def test_canonical_comparison_contains_complete_deltas_and_no_public_score():
     assert set(result["by_fold"]) == {"fold-e1", "fold-e2"}
     assert result["pooled"]["metrics"]["score"]["delta"] is not None
     assert result["pooled"]["counts"]["edge_tp"]["delta"] == 3
+    required_diagnostics = {
+        "conditional_association_recall",
+        "conditional_valid_edge_precision",
+        "conditional_valid_edge_jaccard",
+        "endpoint_availability",
+        "node_count_ratio",
+        "oracle_gap_adjusted_edge",
+        "oracle_link_ceiling_adjusted",
+        "oracle_link_ceiling_raw",
+    }
+    assert required_diagnostics <= set(result["pooled"]["diagnostic_deltas"])
+    for group in (result["by_embryo"], result["by_fold"]):
+        for row in group.values():
+            assert required_diagnostics <= set(row["diagnostic_deltas"])
+    for row in result["by_movie"]:
+        assert required_diagnostics <= set(row["diagnostic_deltas"])
     assert result["lowest_absolute_candidate_movie"]["sample_id"] == "e1-a"
     serialized = canonical_json_bytes(result).decode("utf-8")
     assert "public_score" not in serialized
     assert "leaderboard" not in serialized
+
+
+def test_diagnostic_pooling_recomputes_ratios_node_counts_and_oracle_gap():
+    registration, members, inventories, baseline, candidate = _fixture()
+    baseline = deepcopy(baseline)
+    candidate = deepcopy(candidate)
+    baseline[0]["official_counts"]["num_pred_nodes"] = 20
+    baseline[0]["diagnostic_state"]["node_count_ratio"] = "1"
+    baseline[1]["official_counts"]["num_pred_nodes"] = 5
+    baseline[1]["diagnostic_state"]["node_count_ratio"] = "-0.5"
+    result = _build(
+        registration=registration,
+        members=members,
+        authoritative_inventories=inventories,
+        baseline_movies=baseline,
+        candidate_movies=candidate,
+    )
+    pooled = result["pooled"]["diagnostic_deltas"]
+    assert pooled["node_count_ratio"]["baseline"] == "0.125"
+    assert pooled["node_count_ratio"]["baseline"] != "0.25"
+    assert pooled["conditional_association_recall"]["baseline"] == _text(
+        Decimal(24) / Decimal(35)
+    )
+    assert pooled["oracle_link_ceiling_adjusted"]["baseline"] == _text(
+        Decimal(24) / Decimal(35) * Decimal("0.9875")
+    )
+    assert pooled["oracle_gap_adjusted_edge"]["baseline"] is not None
+
+
+def test_comparison_rejects_missing_required_diagnostic_metric():
+    registration, members, inventories, baseline, candidate = _fixture()
+    candidate = deepcopy(candidate)
+    del candidate[0]["diagnostic_state"]["conditional_valid_edge_jaccard"]
+    with pytest.raises(ComparisonError, match="required diagnostic field"):
+        _build(
+            registration=registration,
+            members=members,
+            authoritative_inventories=inventories,
+            baseline_movies=baseline,
+            candidate_movies=candidate,
+        )
