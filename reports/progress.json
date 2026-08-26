@@ -1390,6 +1390,21 @@
             "trainer_sha256": "33c6c9285a40b1f4eb04193de1e74bc422fe2b848bcfb4c98aa860fe569248fa"
           },
           "target_event_id": "evt-9f5aabed322f4abe9ab819ee03563eb1"
+        },
+        {
+          "correction_reason": "Coverage repair: one-pair mode previously selected frame zero for every movie; seeded stable per-movie hashing now spreads training pairs through developmental time without changing validation exclusions or GPU budget.",
+          "replacement_fields": {
+            "config_file_sha256": "10c1060ae9d49ab8132081a13e87a006e05c6ad217e1800b6ef3a35c4b5ddef1",
+            "config_path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+            "data_sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371",
+            "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r5.json",
+            "preflight_report_sha256": "163086e5a9abff768b21838456a507c5df617ea3d9ee81f05880097cc8996615",
+            "runtime_dataset_version": 6,
+            "runtime_manifest_sha256": "7312c03c2ea2d44f35542493f60c0c55190cd01845fe42e157856263670bf5ae",
+            "single_pair_sampling": "seeded stable per-movie temporal hash",
+            "temporal_sampling_test_sha256": "1966fe75edf0f700bdebb80dd15248f79df6124cbd147b82640e50641cc778ab"
+          },
+          "target_event_id": "evt-55d85a11f915430f8fb1b7aacf1af755"
         }
       ],
       "authorized_for_submission": false,
