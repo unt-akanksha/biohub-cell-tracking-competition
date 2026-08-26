@@ -22,6 +22,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `prior-zebrahub-selective-ssm-medium` | — | ZebraHub selective_ssm_medium parent-ranking gains survive reciprocal competition calibration and exact complete-graph OOF scoring. | incomplete | {"mean_net_recoveries":"51.7","nearest_parent_top1":"0.932190","parent_top1":"0.932448"} | — | unknown / unknown | retain | — | reciprocal_competition_calibration_and_complete_graph_exact_metric |
 | `phase1-live-guard-readonly-smoke` | — | Read-only Phase 1 live guard verification; no kernel launch is authorized or executed. | registered | not recorded | — | unknown / 0.01 | — | — | — |
 | `public-0927-clean-repro-v1` | — | Intensity-weighted centroid refinement plus constrained division repair on the clean dual-seed harmonic TemporalUNet3D pipeline improves the owned public score beyond 0.913 without metric manipulation. | registered | not recorded | — | unknown / 1.00 | — | — | — |
+| `public-0927-clean-repro-v2` | public-0927-clean-repro-v1 | The Windows-safe fork reproduces the clean 0.927 dual-seed harmonic TemporalUNet3D pipeline and improves the owned public score beyond 0.913 without metric manipulation. | registered | not recorded | — | unknown / 1.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -89,6 +90,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Decision evidence: `not recorded`
 
 ### public-0927-clean-repro-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### public-0927-clean-repro-v2
 
 - Authorized for submission: `false`
 - Imported audit: `false`
