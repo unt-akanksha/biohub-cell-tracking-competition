@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-public-node-refinement-v1",
+  "parent": "public-0927-clean-repro-v2",
+  "hypothesis": "A single global coordinate blend from the frozen high-recall public graph toward the independently trained 35.1M-parameter LSM-FM feature-36 probability centroid will strictly increase matched held-out nodes while preserving every node ID, edge, frame assignment, and node count.",
+  "accelerator": "NvidiaTeslaT4",
+  "declared_max_runtime_hours": "1.00",
+  "watchdog_hard_stop_seconds": 3300,
+  "evaluator_max_wall_seconds": 3000,
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-refine-v1",
+  "runtime_dataset_ref": "indarkarhana/biohub-lsm-fm-public-node-runtime-v1@version1",
+  "runtime_builder_sha256": "f12ac00754b2f5e201379a97ca66668b73734173b0a5c8fad550e289ca50e425",
+  "kernel_builder_sha256": "5f2242d33aeb7ae0a2abd8e8d1ca79084d5ea3dc3b4ac9e410a258fdcca06888",
+  "evaluator_sha256": "abaa22be4c8be1dd8ec36a958851a368215601fb1adf680d945938b82fa74ef0",
+  "notebook_sha256": "0c5429c4de93d69882225d86b2a21bb0a4e27b50f747dd828f8c8a6fb70e638e",
+  "kernel_metadata_sha256": "ef1f2bcace55a917dab5a73a1a9445fa5c7b54406b210168fb9d2b1ebc6044d5",
+  "runtime_manifest_sha256": "2cea1bd05fd35f687ecbe47f04128b37fba3d542b5aed95b6fe6900b9d8479fe",
+  "design_report_sha256": "3fc800f6870fed7b2a5963eef6a50120e3d4cff48b906e8424575e5bb4686981",
+  "dataset_sources": [
+    "indarkarhana/biohub-lsm-fm-public-node-runtime-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
+    "indarkarhana/biohub-lsm-fm-image-text-pu-adaptation-v1"
+  ],
+  "frozen_detector": {
+    "architecture": "LSM-FM image-text SwinUNETR feature-36 plus Biohub heatmap head",
+    "parameters": 35072515,
+    "base_checkpoint_sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7",
+    "learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+  },
+  "public_graph_used_as_base": true,
+  "exact_public_replica": false,
+  "public_graph_topology_preserved": true,
+  "coordinate_source": "independent_lsm_fm_probability",
+  "strategies": {
+    "radius_voxels": [1, 2],
+    "probability_power": 2.0,
+    "global_blends": [0.25, 0.5, 0.75, 1.0],
+    "per_movie_selection": false
+  },
+  "validation": {
+    "selection_movies": 8,
+    "untouched_acceptance_movies": 4,
+    "selection_requires_strict_matched_node_gain": true,
+    "maximum_movie_recall_regression": 0.002,
+    "acceptance_graphs_retained_for_exact_scoring": true,
+    "public_leaderboard_used_for_selection": false
+  },
+  "competition_submission_performed": false,
+  "promotion_rule": "node acceptance only authorizes an exact official complete-graph metric gate; any eventual submission requires exactly two CUDA devices and whole-movie sharding"
+}
