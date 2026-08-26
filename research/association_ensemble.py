@@ -33,6 +33,10 @@ def _aligned_matrix(
     other_scores = np.asarray(other_scores, dtype=np.float64)
     if other_scores.shape != (len(other_source_ids), len(other_target_ids)):
         raise ValueError("Association matrix shape does not match its stable IDs")
+    if len(np.unique(other_source_ids)) != len(other_source_ids):
+        raise ValueError("Ensemble source IDs must be unique")
+    if len(np.unique(other_target_ids)) != len(other_target_ids):
+        raise ValueError("Ensemble target IDs must be unique")
     if set(source_ids.tolist()) != set(other_source_ids.tolist()):
         raise ValueError("Ensemble source-node sets differ")
     if set(target_ids.tolist()) != set(other_target_ids.tolist()):
@@ -50,13 +54,18 @@ def blend_pair_scores(
     *,
     trackastra_weight: float,
     epsilon: float = 1e-5,
+    support_aware: bool = True,
 ) -> PairScores:
     """Blend independently learned association probabilities in log-odds space.
 
     Stable node IDs are aligned explicitly, so a harmless row/column ordering
-    difference cannot silently corrupt the ensemble. A probability of zero is
-    treated as finite low evidence rather than an impossible edge because both
-    tiled models use zero for candidates outside their bounded neighborhoods.
+    difference cannot silently corrupt the ensemble. Both tiled models use an
+    exact zero for pairs outside their candidate neighborhoods while evaluated
+    candidates have strictly positive softmax probabilities. With
+    ``support_aware=True`` a score is therefore blended only where both models
+    evaluated the pair; elsewhere the available model is preserved. This
+    prevents one model's bounded candidate graph from vetoing useful evidence
+    from the other model.
     """
     if not 0 <= trackastra_weight <= 1:
         raise ValueError("trackastra_weight must be in [0, 1]")
@@ -74,6 +83,10 @@ def blend_pair_scores(
         trackastra_scores = np.asarray(trackastra_scores, dtype=np.float64)
         if trackastra_scores.shape != (len(source_ids), len(target_ids)):
             raise ValueError("Trackastra matrix shape does not match stable IDs")
+        if len(np.unique(source_ids)) != len(source_ids):
+            raise ValueError("Ensemble source IDs must be unique")
+        if len(np.unique(target_ids)) != len(target_ids):
+            raise ValueError("Ensemble target IDs must be unique")
         aligned_hoct = _aligned_matrix(
             source_ids,
             target_ids,
@@ -81,11 +94,42 @@ def blend_pair_scores(
             other_target_ids,
             hoct_scores,
         )
+        if not np.isfinite(trackastra_scores).all() or not np.isfinite(
+            aligned_hoct
+        ).all():
+            raise ValueError("Association probabilities must be finite")
+        if (
+            (trackastra_scores < 0).any()
+            or (trackastra_scores > 1).any()
+            or (aligned_hoct < 0).any()
+            or (aligned_hoct > 1).any()
+        ):
+            raise ValueError("Association probabilities must be in [0, 1]")
+
         logit = trackastra_weight * _logit(trackastra_scores, epsilon)
         logit += (1 - trackastra_weight) * _logit(aligned_hoct, epsilon)
+        matrix = _sigmoid(logit)
+        if support_aware:
+            trackastra_support = trackastra_scores > 0
+            hoct_support = aligned_hoct > 0
+            matrix = np.where(
+                trackastra_support & ~hoct_support,
+                trackastra_scores,
+                matrix,
+            )
+            matrix = np.where(
+                hoct_support & ~trackastra_support,
+                aligned_hoct,
+                matrix,
+            )
+            matrix = np.where(
+                ~trackastra_support & ~hoct_support,
+                0.0,
+                matrix,
+            )
         blended[source_t] = (
             source_ids.copy(),
             target_ids.copy(),
-            _sigmoid(logit).astype(np.float32),
+            matrix.astype(np.float32),
         )
     return blended
