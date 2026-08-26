@@ -1616,13 +1616,13 @@
       "failure_reason": null,
       "hypothesis": "After propagating the already hash-verified MONAI import root into trainer and evaluator subprocesses, the unchanged geometry-matched 3D LSM-FM experiment can produce its first scientific localization evidence.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "lsm-fm-pu-adaptation-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T19:03:01.267590Z",
       "run_id": "lsm-fm-pu-adaptation-v2",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
