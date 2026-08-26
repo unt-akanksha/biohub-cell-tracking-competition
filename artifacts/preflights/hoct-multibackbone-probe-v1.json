@@ -1,0 +1,168 @@
+{
+  "checks": [
+    {
+      "detail": "Both trainers and the twelve-variant ensemble import, every notebook code cell compiles, and the focused suite passes.",
+      "evidence": [
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_probe.py",
+          "sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_multibackbone.py",
+          "sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa"
+        },
+        {
+          "path": "research/hoct_graph/multibackbone.py",
+          "sha256": "977ea2c64e52135ec340ac021e6f43904bb4c6e27100b2052b6eb691e988ae52"
+        },
+        {
+          "path": "kaggle/biohub-hoct-multibackbone-probe-v1/biohub-hoct-multibackbone-probe-v1.ipynb",
+          "sha256": "7f36bd8a49b32ae2f68c500430912b30912a58f1639c56d4c06fed9af2afd77c"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtime manifests, exact comparator sources, preceding topology cache, competition data, and offline dependencies are hash-verified with GPU on and internet/TPU off.",
+      "evidence": [
+        {
+          "path": "config/experiments/hoct-multibackbone-probe-v1.json",
+          "sha256": "d6eea178bbffc4884a8435cf1018b0f42d60e71f47cdb41da7772ab64d337590"
+        },
+        {
+          "path": "kaggle/biohub-hoct-multibackbone-probe-v1/kernel-metadata.json",
+          "sha256": "2584c73994fdd8b094279c17d3d7dbccf1a8f114728e338c758089988a68cf17"
+        },
+        {
+          "path": ".biohub/staging/biohub-hoct-multibackbone-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "7fefe5d28677dae2efd909504848f172246b3419cde50f086c7636fa422aacc3"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Both official checkpoints produce finite Biohub edge probabilities; tiled core ownership and parental normalization are covered by tests.",
+      "evidence": [
+        {
+          "path": "reports/experiments/hoct-probe-local-smoke.json",
+          "sha256": "347cf60cc48d2dcc86fdd70bd20395d92854ae1c96160ef92416ddb91d95bf6b"
+        },
+        {
+          "path": "reports/experiments/hoct-backbone-complementarity-audit.json",
+          "sha256": "bacf71e90035996bb28aaefc26040c64cbf2710a1abde2f93020948b884eafb2"
+        },
+        {
+          "path": "tests/test_hoct_biohub_adapter.py",
+          "sha256": "9240c0d3dcea4b711bc962d482da830165d3897afea321fb50c2c2bacf6b45ba"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "A real 288-feature probe step reduces diagnostic BCE, changes head parameters, and the bounded balanced sampler passes deterministic class tests.",
+      "evidence": [
+        {
+          "path": "reports/experiments/hoct-probe-local-smoke.json",
+          "sha256": "347cf60cc48d2dcc86fdd70bd20395d92854ae1c96160ef92416ddb91d95bf6b"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_probe.py",
+          "sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8"
+        },
+        {
+          "path": "tests/test_hoct_probe_trainer.py",
+          "sha256": "0fb770fa6543dfa1b0f63735b263473b7585a8b1dd6bd41ea3479f17b7dbd3b9"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Both official 6,252,593-parameter JIT checkpoints match the staged manifest and reload through the exact inference path.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-hoct-multibackbone-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265"
+        },
+        {
+          "path": ".biohub/cache/models/hoct/general_v1.pt",
+          "sha256": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33"
+        },
+        {
+          "path": ".biohub/cache/models/hoct/ctc_v0.pt",
+          "sha256": "b9be3d976e2d51ae946128ded99142a81b5ba99fb87a0da67c38de2934944000"
+        },
+        {
+          "path": "reports/experiments/hoct-backbone-complementarity-audit.json",
+          "sha256": "bacf71e90035996bb28aaefc26040c64cbf2710a1abde2f93020948b884eafb2"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Training writes only probes and validation evidence below /kaggle/working, asserts no submission exists, and creates no competition submission.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-hoct-multibackbone-probe-v1/biohub-hoct-multibackbone-probe-v1.ipynb",
+          "sha256": "7f36bd8a49b32ae2f68c500430912b30912a58f1639c56d4c06fed9af2afd77c"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_multibackbone.py",
+          "sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Dense inference is spatially tiled, and deterministic per-movie caps hard-bound each backbone to 600,000 float32 feature rows before fitting.",
+      "evidence": [
+        {
+          "path": "research/hoct_graph/biohub_adapter.py",
+          "sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_probe.py",
+          "sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8"
+        },
+        {
+          "path": "tests/test_hoct_probe_trainer.py",
+          "sha256": "0fb770fa6543dfa1b0f63735b263473b7585a8b1dd6bd41ea3479f17b7dbd3b9"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "All 195 non-validation movies are scanned, every consecutive transition is covered, candidate recall below 98% aborts, and selection/acceptance stems remain disjoint.",
+      "evidence": [
+        {
+          "path": "config/experiments/hoct-multibackbone-probe-v1.json",
+          "sha256": "d6eea178bbffc4884a8435cf1018b0f42d60e71f47cdb41da7772ab64d337590"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_probe.py",
+          "sha256": "fcc22693b3a3dd2975eb3416bc1680311275828e3db0bfbe0c1e9603f4e15be8"
+        },
+        {
+          "path": "research/hoct_graph/train_biohub_hoct_multibackbone.py",
+          "sha256": "34eb415de9abfea50114aa790a96e3789d29714f8d088dea3bff2e133b9632fa"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T10:47:04.594567Z",
+  "report_sha256": "08d859db8f53c90679f4c1a499a0f6e6a5713bb00875ecd4f54dfb04f103463d",
+  "run_id": "hoct-multibackbone-probe-v1",
+  "schema_version": 1
+}
