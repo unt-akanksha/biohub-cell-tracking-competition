@@ -39,6 +39,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `trackastra-raw-confidence-acceptance-v1` | trackastra-graph-finetune-v6 | The independently fine-tuned 27.5M Trackastra checkpoint plus transferred raw detector confidence improves the exact processed final-topology association proxy on disjoint clean acceptance movies without leaderboard feedback. | failed | not recorded | — | 0.22264 / 1.50 | — | Frozen topology materializer omitted the hash-pinned public preset cell and selected DeepCenter checkpoint_last.pt epoch 500; expected node-count guard failed before Trackastra inference, so no scientific acceptance result or submission was produced. | — |
 | `trackastra-raw-confidence-acceptance-v2` | trackastra-graph-finetune-v6 | The independently fine-tuned 27.5M Trackastra checkpoint plus transferred raw detector confidence improves exact processed final-topology association on disjoint clean acceptance movies; v2 repairs only the pre-inference frozen-preset materialization failure. | failed | not recorded | — | 0.175548 / 1.50 | — | Frozen public topology materialization produced 21,843 nodes for 44b6_267148e4, a 0.34% drift from the earlier validator artifact's 21,768 count; model inference never started. This is comparator-integrity failure, not Trackastra model evidence; no submission was created. | — |
 | `hoct-multibackbone-probe-v1` | trackastra-graph-finetune-v6 | Complementary HOCT general and CTC backbones with independently fitted Biohub probes and a robust worst-embryo selection rule improve exact processed-topology association over the frozen public comparator without leaderboard feedback. | rejected | not recorded | — | 1.1933794444 / 4.00 | retire | Training completed and candidate recall was 0.99994, but the frozen general_ctc_blend_w0.75 Biohub probe regressed the base by 0.05384 on selection and 0.004340 on untouched acceptance. Acceptance adjusted edge Jaccard was 0.81754 versus 0.82188; division false positives rose from 3 to 10. No submission was created. | — |
+| `spatialdino-appearance-validation-v1` | hoct-multibackbone-probe-v1 | Frozen 3D microscopy foundation-model appearance features can correct a small set of ambiguous parent crossings while preserving the strong detector topology and every node degree, improving clean held-out association beyond the public comparator without leaderboard feedback. | running | not recorded | — | unknown / 2.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -230,6 +231,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `["reports/experiments/hoct-multibackbone-probe-v1-result.json",".biohub/cache/kernel-outputs/hoct-multibackbone-probe-v1/hoct_multibackbone_v1/complete_movie_validation.json"]`
+
+### spatialdino-appearance-validation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls

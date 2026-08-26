@@ -1301,6 +1301,27 @@
       "registered_at": "2026-08-26T10:45:20.722516Z",
       "run_id": "hoct-multibackbone-probe-v1",
       "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Frozen 3D microscopy foundation-model appearance features can correct a small set of ambiguous parent crossings while preserving the strong detector topology and every node degree, improving clean held-out association beyond the public comparator without leaderboard feedback.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "hoct-multibackbone-probe-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T14:13:34.437632Z",
+      "run_id": "spatialdino-appearance-validation-v1",
+      "status": "running"
     }
   ],
   "schema_version": 1
