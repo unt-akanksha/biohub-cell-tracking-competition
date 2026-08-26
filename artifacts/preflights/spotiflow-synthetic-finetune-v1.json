@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-synthetic-finetune-v1",
+  "created_at": "2026-08-26T07:13:00Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/spotiflow_biohub/train_synthetic_detector.py", "sha256": "47dfa6d1dcadb52b86f996c60a68a4f099122f754a78d23e7a754e6778e04a75"},
+        {"path": "kaggle/biohub-spotiflow-synthetic-finetune-v1/biohub-spotiflow-synthetic-finetune-v1.ipynb", "sha256": "28ff43404b4569be894271b0fb8d10d545a007fc168905a6a9cd4a382b4e106d"}
+      ],
+      "detail": "Trainer and all generated notebook code cells compile; the exact runtime import path was corrected after a local smoke exposed it."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-spotiflow-synthetic-finetune-v1/kernel-metadata.json", "sha256": "a7b698f2bb01cdfec3a20f6d407ab7192d40f6abd487d0bcdebed2f572ae6e50"},
+        {"path": "config/experiments/spotiflow-synthetic-finetune-v1.json", "sha256": "61483dd3e4dcb938fd736b575c67c47740e57ce7092053a7142cc2bfbb64edc9"},
+        {"path": ".biohub/staging/biohub-spotiflow-detector-runtime-v1/SOURCE_MANIFEST.json", "sha256": "3cb819dc38010efdbcba6525e45da942b3bc23e5953eed03cf1b3b6987f499ab"}
+      ],
+      "detail": "Private runtime version 4 contains the selected checkpoint, exact offline wheels, corrected trainer and adapter; the CC0 synthetic kernel output is attached."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "tests/test_spotiflow_synthetic_trainer.py", "sha256": "2f4640f7f15aa938311ae7120640afb92aa1b48df95d75cd93436afe66ca809e"},
+        {"path": "tests/test_synthetic_pretrain_data.py", "sha256": "b0c65940b1a8e879b4ae40779cee2c52545afdc7befad29fce0419b82af1b3de"}
+      ],
+      "detail": "Focused tests cover manifest discovery, deterministic disjoint splitting, joint image/centroid pooling, and finite lazy iteration without volume decompression during shape checks."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/spotiflow-synthetic-finetune-v1-smoke.json", "sha256": "0da97637437158324a772e1f9b185b50d5ed302ef0129a0ef7a04452ab84e95f"},
+        {"path": "research/spotiflow_biohub/smoke_model_step.py", "sha256": "c4f1c694bb0e6fbefd130ecea668b8cf295d3450b3b7382d813804b4aa5d4423"}
+      ],
+      "detail": "Official 35.5M smfish_3d completed forward, backward, finite gradients in 125 parameter tensors, and AdamW step at the exact 32x64x64 crop shape."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/spotiflow-synthetic-finetune-v1-smoke.json", "sha256": "0da97637437158324a772e1f9b185b50d5ed302ef0129a0ef7a04452ab84e95f"},
+        {"path": ".biohub/staging/biohub-spotiflow-detector-runtime-v1/SOURCE_MANIFEST.json", "sha256": "3cb819dc38010efdbcba6525e45da942b3bc23e5953eed03cf1b3b6987f499ab"}
+      ],
+      "detail": "Official checkpoint hash reloads at 35,489,892 parameters; upstream Spotiflow checkpoint callback writes and reloads best/last model folders."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-spotiflow-synthetic-finetune-v1/biohub-spotiflow-synthetic-finetune-v1.ipynb", "sha256": "28ff43404b4569be894271b0fb8d10d545a007fc168905a6a9cd4a382b4e106d"},
+        {"path": "kaggle/biohub-spotiflow-synthetic-finetune-v1/kernel-metadata.json", "sha256": "a7b698f2bb01cdfec3a20f6d407ab7192d40f6abd487d0bcdebed2f572ae6e50"}
+      ],
+      "detail": "Metrics, source manifest, best/last checkpoints, progress and terminal evidence are below /kaggle/working; no competition input or submission code exists."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/spotiflow_biohub/train_synthetic_detector.py", "sha256": "47dfa6d1dcadb52b86f996c60a68a4f099122f754a78d23e7a754e6778e04a75"},
+        {"path": "tests/test_synthetic_pretrain_data.py", "sha256": "b0c65940b1a8e879b4ae40779cee2c52545afdc7befad29fce0419b82af1b3de"}
+      ],
+      "detail": "Batch one, 32x64x64 crops, deferred normalization, two-sample cache, and metadata lazy proxies bound GPU memory and avoid repeated 13 GB setup decompression."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/spotiflow-synthetic-finetune-v1.json", "sha256": "61483dd3e4dcb938fd736b575c67c47740e57ce7092053a7142cc2bfbb64edc9"},
+        {"path": "tests/test_spotiflow_synthetic_trainer.py", "sha256": "2f4640f7f15aa938311ae7120640afb92aa1b48df95d75cd93436afe66ca809e"}
+      ],
+      "detail": "1,200 deterministic training and 128 disjoint synthetic validation volumes cover the dense static source; real clean acceptance remains a mandatory later gate."
+    }
+  ],
+  "report_sha256": "2640d147e9f946cceebd0b01901cccf8316712b319bfb878c2fbd9a45f0d8187"
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-detector-acceptance-v3",
+  "status": "completed",
+  "terminal_elapsed_seconds": 220.303,
+  "evaluator_elapsed_seconds": 102.45089798,
+  "remaining_gpu_hours": 29.32,
+  "result_sha256": "248177dcf6075241b38ec35cedca371ed18ddd55bf6153b375baafdb7286afdc",
+  "launcher_terminal_sha256": "9f97cc3b5554cf5b096cd0a78c0d5a2af5a95381fc46b2900e92db785bb3ee59",
+  "pooled": {
+    "adjusted_edge_jaccard": null,
+    "edge_jaccard": null,
+    "division_jaccard": null,
+    "node_recall": 0.7776834959694527
+  },
+  "division_counts": {"tp": null, "fp": null, "fn": null},
+  "by_embryo": {
+    "44b6": {
+      "node_recall": 0.7078651685393258,
+      "baseline_node_recall": 0.9588014981273408,
+      "node_recall_delta": -0.25093632958801504
+    },
+    "6bba": {
+      "node_recall": 0.8355314197051978,
+      "baseline_node_recall": 0.9775019394879751,
+      "node_recall_delta": -0.1419705197827773
+    }
+  },
+  "by_fold": {
+    "44b6_12dfb391": {"node_recall": 0.7868020304568528, "delta": -0.18274111675126903},
+    "44b6_267148e4": {"node_recall": 0.4857142857142857, "delta": -0.4428571428571429},
+    "6bba_062c8d37": {"node_recall": 0.9354838709677419, "delta": -0.05698924731182797},
+    "6bba_07e24132": {"node_recall": 0.5766016713091922, "delta": -0.3621169916434541}
+  },
+  "worst_movie_delta": -0.4428571428571429,
+  "selection": {
+    "model_name": "smfish_3d",
+    "normalization": "spotiflow_auto",
+    "annotated_node_recall": 0.688839615668884
+  },
+  "acceptance": {
+    "movies": 4,
+    "annotated_gt_nodes": 2357,
+    "spotiflow_matched_gt_nodes": 1833,
+    "spotiflow_annotated_node_recall": 0.7776834959694527,
+    "baseline_matched_gt_nodes": 2284,
+    "baseline_annotated_node_recall": 0.96902842596521,
+    "annotated_recall_delta": -0.1913449299957573,
+    "per_movie_recall_delta": {
+      "44b6_12dfb391": -0.18274111675126903,
+      "44b6_267148e4": -0.4428571428571429,
+      "6bba_062c8d37": -0.05698924731182797,
+      "6bba_07e24132": -0.3621169916434541
+    }
+  },
+  "decision": {
+    "drop_in_detector": "retire",
+    "reason": "Official pretrained Spotiflow is materially below the public detector on every acceptance movie.",
+    "transfer_initialization": "retain_smfish_3d",
+    "next_test": "Dense corrected synthetic fine-tuning followed by the same clean acceptance protocol."
+  },
+  "submission_created": false
+}

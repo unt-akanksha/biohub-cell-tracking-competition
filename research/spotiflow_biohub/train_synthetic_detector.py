@@ -151,7 +151,7 @@ def main() -> None:
     import lightning.pytorch as pl
     import torch
     from lightning.pytorch.loggers import CSVLogger
-    from spotiflow import Spotiflow
+    from spotiflow.model import Spotiflow
     from spotiflow.utils import normalize
 
     random.seed(args.seed)

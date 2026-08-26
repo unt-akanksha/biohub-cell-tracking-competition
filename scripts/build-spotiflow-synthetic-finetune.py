@@ -130,7 +130,7 @@ print(json.dumps({"runtime": str(runtime), "synthetic": str(synthetic)}, indent=
 '''
 
 
-RUN = r'''BASE_MODEL = "synth_3d"
+RUN = r'''BASE_MODEL = "smfish_3d"
 output_dir = Path("/kaggle/working/spotiflow_synthetic_finetune")
 command = [
     sys.executable,

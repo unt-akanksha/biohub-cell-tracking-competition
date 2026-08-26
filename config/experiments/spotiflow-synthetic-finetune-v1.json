@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-synthetic-finetune-v1",
+  "parent": "spotiflow-detector-acceptance-v3",
+  "kernel_ref": "indarkarhana/biohub-spotiflow-synthetic-finetune-v1",
+  "notebook_sha256": "28ff43404b4569be894271b0fb8d10d545a007fc168905a6a9cd4a382b4e106d",
+  "kernel_metadata_sha256": "a7b698f2bb01cdfec3a20f6d407ab7192d40f6abd487d0bcdebed2f572ae6e50",
+  "trainer_sha256": "47dfa6d1dcadb52b86f996c60a68a4f099122f754a78d23e7a754e6778e04a75",
+  "runtime_manifest_sha256": "3cb819dc38010efdbcba6525e45da942b3bc23e5953eed03cf1b3b6987f499ab",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "trainer_max_wall_seconds": 6300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spotiflow-detector-runtime-v1@version4"
+  ],
+  "kernel_sources": [
+    "josefreitasalvesneto/biohub-synthetic-dataset"
+  ],
+  "pretrained_model": {
+    "name": "Spotiflow smfish_3d release 0.6.0",
+    "selection_source": "spotiflow-detector-acceptance-v3 eight-movie selection split",
+    "selection_recall": 0.688839615668884,
+    "source_repository": "weigertlab/spotiflow",
+    "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+    "license": "BSD-3-Clause",
+    "model_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+    "parameter_count": 35489892
+  },
+  "training": {
+    "source_license": "CC0",
+    "geometry": "native static volume[:,::4,::4] with centroid Y/X divided by four",
+    "train_samples": 1200,
+    "validation_samples": 128,
+    "split": "deterministic salted filename hash with zero overlap",
+    "epochs": 4,
+    "samples_per_epoch": 768,
+    "optimizer": "AdamW",
+    "learning_rate": 3e-5,
+    "batch_size": 1,
+    "crop_size": [32, 64, 64],
+    "smart_crop_probability": 0.8,
+    "deferred_normalization": true,
+    "metadata_only_shape_validation": true,
+    "seed": 20260826
+  },
+  "evidence": {
+    "drop_in_acceptance_recall": 0.7776834959694527,
+    "public_detector_acceptance_recall": 0.96902842596521,
+    "reason_to_train": "large observed domain gap makes dense adaptation necessary before judging the architecture"
+  },
+  "promotion_rule": "checkpoint is only retained for real clean acceptance; it cannot enter candidate assembly from synthetic validation alone",
+  "submission_policy": "training_only_no_submission"
+}

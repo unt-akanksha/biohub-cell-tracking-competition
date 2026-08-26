@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-synthetic-finetune-v1",
+  "executed_at": "2026-08-26T07:07:00Z",
+  "device": "cpu",
+  "model": "official Spotiflow smfish_3d release 0.6.0",
+  "model_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+  "parameter_count": 35489892,
+  "forward_backward": {
+    "status": "passed",
+    "elapsed_seconds": 1.562,
+    "input_shape": [1, 1, 32, 64, 64],
+    "loss": 84.6138687133789,
+    "parameter_tensors_with_finite_gradients": 125,
+    "optimizer": "AdamW",
+    "optimizer_step_completed": true
+  },
+  "outputs": {
+    "heatmap_shapes": [
+      [1, 1, 16, 32, 32],
+      [1, 1, 8, 16, 16],
+      [1, 1, 4, 8, 8],
+      [1, 1, 2, 4, 4],
+      [1, 1, 1, 2, 2]
+    ],
+    "flow_shape": [1, 4, 16, 32, 32]
+  },
+  "scope": "Model forward/backward and optimizer only; Windows smoke stubs Linux peak-extraction extensions, which were separately exercised by the successful Kaggle acceptance inference."
+}
