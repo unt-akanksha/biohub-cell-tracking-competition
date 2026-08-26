@@ -133,3 +133,57 @@ def blend_pair_scores(
             matrix.astype(np.float32),
         )
     return blended
+
+
+def minimum_consensus_pair_scores(first: PairScores, second: PairScores) -> PairScores:
+    """Use the weaker probability where both models evaluated an edge.
+
+    A pair evaluated by only one bounded candidate graph remains available;
+    shared pairs must earn support from both models. This provides a small,
+    conservative disagreement-aware alternative to log-odds averaging.
+    """
+    if set(first) != set(second):
+        raise ValueError("Ensemble frame-pair sets differ")
+    consensus: PairScores = {}
+    for source_t in sorted(first):
+        source_ids, target_ids, first_scores = first[source_t]
+        other_source_ids, other_target_ids, second_scores = second[source_t]
+        source_ids = np.asarray(source_ids, dtype=np.int64)
+        target_ids = np.asarray(target_ids, dtype=np.int64)
+        first_scores = np.asarray(first_scores, dtype=np.float64)
+        if first_scores.shape != (len(source_ids), len(target_ids)):
+            raise ValueError("Consensus matrix shape does not match stable IDs")
+        if len(np.unique(source_ids)) != len(source_ids):
+            raise ValueError("Ensemble source IDs must be unique")
+        if len(np.unique(target_ids)) != len(target_ids):
+            raise ValueError("Ensemble target IDs must be unique")
+        aligned_second = _aligned_matrix(
+            source_ids,
+            target_ids,
+            other_source_ids,
+            other_target_ids,
+            second_scores,
+        )
+        if not np.isfinite(first_scores).all() or not np.isfinite(
+            aligned_second
+        ).all():
+            raise ValueError("Association probabilities must be finite")
+        if (
+            (first_scores < 0).any()
+            or (first_scores > 1).any()
+            or (aligned_second < 0).any()
+            or (aligned_second > 1).any()
+        ):
+            raise ValueError("Association probabilities must be in [0, 1]")
+        shared = (first_scores > 0) & (aligned_second > 0)
+        matrix = np.where(
+            shared,
+            np.minimum(first_scores, aligned_second),
+            np.maximum(first_scores, aligned_second),
+        )
+        consensus[source_t] = (
+            source_ids.copy(),
+            target_ids.copy(),
+            matrix.astype(np.float32),
+        )
+    return consensus

@@ -40,7 +40,7 @@ def _backbones():
 def test_default_multibackbone_grid_is_small_and_stable() -> None:
     variants = build_multibackbone_variants(_backbones())
 
-    assert len(variants) == 10
+    assert len(variants) == 12
     assert set(variants) >= {
         "general:pretrained",
         "general:biohub_probe",
@@ -48,6 +48,8 @@ def test_default_multibackbone_grid_is_small_and_stable() -> None:
         "ctc:biohub_probe",
         "general_ctc_blend_w0.5:pretrained",
         "general_ctc_blend_w0.5:biohub_probe",
+        "general_ctc_consensus_min:pretrained",
+        "general_ctc_consensus_min:biohub_probe",
     }
 
 
@@ -67,6 +69,7 @@ def test_multibackbone_blend_preserves_candidate_union() -> None:
         ("general:pretrained", {"general"}),
         ("ctc:biohub_probe", {"ctc"}),
         ("general_ctc_blend_w0.25:pretrained", {"general", "ctc"}),
+        ("general_ctc_consensus_min:biohub_probe", {"general", "ctc"}),
     ],
 )
 def test_required_backbones(variant: str, expected: set[str]) -> None:
@@ -94,6 +97,19 @@ def test_materialize_blend_matches_grid() -> None:
 
     selected = materialize_variant(
         "general_ctc_blend_w0.75:biohub_probe", scores
+    )
+
+    np.testing.assert_allclose(selected[0][2], expected[0][2], atol=1e-6)
+
+
+def test_materialize_consensus_matches_grid() -> None:
+    scores = _backbones()
+    expected = build_multibackbone_variants(scores)[
+        "general_ctc_consensus_min:biohub_probe"
+    ]
+
+    selected = materialize_variant(
+        "general_ctc_consensus_min:biohub_probe", scores
     )
 
     np.testing.assert_allclose(selected[0][2], expected[0][2], atol=1e-6)

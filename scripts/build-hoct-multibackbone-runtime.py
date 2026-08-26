@@ -122,6 +122,7 @@ def main() -> None:
                 "learned_parameters_per_backbone": 289,
                 "single_variants": 4,
                 "support_aware_blend_variants": 6,
+                "minimum_consensus_variants": 2,
                 "selection": "two held-out complete movies",
                 "acceptance": "two disjoint complete movies inferred and scored once after freeze",
                 "public_leaderboard_used": False,

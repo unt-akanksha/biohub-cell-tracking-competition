@@ -4,9 +4,17 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 try:
-    from association_ensemble import PairScores, blend_pair_scores
+    from association_ensemble import (
+        PairScores,
+        blend_pair_scores,
+        minimum_consensus_pair_scores,
+    )
 except ModuleNotFoundError:
-    from research.association_ensemble import PairScores, blend_pair_scores
+    from research.association_ensemble import (
+        PairScores,
+        blend_pair_scores,
+        minimum_consensus_pair_scores,
+    )
 
 
 @dataclass(frozen=True)
@@ -66,6 +74,12 @@ def build_multibackbone_variants(
             trackastra_weight=spec.general_weight,
             support_aware=True,
         )
+    for head in sorted(expected_heads):
+        name = f"general_ctc_consensus_min:{head}"
+        variants[name] = minimum_consensus_pair_scores(
+            backbone_scores["general"][head],
+            backbone_scores["ctc"][head],
+        )
     return variants
 
 
@@ -78,7 +92,7 @@ def required_backbones(variant_name: str) -> frozenset[str]:
         return frozenset({"general"})
     if prefix == "ctc":
         return frozenset({"ctc"})
-    if prefix.startswith("general_ctc_blend_w"):
+    if prefix.startswith("general_ctc_blend_w") or prefix == "general_ctc_consensus_min":
         return frozenset({"general", "ctc"})
     raise ValueError(f"Unknown HOCT variant name: {variant_name}")
 
@@ -97,6 +111,11 @@ def materialize_variant(
         raise ValueError(f"Missing HOCT backbone scores: {sorted(missing)}")
     if prefix in {"general", "ctc"}:
         return backbone_scores[prefix][head]
+    if prefix == "general_ctc_consensus_min":
+        return minimum_consensus_pair_scores(
+            backbone_scores["general"][head],
+            backbone_scores["ctc"][head],
+        )
     weight_text = prefix.removeprefix("general_ctc_blend_w")
     try:
         general_weight = float(weight_text)

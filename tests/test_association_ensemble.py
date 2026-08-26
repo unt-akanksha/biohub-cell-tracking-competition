@@ -3,7 +3,10 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from research.association_ensemble import blend_pair_scores
+from research.association_ensemble import (
+    blend_pair_scores,
+    minimum_consensus_pair_scores,
+)
 
 
 def _scores(source_ids, target_ids, matrix):
@@ -73,3 +76,14 @@ def test_blend_rejects_duplicate_stable_ids() -> None:
     second = _scores([1, 1], [2], [[0.3], [0.2]])
     with pytest.raises(ValueError, match="IDs must be unique"):
         blend_pair_scores(first, second, trackastra_weight=0.5)
+
+
+def test_minimum_consensus_dampens_disagreement_and_preserves_union() -> None:
+    first = _scores([1], [2, 3, 4], [[0.9, 0.7, 0.0]])
+    second = _scores([1], [2, 3, 4], [[0.4, 0.0, 0.6]])
+
+    consensus = minimum_consensus_pair_scores(first, second)
+
+    np.testing.assert_allclose(
+        consensus[0][2], [[0.4, 0.7, 0.6]], atol=1e-6
+    )

@@ -12,9 +12,11 @@ testing them together on Biohub's clean held-out topology.
 V2 freezes both 6,252,593-parameter backbones and fits an independent
 289-parameter probe for each on all 195 non-validation ground-truth movies.
 The selection grid contains only ten association variants: four individual
-backbone/head choices and three support-aware log-odds weights for each of the
-two head types. Exact zeros outside one model's candidate neighborhood no
-longer veto evidence from the other model.
+backbone/head choices, three support-aware log-odds weights for each of the two
+head types, and one minimum-consensus variant per head. The latter dampens an
+edge to the weaker model probability when both evaluated it, giving selection
+a conservative disagreement-aware option. Exact zeros outside one model's
+candidate neighborhood do not veto evidence from the other model.
 
 The final linker and thresholds use the same small V1 grid. Two complete movies
 select the entire configuration by maximizing the worse per-movie delta versus
