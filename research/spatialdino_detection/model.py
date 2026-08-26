@@ -132,6 +132,11 @@ class HybridSpatialDinoDetector(nn.Module):
         self.decode_32 = UpFuseBlock(c2, c1 * 2, c1)
         self.decode_64 = UpFuseBlock(c1, c0 * 2, c0)
         self.heatmap_head = nn.Conv3d(c0, 1, kernel_size=1)
+        # A sparse detector should not begin at sigmoid(0)=0.5 everywhere.
+        # The small head weights preserve the learned feature scale while the
+        # low foreground prior prevents a randomly decoded peak field.
+        nn.init.normal_(self.heatmap_head.weight, mean=0.0, std=1e-3)
+        nn.init.constant_(self.heatmap_head.bias, -4.0)
 
     def forward(self, volume: torch.Tensor) -> torch.Tensor:
         if volume.ndim != 5 or volume.shape[1] != 1:

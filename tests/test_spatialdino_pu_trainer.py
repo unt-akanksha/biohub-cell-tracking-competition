@@ -7,6 +7,7 @@ import torch
 from research.spatialdino_detection.data import VALIDATION_STEMS, select_frame_pairs
 from research.spatialdino_detection.train_pu_detector import (
     annotations_to_isotropic_grid,
+    ema_decay_for_step,
     normalize_spatialdino_frame,
     update_ema,
 )
@@ -58,3 +59,11 @@ def test_frame_pair_inventory_excludes_every_validation_movie() -> None:
     )
     assert {stem for stem, _ in selected} == {"44b6_train", "6bba_train"}
     assert len(selected) == 2
+
+
+def test_ema_decay_warms_up_without_exceeding_maximum() -> None:
+    assert ema_decay_for_step(0.995, 1) == pytest.approx(2 / 11)
+    assert ema_decay_for_step(0.995, 768) == pytest.approx(769 / 778)
+    assert ema_decay_for_step(0.90, 10_000) == 0.90
+    with pytest.raises(ValueError, match="positive"):
+        ema_decay_for_step(0.995, 0)

@@ -1,0 +1,188 @@
+{
+  "checks": [
+    {
+      "detail": "All tracked and flat-runtime modules import; notebook cells compile and the focused model/PU/policy suite passes.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "4a7150afe6c80bdb4254e02f8db374010273b36f3aec666c546efa2aa8b13db5"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-pu-adaptation-v1/biohub-spatialdino-pu-adaptation-v1.ipynb",
+          "sha256": "bc43c980bd343e259b1fe3709ff60dcc20b1dcbeba2044c193f8bccdb6c55913"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Private runtime, teachers, frozen baseline graphs, and competition images are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+          "sha256": "5e16fed29c821c2f90096a23a550742b08c49a08e83982325e2f4a56b627d4e0"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-pu-adaptation-v1/kernel-metadata.json",
+          "sha256": "9f0841ca255db7e4a6154b1f6d30d8f85c8d1c4339a7b7bb426af1ca3aec4f0a"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "8cd76890807198ab9d960f46de9ab876e708b3c86a78c86d02917ee0d5c9f2f6"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The hybrid preserves full spatial resolution, validates tensor geometry, performs flip-consistent inference, and refines peaks sub-voxel.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "tests/test_spatialdino_detector.py",
+          "sha256": "2a4196755a5c482ae83e9f627fb4c4d8a54710e4f3af2d7aa4d0315fc63e873b"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The 29,521,225-parameter architecture has an 8.0M decoder warm-up and a verified 15.1M deep phase with EMA updates.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93"
+        },
+        {
+          "path": "tests/test_spatialdino_pu_trainer.py",
+          "sha256": "b1b55132e7b7be5c2959abfa801037b6fbb90a1f8d0bfc8f2ff665705e4c2be2"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "SpatialDINO strict-loads at 21,501,312 parameters and both audited teacher checkpoints retain their fixed hashes.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/models/spatialdino-vits8-step244999-backbone.pth",
+          "sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "8cd76890807198ab9d960f46de9ab876e708b3c86a78c86d02917ee0d5c9f2f6"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only a learned checkpoint and validation evidence are written under /kaggle/working; submission artifacts cause failure.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-spatialdino-pu-adaptation-v1/biohub-spatialdino-pu-adaptation-v1.ipynb",
+          "sha256": "bc43c980bd343e259b1fe3709ff60dcc20b1dcbeba2044c193f8bccdb6c55913"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Teacher targets and frame pairs are cached on CPU, training is batch-one, validation is batch-four, and soft guards preserve evaluation time.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+          "sha256": "5e16fed29c821c2f90096a23a550742b08c49a08e83982325e2f4a56b627d4e0"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "Every non-validation movie is discovered dynamically; all twelve clean movies are excluded, with eight gating four untouched acceptance movies.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "4a7150afe6c80bdb4254e02f8db374010273b36f3aec666c546efa2aa8b13db5"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "44584af8ed65d0ab6e52e1238eeb24570f7148297990b227afc2e3e64c865b93"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        },
+        {
+          "path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+          "sha256": "5e16fed29c821c2f90096a23a550742b08c49a08e83982325e2f4a56b627d4e0"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T15:33:05.335169Z",
+  "report_sha256": "c94c379e7d38b7f2f1dbc03487fbff2c7e362e306e0f18232a364fdb8f478dcd",
+  "run_id": "spatialdino-pu-adaptation-v1",
+  "schema_version": 1
+}

@@ -26,7 +26,9 @@ has weight 0.01.
 - 8,019,913 decoder parameters train during warm-up.
 - The last four SpatialDINO blocks then open, for 15,121,609 trainable
   parameters while earlier encoder blocks remain frozen.
-- EMA weights with decay 0.995 are saved for clean validation.
+- The sparse heatmap head starts at a low foreground prior instead of 0.5.
+- EMA warms from the current student before approaching a maximum decay of
+  0.995, so an early guarded stop does not preserve random decoder weights.
 - One deterministic frame pair from every non-validation movie supplies broad
   embryo coverage; both pair frames are visited across cycles.
 - Teacher targets and raw frame pairs are cached on CPU. This converts repeated
@@ -47,14 +49,17 @@ counts before ground-truth scoring. The leaderboard is not used for selection.
 
 ## Verification
 
-The preflight passed all eight checks. The focused suite reports 32 passing
+The preflight passed all eight checks. The focused suite reports 33 passing
 tests, including strict SpatialDINO loading, intermediate-feature equivalence,
 full-resolution model geometry, trainable-phase isolation, EMA behavior,
 positive-unlabeled masking, sub-voxel inference, clean-result provenance, and
 the future two-GPU submission policy.
 
 Preflight report SHA-256:
-`b950d3c2ffc086a540430dc8ac2145f43353a36996d47e9dca9fdb3293a2f6fc`
+`c94c379e7d38b7f2f1dbc03487fbff2c7e362e306e0f18232a364fdb8f478dcd`
+
+The original immutable preflight remains retained. Revision 2 adds the sparse
+head prior and EMA warm-up checks before any GPU launch.
 
 ## Launch rule
 

@@ -92,6 +92,16 @@ def update_ema(ema, student, *, decay: float) -> None:
                 ema_value.copy_(source)
 
 
+def ema_decay_for_step(maximum_decay: float, step: int) -> float:
+    """Warm EMA quickly so short guarded runs do not retain random weights."""
+
+    if not 0.0 <= maximum_decay < 1.0:
+        raise ValueError("EMA decay must lie in [0, 1)")
+    if step <= 0:
+        raise ValueError("EMA step must be positive")
+    return min(float(maximum_decay), float(step + 1) / float(step + 10))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--competition-dir", type=Path, required=True)
@@ -205,6 +215,7 @@ def main() -> None:
             "decoder_learning_rate": args.decoder_learning_rate,
             "encoder_learning_rate": args.encoder_learning_rate,
             "ema_decay": args.ema_decay,
+            "ema_warmup": "min(maximum_decay, (step + 1) / (step + 10))",
             "full_resolution_heatmap": True,
         },
         "teachers": {
@@ -341,7 +352,8 @@ def main() -> None:
         scaler.step(optimizer)
         scaler.update()
         optimizer.zero_grad(set_to_none=True)
-        update_ema(ema, student, decay=args.ema_decay)
+        current_ema_decay = ema_decay_for_step(args.ema_decay, step + 1)
+        update_ema(ema, student, decay=current_ema_decay)
         actual_steps = step + 1
 
         if actual_steps % 16 == 0 or step == 0:
@@ -360,6 +372,7 @@ def main() -> None:
                 "unknown_fraction": float(targets.unknown_mask.mean()),
                 "target_cache_hit": target_cache_hit,
                 "encoder_blocks_unfrozen": args.encoder_blocks if unfreeze_phase else 0,
+                "ema_decay": current_ema_decay,
             }
             metrics.append(row)
             atomic_json(

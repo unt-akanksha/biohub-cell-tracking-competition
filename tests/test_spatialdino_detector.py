@@ -40,6 +40,8 @@ class TinySpatialDino(SpatialDinoViTS8):
 
 def test_hybrid_detector_preserves_full_spatial_resolution() -> None:
     model = HybridSpatialDinoDetector(TinySpatialDino(), widths=(8, 16, 24, 32))
+    torch.testing.assert_close(model.heatmap_head.bias, torch.full_like(model.heatmap_head.bias, -4.0))
+    assert float(model.heatmap_head.weight.detach().std()) < 0.002
     volume = torch.randn(1, 1, 16, 16, 16)
     logits = model(volume)
     assert logits.shape == (1, 1, 16, 16, 16)
