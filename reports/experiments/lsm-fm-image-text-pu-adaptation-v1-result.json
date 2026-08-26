@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-image-text-pu-adaptation-v1",
+  "status": "rejected_at_selection_retain_family",
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-image-text-pu-adaptation-v1",
+  "gpu": {
+    "quota_before_hours": 26.16,
+    "quota_after_hours": 25.59,
+    "charged_hours": 0.57,
+    "launcher_elapsed_seconds": 2037.531,
+    "declared_max_hours": 2.0,
+    "protected_reserve_hours": 8.0
+  },
+  "training": {
+    "status": "completed",
+    "actual_steps": 3072,
+    "target_steps": 3072,
+    "budget_stop_requested": false,
+    "elapsed_seconds": 1545.955,
+    "parameter_count": 35072515,
+    "base_checkpoint_sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7",
+    "learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a",
+    "validation_overlap": [],
+    "public_predictions_copied": false,
+    "competition_submission_performed": false
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "matched_gt_nodes": 9936,
+    "annotated_node_recall": 0.8891275167785235,
+    "worst_movie": "6bba_57b7cc1e",
+    "worst_movie_recall": 0.6419529837251357,
+    "worst_movie_matched_gt_nodes": 1065,
+    "worst_movie_annotated_gt_nodes": 1659,
+    "worst_movie_mean_match_distance_um": 2.57575195951702,
+    "worst_movie_predicted_nodes": 65586,
+    "worst_movie_estimated_nodes": 65511.0,
+    "worst_movie_projected_count_ratio": 0.9998320892674513,
+    "required_additional_matches_for_0_65": 14,
+    "pooled_gate": 0.8,
+    "worst_movie_gate": 0.65,
+    "passed": false
+  },
+  "comparison_to_feature24": {
+    "pooled_recall_delta": 0.0049217002237136,
+    "worst_movie_recall_delta": 0.0198915009041592,
+    "interpretation": "The larger multimodal student improved both pooled and limiting-movie localization, but remained 14 matches below the immutable worst-movie gate."
+  },
+  "acceptance": {
+    "opened": false,
+    "promotion_passed": false
+  },
+  "evidence": {
+    "launcher_terminal_sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac",
+    "validation_result_sha256": "beee77f71a34af0bd3d81cdc07c4742ed99bc81899fcdfb3dced1e1867d746ba",
+    "selection_partial_sha256": "b60d7d2c973aa64a4b2d0e61bfa34c5010f31013e27f66df236e0bb91e02463d",
+    "run_manifest_sha256": "0baa9614aa0c2f86a70d9c848e1454c9dd990c532e39be2fb7020a3f22c50637",
+    "training_progress_sha256": "3ea4e2d4f7e60faa1916541fbf99d68a47708e2ff0cbef6745725dbbb1275f4b",
+    "kernel_log_sha256": "fc22fe6eee39b16bb727e041c6a1f856a38e59ba7ba47c5ea2d2d2ad3a19e42b",
+    "submission_artifacts_found": []
+  },
+  "metadata_correction": {
+    "field": "run_manifest.student.architecture",
+    "recorded_value": "LSM-FM image-only SwinUNETR feature-24 + Biohub heatmap head",
+    "correct_value": "LSM-FM image-text SwinUNETR feature-36 + Biohub heatmap head",
+    "classification": "metadata_only",
+    "evidence": "The immutable base checkpoint hash, 35,072,515 parameter count, learned checkpoint, runtime manifest, and strict model load all identify the feature-36 image-text detector. The shared trainer string was corrected after this immutable kernel version launched."
+  },
+  "decision": {
+    "selection_gate": "reject",
+    "family": "retain",
+    "next_experiment": "lsm-fm-ensemble-validation-v1",
+    "reason": "A fixed feature-24/feature-36 probability ensemble plus theory-matched sub-voxel refinement directly targets the remaining 14-match deficit without retraining or leaderboard selection."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false
+}

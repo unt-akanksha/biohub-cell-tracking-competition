@@ -1,0 +1,187 @@
+{
+  "checks": [
+    {
+      "detail": "Notebook cells compile, remote modules import, and focused ensemble/refinement/sharding tests pass.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-ensemble-validation-v1/biohub-lsm-fm-ensemble-validation-v1.ipynb",
+          "sha256": "2ff7b5518a75923b37cffb9043091623908e02094375c646996f6ef334c5ec8c"
+        },
+        {
+          "path": "research/lsm_fm_detection/evaluate_ensemble.py",
+          "sha256": "a8b56310ba0d428baf0589614b773edfb553e44685912171e41f3f8fa48649d0"
+        },
+        {
+          "path": "research/lsm_fm_detection/localization_refinement.py",
+          "sha256": "528bed55386a34a9e30d5a200cc22453092bf5be7627307b4b433501fc098279"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/evaluate_lsm_fm_ensemble.py",
+          "sha256": "a8b56310ba0d428baf0589614b773edfb553e44685912171e41f3f8fa48649d0"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/monai-1.5.1/monai/__init__.py",
+          "sha256": "3b018ef27d5eaea7ce26c2e897586cb8735d73b00eb0e6fcdca33b9b3d554337"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Both completed source kernels, learned checkpoints, private runtime, graph baseline, and competition input are exact-hash bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-ensemble-validation-v1.json",
+          "sha256": "96bc251a530dabb5666c11819a5f486a1e836944d3e3359af87dcf691bab519f"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-ensemble-validation-v1/kernel-metadata.json",
+          "sha256": "f86edf2beec8e433de424ae9842708d22c49666d8ad1b344edbcdc4d5cdefca2"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-ensemble-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/SOURCE_MANIFEST.json",
+          "sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/launcher_terminal.json",
+          "sha256": "d1a56bae37975e4221256a79ecbefa7aad2cb1f7f0df7e4e87798f777372ecc6"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/lsm_fm_pu_model/best.pt",
+          "sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/lsm_fm_pu_model/pu_training_result.json",
+          "sha256": "da370d810e26253b2a0bed1e16d4bdbc0264ec8a705d7e757a2607fa93c14d0d"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Both learned detector states strict-load and the fixed equal-probability batch combiner returns finite exact values.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/evaluate_ensemble.py",
+          "sha256": "a8b56310ba0d428baf0589614b773edfb553e44685912171e41f3f8fa48649d0"
+        },
+        {
+          "path": "tests/test_lsm_fm_ensemble_evaluator.py",
+          "sha256": "7f2f61c2dea689944dd5862fc9be9c74e57d5df00f4805e5cb246a87e6fa4da7"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/lsm_fm_pu_model/best.pt",
+          "sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only experiment: both source checkpoints already carry completed optimizer evidence and no parameter is updated here.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "Remote base weights and both learned source checkpoints strict-load with exact expected parameter counts and terminal provenance.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-ensemble-runtime-v1-version1/SOURCE_MANIFEST.json",
+          "sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/lsm_fm_pu_model/best.pt",
+          "sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-pu-adaptation-v2/lsm_fm_pu_model/pu_training_result.json",
+          "sha256": "da370d810e26253b2a0bed1e16d4bdbc0264ec8a705d7e757a2607fa93c14d0d"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only clean validation evidence is written; submission artifacts cause failure and no competition submission call exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-ensemble-validation-v1/biohub-lsm-fm-ensemble-validation-v1.ipynb",
+          "sha256": "2ff7b5518a75923b37cffb9043091623908e02094375c646996f6ef334c5ec8c"
+        },
+        {
+          "path": "research/lsm_fm_detection/evaluate_ensemble.py",
+          "sha256": "a8b56310ba0d428baf0589614b773edfb553e44685912171e41f3f8fa48649d0"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "One global choice is frozen over eight selection movies before four disjoint acceptance movies can be opened.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-ensemble-validation-v1.json",
+          "sha256": "96bc251a530dabb5666c11819a5f486a1e836944d3e3359af87dcf691bab519f"
+        },
+        {
+          "path": "research/lsm_fm_detection/evaluate_ensemble.py",
+          "sha256": "a8b56310ba0d428baf0589614b773edfb553e44685912171e41f3f8fa48649d0"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Only licensed official pretrained weights and independently trained Biohub checkpoints are used; no public predictions or Kaggle code are copied.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-ensemble-validation-v1.json",
+          "sha256": "96bc251a530dabb5666c11819a5f486a1e836944d3e3359af87dcf691bab519f"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-ensemble-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1"
+        },
+        {
+          "path": "licenses/LSM_FM_WEIGHTS_ATTRIBUTION.md",
+          "sha256": "91d081f0bf9365062dc8a7623523dfb489d87fbf03bd18504ce44a6f2227c522"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T20:37:46.273892Z",
+  "report_sha256": "93c8a66d9dff18c2b71112fc8f10c767d97e04b7a6ec7bafe7452ef0cd73c0c7",
+  "run_id": "lsm-fm-ensemble-validation-v1",
+  "schema_version": 1
+}
