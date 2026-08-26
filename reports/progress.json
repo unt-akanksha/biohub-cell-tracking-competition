@@ -1427,6 +1427,45 @@
       "registered_at": "2026-08-26T15:28:44.522267Z",
       "run_id": "spatialdino-pu-adaptation-v1",
       "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Bind the immutable preflight and independently downloaded Kaggle topology dataset after registration.",
+          "replacement_fields": {
+            "config_file_sha256": "794db77353c371b0d9db7fc023d74a3d827741694dab74fc4aa18f496cb84c3c",
+            "config_path": "config/experiments/spatialdino-appearance-validation-v2.json",
+            "preflight_report": "artifacts/preflights/spatialdino-appearance-validation-v2.json",
+            "preflight_report_sha256": "1085f39235014bbade6a509f990126c5c86e22670ac39a40c89424a47791ca47",
+            "remote_dataset_download_verified": true,
+            "remote_dataset_file_count": 6,
+            "repair_scope": "replace unavailable kernel-output attachment with an exact private dataset materialization",
+            "scientific_code_changed_from_v1": false,
+            "topology_dataset": "indarkarhana/biohub-hoct-processed-validation-v1",
+            "topology_dataset_manifest_sha256": "2d8346d99769770ae13633b29ced14728c610057049c9ccb5a20b127abc89c4f",
+            "topology_dataset_version": 1
+          },
+          "target_event_id": "evt-a4917dbfd7c047a0a59d5906f60e8218"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "spatialdino-appearance-validation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T16:09:57.111892Z",
+      "run_id": "spatialdino-appearance-validation-v2",
+      "status": "registered"
     }
   ],
   "schema_version": 1

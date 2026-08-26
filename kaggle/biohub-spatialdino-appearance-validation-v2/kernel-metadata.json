@@ -1,0 +1,31 @@
+{
+  "code_file": "biohub-spatialdino-appearance-validation-v2.ipynb",
+  "competition_sources": [
+    "biohub-cell-tracking-during-development"
+  ],
+  "dataset_sources": [
+    "indarkarhana/biohub-spatialdino-runtime-v1",
+    "indarkarhana/biohub-hoct-multibackbone-runtime-v1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "indarkarhana/biohub-hoct-processed-validation-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "enable_gpu": true,
+  "enable_internet": false,
+  "enable_tpu": false,
+  "id": "indarkarhana/biohub-spatialdino-appearance-validation-v2",
+  "is_private": true,
+  "kernel_sources": [],
+  "kernel_type": "notebook",
+  "keywords": [
+    "gpu",
+    "cell-tracking",
+    "spatialdino",
+    "appearance"
+  ],
+  "language": "python",
+  "machine_shape": "NvidiaTeslaT4",
+  "model_sources": [],
+  "title": "Biohub SpatialDINO Appearance Validation v2"
+}

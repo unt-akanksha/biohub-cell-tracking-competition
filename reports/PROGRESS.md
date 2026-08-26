@@ -42,6 +42,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `spatialdino-appearance-validation-v1` | hoct-multibackbone-probe-v1 | Frozen 3D microscopy foundation-model appearance features can correct a small set of ambiguous parent crossings while preserving the strong detector topology and every node degree, improving clean held-out association beyond the public comparator without leaderboard feedback. | failed | not recorded | — | 0.000012 / 2.00 | inconclusive | Kaggle did not materialize the attached HOCT kernel output, so hoct_output discovery failed in setup after 0.043 seconds. SpatialDINO inference and validation never started; no submission was created. | — |
 | `spotiflow-pu-adaptation-v1` | spatialdino-appearance-validation-v1 | Positive-unlabeled adaptation of the official 35.5M Spotiflow detector using conservative two-seed teacher consensus, forced organizer positives, weak-strong consistency, and frozen-base flow preservation can match the public detector's clean recall without copying public predictions. | rejected | not recorded | — | 0.15005 / 2.00 | retire | Independent PU training completed all 1,024 steps across 187 non-validation movies, but clean selection recall was 0.779239 versus the 0.80 pooled gate and 0.486438 versus the 0.65 worst-movie gate. Acceptance remained unopened and no submission was created. | — |
 | `spatialdino-pu-adaptation-v1` | spotiflow-pu-adaptation-v1 | An independent 29.5M-parameter microscopy-pretrained SpatialDINO/UNETR hybrid, trained on conservative positive-unlabeled consensus across every non-validation movie, will improve clean complete-movie detection recall and complement Spotiflow without copying public predictions. | running | not recorded | — | unknown / 2.00 | — | — | — |
+| `spatialdino-appearance-validation-v2` | spatialdino-appearance-validation-v1 | The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment. | registered | not recorded | — | unknown / 2.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -249,6 +250,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Decision evidence: `["reports/experiments/spotiflow-pu-adaptation-v1-result.json",".biohub/cache/kernel-outputs/spotiflow-pu-adaptation-v1/spotiflow_pu_validation/pu_detector_validation.json"]`
 
 ### spatialdino-pu-adaptation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spatialdino-appearance-validation-v2
 
 - Authorized for submission: `false`
 - Imported audit: `false`
