@@ -1303,25 +1303,28 @@
       "status": "rejected"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.000012",
       "amendments": [],
       "authorized_for_submission": false,
-      "decision": null,
-      "decision_evidence": [],
+      "decision": "inconclusive",
+      "decision_evidence": [
+        ".biohub/cache/kernel-outputs/spatialdino-appearance-validation-v1/launcher_terminal.json",
+        ".biohub/cache/kernel-outputs/spatialdino-appearance-validation-v1/biohub-spatialdino-appearance-validation-v1.log"
+      ],
       "declared_gpu_hours": "2.00",
       "dependencies": [],
       "exact_evidence": {},
       "failed_gate": null,
-      "failure_reason": null,
+      "failure_reason": "Kaggle did not materialize the attached HOCT kernel output, so hoct_output discovery failed in setup after 0.043 seconds. SpatialDINO inference and validation never started; no submission was created.",
       "hypothesis": "Frozen 3D microscopy foundation-model appearance features can correct a small set of ambiguous parent crossings while preserving the strong detector topology and every node degree, improving clean held-out association beyond the public comparator without leaderboard feedback.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "failed",
       "next_gate": null,
       "parent": "hoct-multibackbone-probe-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-26T14:13:34.437632Z",
       "run_id": "spatialdino-appearance-validation-v1",
-      "status": "running"
+      "status": "failed"
     },
     {
       "actual_gpu_hours": null,
