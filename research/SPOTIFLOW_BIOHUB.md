@@ -46,3 +46,12 @@ receive a favorable count adjustment.
 Promotion requires a complete held-out graph gain, stable node recall, and no
 regression in division Jaccard. A detector-only or count-only proxy is not a
 promotion gate.
+
+## Dense pretraining source
+
+The 2026-08-26 public audit identified a CC0 physical synthetic source with
+1,539 fully labeled static volumes. Its static coordinates are suitable after
+the same XY stride/downscale used by Biohub; its temporal coordinates require a
+documented Y/X divide-by-four repair. If pretrained Spotiflow is viable, this is
+the preferred dense-supervision stage before positive-unlabeled real-data
+adaptation. See `research/SYNTHETIC_PRETRAIN_AUDIT.md`.
