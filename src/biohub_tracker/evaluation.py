@@ -35,7 +35,9 @@ from .ledger import (
     Ledger,
     exact_evaluation_completed_payload,
     exact_evaluation_failed_payload,
+    exact_evaluation_materialized_payload,
     exact_evaluation_registration_payload,
+    event_sha256,
     reconstruct_exact_evaluations,
 )
 from .manifests import EvaluationManifest, SampleRecord, load_manifest
@@ -358,6 +360,16 @@ def _published_report(request: ExactEvaluationRequest, output: Path) -> ExactRep
         ),
     )
     state = reconstruct_exact_evaluations(ledger.read_events())[request.evaluation_run_id]
+    if state.status is ExactEvaluationStatus.RUNNING:
+        if state.materialized is None:
+            _fail("EXACT_REPORT_NOT_MATERIALIZED", request.evaluation_run_id)
+        if _artifact_inventory(output) != state.materialized["artifact_inventory"]:
+            _fail("EXACT_MATERIALIZATION_MISMATCH", "published artifact inventory")
+        if (
+            report.core_sha256 != state.materialized["report_core_sha256"]
+            or report.envelope_sha256 != state.materialized["envelope_sha256"]
+        ):
+            _fail("EXACT_MATERIALIZATION_MISMATCH", "published report hashes")
     for name in (
         "evaluation_run_id",
         "evidence_kind",
@@ -383,6 +395,15 @@ def _published_report(request: ExactEvaluationRequest, output: Path) -> ExactRep
             "report_envelope_file": sha256_file(envelope_path),
         },
         authoritative_inventories=authoritative,
+        materialization_event_sha256=event_sha256(
+            next(
+                item
+                for item in state.events
+                if item.event_type is EventType.EXACT_EVALUATION_MATERIALIZED
+            )
+        )
+        if state.materialized is not None
+        else None,
     )
     if state.status is ExactEvaluationStatus.RUNNING:
         ledger.append(
@@ -729,6 +750,30 @@ def _normalized_graph_signature(graph: GraphData) -> str:
     return sha256_bytes(canonical_json_bytes(normalized))
 
 
+def _artifact_inventory(directory: Path) -> list[dict[str, Any]]:
+    root = directory.resolve(strict=True)
+    result: list[dict[str, Any]] = []
+    for path in sorted(
+        (item for item in root.rglob("*") if item.is_file()),
+        key=lambda item: item.relative_to(root).as_posix(),
+    ):
+        resolved = path.resolve(strict=True)
+        try:
+            resolved.relative_to(root)
+        except ValueError as exc:
+            raise ExactEvaluationError("EXACT_ARTIFACT_PATH_ESCAPE", str(path)) from exc
+        result.append(
+            {
+                "path": path.relative_to(root).as_posix(),
+                "sha256": sha256_file(resolved),
+                "size_bytes": resolved.stat().st_size,
+            }
+        )
+    if not result:
+        _fail("EXACT_ARTIFACT_INVENTORY_EMPTY", str(directory))
+    return result
+
+
 def metric_exploit_audit(
     *,
     scorer_lock: ScorerLock,
@@ -997,6 +1042,24 @@ def validate_exact_report(
         )
         if state is None or state.status is not ExactEvaluationStatus.COMPLETED or state.terminal is None:
             _fail("EXACT_EVALUATION_NOT_COMPLETED", str(report.core["evaluation_run_id"]))
+        if report.core["schema_version"] == REPORT_SCHEMA:
+            materialized_event = next(
+                (
+                    item
+                    for item in state.events
+                    if item.event_type is EventType.EXACT_EVALUATION_MATERIALIZED
+                ),
+                None,
+            )
+            if (
+                materialized_event is None
+                or state.materialized is None
+                or state.terminal.get("materialization_event_sha256")
+                != event_sha256(materialized_event)
+                or state.materialized.get("report_core_sha256") != report.core_sha256
+                or state.materialized.get("envelope_sha256") != report.envelope_sha256
+            ):
+                _fail("EXACT_MATERIALIZATION_MISMATCH", "completed report binding")
         if state.terminal.get("report_core_sha256") != report.core_sha256:
             _fail("EXACT_REPORT_HASH_MISMATCH", "ledger core")
         if state.terminal.get("envelope_sha256") != report.envelope_sha256:
@@ -1166,6 +1229,20 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
         envelope_path = staging / "exact-report-envelope.json"
         atomic_write_json(core_path, core)
         atomic_write_json(envelope_path, envelope)
+        materialized = exact_evaluation_materialized_payload(
+            evaluation_run_id=request.evaluation_run_id,
+            members=members,
+            report_core_sha256=core_sha,
+            envelope_sha256=envelope_sha,
+            artifact_inventory=_artifact_inventory(staging),
+            authoritative_inventories=authoritative,
+        )
+        materialization_event = ExperimentEvent.create(
+                request.evaluation_run_id,
+                EventType.EXACT_EVALUATION_MATERIALIZED,
+                materialized,
+        )
+        ledger.append(materialization_event)
         os.rename(staging, output)
         published = True
         core_path = output / core_path.name
@@ -1180,6 +1257,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
                 "report_envelope_file": sha256_file(envelope_path),
             },
             authoritative_inventories=authoritative,
+            materialization_event_sha256=event_sha256(materialization_event),
         )
         ledger.append(
             ExperimentEvent.create(

@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from biohub_tracker.evaluation import (
+    ExactEvaluationError,
     ExactEvaluationRequest,
     ExactReport,
     PredictionSetRef,
@@ -408,6 +409,39 @@ def test_exact_publication_recovers_kill_after_rename_before_completion(
     assert validate_exact_report(
         report, ledger_path=ledger.path, workspace_root=tmp_path
     ).core_sha256 == report.core_sha256
+
+
+def test_kill_after_rename_cannot_bless_a_rehashed_replacement(
+    tmp_path, verified, monkeypatch
+):
+    request, ledger = _request(tmp_path, verified)
+    real_append = Ledger.append
+
+    def kill_before_completion(self, event):
+        if event.event_type is EventType.EXACT_EVALUATION_COMPLETED:
+            raise SystemExit("kill before completion")
+        return real_append(self, event)
+
+    monkeypatch.setattr(Ledger, "append", kill_before_completion)
+    with pytest.raises(SystemExit, match="before completion"):
+        evaluate_exact(request)
+    monkeypatch.setattr(Ledger, "append", real_append)
+
+    core_path = request.output_dir / "exact-report-core.json"
+    envelope_path = request.output_dir / "exact-report-envelope.json"
+    core = json.loads(core_path.read_text(encoding="utf-8"))
+    core["official"]["candidate"]["pooled"]["score"] = "999"
+    replacement_core_sha = sha256_bytes(canonical_json_bytes(core))
+    envelope = json.loads(envelope_path.read_text(encoding="utf-8"))
+    envelope["report_core_sha256"] = replacement_core_sha
+    core_path.write_bytes(canonical_json_bytes(core) + b"\n")
+    envelope_path.write_bytes(canonical_json_bytes(envelope) + b"\n")
+
+    with pytest.raises(ExactEvaluationError, match="EXACT_MATERIALIZATION_MISMATCH"):
+        evaluate_exact(request)
+    assert reconstruct_exact_evaluations(ledger.read_events())["eval-fixture"].status is (
+        ExactEvaluationStatus.RUNNING
+    )
 
 
 def test_exact_publication_retries_kill_after_completion_append(

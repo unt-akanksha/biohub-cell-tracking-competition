@@ -30,6 +30,7 @@ from .ledger import (
     event_sha256,
     exact_evaluation_completed_payload,
     exact_evaluation_failed_payload,
+    exact_evaluation_materialized_payload,
     exact_evaluation_registration_payload,
     exact_evaluation_started_payload,
     reconstruct_cpu_acceptances,
@@ -1590,6 +1591,33 @@ def reconcile_pending_control(
         },
     }
     envelope_sha = sha256_bytes(canonical_json_bytes(envelope))
+    expected_aggregate_materialization = _saga_event(
+        pending.evaluation_run_id,
+        EventType.EXACT_EVALUATION_MATERIALIZED,
+        exact_evaluation_materialized_payload(
+            evaluation_run_id=pending.evaluation_run_id,
+            members=members,
+            report_core_sha256=core_sha,
+            envelope_sha256=envelope_sha,
+            artifact_inventory=[
+                {
+                    "path": "exact-report-core.json",
+                    "sha256": core_sha,
+                    "size_bytes": len(canonical_json_bytes(core)) + 1,
+                },
+                {
+                    "path": "exact-report-envelope.json",
+                    "sha256": envelope_sha,
+                    "size_bytes": len(canonical_json_bytes(envelope)) + 1,
+                },
+            ],
+            authoritative_inventories=authoritative,
+        ),
+        created_at=start_event.created_at,
+    )
+    aggregate_materialization, _ = _reuse_saga_event(
+        events, expected_aggregate_materialization
+    )
     expected_aggregate_completion = _saga_event(
         pending.evaluation_run_id,
         EventType.EXACT_EVALUATION_COMPLETED,
@@ -1605,6 +1633,7 @@ def reconcile_pending_control(
             },
             authoritative_inventories=authoritative,
             promotion_eligible=False,
+            materialization_event_sha256=event_sha256(aggregate_materialization),
         ),
         created_at=start_event.created_at,
     )
@@ -1650,6 +1679,7 @@ def reconcile_pending_control(
             "cpu_completed": event_sha256(completion_event),
             "aggregate_registered": event_sha256(aggregate_registration),
             "aggregate_started": event_sha256(aggregate_start),
+            "aggregate_materialized": event_sha256(aggregate_materialization),
             "aggregate_completed": event_sha256(aggregate_completion),
         },
         "exact_report": {"core": core, "envelope": envelope},
@@ -1667,6 +1697,7 @@ def reconcile_pending_control(
         completion_event,
         aggregate_registration,
         aggregate_start,
+        aggregate_materialization,
         aggregate_completion,
     ):
         _append_saga_event(ledger, event)

@@ -64,6 +64,7 @@ class EventType(StrEnum):
     LAUNCH_FAILED = "launch_failed"
     EXACT_EVALUATION_REGISTERED = "exact_evaluation_registered"
     EXACT_EVALUATION_STARTED = "exact_evaluation_started"
+    EXACT_EVALUATION_MATERIALIZED = "exact_evaluation_materialized"
     EXACT_EVALUATION_COMPLETED = "exact_evaluation_completed"
     EXACT_EVALUATION_FAILED = "exact_evaluation_failed"
     EXACT_PROMOTION_DECISION = "exact_promotion_decision"
@@ -116,6 +117,7 @@ REVIEW_EXCEPTION_AUTHORIZATIONS = frozenset(
 _EXACT_EVENT_TYPES = {
     EventType.EXACT_EVALUATION_REGISTERED,
     EventType.EXACT_EVALUATION_STARTED,
+    EventType.EXACT_EVALUATION_MATERIALIZED,
     EventType.EXACT_EVALUATION_COMPLETED,
     EventType.EXACT_EVALUATION_FAILED,
 }
@@ -207,6 +209,7 @@ class ExactEvaluationState:
     status: ExactEvaluationStatus
     registered: dict[str, Any]
     events: list[ExperimentEvent] = field(default_factory=list)
+    materialized: dict[str, Any] | None = None
     terminal: dict[str, Any] | None = None
     decision: dict[str, Any] | None = None
     exceptions: list[dict[str, Any]] = field(default_factory=list)
@@ -319,8 +322,9 @@ def _event_order(event: ExperimentEvent) -> tuple[Any, ...]:
         EventType.AMENDMENT: 5,
         EventType.EXACT_EVALUATION_REGISTERED: 0,
         EventType.EXACT_EVALUATION_STARTED: 2,
-        EventType.EXACT_EVALUATION_COMPLETED: 3,
-        EventType.EXACT_EVALUATION_FAILED: 3,
+        EventType.EXACT_EVALUATION_MATERIALIZED: 3,
+        EventType.EXACT_EVALUATION_COMPLETED: 4,
+        EventType.EXACT_EVALUATION_FAILED: 4,
         EventType.EXACT_PROMOTION_DECISION: 4,
         EventType.EXACT_PROMOTION_EXCEPTION: 5,
         EventType.CPU_ACCEPTANCE_REGISTERED: 0,
@@ -634,6 +638,15 @@ def reconstruct_exact_evaluations(
                         f"exact evaluation {evaluation_run_id} has an illegal repeated/late start"
                     )
                 state.status = ExactEvaluationStatus.RUNNING
+            elif event.event_type is EventType.EXACT_EVALUATION_MATERIALIZED:
+                if (
+                    state.status is not ExactEvaluationStatus.RUNNING
+                    or state.materialized is not None
+                ):
+                    raise TransitionError(
+                        f"exact evaluation {evaluation_run_id} has an illegal materialization"
+                    )
+                state.materialized = dict(event.payload)
             elif event.event_type in {
                 EventType.EXACT_EVALUATION_COMPLETED,
                 EventType.EXACT_EVALUATION_FAILED,
@@ -1392,8 +1405,9 @@ def exact_evaluation_completed_payload(
     artifact_hashes: Mapping[str, Any],
     authoritative_inventories: Sequence[Mapping[str, Any]],
     promotion_eligible: bool = True,
+    materialization_event_sha256: str | None = None,
 ) -> dict[str, Any]:
-    return {
+    result = {
         "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
         "members": _normalize_exact_members([dict(item) for item in members]),
         "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
@@ -1403,6 +1417,60 @@ def exact_evaluation_completed_payload(
             [dict(item) for item in authoritative_inventories]
         ),
         "promotion_eligible": bool(promotion_eligible),
+    }
+    if materialization_event_sha256 is not None:
+        result["materialization_event_sha256"] = _sha256_text(
+            materialization_event_sha256, "materialization_event_sha256"
+        )
+    return result
+
+
+def _normalize_artifact_inventory(value: Any) -> list[dict[str, Any]]:
+    if not isinstance(value, list) or not value:
+        raise ValueError("materialization requires a non-empty artifact inventory")
+    result: list[dict[str, Any]] = []
+    for item in value:
+        if not isinstance(item, Mapping) or set(item) != {"path", "sha256", "size_bytes"}:
+            raise ValueError("materialization artifact inventory fields are invalid")
+        relative = Path(_bounded_text(item["path"], "artifact inventory path", 500))
+        if relative.is_absolute() or ".." in relative.parts or relative.as_posix() in {"", "."}:
+            raise ValueError("materialization artifact inventory path is unsafe")
+        size = item["size_bytes"]
+        if isinstance(size, bool) or not isinstance(size, int) or size < 0:
+            raise ValueError("materialization artifact size is invalid")
+        result.append(
+            {
+                "path": relative.as_posix(),
+                "sha256": _sha256_text(item["sha256"], "artifact inventory sha256"),
+                "size_bytes": size,
+            }
+        )
+    result.sort(key=lambda item: item["path"])
+    if len({item["path"] for item in result}) != len(result):
+        raise ValueError("materialization artifact paths must be unique")
+    return result
+
+
+def exact_evaluation_materialized_payload(
+    *,
+    evaluation_run_id: str,
+    members: Sequence[Mapping[str, Any]],
+    report_core_sha256: str,
+    envelope_sha256: str,
+    artifact_inventory: Sequence[Mapping[str, Any]],
+    authoritative_inventories: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    return {
+        "evaluation_run_id": _bounded_text(evaluation_run_id, "evaluation_run_id", 160),
+        "members": _normalize_exact_members([dict(item) for item in members]),
+        "report_core_sha256": _sha256_text(report_core_sha256, "report_core_sha256"),
+        "envelope_sha256": _sha256_text(envelope_sha256, "envelope_sha256"),
+        "artifact_inventory": _normalize_artifact_inventory(
+            [dict(item) for item in artifact_inventory]
+        ),
+        "authoritative_inventories": _normalize_authoritative_inventories(
+            [dict(item) for item in authoritative_inventories]
+        ),
     }
 
 
@@ -1570,6 +1638,29 @@ def _validate_exact_transition(
             f"exact evaluation {event.run_id} cannot finish from {existing.status}"
         )
     _validate_registered_exact_members(events, existing.registered["members"])
+    if event.event_type is EventType.EXACT_EVALUATION_MATERIALIZED:
+        if existing.materialized is not None:
+            raise TransitionError("exact evaluation is already materialized")
+        try:
+            normalized_materialized = exact_evaluation_materialized_payload(
+                evaluation_run_id=event.run_id,
+                members=event.payload.get("members", ()),
+                report_core_sha256=event.payload.get("report_core_sha256"),
+                envelope_sha256=event.payload.get("envelope_sha256"),
+                artifact_inventory=event.payload.get("artifact_inventory", ()),
+                authoritative_inventories=event.payload.get(
+                    "authoritative_inventories", ()
+                ),
+            )
+        except ValueError as exc:
+            raise TransitionError(str(exc)) from exc
+        if event.payload != normalized_materialized:
+            raise TransitionError("exact evaluation materialization payload is invalid")
+        if canonical_json_bytes(normalized_materialized["members"]) != canonical_json_bytes(
+            existing.registered["members"]
+        ):
+            raise TransitionError("exact evaluation materialization member table drifted")
+        return
     if event.event_type is EventType.EXACT_EVALUATION_COMPLETED:
         try:
             normalized = exact_evaluation_completed_payload(
@@ -1580,6 +1671,9 @@ def _validate_exact_transition(
                 artifact_hashes=event.payload.get("artifact_hashes", {}),
                 authoritative_inventories=event.payload.get("authoritative_inventories", ()),
                 promotion_eligible=event.payload.get("promotion_eligible"),
+                materialization_event_sha256=event.payload.get(
+                    "materialization_event_sha256"
+                ),
             )
         except ValueError as exc:
             raise TransitionError(str(exc)) from exc
@@ -1594,6 +1688,30 @@ def _validate_exact_transition(
             existing.registered["members"]
         ):
             raise TransitionError("exact evaluation completion member table drifted")
+        if "materialization_event_sha256" in normalized:
+            if existing.materialized is None:
+                raise TransitionError("exact evaluation completion requires materialization")
+            materialized_event = next(
+                item
+                for item in existing.events
+                if item.event_type is EventType.EXACT_EVALUATION_MATERIALIZED
+            )
+            if normalized["materialization_event_sha256"] != event_sha256(
+                materialized_event
+            ):
+                raise TransitionError("exact evaluation materialization event hash mismatch")
+            for name in (
+                "members",
+                "report_core_sha256",
+                "envelope_sha256",
+                "authoritative_inventories",
+            ):
+                if canonical_json_bytes(normalized[name]) != canonical_json_bytes(
+                    existing.materialized[name]
+                ):
+                    raise TransitionError(
+                        f"exact evaluation completion {name} was not materialized"
+                    )
         registered_slots = {
             (item["role"], item["fold_id"], item["producer_run_id"])
             for item in existing.registered["members"]
