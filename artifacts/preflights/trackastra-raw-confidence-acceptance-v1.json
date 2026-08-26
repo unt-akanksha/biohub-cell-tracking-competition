@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-raw-confidence-acceptance-v1",
+  "created_at": "2026-08-26T09:39:54Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/validate_model_posthoc.py", "sha256": "511d2a1e1c857656a1688a873ab3c47d6de88dbf99f67fddba47c75a7261e1b1"},
+        {"path": "research/trackastra_graph/materialize_public_validation.py", "sha256": "ae2044d77cff82c77b87c17cc517148f25cff71450a1cb63df007480e7bf404f"},
+        {"path": "kaggle/biohub-trackastra-raw-confidence-acceptance-v1/biohub-trackastra-raw-confidence-acceptance-v1.ipynb", "sha256": "bfa5b59e54f5b365c427c99b38a9ef4dc12a91e5d2d408dcdb21ecf5392abdf4"}
+      ],
+      "detail": "The posthoc validator and exact public-topology materializer import, and every generated notebook code cell parses."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/trackastra-raw-confidence-acceptance-v1.json", "sha256": "25578e283cd06279c166fcafe540444a35dd7498c9adb4d44c885bc963da307f"},
+        {"path": "kaggle/biohub-trackastra-raw-confidence-acceptance-v1/kernel-metadata.json", "sha256": "d4b5357f282bd119fbfce8519f36d8b3800184c9df781357f0d25ebbadc3cc3f"},
+        {"path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json", "sha256": "dd079e34018b08a6d727d9fd51849739adeb4bf917e8e3800807f894097d8419"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v6-result.json", "sha256": "8f67cea4cac0a12b099099e6bf10bff745b6c7006f973551db65c3d3efc7a243"}
+      ],
+      "detail": "The private kernel pins runtime v8, official competition input, support wheels, DeepCenter input, and the completed V6 kernel output."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "e6a5190aede06d6811130ed90de7ed5ac085124e8ffa0bc76f1b027aa3398e45"}
+      ],
+      "detail": "The exact Trackastra inference path completed a finite dense batch and preserves stable source/target IDs."
+    },
+    {
+      "name": "model_step",
+      "status": "not_applicable",
+      "evidence": [],
+      "detail": "This frozen posthoc acceptance performs inference and graph selection only; no optimizer or parameter update is permitted."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": ".biohub/cache/kernel-outputs/trackastra-graph-finetune-v6/trackastra_graph_v6/model.pt", "sha256": "255b3600a4926db6af36a7bddf6f1d84b711fca597602a4bdc511f5f4fd9166f"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v6-result.json", "sha256": "8f67cea4cac0a12b099099e6bf10bff745b6c7006f973551db65c3d3efc7a243"}
+      ],
+      "detail": "The downloaded model hash matches V6 terminal evidence and the acceptance notebook verifies the same binding before inference."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-raw-confidence-acceptance-v1/biohub-trackastra-raw-confidence-acceptance-v1.ipynb", "sha256": "bfa5b59e54f5b365c427c99b38a9ef4dc12a91e5d2d408dcdb21ecf5392abdf4"},
+        {"path": "research/trackastra_graph/validate_model_posthoc.py", "sha256": "511d2a1e1c857656a1688a873ab3c47d6de88dbf99f67fddba47c75a7261e1b1"}
+      ],
+      "detail": "The kernel writes only processed validation artifacts and terminal evidence below /kaggle/working and refuses submission creation."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "b59dcc3bdc8bc54fd1da203fed884bc6d3aa7d2e81f539390a1cf4f196d46757"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"}
+      ],
+      "detail": "Recursive inference tiling, batch one, mixed precision, and a 5,100-second hard watchdog bound GPU and host memory."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/trackastra-raw-confidence-acceptance-v1.json", "sha256": "25578e283cd06279c166fcafe540444a35dd7498c9adb4d44c885bc963da307f"},
+        {"path": "research/trackastra_graph/materialize_public_validation.py", "sha256": "ae2044d77cff82c77b87c17cc517148f25cff71450a1cb63df007480e7bf404f"},
+        {"path": "research/trackastra_graph/hybrid_linker.py", "sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946"}
+      ],
+      "detail": "The exact four frozen movies are materialized; two select configuration and two remain unread until the selection is frozen."
+    }
+  ],
+  "report_sha256": "79ab24a0c41ae62961f9cf6c1c49c7a1ed18bf85f4ee0ff4ac66fe00f571d7b3"
+}

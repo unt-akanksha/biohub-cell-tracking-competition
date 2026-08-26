@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v6",
+  "status": "completed",
+  "launcher_elapsed_seconds": 2022.8,
+  "trainer_elapsed_seconds": 1695.045306839,
+  "actual_gpu_hours": 0.5619,
+  "remaining_gpu_hours": 28.55,
+  "launcher_terminal_sha256": "f9acbb15ea0ce7caa16ab627659e06b8996eb1a316e5f8e39d1962940058bfbb",
+  "training_terminal_sha256": "c6c2843a2640b7ab55dadf9f19e2b6535ece50845e15b4cee8498734ca123d23",
+  "complete_movie_validation_sha256": "186350e9209d5f284da77e8769ca2fca47d8afb954edc4852cf71dcdbc1f2926",
+  "model_sha256": "255b3600a4926db6af36a7bddf6f1d84b711fca597602a4bdc511f5f4fd9166f",
+  "parameter_count": 27456880,
+  "synthetic_steps": 1200,
+  "real_steps": 7000,
+  "pooled": {
+    "adjusted_edge_jaccard": 0.7799176488499155,
+    "edge_jaccard": null,
+    "division_jaccard": 0.0,
+    "node_recall": null
+  },
+  "division_counts": {
+    "tp": 0,
+    "fp": 5,
+    "fn": 3
+  },
+  "by_embryo": {},
+  "by_fold": {},
+  "worst_movie_delta": -0.108190040920348,
+  "provisional_raw_graph_validation": {
+    "base_acceptance_proxy": 0.8457157112559047,
+    "selected_acceptance_proxy": 0.7799176488499155,
+    "acceptance_delta_vs_base_raw": -0.06579806240598918,
+    "base_worst_movie": 0.8431698208567855,
+    "selected_worst_movie": 0.7349797799364375,
+    "selection_delta_vs_base_raw": -0.0029035865932345306,
+    "association_acceptance_passed": false
+  },
+  "training_diagnostics": {
+    "initial_window_loss": 0.00953277984800177,
+    "post_synthetic_window_loss": 0.004059034490118729,
+    "final_window_loss": 0.05353495265201976,
+    "final_window_positive_probability": 0.843684564034144,
+    "note": "The tiny positive-only window check degraded after real fine-tuning and did not contain negatives; the complete-movie gate is the relevant provisional evidence."
+  },
+  "decision": {
+    "state": "retain_only_for_predeclared_exact_processed_topology_gate",
+    "reason": "Raw-graph validation failed, but the experiment contract explicitly made it provisional because the submission candidate uses the audited processed final topology with transferred raw confidences.",
+    "next_test": "Run trackastra-raw-confidence-acceptance-v1 once; retire immediately unless its disjoint processed-topology acceptance gate passes."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "submission_created": false
+}

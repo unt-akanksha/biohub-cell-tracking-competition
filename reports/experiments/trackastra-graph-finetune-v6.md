@@ -1,7 +1,7 @@
 # trackastra-graph-finetune-v6
 
-Status: staged corrective rerun of V5; no concurrent GPU job and no submission
-code.
+Status: completed; checkpoint retained only for the predeclared exact
+processed-topology posthoc gate. No submission was created.
 
 V5 established that all 195 real graphs, four validation graphs, 384 corrected
 synthetic graphs, the offline numerical stack, and the official 27.5M
@@ -22,3 +22,17 @@ movies, and the 27,456,880-parameter official CTC model. Training-time graph
 validation is provisional. Promotion still requires the separate V1 posthoc
 gate, which materializes the exact public final-CSV validation topology and
 uses disjoint selection/acceptance movies without leaderboard feedback.
+
+## Result
+
+The run completed all 1,200 synthetic and 7,000 real steps in 2,022.8 seconds
+of notebook wall time and produced a hash-bound 27,456,880-parameter model.
+Its provisional raw-graph validation did not generalize: acceptance proxy fell
+from `0.8457157` to `0.7799176` (`-0.0657981`), and the worst movie fell from
+`0.8431698` to `0.7349798`. The model is therefore not a submission candidate.
+
+The exact processed-topology posthoc gate remains justified once because V6's
+contract explicitly declared the training-time topology provisional. That gate
+is the only remaining use of this checkpoint and cannot create a submission.
+Failure retires the Trackastra lane immediately. Public leaderboard feedback
+was not used.
