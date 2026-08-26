@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import random
 from dataclasses import dataclass
@@ -59,9 +60,20 @@ def select_frame_pairs(
             continue
         if frame_count < 2:
             raise ValueError(f"movie {stem} has fewer than two frames")
-        candidates = np.linspace(
-            0, frame_count - 2, num=min(pairs_per_movie, frame_count - 1), dtype=int
-        )
+        count = min(pairs_per_movie, frame_count - 1)
+        if count == 1:
+            # One-pair coverage should not silently mean frame zero for every
+            # movie. Stable per-movie hashing spreads samples through time
+            # while remaining exactly reproducible from the recorded seed.
+            digest = hashlib.sha256(f"{seed}:{stem}".encode("utf-8")).digest()
+            candidates = np.asarray(
+                [int.from_bytes(digest[:8], "big") % (frame_count - 1)],
+                dtype=int,
+            )
+        else:
+            candidates = np.linspace(
+                0, frame_count - 2, num=count, dtype=int
+            )
         selected.extend((stem, int(frame)) for frame in np.unique(candidates))
     if not selected:
         raise RuntimeError("no non-validation frame pairs were selected")

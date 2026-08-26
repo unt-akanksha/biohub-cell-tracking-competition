@@ -180,7 +180,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r4.json",
+        default=ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r5.json",
     )
     args = parser.parse_args()
     verify_sources()

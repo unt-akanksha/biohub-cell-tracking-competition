@@ -1,0 +1,11 @@
+{
+  "config_path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+  "config_file_sha256": "10c1060ae9d49ab8132081a13e87a006e05c6ad217e1800b6ef3a35c4b5ddef1",
+  "runtime_manifest_sha256": "7312c03c2ea2d44f35542493f60c0c55190cd01845fe42e157856263670bf5ae",
+  "data_sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371",
+  "temporal_sampling_test_sha256": "1966fe75edf0f700bdebb80dd15248f79df6124cbd147b82640e50641cc778ab",
+  "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r5.json",
+  "preflight_report_sha256": "163086e5a9abff768b21838456a507c5df617ea3d9ee81f05880097cc8996615",
+  "runtime_dataset_version": 6,
+  "single_pair_sampling": "seeded stable per-movie temporal hash"
+}

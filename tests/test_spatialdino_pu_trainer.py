@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+
 import numpy as np
 import pytest
 import torch
@@ -59,6 +61,10 @@ def test_frame_pair_inventory_excludes_every_validation_movie() -> None:
     )
     assert {stem for stem, _ in selected} == {"44b6_train", "6bba_train"}
     assert len(selected) == 2
+    by_stem = dict(selected)
+    for stem, frame_count in (("44b6_train", 5), ("6bba_train", 7)):
+        digest = hashlib.sha256(f"11:{stem}".encode("utf-8")).digest()
+        assert by_stem[stem] == int.from_bytes(digest[:8], "big") % (frame_count - 1)
 
 
 def test_ema_decay_warms_up_without_exceeding_maximum() -> None:

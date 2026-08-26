@@ -29,8 +29,8 @@ has weight 0.01.
 - The sparse heatmap head starts at a low foreground prior instead of 0.5.
 - EMA warms from the current student before approaching a maximum decay of
   0.995, so an early guarded stop does not preserve random decoder weights.
-- One deterministic frame pair from every non-validation movie supplies broad
-  embryo coverage; both pair frames are visited across cycles.
+- One deterministic, seed-hashed temporal pair from every non-validation movie
+  supplies broad embryo and developmental-time coverage; both frames are used.
 - Teacher targets and raw frame pairs are cached on CPU. Each expensive teacher
   call predicts and caches both frames at once, then later cycles are cache hits.
 - Training is batch-one; clean inference is batch-four with Y/X flip TTA.
@@ -57,10 +57,10 @@ positive-unlabeled masking, sub-voxel inference, clean-result provenance, and
 the future two-GPU submission policy.
 
 Preflight report SHA-256:
-`b77ae8fcf71ca8cab5d7c63bab61ae16a5c59fc155b91f3c3ba9e0c183313baa`
+`163086e5a9abff768b21838456a507c5df617ea3d9ee81f05880097cc8996615`
 
-The earlier immutable preflights remain retained. Revision 4 also binds the
-two-frame-per-teacher-forward cache optimization before any GPU launch.
+The earlier immutable preflights remain retained. Revision 5 also binds the
+seeded temporal-coverage repair before any GPU launch.
 
 ## Launch rule
 
