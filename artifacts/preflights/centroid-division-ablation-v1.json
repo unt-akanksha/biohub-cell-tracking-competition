@@ -1,0 +1,116 @@
+{
+  "checks": [
+    {
+      "detail": "All code cells compile; deterministic builder reproduces the frozen ASCII notebook hash.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-centroid-division-ablation-v1/biohub-0-927-lb.ipynb",
+          "sha256": "ad8edbf68a368abdccba6932c15c7a27b77aac2f660b3301b172f285d6f35e6c"
+        },
+        {
+          "path": "scripts/build-centroid-division-ablation.py",
+          "sha256": "62abd6a9c382bddd2ebfc7736dc4a9aaa5176192c5fe670bd5741a3959bc72c5"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Competition input plus three immutable public checkpoint datasets attached; GPU on, TPU and internet off.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-centroid-division-ablation-v1/kernel-metadata.json",
+          "sha256": "2edbffe14cd907cd172d1de771b007ba9036beb3a6b1b39df2f00309ee910452"
+        },
+        {
+          "path": "config/experiments/centroid-division-ablation-v1.json",
+          "sha256": "304989a2392296fb77e880d19eb82ccf33a7f1de7a11694eec0356f73b3fbaee"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Parent inference completed all four 100-frame test movies; ablation reuses the identical learned pipeline and adds bounded post-processing arms.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-centroid-division-ablation-v1/biohub-0-927-lb.ipynb",
+          "sha256": "ad8edbf68a368abdccba6932c15c7a27b77aac2f660b3301b172f285d6f35e6c"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/dual_seed_frame_retention_guard_report.json",
+          "sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only ablation uses immutable pretrained checkpoints and performs no optimizer or backward step.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "Owned parent runtime verified all primary, secondary, and DeepCenter checkpoint hashes.",
+      "evidence": [
+        {
+          "path": "config/experiments/centroid-division-ablation-v1.json",
+          "sha256": "304989a2392296fb77e880d19eb82ccf33a7f1de7a11694eec0356f73b3fbaee"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/bidirectional_production_runtime_integrity.json",
+          "sha256": "ae41130ee035d3ddcbaf2d0977f721429a52ffda8133fe1b877f51de5926278d"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Notebook preserves /kaggle/working/submission.csv and writes compact ablation CSV/JSON evidence to /kaggle/working.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-centroid-division-ablation-v1/biohub-0-927-lb.ipynb",
+          "sha256": "ad8edbf68a368abdccba6932c15c7a27b77aac2f660b3301b172f285d6f35e6c"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/submission.csv",
+          "sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Four complete held-out movies across both embryo prefixes and all four complete competition test movies are covered.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/validator_results.csv",
+          "sha256": "b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777"
+        },
+        {
+          "path": ".biohub/cache/notebook-outputs/indarkarhana-biohub-clean-0-927-reproduction-v1/dual_seed_frame_retention_guard_report.json",
+          "sha256": "77219d972d53b474461ca058fa72a6d5f0c66f66343397abed8c742252e05b42"
+        },
+        {
+          "path": "kaggle/biohub-centroid-division-ablation-v1/biohub-0-927-lb.ipynb",
+          "sha256": "ad8edbf68a368abdccba6932c15c7a27b77aac2f660b3301b172f285d6f35e6c"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T03:59:57.129433Z",
+  "report_sha256": "021945916f51674c83a1c268acacf3fcd416ba3168d7ad547176d194c0015796",
+  "run_id": "centroid-division-ablation-v1",
+  "schema_version": 1
+}
