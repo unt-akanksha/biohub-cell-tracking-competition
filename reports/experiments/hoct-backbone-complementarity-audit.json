@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "run_id": "hoct-backbone-complementarity-audit",
+  "status": "completed_local_cpu",
+  "input_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+  "models": {
+    "general_v1": {
+      "sha256": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33",
+      "registry_generation": "weights-v1"
+    },
+    "ctc_v0": {
+      "sha256": "b9be3d976e2d51ae946128ded99142a81b5ba99fb87a0da67c38de2934944000",
+      "registry_generation": "weights-v0"
+    }
+  },
+  "audits": [
+    {
+      "movie_stem": "44b6_0113de3b",
+      "tiles": 8,
+      "owned_candidate_edges": 2152,
+      "target_parent_groups": 233,
+      "probability_pearson": 0.6498399344227856,
+      "logit_pearson": 0.454169042147503,
+      "probability_mean_absolute_difference": 0.1272939294576645,
+      "top_parent_agreement": 0.6008583690987125,
+      "general_probability_median": 0.005158459302037954,
+      "ctc_probability_median": 0.093659907579422
+    },
+    {
+      "movie_stem": "6bba_05b6850b",
+      "tiles": 8,
+      "owned_candidate_edges": 650,
+      "target_parent_groups": 77,
+      "probability_pearson": 0.7874611273527712,
+      "logit_pearson": 0.5758465218839401,
+      "probability_mean_absolute_difference": 0.08997455984354019,
+      "top_parent_agreement": 0.8051948051948052,
+      "general_probability_median": 0.00579997431486845,
+      "ctc_probability_median": 0.05141953378915787
+    }
+  ],
+  "finding": "The CTC-specialized and general HOCT checkpoints are materially diverse on both Biohub embryo prefixes rather than replica-like seeds. Their top-parent agreement ranges from 0.60 to 0.81 and probability correlation from 0.65 to 0.79.",
+  "decision": "Stage a multi-backbone HOCT v2 lane only after v1 evidence. Fit and evaluate each backbone independently, then allow a support-aware log-odds blend selected on the frozen selection movies and read acceptance once after configuration freeze.",
+  "public_leaderboard_used": false,
+  "labels_read": false,
+  "gpu_hours": 0
+}
