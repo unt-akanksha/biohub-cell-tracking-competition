@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-spotiflow-detector-acceptance-v2"
-NOTEBOOK = TARGET / "biohub-spotiflow-detector-acceptance-v2.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-spotiflow-detector-acceptance-v3"
+NOTEBOOK = TARGET / "biohub-spotiflow-detector-acceptance-v3.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,7 +31,7 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "spotiflow-detector-acceptance-v2"
+RUN_ID = "spotiflow-detector-acceptance-v3"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
@@ -204,7 +204,11 @@ command = [
 ]
 print("Launching Spotiflow detector acceptance:", " ".join(command))
 try:
-    subprocess.run(command, check=True)
+    run_env = os.environ.copy()
+    run_env["PYTHONPATH"] = os.pathsep.join(
+        [str(support_repo.parent), run_env.get("PYTHONPATH", "")]
+    ).rstrip(os.pathsep)
+    subprocess.run(command, check=True, env=run_env)
 except Exception as exc:
     write_terminal("failed", exc)
     raise
@@ -258,7 +262,7 @@ def main() -> None:
             code_cell(WATCHDOG),
             markdown_cell(
                 "# Spotiflow 3D detector acceptance\n\n"
-                "This is a disjoint-selection, clean-heldout test of two official pretrained 3D detectors. "
+                "This is a candidate-disjoint test of two official pretrained 3D detectors. "
                 "It does not create or submit a competition prediction.\n"
             ),
             code_cell(SETUP),
@@ -270,8 +274,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-spotiflow-detector-acceptance-v2",
-        "title": "Biohub Spotiflow Detector Acceptance v2",
+        "id": "indarkarhana/biohub-spotiflow-detector-acceptance-v3",
+        "title": "Biohub Spotiflow Detector Acceptance v3",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "detail": "Generated notebook compiles and propagates the verified support source path into the evaluator subprocess after preserving NumPy and probing SciPy plus a complete GEFF graph.",
+      "evidence": [{"path": "kaggle/biohub-spotiflow-detector-acceptance-v3/biohub-spotiflow-detector-acceptance-v3.ipynb", "sha256": "226b7f7cb015ff507d415fe2241ccb0b6c2cae7c847c532a650fabd03d9479de"}],
+      "name": "imports", "status": "passed"
+    },
+    {
+      "detail": "Both official checkpoints, evaluator, complete baseline graphs, competition data, support source, and exact offline wheels are attached.",
+      "evidence": [{"path": ".biohub/staging/biohub-spotiflow-detector-runtime-v1/SOURCE_MANIFEST.json", "sha256": "2b55f535ce37c3c8cd153f1dcc5a1fc546abf7b2f2717e850e22c471e504d55a"}, {"path": "kaggle/biohub-spotiflow-detector-acceptance-v3/kernel-metadata.json", "sha256": "2bba1ffc63a52937e89717f2f082cad4c244e6ce7fed6e4d753c5ff575e06d53"}],
+      "name": "inputs", "status": "passed"
+    },
+    {
+      "detail": "Synthetic tests cover density threshold selection, physical matching, and disjoint evaluation helpers.",
+      "evidence": [{"path": "tests/test_spotiflow_detector_acceptance.py", "sha256": "e128e54bef982196fdbd650aa0677300533c798785bcaed3c050ef9a6d0698fa"}, {"path": "tests/test_density_calibration.py", "sha256": "a498c34fc8dd920fd8442b599ef8ed0a8231c0faeeb64c2f5cc8b6626a530d01"}],
+      "name": "single_batch", "status": "passed"
+    },
+    {
+      "detail": "Inference-only pretrained detector acceptance; no optimizer step or model mutation occurs.",
+      "evidence": [], "name": "model_step", "status": "not_applicable"
+    },
+    {
+      "detail": "Both official 35,489,892-parameter checkpoints and release hashes were verified.",
+      "evidence": [{"path": "reports/experiments/spotiflow-detector-acceptance-v1-smoke.json", "sha256": "e7acd3ae638b9827959b335b6f599b817c40b974721614f478f31ecfcd02b5f2"}],
+      "name": "checkpoint_roundtrip", "status": "passed"
+    },
+    {
+      "detail": "Incremental and terminal evidence is written only below /kaggle/working; no submission file is created.",
+      "evidence": [{"path": "kaggle/biohub-spotiflow-detector-acceptance-v3/biohub-spotiflow-detector-acceptance-v3.ipynb", "sha256": "226b7f7cb015ff507d415fe2241ccb0b6c2cae7c847c532a650fabd03d9479de"}],
+      "name": "output_location", "status": "passed"
+    },
+    {
+      "detail": "One 35.5M model and one 64-cubed frame are resident; models unload between arms and tiled OOM fallback is implemented.",
+      "evidence": [{"path": "research/spotiflow_biohub/evaluate_pretrained_detector.py", "sha256": "44448f862786342aa92556f9194ce246e1def333e56f76a07a5d9a509f147f2c"}],
+      "name": "dense_memory", "status": "passed"
+    },
+    {
+      "detail": "Eight selection and four complete acceptance movies cover both embryo prefixes with zero overlap; GT is scored only after metadata-only threshold calibration.",
+      "evidence": [{"path": "config/experiments/spotiflow-detector-acceptance-v3.json", "sha256": "b3e173efeedafe38bb7f41f17c814f66100ffdd45df5ebadcf9d7246ad8eee32"}],
+      "name": "dataset_coverage", "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T06:26:00.0000000Z",
+  "report_sha256": "9b3ebb6b1fc706b348b75b39f57ea36c3918212c13fd08cbedb62fdc25bbd9e1",
+  "run_id": "spotiflow-detector-acceptance-v3",
+  "schema_version": 1
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-detector-acceptance-v3",
+  "parent": "spotiflow-detector-acceptance-v2",
+  "retry_of": "spotiflow-detector-acceptance-v2",
+  "kernel_ref": "indarkarhana/biohub-spotiflow-detector-acceptance-v3",
+  "notebook_sha256": "226b7f7cb015ff507d415fe2241ccb0b6c2cae7c847c532a650fabd03d9479de",
+  "kernel_metadata_sha256": "2bba1ffc63a52937e89717f2f082cad4c244e6ce7fed6e4d753c5ff575e06d53",
+  "evaluator_sha256": "44448f862786342aa92556f9194ce246e1def333e56f76a07a5d9a509f147f2c",
+  "runtime_manifest_sha256": "2b55f535ce37c3c8cd153f1dcc5a1fc546abf7b2f2717e850e22c471e504d55a",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "evaluator_max_wall_seconds": 6300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spotiflow-detector-runtime-v1@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version2",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "environment_repair": {
+    "numpy_version": "2.0.2",
+    "dependency_install": "exact graph-IO wheels with --no-deps",
+    "evaluator_pythonpath": "support-pack repo/src propagated into subprocess environment",
+    "scipy_smoke_after_install": true,
+    "complete_geff_probe_after_install": true
+  },
+  "candidate_models": [
+    {
+      "name": "Spotiflow synth_3d release 0.6.0",
+      "source_repository": "weigertlab/spotiflow",
+      "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+      "license": "BSD-3-Clause",
+      "model_sha256": "846d1ef438f872d50f160ad6cfb8be5b99f3f837600c52843a1391ca4eae7d4c",
+      "parameter_count": 35489892
+    },
+    {
+      "name": "Spotiflow smfish_3d release 0.6.0",
+      "source_repository": "weigertlab/spotiflow",
+      "source_commit": "b4f464552afc3424944a9c0fa60ac024e4013f1f",
+      "license": "BSD-3-Clause",
+      "model_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+      "parameter_count": 35489892
+    }
+  ],
+  "selection": {
+    "movies": [
+      "44b6_d29c9ab2", "44b6_3a861e03", "44b6_d5e7d891", "44b6_ddf577ad",
+      "6bba_09961292", "6bba_bb9f20c3", "6bba_784a78c9", "6bba_57b7cc1e"
+    ],
+    "uniform_frames_per_movie": 12,
+    "arms": ["synth_3d/global", "synth_3d/auto", "smfish_3d/global", "smfish_3d/auto"],
+    "metric": "metadata-density-calibrated annotated-node recall"
+  },
+  "acceptance": {
+    "movies": ["44b6_12dfb391", "44b6_267148e4", "6bba_062c8d37", "6bba_07e24132"],
+    "complete_movies": true,
+    "selection_overlap": [],
+    "threshold_source": "image predictions plus organizer estimated_number_of_nodes before GT scoring",
+    "public_leaderboard_used_for_selection": false
+  },
+  "validation_scope": "candidate-disjoint; public comparator checkpoint reportedly saw all 199 annotated movies",
+  "promotion_rule": "advance only if annotated recall is competitive and count behavior is stable",
+  "submission_policy": "detector_acceptance_only_no_submission"
+}
