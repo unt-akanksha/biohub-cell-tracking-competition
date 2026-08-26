@@ -1,0 +1,11 @@
+{
+  "config_path": "config/experiments/spatialdino-appearance-validation-v2.json",
+  "config_file_sha256": "794db77353c371b0d9db7fc023d74a3d827741694dab74fc4aa18f496cb84c3c",
+  "preflight_builder_sha256": "01fedde0286cee1d8e2c0ae958a4a25b3d01c2c6965565a1d77f436984f9ecc3",
+  "preflight_report": "artifacts/preflights/spatialdino-appearance-validation-v2-r2.json",
+  "preflight_report_sha256": "bfc3498179cacf1f57fdfe9d2b5b17d4d527be38e7d84433fd35f30fcb28db2c",
+  "single_batch_check": true,
+  "focused_tests_passed": 20,
+  "scientific_code_changed": false,
+  "repair_scope": "add the standardized frozen SpatialDINO single-batch feature and appearance smoke check required by the guarded launcher"
+}

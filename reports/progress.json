@@ -1450,6 +1450,21 @@
             "topology_dataset_version": 1
           },
           "target_event_id": "evt-a4917dbfd7c047a0a59d5906f60e8218"
+        },
+        {
+          "correction_reason": "Guarded launch preflight repair: add the standardized single-batch frozen-feature and appearance smoke check; scientific code, inputs, split, and GPU budget are unchanged.",
+          "replacement_fields": {
+            "config_file_sha256": "794db77353c371b0d9db7fc023d74a3d827741694dab74fc4aa18f496cb84c3c",
+            "config_path": "config/experiments/spatialdino-appearance-validation-v2.json",
+            "focused_tests_passed": 20,
+            "preflight_builder_sha256": "01fedde0286cee1d8e2c0ae958a4a25b3d01c2c6965565a1d77f436984f9ecc3",
+            "preflight_report": "artifacts/preflights/spatialdino-appearance-validation-v2-r2.json",
+            "preflight_report_sha256": "bfc3498179cacf1f57fdfe9d2b5b17d4d527be38e7d84433fd35f30fcb28db2c",
+            "repair_scope": "add the standardized frozen SpatialDINO single-batch feature and appearance smoke check required by the guarded launcher",
+            "scientific_code_changed": false,
+            "single_batch_check": true
+          },
+          "target_event_id": "evt-f2dbc150ac3a4a4eb9fa40f918ae1dc5"
         }
       ],
       "authorized_for_submission": false,

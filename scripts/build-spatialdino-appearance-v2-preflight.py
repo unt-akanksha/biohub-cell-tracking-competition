@@ -153,6 +153,16 @@ def main() -> None:
             "All runtime modules and notebook cells compile; the focused model and kernel tests pass.",
         ),
         check(
+            "single_batch",
+            [
+                encoder,
+                appearance,
+                ROOT / "tests" / "test_spatialdino_encoder.py",
+                ROOT / "tests" / "test_spatialdino_appearance.py",
+            ],
+            "A frozen SpatialDINO forward preserves final/intermediate feature equivalence, and one feature grid is sampled into finite normalized node embeddings and candidate-local cosine margins.",
+        ),
+        check(
             "inputs",
             [CONFIG, METADATA, RUNTIME_MANIFEST, GRAPH_MANIFEST, HOCT_MANIFEST],
             "The private runtimes, competition images, and processed topology dataset are explicitly attached with internet and TPU disabled.",

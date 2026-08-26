@@ -1,0 +1,183 @@
+{
+  "checks": [
+    {
+      "detail": "All runtime modules and notebook cells compile; the focused model and kernel tests pass.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dfd224c0820ea367adcbf0b23856156bcc8a976dbfbab967948909eeacdf1049"
+        },
+        {
+          "path": "research/spatialdino_association/appearance.py",
+          "sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5"
+        },
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v2/biohub-spatialdino-appearance-validation-v2.ipynb",
+          "sha256": "3469a1346fc9a9cf4165cd71867f98fc0898bf70df32d5372986df0d70dc623e"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "A frozen SpatialDINO forward preserves final/intermediate feature equivalence, and one feature grid is sampled into finite normalized node embeddings and candidate-local cosine margins.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dfd224c0820ea367adcbf0b23856156bcc8a976dbfbab967948909eeacdf1049"
+        },
+        {
+          "path": "research/spatialdino_association/appearance.py",
+          "sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5"
+        },
+        {
+          "path": "tests/test_spatialdino_encoder.py",
+          "sha256": "914c8a57fb2f119baf9e5bc510bb12dbf626d827a6df427cd828a87b4b9fc3a0"
+        },
+        {
+          "path": "tests/test_spatialdino_appearance.py",
+          "sha256": "16206b16df24b23b9547ecb4776c09c92f6a66c4419e7c87acd1997357a78eb7"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtimes, competition images, and processed topology dataset are explicitly attached with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-appearance-validation-v2.json",
+          "sha256": "794db77353c371b0d9db7fc023d74a3d827741694dab74fc4aa18f496cb84c3c"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v2/kernel-metadata.json",
+          "sha256": "ba6d5de6fdd6faac16f9226063dd4a016ba65dd88015face70cc149791407e58"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "ad6d2dfecbf149a716443fd05f3b1d9b5923ecd778bf09ba22109c619eb7f700"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/staging/biohub-hoct-multibackbone-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The repaired input is the exact hash-bound output of the completed clean HOCT producer and excludes ground-truth labels.",
+      "evidence": [
+        {
+          "path": "scripts/build-hoct-processed-validation-dataset.py",
+          "sha256": "440cd2311205c2e5ca3ee518e1a1106ebf32aa0f3316e5b7741c37c0c5fc9302"
+        },
+        {
+          "path": ".biohub/staging/biohub-hoct-processed-validation-v1/SOURCE_MANIFEST.json",
+          "sha256": "2d8346d99769770ae13633b29ced14728c610057049c9ccb5a20b127abc89c4f"
+        }
+      ],
+      "name": "materialized_topology",
+      "status": "passed"
+    },
+    {
+      "detail": "Frozen SpatialDINO appearance can only propose degree-preserving swaps through the unchanged 18-configuration grid.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dfd224c0820ea367adcbf0b23856156bcc8a976dbfbab967948909eeacdf1049"
+        },
+        {
+          "path": "research/spatialdino_association/appearance.py",
+          "sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5"
+        },
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The public MIT-licensed SpatialDINO checkpoint and dependency-light encoder are hash-bound.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-spatialdino-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "ad6d2dfecbf149a716443fd05f3b1d9b5923ecd778bf09ba22109c619eb7f700"
+        },
+        {
+          "path": ".biohub/cache/models/spatialdino-vits8-step244999-backbone.pth",
+          "sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+        },
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dfd224c0820ea367adcbf0b23856156bcc8a976dbfbab967948909eeacdf1049"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only validation evidence is written below /kaggle/working; submission creation is forbidden.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v2/biohub-spatialdino-appearance-validation-v2.ipynb",
+          "sha256": "3469a1346fc9a9cf4165cd71867f98fc0898bf70df32d5372986df0d70dc623e"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference is frame-batched and transition-local, with a 6,900-second hard stop inside the two-hour declaration.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        },
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "Two complete selection movies freeze configuration before two disjoint acceptance movies are opened.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-appearance-validation-v2.json",
+          "sha256": "794db77353c371b0d9db7fc023d74a3d827741694dab74fc4aa18f496cb84c3c"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T16:46:24.080247Z",
+  "report_sha256": "bfc3498179cacf1f57fdfe9d2b5b17d4d527be38e7d84433fd35f30fcb28db2c",
+  "run_id": "spatialdino-appearance-validation-v2",
+  "schema_version": 1
+}
