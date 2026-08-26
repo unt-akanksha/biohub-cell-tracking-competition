@@ -1,6 +1,6 @@
 # public-0927-clean-repro-v1
 
-Status: preflight
+Status: preflight retry (`public-0927-clean-repro-v2`)
 
 ## Hypothesis
 
@@ -11,7 +11,7 @@ The public dual-seed TemporalUNet3D + node-transformer + ILP pipeline can improv
 - Source kernel: `evgendvorkin/biohub-0-927-lb`
 - Source kernel status: `COMPLETE`
 - Source notebook SHA-256: `08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1`
-- Fork notebook SHA-256 after operational watchdog injection: `7dadd3550698659cc458136dff9c31128200cc13afbb1f1a666b0f5b3d779a3f`
+- Fork notebook SHA-256 after watchdog injection and Windows-safe JSON normalization: `19d4c0f525be6325689af7bc37180098e5d19556d53636ed042e819b7fdeea24`
 - Scientific-cell comparison: all 33 upstream cells are exact; the fork adds only one leading watchdog cell and one terminal-evidence cell.
 - Upstream execution span: 33.727 minutes.
 - Fork accelerator policy: GPU enabled; TPU and internet disabled; private kernel.
@@ -76,3 +76,11 @@ Validator CSV SHA-256: `b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0
 - GPU quota before authorization: to be re-read live; last observed `30.00 h`.
 - Protected reserve: `8.00 h`.
 - No submission will be made until our fork completes and its output audit passes.
+
+## Operational retry history
+
+- `public-0927-clean-repro-v1` was authorized with `30.00 h` remaining and `29.00 h` projected after the declared run.
+- Its guarded push failed before Kaggle created a kernel, so it consumed no GPU quota.
+- Root cause: the local notebook utility emitted raw UTF-8, while Kaggle CLI on Windows opened the source with cp1252 and raised `UnicodeDecodeError` on multilingual markdown.
+- `public-0927-clean-repro-v2` ASCII-escapes notebook JSON without changing any parsed scientific cell. A local default-codec read now passes.
+- The launcher now records sanitized Kaggle stderr for any future nonzero push exit.
