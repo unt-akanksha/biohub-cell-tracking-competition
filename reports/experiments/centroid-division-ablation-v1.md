@@ -1,6 +1,10 @@
 # centroid-division-ablation-v1
 
-Status: staged
+Status: canceled before authorization or launch; zero GPU hours used
+
+Cancellation reason: the active objective requires a genuinely improved learned
+candidate, while this notebook only calibrated the exact public 0.927 pipeline.
+It remains as a reproducible diagnostic artifact and will not be launched.
 
 ## Hypothesis
 
