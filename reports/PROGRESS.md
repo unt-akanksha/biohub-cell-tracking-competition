@@ -23,6 +23,19 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `phase1-live-guard-readonly-smoke` | — | Read-only Phase 1 live guard verification; no kernel launch is authorized or executed. | registered | not recorded | — | unknown / 0.01 | — | — | — |
 | `public-0927-clean-repro-v1` | — | Intensity-weighted centroid refinement plus constrained division repair on the clean dual-seed harmonic TemporalUNet3D pipeline improves the owned public score beyond 0.913 without metric manipulation. | registered | not recorded | — | unknown / 1.00 | — | — | — |
 | `public-0927-clean-repro-v2` | public-0927-clean-repro-v1 | The Windows-safe fork reproduces the clean 0.927 dual-seed harmonic TemporalUNet3D pipeline and improves the owned public score beyond 0.913 without metric manipulation. | completed | {"by_embryo":{"44b6":{"adjusted_edge_jaccard":"0.8910900942367352","division_jaccard":"0.0","proxy_score":"0.8910900942367352"},"6bba":{"adjusted_edge_jaccard":"0.9365550101410081","division_jaccard":"0.25","proxy_score":"0.9615550101410081"}},"by_fold":{"44b6_12dfb391":{"score":"0.934126868799285"},"44b6_267148e4":{"score":"0.7802295420408002"},"6bba_062c8d37":{"score":"1.0770587342596099"},"6bba_07e24132":{"score":"0.8356295217465801"}},"division_counts":{"fn":4,"fp":2,"tp":1},"evidence_scope":"four complete embryo-held training movies; exact owned output matches audited upstream output","note":"node_recall is null because the compact upstream validator did not emit the ground-truth node denominator; no value is imputed.","pooled":{"adjusted_edge_jaccard":"0.9151575278536992","division_jaccard":"0.14285714285714285","edge_jaccard":"0.9104539775093711","node_recall":null,"proxy_score":"0.9294432421394134"},"run_id":"public-0927-clean-repro-v2","schema_version":1,"validator_results_sha256":"b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777","worst_movie_delta":"-0.14921370009861323"} | — | 0.5616 / 1.00 | retain | — | — |
+| `centroid-division-ablation-v1` | public-0927-clean-repro-v2 | Complete-movie validation aligned to the test-path centroid refinement will identify whether centroid refinement and safe-division repair improve the clean dual-seed harmonic pipeline without metric manipulation. | registered | not recorded | — | unknown / 1.00 | — | — | — |
+| `trackastra-graph-finetune-v1` | public-0927-clean-repro-v2 | Biohub fine-tuning of the 27.5M-parameter four-frame Trackastra CTC association transformer, with detector-noise augmentation, physical anisotropy, dense tiling, hard negatives, and division upweighting, will improve clean complete-movie generalization over the public 0.927 pipeline's smaller two-frame linker. | failed | not recorded | — | 0.01 / 4.00 | — | Kaggle setup failed in 32 seconds because offline dependency resolution upgraded NumPy from the live kernel's 2.0.2 to 2.4.6, leaving SciPy loaded against an incompatible NumPy runtime. Independent input audit also found the cached fourth validator GEFF incomplete. Retry pins NumPy 2.0.2 and uses a fresh four-graph download that each loads end-to-end. | — |
+| `trackastra-graph-finetune-v2` | trackastra-graph-finetune-v1 | With NumPy pinned to the live Kaggle SciPy-compatible runtime and all four validator graphs complete, Biohub fine-tuning of the 27.5M-parameter four-frame Trackastra association transformer will improve clean complete-movie generalization over the public pipeline's smaller two-frame linker. | failed | not recorded | — | 0.0015 / 4.00 | — | Offline dependency resolver rejected tracksdata numpy>2 against pinned live NumPy 2.0.2 before training; terminal evidence confirms zero model steps. | — |
+| `spotiflow-detector-acceptance-v1` | public-0927-clean-repro-v2 | A 35.5M-parameter official Spotiflow 3D detector, selected on eight disjoint Biohub fields and calibrated only from image responses plus organizer node-count metadata, can match or improve annotated-node recall and density stability versus the public pipeline's 8.3M detector on four complete clean heldout movies. | registered | not recorded | — | unknown / 2.00 | — | — | — |
+| `spotiflow-detector-acceptance-v2` | spotiflow-detector-acceptance-v1 | With the Kaggle numerical stack preserved, a 35.5M-parameter official Spotiflow 3D detector selected on eight disjoint Biohub fields and calibrated only from image responses plus organizer node-count metadata can match or improve annotated-node recall and density stability versus the public pipeline's 8.3M detector on four complete clean heldout movies. | failed | not recorded | — | 0.0184 / 2 | — | Offline numerical and GEFF setup passed; evaluator subprocess did not inherit the notebook-only biohub_tracking source path, so inference stopped before the first model frame. | — |
+| `spotiflow-detector-acceptance-v3` | spotiflow-detector-acceptance-v2 | After propagating the verified support source into the evaluator subprocess, the official 35.5M Spotiflow 3D detector selected on eight disjoint Biohub fields and calibrated only from images plus organizer counts can match or improve annotated-node recall and count stability versus the memorized public comparator on four complete candidate-disjoint movies. | completed | {"acceptance":{"annotated_gt_nodes":2357,"annotated_recall_delta":"-0.1913449299957573","baseline_annotated_node_recall":"0.96902842596521","baseline_matched_gt_nodes":2284,"movies":4,"per_movie_recall_delta":{"44b6_12dfb391":"-0.18274111675126903","44b6_267148e4":"-0.4428571428571429","6bba_062c8d37":"-0.05698924731182797","6bba_07e24132":"-0.3621169916434541"},"spotiflow_annotated_node_recall":"0.7776834959694527","spotiflow_matched_gt_nodes":1833},"by_embryo":{"44b6":{"baseline_node_recall":"0.9588014981273408","node_recall":"0.7078651685393258","node_recall_delta":"-0.25093632958801504"},"6bba":{"baseline_node_recall":"0.9775019394879751","node_recall":"0.8355314197051978","node_recall_delta":"-0.1419705197827773"}},"by_fold":{"44b6_12dfb391":{"delta":"-0.18274111675126903","node_recall":"0.7868020304568528"},"44b6_267148e4":{"delta":"-0.4428571428571429","node_recall":"0.4857142857142857"},"6bba_062c8d37":{"delta":"-0.05698924731182797","node_recall":"0.9354838709677419"},"6bba_07e24132":{"delta":"-0.3621169916434541","node_recall":"0.5766016713091922"}},"decision":{"drop_in_detector":"retire","next_test":"Dense corrected synthetic fine-tuning followed by the same clean acceptance protocol.","reason":"Official pretrained Spotiflow is materially below the public detector on every acceptance movie.","transfer_initialization":"retain_smfish_3d"},"division_counts":{"fn":null,"fp":null,"tp":null},"evaluator_elapsed_seconds":"102.45089798","launcher_terminal_sha256":"9f97cc3b5554cf5b096cd0a78c0d5a2af5a95381fc46b2900e92db785bb3ee59","pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":"0.7776834959694527"},"remaining_gpu_hours":"29.32","result_sha256":"248177dcf6075241b38ec35cedca371ed18ddd55bf6153b375baafdb7286afdc","run_id":"spotiflow-detector-acceptance-v3","schema_version":1,"selection":{"annotated_node_recall":"0.688839615668884","model_name":"smfish_3d","normalization":"spotiflow_auto"},"status":"completed","submission_created":false,"terminal_elapsed_seconds":"220.303","worst_movie_delta":"-0.4428571428571429"} | — | 0.0612 / 2 | retire | — | — |
+| `trackastra-graph-finetune-v3` | trackastra-graph-finetune-v2 | Geometry-correct CC0 sequence-graph pretraining before real Biohub fine-tuning improves clean complete-movie association and division proxy over the public baseline. | registered | not recorded | — | unknown / 4.00 | — | — | — |
+| `spotiflow-synthetic-finetune-v1` | spotiflow-detector-acceptance-v3 | Dense geometry-correct CC0 adaptation closes enough of the observed Biohub domain gap for the selected 35.5M Spotiflow warm start to become a viable detector candidate. | completed | {"base_weight_sha256":"1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d","best_observed_synthetic_validation":{"epoch":2,"val_acc":"0.8202484250068665","val_f1":"0.892428994178772","val_loss":"2.3044614791870117"},"best_weight_sha256":"8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac","budget_stop_requested":false,"by_embryo":{},"by_fold":{},"division_counts":{"fn":null,"fp":null,"tp":null},"epochs":4,"final_epoch":{"flow_loss":"0.18817086517810822","heatmap_loss":"0.9745568633079529","train_loss":"1.1627275943756104","val_acc":"0.8056281805038452","val_f1":"0.8833800554275513","val_loss":"2.9409303665161133"},"global_steps":3072,"launcher_elapsed_seconds":"384.078","parameter_count":35489892,"pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":null},"promotion_state":"awaiting frozen real-movie detector acceptance","quota_after_hours":"29.21","result_sha256":"c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919","run_id":"spotiflow-synthetic-finetune-v1","schema_version":1,"status":"completed","terminal_sha256":"fe5b1779573fc9361ed4dee9a7ca7d51627cf2898aac051cf68629c38b27ff17","trainer_elapsed_seconds":"300.888","weights_changed":true,"worst_movie_delta":null} | — | 0.1067 / 2.00 | — | — | — |
+| `trackastra-graph-finetune-v4` | trackastra-graph-finetune-v3 | A synthetic-pretrained then Biohub-finetuned 27.5M Trackastra association model can improve the same-node public detector graph on a frozen two-movie acceptance split, enabling a non-replica submission candidate. | registered | not recorded | — | unknown / 4.00 | — | — | — |
+| `spotiflow-finetuned-acceptance-v1` | spotiflow-synthetic-finetune-v1 | Dense synthetic adaptation improves real-movie recall over the selected pretrained Spotiflow warm start and may close the gap to the public detector without label-based threshold tuning. | completed | {"acceptance":{"annotated_gt_nodes":2357,"baseline_annotated_node_recall":"0.96902842596521","baseline_matched_gt_nodes":2284,"candidate_annotated_node_recall":"0.09249045396690708","candidate_matched_gt_nodes":218,"delta_vs_baseline":"-0.876537971998303","delta_vs_pretrained_spotiflow":"-0.6851930420025456","movies":4,"pretrained_spotiflow_annotated_node_recall":"0.7776834959694527"},"by_embryo":{"44b6":{"baseline_node_recall":"0.9588014981273408","node_recall":"0.20411985018726592","node_recall_delta":"-0.7546816479400749"},"6bba":{"baseline_node_recall":"0.9775019394879751","node_recall":"0.0","node_recall_delta":"-0.9775019394879751"}},"by_fold":{"44b6_12dfb391":{"delta":"-0.6928934010152284","node_recall":"0.2766497461928934"},"44b6_267148e4":{"delta":"-0.9285714285714286","node_recall":"0.0"},"6bba_062c8d37":{"delta":"-0.9924731182795699","node_recall":"0.0"},"6bba_07e24132":{"delta":"-0.9387186629526463","node_recall":"0.0"}},"decision":{"drop_in_detector":"retire","next_test":"Keep the public detector frozen and improve associations with density-matched Trackastra training.","reason":"Synthetic-only fine-tuning catastrophically reduced clean real-movie recall and produced zero detections on three acceptance movies at the frozen calibration rule.","transfer_initialization":"retire_synthetic_checkpoint"},"division_counts":{"fn":null,"fp":null,"tp":null},"evaluator_elapsed_seconds":"79.805730905","launcher_terminal_sha256":"b4209e99b520a1f4bd591a80384fcdac6016406be679a8f5f3e18599020f48ad","pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":"0.09249045396690708"},"remaining_gpu_hours":"29.16","result_sha256":"4a7fbed512f7c69769a84addd0398676a881568ed677e7299e12d530d9d8fff5","run_id":"spotiflow-finetuned-acceptance-v1","schema_version":1,"status":"completed","submission_created":false,"terminal_elapsed_seconds":"162.778","worst_movie_delta":"-0.9924731182795699"} | — | 0.0452 / 2.00 | retire | — | — |
+| `trackastra-graph-finetune-v5` | trackastra-graph-finetune-v4 | Density-matched distractor training lets a 27.5M Biohub-finetuned Trackastra improve complete-movie associations over the same-node public graph, enabling an independent non-replica candidate. | failed | not recorded | — | 0.0322 / 4.00 | — | Kaggle CUDA pre-training validation failed because probability-space BCE was executed inside autocast; no optimizer step or model artifact was produced. | — |
+| `trackastra-graph-finetune-v6` | trackastra-graph-finetune-v5 | CUDA-safe density-matched fine-tuning of the 27.5M Trackastra model can learn independent associations that improve the exact processed-topology heldout proxy over the frozen public graph. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `hoct-probe-finetune-v1` | trackastra-graph-finetune-v6 | A Biohub-supervised linear probe on frozen HOCT edge-centric features, combined with raw detector confidence, improves clean final-topology association over the public comparator and node-centric Trackastra. | registered | not recorded | — | unknown / 4.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -102,6 +115,97 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `{"by_embryo":{"44b6":{"adjusted_edge_jaccard":"0.8910900942367352","division_jaccard":"0.0","proxy_score":"0.8910900942367352"},"6bba":{"adjusted_edge_jaccard":"0.9365550101410081","division_jaccard":"0.25","proxy_score":"0.9615550101410081"}},"by_fold":{"44b6_12dfb391":{"score":"0.934126868799285"},"44b6_267148e4":{"score":"0.7802295420408002"},"6bba_062c8d37":{"score":"1.0770587342596099"},"6bba_07e24132":{"score":"0.8356295217465801"}},"division_counts":{"fn":4,"fp":2,"tp":1},"evidence_scope":"four complete embryo-held training movies; exact owned output matches audited upstream output","note":"node_recall is null because the compact upstream validator did not emit the ground-truth node denominator; no value is imputed.","pooled":{"adjusted_edge_jaccard":"0.9151575278536992","division_jaccard":"0.14285714285714285","edge_jaccard":"0.9104539775093711","node_recall":null,"proxy_score":"0.9294432421394134"},"run_id":"public-0927-clean-repro-v2","schema_version":1,"validator_results_sha256":"b2b18eaeff608dae26202fe2a2c42aeac1987e0f592becd3dc75a2e0e490e777","worst_movie_delta":"-0.14921370009861323"}`
 - Decision evidence: `["reports/experiments/public-0927-clean-repro-v2-output-audit.json","exact_owned_submission_hash_matches_audited_public_candidate","complete_four_movie_heldout_validator_proxy_0.929443","kaggle_submission_55784044_pending"]`
+
+### centroid-division-ablation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### trackastra-graph-finetune-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### trackastra-graph-finetune-v2
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spotiflow-detector-acceptance-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spotiflow-detector-acceptance-v2
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spotiflow-detector-acceptance-v3
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `{"acceptance":{"annotated_gt_nodes":2357,"annotated_recall_delta":"-0.1913449299957573","baseline_annotated_node_recall":"0.96902842596521","baseline_matched_gt_nodes":2284,"movies":4,"per_movie_recall_delta":{"44b6_12dfb391":"-0.18274111675126903","44b6_267148e4":"-0.4428571428571429","6bba_062c8d37":"-0.05698924731182797","6bba_07e24132":"-0.3621169916434541"},"spotiflow_annotated_node_recall":"0.7776834959694527","spotiflow_matched_gt_nodes":1833},"by_embryo":{"44b6":{"baseline_node_recall":"0.9588014981273408","node_recall":"0.7078651685393258","node_recall_delta":"-0.25093632958801504"},"6bba":{"baseline_node_recall":"0.9775019394879751","node_recall":"0.8355314197051978","node_recall_delta":"-0.1419705197827773"}},"by_fold":{"44b6_12dfb391":{"delta":"-0.18274111675126903","node_recall":"0.7868020304568528"},"44b6_267148e4":{"delta":"-0.4428571428571429","node_recall":"0.4857142857142857"},"6bba_062c8d37":{"delta":"-0.05698924731182797","node_recall":"0.9354838709677419"},"6bba_07e24132":{"delta":"-0.3621169916434541","node_recall":"0.5766016713091922"}},"decision":{"drop_in_detector":"retire","next_test":"Dense corrected synthetic fine-tuning followed by the same clean acceptance protocol.","reason":"Official pretrained Spotiflow is materially below the public detector on every acceptance movie.","transfer_initialization":"retain_smfish_3d"},"division_counts":{"fn":null,"fp":null,"tp":null},"evaluator_elapsed_seconds":"102.45089798","launcher_terminal_sha256":"9f97cc3b5554cf5b096cd0a78c0d5a2af5a95381fc46b2900e92db785bb3ee59","pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":"0.7776834959694527"},"remaining_gpu_hours":"29.32","result_sha256":"248177dcf6075241b38ec35cedca371ed18ddd55bf6153b375baafdb7286afdc","run_id":"spotiflow-detector-acceptance-v3","schema_version":1,"selection":{"annotated_node_recall":"0.688839615668884","model_name":"smfish_3d","normalization":"spotiflow_auto"},"status":"completed","submission_created":false,"terminal_elapsed_seconds":"220.303","worst_movie_delta":"-0.4428571428571429"}`
+- Decision evidence: `["reports/experiments/spotiflow-detector-acceptance-v3-result.json"]`
+
+### trackastra-graph-finetune-v3
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spotiflow-synthetic-finetune-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `{"base_weight_sha256":"1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d","best_observed_synthetic_validation":{"epoch":2,"val_acc":"0.8202484250068665","val_f1":"0.892428994178772","val_loss":"2.3044614791870117"},"best_weight_sha256":"8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac","budget_stop_requested":false,"by_embryo":{},"by_fold":{},"division_counts":{"fn":null,"fp":null,"tp":null},"epochs":4,"final_epoch":{"flow_loss":"0.18817086517810822","heatmap_loss":"0.9745568633079529","train_loss":"1.1627275943756104","val_acc":"0.8056281805038452","val_f1":"0.8833800554275513","val_loss":"2.9409303665161133"},"global_steps":3072,"launcher_elapsed_seconds":"384.078","parameter_count":35489892,"pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":null},"promotion_state":"awaiting frozen real-movie detector acceptance","quota_after_hours":"29.21","result_sha256":"c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919","run_id":"spotiflow-synthetic-finetune-v1","schema_version":1,"status":"completed","terminal_sha256":"fe5b1779573fc9361ed4dee9a7ca7d51627cf2898aac051cf68629c38b27ff17","trainer_elapsed_seconds":"300.888","weights_changed":true,"worst_movie_delta":null}`
+- Decision evidence: `not recorded`
+
+### trackastra-graph-finetune-v4
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### spotiflow-finetuned-acceptance-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `{"acceptance":{"annotated_gt_nodes":2357,"baseline_annotated_node_recall":"0.96902842596521","baseline_matched_gt_nodes":2284,"candidate_annotated_node_recall":"0.09249045396690708","candidate_matched_gt_nodes":218,"delta_vs_baseline":"-0.876537971998303","delta_vs_pretrained_spotiflow":"-0.6851930420025456","movies":4,"pretrained_spotiflow_annotated_node_recall":"0.7776834959694527"},"by_embryo":{"44b6":{"baseline_node_recall":"0.9588014981273408","node_recall":"0.20411985018726592","node_recall_delta":"-0.7546816479400749"},"6bba":{"baseline_node_recall":"0.9775019394879751","node_recall":"0.0","node_recall_delta":"-0.9775019394879751"}},"by_fold":{"44b6_12dfb391":{"delta":"-0.6928934010152284","node_recall":"0.2766497461928934"},"44b6_267148e4":{"delta":"-0.9285714285714286","node_recall":"0.0"},"6bba_062c8d37":{"delta":"-0.9924731182795699","node_recall":"0.0"},"6bba_07e24132":{"delta":"-0.9387186629526463","node_recall":"0.0"}},"decision":{"drop_in_detector":"retire","next_test":"Keep the public detector frozen and improve associations with density-matched Trackastra training.","reason":"Synthetic-only fine-tuning catastrophically reduced clean real-movie recall and produced zero detections on three acceptance movies at the frozen calibration rule.","transfer_initialization":"retire_synthetic_checkpoint"},"division_counts":{"fn":null,"fp":null,"tp":null},"evaluator_elapsed_seconds":"79.805730905","launcher_terminal_sha256":"b4209e99b520a1f4bd591a80384fcdac6016406be679a8f5f3e18599020f48ad","pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":"0.09249045396690708"},"remaining_gpu_hours":"29.16","result_sha256":"4a7fbed512f7c69769a84addd0398676a881568ed677e7299e12d530d9d8fff5","run_id":"spotiflow-finetuned-acceptance-v1","schema_version":1,"status":"completed","submission_created":false,"terminal_elapsed_seconds":"162.778","worst_movie_delta":"-0.9924731182795699"}`
+- Decision evidence: `["reports/experiments/spotiflow-finetuned-acceptance-v1-result.json",".biohub/cache/kernel-outputs/spotiflow-finetuned-acceptance-v1/spotiflow_finetuned_acceptance/finetuned_detector_acceptance.json"]`
+
+### trackastra-graph-finetune-v5
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### trackastra-graph-finetune-v6
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### hoct-probe-finetune-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls

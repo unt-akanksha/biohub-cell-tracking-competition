@@ -486,6 +486,575 @@
       "registered_at": "2026-08-26T02:22:44.465809Z",
       "run_id": "public-0927-clean-repro-v2",
       "status": "completed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "1.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Complete-movie validation aligned to the test-path centroid refinement will identify whether centroid refinement and safe-division repair improve the clean dual-seed harmonic pipeline without metric manipulation.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "public-0927-clean-repro-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T03:59:24.108274Z",
+      "run_id": "centroid-division-ablation-v1",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.01",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Kaggle setup failed in 32 seconds because offline dependency resolution upgraded NumPy from the live kernel's 2.0.2 to 2.4.6, leaving SciPy loaded against an incompatible NumPy runtime. Independent input audit also found the cached fourth validator GEFF incomplete. Retry pins NumPy 2.0.2 and uses a fresh four-graph download that each loads end-to-end.",
+      "hypothesis": "Biohub fine-tuning of the 27.5M-parameter four-frame Trackastra CTC association transformer, with detector-noise augmentation, physical anisotropy, dense tiling, hard negatives, and division upweighting, will improve clean complete-movie generalization over the public 0.927 pipeline's smaller two-frame linker.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "public-0927-clean-repro-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T05:09:21.543954Z",
+      "run_id": "trackastra-graph-finetune-v1",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "0.0015",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Offline dependency resolver rejected tracksdata numpy>2 against pinned live NumPy 2.0.2 before training; terminal evidence confirms zero model steps.",
+      "hypothesis": "With NumPy pinned to the live Kaggle SciPy-compatible runtime and all four validator graphs complete, Biohub fine-tuning of the 27.5M-parameter four-frame Trackastra association transformer will improve clean complete-movie generalization over the public pipeline's smaller two-frame linker.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T05:23:41.062470Z",
+      "run_id": "trackastra-graph-finetune-v2",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A 35.5M-parameter official Spotiflow 3D detector, selected on eight disjoint Biohub fields and calibrated only from image responses plus organizer node-count metadata, can match or improve annotated-node recall and density stability versus the public pipeline's 8.3M detector on four complete clean heldout movies.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "public-0927-clean-repro-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T05:56:23.422361Z",
+      "run_id": "spotiflow-detector-acceptance-v1",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.0184",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Offline numerical and GEFF setup passed; evaluator subprocess did not inherit the notebook-only biohub_tracking source path, so inference stopped before the first model frame.",
+      "hypothesis": "With the Kaggle numerical stack preserved, a 35.5M-parameter official Spotiflow 3D detector selected on eight disjoint Biohub fields and calibrated only from image responses plus organizer node-count metadata can match or improve annotated-node recall and density stability versus the public pipeline's 8.3M detector on four complete clean heldout movies.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "spotiflow-detector-acceptance-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T06:07:35.102985Z",
+      "run_id": "spotiflow-detector-acceptance-v2",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": "0.0612",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/spotiflow-detector-acceptance-v3-result.json"
+      ],
+      "declared_gpu_hours": "2",
+      "dependencies": [],
+      "exact_evidence": {
+        "acceptance": {
+          "annotated_gt_nodes": 2357,
+          "annotated_recall_delta": "-0.1913449299957573",
+          "baseline_annotated_node_recall": "0.96902842596521",
+          "baseline_matched_gt_nodes": 2284,
+          "movies": 4,
+          "per_movie_recall_delta": {
+            "44b6_12dfb391": "-0.18274111675126903",
+            "44b6_267148e4": "-0.4428571428571429",
+            "6bba_062c8d37": "-0.05698924731182797",
+            "6bba_07e24132": "-0.3621169916434541"
+          },
+          "spotiflow_annotated_node_recall": "0.7776834959694527",
+          "spotiflow_matched_gt_nodes": 1833
+        },
+        "by_embryo": {
+          "44b6": {
+            "baseline_node_recall": "0.9588014981273408",
+            "node_recall": "0.7078651685393258",
+            "node_recall_delta": "-0.25093632958801504"
+          },
+          "6bba": {
+            "baseline_node_recall": "0.9775019394879751",
+            "node_recall": "0.8355314197051978",
+            "node_recall_delta": "-0.1419705197827773"
+          }
+        },
+        "by_fold": {
+          "44b6_12dfb391": {
+            "delta": "-0.18274111675126903",
+            "node_recall": "0.7868020304568528"
+          },
+          "44b6_267148e4": {
+            "delta": "-0.4428571428571429",
+            "node_recall": "0.4857142857142857"
+          },
+          "6bba_062c8d37": {
+            "delta": "-0.05698924731182797",
+            "node_recall": "0.9354838709677419"
+          },
+          "6bba_07e24132": {
+            "delta": "-0.3621169916434541",
+            "node_recall": "0.5766016713091922"
+          }
+        },
+        "decision": {
+          "drop_in_detector": "retire",
+          "next_test": "Dense corrected synthetic fine-tuning followed by the same clean acceptance protocol.",
+          "reason": "Official pretrained Spotiflow is materially below the public detector on every acceptance movie.",
+          "transfer_initialization": "retain_smfish_3d"
+        },
+        "division_counts": {
+          "fn": null,
+          "fp": null,
+          "tp": null
+        },
+        "evaluator_elapsed_seconds": "102.45089798",
+        "launcher_terminal_sha256": "9f97cc3b5554cf5b096cd0a78c0d5a2af5a95381fc46b2900e92db785bb3ee59",
+        "pooled": {
+          "adjusted_edge_jaccard": null,
+          "division_jaccard": null,
+          "edge_jaccard": null,
+          "node_recall": "0.7776834959694527"
+        },
+        "remaining_gpu_hours": "29.32",
+        "result_sha256": "248177dcf6075241b38ec35cedca371ed18ddd55bf6153b375baafdb7286afdc",
+        "run_id": "spotiflow-detector-acceptance-v3",
+        "schema_version": 1,
+        "selection": {
+          "annotated_node_recall": "0.688839615668884",
+          "model_name": "smfish_3d",
+          "normalization": "spotiflow_auto"
+        },
+        "status": "completed",
+        "submission_created": false,
+        "terminal_elapsed_seconds": "220.303",
+        "worst_movie_delta": "-0.4428571428571429"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "After propagating the verified support source into the evaluator subprocess, the official 35.5M Spotiflow 3D detector selected on eight disjoint Biohub fields and calibrated only from images plus organizer counts can match or improve annotated-node recall and count stability versus the memorized public comparator on four complete candidate-disjoint movies.",
+      "imported_audit": false,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": "spotiflow-detector-acceptance-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T06:27:25.702536Z",
+      "run_id": "spotiflow-detector-acceptance-v3",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Geometry-correct CC0 sequence-graph pretraining before real Biohub fine-tuning improves clean complete-movie association and division proxy over the public baseline.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T06:55:38.262328Z",
+      "run_id": "trackastra-graph-finetune-v3",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.1067",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {
+        "base_weight_sha256": "1fdfd62c89a007094870782c27da163052ed72952a72d29f12e6730514d3ad6d",
+        "best_observed_synthetic_validation": {
+          "epoch": 2,
+          "val_acc": "0.8202484250068665",
+          "val_f1": "0.892428994178772",
+          "val_loss": "2.3044614791870117"
+        },
+        "best_weight_sha256": "8b786a300d4446ce86c407a61b58075472b55a5dd929255dbbc0c23e375b7eac",
+        "budget_stop_requested": false,
+        "by_embryo": {},
+        "by_fold": {},
+        "division_counts": {
+          "fn": null,
+          "fp": null,
+          "tp": null
+        },
+        "epochs": 4,
+        "final_epoch": {
+          "flow_loss": "0.18817086517810822",
+          "heatmap_loss": "0.9745568633079529",
+          "train_loss": "1.1627275943756104",
+          "val_acc": "0.8056281805038452",
+          "val_f1": "0.8833800554275513",
+          "val_loss": "2.9409303665161133"
+        },
+        "global_steps": 3072,
+        "launcher_elapsed_seconds": "384.078",
+        "parameter_count": 35489892,
+        "pooled": {
+          "adjusted_edge_jaccard": null,
+          "division_jaccard": null,
+          "edge_jaccard": null,
+          "node_recall": null
+        },
+        "promotion_state": "awaiting frozen real-movie detector acceptance",
+        "quota_after_hours": "29.21",
+        "result_sha256": "c06f57265507f853152a1ace742b87e8e44a2a6d080f0074ec3468ea8f931919",
+        "run_id": "spotiflow-synthetic-finetune-v1",
+        "schema_version": 1,
+        "status": "completed",
+        "terminal_sha256": "fe5b1779573fc9361ed4dee9a7ca7d51627cf2898aac051cf68629c38b27ff17",
+        "trainer_elapsed_seconds": "300.888",
+        "weights_changed": true,
+        "worst_movie_delta": null
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Dense geometry-correct CC0 adaptation closes enough of the observed Biohub domain gap for the selected 35.5M Spotiflow warm start to become a viable detector candidate.",
+      "imported_audit": false,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": "spotiflow-detector-acceptance-v3",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T07:13:55.157825Z",
+      "run_id": "spotiflow-synthetic-finetune-v1",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Expanded real graph training from 48 movies/5000 steps to every non-validation movie/7000 steps before launch; updated generated notebook and immutable config hashes.",
+          "replacement_fields": {
+            "code": {
+              "dirty": true,
+              "dirty_state_sha256": "8cbff5f1b008b13a14fe2fe8d3d4f9000bb90c51705e3f481a93a88e271c90ad",
+              "git_head": "29dad183d632e9ec26f562b3d031505e9098f0bd"
+            },
+            "config": {
+              "accelerator": "NvidiaTeslaT4",
+              "dataset_sources": [
+                "indarkarhana/biohub-trackastra-graph-runtime-v1@version4",
+                "pilkwang/biohub-tracking-support-pack-50ep-v1"
+              ],
+              "declared_max_runtime_hours": "4.00",
+              "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
+              "internet_enabled": false,
+              "kernel_metadata_sha256": "a0cbb4baa11bcdbdcc790e3de7fc11153d1badcb66565797b7aca06eb086de8f",
+              "kernel_ref": "indarkarhana/biohub-trackastra-graph-finetune-v4",
+              "kernel_sources": [
+                "josefreitasalvesneto/biohub-synthetic-dataset"
+              ],
+              "notebook_sha256": "81d9db340ba0fc90ffdf5176b98bd26390a588728fa730d6446ce15ab81882c1",
+              "parent": "trackastra-graph-finetune-v3",
+              "pretrained_model": {
+                "license": "BSD-3-Clause",
+                "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+                "name": "Trackastra ctc v0.3.0",
+                "parameter_count": 27456880,
+                "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+                "source_repository": "weigertlab/trackastra"
+              },
+              "promotion_rule": "promote only if the frozen two-movie acceptance proxy delta versus the same-node raw base graph is positive and worst-movie regression is no more than 0.01",
+              "real_finetuning": {
+                "division_sampling_probability": "0.5",
+                "false_positive_probability": "0.03",
+                "gradient_accumulation": 4,
+                "hard_negative_radius_scaled_voxels": "64.0",
+                "jitter_sigma_scaled_voxels": "2.0",
+                "learning_rate": "0.00001",
+                "max_tokens": 512,
+                "node_drop_probability": "0.04",
+                "physical_z_to_xy_scale": "4.0",
+                "selection": "all available movies from both embryo prefixes; four complete validation movies excluded",
+                "target_steps": 7000,
+                "weight_decay": "0.00001",
+                "window_frames": 4
+              },
+              "retry_of": "trackastra-graph-finetune-v3",
+              "run_id": "trackastra-graph-finetune-v4",
+              "runtime_manifest_sha256": "ef3cda2f19ba8297bf8b38d30441ea6195803beab6493c60d6b9b54d166b15e1",
+              "schema_version": 1,
+              "submission_policy": "training and clean validation only; separate reranker refuses exact replicas and runs only after acceptance passes",
+              "submission_reranker_sha256": "c8551d49535a19dbc536db4c938a2d0c8cb2da7f6b1267cccb4b433f14f20275",
+              "synthetic_adapter_sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be",
+              "synthetic_pretraining": {
+                "coordinate_repair": "divide already-pooled sequence node Y/X by four exactly once",
+                "division_loss_prior_multiplier": "0.063812",
+                "division_sampling_probability": "0.15",
+                "image_arrays_loaded": false,
+                "learning_rate": "0.00002",
+                "license": "CC0",
+                "selection": "384 deterministic six-frame sequence graphs",
+                "target_steps": 1200
+              },
+              "trainer_max_wall_seconds": 13200,
+              "trainer_sha256": "3acf7580ceab4a80c0323b29f9df878bbd23fa8f6b99ccefb8278f8aa38a1245",
+              "validation": {
+                "acceptance_read_after_configuration_freeze": true,
+                "acceptance_stems": [
+                  "44b6_267148e4",
+                  "6bba_07e24132"
+                ],
+                "base_edge_information": "constant 0.80 pseudo-probability matching exported CSV information",
+                "checkpoints": [
+                  "initial",
+                  "post_synthetic",
+                  "post_real"
+                ],
+                "complete_movies": true,
+                "match_radius_um": "7.0",
+                "methods_selected": [
+                  "trackastra_only",
+                  "submission_graph_hybrid"
+                ],
+                "public_leaderboard_used_for_selection": false,
+                "selection_stems": [
+                  "44b6_12dfb391",
+                  "6bba_062c8d37"
+                ]
+              },
+              "validation_reserve_seconds": 1800,
+              "watchdog_hard_stop_seconds": 14100
+            },
+            "config_sha256": "a6eb977c3755e4c3bcbbed07a76b4cd826772b5dbc8656bf5a47a718c0a8119f"
+          },
+          "target_event_id": "evt-adb49cbf2338488abfd2370a971e01a0"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A synthetic-pretrained then Biohub-finetuned 27.5M Trackastra association model can improve the same-node public detector graph on a frozen two-movie acceptance split, enabling a non-replica submission candidate.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v3",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T07:41:02.556294Z",
+      "run_id": "trackastra-graph-finetune-v4",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.0452",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/spotiflow-finetuned-acceptance-v1-result.json",
+        ".biohub/cache/kernel-outputs/spotiflow-finetuned-acceptance-v1/spotiflow_finetuned_acceptance/finetuned_detector_acceptance.json"
+      ],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {
+        "acceptance": {
+          "annotated_gt_nodes": 2357,
+          "baseline_annotated_node_recall": "0.96902842596521",
+          "baseline_matched_gt_nodes": 2284,
+          "candidate_annotated_node_recall": "0.09249045396690708",
+          "candidate_matched_gt_nodes": 218,
+          "delta_vs_baseline": "-0.876537971998303",
+          "delta_vs_pretrained_spotiflow": "-0.6851930420025456",
+          "movies": 4,
+          "pretrained_spotiflow_annotated_node_recall": "0.7776834959694527"
+        },
+        "by_embryo": {
+          "44b6": {
+            "baseline_node_recall": "0.9588014981273408",
+            "node_recall": "0.20411985018726592",
+            "node_recall_delta": "-0.7546816479400749"
+          },
+          "6bba": {
+            "baseline_node_recall": "0.9775019394879751",
+            "node_recall": "0.0",
+            "node_recall_delta": "-0.9775019394879751"
+          }
+        },
+        "by_fold": {
+          "44b6_12dfb391": {
+            "delta": "-0.6928934010152284",
+            "node_recall": "0.2766497461928934"
+          },
+          "44b6_267148e4": {
+            "delta": "-0.9285714285714286",
+            "node_recall": "0.0"
+          },
+          "6bba_062c8d37": {
+            "delta": "-0.9924731182795699",
+            "node_recall": "0.0"
+          },
+          "6bba_07e24132": {
+            "delta": "-0.9387186629526463",
+            "node_recall": "0.0"
+          }
+        },
+        "decision": {
+          "drop_in_detector": "retire",
+          "next_test": "Keep the public detector frozen and improve associations with density-matched Trackastra training.",
+          "reason": "Synthetic-only fine-tuning catastrophically reduced clean real-movie recall and produced zero detections on three acceptance movies at the frozen calibration rule.",
+          "transfer_initialization": "retire_synthetic_checkpoint"
+        },
+        "division_counts": {
+          "fn": null,
+          "fp": null,
+          "tp": null
+        },
+        "evaluator_elapsed_seconds": "79.805730905",
+        "launcher_terminal_sha256": "b4209e99b520a1f4bd591a80384fcdac6016406be679a8f5f3e18599020f48ad",
+        "pooled": {
+          "adjusted_edge_jaccard": null,
+          "division_jaccard": null,
+          "edge_jaccard": null,
+          "node_recall": "0.09249045396690708"
+        },
+        "remaining_gpu_hours": "29.16",
+        "result_sha256": "4a7fbed512f7c69769a84addd0398676a881568ed677e7299e12d530d9d8fff5",
+        "run_id": "spotiflow-finetuned-acceptance-v1",
+        "schema_version": 1,
+        "status": "completed",
+        "submission_created": false,
+        "terminal_elapsed_seconds": "162.778",
+        "worst_movie_delta": "-0.9924731182795699"
+      },
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Dense synthetic adaptation improves real-movie recall over the selected pretrained Spotiflow warm start and may close the gap to the public detector without label-based threshold tuning.",
+      "imported_audit": false,
+      "lifecycle_status": "completed",
+      "next_gate": null,
+      "parent": "spotiflow-synthetic-finetune-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T07:50:40.906428Z",
+      "run_id": "spotiflow-finetuned-acceptance-v1",
+      "status": "completed"
+    },
+    {
+      "actual_gpu_hours": "0.0322",
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Kaggle CUDA pre-training validation failed because probability-space BCE was executed inside autocast; no optimizer step or model artifact was produced.",
+      "hypothesis": "Density-matched distractor training lets a 27.5M Biohub-finetuned Trackastra improve complete-movie associations over the same-node public graph, enabling an independent non-replica candidate.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v4",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T08:09:28.577099Z",
+      "run_id": "trackastra-graph-finetune-v5",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "CUDA-safe density-matched fine-tuning of the 27.5M Trackastra model can learn independent associations that improve the exact processed-topology heldout proxy over the frozen public graph.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v5",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T08:54:48.754904Z",
+      "run_id": "trackastra-graph-finetune-v6",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A Biohub-supervised linear probe on frozen HOCT edge-centric features, combined with raw detector confidence, improves clean final-topology association over the public comparator and node-centric Trackastra.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v6",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T09:18:03.442218Z",
+      "run_id": "hoct-probe-finetune-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1
