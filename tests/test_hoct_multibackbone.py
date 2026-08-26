@@ -10,6 +10,7 @@ from research.hoct_graph.multibackbone import (
 )
 from research.hoct_graph.train_biohub_hoct_multibackbone import (
     multibackbone_configurations,
+    robust_selection_key,
 )
 
 
@@ -110,3 +111,26 @@ def test_multibackbone_linker_grid_has_no_duplicate_configurations() -> None:
         "hoct_only",
         "raw_confidence_hybrid",
     }
+
+
+def test_robust_selection_prioritizes_worst_embryo_delta() -> None:
+    concentrated = {
+        "selection_min_delta_vs_base": -0.02,
+        "selection_summary": {
+            "proxy_score": 1.10,
+            "worst_movie": 0.70,
+            "div_fp": 0,
+        },
+        "method": "hoct_only",
+    }
+    transferable = {
+        "selection_min_delta_vs_base": 0.001,
+        "selection_summary": {
+            "proxy_score": 0.95,
+            "worst_movie": 0.90,
+            "div_fp": 2,
+        },
+        "method": "raw_confidence_hybrid",
+    }
+
+    assert robust_selection_key(transferable) > robust_selection_key(concentrated)

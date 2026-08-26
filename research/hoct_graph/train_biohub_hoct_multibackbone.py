@@ -85,6 +85,16 @@ def multibackbone_configurations(variant_names: list[str]) -> list[dict[str, Any
     ]
 
 
+def robust_selection_key(row: dict[str, Any]) -> tuple[float, float, float, int, bool]:
+    """Prefer configurations whose gain transfers across both embryo prefixes."""
+    summary = row["selection_summary"]
+    return (
+        float(row["selection_min_delta_vs_base"]),
+        float(summary["proxy_score"]),
+        float(summary["worst_movie"]),
+        -int(summary["div_fp"]),
+        row["method"] == "raw_confidence_hybrid",
+    )
 def validate_multibackbone_movies(
     models: dict[str, torch.nn.Module],
     probes: dict[str, torch.nn.Linear],
@@ -135,6 +145,12 @@ def validate_multibackbone_movies(
             predictions, truths, train_dir, base_edges, VALIDATION_STEMS
         ),
     }
+    base_by_stem = {
+        stem: _score_partition(
+            predictions, truths, train_dir, base_edges, (stem,)
+        )
+        for stem in SELECTION_STEMS
+    }
 
     configurations: list[dict[str, Any]] = []
     for candidate in multibackbone_configurations(variant_names):
@@ -144,23 +160,29 @@ def validate_multibackbone_movies(
             )
             for stem in SELECTION_STEMS
         }
+        by_stem = {
+            stem: _score_partition(
+                predictions, truths, train_dir, edges, (stem,)
+            )
+            for stem in SELECTION_STEMS
+        }
+        deltas = {
+            stem: by_stem[stem]["proxy_score"]
+            - base_by_stem[stem]["proxy_score"]
+            for stem in SELECTION_STEMS
+        }
         configurations.append(
             {
                 **candidate,
                 "selection_summary": _score_partition(
                     predictions, truths, train_dir, edges, SELECTION_STEMS
                 ),
+                "selection_by_stem": by_stem,
+                "selection_delta_by_stem": deltas,
+                "selection_min_delta_vs_base": min(deltas.values()),
             }
         )
-    selected = max(
-        configurations,
-        key=lambda row: (
-            row["selection_summary"]["proxy_score"],
-            row["selection_summary"]["worst_movie"],
-            -row["selection_summary"]["div_fp"],
-            row["method"] == "raw_confidence_hybrid",
-        ),
-    )
+    selected = max(configurations, key=robust_selection_key)
     selected_variant = str(selected["variant"])
     needed = required_backbones(selected_variant)
 
@@ -234,6 +256,7 @@ def validate_multibackbone_movies(
         "acceptance_stems": list(ACCEPTANCE_STEMS),
         "selection_rule": "backbone/head/blend/linker/thresholds selected on selection movies; acceptance inferred and scored once after freeze",
         "base_graph": base_summary,
+        "base_selection_by_stem": base_by_stem,
         "selected": selected,
         "selection_delta_vs_base": selection_delta,
         "acceptance_delta_vs_base": acceptance_delta,

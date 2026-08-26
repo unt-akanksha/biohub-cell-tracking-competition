@@ -17,7 +17,9 @@ two head types. Exact zeros outside one model's candidate neighborhood no
 longer veto evidence from the other model.
 
 The final linker and thresholds use the same small V1 grid. Two complete movies
-select the entire configuration. Only then are the two disjoint acceptance
+select the entire configuration by maximizing the worse per-movie delta versus
+the base across the two embryo prefixes; pooled score is only a tie-breaker.
+Only then are the two disjoint acceptance
 movies inferred, using only the backbone or backbones required by the frozen
 winner. Acceptance requires a positive proxy delta and no more than a 0.01
 worst-movie regression. No submission or leaderboard read occurs.
