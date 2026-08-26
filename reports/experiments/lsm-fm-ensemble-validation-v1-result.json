@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-ensemble-validation-v1",
+  "status": "rejected_at_selection_retain_feature36",
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-ensemble-validation-v1",
+  "gpu": {
+    "quota_before_hours": 25.59,
+    "quota_after_hours": 25.3,
+    "charged_hours": 0.29,
+    "launcher_elapsed_seconds": 1022.334,
+    "declared_max_hours": 1.0,
+    "protected_reserve_hours": 8.0
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "candidates": {
+      "feature36_control": {
+        "matched_gt_nodes": 9936,
+        "annotated_node_recall": 0.8891275167785235,
+        "worst_movie_recall": 0.6419529837251357,
+        "mean_movie_match_distance_um": 1.8695538531033598
+      },
+      "feature36_log_quadratic": {
+        "matched_gt_nodes": 9948,
+        "annotated_node_recall": 0.8902013422818792,
+        "worst_movie_recall": 0.6311030741410488,
+        "mean_movie_match_distance_um": 1.8520067683472552
+      },
+      "equal_ensemble_control": {
+        "matched_gt_nodes": 9933,
+        "annotated_node_recall": 0.8888590604026846,
+        "worst_movie_recall": 0.6377335744424352,
+        "mean_movie_match_distance_um": 1.8675369841004532
+      },
+      "equal_ensemble_log_quadratic": {
+        "matched_gt_nodes": 9939,
+        "annotated_node_recall": 0.8893959731543624,
+        "worst_movie_recall": 0.6317058468957203,
+        "mean_movie_match_distance_um": 1.8345898289908105
+      },
+      "feature24_control": {
+        "matched_gt_nodes": 9881,
+        "annotated_node_recall": 0.8842058165548099,
+        "worst_movie_recall": 0.6220614828209765,
+        "mean_movie_match_distance_um": 1.8643593862365697
+      }
+    },
+    "selected_candidate": null,
+    "pooled_gate": 0.8,
+    "worst_movie_gate": 0.65,
+    "passed": false
+  },
+  "limiting_movie": {
+    "stem": "6bba_57b7cc1e",
+    "feature36_control_matched_gt_nodes": 1065,
+    "annotated_gt_nodes": 1659,
+    "annotated_node_recall": 0.6419529837251357,
+    "mean_match_distance_um": 2.5757518689258636,
+    "predicted_nodes": 65586,
+    "estimated_nodes": 65511.0,
+    "projected_count_ratio": 0.9998320892674513,
+    "additional_matches_required_for_gate": 14
+  },
+  "interpretation": {
+    "ensemble": "The fixed equal-probability feature-24/feature-36 blend regressed the limiting movie by seven annotated matches versus feature-36 alone.",
+    "log_quadratic": "Log-quadratic localization improved pooled feature-36 recall by twelve matches but lost eighteen matches on the limiting movie, so it is not a safe global refiner.",
+    "density": "The limiting movie remains almost exactly density calibrated; the failure is localization and duplicate-versus-miss allocation, not total count."
+  },
+  "acceptance": {
+    "opened": false,
+    "promotion_passed": false
+  },
+  "evidence": {
+    "launcher_terminal_sha256": "c133ca163bb23d98b97759a4be2dfe4cbc33e08dc454a69c3f7c379ed9591e45",
+    "validation_result_sha256": "d1e69386a2fdfd7fa664f2ea4a9fadfa64312055ca7171552f2d45abb1d857f7",
+    "selection_partial_sha256": "a444b63117f517279400648c5c80498fd3a764b186bb13180c3fd6845ca5709e",
+    "kernel_log_sha256": "678712f8d2f1a2d3efc898e15e785a5af13238117ff7f3fa9659585f6e9f7609",
+    "submission_artifacts_found": []
+  },
+  "decision": {
+    "selection_gate": "reject",
+    "family": "retain_feature36",
+    "next_experiment": "lsm-fm-image-text-localization-refinement-v1",
+    "reason": "Run the already predeclared checkpoint-frozen raw-intensity and wider-radius localization strategies. They infer feature-36 once and are the final low-cost test aimed directly at the remaining 14-match localization deficit."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false
+}
