@@ -7,7 +7,7 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
-from .evaluation import ExactEvaluationError, ExactReport, validate_exact_core
+from .evaluation import REPORT_SCHEMA, ExactEvaluationError, ExactReport, validate_exact_core
 from .io import canonical_json_bytes, sha256_bytes
 from .ledger import (
     EventType,
@@ -186,7 +186,7 @@ def load_promotion_policy(path: str | Path) -> PromotionPolicy:
     if (
         value["schema_version"] != POLICY_SCHEMA
         or value["decision_input_schema"] != INPUT_SCHEMA
-        or value["report_schema"] != "biohub.exact-report.v2"
+        or value["report_schema"] != REPORT_SCHEMA
         or value["required_evidence_kind"] != "model_candidate"
     ):
         _fail("PROMOTION_POLICY_SCHEMA_INVALID", "schema or evidence kind")
@@ -304,7 +304,9 @@ def _hard_failures(
             reasons.append("TERMINAL_ARTIFACT_MISMATCH")
 
     integrity = core["integrity_checks"]
-    if integrity.get("metric_exploit_audit") != "passed":
+    if core["schema_version"] != REPORT_SCHEMA:
+        reasons.append("METRIC_EXPLOIT_EVIDENCE_MISSING")
+    elif integrity.get("metric_exploit_audit") != "passed":
         reasons.append("METRIC_EXPLOIT_SIGNATURE")
     if integrity.get("complete_coverage") != "passed" or core["coverage"].get("complete") is not True:
         reasons.append("INCOMPLETE_MOVIE_COVERAGE")

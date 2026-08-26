@@ -19,6 +19,8 @@ from .comparison import build_paired_comparison
 from .diagnostics import aggregate_movie_diagnostics, diagnose_movie
 from .evidence import resolve_producer
 from .graphs import (
+    GraphData,
+    GraphNode,
     PredictionInventory,
     artifact_tree_sha256,
     graph_data_from_tracksdata,
@@ -42,7 +44,8 @@ from .submission_io import RoundTripEvidence, roundtrip_prediction_inventory
 
 
 LEGACY_REPORT_SCHEMA = "biohub.exact-report.v1"
-REPORT_SCHEMA = "biohub.exact-report.v2"
+INTERMEDIATE_REPORT_SCHEMA = "biohub.exact-report.v2"
+REPORT_SCHEMA = "biohub.exact-report.v3"
 _SHA256 = frozenset("0123456789abcdef")
 _POLICY_KEYS = {
     "schema_version",
@@ -691,6 +694,124 @@ def _diagnostic_projection(movies: Sequence[Mapping[str, Any]]) -> dict[str, Any
     }
 
 
+def _normalized_graph_signature(graph: GraphData) -> str:
+    """Return an ID- and translation-invariant signature for a graph topology."""
+
+    if not graph.nodes:
+        return sha256_bytes(canonical_json_bytes({"nodes": [], "edges": []}))
+    minima = {
+        name: min(float(getattr(node, name)) for node in graph.nodes)
+        for name in ("t", "z", "y", "x")
+    }
+    ordered = sorted(
+        graph.nodes,
+        key=lambda node: (
+            float(node.t),
+            float(node.z),
+            float(node.y),
+            float(node.x),
+            str(node.node_id),
+        ),
+    )
+    indexes = {node.node_id: index for index, node in enumerate(ordered)}
+    normalized = {
+        "nodes": [
+            [
+                decimal_string(float(node.t) - minima["t"], "signature.t"),
+                decimal_string(float(node.z) - minima["z"], "signature.z"),
+                decimal_string(float(node.y) - minima["y"], "signature.y"),
+                decimal_string(float(node.x) - minima["x"], "signature.x"),
+            ]
+            for node in ordered
+        ],
+        "edges": sorted([indexes[source], indexes[target]] for source, target in graph.edges),
+    }
+    return sha256_bytes(canonical_json_bytes(normalized))
+
+
+def metric_exploit_audit(
+    *,
+    scorer_lock: ScorerLock,
+    scorer_lock_sha256: str,
+    fixture_path: Path,
+    candidate_graphs: Sequence[tuple[str, GraphData]],
+) -> dict[str, Any]:
+    """Audit pinned scorer provenance and candidate graphs for frozen exploit signatures."""
+
+    if sha256_file(fixture_path) != scorer_lock.patched_exploit_sha256:
+        _fail("METRIC_EXPLOIT_AUDIT_INVALID", "frozen exploit fixture hash mismatch")
+    fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+    cases = fixture.get("cases") if isinstance(fixture, dict) else None
+    if not isinstance(cases, dict) or not cases:
+        _fail("METRIC_EXPLOIT_AUDIT_INVALID", "frozen exploit fixture cases missing")
+
+    known: dict[str, str] = {}
+    for name, case in sorted(cases.items()):
+        prediction = case.get("prediction") if isinstance(case, dict) else None
+        if not isinstance(prediction, dict):
+            _fail("METRIC_EXPLOIT_AUDIT_INVALID", f"fixture case {name}")
+        nodes = prediction.get("nodes")
+        edges = prediction.get("edges")
+        if not isinstance(nodes, list) or not isinstance(edges, list):
+            _fail("METRIC_EXPLOIT_AUDIT_INVALID", f"fixture graph {name}")
+        graph = GraphData(
+            nodes=tuple(
+                GraphNode(
+                    node["id"], node["t"], node["z"], node["y"], node["x"]
+                )
+                for node in nodes
+            ),
+            edges=tuple((source, target) for source, target in edges),
+        )
+        known[_normalized_graph_signature(graph)] = str(name)
+
+    candidate_signatures = [
+        {"sample_id": sample_id, "graph_signature_sha256": _normalized_graph_signature(graph)}
+        for sample_id, graph in sorted(candidate_graphs, key=lambda item: item[0])
+    ]
+    matches = [
+        {"sample_id": item["sample_id"], "fixture_case": known[item["graph_signature_sha256"]]}
+        for item in candidate_signatures
+        if item["graph_signature_sha256"] in known
+    ]
+    reason_codes = ["KNOWN_EXPLOIT_GRAPH_SIGNATURE"] if matches else []
+    evidence = {
+        "schema_version": "biohub.metric-exploit-audit.v1",
+        "scorer_lock_sha256": scorer_lock_sha256,
+        "organizer_commit": scorer_lock.organizer_commit,
+        "patch_commit": scorer_lock.patch_commit,
+        "patched_exploit_sha256": scorer_lock.patched_exploit_sha256,
+        "hack2_result_sha256": scorer_lock.hack2_result_sha256,
+        "candidate_graph_signatures": candidate_signatures,
+        "known_signature_matches": matches,
+        "reason_codes": reason_codes,
+        "status": "failed" if reason_codes else "passed",
+    }
+    evidence["audit_sha256"] = sha256_bytes(canonical_json_bytes(evidence))
+    return evidence
+
+
+def unavailable_metric_exploit_audit(
+    scorer_lock_sha256: str, reason_code: str
+) -> dict[str, Any]:
+    """Create a hashed fail-closed result when candidate graphs are unavailable."""
+
+    evidence = {
+        "schema_version": "biohub.metric-exploit-audit.v1",
+        "scorer_lock_sha256": scorer_lock_sha256,
+        "organizer_commit": "unavailable",
+        "patch_commit": "unavailable",
+        "patched_exploit_sha256": "0" * 64,
+        "hack2_result_sha256": "0" * 64,
+        "candidate_graph_signatures": [],
+        "known_signature_matches": [],
+        "reason_codes": [reason_code],
+        "status": "failed",
+    }
+    evidence["audit_sha256"] = sha256_bytes(canonical_json_bytes(evidence))
+    return evidence
+
+
 def canonical_report_core(
     *,
     registration: Mapping[str, Any],
@@ -699,6 +820,7 @@ def canonical_report_core(
     expected_samples: Sequence[str],
     diagnostics: Mapping[str, Any],
     comparison: Mapping[str, Any],
+    metric_exploit_evidence: Mapping[str, Any],
 ) -> dict[str, Any]:
     core = {
         "schema_version": REPORT_SCHEMA,
@@ -728,7 +850,8 @@ def canonical_report_core(
             "native_graph_integrity": "passed",
             "submission_roundtrip": "passed",
             "official_count_parity": "passed",
-            "metric_exploit_audit": "passed",
+            "metric_exploit_audit": metric_exploit_evidence["status"],
+            "metric_exploit_evidence": dict(metric_exploit_evidence),
             "authoritative_prediction_space": "integer-csv-rebuilt-geff",
             "native_prediction_space": "diagnostic_only",
         },
@@ -741,7 +864,11 @@ def canonical_report_core(
 def validate_exact_core(core: Any) -> dict[str, Any]:
     if not isinstance(core, dict) or set(core) != _CORE_KEYS:
         _fail("EXACT_REPORT_SCHEMA_INVALID", "unknown or missing core field")
-    if core["schema_version"] not in {LEGACY_REPORT_SCHEMA, REPORT_SCHEMA}:
+    if core["schema_version"] not in {
+        LEGACY_REPORT_SCHEMA,
+        INTERMEDIATE_REPORT_SCHEMA,
+        REPORT_SCHEMA,
+    }:
         _fail("EXACT_REPORT_SCHEMA_INVALID", "report schema changed")
     for name in (
         "scorer_lock_sha256",
@@ -797,14 +924,46 @@ def validate_exact_core(core: Any) -> dict[str, Any]:
     integrity = core["integrity_checks"]
     if not isinstance(integrity, dict):
         _fail("EXACT_REPORT_SCHEMA_INVALID", "integrity checks")
-    if (
-        core["schema_version"] == REPORT_SCHEMA
-        and integrity.get("metric_exploit_audit") not in {"passed", "failed"}
-    ):
+    if core["schema_version"] != LEGACY_REPORT_SCHEMA and integrity.get(
+        "metric_exploit_audit"
+    ) not in {"passed", "failed"}:
         _fail(
             "EXACT_REPORT_SCHEMA_INVALID",
             "metric exploit audit is required and must be an explicit passed/failed result",
         )
+    if core["schema_version"] == REPORT_SCHEMA:
+        audit = integrity.get("metric_exploit_evidence")
+        required_audit_keys = {
+            "schema_version",
+            "scorer_lock_sha256",
+            "organizer_commit",
+            "patch_commit",
+            "patched_exploit_sha256",
+            "hack2_result_sha256",
+            "candidate_graph_signatures",
+            "known_signature_matches",
+            "reason_codes",
+            "status",
+            "audit_sha256",
+        }
+        if not isinstance(audit, dict) or set(audit) != required_audit_keys:
+            _fail("EXACT_REPORT_SCHEMA_INVALID", "metric exploit audit evidence")
+        semantic_audit = dict(audit)
+        audit_sha256 = _sha(semantic_audit.pop("audit_sha256"), "metric exploit audit")
+        if not secrets.compare_digest(
+            audit_sha256, sha256_bytes(canonical_json_bytes(semantic_audit))
+        ):
+            _fail("EXACT_REPORT_SCHEMA_INVALID", "metric exploit audit hash")
+        if (
+            audit["schema_version"] != "biohub.metric-exploit-audit.v1"
+            or audit["scorer_lock_sha256"] != core["scorer_lock_sha256"]
+            or audit["status"] != integrity["metric_exploit_audit"]
+            or audit["status"] != ("failed" if audit["reason_codes"] else "passed")
+            or not isinstance(audit["candidate_graph_signatures"], list)
+            or not isinstance(audit["known_signature_matches"], list)
+            or not isinstance(audit["reason_codes"], list)
+        ):
+            _fail("EXACT_REPORT_SCHEMA_INVALID", "metric exploit audit binding")
     _finite_tree(core)
     canonical_json_bytes(core)
     return core
@@ -908,6 +1067,7 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             roundtrips.append((role, inventory, evidence, target))
         authoritative.sort(key=lambda item: (item["role"], item["fold_id"]))
         movies: dict[str, list[dict[str, Any]]] = {"baseline": [], "candidate": []}
+        candidate_graphs: list[tuple[str, GraphData]] = []
         for role, inventory, evidence, target in roundtrips:
             roundtrip_counts = {
                 item["sample_id"]: item["official_counts"] for item in evidence.per_movie
@@ -927,9 +1087,14 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
                     raise ExactEvaluationError("TRUTH_PATH_ESCAPE", sample.truth_relpath) from exc
                 if artifact_tree_sha256(truth_path) != sample.geff_tree_sha256:
                     _fail("TRUTH_HASH_MISMATCH", sample_id)
+                prediction = load_geff_graph(prediction_path, verified)
+                if role == "candidate":
+                    candidate_graphs.append(
+                        (sample_id, graph_data_from_tracksdata(prediction))
+                    )
                 row = _score_movie(
                     verified,
-                    load_geff_graph(prediction_path, verified),
+                    prediction,
                     load_geff_graph(truth_path, verified),
                     sample,
                     policy,
@@ -977,6 +1142,13 @@ def evaluate_exact(request: ExactEvaluationRequest) -> ExactReport:
             expected_samples=[item.sample_id for item in manifest.samples],
             diagnostics=diagnostics,
             comparison=comparison,
+            metric_exploit_evidence=metric_exploit_audit(
+                scorer_lock=verified.lock,
+                scorer_lock_sha256=verified.lock_sha256,
+                fixture_path=request.scorer_lock_path.resolve().parent.parent
+                / verified.lock.patched_exploit_path,
+                candidate_graphs=candidate_graphs,
+            ),
         )
         core_sha = sha256_bytes(canonical_json_bytes(core))
         _, peak_bytes = tracemalloc.get_traced_memory()

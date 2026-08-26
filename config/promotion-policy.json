@@ -37,8 +37,8 @@
     "ROUNDTRIP_INVALID",
     "OFFICIAL_COUNT_PARITY_FAILURE"
   ],
-  "policy_sha256": "c532325774cb9d9294e30a3941c7d407e289ede2ba4c98ad65b6a31dba9d0960",
-  "report_schema": "biohub.exact-report.v2",
+  "policy_sha256": "30cff66678ccd6c5c79950af5e9d172069436dbe8e8e5e0690da59f5b74233e6",
+  "report_schema": "biohub.exact-report.v3",
   "required_evidence_kind": "model_candidate",
   "required_integrity": {
     "aggregate_member_match": "passed",

@@ -11,9 +11,10 @@ from biohub_tracker.evaluation import (
     ExactReport,
     PredictionSetRef,
     evaluate_exact,
+    metric_exploit_audit,
     validate_exact_report,
 )
-from biohub_tracker.graphs import artifact_tree_sha256
+from biohub_tracker.graphs import GraphData, GraphNode, artifact_tree_sha256
 from biohub_tracker.io import canonical_json_bytes, sha256_bytes
 from biohub_tracker.ledger import (
     EventType,
@@ -29,7 +30,7 @@ from biohub_tracker.ledger import (
     start_payload,
 )
 from biohub_tracker.manifests import EvaluationManifest, FoldRecord, SampleRecord, write_manifest
-from biohub_tracker.scorer_lock import verify_scorer_lock
+from biohub_tracker.scorer_lock import ScorerLock, verify_scorer_lock
 
 
 LOCK = Path("config/official-scorer.lock.json").resolve()
@@ -322,11 +323,43 @@ def test_exact_canonical_complete_movie_report_is_pooled_and_ledger_attached(tmp
     assert report.core["diagnostics"]["candidate"]["pooled"]["reconciliation"]["status"] == "passed"
     assert "diagnostic_state" not in json.dumps(report.core["official"], sort_keys=True)
     assert report.core["integrity_checks"]["authoritative_prediction_space"] == "integer-csv-rebuilt-geff"
+    assert report.core["integrity_checks"]["metric_exploit_audit"] == "passed"
+    assert report.core["integrity_checks"]["metric_exploit_evidence"]["audit_sha256"]
     assert validate_exact_report(
         ExactReport.from_files(report.core_path, report.envelope_path),
         ledger_path=ledger.path,
         workspace_root=tmp_path,
     ).core_sha256 == report.core_sha256
+
+
+def test_production_metric_exploit_audit_detects_frozen_shifted_signature():
+    lock = ScorerLock.from_dict(json.loads(LOCK.read_text(encoding="utf-8")))
+    fixture_path = LOCK.parent.parent / lock.patched_exploit_path
+    case = json.loads(fixture_path.read_text(encoding="utf-8"))["cases"]["hack2"]
+    graph = GraphData(
+        nodes=tuple(
+            GraphNode(
+                node["id"],
+                node["t"],
+                node["z"] + 100,
+                node["y"] + 100,
+                node["x"] + 100,
+            )
+            for node in case["prediction"]["nodes"]
+        ),
+        edges=tuple(tuple(edge) for edge in case["prediction"]["edges"]),
+    )
+    audit = metric_exploit_audit(
+        scorer_lock=lock,
+        scorer_lock_sha256=lock.semantic_sha256,
+        fixture_path=fixture_path,
+        candidate_graphs=[("production-shaped", graph)],
+    )
+    assert audit["status"] == "failed"
+    assert audit["reason_codes"] == ["KNOWN_EXPLOIT_GRAPH_SIGNATURE"]
+    assert audit["known_signature_matches"] == [
+        {"sample_id": "production-shaped", "fixture_case": "hack2"}
+    ]
 
 
 def test_exact_publication_retries_after_kill_immediately_before_rename(

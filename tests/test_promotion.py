@@ -193,6 +193,19 @@ def _completed_report(
         }
         for member in members
     ]
+    audit = {
+        "schema_version": "biohub.metric-exploit-audit.v1",
+        "scorer_lock_sha256": "a" * 64,
+        "organizer_commit": "0" * 40,
+        "patch_commit": "1" * 40,
+        "patched_exploit_sha256": "2" * 64,
+        "hack2_result_sha256": "3" * 64,
+        "candidate_graph_signatures": [],
+        "known_signature_matches": [],
+        "reason_codes": [],
+        "status": "passed",
+    }
+    audit["audit_sha256"] = sha256_bytes(canonical_json_bytes(audit))
     integrity = {
         "producer_ledger_resolution": "passed",
         "aggregate_member_match": "passed",
@@ -201,12 +214,20 @@ def _completed_report(
         "submission_roundtrip": "passed",
         "official_count_parity": "passed",
         "metric_exploit_audit": "passed",
+        "metric_exploit_evidence": audit,
         "authoritative_prediction_space": "integer-csv-rebuilt-geff",
         "native_prediction_space": "diagnostic_only",
     }
     integrity.update(integrity_override or {})
+    if integrity["metric_exploit_audit"] == "failed":
+        failed_audit = dict(integrity["metric_exploit_evidence"])
+        failed_audit["reason_codes"] = ["KNOWN_EXPLOIT_GRAPH_SIGNATURE"]
+        failed_audit["status"] = "failed"
+        failed_audit.pop("audit_sha256")
+        failed_audit["audit_sha256"] = sha256_bytes(canonical_json_bytes(failed_audit))
+        integrity["metric_exploit_evidence"] = failed_audit
     core = {
-        "schema_version": "biohub.exact-report.v2",
+        "schema_version": "biohub.exact-report.v3",
         "evaluation_run_id": "evaluation-candidate-v1",
         "evidence_kind": evidence_kind,
         "scorer_lock_sha256": "a" * 64,
@@ -344,6 +365,7 @@ def test_missing_metric_exploit_audit_is_rejected_but_legacy_v1_remains_readable
     missing = dict(report.core)
     missing["integrity_checks"] = dict(missing["integrity_checks"])
     missing["integrity_checks"].pop("metric_exploit_audit")
+    missing["integrity_checks"].pop("metric_exploit_evidence")
     rewritten = _replace_core_and_attachment(ledger, report, missing)
     with pytest.raises(PromotionError, match="metric exploit audit is required"):
         _evaluate(ledger, rewritten)

@@ -1375,6 +1375,7 @@ def reconcile_pending_control(
     from .evaluation import (
         ExactReport,
         canonical_report_core,
+        unavailable_metric_exploit_audit,
         validate_exact_report,
     )
     from .manifests import EvaluationManifest
@@ -1562,6 +1563,9 @@ def reconcile_pending_control(
         expected_samples=control["expected_sample_ids"],
         diagnostics=diagnostics,
         comparison=comparison,
+        metric_exploit_evidence=unavailable_metric_exploit_audit(
+            registration["scorer_lock_sha256"], "CANDIDATE_GRAPHS_NOT_LOCALLY_AUDITED"
+        ),
     )
     core_sha = sha256_bytes(canonical_json_bytes(core))
     envelope = {
