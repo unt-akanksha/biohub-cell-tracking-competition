@@ -1,0 +1,211 @@
+{
+  "checks": [
+    {
+      "detail": "Tracked, staged, and independently downloaded runtime modules import; notebook cells compile and focused tests pass.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/image_text_model.py",
+          "sha256": "5e90eb39412b9f18f69e1565ccc3af5938c26d238fb336ff10cffcc9d5e6bb6f"
+        },
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-pu-adaptation-v1/biohub-lsm-fm-image-text-pu-adaptation-v1.ipynb",
+          "sha256": "2818daa0611d5d53639d588b0c3416cdb197db24373d14c79b7b78eeb2660c2f"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-image-text-pu-runtime-v1-version1/monai-1.5.1/monai/__init__.py",
+          "sha256": "3b018ef27d5eaea7ce26c2e897586cb8735d73b00eb0e6fcdca33b9b3d554337"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The CC-BY-4.0 weights, Apache-2.0 implementation, private runtime, frozen teachers, graph baseline, and competition source are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+          "sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-pu-adaptation-v1/kernel-metadata.json",
+          "sha256": "34d18b2c4b5a312d9bed5dc6d5783c9e1a843ab5fb399bf741207c2506ab468b"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-image-text-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "5b73f47d4695492ebad504539ee1be9538faa259115a848f1ecd348c74154721"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "An exact 64-cubed CPU forward/backward optimizer step has finite outputs and gradients.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/image_text_model.py",
+          "sha256": "5e90eb39412b9f18f69e1565ccc3af5938c26d238fb336ff10cffcc9d5e6bb6f"
+        },
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": "tests/test_lsm_fm_image_text_detector.py",
+          "sha256": "e18308f72274662a92d420e114ac523c6fe8ddb7b6c9dfbede6dce4ec185ae4e"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The 35.07M-parameter detector strict-loads all non-head feature-36 tensors and verifies 30.45M warm / 35.07M deep trainable counts.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/image_text_model.py",
+          "sha256": "5e90eb39412b9f18f69e1565ccc3af5938c26d238fb336ff10cffcc9d5e6bb6f"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+          "sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The safely stripped 159-tensor image-text student retains its audited hash locally, in staging, and after Kaggle download.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-image-text-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "5b73f47d4695492ebad504539ee1be9538faa259115a848f1ecd348c74154721"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-image-text-pu-runtime-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only learned-model and clean-validation evidence can be written; submission artifacts cause failure and no competition API call exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-image-text-pu-adaptation-v1/biohub-lsm-fm-image-text-pu-adaptation-v1.ipynb",
+          "sha256": "2818daa0611d5d53639d588b0c3416cdb197db24373d14c79b7b78eeb2660c2f"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Training serializes weak/strong activation graphs with batch one and CPU target caches; validation remains batch one with hard wall guards.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+          "sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "All 187 training movies use two deterministic pairs; eight selection movies gate four untouched acceptance movies and all twelve are excluded from training.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        },
+        {
+          "path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+          "sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Only licensed pretrained tensors and MONAI are reused; the detector head, PU trainer, evaluator, and outputs are Biohub-owned and no public prediction is copied.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+          "sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-image-text-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "5b73f47d4695492ebad504539ee1be9538faa259115a848f1ecd348c74154721"
+        },
+        {
+          "path": "licenses/LSM_FM_WEIGHTS_ATTRIBUTION.md",
+          "sha256": "91d081f0bf9365062dc8a7623523dfb489d87fbf03bd18504ce44a6f2227c522"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T19:48:43.339053Z",
+  "report_sha256": "966a3a36985f98a14ec469af7d674fde5f21bba5a5735c84b7847505f4b7530a",
+  "run_id": "lsm-fm-image-text-pu-adaptation-v1",
+  "schema_version": 1
+}

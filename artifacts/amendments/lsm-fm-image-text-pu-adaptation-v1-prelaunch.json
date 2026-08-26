@@ -1,0 +1,18 @@
+{
+  "acceptance_labels_opened": false,
+  "config_file_sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611",
+  "config_path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+  "detector_parameters": 35072515,
+  "exact_64_cube_forward_backward_optimizer_step": true,
+  "focused_tests_passed": 35,
+  "preflight_builder_sha256": "c184aeab6d3558134d67c4ee9c2d8e0cc800922519f01bdb2815d65cb397723f",
+  "preflight_file_sha256": "49cc87c315063fe4f83289ffd89709a88f08bee0f7ae00a07c1363627640a8c1",
+  "preflight_report": "artifacts/preflights/lsm-fm-image-text-pu-adaptation-v1.json",
+  "preflight_report_sha256": "966a3a36985f98a14ec469af7d674fde5f21bba5a5735c84b7847505f4b7530a",
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "remote_dataset_download_verified": true,
+  "runtime_dataset": "indarkarhana/biohub-lsm-fm-image-text-pu-runtime-v1",
+  "runtime_dataset_version": 1,
+  "runtime_manifest_sha256": "5b73f47d4695492ebad504539ee1be9538faa259115a848f1ecd348c74154721"
+}
