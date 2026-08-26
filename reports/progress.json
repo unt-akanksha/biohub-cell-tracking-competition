@@ -1376,6 +1376,20 @@
             "preflight_report_sha256": "073dcbcb287bdb23b6512750bc0fe47ddb5e3b66ba63dc0d07c90cec7031719c"
           },
           "target_event_id": "evt-f6eaa6ae5a4e46f0bc26c12cb0ff284f"
+        },
+        {
+          "correction_reason": "Runtime optimization: one teacher forward already predicts both frames, so cache both PU targets and avoid duplicate two-seed four-view TTA inference; no GPU launch had occurred.",
+          "replacement_fields": {
+            "both_pair_frames_cached_per_teacher_forward": true,
+            "config_file_sha256": "bd1963b3ee70f6ebd7db87d6964a478d802fc92b3496d5ae626482c34a603b9f",
+            "config_path": "config/experiments/spatialdino-pu-adaptation-v1.json",
+            "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r4.json",
+            "preflight_report_sha256": "b77ae8fcf71ca8cab5d7c63bab61ae16a5c59fc155b91f3c3ba9e0c183313baa",
+            "runtime_dataset_version": 5,
+            "runtime_manifest_sha256": "0448ac35ef7eaf2e270198a037e168418a70d23b3141ebc23301133593062683",
+            "trainer_sha256": "33c6c9285a40b1f4eb04193de1e74bc422fe2b848bcfb4c98aa860fe569248fa"
+          },
+          "target_event_id": "evt-9f5aabed322f4abe9ab819ee03563eb1"
         }
       ],
       "authorized_for_submission": false,
