@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "run_id": "hoct-probe-finetune-v1",
+  "created_at": "2026-08-26T09:15:35Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/hoct_graph/biohub_adapter.py", "sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698"},
+        {"path": "research/hoct_graph/train_biohub_hoct_probe.py", "sha256": "5b6f50548066793b54486d347869b398b202ada4cbca75f0a7004220b7771882"},
+        {"path": "kaggle/biohub-hoct-probe-finetune-v1/biohub-hoct-probe-finetune-v1.ipynb", "sha256": "83db77ba24f208cccba82436b1d32590200e3b34cb4e5967a6a2b16dd96cc9d3"}
+      ],
+      "detail": "Both Python modules import, every generated notebook code cell parses, and the trainer CLI resolves."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/hoct-probe-finetune-v1.json", "sha256": "732008e34e83905f2f75b168643f004c718e3a328eb27b153296a760c1ed8a45"},
+        {"path": "kaggle/biohub-hoct-probe-finetune-v1/kernel-metadata.json", "sha256": "c888bfda02f03a7f2c4aedcc4675f54508b3cc29c5404cb251d94388914434fc"},
+        {"path": ".biohub/staging/biohub-hoct-runtime-v1/SOURCE_MANIFEST.json", "sha256": "28735a7b2e8b1c14e74aec42914570c65c911ad94869dee5fbeb80f99ed0e67d"}
+      ],
+      "detail": "The kernel pins the private HOCT runtime, graph runtime v8, official competition input, offline tracking wheels, and DeepCenter comparator dependency with GPU on and internet/TPU off."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/hoct-probe-local-smoke.json", "sha256": "347cf60cc48d2dcc86fdd70bd20395d92854ae1c96160ef92416ddb91d95bf6b"},
+        {"path": "tests/test_hoct_biohub_adapter.py", "sha256": "9240c0d3dcea4b711bc962d482da830165d3897afea321fb50c2c2bacf6b45ba"}
+      ],
+      "detail": "The official scripted checkpoint produced finite 288-dimensional features and normalized parental probabilities on a complete synthetic window."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/hoct-probe-local-smoke.json", "sha256": "347cf60cc48d2dcc86fdd70bd20395d92854ae1c96160ef92416ddb91d95bf6b"},
+        {"path": "tests/test_hoct_probe_trainer.py", "sha256": "9b1730a0cfaee73eea6c5f79042e33e689832f2649b541190ea8fdba2ac5abe9"}
+      ],
+      "detail": "A real 288-feature optimizer smoke changed both head weight and bias, remained finite, and reduced diagnostic BCE from 1.3330 to 1.0486."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": ".biohub/staging/biohub-hoct-runtime-v1/SOURCE_MANIFEST.json", "sha256": "28735a7b2e8b1c14e74aec42914570c65c911ad94869dee5fbeb80f99ed0e67d"},
+        {"path": "reports/experiments/hoct-probe-local-smoke.json", "sha256": "347cf60cc48d2dcc86fdd70bd20395d92854ae1c96160ef92416ddb91d95bf6b"}
+      ],
+      "detail": "The hash-pinned 6,252,593-parameter JIT checkpoint reloads, and its exposed head reconstructs scripted logits from returned normalized features within 2.4e-7 absolute error."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-hoct-probe-finetune-v1/biohub-hoct-probe-finetune-v1.ipynb", "sha256": "83db77ba24f208cccba82436b1d32590200e3b34cb4e5967a6a2b16dd96cc9d3"},
+        {"path": "research/hoct_graph/train_biohub_hoct_probe.py", "sha256": "5b6f50548066793b54486d347869b398b202ada4cbca75f0a7004220b7771882"}
+      ],
+      "detail": "The experiment writes only a probe checkpoint, clean-validation evidence, and terminal records below /kaggle/working; it hard-fails if submission.csv appears."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/hoct_graph/biohub_adapter.py", "sha256": "8a450d77fa885ca649031a09b19be6ec8d6f30892666c3300589810d52403698"},
+        {"path": "tests/test_hoct_biohub_adapter.py", "sha256": "9240c0d3dcea4b711bc962d482da830165d3897afea321fb50c2c2bacf6b45ba"}
+      ],
+      "detail": "Dense inference is pairwise and spatially tiled; each target belongs to exactly one core while halo nodes provide higher-order context, preventing duplicate ownership."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/hoct-probe-finetune-v1.json", "sha256": "732008e34e83905f2f75b168643f004c718e3a328eb27b153296a760c1ed8a45"},
+        {"path": "research/hoct_graph/train_biohub_hoct_probe.py", "sha256": "5b6f50548066793b54486d347869b398b202ada4cbca75f0a7004220b7771882"}
+      ],
+      "detail": "The trainer excludes exactly four frozen validation stems, hard-requires the remaining 195 movies, covers every consecutive transition, and refuses candidate recall below 98%."
+    }
+  ],
+  "report_sha256": "5cab4f27a7fe0ac2b1cb6a4da69bdd265d5dbf0a85f4e1b98036a0f675d18f0a"
+}
