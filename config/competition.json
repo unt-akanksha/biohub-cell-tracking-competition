@@ -21,6 +21,16 @@
     "runtime_hard_stop_hours": "11.25",
     "require_non_replica_output": true
   },
+  "research_refresh_policy": {
+    "max_audit_age_hours": 24,
+    "notebook_scan_limit": 50,
+    "audit_before_new_model_family": true,
+    "audit_before_submission_candidate": true,
+    "require_source_review": true,
+    "exclude_metric_hacks": true,
+    "leaderboard_selection_forbidden": true,
+    "running_kernel_status_checks_do_not_count_as_research": true
+  },
   "current_status": {
     "best_clean_public_score": "0.913",
     "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",

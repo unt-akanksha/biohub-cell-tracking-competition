@@ -21,7 +21,7 @@
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no metric exploit: test submission generation is label-free; held-out training labels are accessed only by a post-submission validator with explicit train/test stem exclusion. Completed output has valid indegree/outdegree topology and no sentinel coordinates. The reported public score is not yet reproduced under our account.",
-      "reviewed_sha256": "b04b9bce7b74566d5d0c99147f5fa480af7f69aef1bace29ded4dd24c6a837af",
+      "reviewed_sha256": "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1",
       "score_reproduced": false
     },
     {
@@ -36,7 +36,8 @@
       "ref": "yunusgmsoy/kimi-notebook-v17",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "evidence": "No known exploit found in the current source; it has 0.944 normalized code-line Jaccard with the current 0.927 public lineage, so it is a comparator rather than an independent model candidate.",
+      "reviewed_sha256": "4c5bfa1f9dd8ffc10bf05afb3f341caf0f8ce45726f69ed286e6ad3a571e2648",
       "score_reproduced": false
     },
     {
@@ -57,7 +58,32 @@
       "ref": "anhadmahajan06/biohub-track-your-cells-development",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "evidence": "No known exploit found in the current source; it has 0.965 normalized code-line Jaccard with the current 0.927 public lineage, so it is not an independent heavy-model lead.",
+      "reviewed_sha256": "650127deb79de7536bf99906dd6d176b47d0061379881e91c3799d4fe62a41f6",
+      "score_reproduced": false
+    },
+    {
+      "ref": "flexonafft/biohub-harmonic-fusion",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Current source sets metric_hack_used false and is 0.996 code-line-Jaccard similar to the 0.926 divsub notebook; it is another public-lineage post-processing variant.",
+      "reviewed_sha256": "2391569398c2beb129743019e607d3b0dac979db430b8d7cf48074eb3c707199",
+      "score_reproduced": false
+    },
+    {
+      "ref": "rockerritesh/0-926-biohub-divsub",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Current source sets metric_hack_used false and retains the public dual-seed TemporalUNet, DeepCenter, and graph-repair pipeline; its score claim remains unverified.",
+      "reviewed_sha256": "a0c44e988ca4eadfddb6022f933c128042eaf51b9f74c12e5aa4e6c62f0c18cf",
+      "score_reproduced": false
+    },
+    {
+      "ref": "salemali7/biohub-cell-tracking-92-6",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Current source sets metric_hack_used false and is 0.983 code-line-Jaccard similar to both harmonic-fusion and divsub; it is not a new model family.",
+      "reviewed_sha256": "164d9c79cb95126bf24da62b7d95c83db9173d55266cdf7bff8581c831bbacd6",
       "score_reproduced": false
     },
     {

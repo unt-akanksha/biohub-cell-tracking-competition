@@ -37,6 +37,25 @@ The current submission with public-output SHA-256 `33c179...` is therefore
 retained only as an attributed benchmark. It is not an owned candidate and
 should never be promoted as evidence of model improvement.
 
+## Same-day delta audit
+
+A second source pull covered six notebooks visible near the current high-vote
+or high-score frontier: `evgendvorkin/biohub-0-927-lb`,
+`yunusgmsoy/kimi-notebook-v17`,
+`anhadmahajan06/biohub-track-your-cells-development`,
+`flexonafft/biohub-harmonic-fusion`,
+`rockerritesh/0-926-biohub-divsub`, and
+`salemali7/biohub-cell-tracking-92-6`.
+
+After trimming whitespace and deduplicating code lines, the first three have
+pairwise Jaccard similarities of 0.944–0.965. The latter three are even closer
+at 0.983–0.996. Cross-cluster similarities remain 0.722–0.757 because both
+clusters share most of the same public dual-seed TemporalUNet, DeepCenter, and
+graph-repair implementation. Every current source explicitly records
+`metric_hack_used` as false, but none supplies a materially independent heavy
+model. This strengthens the decision to spend GPU only on owned SpatialDINO,
+temporal-contrastive, or other independently learned candidates.
+
 ## Discussion evidence that changes our plan
 
 Current competition discussions independently reinforce the same direction:
