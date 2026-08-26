@@ -5,7 +5,11 @@ import pytest
 
 from research.hoct_graph.multibackbone import (
     build_multibackbone_variants,
+    materialize_variant,
     required_backbones,
+)
+from research.hoct_graph.train_biohub_hoct_multibackbone import (
+    multibackbone_configurations,
 )
 
 
@@ -71,3 +75,38 @@ def test_required_backbones(variant: str, expected: set[str]) -> None:
 def test_multibackbone_rejects_incomplete_sources() -> None:
     with pytest.raises(ValueError, match="exactly the general and ctc"):
         build_multibackbone_variants({"general": _backbones()["general"]})
+
+
+def test_materialize_variant_needs_only_selected_single_backbone() -> None:
+    scores = {"ctc": _backbones()["ctc"]}
+
+    selected = materialize_variant("ctc:biohub_probe", scores)
+
+    np.testing.assert_allclose(selected[0][2], [[0.3, 0.9]], atol=1e-6)
+
+
+def test_materialize_blend_matches_grid() -> None:
+    scores = _backbones()
+    expected = build_multibackbone_variants(scores)[
+        "general_ctc_blend_w0.75:biohub_probe"
+    ]
+
+    selected = materialize_variant(
+        "general_ctc_blend_w0.75:biohub_probe", scores
+    )
+
+    np.testing.assert_allclose(selected[0][2], expected[0][2], atol=1e-6)
+
+
+def test_multibackbone_linker_grid_has_no_duplicate_configurations() -> None:
+    variants = sorted(build_multibackbone_variants(_backbones()))
+
+    configurations = multibackbone_configurations(variants)
+    frozen = {tuple(sorted(row.items())) for row in configurations}
+
+    assert len(configurations) == len(frozen)
+    assert {row["variant"] for row in configurations} == set(variants)
+    assert {row["method"] for row in configurations} == {
+        "hoct_only",
+        "raw_confidence_hybrid",
+    }

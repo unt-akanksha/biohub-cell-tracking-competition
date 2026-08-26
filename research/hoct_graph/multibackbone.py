@@ -81,3 +81,32 @@ def required_backbones(variant_name: str) -> frozenset[str]:
     if prefix.startswith("general_ctc_blend_w"):
         return frozenset({"general", "ctc"})
     raise ValueError(f"Unknown HOCT variant name: {variant_name}")
+
+
+def materialize_variant(
+    variant_name: str,
+    backbone_scores: Mapping[str, Mapping[str, PairScores]],
+) -> PairScores:
+    """Materialize one frozen variant without constructing unused blends."""
+    prefix, separator, head = variant_name.partition(":")
+    if not separator or head not in {"pretrained", "biohub_probe"}:
+        raise ValueError(f"Malformed HOCT variant name: {variant_name}")
+    required = required_backbones(variant_name)
+    missing = required - set(backbone_scores)
+    if missing:
+        raise ValueError(f"Missing HOCT backbone scores: {sorted(missing)}")
+    if prefix in {"general", "ctc"}:
+        return backbone_scores[prefix][head]
+    weight_text = prefix.removeprefix("general_ctc_blend_w")
+    try:
+        general_weight = float(weight_text)
+    except ValueError as exc:
+        raise ValueError(f"Malformed HOCT blend weight: {variant_name}") from exc
+    if not 0 <= general_weight <= 1:
+        raise ValueError(f"HOCT blend weight is outside [0, 1]: {general_weight}")
+    return blend_pair_scores(
+        backbone_scores["general"][head],
+        backbone_scores["ctc"][head],
+        trackastra_weight=general_weight,
+        support_aware=True,
+    )
