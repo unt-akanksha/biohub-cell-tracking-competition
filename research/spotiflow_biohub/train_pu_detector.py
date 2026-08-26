@@ -213,7 +213,13 @@ def candidate_parameters(model) -> list[tuple[str, Any]]:
     return [
         (name, parameter)
         for name, parameter in model.named_parameters()
-        if name.startswith(("_post.", "_backbone.up_blocks."))
+        if name.startswith(
+            (
+                "_post.heads.0.",
+                "_post.last_convs.0.",
+                "_backbone.up_blocks.",
+            )
+        )
     ]
 
 
@@ -222,7 +228,9 @@ def set_training_phase(model, *, deep_decoder: bool) -> int:
 
     model.requires_grad_(False)
     for name, parameter in model.named_parameters():
-        if name.startswith("_post.") or name.startswith("_backbone.up_blocks.0."):
+        if name.startswith(
+            ("_post.heads.0.", "_post.last_convs.0.", "_backbone.up_blocks.0.")
+        ):
             parameter.requires_grad_(True)
         elif deep_decoder and name.startswith("_backbone.up_blocks."):
             parameter.requires_grad_(True)

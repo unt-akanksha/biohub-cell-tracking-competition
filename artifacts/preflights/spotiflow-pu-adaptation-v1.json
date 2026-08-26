@@ -13,7 +13,7 @@
         },
         {
           "path": "research/spotiflow_biohub/train_pu_detector.py",
-          "sha256": "ed65cbe50361a45eb30838884ff1cf0f34e1b4fe080ae11e0bbdbf4b54904c90"
+          "sha256": "c1efe6dc7f8b5df5b8f973008dae7e6b765c910eebc0fce2c09fa7f344121154"
         },
         {
           "path": "research/spotiflow_biohub/evaluate_pu_detector.py",
@@ -32,7 +32,7 @@
       "evidence": [
         {
           "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
-          "sha256": "5e9379ef4f34da69e89fd899c140ec04b7bce05f279d4b6d8abfe6f42fe65b62"
+          "sha256": "30a67bc6c26cb7837aa3382dcadf30f2a6a650cd2fdf45b149e81d0b17068c1f"
         },
         {
           "path": "kaggle/biohub-spotiflow-pu-adaptation-v1/kernel-metadata.json",
@@ -40,7 +40,7 @@
         },
         {
           "path": ".biohub/staging/biohub-spotiflow-pu-runtime-v1/SOURCE_MANIFEST.json",
-          "sha256": "b38f81d8f8545cce7b5e398d02190d6932c7f081a182aa225d26826e68746280"
+          "sha256": "cbfbfd2975e1e4d2e68b25b98167dbe0d98c7496b480123cd48edf044e5983a4"
         },
         {
           "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
@@ -78,7 +78,7 @@
       "evidence": [
         {
           "path": "research/spotiflow_biohub/train_pu_detector.py",
-          "sha256": "ed65cbe50361a45eb30838884ff1cf0f34e1b4fe080ae11e0bbdbf4b54904c90"
+          "sha256": "c1efe6dc7f8b5df5b8f973008dae7e6b765c910eebc0fce2c09fa7f344121154"
         },
         {
           "path": "research/spotiflow_biohub/smoke_model_step.py",
@@ -135,11 +135,11 @@
       "evidence": [
         {
           "path": "research/spotiflow_biohub/train_pu_detector.py",
-          "sha256": "ed65cbe50361a45eb30838884ff1cf0f34e1b4fe080ae11e0bbdbf4b54904c90"
+          "sha256": "c1efe6dc7f8b5df5b8f973008dae7e6b765c910eebc0fce2c09fa7f344121154"
         },
         {
           "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
-          "sha256": "5e9379ef4f34da69e89fd899c140ec04b7bce05f279d4b6d8abfe6f42fe65b62"
+          "sha256": "30a67bc6c26cb7837aa3382dcadf30f2a6a650cd2fdf45b149e81d0b17068c1f"
         }
       ],
       "name": "dense_memory",
@@ -150,7 +150,7 @@
       "evidence": [
         {
           "path": "research/spotiflow_biohub/train_pu_detector.py",
-          "sha256": "ed65cbe50361a45eb30838884ff1cf0f34e1b4fe080ae11e0bbdbf4b54904c90"
+          "sha256": "c1efe6dc7f8b5df5b8f973008dae7e6b765c910eebc0fce2c09fa7f344121154"
         },
         {
           "path": "research/spotiflow_biohub/evaluate_pu_detector.py",
@@ -158,15 +158,15 @@
         },
         {
           "path": "config/experiments/spotiflow-pu-adaptation-v1.json",
-          "sha256": "5e9379ef4f34da69e89fd899c140ec04b7bce05f279d4b6d8abfe6f42fe65b62"
+          "sha256": "30a67bc6c26cb7837aa3382dcadf30f2a6a650cd2fdf45b149e81d0b17068c1f"
         }
       ],
       "name": "dataset_coverage",
       "status": "passed"
     }
   ],
-  "created_at": "2026-08-26T14:58:09.818463Z",
-  "report_sha256": "5482d91df2b138312305547c6409a29e4ed1db44fe8a8a777939e7b6050ec1d6",
+  "created_at": "2026-08-26T15:00:57.752916Z",
+  "report_sha256": "dd07a2dfbbae53637b02e324695fe625e7032c4fabf25da770dcfeaa5ea9390f",
   "run_id": "spotiflow-pu-adaptation-v1",
   "schema_version": 1
 }
