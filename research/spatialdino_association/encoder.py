@@ -107,19 +107,49 @@ class SpatialDinoViTS8(nn.Module):
         )
         self.norm = nn.LayerNorm(self.embed_dim, eps=1e-6)
 
-    def forward(self, volume: torch.Tensor) -> torch.Tensor:
+    def forward_intermediates(
+        self,
+        volume: torch.Tensor,
+        *,
+        block_indices: tuple[int, ...] = (2, 5, 8, 11),
+    ) -> tuple[torch.Tensor, ...]:
+        """Return patch-token grids after selected zero-based transformer blocks.
+
+        The released checkpoint has no learned positional embedding, so the same
+        token sequence can be exposed at several depths without changing the
+        checkpoint-compatible module structure.  This supports UNETR-style
+        decoders while keeping the original ``forward`` output bit-identical.
+        """
+
+        if not block_indices:
+            raise ValueError("block_indices must not be empty")
+        if tuple(sorted(set(block_indices))) != block_indices:
+            raise ValueError("block_indices must be unique and increasing")
+        if block_indices[0] < 0 or block_indices[-1] >= self.depth:
+            raise ValueError("block_indices are outside the transformer depth")
         patch_tokens = self.patch_embed(volume)
         tokens = torch.cat(
             (self.cls_token.expand(volume.shape[0], -1, -1), patch_tokens),
             dim=1,
         )
-        for block in self.blocks:
-            tokens = block(tokens)
-        tokens = self.norm(tokens)[:, 1:]
+        selected: list[torch.Tensor] = []
         grid_shape = tuple(int(size) // self.patch_size for size in volume.shape[-3:])
-        return tokens.transpose(1, 2).reshape(
-            volume.shape[0], self.embed_dim, *grid_shape
-        )
+        selected_indices = set(block_indices)
+        for index, block in enumerate(self.blocks):
+            tokens = block(tokens)
+            if index in selected_indices:
+                patch_grid = tokens[:, 1:]
+                if index == self.depth - 1:
+                    patch_grid = self.norm(patch_grid)
+                selected.append(
+                    patch_grid.transpose(1, 2).reshape(
+                        volume.shape[0], self.embed_dim, *grid_shape
+                    )
+                )
+        return tuple(selected)
+
+    def forward(self, volume: torch.Tensor) -> torch.Tensor:
+        return self.forward_intermediates(volume, block_indices=(self.depth - 1,))[0]
 
 
 def sha256_file(path: str | Path) -> str:
