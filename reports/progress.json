@@ -1432,7 +1432,7 @@
       "status": "rejected"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.02",
       "amendments": [
         {
           "correction_reason": "Bind the immutable preflight and independently downloaded Kaggle topology dataset after registration.",
@@ -1468,6 +1468,49 @@
         }
       ],
       "authorized_for_submission": false,
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/spatialdino-appearance-validation-v2-result.json",
+        ".biohub/cache/kernel-outputs/spatialdino-appearance-validation-v2/spatialdino_appearance_v2/complete_movie_validation.json"
+      ],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "selection_positive_delta_and_swap",
+      "failure_reason": "Frozen SpatialDINO appearance evaluated all 18 preregistered degree-preserving configurations, but zero candidate pairs qualified, zero swaps were made, and selection delta versus the base remained 0. Acceptance stayed unopened and no submission was created.",
+      "hypothesis": "The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "spatialdino-appearance-validation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T16:09:57.111892Z",
+      "run_id": "spatialdino-appearance-validation-v2",
+      "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Bind the nine-check immutable preflight and independently downloaded Kaggle runtime dataset after registration; no GPU launch has occurred.",
+          "replacement_fields": {
+            "config_file_sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7",
+            "config_path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+            "focused_tests_passed": 39,
+            "parent_result_sha256": "a5bc79215af4d2da1710250a9e1b757a64a6d5d7b147439d89a49929bf5cee12",
+            "preflight_builder_sha256": "85fba41c4fb65f610e6b54e577ca1505ae8d919ac4c7b96c8920ca943870c411",
+            "preflight_report": "artifacts/preflights/spatialdino-pu-selective-distillation-v2.json",
+            "preflight_report_sha256": "bc7baae3e9c2854d33fbaf9891cfd9468419e83f3989b22f18586f2974877f4d",
+            "remote_dataset_download_verified": true,
+            "runtime_dataset": "indarkarhana/biohub-spatialdino-pu-runtime-v2",
+            "runtime_dataset_version": 1,
+            "runtime_manifest_sha256": "250eeb69c9f107d7ce1ac5cb0e32cdf1f35f26c752f83a6c6f1b131ccd5c982b",
+            "scientific_delta_from_v1": "add a 0.25-weight two-seed-supported soft BCE with quadratic disagreement discount; preserve the paired seed, architecture, PU targets, optimization schedule, split, inference, and gates"
+          },
+          "target_event_id": "evt-98bbd5fb48dd4cb6a32e84a3312c3639"
+        }
+      ],
+      "authorized_for_submission": false,
       "decision": null,
       "decision_evidence": [],
       "declared_gpu_hours": "2.00",
@@ -1475,15 +1518,15 @@
       "exact_evidence": {},
       "failed_gate": null,
       "failure_reason": null,
-      "hypothesis": "The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment.",
+      "hypothesis": "A minority disagreement-weighted soft probability loss on two-seed-supported voxels will improve dense-movie localization enough for the independent SpatialDINO/UNETR detector to clear the unchanged worst-movie recall gate without copying public predictions.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "registered",
       "next_gate": null,
-      "parent": "spatialdino-appearance-validation-v1",
+      "parent": "spatialdino-pu-adaptation-v1",
       "public_score_non_authoritative": null,
-      "registered_at": "2026-08-26T16:09:57.111892Z",
-      "run_id": "spatialdino-appearance-validation-v2",
-      "status": "running"
+      "registered_at": "2026-08-26T17:38:25.687445Z",
+      "run_id": "spatialdino-pu-selective-distillation-v2",
+      "status": "registered"
     }
   ],
   "schema_version": 1

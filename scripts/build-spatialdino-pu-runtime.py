@@ -10,7 +10,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".biohub" / "staging"
-TARGET = STAGING_ROOT / "biohub-spatialdino-pu-runtime-v1"
+TARGETS = {
+    "v1": STAGING_ROOT / "biohub-spatialdino-pu-runtime-v1",
+    "v2": STAGING_ROOT / "biohub-spatialdino-pu-runtime-v2",
+}
 UPSTREAM = ROOT / ".biohub" / "cache" / "spatialdino"
 CHECKPOINT = (
     ROOT / ".biohub" / "cache" / "models" / "spatialdino-vits8-step244999-backbone.pth"
@@ -40,6 +43,10 @@ SOURCES = {
     / "spatialdino_detection"
     / "train_pu_detector.py",
 }
+V2_SOURCES = {
+    **SOURCES,
+    "distillation.py": ROOT / "research" / "spatialdino_detection" / "distillation.py",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -56,10 +63,13 @@ def write_json(path: Path, payload: dict) -> None:
     )
 
 
-def checked_target() -> Path:
+def checked_target(variant: str) -> Path:
     root = STAGING_ROOT.resolve()
-    target = TARGET.resolve()
-    if target.parent != root or target.name != "biohub-spatialdino-pu-runtime-v1":
+    target = TARGETS[variant].resolve()
+    if target.parent != root or target.name not in {
+        "biohub-spatialdino-pu-runtime-v1",
+        "biohub-spatialdino-pu-runtime-v2",
+    }:
         raise RuntimeError(f"unsafe SpatialDINO PU staging target: {target}")
     return target
 
@@ -67,8 +77,9 @@ def checked_target() -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--replace", action="store_true")
+    parser.add_argument("--variant", choices=sorted(TARGETS), default="v1")
     args = parser.parse_args()
-    target = checked_target()
+    target = checked_target(args.variant)
     if target.exists():
         if not args.replace:
             raise FileExistsError(f"{target} already exists; pass --replace")
@@ -82,7 +93,8 @@ def main() -> None:
         raise RuntimeError(f"SpatialDINO repository commit changed: {commit}")
     if sha256_file(CHECKPOINT) != EXPECTED_CHECKPOINT_SHA256:
         raise RuntimeError("SpatialDINO checkpoint hash changed")
-    for name, source in SOURCES.items():
+    sources = V2_SOURCES if args.variant == "v2" else SOURCES
+    for name, source in sources.items():
         shutil.copy2(source, target / name)
     shutil.copy2(CHECKPOINT, target / "spatialdino_vits8_backbone.pth")
     shutil.copy2(UPSTREAM / "LICENSE", target / "SPATIALDINO_LICENSE")
@@ -99,7 +111,11 @@ def main() -> None:
         target / "SOURCE_MANIFEST.json",
         {
             "schema_version": 1,
-            "purpose": "Independent SpatialDINO hybrid detector training and clean validation; no submission",
+            "purpose": (
+                "Independent SpatialDINO hybrid detector with selective soft-teacher distillation and clean validation; no submission"
+                if args.variant == "v2"
+                else "Independent SpatialDINO hybrid detector training and clean validation; no submission"
+            ),
             "upstream": {
                 "repository": "https://github.com/kirchhausenlab/spatialdino",
                 "commit": commit,
@@ -116,6 +132,7 @@ def main() -> None:
                 "public_predictions_copied": False,
                 "teachers_are_frozen_pseudo_label_sources_only": True,
                 "validation_movies_excluded_from_training": 12,
+                "selective_soft_distillation": args.variant == "v2",
             },
             "files": files,
         },
@@ -123,8 +140,8 @@ def main() -> None:
     write_json(
         target / "dataset-metadata.json",
         {
-            "title": "Biohub SpatialDINO PU Runtime v1",
-            "id": "indarkarhana/biohub-spatialdino-pu-runtime-v1",
+            "title": f"Biohub SpatialDINO PU Runtime {args.variant}",
+            "id": f"indarkarhana/biohub-spatialdino-pu-runtime-{args.variant}",
             "licenses": [{"name": "MIT"}],
             "isPrivate": True,
         },

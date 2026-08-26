@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "run_id": "spatialdino-pu-selective-distillation-v2",
+  "parent": "spatialdino-pu-adaptation-v1",
+  "kernel_ref": "indarkarhana/biohub-spatialdino-pu-selective-distillation-v2",
+  "notebook_sha256": "0e48530951cb0a90b1a6aecbb5e45c97a9dbc5f76f34bf09ffcabad2fb48ad23",
+  "kernel_metadata_sha256": "7e3508d2883ce8a797dd97e3008989fc95c9403101a1d24b5f238eb0bbc0dcc0",
+  "kernel_builder_sha256": "f3b1825b1f54404a33afe73f4e3d8e24eb0d22ce046f95542f47f24554f65528",
+  "runtime_builder_sha256": "1d6a50f04913293ccd4a7007269cb03d79f11ed4ea5410c7d2d6b39965d68cd5",
+  "runtime_manifest_sha256": "250eeb69c9f107d7ce1ac5cb0e32cdf1f35f26c752f83a6c6f1b131ccd5c982b",
+  "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+  "model_sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e",
+  "data_sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371",
+  "trainer_sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77",
+  "distillation_sha256": "51693320eb3f6a41867b04f0dc3f0d1f0d44c939244c8c315148120ab73b51e4",
+  "inference_sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e",
+  "evaluator_sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d",
+  "encoder_sha256": "dfd224c0820ea367adcbf0b23856156bcc8a976dbfbab967948909eeacdf1049",
+  "target_builder_sha256": "f37ff2c376138bd381615a72c82b36e6b7d0714d9be962dd369d723c81c3167f",
+  "teacher_reconstruction_sha256": "1a5e814185fee0639ff401ff426d289458d2719488f638b79e7d9b0171fdb989",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "trainer_max_wall_seconds": 5200,
+  "evaluator_max_wall_seconds": 1300,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spatialdino-pu-runtime-v2@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "pilkwang/biohub-temporal-unet3d-seed314159-v1"
+  ],
+  "student": {
+    "name": "SpatialDINO ViT-S/8 hybrid full-resolution detector",
+    "architecture": "microscopy-pretrained SpatialDINO plus raw-image 3D pyramid and UNETR-like decoder",
+    "base_checkpoint_sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8",
+    "parameter_count": 29521225,
+    "decoder_warmup_trainable_parameters": 8019913,
+    "deep_phase_trainable_parameters": 15121609,
+    "full_resolution_heatmap": true,
+    "ema_decay": 0.995,
+    "ema_warmup": true,
+    "initial_foreground_logit_bias": -4.0,
+    "public_predictions_copied": false
+  },
+  "teachers": [
+    {
+      "role": "frozen consensus and soft probability teacher",
+      "checkpoint_sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+    },
+    {
+      "role": "frozen independent-seed consensus and soft probability teacher",
+      "checkpoint_sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+    }
+  ],
+  "training": {
+    "paired_ablation_seed": 20260827,
+    "target_steps": 768,
+    "minimum_steps": 192,
+    "encoder_unfreeze_step": 192,
+    "encoder_blocks_unfrozen": 4,
+    "pairs_per_training_movie": 1,
+    "single_pair_sampling": "seeded stable per-movie temporal hash",
+    "decoder_learning_rate": 0.0002,
+    "encoder_learning_rate": 0.000002,
+    "teacher_target_cache": true,
+    "both_pair_frames_cached_per_teacher_forward": true,
+    "teacher_disagreements_are_unknown_for_pu_loss": true,
+    "safe_background_weight": 0.01,
+    "validation_movies_excluded": 12,
+    "selective_distillation": {
+      "loss_weight": 0.25,
+      "support_threshold": 0.05,
+      "agreement_power": 2.0,
+      "soft_probability": "mean of the two frozen teacher seeds",
+      "soft_weight": "sqrt(primary*secondary) * (1-abs(primary-secondary))^2",
+      "unsupported_voxels_weight": 0.0
+    }
+  },
+  "v1_diagnosis": {
+    "selection_pooled_recall": 0.8856375838926175,
+    "selection_worst_movie_recall": 0.6112115732368897,
+    "selection_pooled_gate_passed": true,
+    "selection_worst_movie_gate_passed": false,
+    "worst_movie_projected_count_ratio": 0.9988144484641257,
+    "worst_movie_mean_match_distance_um": 2.65603211599001,
+    "interpretation": "localization transfer rather than count calibration is the limiting factor"
+  },
+  "validation": {
+    "selection_movies": 8,
+    "untouched_acceptance_movies": 4,
+    "threshold_source": "image responses plus organizer estimated node counts before label read",
+    "public_leaderboard_used_for_selection": false,
+    "selection_pooled_recall_min": 0.8,
+    "selection_worst_movie_recall_min": 0.65,
+    "acceptance_public_pooled_recall": 0.96902842596521,
+    "worst_movie_delta_min": -0.01
+  },
+  "promotion_rule": "only clean-heldout acceptance can authorize a separate non-replica submission candidate; that submission must use two GPUs with movie sharding",
+  "submission_policy": "training and validation only; no submission file or competition API call"
+}

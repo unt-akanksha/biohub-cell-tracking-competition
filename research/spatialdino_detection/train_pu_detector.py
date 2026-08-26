@@ -21,6 +21,10 @@ import numpy as np
 
 try:
     from data import VALIDATION_STEMS, atomic_json, discover_movies, select_frame_pairs
+    from distillation import (
+        build_selective_distillation_targets,
+        selective_distillation_bce,
+    )
     from encoder import load_spatialdino_vits8, sha256_file
     from model import HybridSpatialDinoDetector, set_detector_training_phase
     from pu_targets import YXTransform, build_pu_targets, weighted_pu_bce_with_logits
@@ -31,6 +35,10 @@ except ModuleNotFoundError:
         atomic_json,
         discover_movies,
         select_frame_pairs,
+    )
+    from research.spatialdino_detection.distillation import (
+        build_selective_distillation_targets,
+        selective_distillation_bce,
     )
     from research.spatialdino_association.encoder import (
         load_spatialdino_vits8,
@@ -117,6 +125,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--decoder-learning-rate", type=float, default=2e-4)
     parser.add_argument("--encoder-learning-rate", type=float, default=2e-6)
     parser.add_argument("--ema-decay", type=float, default=0.995)
+    parser.add_argument("--distillation-weight", type=float, default=0.0)
+    parser.add_argument("--distillation-support-threshold", type=float, default=0.05)
+    parser.add_argument("--distillation-agreement-power", type=float, default=2.0)
     parser.add_argument("--seed", type=int, default=20260827)
     parser.add_argument("--max-wall-seconds", type=float, default=5200.0)
     return parser.parse_args()
@@ -136,6 +147,12 @@ def main() -> None:
         raise ValueError("encoder learning rate is outside the safe range")
     if not 0.9 <= args.ema_decay < 1.0:
         raise ValueError("EMA decay is outside the safe range")
+    if not 0.0 <= args.distillation_weight <= 0.5:
+        raise ValueError("distillation weight is outside the safe range")
+    if not 0.0 < args.distillation_support_threshold < 1.0:
+        raise ValueError("distillation support threshold must lie in (0, 1)")
+    if args.distillation_agreement_power <= 0.0:
+        raise ValueError("distillation agreement power must be positive")
 
     import torch
 
@@ -236,6 +253,14 @@ def main() -> None:
             "background_weight": 0.01,
             "positive_sigma_voxels": 1.0,
             "unknown_voxels_have_zero_loss": True,
+            "selective_distillation": {
+                "enabled": args.distillation_weight > 0.0,
+                "loss_weight": args.distillation_weight,
+                "support_threshold": args.distillation_support_threshold,
+                "agreement_power": args.distillation_agreement_power,
+                "probability": "mean of two frozen teacher seeds",
+                "weighting": "geometric joint confidence times disagreement discount",
+            },
         },
         "selection_labels_read_during_training": False,
         "acceptance_labels_read_during_training": False,
@@ -302,9 +327,11 @@ def main() -> None:
                 annotations = annotations_to_isotropic_grid(
                     record.annotations.get(pair_frame + cached_offset, np.empty((0, 3)))
                 )
-                target_cache[(stem, pair_frame, cached_offset)] = build_pu_targets(
-                    primary_probability[0, cached_offset].float().cpu().numpy(),
-                    secondary_probability[0, cached_offset].float().cpu().numpy(),
+                primary_frame = primary_probability[0, cached_offset].float().cpu().numpy()
+                secondary_frame = secondary_probability[0, cached_offset].float().cpu().numpy()
+                pu_targets = build_pu_targets(
+                    primary_frame,
+                    secondary_frame,
                     annotations,
                     high_threshold=0.96875,
                     low_support_threshold=0.10,
@@ -315,8 +342,22 @@ def main() -> None:
                     background_weight=0.01,
                     voxel_size=INPUT_VOXEL_UM,
                 )
+                soft_targets = (
+                    build_selective_distillation_targets(
+                        primary_frame,
+                        secondary_frame,
+                        support_threshold=args.distillation_support_threshold,
+                        agreement_power=args.distillation_agreement_power,
+                    )
+                    if args.distillation_weight > 0.0
+                    else None
+                )
+                target_cache[(stem, pair_frame, cached_offset)] = (
+                    pu_targets,
+                    soft_targets,
+                )
             del teacher_tensor, primary_probability, secondary_probability
-        targets = target_cache[target_key]
+        targets, soft_targets = target_cache[target_key]
 
         image = normalize_spatialdino_frame(raw_pair[frame_offset])
         transform = YXTransform(
@@ -334,6 +375,16 @@ def main() -> None:
         target = torch.from_numpy(transform.apply_array(targets.heatmap)).unsqueeze(0).unsqueeze(0).to(device)
         weights = torch.from_numpy(transform.apply_array(targets.weights)).unsqueeze(0).unsqueeze(0).to(device)
         unknown = torch.from_numpy(transform.apply_array(targets.unknown_mask)).unsqueeze(0).unsqueeze(0).to(device)
+        if soft_targets is not None:
+            soft_probability = torch.from_numpy(
+                transform.apply_array(soft_targets.probability)
+            ).unsqueeze(0).unsqueeze(0).to(device)
+            soft_weights = torch.from_numpy(
+                transform.apply_array(soft_targets.weights)
+            ).unsqueeze(0).unsqueeze(0).to(device)
+        else:
+            soft_probability = None
+            soft_weights = None
 
         with torch.autocast("cuda", dtype=torch.float16):
             weak_logits = student(weak)
@@ -348,7 +399,23 @@ def main() -> None:
                 if torch.any(unknown)
                 else weak_logits.sum() * 0.0
             )
-            loss = 0.5 * (weak_loss + strong_loss) + 0.05 * consistency
+            if soft_probability is not None and soft_weights is not None:
+                weak_distillation = selective_distillation_bce(
+                    weak_logits, soft_probability, soft_weights
+                )
+                strong_distillation = selective_distillation_bce(
+                    strong_logits, soft_probability, soft_weights
+                )
+                distillation_loss = 0.5 * (
+                    weak_distillation + strong_distillation
+                )
+            else:
+                distillation_loss = weak_logits.sum() * 0.0
+            loss = (
+                0.5 * (weak_loss + strong_loss)
+                + 0.05 * consistency
+                + args.distillation_weight * distillation_loss
+            )
         scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(
@@ -371,6 +438,16 @@ def main() -> None:
                 "weak_pu_loss": float(weak_loss.detach().cpu()),
                 "strong_pu_loss": float(strong_loss.detach().cpu()),
                 "consistency_loss": float(consistency.detach().cpu()),
+                "distillation_loss": float(distillation_loss.detach().cpu()),
+                "distillation_weight": args.distillation_weight,
+                "distillation_support_fraction": (
+                    float(soft_targets.support_mask.mean())
+                    if soft_targets is not None
+                    else 0.0
+                ),
+                "distillation_mean_agreement": (
+                    soft_targets.mean_agreement if soft_targets is not None else 0.0
+                ),
                 "consensus_positives": targets.consensus_count,
                 "forced_annotations": targets.forced_annotation_count,
                 "positive_voxels": int(targets.positive_mask.sum()),

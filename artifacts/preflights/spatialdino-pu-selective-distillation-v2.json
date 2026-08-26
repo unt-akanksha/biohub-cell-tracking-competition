@@ -1,0 +1,219 @@
+{
+  "checks": [
+    {
+      "detail": "Tracked, staged, and independently downloaded runtime modules import; notebook cells compile and the focused suite passes.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77"
+        },
+        {
+          "path": "research/spatialdino_detection/distillation.py",
+          "sha256": "51693320eb3f6a41867b04f0dc3f0d1f0d44c939244c8c315148120ab73b51e4"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-pu-selective-distillation-v2/biohub-spatialdino-pu-selective-distillation-v2.ipynb",
+          "sha256": "0e48530951cb0a90b1a6aecbb5e45c97a9dbc5f76f34bf09ffcabad2fb48ad23"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private runtime, frozen teachers, baseline graphs, and competition images are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+          "sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-pu-selective-distillation-v2/kernel-metadata.json",
+          "sha256": "7e3508d2883ce8a797dd97e3008989fc95c9403101a1d24b5f238eb0bbc0dcc0"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-pu-runtime-v2/SOURCE_MANIFEST.json",
+          "sha256": "250eeb69c9f107d7ce1ac5cb0e32cdf1f35f26c752f83a6c6f1b131ccd5c982b"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The full-resolution hybrid has a finite forward/backward optimizer step and sub-voxel inference on a single batch.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "tests/test_spatialdino_detector.py",
+          "sha256": "02397f61835f09095e26c30f100b3295c9deb8e8dbce16061e8bf30ec4997a3d"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The 29.5M-parameter student combines PU, consistency, and differentiable selective soft losses while preserving the verified trainable phases.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/model.py",
+          "sha256": "754cb9ece2ec9b91f10c25fcb9da2ac12fe560a4fb977372402a4fd716e4511e"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77"
+        },
+        {
+          "path": "research/spatialdino_detection/distillation.py",
+          "sha256": "51693320eb3f6a41867b04f0dc3f0d1f0d44c939244c8c315148120ab73b51e4"
+        },
+        {
+          "path": "tests/test_spatialdino_distillation.py",
+          "sha256": "68a9689d62c3c174cd905993b2c629065dda05b721399f89ba7ccc4a13ae6001"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "SpatialDINO and both frozen teacher checkpoints retain their audited hashes in the downloaded runtime.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/models/spatialdino-vits8-step244999-backbone.pth",
+          "sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-pu-runtime-v2/SOURCE_MANIFEST.json",
+          "sha256": "250eeb69c9f107d7ce1ac5cb0e32cdf1f35f26c752f83a6c6f1b131ccd5c982b"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only a learned checkpoint and validation evidence are written; submission artifacts cause failure.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-spatialdino-pu-selective-distillation-v2/biohub-spatialdino-pu-selective-distillation-v2.ipynb",
+          "sha256": "0e48530951cb0a90b1a6aecbb5e45c97a9dbc5f76f34bf09ffcabad2fb48ad23"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Both PU and soft targets share the CPU teacher cache; batch sizes and wall guards preserve evaluation time.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+          "sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "All 187 non-validation movies retain the paired v1 sampling seed; eight selection movies gate four untouched acceptance movies.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b8855509f2f8575b5698eeeaaf55bbbaf4c03335137c73dd838952d3d614830d"
+        },
+        {
+          "path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+          "sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Only two-seed-supported voxels receive soft BCE; unsupported voxels are zero-weight and disagreement is quadratically discounted.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/distillation.py",
+          "sha256": "51693320eb3f6a41867b04f0dc3f0d1f0d44c939244c8c315148120ab73b51e4"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "d37da832292801bff589e7ede374e9d72c2f26453b6208558636ae14ccb6fe77"
+        },
+        {
+          "path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+          "sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7"
+        },
+        {
+          "path": "tests/test_spatialdino_distillation.py",
+          "sha256": "68a9689d62c3c174cd905993b2c629065dda05b721399f89ba7ccc4a13ae6001"
+        }
+      ],
+      "name": "selective_distillation",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T17:36:27.096611Z",
+  "report_sha256": "bc7baae3e9c2854d33fbaf9891cfd9468419e83f3989b22f18586f2974877f4d",
+  "run_id": "spatialdino-pu-selective-distillation-v2",
+  "schema_version": 1
+}

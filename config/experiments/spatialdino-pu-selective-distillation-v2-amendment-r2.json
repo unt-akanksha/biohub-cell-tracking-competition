@@ -1,0 +1,14 @@
+{
+  "config_path": "config/experiments/spatialdino-pu-selective-distillation-v2.json",
+  "config_file_sha256": "17dda6c908f5f338185a3728bf1976641d6d7643cd0d6c249c6c449611eb67d7",
+  "preflight_builder_sha256": "85fba41c4fb65f610e6b54e577ca1505ae8d919ac4c7b96c8920ca943870c411",
+  "preflight_report": "artifacts/preflights/spatialdino-pu-selective-distillation-v2.json",
+  "preflight_report_sha256": "bc7baae3e9c2854d33fbaf9891cfd9468419e83f3989b22f18586f2974877f4d",
+  "runtime_dataset": "indarkarhana/biohub-spatialdino-pu-runtime-v2",
+  "runtime_dataset_version": 1,
+  "runtime_manifest_sha256": "250eeb69c9f107d7ce1ac5cb0e32cdf1f35f26c752f83a6c6f1b131ccd5c982b",
+  "remote_dataset_download_verified": true,
+  "parent_result_sha256": "a5bc79215af4d2da1710250a9e1b757a64a6d5d7b147439d89a49929bf5cee12",
+  "focused_tests_passed": 39,
+  "scientific_delta_from_v1": "add a 0.25-weight two-seed-supported soft BCE with quadratic disagreement discount; preserve the paired seed, architecture, PU targets, optimization schedule, split, inference, and gates"
+}

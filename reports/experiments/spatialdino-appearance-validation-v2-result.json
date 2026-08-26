@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "run_id": "spatialdino-appearance-validation-v2",
+  "status": "rejected",
+  "actual_gpu_hours": "0.02",
+  "quota_before_hours": "26.61",
+  "quota_after_hours": "26.59",
+  "launcher_elapsed_seconds": 73.211,
+  "validation_elapsed_seconds": 48.83730822200002,
+  "selection": {
+    "movies": 2,
+    "configurations": 18,
+    "base_proxy_score": 1.0112523998504654,
+    "base_worst_movie": 0.9424336353735232,
+    "selection_delta_vs_base": 0.0,
+    "minimum_appearance_gain_tested": 0.02,
+    "candidate_pairs": {
+      "44b6_12dfb391_at_lock_0.90": 11663,
+      "44b6_12dfb391_at_lock_0.95": 26332,
+      "6bba_062c8d37_at_lock_0.90": 207,
+      "6bba_062c8d37_at_lock_0.95": 345
+    },
+    "qualified_pairs_across_all_configurations": 0,
+    "selected_swaps_across_all_configurations": 0,
+    "passed": false
+  },
+  "acceptance": {
+    "opened": false,
+    "reason": "selection produced no degree-preserving appearance correction and no positive proxy delta"
+  },
+  "decision": {
+    "state": "retire",
+    "reason": "Frozen global SpatialDINO patch similarity did not support a single safe edge swap across the complete selection movies; weakening the geometric and gain gates would be unsupported topology editing.",
+    "next_test": "Use Biohub-supervised adjacent-frame temporal contrastive features only after the selective-distillation detector ablation is reconciled."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "competition_submission_performed": false,
+  "evidence": {
+    "launcher_terminal_sha256": "053e36a0d70fc20ec51ab221c4864d7d4108ea778356af70637e8bddec964ca7",
+    "training_terminal_sha256": "4a0bfd143071f642f734c29d874425daed6fd292aa2dcf2a7fd7cb12f7fc0b44",
+    "complete_movie_validation_sha256": "7060c0dc421e7f034633637762ab8f4ee1ba562b067a2084c66e3a9556433790",
+    "kernel_log_sha256": "9deea71d8769a8768534b6bc91eb147c2c91d14f4307b4e1753f437c27ba5702",
+    "spatialdino_checkpoint_sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+  }
+}
