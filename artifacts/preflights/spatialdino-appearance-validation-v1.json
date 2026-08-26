@@ -1,0 +1,160 @@
+{
+  "checks": [
+    {
+      "detail": "All tracked runtime modules and notebook cells compile; the focused 16-test model/kernel suite passes.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dde761fa686242788f46728672399f951ecaca90ff12bd09dc9db3c5eddb8ef2"
+        },
+        {
+          "path": "research/spatialdino_association/appearance.py",
+          "sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5"
+        },
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v1/biohub-spatialdino-appearance-validation-v1.ipynb",
+          "sha256": "72fb0420946df07fa7b5e4dd07221233eddbf0765788e7cc10836790787dabd3"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private checkpoint runtime, scoring runtime, raw validation graphs, processed comparator output, and competition images are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-appearance-validation-v1.json",
+          "sha256": "cd126cc922221cacf7fe7b3dde5308cc7204e4e163deeffc247ea3acd51f1ff2"
+        },
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v1/kernel-metadata.json",
+          "sha256": "97d9f1247a18d017c8858562973ae4da8418c1bd29a511774bd6b2aa16b029a2"
+        },
+        {
+          "path": ".biohub/staging/biohub-spatialdino-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "ad6d2dfecbf149a716443fd05f3b1d9b5923ecd778bf09ba22109c619eb7f700"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/staging/biohub-hoct-multibackbone-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact 174-tensor, 21,501,312-parameter encoder matches upstream arithmetic and produces normalized finite patch embeddings.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dde761fa686242788f46728672399f951ecaca90ff12bd09dc9db3c5eddb8ef2"
+        },
+        {
+          "path": "research/spatialdino_association/appearance.py",
+          "sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5"
+        },
+        {
+          "path": "tests/test_spatialdino_encoder.py",
+          "sha256": "3874a4f03c58d9e932afe2839a58355d35c3a1dd637db9357fe4e430c2b80859"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Synthetic crossing links are corrected only when appearance and geometry gates pass; locked edges, divisions, and gaps remain unchanged.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        },
+        {
+          "path": "tests/test_spatialdino_correction.py",
+          "sha256": "5b8612dc53941f537fbfd7806cea644fadf5f5cd986e31b205f7f433d53a2d86"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The official SpatialDINO checkpoint hash, tensor count, parameter count, and strict state-dict reload are fixed.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-spatialdino-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "ad6d2dfecbf149a716443fd05f3b1d9b5923ecd778bf09ba22109c619eb7f700"
+        },
+        {
+          "path": ".biohub/cache/models/spatialdino-vits8-step244999-backbone.pth",
+          "sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+        },
+        {
+          "path": "research/spatialdino_association/encoder.py",
+          "sha256": "dde761fa686242788f46728672399f951ecaca90ff12bd09dc9db3c5eddb8ef2"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only validation JSON and terminal evidence are written below /kaggle/working; a submission file causes failure and no submit API is present.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-spatialdino-appearance-validation-v1/biohub-spatialdino-appearance-validation-v1.ipynb",
+          "sha256": "72fb0420946df07fa7b5e4dd07221233eddbf0765788e7cc10836790787dabd3"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Image inference is batched four frames at a time and pair scoring is bounded per transition; no all-movie feature tensor is retained on GPU.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        },
+        {
+          "path": "research/spatialdino_association/correction.py",
+          "sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "One complete movie per embryo selects the correction, and the two disjoint acceptance movies are opened only if selection passes after configuration freeze.",
+      "evidence": [
+        {
+          "path": "config/experiments/spatialdino-appearance-validation-v1.json",
+          "sha256": "cd126cc922221cacf7fe7b3dde5308cc7204e4e163deeffc247ea3acd51f1ff2"
+        },
+        {
+          "path": "research/spatialdino_association/validate_appearance_correction.py",
+          "sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T14:12:52.895935Z",
+  "report_sha256": "bcf8a5790d352084c9c7625259013b0eb8ba755b3eaa4de02f50720ec7b6cea3",
+  "run_id": "spatialdino-appearance-validation-v1",
+  "schema_version": 1
+}

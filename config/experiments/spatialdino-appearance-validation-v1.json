@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "run_id": "spatialdino-appearance-validation-v1",
+  "parent": "hoct-multibackbone-probe-v1",
+  "kernel_ref": "indarkarhana/biohub-spatialdino-appearance-validation-v1",
+  "notebook_sha256": "72fb0420946df07fa7b5e4dd07221233eddbf0765788e7cc10836790787dabd3",
+  "kernel_metadata_sha256": "97d9f1247a18d017c8858562973ae4da8418c1bd29a511774bd6b2aa16b029a2",
+  "kernel_builder_sha256": "16ffc340926a6866a3cb72275917586ed168d93a00f64adff6e9caab6b3f34fa",
+  "runtime_builder_sha256": "97e139da65d7ee29a3cc18b554d7231ec4434a346eda978efc14d3f00f3fb439",
+  "runtime_manifest_sha256": "ad6d2dfecbf149a716443fd05f3b1d9b5923ecd778bf09ba22109c619eb7f700",
+  "graph_runtime_manifest_sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7",
+  "hoct_runtime_manifest_sha256": "88faf798791a579bd5b83336cb5277d7240e7c8515fffb07ea08b4ba53c77265",
+  "appearance_adapter_sha256": "b3abdcf751bca29b7c500f0635cd3f649b13934fad6dfae7273dabc27d4747e5",
+  "correction_sha256": "efc163af817670070405f095415f9dfe55854f1dec3f68bc0e65b85ec8ace192",
+  "encoder_sha256": "dde761fa686242788f46728672399f951ecaca90ff12bd09dc9db3c5eddb8ef2",
+  "validator_sha256": "fe55395d2c1fc6c5c57b13ad4bb2e3f5cc1257bca4bab98565ae78090e09a350",
+  "declared_max_runtime_hours": "2.00",
+  "watchdog_hard_stop_seconds": 6900,
+  "validator_max_wall_seconds": 6600,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-spatialdino-runtime-v1@version1",
+    "indarkarhana/biohub-hoct-multibackbone-runtime-v1@version6",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version11",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-hoct-multibackbone-probe-v1"
+  ],
+  "processed_topology": {
+    "producer_run_id": "hoct-multibackbone-probe-v1",
+    "csv_sha256": "6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b",
+    "producer_training_terminal_sha256": "8ddd87ca0dd748b668e8c4f61409930d071ef84f9dd82d96fd750e8b98943f69",
+    "ground_truth_labels_in_cache": false,
+    "role": "frozen node and base-edge comparator only"
+  },
+  "pretrained_model": {
+    "name": "SpatialDINO ViT-S/8 step 244999",
+    "checkpoint_sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8",
+    "parameter_count": 21501312,
+    "source_repository": "kirchhausenlab/spatialdino",
+    "source_commit": "ca3ab86b34430d963f12a3909baaeb9343c63b7d",
+    "license": "MIT",
+    "frozen": true,
+    "architecture_equivalence": "tracked dependency-light encoder was bit-identical to upstream on the bound checkpoint"
+  },
+  "correction": {
+    "operation": "disjoint two-edge swaps only",
+    "invariants": [
+      "node set unchanged",
+      "edge count unchanged",
+      "per-node in-degree unchanged",
+      "per-node out-degree unchanged",
+      "division and gap structure unchanged"
+    ],
+    "max_pair_distance_um": 12.0,
+    "appearance_gain_grid": [0.02, 0.05, 0.10],
+    "max_total_distance_increase_um_grid": [0.0, 1.0, 2.0],
+    "base_lock_probability_grid": [0.90, 0.95],
+    "configurations": 18
+  },
+  "validation": {
+    "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
+    "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
+    "selection_objective": "maximize minimum per-embryo proxy delta, then pooled proxy and worst movie, while preferring fewer swaps",
+    "selection_gate": "positive pooled delta, nonnegative delta on both selection movies, and at least one swap",
+    "acceptance_read_after_configuration_freeze": true,
+    "acceptance_rule": "positive pooled delta, at least one swap, no per-movie proxy regression worse than 0.005, and worst-movie regression no worse than 0.005",
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "only clean-heldout acceptance can authorize building a separate dual-GPU non-replica submission candidate",
+  "submission_policy": "validation only; no submission file or competition API call"
+}
