@@ -93,6 +93,46 @@ def hash_kernel_directory(directory: Path) -> str:
     return sha256_bytes(canonical_json_bytes(records))
 
 
+def validate_research_refresh(
+    workspace_root: Path,
+    config: Mapping[str, Any],
+    *,
+    now: datetime,
+) -> None:
+    """Require a recent source-based notebook audit before spending GPU."""
+
+    policy = config.get("research_refresh_policy")
+    if not isinstance(policy, Mapping):
+        return
+    try:
+        max_age = int(policy["max_audit_age_hours"])
+    except (KeyError, TypeError, ValueError) as exc:
+        raise LaunchError(
+            "RESEARCH_POLICY_INVALID", "research audit age policy is malformed"
+        ) from exc
+    if max_age <= 0:
+        raise LaunchError(
+            "RESEARCH_POLICY_INVALID", "research audit age must be positive"
+        )
+    audit_path = workspace_root.resolve() / "policies" / "notebook_audits.json"
+    try:
+        audit = json.loads(audit_path.read_text(encoding="utf-8"))
+        audited_at = _parse_time(str(audit["audited_at"]))
+    except (FileNotFoundError, json.JSONDecodeError, KeyError) as exc:
+        raise LaunchError(
+            "RESEARCH_AUDIT_UNAVAILABLE", "source-based notebook audit is unavailable"
+        ) from exc
+    current = now.astimezone(timezone.utc)
+    if audited_at > current + timedelta(minutes=5):
+        raise LaunchError(
+            "RESEARCH_AUDIT_FUTURE", "notebook audit timestamp is in the future"
+        )
+    if current - audited_at > timedelta(hours=max_age):
+        raise LaunchError(
+            "RESEARCH_AUDIT_STALE", "refresh notebooks and discussions before GPU launch"
+        )
+
+
 @dataclass(frozen=True)
 class LaunchAuthorization:
     authorization_id: str
@@ -215,6 +255,7 @@ def authorize_launch(
 ) -> tuple[LaunchAuthorization, GuardDecision]:
     root = workspace_root.resolve()
     current = (now or utc_now()).astimezone(timezone.utc)
+    validate_research_refresh(root, config, now=current)
     runs = reconstruct_runs(ledger.read_events())
     state = runs.get(run_id)
     if state is None:
@@ -279,6 +320,7 @@ def validate_authorization(
 ) -> tuple[GuardDecision, Decimal]:
     root = workspace_root.resolve()
     current = (now or utc_now()).astimezone(timezone.utc)
+    validate_research_refresh(root, config, now=current)
     if not secrets.compare_digest(authorization.authorization_sha256, authorization.computed_sha256()):
         raise LaunchError("AUTHORIZATION_CHANGED", "authorization content hash changed")
     if current < _parse_time(authorization.issued_at) - timedelta(seconds=60):
