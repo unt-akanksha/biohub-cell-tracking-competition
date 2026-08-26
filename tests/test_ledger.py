@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import threading
+import time
 from pathlib import Path
 
 import pytest
@@ -39,6 +40,7 @@ from biohub_tracker.ledger import (
     start_payload,
     validate_producer_registration_evidence,
     validate_producer_terminal_evidence,
+    _ExclusiveLock,
 )
 
 
@@ -284,6 +286,45 @@ def test_lock_timeout_does_not_change_ledger(tmp_path):
     with pytest.raises(LedgerLockTimeout):
         ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
     assert ledger.path.read_bytes() == b""
+
+
+def test_active_lock_metadata_is_never_stolen(tmp_path):
+    ledger = make_ledger(tmp_path, timeout=0.02)
+    ledger.path.parent.mkdir(parents=True)
+    ledger.path.write_bytes(b"")
+    with _ExclusiveLock(ledger.lock_path, 0.2):
+        metadata = json.loads(ledger.lock_path.read_bytes())
+        assert metadata["pid"] > 0
+        assert metadata["process_start"]
+        assert metadata["created_at"].endswith("Z")
+        assert len(metadata["owner_token"]) == 64
+        with pytest.raises(LedgerLockTimeout):
+            ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
+        assert ledger.lock_path.exists()
+    assert not ledger.lock_path.exists()
+
+
+def test_demonstrably_stale_lock_is_quarantined_and_recovered(tmp_path):
+    ledger = make_ledger(tmp_path, timeout=0.02)
+    ledger.path.parent.mkdir(parents=True)
+    ledger.path.write_bytes(b"")
+    ledger.lock_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "biohub.ledger-lock.v1",
+                "pid": 999_999_999,
+                "process_start": "proc-start-ticks:stale",
+                "created_at": "2000-01-01T00:00:00Z",
+                "created_at_epoch_seconds": time.time() - 60,
+                "owner_token": "a" * 64,
+            }
+        ),
+        encoding="utf-8",
+    )
+    ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
+    assert [event.run_id for event in ledger.read_events()] == ["run-a"]
+    assert not ledger.lock_path.exists()
+    assert list(ledger.path.parent.glob(".*.stale-*")) == []
 
 
 def test_concurrent_append_has_complete_json_lines(tmp_path):

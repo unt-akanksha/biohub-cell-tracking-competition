@@ -750,23 +750,154 @@ class _ExclusiveLock:
         self.path = path
         self.timeout_seconds = timeout_seconds
         self.descriptor: int | None = None
+        self.owner_token: str | None = None
+
+    @staticmethod
+    def _process_start_identity(pid: int) -> str | None:
+        if pid <= 0:
+            return None
+        if os.name == "nt":
+            import ctypes
+
+            process_query_limited_information = 0x1000
+            handle = ctypes.windll.kernel32.OpenProcess(  # type: ignore[attr-defined]
+                process_query_limited_information, False, pid
+            )
+            if not handle:
+                error = ctypes.windll.kernel32.GetLastError()  # type: ignore[attr-defined]
+                return None if error == 87 else f"active-unobservable:{pid}"
+            try:
+                creation = ctypes.c_ulonglong()
+                exit_time = ctypes.c_ulonglong()
+                kernel = ctypes.c_ulonglong()
+                user = ctypes.c_ulonglong()
+                if not ctypes.windll.kernel32.GetProcessTimes(  # type: ignore[attr-defined]
+                    handle,
+                    ctypes.byref(creation),
+                    ctypes.byref(exit_time),
+                    ctypes.byref(kernel),
+                    ctypes.byref(user),
+                ):
+                    return f"active-unobservable:{pid}"
+                return f"windows-filetime:{creation.value}"
+            finally:
+                ctypes.windll.kernel32.CloseHandle(handle)  # type: ignore[attr-defined]
+        proc_stat = Path(f"/proc/{pid}/stat")
+        try:
+            fields = proc_stat.read_text(encoding="ascii").split()
+            return f"proc-start-ticks:{fields[21]}"
+        except (FileNotFoundError, ProcessLookupError):
+            return None
+        except (OSError, IndexError):
+            try:
+                os.kill(pid, 0)
+            except ProcessLookupError:
+                return None
+            except (PermissionError, OSError):
+                return f"active-unobservable:{pid}"
+            return f"active-unobservable:{pid}"
+
+    def _metadata(self) -> dict[str, Any]:
+        now = time.time()
+        return {
+            "schema_version": "biohub.ledger-lock.v1",
+            "pid": os.getpid(),
+            "process_start": self._process_start_identity(os.getpid()),
+            "created_at": datetime.fromtimestamp(now, timezone.utc)
+            .isoformat()
+            .replace("+00:00", "Z"),
+            "created_at_epoch_seconds": now,
+            "owner_token": secrets.token_hex(32),
+        }
+
+    def _recover_stale(self) -> bool:
+        try:
+            before = self.path.stat()
+            raw = self.path.read_bytes()
+            metadata = json.loads(raw)
+        except (FileNotFoundError, OSError, json.JSONDecodeError):
+            return False
+        if not isinstance(metadata, dict) or set(metadata) != {
+            "schema_version",
+            "pid",
+            "process_start",
+            "created_at",
+            "created_at_epoch_seconds",
+            "owner_token",
+        }:
+            return False
+        try:
+            pid = int(metadata["pid"])
+            created = float(metadata["created_at_epoch_seconds"])
+            owner_token = str(metadata["owner_token"])
+            process_start = str(metadata["process_start"])
+        except (TypeError, ValueError):
+            return False
+        if (
+            metadata["schema_version"] != "biohub.ledger-lock.v1"
+            or not re.fullmatch(r"[0-9a-f]{64}", owner_token)
+            or time.time() - created < max(0.1, self.timeout_seconds)
+        ):
+            return False
+        current_start = self._process_start_identity(pid)
+        if current_start is not None and secrets.compare_digest(current_start, process_start):
+            return False
+        try:
+            after = self.path.stat()
+        except FileNotFoundError:
+            return True
+        identity_before = (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
+        identity_after = (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
+        if identity_before != identity_after:
+            return False
+        quarantine = self.path.with_name(
+            f".{self.path.name}.stale-{owner_token}-{secrets.token_hex(8)}"
+        )
+        try:
+            os.replace(self.path, quarantine)
+            if quarantine.read_bytes() != raw:
+                if not self.path.exists():
+                    os.replace(quarantine, self.path)
+                return False
+            quarantine.unlink()
+            return True
+        except FileNotFoundError:
+            return True
+        except OSError:
+            return False
 
     def __enter__(self) -> "_ExclusiveLock":
         deadline = time.monotonic() + self.timeout_seconds
         while True:
             try:
                 self.descriptor = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-                os.write(self.descriptor, f"pid={os.getpid()}\n".encode("ascii"))
+                metadata = self._metadata()
+                self.owner_token = str(metadata["owner_token"])
+                os.write(self.descriptor, canonical_json_bytes(metadata) + b"\n")
+                os.fsync(self.descriptor)
                 return self
             except FileExistsError:
                 if time.monotonic() >= deadline:
+                    if self._recover_stale():
+                        deadline = time.monotonic() + self.timeout_seconds
+                        continue
                     raise LedgerLockTimeout(f"timed out waiting for ledger lock: {self.path}")
                 time.sleep(0.01)
 
     def __exit__(self, *_: Any) -> None:
         if self.descriptor is not None:
             os.close(self.descriptor)
-        self.path.unlink(missing_ok=True)
+            self.descriptor = None
+        try:
+            metadata = json.loads(self.path.read_bytes())
+        except (FileNotFoundError, OSError, json.JSONDecodeError):
+            return
+        if (
+            isinstance(metadata, dict)
+            and self.owner_token is not None
+            and secrets.compare_digest(str(metadata.get("owner_token")), self.owner_token)
+        ):
+            self.path.unlink(missing_ok=True)
 
 
 @dataclass
