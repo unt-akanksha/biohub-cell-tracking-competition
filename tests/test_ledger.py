@@ -358,27 +358,44 @@ def test_active_lock_metadata_is_never_stolen(tmp_path):
     assert not ledger.lock_path.exists()
 
 
-def test_demonstrably_stale_lock_is_quarantined_and_recovered(tmp_path):
+def test_stale_path_lock_fails_closed_without_moving_owner_bytes(tmp_path):
     ledger = make_ledger(tmp_path, timeout=0.02)
     ledger.path.parent.mkdir(parents=True)
     ledger.path.write_bytes(b"")
-    ledger.lock_path.write_text(
-        json.dumps(
-            {
-                "schema_version": "biohub.ledger-lock.v1",
-                "pid": 999_999_999,
-                "process_start": "proc-start-ticks:stale",
-                "created_at": "2000-01-01T00:00:00Z",
-                "created_at_epoch_seconds": time.time() - 60,
-                "owner_token": "a" * 64,
-            }
-        ),
-        encoding="utf-8",
-    )
-    ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
-    assert [event.run_id for event in ledger.read_events()] == ["run-a"]
-    assert not ledger.lock_path.exists()
+    stale_bytes = json.dumps(
+        {
+            "schema_version": "biohub.ledger-lock.v1",
+            "pid": 999_999_999,
+            "process_start": "proc-start-ticks:stale",
+            "created_at": "2000-01-01T00:00:00Z",
+            "created_at_epoch_seconds": time.time() - 60,
+            "owner_token": "a" * 64,
+        }
+    ).encode()
+    ledger.lock_path.write_bytes(stale_bytes)
+    with pytest.raises(LedgerLockTimeout):
+        ledger.append(ExperimentEvent.create("run-a", EventType.REGISTERED, payload()))
+    assert ledger.path.read_bytes() == b""
+    assert ledger.lock_path.read_bytes() == stale_bytes
     assert list(ledger.path.parent.glob(".*.stale-*")) == []
+
+
+def test_stale_recovery_never_renames_a_replaced_live_lock(tmp_path):
+    ledger = make_ledger(tmp_path, timeout=0.02)
+    ledger.path.parent.mkdir(parents=True)
+    live_bytes = json.dumps(
+        {
+            "schema_version": "biohub.ledger-lock.v1",
+            "pid": 123,
+            "process_start": "new-owner",
+            "created_at": "2026-08-25T00:00:00Z",
+            "created_at_epoch_seconds": time.time(),
+            "owner_token": "b" * 64,
+        }
+    ).encode()
+    ledger.lock_path.write_bytes(live_bytes)
+    assert _ExclusiveLock(ledger.lock_path, 0.02)._recover_stale() is False
+    assert ledger.lock_path.read_bytes() == live_bytes
 
 
 def test_concurrent_append_has_complete_json_lines(tmp_path):

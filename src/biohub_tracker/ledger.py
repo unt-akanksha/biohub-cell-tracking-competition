@@ -821,60 +821,12 @@ class _ExclusiveLock:
         }
 
     def _recover_stale(self) -> bool:
-        try:
-            before = self.path.stat()
-            raw = self.path.read_bytes()
-            metadata = json.loads(raw)
-        except (FileNotFoundError, OSError, json.JSONDecodeError):
-            return False
-        if not isinstance(metadata, dict) or set(metadata) != {
-            "schema_version",
-            "pid",
-            "process_start",
-            "created_at",
-            "created_at_epoch_seconds",
-            "owner_token",
-        }:
-            return False
-        try:
-            pid = int(metadata["pid"])
-            created = float(metadata["created_at_epoch_seconds"])
-            owner_token = str(metadata["owner_token"])
-            process_start = str(metadata["process_start"])
-        except (TypeError, ValueError):
-            return False
-        if (
-            metadata["schema_version"] != "biohub.ledger-lock.v1"
-            or not re.fullmatch(r"[0-9a-f]{64}", owner_token)
-            or time.time() - created < max(0.1, self.timeout_seconds)
-        ):
-            return False
-        current_start = self._process_start_identity(pid)
-        if current_start is not None and secrets.compare_digest(current_start, process_start):
-            return False
-        try:
-            after = self.path.stat()
-        except FileNotFoundError:
-            return True
-        identity_before = (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)
-        identity_after = (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)
-        if identity_before != identity_after:
-            return False
-        quarantine = self.path.with_name(
-            f".{self.path.name}.stale-{owner_token}-{secrets.token_hex(8)}"
-        )
-        try:
-            os.replace(self.path, quarantine)
-            if quarantine.read_bytes() != raw:
-                if not self.path.exists():
-                    os.replace(quarantine, self.path)
-                return False
-            quarantine.unlink()
-            return True
-        except FileNotFoundError:
-            return True
-        except OSError:
-            return False
+        # A pathname cannot be removed with compare-and-swap semantics on every
+        # supported platform.  Automatic stale recovery could therefore rename a
+        # new owner's live lock after inspecting an older file.  Fail closed: an
+        # operator must verify that no writer is active and remove a stale lock
+        # explicitly before retrying.
+        return False
 
     def __enter__(self) -> "_ExclusiveLock":
         deadline = time.monotonic() + self.timeout_seconds
