@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "run_id": "spatialdino-pu-adaptation-v1",
+  "status": "rejected",
+  "actual_gpu_hours": "0.18",
+  "quota_before_hours": "26.79",
+  "quota_after_hours": "26.61",
+  "launcher_elapsed_seconds": 618.901,
+  "training": {
+    "status": "completed",
+    "actual_steps": 768,
+    "target_steps": 768,
+    "training_movies": 187,
+    "validation_overlap": [],
+    "parameter_count": 29521225,
+    "decoder_warmup_trainable_parameters": 8019913,
+    "deep_trainable_parameters": 15121609,
+    "ema_checkpoint": true,
+    "weights_changed": true,
+    "base_encoder_sha256": "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8",
+    "best_weight_sha256": "6c9b100397ec8854f9ce6376719b2ed262fc55cb0f0f11ae0492da57f973331f",
+    "elapsed_seconds": 318.985
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "matched_gt_nodes": 9897,
+    "annotated_node_recall": 0.8856375838926175,
+    "pooled_recall_min": 0.8,
+    "worst_movie_recall": 0.6112115732368897,
+    "worst_movie_recall_min": 0.65,
+    "by_embryo": {
+      "44b6": {
+        "annotated_gt_nodes": 3853,
+        "matched_gt_nodes": 3569,
+        "annotated_node_recall": 0.9262912016610434
+      },
+      "6bba": {
+        "annotated_gt_nodes": 7322,
+        "matched_gt_nodes": 6328,
+        "annotated_node_recall": 0.864244741873805
+      }
+    },
+    "per_movie_recall": {
+      "44b6_d29c9ab2": 0.991130820399113,
+      "44b6_3a861e03": 0.9700534759358289,
+      "44b6_d5e7d891": 0.7847682119205298,
+      "44b6_ddf577ad": 0.9256449165402124,
+      "6bba_09961292": 0.9379487179487179,
+      "6bba_bb9f20c3": 0.9075324675324675,
+      "6bba_784a78c9": 0.9720357941834452,
+      "6bba_57b7cc1e": 0.6112115732368897
+    },
+    "passed": false
+  },
+  "acceptance": {
+    "opened": false,
+    "reason": "worst-movie selection recall missed the 0.65 gate"
+  },
+  "diagnosis": {
+    "optimization_collapsed": false,
+    "pooled_gate_passed": true,
+    "worst_movie_gap": -0.03878842676311035,
+    "worst_movie_gain_vs_spotiflow_pu": 0.1247739602169982,
+    "worst_movie_projected_count_ratio": 0.9988144484641257,
+    "worst_movie_mean_match_distance_um": 2.65603211599001,
+    "interpretation": "The count-calibrated detector predicts the expected number of nodes but localizes too few annotated cells on one dense 6bba movie; selective soft spatial distillation is a more targeted next test than increasing output count."
+  },
+  "decision": {
+    "state": "retire",
+    "reason": "The independent checkpoint is materially stronger than Spotiflow PU but cannot open clean acceptance after missing the immutable worst-movie gate.",
+    "next_test": "Add disagreement-weighted selective soft distillation to the same independent SpatialDINO/UNETR student, retain organizer positives and PU masking, and rerun the unchanged clean gates."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "competition_submission_performed": false,
+  "evidence": {
+    "launcher_terminal_sha256": "c81dcf1d0b14a2c40f2125915524612cc0c224e0813e28b42532027f41e6c504",
+    "training_result_sha256": "741b5896c3341d25ee86ce2420babc5fe6e68050265a701ccc388a46692241ed",
+    "validation_result_sha256": "97460530b6dac2bde2f66ea6f5397775d17a3ccd23483aff81b05fa8654da8a8",
+    "kernel_log_sha256": "bfc0c40f305db6b2b0338cea20aa68485c6b59005cbd7cc1dc0c24666299a089",
+    "checkpoint_sha256": "6c9b100397ec8854f9ce6376719b2ed262fc55cb0f0f11ae0492da57f973331f"
+  }
+}
