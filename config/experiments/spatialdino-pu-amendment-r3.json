@@ -1,0 +1,7 @@
+{
+  "preflight_report": "artifacts/preflights/spatialdino-pu-adaptation-v1-r3.json",
+  "preflight_report_sha256": "073dcbcb287bdb23b6512750bc0fe47ddb5e3b66ba63dc0d07c90cec7031719c",
+  "model_step_test_sha256": "02397f61835f09095e26c30f100b3295c9deb8e8dbce16061e8bf30ec4997a3d",
+  "finite_forward_backward_gradients": true,
+  "adamw_optimizer_step_completed": true
+}

@@ -49,17 +49,18 @@ counts before ground-truth scoring. The leaderboard is not used for selection.
 
 ## Verification
 
-The preflight passed all eight checks. The focused suite reports 33 passing
+The preflight passed all eight checks. The focused suite reports 34 passing
 tests, including strict SpatialDINO loading, intermediate-feature equivalence,
-full-resolution model geometry, trainable-phase isolation, EMA behavior,
+full-resolution model geometry, a finite forward/backward optimizer step,
+trainable-phase isolation, EMA behavior,
 positive-unlabeled masking, sub-voxel inference, clean-result provenance, and
 the future two-GPU submission policy.
 
 Preflight report SHA-256:
-`c94c379e7d38b7f2f1dbc03487fbff2c7e362e306e0f18232a364fdb8f478dcd`
+`073dcbcb287bdb23b6512750bc0fe47ddb5e3b66ba63dc0d07c90cec7031719c`
 
-The original immutable preflight remains retained. Revision 2 adds the sparse
-head prior and EMA warm-up checks before any GPU launch.
+The earlier immutable preflights remain retained. Revision 3 adds an explicit
+finite forward/backward AdamW step before any GPU launch.
 
 ## Launch rule
 

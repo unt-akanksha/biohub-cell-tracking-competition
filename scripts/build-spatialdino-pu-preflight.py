@@ -180,7 +180,7 @@ def main() -> None:
     parser.add_argument(
         "--output",
         type=Path,
-        default=ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r2.json",
+        default=ROOT / "artifacts" / "preflights" / f"{RUN_ID}-r3.json",
     )
     args = parser.parse_args()
     verify_sources()
@@ -208,7 +208,7 @@ def main() -> None:
         check(
             "model_step",
             [model, trainer, ROOT / "tests" / "test_spatialdino_pu_trainer.py"],
-            "The 29,521,225-parameter architecture has an 8.0M decoder warm-up and a verified 15.1M deep phase with EMA updates.",
+            "The 29,521,225-parameter architecture has an 8.0M decoder warm-up, a verified 15.1M deep phase, finite forward/backward gradients, an AdamW step, and EMA updates.",
         ),
         check(
             "checkpoint_roundtrip",

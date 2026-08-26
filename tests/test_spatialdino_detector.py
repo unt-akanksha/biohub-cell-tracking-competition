@@ -75,3 +75,27 @@ def test_training_phase_freezes_encoder_then_unfreezes_only_tail() -> None:
         for block in model.encoder.blocks[:-2]
         for parameter in block.parameters()
     )
+
+
+def test_hybrid_detector_completes_finite_optimizer_step() -> None:
+    torch.manual_seed(19)
+    model = HybridSpatialDinoDetector(TinySpatialDino(), widths=(8, 16, 24, 32))
+    set_detector_training_phase(model, unfreeze_last_encoder_blocks=0)
+    optimizer = torch.optim.AdamW(
+        [parameter for parameter in model.parameters() if parameter.requires_grad],
+        lr=1e-4,
+    )
+    before = model.heatmap_head.weight.detach().clone()
+    logits = model(torch.randn(1, 1, 16, 16, 16))
+    target = torch.zeros_like(logits)
+    target[:, :, 8, 8, 8] = 1.0
+    loss = torch.nn.functional.binary_cross_entropy_with_logits(logits, target)
+    loss.backward()
+    gradients = [
+        parameter.grad
+        for parameter in model.parameters()
+        if parameter.requires_grad and parameter.grad is not None
+    ]
+    assert gradients and all(torch.isfinite(gradient).all() for gradient in gradients)
+    optimizer.step()
+    assert not torch.equal(before, model.heatmap_head.weight.detach())
