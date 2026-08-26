@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v5"
-NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v5.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v6"
+NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v6.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,14 +31,14 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-graph-finetune-v5"
+RUN_ID = "trackastra-graph-finetune-v6"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
 
 
 def write_terminal(status, error=None):
-    training_terminal = Path("/kaggle/working/trackastra_graph_v5/training_terminal.json")
+    training_terminal = Path("/kaggle/working/trackastra_graph_v6/training_terminal.json")
     payload = {
         "run_id": RUN_ID,
         "status": status,
@@ -228,7 +228,7 @@ print(json.dumps({
 '''
 
 
-TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v5")
+TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v6")
 command = [
     sys.executable,
     str(runtime / "trainer.py"),
@@ -282,7 +282,7 @@ print(json.dumps({
 FINISH = r'''FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
-print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v5"))
+print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v6"))
 '''
 
 
@@ -321,8 +321,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-trackastra-graph-finetune-v5",
-        "title": "Biohub Trackastra Graph Finetune v5",
+        "id": "indarkarhana/biohub-trackastra-graph-finetune-v6",
+        "title": "Biohub Trackastra Graph Finetune v6",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "run_id": "trackastra-raw-confidence-acceptance-v1",
-  "parent": "trackastra-graph-finetune-v5",
+  "parent": "trackastra-graph-finetune-v6",
   "kernel_ref": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
-  "notebook_sha256": "de575e959221f8e0c476806dbf80eb580533026eda8943f41f1fe5d2b043d0ca",
-  "kernel_metadata_sha256": "6fcdf2d0803ed9c7ba72efce0c5c135d354b035e0390bc90273323df2511ace4",
-  "trainer_sha256": "cc8476f1401e23578e45c98b1b230fac9892905de5cb59c92a652de9b59f946b",
+  "notebook_sha256": "bfa5b59e54f5b365c427c99b38a9ef4dc12a91e5d2d408dcdb21ecf5392abdf4",
+  "kernel_metadata_sha256": "d4b5357f282bd119fbfce8519f36d8b3800184c9df781357f0d25ebbadc3cc3f",
+  "trainer_sha256": "b59dcc3bdc8bc54fd1da203fed884bc6d3aa7d2e81f539390a1cf4f196d46757",
   "posthoc_validator_sha256": "511d2a1e1c857656a1688a873ab3c47d6de88dbf99f67fddba47c75a7261e1b1",
   "public_validation_materializer_sha256": "ae2044d77cff82c77b87c17cc517148f25cff71450a1cb63df007480e7bf404f",
   "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
   "submission_reranker_sha256": "8b02a1e466f8e6bd85bedbc2cc1cb047c8efeaa12aa458e074b310a42e303f46",
-  "runtime_manifest_sha256": "e08c0023ae3fd326894e89c0038a4bb0f32022ae08a67e52bd04203e0fa16565",
+  "runtime_manifest_sha256": "dd079e34018b08a6d727d9fd51849739adeb4bf917e8e3800807f894097d8419",
   "declared_max_runtime_hours": "1.50",
   "watchdog_hard_stop_seconds": 5100,
   "accelerator": "NvidiaTeslaT4",
@@ -18,12 +18,12 @@
   "tpu_enabled": false,
   "submission_created": false,
   "dataset_sources": [
-    "indarkarhana/biohub-trackastra-graph-runtime-v1@version7",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version8",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
     "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
   "kernel_sources": [
-    "indarkarhana/biohub-trackastra-graph-finetune-v5"
+    "indarkarhana/biohub-trackastra-graph-finetune-v6"
   ],
   "source_model_binding": {
     "required_training_status": "completed",

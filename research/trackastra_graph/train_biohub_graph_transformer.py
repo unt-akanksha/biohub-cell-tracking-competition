@@ -525,7 +525,14 @@ def association_loss(
     timepoints = coords[:, :, 0].long()
     probabilities = model.normalize_output(logits.float().unsqueeze(0), timepoints, coords.float())[0]
     probabilities = probabilities.clamp(1e-6, 1.0 - 1e-6)
-    bce = F.binary_cross_entropy(probabilities, target, reduction="none")
+    # Probability-space BCE is explicitly rejected by CUDA autocast even when
+    # its inputs have already been promoted to float32.  Trackastra exposes
+    # normalized probabilities rather than raw binary logits, so keep this
+    # numerically sensitive operation in a nested full-precision region.
+    with torch.autocast(device_type=device.type, enabled=False):
+        probabilities = probabilities.float()
+        target = target.float()
+        bce = F.binary_cross_entropy(probabilities, target, reduction="none")
     focal = torch.where(target > 0, (1.0 - probabilities).square(), probabilities.square())
     weights = 1.0 + 4.0 * target + 8.0 * division * division_weight_scale
     loss = (bce * focal * weights)[valid].mean()

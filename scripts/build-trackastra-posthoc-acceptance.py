@@ -213,7 +213,7 @@ for path in input_root.rglob("training_terminal.json"):
         training_candidates.append((path, payload))
 if len(training_candidates) != 1:
     raise FileNotFoundError(
-        f"Expected one hash-valid V5 training output, found {[str(path) for path, _ in training_candidates]}"
+        f"Expected one hash-valid V6 training output, found {[str(path) for path, _ in training_candidates]}"
     )
 training_terminal, training_payload = training_candidates[0]
 model_dir = training_terminal.parent
@@ -335,7 +335,7 @@ def main() -> None:
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
             "pilkwang/biohub-deepcenter-unet3d-center-prior-v1",
         ],
-        "kernel_sources": ["indarkarhana/biohub-trackastra-graph-finetune-v5"],
+        "kernel_sources": ["indarkarhana/biohub-trackastra-graph-finetune-v6"],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],
         "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",

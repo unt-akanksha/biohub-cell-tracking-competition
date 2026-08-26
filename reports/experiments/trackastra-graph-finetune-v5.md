@@ -1,7 +1,7 @@
 # trackastra-graph-finetune-v5
 
-Status: staged behind the active learned-detector acceptance; GPU runs remain
-strictly sequential.
+Status: failed before the first optimizer step after 116 seconds; superseded by
+V6 with the CUDA autocast loss fix. No checkpoint or submission was produced.
 
 V5 supersedes the unlaunched V4 before any GPU was spent. The change addresses
 a specific association-model distribution mismatch: the complete validation
@@ -35,3 +35,12 @@ that stable edge IDs retain the original public link confidence for 92.85% to
 97.63% of the final CSV edges. A probability-aware hybrid path is now tested in
 source, but it remains disabled for submission until the same selection/frozen
 acceptance protocol validates it; the running V5 artifact is unchanged.
+
+## Terminal result
+
+Kaggle loaded all 195 real graphs and 384 synthetic graphs successfully, then
+failed during the initial clean window validation. Trackastra exposes normalized
+probabilities, and PyTorch refuses probability-space binary cross entropy while
+CUDA autocast is active. V6 retains the same scientific configuration but runs
+that numerically sensitive BCE region explicitly in float32 outside autocast.
+The failure consumed 0.0322 GPU hours and left 29.12 hours available.

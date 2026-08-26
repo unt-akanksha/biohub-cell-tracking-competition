@@ -1,11 +1,11 @@
 # trackastra-raw-confidence-acceptance-v1
 
-Status: staged behind the active V5 training run; GPU execution remains
+Status: staged behind the corrected V6 training run; GPU execution remains
 strictly sequential.
 
 This is a clean posthoc evaluation of the independently fine-tuned 27.5M
 Trackastra checkpoint. It does not retrain, create a submission, read the public
-leaderboard, or reuse V5's training-time acceptance decision. Its purpose is to
+leaderboard, or reuse V6's training-time acceptance decision. Its purpose is to
 test the extra signal retained in the owned baseline's raw GEFF output:
 per-edge learned confidence before graph postprocessing.
 

@@ -4,9 +4,12 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 
+import research.trackastra_graph.train_biohub_graph_transformer as trainer
 from research.trackastra_graph.train_biohub_graph_transformer import (
     _recursive_source_tiles,
+    association_loss,
     build_synthetic_video,
     compute_division_confusion,
     compute_edge_confusion,
@@ -71,6 +74,40 @@ def test_dense_distractors_fill_budget_without_becoming_positive_targets() -> No
         if len(false_points) and len(true_points):
             distances = np.linalg.norm(false_points[:, None] - true_points[None], axis=-1)
             assert distances.min() >= 4.0 - 1e-5
+
+
+def test_probability_bce_runs_outside_parent_autocast(monkeypatch) -> None:
+    class DummyAssociationModel(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.bias = torch.nn.Parameter(torch.tensor(0.0))
+
+        def forward(self, coords, features):
+            size = coords.shape[1]
+            return self.bias.expand(coords.shape[0], size, size)
+
+        def normalize_output(self, logits, timepoints, coords):
+            return torch.sigmoid(logits)
+
+    sample = sample_window(
+        [build_synthetic_video()], np.random.default_rng(19), **_clean_sample_kwargs()
+    )
+    original_bce = trainer.F.binary_cross_entropy
+    autocast_states: list[bool] = []
+
+    def guarded_bce(*args, **kwargs):
+        autocast_states.append(torch.is_autocast_enabled("cpu"))
+        return original_bce(*args, **kwargs)
+
+    monkeypatch.setattr(trainer.F, "binary_cross_entropy", guarded_bce)
+    model = DummyAssociationModel()
+    with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+        loss, _stats = association_loss(model, sample, torch.device("cpu"))
+    loss.backward()
+
+    assert autocast_states == [False]
+    assert model.bias.grad is not None
+    assert torch.isfinite(model.bias.grad)
 
 
 def test_recursive_tiles_cover_each_source_and_respect_budget() -> None:
