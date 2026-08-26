@@ -1,0 +1,192 @@
+{
+  "checks": [
+    {
+      "detail": "Tracked, staged, and independently downloaded runtime modules import; notebook cells compile and the focused suite passes.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/model.py",
+          "sha256": "62580122ac968e695d49d4af0146b4e92de7d3cd0e38afa9f6d744a7bea13356"
+        },
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-pu-adaptation-v1/biohub-lsm-fm-pu-adaptation-v1.ipynb",
+          "sha256": "c9374bdb5f14dbc79d8330b608f39c78df1389587aa1925c3cd22d9941ffc912"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-pu-runtime-v1-version2/monai-1.5.1/monai/__init__.py",
+          "sha256": "3b018ef27d5eaea7ce26c2e897586cb8735d73b00eb0e6fcdca33b9b3d554337"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The CC-BY-4.0 model, Apache-2.0 implementation, private runtime, frozen teachers, baseline graphs, and competition source are hash-bound with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-pu-adaptation-v1.json",
+          "sha256": "eb8b209676293ba2ec12d23547c995ab487b0ddf32421232674952e4b82355f5"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-pu-adaptation-v1/kernel-metadata.json",
+          "sha256": "63631686625e368d837524b32a674d7052f4277eda93154af61d73099b0d72db"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "fe6077dd0618f4fd2e6b026d88bf18323a66b27b7cebd5bb9431b2e1d3d6735c"
+        },
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_only_student.pt",
+          "sha256": "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0"
+        },
+        {
+          "path": ".biohub/cache/datasets/teacher-primary/edge_predictor_best.pth",
+          "sha256": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/public-0927-clean-repro-v2/secondary_seed_weights/unet_transformer/split_0/edge_predictor_best.pth",
+          "sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "A full 64-cubed CPU forward/backward optimizer step has finite outputs and gradients with exact input/output geometry.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/model.py",
+          "sha256": "62580122ac968e695d49d4af0146b4e92de7d3cd0e38afa9f6d744a7bea13356"
+        },
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_only_student.pt",
+          "sha256": "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0"
+        },
+        {
+          "path": "tests/test_lsm_fm_detector.py",
+          "sha256": "099812832e58d37b36eaa32336bb2c29128ac451cda1c340e8a97bd8da33a6b8"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The 15.7M-parameter detector strict-loads all non-head LSM-FM tensors, verifies warm/deep trainable counts, and serializes weak/strong graphs for a 16 GB T4.",
+      "evidence": [
+        {
+          "path": "research/lsm_fm_detection/model.py",
+          "sha256": "62580122ac968e695d49d4af0146b4e92de7d3cd0e38afa9f6d744a7bea13356"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "config/experiments/lsm-fm-pu-adaptation-v1.json",
+          "sha256": "eb8b209676293ba2ec12d23547c995ab487b0ddf32421232674952e4b82355f5"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The safely stripped 16.7M-parameter student and its source provenance retain their audited hashes locally, in staging, and after Kaggle download.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/models/lsm-fm/lsm_fm_image_only_student.pt",
+          "sha256": "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0"
+        },
+        {
+          "path": ".biohub/staging/biohub-lsm-fm-pu-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "fe6077dd0618f4fd2e6b026d88bf18323a66b27b7cebd5bb9431b2e1d3d6735c"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-pu-runtime-v1-version2/lsm_fm_image_only_student.pt",
+          "sha256": "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only a learned checkpoint and clean validation evidence are written; submission artifacts cause failure and no competition API call exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-pu-adaptation-v1/biohub-lsm-fm-pu-adaptation-v1.ipynb",
+          "sha256": "c9374bdb5f14dbc79d8330b608f39c78df1389587aa1925c3cd22d9941ffc912"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Training uses batch one with serialized activation graphs and CPU target caches; validation uses batch one and both phases have hard wall guards.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/inference.py",
+          "sha256": "4ce09f116337a540e2a4b8e69490a4b671f5bcfb61e0d6001819188485c8a28e"
+        },
+        {
+          "path": "config/experiments/lsm-fm-pu-adaptation-v1.json",
+          "sha256": "eb8b209676293ba2ec12d23547c995ab487b0ddf32421232674952e4b82355f5"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "All 187 non-validation movies retain the paired seed; eight selection movies gate four untouched acceptance movies with all twelve excluded from training.",
+      "evidence": [
+        {
+          "path": "research/spatialdino_detection/data.py",
+          "sha256": "c02ca6ea9a866d3bcfb9d10613dc2c7536f20111e05c49058d894a9228bbf371"
+        },
+        {
+          "path": "research/spatialdino_detection/train_pu_detector.py",
+          "sha256": "e3eedf10060931b37bccf88c10825cd34c30c16f7067fb3416fcfce5997d2d2f"
+        },
+        {
+          "path": "research/spatialdino_detection/evaluate_pu_detector.py",
+          "sha256": "b0ee369bd89833b79e7dd009daf6fc58e4579a00fc8d2525250628a6bb9d719b"
+        },
+        {
+          "path": "config/experiments/lsm-fm-pu-adaptation-v1.json",
+          "sha256": "eb8b209676293ba2ec12d23547c995ab487b0ddf32421232674952e4b82355f5"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-26T18:43:48.347315Z",
+  "report_sha256": "7da695cf355e9336851e512e6e88fd1fdbef40f715d5c312124bd4ef401f4a21",
+  "run_id": "lsm-fm-pu-adaptation-v1",
+  "schema_version": 1
+}

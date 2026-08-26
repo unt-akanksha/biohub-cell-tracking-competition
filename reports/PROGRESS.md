@@ -44,6 +44,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `spatialdino-pu-adaptation-v1` | spotiflow-pu-adaptation-v1 | An independent 29.5M-parameter microscopy-pretrained SpatialDINO/UNETR hybrid, trained on conservative positive-unlabeled consensus across every non-validation movie, will improve clean complete-movie detection recall and complement Spotiflow without copying public predictions. | rejected | not recorded | — | 0.18 / 2.00 | retire | Independent SpatialDINO PU training completed 768 steps and passed pooled selection recall at 0.885638, but the worst complete movie reached 0.611212 versus the immutable 0.65 gate. Acceptance remained unopened and no submission was created. | — |
 | `spatialdino-appearance-validation-v2` | spatialdino-appearance-validation-v1 | The unchanged frozen SpatialDINO degree-preserving appearance correction can improve clean held-out association once the exact completed HOCT topology is materialized through a private hash-bound dataset instead of Kaggle kernel-output attachment. | rejected | not recorded | — | 0.02 / 2.00 | retire | Frozen SpatialDINO appearance evaluated all 18 preregistered degree-preserving configurations, but zero candidate pairs qualified, zero swaps were made, and selection delta versus the base remained 0. Acceptance stayed unopened and no submission was created. | — |
 | `spatialdino-pu-selective-distillation-v2` | spatialdino-pu-adaptation-v1 | A minority disagreement-weighted soft probability loss on two-seed-supported voxels will improve dense-movie localization enough for the independent SpatialDINO/UNETR detector to clear the unchanged worst-movie recall gate without copying public predictions. | rejected | not recorded | — | 0.18 / 2.00 | retire | Selective distillation completed 768 paired steps and left pooled recall effectively unchanged at 0.885906, but regressed the limiting movie from 0.611212 to 0.602170 versus the immutable 0.65 gate. Acceptance remained unopened and no submission was created. | — |
+| `lsm-fm-pu-adaptation-v1` | spatialdino-pu-selective-distillation-v2 | A geometry-matched 3D light-sheet foundation model will improve dim-cell localization beyond the retired 2D SpatialDINO hybrid while retaining conservative independent PU supervision. | registered | not recorded | — | unknown / 2.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -270,6 +271,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `["reports/experiments/spatialdino-pu-selective-distillation-v2-result.json",".biohub/cache/kernel-outputs/spatialdino-pu-selective-distillation-v2/spatialdino_pu_validation/spatialdino_pu_validation.json"]`
+
+### lsm-fm-pu-adaptation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls

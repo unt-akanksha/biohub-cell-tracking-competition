@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Train an independent SpatialDINO hybrid detector with conservative PU labels.
+"""Train an independent 3D microscopy detector with conservative PU labels.
 
 The 21.5M-parameter microscopy-pretrained ViT is fused with a learned raw-image
 3D pyramid and high-resolution decoder.  Public TemporalUNets are immutable
@@ -64,6 +64,7 @@ INPUT_VOXEL_UM = (1.625, 1.625, 1.625)
 EXPECTED_ENCODER_PARAMETERS = 21_501_312
 EXPECTED_MODEL_PARAMETERS = 29_521_225
 SPATIALDINO_SHA256 = "47f199d2e8644ca11be2d5679494bd9607f9e9a7a0b448e35b85391d70c94ed8"
+LSM_FM_STRIPPED_SHA256 = "d287049e5f86ad1db7350cdf30acf2309c9dca34be8570c398f330f346afcfb0"
 
 
 def normalize_spatialdino_frame(values: np.ndarray) -> np.ndarray:
@@ -113,7 +114,17 @@ def ema_decay_for_step(maximum_decay: float, step: int) -> float:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--competition-dir", type=Path, required=True)
-    parser.add_argument("--spatialdino-checkpoint", type=Path, required=True)
+    parser.add_argument(
+        "--model-family",
+        choices=("spatialdino", "lsm_fm"),
+        default="spatialdino",
+    )
+    parser.add_argument("--spatialdino-checkpoint", type=Path)
+    parser.add_argument("--lsm-fm-checkpoint", type=Path)
+    parser.add_argument(
+        "--lsm-fm-checkpoint-sha256",
+        default=LSM_FM_STRIPPED_SHA256,
+    )
     parser.add_argument("--primary-teacher", type=Path, required=True)
     parser.add_argument("--secondary-teacher", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -157,7 +168,7 @@ def main() -> None:
     import torch
 
     if not torch.cuda.is_available():
-        raise RuntimeError("SpatialDINO PU adaptation requires CUDA")
+        raise RuntimeError("3D microscopy PU adaptation requires CUDA")
     started = time.monotonic()
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -177,27 +188,69 @@ def main() -> None:
     if set(by_stem) & VALIDATION_STEMS:
         raise RuntimeError("validation movie entered the training inventory")
 
-    encoder = load_spatialdino_vits8(
-        args.spatialdino_checkpoint,
-        expected_sha256=SPATIALDINO_SHA256,
-        map_location="cpu",
-    )
-    if sum(parameter.numel() for parameter in encoder.parameters()) != EXPECTED_ENCODER_PARAMETERS:
-        raise RuntimeError("unexpected SpatialDINO parameter count")
-    student = HybridSpatialDinoDetector(encoder).to(device)
-    if sum(parameter.numel() for parameter in student.parameters()) != EXPECTED_MODEL_PARAMETERS:
-        raise RuntimeError("unexpected hybrid detector parameter count")
-    initial_phase = set_detector_training_phase(student, unfreeze_last_encoder_blocks=0)
+    if args.model_family == "spatialdino":
+        if args.spatialdino_checkpoint is None:
+            raise ValueError("--spatialdino-checkpoint is required for SpatialDINO")
+        encoder = load_spatialdino_vits8(
+            args.spatialdino_checkpoint,
+            expected_sha256=SPATIALDINO_SHA256,
+            map_location="cpu",
+        )
+        if sum(parameter.numel() for parameter in encoder.parameters()) != EXPECTED_ENCODER_PARAMETERS:
+            raise RuntimeError("unexpected SpatialDINO parameter count")
+        student = HybridSpatialDinoDetector(encoder).to(device)
+        model_parameter_count = EXPECTED_MODEL_PARAMETERS
+        pretrained_parameter_count = EXPECTED_ENCODER_PARAMETERS
+        encoder_module = student.encoder
+        encoder_prefix = "encoder."
+        phase_setter = set_detector_training_phase
+        base_checkpoint = args.spatialdino_checkpoint
+        base_checkpoint_sha256 = SPATIALDINO_SHA256
+        architecture = "SpatialDINO ViT-S/8 + raw 3D pyramid + UNETR decoder"
+    else:
+        if args.lsm_fm_checkpoint is None:
+            raise ValueError("--lsm-fm-checkpoint is required for the LSM foundation model")
+        try:
+            from lsm_fm_model import (
+                EXPECTED_DETECTOR_PARAMETERS as expected_lsm_parameters,
+                EXPECTED_PRETRAINED_PARAMETERS as expected_lsm_pretrained,
+                build_lsm_fm_detector,
+                set_detector_training_phase as set_lsm_training_phase,
+            )
+        except ModuleNotFoundError:
+            from research.lsm_fm_detection.model import (
+                EXPECTED_DETECTOR_PARAMETERS as expected_lsm_parameters,
+                EXPECTED_PRETRAINED_PARAMETERS as expected_lsm_pretrained,
+                build_lsm_fm_detector,
+                set_detector_training_phase as set_lsm_training_phase,
+            )
+
+        student = build_lsm_fm_detector(
+            args.lsm_fm_checkpoint,
+            expected_sha256=args.lsm_fm_checkpoint_sha256,
+        ).to(device)
+        model_parameter_count = expected_lsm_parameters
+        pretrained_parameter_count = expected_lsm_pretrained
+        encoder_module = student.swinViT
+        encoder_prefix = "swinViT."
+        phase_setter = set_lsm_training_phase
+        base_checkpoint = args.lsm_fm_checkpoint
+        base_checkpoint_sha256 = args.lsm_fm_checkpoint_sha256
+        architecture = "LSM-FM image-only SwinUNETR feature-24 + Biohub heatmap head"
+
+    if sum(parameter.numel() for parameter in student.parameters()) != model_parameter_count:
+        raise RuntimeError("unexpected detector parameter count")
+    initial_phase = phase_setter(student, unfreeze_last_encoder_blocks=0)
     student.train()
-    student.encoder.eval()
+    encoder_module.eval()
     ema = copy.deepcopy(student).requires_grad_(False).eval()
 
     decoder_parameters = [
         parameter
         for name, parameter in student.named_parameters()
-        if not name.startswith("encoder.")
+        if not name.startswith(encoder_prefix)
     ]
-    encoder_parameters = list(student.encoder.parameters())
+    encoder_parameters = list(encoder_module.parameters())
     optimizer = torch.optim.AdamW(
         [
             {"params": decoder_parameters, "lr": args.decoder_learning_rate},
@@ -224,10 +277,12 @@ def main() -> None:
         "pairs_per_movie": args.pairs_per_movie,
         "max_wall_seconds": args.max_wall_seconds,
         "student": {
-            "architecture": "SpatialDINO ViT-S/8 + raw 3D pyramid + UNETR decoder",
-            "parameter_count": EXPECTED_MODEL_PARAMETERS,
-            "encoder_parameter_count": EXPECTED_ENCODER_PARAMETERS,
-            "base_encoder_sha256": sha256_file(args.spatialdino_checkpoint),
+            "model_family": args.model_family,
+            "architecture": architecture,
+            "parameter_count": model_parameter_count,
+            "pretrained_parameter_count": pretrained_parameter_count,
+            "base_checkpoint_sha256": sha256_file(base_checkpoint),
+            "expected_base_checkpoint_sha256": base_checkpoint_sha256,
             "initial_trainable": initial_phase,
             "decoder_learning_rate": args.decoder_learning_rate,
             "encoder_learning_rate": args.encoder_learning_rate,
@@ -294,15 +349,15 @@ def main() -> None:
         elapsed = time.monotonic() - started
         if elapsed >= args.max_wall_seconds and step >= args.min_steps:
             budget_stop_requested = True
-            print("DINO PU BUDGET STOP", json.dumps({"step": step, "elapsed": elapsed}), flush=True)
+            print("MICROSCOPY PU BUDGET STOP", json.dumps({"step": step, "elapsed": elapsed}), flush=True)
             break
         if step == args.encoder_unfreeze_step and args.encoder_blocks:
-            unfreeze_phase = set_detector_training_phase(
+            unfreeze_phase = phase_setter(
                 student, unfreeze_last_encoder_blocks=args.encoder_blocks
             )
             student.train()
-            student.encoder.eval()
-            print("DINO PU PHASE", json.dumps(unfreeze_phase, sort_keys=True), flush=True)
+            encoder_module.eval()
+            print("MICROSCOPY PU PHASE", json.dumps(unfreeze_phase, sort_keys=True), flush=True)
 
         stem, pair_frame = frame_pairs[step % len(frame_pairs)]
         frame_offset = step % 2
@@ -386,37 +441,94 @@ def main() -> None:
             soft_probability = None
             soft_weights = None
 
-        with torch.autocast("cuda", dtype=torch.float16):
-            weak_logits = student(weak)
-            strong_logits = student(strong)
-            weak_loss = weighted_pu_bce_with_logits(weak_logits, target, weights)
-            strong_loss = weighted_pu_bce_with_logits(strong_logits, target, weights)
-            consistency = (
-                torch.nn.functional.mse_loss(
-                    torch.sigmoid(weak_logits[unknown]),
-                    torch.sigmoid(strong_logits[unknown]),
+        if args.model_family == "lsm_fm":
+            # A full 64-cubed SwinUNETR activation graph is materially larger than
+            # the SpatialDINO hybrid. Backpropagate the weak view before building
+            # the strong graph so two graphs never coexist on a 16 GB T4. The
+            # detached weak probability remains the consistency target and the
+            # strong view receives that gradient.
+            with torch.autocast("cuda", dtype=torch.float16):
+                weak_logits = student(weak)
+                weak_loss = weighted_pu_bce_with_logits(weak_logits, target, weights)
+                weak_distillation = (
+                    selective_distillation_bce(
+                        weak_logits, soft_probability, soft_weights
+                    )
+                    if soft_probability is not None and soft_weights is not None
+                    else weak_logits.sum() * 0.0
                 )
-                if torch.any(unknown)
-                else weak_logits.sum() * 0.0
-            )
-            if soft_probability is not None and soft_weights is not None:
-                weak_distillation = selective_distillation_bce(
-                    weak_logits, soft_probability, soft_weights
+                weak_unknown_probability = (
+                    torch.sigmoid(weak_logits[unknown]).detach()
+                    if torch.any(unknown)
+                    else None
                 )
-                strong_distillation = selective_distillation_bce(
-                    strong_logits, soft_probability, soft_weights
+                weak_objective = (
+                    0.5 * weak_loss
+                    + 0.5 * args.distillation_weight * weak_distillation
+                )
+            scaler.scale(weak_objective).backward()
+            del weak_logits
+
+            with torch.autocast("cuda", dtype=torch.float16):
+                strong_logits = student(strong)
+                strong_loss = weighted_pu_bce_with_logits(strong_logits, target, weights)
+                consistency = (
+                    torch.nn.functional.mse_loss(
+                        torch.sigmoid(strong_logits[unknown]),
+                        weak_unknown_probability,
+                    )
+                    if weak_unknown_probability is not None
+                    else strong_logits.sum() * 0.0
+                )
+                strong_distillation = (
+                    selective_distillation_bce(
+                        strong_logits, soft_probability, soft_weights
+                    )
+                    if soft_probability is not None and soft_weights is not None
+                    else strong_logits.sum() * 0.0
+                )
+                strong_objective = (
+                    0.5 * strong_loss
+                    + 0.05 * consistency
+                    + 0.5 * args.distillation_weight * strong_distillation
                 )
                 distillation_loss = 0.5 * (
-                    weak_distillation + strong_distillation
+                    weak_distillation.detach() + strong_distillation.detach()
                 )
-            else:
-                distillation_loss = weak_logits.sum() * 0.0
-            loss = (
-                0.5 * (weak_loss + strong_loss)
-                + 0.05 * consistency
-                + args.distillation_weight * distillation_loss
-            )
-        scaler.scale(loss).backward()
+                loss = weak_objective.detach() + strong_objective.detach()
+            scaler.scale(strong_objective).backward()
+        else:
+            with torch.autocast("cuda", dtype=torch.float16):
+                weak_logits = student(weak)
+                strong_logits = student(strong)
+                weak_loss = weighted_pu_bce_with_logits(weak_logits, target, weights)
+                strong_loss = weighted_pu_bce_with_logits(strong_logits, target, weights)
+                consistency = (
+                    torch.nn.functional.mse_loss(
+                        torch.sigmoid(weak_logits[unknown]),
+                        torch.sigmoid(strong_logits[unknown]),
+                    )
+                    if torch.any(unknown)
+                    else weak_logits.sum() * 0.0
+                )
+                if soft_probability is not None and soft_weights is not None:
+                    weak_distillation = selective_distillation_bce(
+                        weak_logits, soft_probability, soft_weights
+                    )
+                    strong_distillation = selective_distillation_bce(
+                        strong_logits, soft_probability, soft_weights
+                    )
+                    distillation_loss = 0.5 * (
+                        weak_distillation + strong_distillation
+                    )
+                else:
+                    distillation_loss = weak_logits.sum() * 0.0
+                loss = (
+                    0.5 * (weak_loss + strong_loss)
+                    + 0.05 * consistency
+                    + args.distillation_weight * distillation_loss
+                )
+            scaler.scale(loss).backward()
         scaler.unscale_(optimizer)
         torch.nn.utils.clip_grad_norm_(
             [parameter for parameter in student.parameters() if parameter.requires_grad], 1.0
@@ -461,7 +573,7 @@ def main() -> None:
                 args.output_dir / "training_progress.json",
                 {"completed": False, "last": row, "records": metrics},
             )
-            print("DINO PU TRAIN", json.dumps(row, sort_keys=True), flush=True)
+            print("MICROSCOPY PU TRAIN", json.dumps(row, sort_keys=True), flush=True)
 
     if actual_steps < args.min_steps or not metrics:
         raise RuntimeError(f"training stopped before minimum evidence: {actual_steps}/{args.min_steps}")
@@ -474,10 +586,11 @@ def main() -> None:
         "target_steps": args.steps,
         "actual_steps": actual_steps,
         "budget_stop_requested": budget_stop_requested,
-        "parameter_count": EXPECTED_MODEL_PARAMETERS,
+        "model_family": args.model_family,
+        "parameter_count": model_parameter_count,
         "initial_trainable": initial_phase,
         "unfrozen_trainable": unfreeze_phase,
-        "base_encoder_sha256": SPATIALDINO_SHA256,
+        "base_checkpoint_sha256": base_checkpoint_sha256,
         "best_weight_sha256": best_hash,
         "ema_checkpoint": True,
         "training_movies": len(by_stem),
@@ -494,7 +607,7 @@ def main() -> None:
         args.output_dir / "training_progress.json",
         {"completed": True, "last": metrics[-1], "records": metrics},
     )
-    print("DINO PU COMPLETE", json.dumps(result, sort_keys=True), flush=True)
+    print("MICROSCOPY PU COMPLETE", json.dumps(result, sort_keys=True), flush=True)
 
 
 if __name__ == "__main__":

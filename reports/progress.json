@@ -1537,6 +1537,49 @@
       "registered_at": "2026-08-26T17:38:25.687445Z",
       "run_id": "spatialdino-pu-selective-distillation-v2",
       "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Bind the strict eight-check preflight, independent Kaggle version-2 runtime download, archive expansion inventory, and scientific family change before GPU launch.",
+          "replacement_fields": {
+            "config_file_sha256": "eb8b209676293ba2ec12d23547c995ab487b0ddf32421232674952e4b82355f5",
+            "config_path": "config/experiments/lsm-fm-pu-adaptation-v1.json",
+            "focused_tests_passed": 36,
+            "preflight_builder_sha256": "5a0c4a3a4b89396070e836eb0951aaeb13ff072e3f35c62d158522ade47494ee",
+            "preflight_file_sha256": "4961e73328e053f5e6ea0d16fbc432c6cc5ec86ee65e7b9398a189f0ea3e5473",
+            "preflight_report": "artifacts/preflights/lsm-fm-pu-adaptation-v1.json",
+            "preflight_report_sha256": "7da695cf355e9336851e512e6e88fd1fdbef40f715d5c312124bd4ef401f4a21",
+            "remote_archive_members_verified": 428,
+            "remote_dataset_download_verified": true,
+            "remote_top_level_files_verified": 15,
+            "runtime_dataset": "indarkarhana/biohub-lsm-fm-pu-runtime-v1",
+            "runtime_dataset_version": 2,
+            "runtime_manifest_sha256": "fe6077dd0618f4fd2e6b026d88bf18323a66b27b7cebd5bb9431b2e1d3d6735c",
+            "scientific_delta_from_parent": "replace the retired 2D SpatialDINO hybrid with a geometry-matched 3D LSM-FM SwinUNETR; retain PU teachers, paired seed, split, inference, and gates; disable selective distillation",
+            "staging_report_sha256": "24bc84e01c5aab49417b2446855eac132b202489709dc13a33e188fce5fe2603"
+          },
+          "target_event_id": "evt-1f0cc958263947bfafdb2b11460d6356"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A geometry-matched 3D light-sheet foundation model will improve dim-cell localization beyond the retired 2D SpatialDINO hybrid while retaining conservative independent PU supervision.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "spatialdino-pu-selective-distillation-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T18:44:49.552808Z",
+      "run_id": "lsm-fm-pu-adaptation-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1

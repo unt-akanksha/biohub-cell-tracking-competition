@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Clean selection and untouched acceptance for the SpatialDINO PU detector."""
+"""Clean selection and untouched acceptance for an independent microscopy PU detector."""
 
 from __future__ import annotations
 
@@ -24,6 +24,7 @@ try:
     from model import HybridSpatialDinoDetector
     from train_spatialdino_pu_detector import (
         EXPECTED_MODEL_PARAMETERS,
+        LSM_FM_STRIPPED_SHA256,
         SPATIALDINO_SHA256,
     )
 except ModuleNotFoundError:
@@ -36,6 +37,7 @@ except ModuleNotFoundError:
     from research.spatialdino_detection.model import HybridSpatialDinoDetector
     from research.spatialdino_detection.train_pu_detector import (
         EXPECTED_MODEL_PARAMETERS,
+        LSM_FM_STRIPPED_SHA256,
         SPATIALDINO_SHA256,
     )
     from research.spotiflow_biohub.evaluate_pretrained_detector import (
@@ -55,10 +57,18 @@ SELECTION_WORST_MOVIE_MIN = 0.65
 PROMOTION_WORST_DELTA_MIN = -0.01
 
 
-def validate_training_result(model_path: Path, result_path: Path) -> dict[str, Any]:
+def validate_training_result(
+    model_path: Path,
+    result_path: Path,
+    *,
+    model_family: str = "spatialdino",
+) -> dict[str, Any]:
     result = json.loads(result_path.read_text(encoding="utf-8"))
     if result.get("status") != "completed" or not result.get("ema_checkpoint"):
-        raise ValueError("SpatialDINO PU training result is not a completed EMA checkpoint")
+        raise ValueError("PU training result is not a completed EMA checkpoint")
+    recorded_family = result.get("model_family", "spatialdino")
+    if recorded_family != model_family:
+        raise ValueError("training-result model family does not match evaluation")
     if result.get("validation_overlap") != [] or result.get("public_predictions_copied") is not False:
         raise ValueError("training provenance violated clean independent learning")
     if sha256_file(model_path) != result.get("best_weight_sha256"):
@@ -148,16 +158,26 @@ def evaluate_stems(
             )
         rows.append(row)
         partial_path.write_text(json.dumps(rows, indent=2, sort_keys=True), encoding="utf-8")
-        print("DINO PU EVAL", json.dumps(row, sort_keys=True), flush=True)
+        print("MICROSCOPY PU EVAL", json.dumps(row, sort_keys=True), flush=True)
         if time.monotonic() - started > max_wall_seconds:
-            raise TimeoutError("SpatialDINO PU evaluation reached its wall guard")
+            raise TimeoutError("microscopy PU evaluation reached its wall guard")
     return rows
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--competition-dir", type=Path, required=True)
-    parser.add_argument("--spatialdino-checkpoint", type=Path, required=True)
+    parser.add_argument(
+        "--model-family",
+        choices=("spatialdino", "lsm_fm"),
+        default="spatialdino",
+    )
+    parser.add_argument("--spatialdino-checkpoint", type=Path)
+    parser.add_argument("--lsm-fm-checkpoint", type=Path)
+    parser.add_argument(
+        "--lsm-fm-checkpoint-sha256",
+        default=LSM_FM_STRIPPED_SHA256,
+    )
     parser.add_argument("--model-path", type=Path, required=True)
     parser.add_argument("--training-result", type=Path, required=True)
     parser.add_argument("--baseline-predictions", type=Path, required=True)
@@ -165,6 +185,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--calibration-frames", type=int, default=12)
     parser.add_argument("--max-wall-seconds", type=float, default=1300.0)
+    parser.add_argument("--output-name", default="spatialdino_pu_validation.json")
     return parser.parse_args()
 
 
@@ -176,20 +197,45 @@ def main() -> None:
     import torch
 
     if not torch.cuda.is_available():
-        raise RuntimeError("SpatialDINO PU evaluation requires CUDA")
+        raise RuntimeError("microscopy PU evaluation requires CUDA")
     device = torch.device("cuda")
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    training_result = validate_training_result(args.model_path, args.training_result)
-    encoder = load_spatialdino_vits8(
-        args.spatialdino_checkpoint,
-        expected_sha256=SPATIALDINO_SHA256,
-        map_location="cpu",
+    training_result = validate_training_result(
+        args.model_path,
+        args.training_result,
+        model_family=args.model_family,
     )
-    model = HybridSpatialDinoDetector(encoder)
+    if args.model_family == "spatialdino":
+        if args.spatialdino_checkpoint is None:
+            raise ValueError("--spatialdino-checkpoint is required for SpatialDINO")
+        encoder = load_spatialdino_vits8(
+            args.spatialdino_checkpoint,
+            expected_sha256=SPATIALDINO_SHA256,
+            map_location="cpu",
+        )
+        model = HybridSpatialDinoDetector(encoder)
+        expected_model_parameters = EXPECTED_MODEL_PARAMETERS
+    else:
+        if args.lsm_fm_checkpoint is None:
+            raise ValueError("--lsm-fm-checkpoint is required for the LSM foundation model")
+        try:
+            from lsm_fm_model import (
+                EXPECTED_DETECTOR_PARAMETERS as expected_model_parameters,
+                build_lsm_fm_detector,
+            )
+        except ModuleNotFoundError:
+            from research.lsm_fm_detection.model import (
+                EXPECTED_DETECTOR_PARAMETERS as expected_model_parameters,
+                build_lsm_fm_detector,
+            )
+        model = build_lsm_fm_detector(
+            args.lsm_fm_checkpoint,
+            expected_sha256=args.lsm_fm_checkpoint_sha256,
+        )
     state = torch.load(args.model_path, map_location="cpu", weights_only=True)
     model.load_state_dict(state["state_dict"], strict=True)
-    if sum(parameter.numel() for parameter in model.parameters()) != EXPECTED_MODEL_PARAMETERS:
-        raise RuntimeError("unexpected hybrid detector parameter count")
+    if sum(parameter.numel() for parameter in model.parameters()) != expected_model_parameters:
+        raise RuntimeError("unexpected detector parameter count")
     model.requires_grad_(False).eval().to(device)
 
     selection_rows = evaluate_stems(
@@ -227,7 +273,8 @@ def main() -> None:
         "provenance": {
             "checkpoint_sha256": sha256_file(args.model_path),
             "training_result_sha256": sha256_file(args.training_result),
-            "parameter_count": EXPECTED_MODEL_PARAMETERS,
+            "model_family": args.model_family,
+            "parameter_count": expected_model_parameters,
             "actual_training_steps": training_result["actual_steps"],
         },
     }
@@ -269,9 +316,11 @@ def main() -> None:
                 },
             }
         )
-    output = args.output_dir / "spatialdino_pu_validation.json"
+    if Path(args.output_name).name != args.output_name:
+        raise ValueError("output-name must be a filename")
+    output = args.output_dir / args.output_name
     output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print("DINO PU VALIDATION COMPLETE", json.dumps(result, sort_keys=True), flush=True)
+    print("MICROSCOPY PU VALIDATION COMPLETE", json.dumps(result, sort_keys=True), flush=True)
 
 
 if __name__ == "__main__":
