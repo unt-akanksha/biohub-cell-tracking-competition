@@ -1,0 +1,23 @@
+{
+  "acceptance_labels_opened": false,
+  "candidate_count": 5,
+  "config_file_sha256": "96bc251a530dabb5666c11819a5f486a1e836944d3e3359af87dcf691bab519f",
+  "config_path": "config/experiments/lsm-fm-ensemble-validation-v1.json",
+  "feature24_learned_checkpoint_sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1",
+  "feature36_learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+  "fixed_ensemble_weights": [0.5, 0.5],
+  "focused_tests_passed": 18,
+  "preflight_builder_sha256": "6f4b8e81b9cfaeee37e0d38a9387addf22ba208ba8089be145968959a216fda5",
+  "preflight_file_sha256": "aa5bd3fa6dc42b290dbb3cd1cafedee58c80567d5f50ac5c9973795737fcba7c",
+  "preflight_report": "artifacts/preflights/lsm-fm-ensemble-validation-v1.json",
+  "preflight_report_sha256": "93c8a66d9dff18c2b71112fc8f10c767d97e04b7a6ec7bafe7452ef0cd73c0c7",
+  "public_kaggle_code_copied": false,
+  "public_leaderboard_used_for_selection": false,
+  "public_predictions_copied": false,
+  "remote_dataset_download_verified": true,
+  "remote_models_strict_loaded": true,
+  "runtime_dataset": "indarkarhana/biohub-lsm-fm-ensemble-runtime-v1",
+  "runtime_dataset_version": 1,
+  "runtime_manifest_sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1",
+  "submission_path_present": false
+}
