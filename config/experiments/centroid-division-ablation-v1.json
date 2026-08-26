@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "run_id": "centroid-division-ablation-v1",
+  "parent": "public-0927-clean-repro-v2",
+  "kernel_ref": "indarkarhana/biohub-centroid-division-ablation-v1",
+  "fork_notebook_sha256": "ad8edbf68a368abdccba6932c15c7a27b77aac2f660b3301b172f285d6f35e6c",
+  "builder_sha256": "62abd6a9c382bddd2ebfc7736dc4a9aaa5176192c5fe670bd5741a3959bc72c5",
+  "declared_max_runtime_hours": "1.00",
+  "watchdog_hard_stop_seconds": 3000,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "pilkwang/biohub-deepcenter-unet3d-center-prior-v1",
+    "pilkwang/biohub-temporal-unet3d-seed314159-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "checkpoint_sha256": {
+    "primary": "12f6881ee3620a831697ca098ff8f48e687a24225f4e048b538deec3562fe771",
+    "secondary": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f",
+    "deepcenter": "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0"
+  },
+  "ablation": {
+    "design": "complete-movie 2x2 centroid-refinement x safe-division",
+    "baseline_arm": "centroid_off__safe_div_on",
+    "additional_arms": [
+      "centroid_off__safe_div_off",
+      "centroid_on__safe_div_on",
+      "centroid_on__safe_div_off"
+    ],
+    "heldout_selection": "two division-aware complete movies per embryo prefix",
+    "match_radius_um": 7.0,
+    "primary_metric": "official-formula proxy score",
+    "test_submission_mutated": false
+  },
+  "decision_rule": "select post-processing only if pooled proxy improves without a material worst-movie or division regression",
+  "submission_policy": "calibration_only_do_not_submit"
+}
