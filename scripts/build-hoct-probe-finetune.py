@@ -192,7 +192,7 @@ for name in ("biohub_adapter.py", "train_biohub_hoct_probe.py", "general_v1.pt")
 graph_manifest = json.loads((graph_runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
 for name in (
     "trainer.py", "hybrid_linker.py", "rerank_submission.py",
-    "materialize_public_validation.py", "public_config_source.py",
+    "materialize_public_validation.py", "public_preset_source.py", "public_config_source.py",
     "public_postprocess_source.py",
 ):
     actual = hashlib.sha256((graph_runtime / name).read_bytes()).hexdigest()
@@ -215,6 +215,7 @@ materialize_command = [
     str(graph_runtime / "materialize_public_validation.py"),
     "--raw-validation-root", str(validation_dir),
     "--competition-dir", str(competition),
+    "--public-preset-source", str(graph_runtime / "public_preset_source.py"),
     "--public-config-source", str(graph_runtime / "public_config_source.py"),
     "--public-postprocess-source", str(graph_runtime / "public_postprocess_source.py"),
     "--output-dir", str(processed_dir),

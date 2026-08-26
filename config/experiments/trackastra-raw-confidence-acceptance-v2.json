@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-raw-confidence-acceptance-v2",
+  "parent": "trackastra-graph-finetune-v6",
+  "kernel_ref": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2",
+  "notebook_sha256": "56341158759b782f3c4e3d55e50fec6782dfae8bf9839a9b6ddad2d3dde5b0f6",
+  "kernel_metadata_sha256": "a55af0e0a42e6dc2b69bf0acec0023f18b78b6673e94805a6775f111fddbf69f",
+  "trainer_sha256": "b59dcc3bdc8bc54fd1da203fed884bc6d3aa7d2e81f539390a1cf4f196d46757",
+  "posthoc_validator_sha256": "511d2a1e1c857656a1688a873ab3c47d6de88dbf99f67fddba47c75a7261e1b1",
+  "public_validation_materializer_sha256": "a66b7b482eb271e26ecae8639850e3d7291bc374beb80b7010fef080d1af04c8",
+  "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
+  "submission_reranker_sha256": "8b02a1e466f8e6bd85bedbc2cc1cb047c8efeaa12aa458e074b310a42e303f46",
+  "runtime_manifest_sha256": "7fefe5d28677dae2efd909504848f172246b3419cde50f086c7636fa422aacc3",
+  "declared_max_runtime_hours": "1.50",
+  "watchdog_hard_stop_seconds": 5100,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "submission_created": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version9",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-trackastra-graph-finetune-v6"
+  ],
+  "failure_repair": {
+    "source_run": "trackastra-raw-confidence-acceptance-v1",
+    "source_elapsed_seconds": 801.504,
+    "source_model_inference_started": false,
+    "root_cause": "The materializer executed public config and postprocess cells without the frozen preset cell, so DeepCenter checkpoint_last.pt epoch 500 was accepted under default epoch 0.",
+    "repair": "Execute hash-pinned public preset cell before config, require best.pt epoch 2 through the preset, and verify DeepCenter SHA256 before topology materialization.",
+    "regression_test": "test_public_preset_executes_before_config_and_postprocess"
+  },
+  "source_model_binding": {
+    "required_training_status": "completed",
+    "model_sha256": "255b3600a4926db6af36a7bddf6f1d84b711fca597602a4bdc511f5f4fd9166f",
+    "model_sha256_must_match_training_terminal": true,
+    "training_acceptance_result_is_not_reused": true
+  },
+  "validation": {
+    "prediction_source": "frozen public detector GEFFs transformed by the exact audited public final-CSV preset and postprocessor, with raw edge_prob transferred by stable IDs",
+    "comparator_postprocess": {
+      "source_notebook": "evgendvorkin/biohub-0-927-lb",
+      "source_notebook_sha256": "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1",
+      "preset_source_sha256": "b39e30792842f343548466b1b2b0d65855127da322139585b65babeb317dce22",
+      "config_source_sha256": "f7517221992aa5f60e563ae650856582dd2231eac2b5627cee53ff68e3d5cbd7",
+      "postprocess_source_sha256": "dcb37574bdfbcfb39a14657b06a8971228ac7ec3672aa6334b8327ec1ceca40c",
+      "deepcenter_best_sha256": "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0",
+      "deepcenter_expected_epoch": 2,
+      "expected_processed_nodes": {
+        "44b6_12dfb391": 44139,
+        "44b6_267148e4": 21768,
+        "6bba_062c8d37": 5812,
+        "6bba_07e24132": 26204
+      },
+      "ground_truth_read_during_postprocess": false
+    },
+    "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
+    "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
+    "methods_selected": [
+      "trackastra_only",
+      "submission_graph_hybrid",
+      "raw_confidence_hybrid"
+    ],
+    "raw_confidence_grid": {
+      "edge_threshold": [0.03, 0.08],
+      "base_lock_probability": [0.94, 0.98],
+      "base_keep_probability": [0.65, 0.80],
+      "base_bonus": [0.02, 0.05],
+      "division_threshold": [0.12, 0.18],
+      "division_ratio": 0.50,
+      "postprocess_only_edge_fallback_probability": 0.80
+    },
+    "acceptance_read_after_configuration_freeze": true,
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "accept only if the frozen two-movie acceptance proxy delta versus the same-node raw base graph is positive and the worst acceptance movie regresses by no more than 0.01",
+  "candidate_binding": {
+    "acceptance_terminal_name": "acceptance_terminal.json",
+    "model_sha256_must_match": true,
+    "raw_test_graph_tree_sha256": "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e",
+    "base_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+    "exact_replica_refused": true
+  }
+}

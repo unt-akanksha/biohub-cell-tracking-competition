@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-raw-confidence-acceptance-v1"
-NOTEBOOK = TARGET / "biohub-trackastra-raw-confidence-acceptance-v1.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-raw-confidence-acceptance-v2"
+NOTEBOOK = TARGET / "biohub-trackastra-raw-confidence-acceptance-v2.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,7 +31,7 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-raw-confidence-acceptance-v1"
+RUN_ID = "trackastra-raw-confidence-acceptance-v2"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
@@ -191,6 +191,7 @@ for name in (
     "rerank_submission.py",
     "validate_model_posthoc.py",
     "materialize_public_validation.py",
+    "public_preset_source.py",
     "public_config_source.py",
     "public_postprocess_source.py",
 ):
@@ -237,6 +238,7 @@ materialize_command = [
     str(runtime / "materialize_public_validation.py"),
     "--raw-validation-root", str(validation_dir),
     "--competition-dir", str(competition),
+    "--public-preset-source", str(runtime / "public_preset_source.py"),
     "--public-config-source", str(runtime / "public_config_source.py"),
     "--public-postprocess-source", str(runtime / "public_postprocess_source.py"),
     "--output-dir", str(processed_dir),
@@ -320,8 +322,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
-        "title": "Biohub Trackastra Raw Confidence Acceptance v1",
+        "id": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2",
+        "title": "Biohub Trackastra Raw Confidence Acceptance v2",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

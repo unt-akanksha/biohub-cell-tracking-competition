@@ -32,6 +32,9 @@ EXPECTED_PROCESSED_NODES = {
     "6bba_062c8d37": 5812,
     "6bba_07e24132": 26204,
 }
+EXPECTED_DEEPCENTER_SHA256 = (
+    "8040999a92f6b7bbd98fa8cf458141e045c0f9ad7c936bdb3b18e1f7edafe2a0"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -47,11 +50,16 @@ def atomic_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 def load_public_namespace(
+    preset_source: Path,
     config_source: Path,
     postprocess_source: Path,
     competition_dir: Path,
 ) -> dict[str, Any]:
     namespace: dict[str, Any] = {"__name__": "public_validation_postprocessor"}
+    exec(
+        compile(preset_source.read_text(encoding="utf-8"), str(preset_source), "exec"),
+        namespace,
+    )
     exec(
         compile(config_source.read_text(encoding="utf-8"), str(config_source), "exec"),
         namespace,
@@ -74,6 +82,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--raw-validation-root", type=Path, required=True)
     parser.add_argument("--competition-dir", type=Path, required=True)
+    parser.add_argument("--public-preset-source", type=Path, required=True)
     parser.add_argument("--public-config-source", type=Path, required=True)
     parser.add_argument("--public-postprocess-source", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -90,6 +99,7 @@ def main() -> None:
             f"found={sorted(geffs)}"
         )
     namespace = load_public_namespace(
+        args.public_preset_source,
         args.public_config_source,
         args.public_postprocess_source,
         args.competition_dir,
@@ -98,6 +108,16 @@ def main() -> None:
     refine_all_centroids = namespace["refine_all_centroids"]
     filter_output_graph = namespace["filter_output_graph"]
     deepcenter = namespace["load_deepcenter_veto_detector"]()
+    if deepcenter is None:
+        raise RuntimeError("Hash-pinned public DeepCenter checkpoint was not loaded")
+    deepcenter_path = Path(deepcenter["path"])
+    deepcenter_sha256 = sha256_file(deepcenter_path)
+    if deepcenter_sha256 != EXPECTED_DEEPCENTER_SHA256:
+        raise RuntimeError(
+            "DeepCenter checkpoint hash mismatch: "
+            f"expected {EXPECTED_DEEPCENTER_SHA256}, got {deepcenter_sha256} "
+            f"from {deepcenter_path}"
+        )
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     csv_path = args.output_dir / "processed_validation.csv"
@@ -195,11 +215,17 @@ def main() -> None:
         "status": "completed",
         "source_notebook": "evgendvorkin/biohub-0-927-lb",
         "role": "frozen comparator postprocessing only",
+        "public_preset_source_sha256": sha256_file(args.public_preset_source),
         "public_config_source_sha256": sha256_file(args.public_config_source),
         "public_postprocess_source_sha256": sha256_file(
             args.public_postprocess_source
         ),
         "processed_validation_sha256": sha256_file(csv_path),
+        "deepcenter_checkpoint": {
+            "path": str(deepcenter_path),
+            "sha256": deepcenter_sha256,
+            "expected_epoch": int(namespace["DEEPCENTER_EXPECTED_EPOCH"]),
+        },
         "datasets": stats,
         "ground_truth_read_for_postprocessing": False,
         "public_leaderboard_used_for_selection": False,

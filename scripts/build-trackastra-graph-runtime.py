@@ -104,6 +104,7 @@ def main() -> None:
     if sha256_file(PUBLIC_NOTEBOOK) != PUBLIC_NOTEBOOK_SHA256:
         raise RuntimeError("Audited public comparator notebook source changed")
     public_notebook = json.loads(PUBLIC_NOTEBOOK.read_text(encoding="utf-8"))
+    public_preset_source = "".join(public_notebook["cells"][3]["source"])
     public_config_source = "".join(public_notebook["cells"][7]["source"])
     public_postprocess_cell = "".join(public_notebook["cells"][13]["source"])
     public_stop_marker = "DEEPCENTER_VETO_DETECTOR = load_deepcenter_veto_detector()"
@@ -112,6 +113,9 @@ def main() -> None:
     public_postprocess_source = public_postprocess_cell.split(
         public_stop_marker, maxsplit=1
     )[0]
+    (target / "public_preset_source.py").write_text(
+        public_preset_source, encoding="utf-8"
+    )
     (target / "public_config_source.py").write_text(
         public_config_source, encoding="utf-8"
     )
@@ -186,6 +190,7 @@ def main() -> None:
                 "role": "frozen comparator materialization only",
                 "source_notebook": "evgendvorkin/biohub-0-927-lb",
                 "source_notebook_sha256": PUBLIC_NOTEBOOK_SHA256,
+                "preset_cell_sha256": files["public_preset_source.py"]["sha256"],
                 "config_cell_sha256": files["public_config_source.py"]["sha256"],
                 "postprocess_prefix_sha256": files[
                     "public_postprocess_source.py"
