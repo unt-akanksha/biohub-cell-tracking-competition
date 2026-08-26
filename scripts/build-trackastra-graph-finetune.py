@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v4"
-NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v4.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v5"
+NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v5.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,14 +31,14 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-graph-finetune-v4"
+RUN_ID = "trackastra-graph-finetune-v5"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
 
 
 def write_terminal(status, error=None):
-    training_terminal = Path("/kaggle/working/trackastra_graph_v4/training_terminal.json")
+    training_terminal = Path("/kaggle/working/trackastra_graph_v5/training_terminal.json")
     payload = {
         "run_id": RUN_ID,
         "status": status,
@@ -228,7 +228,7 @@ print(json.dumps({
 '''
 
 
-TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v4")
+TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v5")
 command = [
     sys.executable,
     str(runtime / "trainer.py"),
@@ -240,6 +240,11 @@ command = [
     "--steps", "7000",
     "--train-per-prefix", "128",
     "--max-tokens", "512",
+    "--false-positive-probability", "0.0",
+    "--false-positive-ratio", "3.0",
+    "--false-positive-uniform-fraction", "0.4",
+    "--false-positive-local-sigma", "12.0",
+    "--false-positive-min-distance", "4.0",
     "--gradient-accumulation", "4",
     "--validation-samples", "24",
     "--max-wall-seconds", "13200",
@@ -249,6 +254,7 @@ command = [
     "--synthetic-steps", "1200",
     "--synthetic-learning-rate-multiplier", "2.0",
     "--synthetic-prefer-division-probability", "0.15",
+    "--synthetic-false-positive-ratio", "0.5",
 ]
 print("Launching Biohub-native Trackastra fine-tuning:", " ".join(command))
 try:
@@ -276,7 +282,7 @@ print(json.dumps({
 FINISH = r'''FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
-print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v4"))
+print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v5"))
 '''
 
 
@@ -302,8 +308,9 @@ def main() -> None:
             markdown_cell(
                 "# Biohub-native Trackastra association fine-tuning\n\n"
                 "This is a new candidate pretrained on corrected CC0 synthetic sequence graphs, "
-                "then fine-tuned on Biohub graph supervision. Public 0.927 outputs are used only "
-                "as frozen detector inputs for clean validation.\n"
+                "then fine-tuned on Biohub graph supervision with detector-density distractor "
+                "augmentation. Public 0.927 outputs are used only as frozen detector inputs for "
+                "clean validation.\n"
             ),
             code_cell(SETUP),
             code_cell(TRAIN),
@@ -314,8 +321,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-trackastra-graph-finetune-v4",
-        "title": "Biohub Trackastra Graph Finetune v4",
+        "id": "indarkarhana/biohub-trackastra-graph-finetune-v5",
+        "title": "Biohub Trackastra Graph Finetune v5",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

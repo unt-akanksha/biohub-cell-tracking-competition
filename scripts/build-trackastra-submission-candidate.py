@@ -284,7 +284,7 @@ def main() -> None:
         "dataset_sources": ["indarkarhana/biohub-trackastra-graph-runtime-v1"],
         "kernel_sources": [
             "indarkarhana/biohub-clean-0-927-reproduction-v1",
-            "indarkarhana/biohub-trackastra-graph-finetune-v4",
+            "indarkarhana/biohub-trackastra-graph-finetune-v5",
         ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],

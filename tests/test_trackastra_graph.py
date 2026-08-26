@@ -26,6 +26,10 @@ def _clean_sample_kwargs() -> dict:
         "tile_radius": np.array((96.0, 192.0, 192.0), dtype=np.float32),
         "drop_probability": 0.0,
         "false_positive_probability": 0.0,
+        "false_positive_ratio": 0.0,
+        "false_positive_uniform_fraction": 0.4,
+        "false_positive_local_sigma": 12.0,
+        "false_positive_min_distance": 4.0,
         "jitter_sigma": 0.0,
         "prefer_division_probability": 1.0,
         "hard_negative_radius": 64.0,
@@ -44,6 +48,28 @@ def test_sample_window_builds_trackastra_compatible_targets() -> None:
     assert np.all(sample.target.astype(bool) <= sample.valid_mask)
     source_rows, target_cols = np.where(sample.target > 0)
     assert np.all(sample.coords[target_cols, 0] - sample.coords[source_rows, 0] == 1)
+
+
+def test_dense_distractors_fill_budget_without_becoming_positive_targets() -> None:
+    kwargs = {
+        **_clean_sample_kwargs(),
+        "max_tokens": 128,
+        "false_positive_ratio": 3.0,
+    }
+    sample = sample_window([build_synthetic_video()], np.random.default_rng(31), **kwargs)
+    false_mask = sample.origin_ids < 0
+
+    assert len(sample.coords) <= 128
+    assert false_mask.sum() > 0
+    assert false_mask.sum() >= (~false_mask).sum()
+    assert not sample.target[false_mask].any()
+    assert not sample.target[:, false_mask].any()
+    for timepoint in np.unique(sample.coords[false_mask, 0]):
+        false_points = sample.coords[false_mask & (sample.coords[:, 0] == timepoint), 1:]
+        true_points = sample.coords[(~false_mask) & (sample.coords[:, 0] == timepoint), 1:]
+        if len(false_points) and len(true_points):
+            distances = np.linalg.norm(false_points[:, None] - true_points[None], axis=-1)
+            assert distances.min() >= 4.0 - 1e-5
 
 
 def test_recursive_tiles_cover_each_source_and_respect_budget() -> None:

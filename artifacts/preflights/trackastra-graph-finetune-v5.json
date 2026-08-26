@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v5",
+  "created_at": "2026-08-26T08:07:25Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "24be9e0f05ba3c434713ef1f706231a751af4027d2a3e92782c3aaaa86844032"},
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v5/biohub-trackastra-graph-finetune-v5.ipynb", "sha256": "043d7b7a1f8d8e2e852cfd2c091444e572ab2693e6d15ac92b047360a0c96a38"}
+      ],
+      "detail": "Trainer self-test passes and every generated training and candidate notebook code cell compiles."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v5/kernel-metadata.json", "sha256": "ac7a06386604dc6c71e7dde60b488f6e08a1305b2bde64540f7b20bd10e047d3"},
+        {"path": "config/experiments/trackastra-graph-finetune-v5.json", "sha256": "40f4312071376b2f0017ffe34c437d81e88368075e691259720cc8f6e0daffb0"},
+        {"path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json", "sha256": "4ace280e55924c2ee5d29f4487fe59d39106a8ac25a7e792a32cfc3f3bc5a2cd"},
+        {"path": "research/synthetic_pretrain/data.py", "sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be"}
+      ],
+      "detail": "Ready runtime version 5 packages the pinned model, dense trainer, hybrid linker, learned CSV reranker, complete validator, and graph-only adapter."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "a6b31a262e8c8874423e264dbbed69b90eb46a92ac23b65d9039b8cc32b93af5"}
+      ],
+      "detail": "A full 512-token window retained 126 true nodes, 386 detector-like distractors, and 92 positive edges; false nodes never became positive targets."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"},
+        {"path": "research/trackastra_graph/train_biohub_graph_transformer.py", "sha256": "24be9e0f05ba3c434713ef1f706231a751af4027d2a3e92782c3aaaa86844032"}
+      ],
+      "detail": "The official 27.5M transformer completed forward and backward on the maximum-density path with finite loss and gradients."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v2-smoke.json", "sha256": "8d8d2b3b773c7f56b493afb9168d767751eeaf103c5b512813a92cb8f49782ca"},
+        {"path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json", "sha256": "4ace280e55924c2ee5d29f4487fe59d39106a8ac25a7e792a32cfc3f3bc5a2cd"}
+      ],
+      "detail": "Official checkpoint hash and 27,456,880-parameter reload are pinned; final output copies its matching config and hash-binds model.pt."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-graph-finetune-v5/biohub-trackastra-graph-finetune-v5.ipynb", "sha256": "043d7b7a1f8d8e2e852cfd2c091444e572ab2693e6d15ac92b047360a0c96a38"},
+        {"path": "research/trackastra_graph/rerank_submission.py", "sha256": "c8551d49535a19dbc536db4c938a2d0c8cb2da7f6b1267cccb4b433f14f20275"}
+      ],
+      "detail": "Training writes histories, checkpoints, split validation, and terminal evidence under /kaggle/working and creates no submission; the later reranker is acceptance-gated."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"},
+        {"path": "tests/test_trackastra_graph.py", "sha256": "a6b31a262e8c8874423e264dbbed69b90eb46a92ac23b65d9039b8cc32b93af5"}
+      ],
+      "detail": "Batch one, exact 512-token smoke, mixed precision, recursive inference tiling, and graph-only reads bound GPU and host memory."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/trackastra-graph-finetune-v5.json", "sha256": "40f4312071376b2f0017ffe34c437d81e88368075e691259720cc8f6e0daffb0"},
+        {"path": "research/trackastra_graph/hybrid_linker.py", "sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946"},
+        {"path": "tests/test_trackastra_submission_rerank.py", "sha256": "356934b8362c3df0edd23373d6c822c945ab3c6ea7f281a4c2a858f9eb30645b"}
+      ],
+      "detail": "384 synthetic graphs precede every real non-validation movie across both prefixes; one complete movie per prefix selects and a disjoint complete movie per prefix accepts."
+    }
+  ],
+  "report_sha256": "aeac22cd89f398510d45b7a8b43b9d959c11a019f3d16b2855c5a7124f568aaf"
+}

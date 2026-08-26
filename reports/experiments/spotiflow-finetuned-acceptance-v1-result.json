@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "run_id": "spotiflow-finetuned-acceptance-v1",
+  "status": "completed",
+  "terminal_elapsed_seconds": 162.778,
+  "evaluator_elapsed_seconds": 79.805730905,
+  "remaining_gpu_hours": 29.16,
+  "result_sha256": "4a7fbed512f7c69769a84addd0398676a881568ed677e7299e12d530d9d8fff5",
+  "launcher_terminal_sha256": "b4209e99b520a1f4bd591a80384fcdac6016406be679a8f5f3e18599020f48ad",
+  "pooled": {
+    "adjusted_edge_jaccard": null,
+    "edge_jaccard": null,
+    "division_jaccard": null,
+    "node_recall": 0.09249045396690708
+  },
+  "division_counts": {"tp": null, "fp": null, "fn": null},
+  "by_embryo": {
+    "44b6": {
+      "node_recall": 0.20411985018726592,
+      "baseline_node_recall": 0.9588014981273408,
+      "node_recall_delta": -0.7546816479400749
+    },
+    "6bba": {
+      "node_recall": 0.0,
+      "baseline_node_recall": 0.9775019394879751,
+      "node_recall_delta": -0.9775019394879751
+    }
+  },
+  "by_fold": {
+    "44b6_12dfb391": {"node_recall": 0.2766497461928934, "delta": -0.6928934010152284},
+    "44b6_267148e4": {"node_recall": 0.0, "delta": -0.9285714285714286},
+    "6bba_062c8d37": {"node_recall": 0.0, "delta": -0.9924731182795699},
+    "6bba_07e24132": {"node_recall": 0.0, "delta": -0.9387186629526463}
+  },
+  "worst_movie_delta": -0.9924731182795699,
+  "acceptance": {
+    "movies": 4,
+    "annotated_gt_nodes": 2357,
+    "candidate_matched_gt_nodes": 218,
+    "candidate_annotated_node_recall": 0.09249045396690708,
+    "pretrained_spotiflow_annotated_node_recall": 0.7776834959694527,
+    "baseline_matched_gt_nodes": 2284,
+    "baseline_annotated_node_recall": 0.96902842596521,
+    "delta_vs_pretrained_spotiflow": -0.6851930420025456,
+    "delta_vs_baseline": -0.876537971998303
+  },
+  "decision": {
+    "drop_in_detector": "retire",
+    "transfer_initialization": "retire_synthetic_checkpoint",
+    "reason": "Synthetic-only fine-tuning catastrophically reduced clean real-movie recall and produced zero detections on three acceptance movies at the frozen calibration rule.",
+    "next_test": "Keep the public detector frozen and improve associations with density-matched Trackastra training."
+  },
+  "submission_created": false
+}

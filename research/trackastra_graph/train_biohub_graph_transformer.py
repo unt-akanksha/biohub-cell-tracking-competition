@@ -255,6 +255,7 @@ class WindowSample:
     valid_mask: np.ndarray
     division_target: np.ndarray
     positive_edges: int
+    origin_ids: np.ndarray
 
 
 def point_features(coords: np.ndarray, timepoints: np.ndarray) -> np.ndarray:
@@ -294,6 +295,74 @@ def point_features(coords: np.ndarray, timepoints: np.ndarray) -> np.ndarray:
     return features
 
 
+def _true_token_budget(
+    max_tokens: int,
+    false_positive_probability: float,
+    false_positive_ratio: float,
+) -> int:
+    """Reserve room for detector-like distractors without losing every true edge."""
+    expected_distractors_per_true = false_positive_probability + false_positive_ratio
+    if expected_distractors_per_true <= 0:
+        return max_tokens
+    return max(8, min(max_tokens, int(max_tokens / (1.0 + expected_distractors_per_true))))
+
+
+def _sample_false_positive_coords(
+    true_coords: np.ndarray,
+    true_times: np.ndarray,
+    rng: np.random.Generator,
+    *,
+    count: int,
+    anchor: np.ndarray,
+    tile_radius: np.ndarray,
+    uniform_fraction: float,
+    local_sigma: float,
+    min_distance: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Mix hard local and broad uniform distractors, separated from known positives."""
+    if count <= 0:
+        return np.empty((0, 3), dtype=np.float32), np.empty(0, dtype=np.int32)
+
+    lower = anchor - tile_radius
+    upper = anchor + tile_radius
+    false_coords: list[np.ndarray] = []
+    false_times: list[int] = []
+    attempts = 0
+    max_attempts = max(100, count * 30)
+    while len(false_coords) < count and attempts < max_attempts:
+        attempts += 1
+        parent_index = int(rng.integers(0, len(true_coords)))
+        timepoint = int(true_times[parent_index])
+        if rng.random() < uniform_fraction:
+            candidate = rng.uniform(lower, upper).astype(np.float32)
+        else:
+            candidate = true_coords[parent_index] + rng.normal(
+                0.0, local_sigma, 3
+            ).astype(np.float32)
+            candidate = np.clip(candidate, lower, upper)
+
+        same_time = true_coords[true_times == timepoint]
+        if len(same_time) and np.linalg.norm(same_time - candidate[None], axis=1).min() < min_distance:
+            continue
+        if false_coords:
+            accepted = np.stack(false_coords)
+            accepted_times = np.asarray(false_times)
+            same_false_time = accepted[accepted_times == timepoint]
+            if (
+                len(same_false_time)
+                and np.linalg.norm(same_false_time - candidate[None], axis=1).min()
+                < min_distance
+            ):
+                continue
+        false_coords.append(candidate.astype(np.float32, copy=False))
+        false_times.append(timepoint)
+
+    return (
+        np.asarray(false_coords, dtype=np.float32).reshape(-1, 3),
+        np.asarray(false_times, dtype=np.int32),
+    )
+
+
 def _sample_once(
     video: GraphVideo,
     rng: np.random.Generator,
@@ -303,6 +372,10 @@ def _sample_once(
     tile_radius: np.ndarray,
     drop_probability: float,
     false_positive_probability: float,
+    false_positive_ratio: float,
+    false_positive_uniform_fraction: float,
+    false_positive_local_sigma: float,
+    false_positive_min_distance: float,
     jitter_sigma: float,
     prefer_division_probability: float,
     hard_negative_radius: float,
@@ -337,9 +410,12 @@ def _sample_once(
     if len(tile_ids) < 8:
         tile_ids = selected_ids
         tile_scaled = scaled
-    if len(tile_ids) > max_tokens:
+    true_token_budget = _true_token_budget(
+        max_tokens, false_positive_probability, false_positive_ratio
+    )
+    if len(tile_ids) > true_token_budget:
         distances = np.linalg.norm((tile_scaled - anchor[None]) / tile_radius[None], axis=1)
-        keep = np.argsort(distances, kind="stable")[:max_tokens]
+        keep = np.argsort(distances, kind="stable")[:true_token_budget]
         tile_ids = tile_ids[keep]
         tile_scaled = tile_scaled[keep]
 
@@ -356,11 +432,22 @@ def _sample_once(
     if jitter_sigma > 0:
         tile_scaled = tile_scaled + rng.normal(0.0, jitter_sigma, tile_scaled.shape).astype(np.float32)
 
-    n_false = int(rng.binomial(len(origin_ids), false_positive_probability))
-    if n_false and len(origin_ids) + n_false <= max_tokens:
-        parents = rng.integers(0, len(origin_ids), size=n_false)
-        false_coords = tile_scaled[parents] + rng.normal(0.0, 8.0, (n_false, 3)).astype(np.float32)
-        false_times = node_times[parents]
+    legacy_false = int(rng.binomial(len(origin_ids), false_positive_probability))
+    dense_false = int(rng.poisson(len(origin_ids) * false_positive_ratio))
+    n_false = min(max_tokens - len(origin_ids), legacy_false + dense_false)
+    if n_false:
+        false_coords, false_times = _sample_false_positive_coords(
+            tile_scaled,
+            node_times,
+            rng,
+            count=n_false,
+            anchor=anchor,
+            tile_radius=tile_radius,
+            uniform_fraction=false_positive_uniform_fraction,
+            local_sigma=false_positive_local_sigma,
+            min_distance=false_positive_min_distance,
+        )
+        n_false = len(false_coords)
         tile_scaled = np.concatenate([tile_scaled, false_coords], axis=0)
         node_times = np.concatenate([node_times, false_times], axis=0)
         origin_ids = np.concatenate([origin_ids, np.full(n_false, -1, dtype=np.int64)])
@@ -405,7 +492,7 @@ def _sample_once(
     if positives == 0 or not valid.any():
         return None
     features = point_features(coords, coords[:, 0].astype(np.int32))
-    return WindowSample(coords, features, target, valid, division_target, positives)
+    return WindowSample(coords, features, target, valid, division_target, positives, origin_ids)
 
 
 def sample_window(
@@ -474,6 +561,7 @@ def evaluate_sample_loss(
                 **sample_kwargs,
                 "drop_probability": 0.0,
                 "false_positive_probability": 0.0,
+                "false_positive_ratio": 0.0,
                 "jitter_sigma": 0.0,
                 "prefer_division_probability": 0.5,
             },
@@ -1175,6 +1263,10 @@ def self_test() -> None:
         tile_radius=np.array((96.0, 192.0, 192.0)),
         drop_probability=0.0,
         false_positive_probability=0.0,
+        false_positive_ratio=0.0,
+        false_positive_uniform_fraction=0.4,
+        false_positive_local_sigma=12.0,
+        false_positive_min_distance=4.0,
         jitter_sigma=0.0,
         prefer_division_probability=1.0,
         hard_negative_radius=64.0,
@@ -1202,6 +1294,14 @@ def self_test() -> None:
 
 def train_main(args: argparse.Namespace) -> None:
     start_time = time.monotonic()
+    if not 0.0 <= args.false_positive_probability <= 1.0:
+        raise ValueError("--false-positive-probability must be in [0, 1]")
+    if args.false_positive_ratio < 0 or args.synthetic_false_positive_ratio < 0:
+        raise ValueError("false-positive ratios must be nonnegative")
+    if not 0.0 <= args.false_positive_uniform_fraction <= 1.0:
+        raise ValueError("--false-positive-uniform-fraction must be in [0, 1]")
+    if args.false_positive_local_sigma <= 0 or args.false_positive_min_distance < 0:
+        raise ValueError("false-positive geometry parameters are invalid")
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -1274,6 +1374,10 @@ def train_main(args: argparse.Namespace) -> None:
         "gradient_accumulation": args.gradient_accumulation,
         "drop_probability": args.drop_probability,
         "false_positive_probability": args.false_positive_probability,
+        "false_positive_ratio": args.false_positive_ratio,
+        "false_positive_uniform_fraction": args.false_positive_uniform_fraction,
+        "false_positive_local_sigma": args.false_positive_local_sigma,
+        "false_positive_min_distance": args.false_positive_min_distance,
         "jitter_sigma": args.jitter_sigma,
         "hard_negative_radius": args.hard_negative_radius,
         "candidate_radius": args.candidate_radius,
@@ -1293,6 +1397,7 @@ def train_main(args: argparse.Namespace) -> None:
             "learning_rate_multiplier": args.synthetic_learning_rate_multiplier,
             "division_weight_scale": division_prior_weight(),
             "prefer_division_probability": args.synthetic_prefer_division_probability,
+            "false_positive_ratio": args.synthetic_false_positive_ratio,
             "image_members_loaded": False,
         },
     }
@@ -1305,6 +1410,10 @@ def train_main(args: argparse.Namespace) -> None:
         "tile_radius": np.array((96.0, 192.0, 192.0), dtype=np.float32),
         "drop_probability": args.drop_probability,
         "false_positive_probability": args.false_positive_probability,
+        "false_positive_ratio": args.false_positive_ratio,
+        "false_positive_uniform_fraction": args.false_positive_uniform_fraction,
+        "false_positive_local_sigma": args.false_positive_local_sigma,
+        "false_positive_min_distance": args.false_positive_min_distance,
         "jitter_sigma": args.jitter_sigma,
         "prefer_division_probability": args.prefer_division_probability,
         "hard_negative_radius": args.hard_negative_radius,
@@ -1332,6 +1441,7 @@ def train_main(args: argparse.Namespace) -> None:
         synthetic_sample_kwargs = {
             **sample_kwargs,
             "prefer_division_probability": args.synthetic_prefer_division_probability,
+            "false_positive_ratio": args.synthetic_false_positive_ratio,
         }
         for group in optimizer.param_groups:
             group["lr"] = args.learning_rate * args.synthetic_learning_rate_multiplier
@@ -1510,6 +1620,10 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--gradient-clip", type=float, default=1.0)
     result.add_argument("--drop-probability", type=float, default=0.04)
     result.add_argument("--false-positive-probability", type=float, default=0.03)
+    result.add_argument("--false-positive-ratio", type=float, default=0.0)
+    result.add_argument("--false-positive-uniform-fraction", type=float, default=0.4)
+    result.add_argument("--false-positive-local-sigma", type=float, default=12.0)
+    result.add_argument("--false-positive-min-distance", type=float, default=4.0)
     result.add_argument("--jitter-sigma", type=float, default=2.0)
     result.add_argument("--prefer-division-probability", type=float, default=0.5)
     result.add_argument("--hard-negative-radius", type=float, default=64.0)
@@ -1519,6 +1633,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--synthetic-steps", type=int, default=0)
     result.add_argument("--synthetic-learning-rate-multiplier", type=float, default=2.0)
     result.add_argument("--synthetic-prefer-division-probability", type=float, default=0.15)
+    result.add_argument("--synthetic-false-positive-ratio", type=float, default=0.0)
     result.add_argument("--checkpoint-every", type=int, default=250)
     result.add_argument("--log-every", type=int, default=25)
     result.add_argument("--validation-samples", type=int, default=24)

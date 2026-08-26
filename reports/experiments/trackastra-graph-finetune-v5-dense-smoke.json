@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v5",
+  "status": "passed",
+  "device": "cpu",
+  "pretrained_model": "Trackastra ctc v0.3.0",
+  "parameter_count": 27456880,
+  "sample": {
+    "max_tokens": 512,
+    "tokens": 512,
+    "true_nodes": 126,
+    "distractors": 386,
+    "positive_edges": 92,
+    "false_positive_ratio": 3.0,
+    "uniform_fraction": 0.4,
+    "minimum_distance_scaled_voxels": 4.0
+  },
+  "model_step": {
+    "loss": 0.04108460620045662,
+    "gradient_norm_sum": 13.001711008733764,
+    "forward_backward_seconds": 1.6244402000447735,
+    "finite": true
+  },
+  "assertions": [
+    "distractors outnumber true nodes",
+    "all tokens stay within the 512-token cap",
+    "positive lineage edges survive dense augmentation",
+    "official 27.5M checkpoint completes forward and backward",
+    "loss and gradients are finite"
+  ]
+}
