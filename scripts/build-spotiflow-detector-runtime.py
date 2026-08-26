@@ -79,6 +79,9 @@ def main() -> None:
         "evaluate_pretrained_detector.py": (
             ROOT / "research" / "spotiflow_biohub" / "evaluate_pretrained_detector.py"
         ),
+        "evaluate_finetuned_detector.py": (
+            ROOT / "research" / "spotiflow_biohub" / "evaluate_finetuned_detector.py"
+        ),
         "density_calibration.py": ROOT / "research" / "density_calibration.py",
         "train_synthetic_detector.py": (
             ROOT / "research" / "spotiflow_biohub" / "train_synthetic_detector.py"
