@@ -29,6 +29,19 @@ SYNTHETIC_ADAPTER = ROOT / "research" / "synthetic_pretrain" / "data.py"
 HYBRID_LINKER = ROOT / "research" / "trackastra_graph" / "hybrid_linker.py"
 SUBMISSION_RERANKER = ROOT / "research" / "trackastra_graph" / "rerank_submission.py"
 POSTHOC_VALIDATOR = ROOT / "research" / "trackastra_graph" / "validate_model_posthoc.py"
+PUBLIC_VALIDATION_MATERIALIZER = (
+    ROOT / "research" / "trackastra_graph" / "materialize_public_validation.py"
+)
+PUBLIC_NOTEBOOK = (
+    ROOT
+    / ".biohub"
+    / "cache"
+    / "notebooks"
+    / "evgendvorkin"
+    / "biohub-0-927-lb"
+    / "biohub-0-927-lb.ipynb"
+)
+PUBLIC_NOTEBOOK_SHA256 = "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1"
 VALIDATION_STEMS = (
     "44b6_12dfb391",
     "44b6_267148e4",
@@ -84,6 +97,27 @@ def main() -> None:
     shutil.copy2(HYBRID_LINKER, target / "hybrid_linker.py")
     shutil.copy2(SUBMISSION_RERANKER, target / "rerank_submission.py")
     shutil.copy2(POSTHOC_VALIDATOR, target / "validate_model_posthoc.py")
+    shutil.copy2(
+        PUBLIC_VALIDATION_MATERIALIZER,
+        target / "materialize_public_validation.py",
+    )
+    if sha256_file(PUBLIC_NOTEBOOK) != PUBLIC_NOTEBOOK_SHA256:
+        raise RuntimeError("Audited public comparator notebook source changed")
+    public_notebook = json.loads(PUBLIC_NOTEBOOK.read_text(encoding="utf-8"))
+    public_config_source = "".join(public_notebook["cells"][7]["source"])
+    public_postprocess_cell = "".join(public_notebook["cells"][13]["source"])
+    public_stop_marker = "DEEPCENTER_VETO_DETECTOR = load_deepcenter_veto_detector()"
+    if public_stop_marker not in public_postprocess_cell:
+        raise RuntimeError("Audited public postprocessor boundary changed")
+    public_postprocess_source = public_postprocess_cell.split(
+        public_stop_marker, maxsplit=1
+    )[0]
+    (target / "public_config_source.py").write_text(
+        public_config_source, encoding="utf-8"
+    )
+    (target / "public_postprocess_source.py").write_text(
+        public_postprocess_source, encoding="utf-8"
+    )
     shutil.copy2(TRACKASTRA_REPO / "LICENSE", target / "TRACKASTRA_LICENSE")
     for relative in TRACKASTRA_FILES:
         source = TRACKASTRA_REPO / relative
@@ -147,6 +181,15 @@ def main() -> None:
                 "source": "frozen raw detector predictions from public 0.927 pipeline",
                 "stems": list(VALIDATION_STEMS),
                 "selection_signal": "complete-movie clean heldout metric only",
+            },
+            "public_validation_postprocess": {
+                "role": "frozen comparator materialization only",
+                "source_notebook": "evgendvorkin/biohub-0-927-lb",
+                "source_notebook_sha256": PUBLIC_NOTEBOOK_SHA256,
+                "config_cell_sha256": files["public_config_source.py"]["sha256"],
+                "postprocess_prefix_sha256": files[
+                    "public_postprocess_source.py"
+                ]["sha256"],
             },
             "files": files,
         },

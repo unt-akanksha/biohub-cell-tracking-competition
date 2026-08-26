@@ -3,13 +3,14 @@
   "run_id": "trackastra-raw-confidence-acceptance-v1",
   "parent": "trackastra-graph-finetune-v5",
   "kernel_ref": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v1",
-  "notebook_sha256": "67a312f9de857b448d185ec229dd2ca51c2701726b16b4a8e3b3b5aba481eb8c",
-  "kernel_metadata_sha256": "0a22d834a0d2160da76297ab55d52020c0d948230c5ede85301c0a897dcab882",
-  "trainer_sha256": "382b530ce0220d9a1c224c801f3d965f8fa74e2737960e54c2f3cf38b4b25dec",
-  "posthoc_validator_sha256": "7cac26f4b8938a967a0c2e89eb9fbc9bf5d59689067b9135731afc46289ace60",
+  "notebook_sha256": "de575e959221f8e0c476806dbf80eb580533026eda8943f41f1fe5d2b043d0ca",
+  "kernel_metadata_sha256": "6fcdf2d0803ed9c7ba72efce0c5c135d354b035e0390bc90273323df2511ace4",
+  "trainer_sha256": "cc8476f1401e23578e45c98b1b230fac9892905de5cb59c92a652de9b59f946b",
+  "posthoc_validator_sha256": "511d2a1e1c857656a1688a873ab3c47d6de88dbf99f67fddba47c75a7261e1b1",
+  "public_validation_materializer_sha256": "ae2044d77cff82c77b87c17cc517148f25cff71450a1cb63df007480e7bf404f",
   "hybrid_linker_sha256": "9599400402d7b9a88c6ef58cc108d3fa0fe7cbf9346d1bf7a0b84e1de0838946",
   "submission_reranker_sha256": "8b02a1e466f8e6bd85bedbc2cc1cb047c8efeaa12aa458e074b310a42e303f46",
-  "runtime_manifest_sha256": "640b9ae0236f893002ddf94223409f9c38cb1f9a5688f8e4753ee3b94b92fcb6",
+  "runtime_manifest_sha256": "e08c0023ae3fd326894e89c0038a4bb0f32022ae08a67e52bd04203e0fa16565",
   "declared_max_runtime_hours": "1.50",
   "watchdog_hard_stop_seconds": 5100,
   "accelerator": "NvidiaTeslaT4",
@@ -17,8 +18,9 @@
   "tpu_enabled": false,
   "submission_created": false,
   "dataset_sources": [
-    "indarkarhana/biohub-trackastra-graph-runtime-v1@version6",
-    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version7",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "pilkwang/biohub-deepcenter-unet3d-center-prior-v1"
   ],
   "kernel_sources": [
     "indarkarhana/biohub-trackastra-graph-finetune-v5"
@@ -29,7 +31,14 @@
     "training_acceptance_result_is_not_reused": true
   },
   "validation": {
-    "prediction_source": "frozen pre-postprocessing public detector GEFFs with stored edge_prob",
+    "prediction_source": "frozen public detector GEFFs transformed by the exact audited public final-CSV postprocessor, with raw edge_prob transferred by stable IDs",
+    "comparator_postprocess": {
+      "source_notebook": "evgendvorkin/biohub-0-927-lb",
+      "source_notebook_sha256": "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1",
+      "config_source_sha256": "f7517221992aa5f60e563ae650856582dd2231eac2b5627cee53ff68e3d5cbd7",
+      "postprocess_source_sha256": "dcb37574bdfbcfb39a14657b06a8971228ac7ec3672aa6334b8327ec1ceca40c",
+      "ground_truth_read_during_postprocess": false
+    },
     "selection_stems": ["44b6_12dfb391", "6bba_062c8d37"],
     "acceptance_stems": ["44b6_267148e4", "6bba_07e24132"],
     "methods_selected": [

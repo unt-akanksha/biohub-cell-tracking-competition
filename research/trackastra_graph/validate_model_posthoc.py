@@ -12,12 +12,22 @@ import torch
 
 try:
     from trainer import complete_movie_validation
+    from rerank_submission import (
+        read_raw_graphs,
+        read_submission,
+        transfer_raw_edge_probabilities,
+    )
 except ModuleNotFoundError:
     repository_root = Path(__file__).resolve().parents[2]
     if str(repository_root) not in sys.path:
         sys.path.insert(0, str(repository_root))
     from research.trackastra_graph.train_biohub_graph_transformer import (
         complete_movie_validation,
+    )
+    from research.trackastra_graph.rerank_submission import (
+        read_raw_graphs,
+        read_submission,
+        transfer_raw_edge_probabilities,
     )
 
 
@@ -56,6 +66,7 @@ def main() -> None:
     parser.add_argument("--model-dir", type=Path, required=True)
     parser.add_argument("--trackastra-dir", type=Path, required=True)
     parser.add_argument("--validation-predictions", type=Path, required=True)
+    parser.add_argument("--processed-validation-csv", type=Path, required=True)
     parser.add_argument("--competition-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--max-tokens", type=int, default=512)
@@ -80,6 +91,13 @@ def main() -> None:
     if not train_dir.is_dir():
         raise FileNotFoundError(f"Competition train directory not found: {train_dir}")
 
+    processed_videos = read_submission(args.processed_validation_csv)
+    raw_videos = read_raw_graphs(
+        args.validation_predictions, set(processed_videos)
+    )
+    probability_transfer = transfer_raw_edge_probabilities(
+        processed_videos, raw_videos
+    )
     complete = complete_movie_validation(
         model,
         args.validation_predictions,
@@ -88,6 +106,7 @@ def main() -> None:
         args.output_dir,
         args.max_tokens,
         args.candidate_radius,
+        prediction_videos=processed_videos,
     )
     terminal = {
         "schema_version": 1,
@@ -109,6 +128,10 @@ def main() -> None:
         "stored_edge_probability_evidence": complete[
             "stored_edge_probability_evidence"
         ],
+        "edge_probability_transfer": probability_transfer,
+        "processed_validation_sha256": sha256_file(
+            args.processed_validation_csv
+        ),
         "selection_delta_vs_base_raw": complete["selection_delta_vs_base_raw"],
         "acceptance_delta_vs_base_raw": complete["acceptance_delta_vs_base_raw"],
         "association_acceptance_passed": complete["acceptance_passed"],

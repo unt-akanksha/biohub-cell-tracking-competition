@@ -1082,17 +1082,25 @@ def complete_movie_validation(
     output_dir: Path,
     max_tokens: int,
     candidate_radius: float,
+    prediction_videos: dict[str, GraphVideo] | None = None,
 ) -> dict[str, Any]:
     prediction_paths = {
         path.stem: path for path in validation_predictions.rglob("*.geff")
     }
-    predictions: dict[str, GraphVideo] = {}
+    predictions: dict[str, GraphVideo] = (
+        {} if prediction_videos is None else dict(prediction_videos)
+    )
+    if prediction_videos is not None and set(predictions) != set(VALIDATION_STEMS):
+        raise ValueError(
+            "Processed validation datasets do not match the frozen validation stems"
+        )
     truths: dict[str, GraphVideo] = {}
     pair_scores: dict[str, dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]] = {}
     for stem in VALIDATION_STEMS:
-        if stem not in prediction_paths:
-            raise FileNotFoundError(f"Missing validator prediction graph for {stem}")
-        predictions[stem] = read_graph_video(prediction_paths[stem])
+        if prediction_videos is None:
+            if stem not in prediction_paths:
+                raise FileNotFoundError(f"Missing validator prediction graph for {stem}")
+            predictions[stem] = read_graph_video(prediction_paths[stem])
         truths[stem] = read_graph_video(train_dir / f"{stem}.geff")
         print(f"COMPLETE MOVIE INFERENCE: {stem}", flush=True)
         pair_scores[stem] = predict_movie_scores(
@@ -1303,6 +1311,11 @@ def complete_movie_validation(
         "selection_rule": (
             "method and thresholds selected on selection movies only; acceptance "
             "movies scored once after freeze; public leaderboard unused"
+        ),
+        "prediction_graph_kind": (
+            "postprocessed_public_comparator_with_transferred_raw_confidence"
+            if prediction_videos is not None
+            else "raw_detector_geff"
         ),
         "public_processed_reference_proxy": BASELINE_PROXY,
         "stored_edge_probability_evidence": summarize_stored_edge_probabilities(

@@ -101,6 +101,10 @@ support = first_existing([
     Path("/kaggle/input/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1"),
     Path("/kaggle/input/biohub-tracking-support-pack-50ep-v1"),
 ])
+deepcenter = first_existing([
+    Path("/kaggle/input/datasets/pilkwang/biohub-deepcenter-unet3d-center-prior-v1"),
+    Path("/kaggle/input/biohub-deepcenter-unet3d-center-prior-v1"),
+])
 if runtime is None:
     runtime = next(
         (
@@ -113,11 +117,12 @@ if runtime is None:
     )
 if support is None:
     support = next((path for path in input_root.iterdir() if (path / "wheels").is_dir()), None)
-if runtime is None or competition is None or support is None:
+if runtime is None or competition is None or support is None or deepcenter is None:
     raise FileNotFoundError({
         "runtime": runtime,
         "competition": competition,
         "support": support,
+        "deepcenter": deepcenter,
     })
 
 runtime_bundle = runtime / "runtime_bundle.zip"
@@ -180,7 +185,15 @@ if importlib.import_module("numpy").__version__ != numpy_before:
     raise RuntimeError("Offline dependency install changed NumPy")
 
 manifest = json.loads((runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
-for name in ("trainer.py", "hybrid_linker.py", "validate_model_posthoc.py"):
+for name in (
+    "trainer.py",
+    "hybrid_linker.py",
+    "rerank_submission.py",
+    "validate_model_posthoc.py",
+    "materialize_public_validation.py",
+    "public_config_source.py",
+    "public_postprocess_source.py",
+):
     actual = hashlib.sha256((runtime / name).read_bytes()).hexdigest()
     if actual != manifest["files"][name]["sha256"]:
         raise RuntimeError(f"Runtime source hash mismatch for {name}")
@@ -212,17 +225,36 @@ print(json.dumps({
     "model_dir": str(model_dir),
     "model_sha256": training_payload["model_sha256"],
     "source_training_acceptance_passed": training_payload.get("association_acceptance_passed"),
+    "deepcenter": str(deepcenter),
 }, indent=2))
 '''
 
 
 EVALUATE = r'''output_dir = Path("/kaggle/working/trackastra_acceptance")
+processed_dir = Path("/kaggle/working/processed_validation")
+materialize_command = [
+    sys.executable,
+    str(runtime / "materialize_public_validation.py"),
+    "--raw-validation-root", str(validation_dir),
+    "--competition-dir", str(competition),
+    "--public-config-source", str(runtime / "public_config_source.py"),
+    "--public-postprocess-source", str(runtime / "public_postprocess_source.py"),
+    "--output-dir", str(processed_dir),
+]
+print("Materializing frozen processed comparator:", " ".join(materialize_command))
+try:
+    subprocess.run(materialize_command, check=True)
+except Exception as exc:
+    write_terminal("failed", exc)
+    raise
+
 command = [
     sys.executable,
     str(runtime / "validate_model_posthoc.py"),
     "--model-dir", str(model_dir),
     "--trackastra-dir", str(trackastra_dir),
     "--validation-predictions", str(validation_dir),
+    "--processed-validation-csv", str(processed_dir / "processed_validation.csv"),
     "--competition-dir", str(competition),
     "--output-dir", str(output_dir),
     "--max-tokens", "512",
@@ -301,6 +333,7 @@ def main() -> None:
         "dataset_sources": [
             "indarkarhana/biohub-trackastra-graph-runtime-v1",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
+            "pilkwang/biohub-deepcenter-unet3d-center-prior-v1",
         ],
         "kernel_sources": ["indarkarhana/biohub-trackastra-graph-finetune-v5"],
         "competition_sources": ["biohub-cell-tracking-during-development"],

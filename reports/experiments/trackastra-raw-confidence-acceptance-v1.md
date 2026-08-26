@@ -9,6 +9,14 @@ leaderboard, or reuse V5's training-time acceptance decision. Its purpose is to
 test the extra signal retained in the owned baseline's raw GEFF output:
 per-edge learned confidence before graph postprocessing.
 
+The acceptance input is not the raw GEFF topology. Before scoring, the kernel
+executes the exact hash-pinned final-CSV postprocessor from the audited public
+0.927 notebook on the four validation movies, including centroid refinement,
+motion relinking, gap repair, short-track filtering, and the attached
+DeepCenter add-only gate. It then transfers raw confidence onto the surviving
+edges by stable ID. This makes validation match the form of the test candidate;
+the postprocessor reads images but never ground-truth labels.
+
 The test-output audit found stable node IDs and 92.85% to 97.63% confidence
 coverage on final CSV edges. The new linker can lock very-high-confidence base
 edges, replace low-confidence edges when the independent Trackastra model has a
