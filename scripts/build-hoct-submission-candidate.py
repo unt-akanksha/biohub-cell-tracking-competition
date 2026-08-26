@@ -92,8 +92,8 @@ RAW_GRAPH_TREE_SHA256 = "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e08088
 RERANKER_SHA256 = "9934ad959f7a255e604ea2cc743049eb5b2a2b038e3683c40b906e83dc1262b6"
 input_root = Path("/kaggle/input")
 hoct_runtime = next((path for path in (
-    Path("/kaggle/input/datasets/indarkarhana/biohub-hoct-runtime-v1"),
-    Path("/kaggle/input/biohub-hoct-runtime-v1"),
+    Path("/kaggle/input/datasets/indarkarhana/biohub-hoct-candidate-runtime-v1"),
+    Path("/kaggle/input/biohub-hoct-candidate-runtime-v1"),
 ) if path.exists()), None)
 graph_runtime = next((path for path in (
     Path("/kaggle/input/datasets/indarkarhana/biohub-trackastra-graph-runtime-v1"),
@@ -299,7 +299,7 @@ def main() -> None:
         "enable_internet": False,
         "keywords": ["gpu", "cell-tracking", "transformer"],
         "dataset_sources": [
-            "indarkarhana/biohub-hoct-runtime-v1",
+            "indarkarhana/biohub-hoct-candidate-runtime-v1",
             "indarkarhana/biohub-trackastra-graph-runtime-v1",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],

@@ -14,7 +14,7 @@
     "transformer"
   ],
   "dataset_sources": [
-    "indarkarhana/biohub-hoct-runtime-v1",
+    "indarkarhana/biohub-hoct-candidate-runtime-v1",
     "indarkarhana/biohub-trackastra-graph-runtime-v1",
     "pilkwang/biohub-tracking-support-pack-50ep-v1"
   ],
