@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v2",
+  "executed_at": "2026-08-26T05:22:00Z",
+  "pretrained_model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+  "parameter_count": 27456880,
+  "forward_backward": {
+    "status": "passed",
+    "loss": 2.08474,
+    "parameter_tensors_with_gradients": 280
+  },
+  "runtime_load": {
+    "status": "passed",
+    "loaded_parameter_count": 27456880
+  },
+  "validator_graph_loads": {
+    "status": "passed",
+    "44b6_12dfb391": {"nodes": 44958, "edges": 41908, "files": 33},
+    "44b6_267148e4": {"nodes": 22577, "edges": 20933, "files": 33},
+    "6bba_062c8d37": {"nodes": 6050, "edges": 5698, "files": 33},
+    "6bba_07e24132": {"nodes": 27399, "edges": 25237, "files": 33}
+  },
+  "environment_repair": {
+    "numpy_pin": "2.0.2",
+    "scipy_compatibility_preserved": true
+  },
+  "dense_memory_bound": {
+    "status": "passed",
+    "max_tokens": 512,
+    "batch_size": 1,
+    "gradient_accumulation": 4,
+    "mechanism": "recursive source tiling with target halo"
+  }
+}

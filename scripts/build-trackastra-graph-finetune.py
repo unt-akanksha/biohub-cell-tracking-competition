@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v1"
-NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v1.ipynb"
+TARGET = ROOT / "kaggle" / "biohub-trackastra-graph-finetune-v2"
+NOTEBOOK = TARGET / "biohub-trackastra-graph-finetune-v2.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -31,14 +31,14 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "trackastra-graph-finetune-v1"
+RUN_ID = "trackastra-graph-finetune-v2"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
 
 
 def write_terminal(status, error=None):
-    training_terminal = Path("/kaggle/working/trackastra_graph_v1/training_terminal.json")
+    training_terminal = Path("/kaggle/working/trackastra_graph_v2/training_terminal.json")
     payload = {
         "run_id": RUN_ID,
         "status": status,
@@ -140,6 +140,7 @@ pip_cmd = [sys.executable, "-m", "pip", "install", "--no-index"]
 for wheel_dir in wheel_dirs:
     pip_cmd.extend(["--find-links", str(wheel_dir)])
 pip_cmd.extend([
+    "numpy==2.0.2",
     "tracksdata",
     "zarr>=3.0.10,<4",
     "polars>=1.36",
@@ -166,7 +167,7 @@ print(json.dumps({
 '''
 
 
-TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v1")
+TRAIN = r'''output_dir = Path("/kaggle/working/trackastra_graph_v2")
 command = [
     sys.executable,
     str(runtime / "trainer.py"),
@@ -206,7 +207,7 @@ print(json.dumps({
 FINISH = r'''FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
-print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v1"))
+print("Experiment complete; evidence is in", Path("/kaggle/working/trackastra_graph_v2"))
 '''
 
 
@@ -244,7 +245,7 @@ def main() -> None:
     )
     metadata = {
         "id": "indarkarhana/biohub-trackastra-graph-finetune-v1",
-        "title": "Biohub Trackastra Graph Finetune v1",
+        "title": "Biohub Trackastra Graph Finetune v2",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

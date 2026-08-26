@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-graph-finetune-v2",
+  "parent": "trackastra-graph-finetune-v1",
+  "kernel_ref": "indarkarhana/biohub-trackastra-graph-finetune-v1",
+  "notebook_sha256": "93008c955352707f408d18541c516e6c2b51db7e260c6db6878fa57036f2b4fd",
+  "kernel_metadata_sha256": "b1e449b71efe691a2e45de17fbde4d6aa2c70c845cced68662f0949b219acacf",
+  "trainer_sha256": "c99a557efc43caacf3c40af0dc659da87670a7e3e1818c23c234e84438f9cfca",
+  "runtime_manifest_sha256": "93464dd9d87a55e05aacf2f60914a9a9535679143fa3dc6e83bb3f8ebd631e81",
+  "declared_max_runtime_hours": "4.00",
+  "watchdog_hard_stop_seconds": 14100,
+  "trainer_max_wall_seconds": 13200,
+  "validation_reserve_seconds": 1800,
+  "accelerator": "NvidiaTeslaT4",
+  "internet_enabled": false,
+  "dataset_sources": [
+    "indarkarhana/biohub-trackastra-graph-runtime-v1@version2",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "environment_repair": {
+    "numpy_pin": "2.0.2",
+    "reason": "prevent offline tracksdata resolution from replacing the live SciPy-compatible NumPy runtime",
+    "four_validator_graphs_structurally_complete": true,
+    "four_validator_graphs_tracksdata_load_passed": true
+  },
+  "pretrained_model": {
+    "name": "Trackastra ctc v0.3.0",
+    "source_repository": "weigertlab/trackastra",
+    "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+    "license": "BSD-3-Clause",
+    "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+    "parameter_count": 27456880
+  },
+  "training": {
+    "selection": "24 deterministic movies per embryo prefix; four complete validation movies excluded",
+    "window_frames": 4,
+    "max_tokens": 512,
+    "target_steps": 6000,
+    "learning_rate": 1e-5,
+    "weight_decay": 1e-5,
+    "gradient_accumulation": 4,
+    "node_drop_probability": 0.04,
+    "false_positive_probability": 0.03,
+    "jitter_sigma_scaled_voxels": 2.0,
+    "division_sampling_probability": 0.5,
+    "hard_negative_radius_scaled_voxels": 64.0,
+    "physical_z_to_xy_scale": 4.0
+  },
+  "validation": {
+    "stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "complete_movies": true,
+    "match_radius_um": 7.0,
+    "baseline_proxy": 0.9294432421394134,
+    "public_leaderboard_used_for_selection": false
+  },
+  "promotion_rule": "promote only after a positive complete-movie clean proxy delta with no material worst-movie regression; otherwise retain diagnostics and redesign",
+  "submission_policy": "training_and_validation_only_no_submission",
+  "retry_of": "trackastra-graph-finetune-v1"
+}

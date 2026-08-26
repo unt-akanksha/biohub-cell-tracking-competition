@@ -17,7 +17,7 @@ VALIDATION_ROOT = (
     / ".biohub"
     / "cache"
     / "notebook-outputs"
-    / "evgendvorkin-biohub-0-927-lb"
+    / "evgendvorkin-biohub-0-927-lb-redownload"
     / "tracking_repo"
     / "predictions"
     / "unknown"
@@ -91,7 +91,21 @@ def main() -> None:
     validator = target / "validator_raw"
     validator.mkdir()
     for stem in VALIDATION_STEMS:
-        shutil.copytree(VALIDATION_ROOT / f"{stem}.geff", validator / f"{stem}.geff")
+        source_graph = VALIDATION_ROOT / f"{stem}.geff"
+        required = (
+            source_graph / "zarr.json",
+            source_graph / "nodes" / "zarr.json",
+            source_graph / "edges" / "zarr.json",
+            source_graph / "nodes" / "ids" / "c" / "0",
+            source_graph / "edges" / "ids" / "c" / "0" / "0",
+        )
+        missing = [path for path in required if not path.is_file()]
+        file_count = sum(1 for path in source_graph.rglob("*") if path.is_file())
+        if missing or file_count != 33:
+            raise RuntimeError(
+                f"Incomplete validator graph {stem}: missing={missing}, files={file_count}"
+            )
+        shutil.copytree(source_graph, validator / f"{stem}.geff")
 
     files = {
         path.relative_to(target).as_posix(): {

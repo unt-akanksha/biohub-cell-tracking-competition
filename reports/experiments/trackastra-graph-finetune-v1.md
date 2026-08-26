@@ -1,6 +1,12 @@
 # trackastra-graph-finetune-v1
 
-Status: staged for guarded GPU launch
+Status: failed during dependency setup after 32 seconds; `0.01 h` GPU charged
+
+Failure: offline resolution upgraded the live Kaggle kernel from NumPy `2.0.2`
+to `2.4.6`, leaving the preloaded SciPy runtime incompatible. A post-failure
+input audit also found the cached fourth validation GEFF incomplete. The `v2`
+retry pins NumPy `2.0.2` and uses a fresh four-graph artifact verified by loading
+every graph through `tracksdata` before upload.
 
 ## Hypothesis
 
