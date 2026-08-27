@@ -1,0 +1,17 @@
+{
+  "preflight_report": "artifacts/preflights/lsm-fm-public-node-refinement-v1-r2.json",
+  "preflight_report_sha256": "d9ab1439b88a9d9fe5a95d9d6bd6ea2d241468d99c488e5a7a0b38935f27551a",
+  "preflight_file_sha256": "f9b1e26dd8006ec69febdf75bd61aa66674424c6319e02b8ae3bbb07ed4a6a2a",
+  "focused_tests_passed": 7,
+  "broad_lsm_fm_tests_passed": 70,
+  "remote_dataset_download_verified": true,
+  "runtime_dataset": "indarkarhana/biohub-lsm-fm-public-node-runtime-v1",
+  "runtime_dataset_version": 1,
+  "runtime_manifest_sha256": "2cea1bd05fd35f687ecbe47f04128b37fba3d542b5aed95b6fe6900b9d8479fe",
+  "public_graph_used_as_base": true,
+  "exact_public_replica": false,
+  "public_graph_topology_preserved": true,
+  "public_leaderboard_used_for_selection": false,
+  "submission_path_present": false,
+  "acceptance_labels_opened": false
+}
