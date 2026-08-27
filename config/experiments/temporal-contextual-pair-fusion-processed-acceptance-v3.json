@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+  "parent": "temporal-contextual-pair-fusion-blend-v3",
+  "status": "staged_not_launched",
+  "purpose": "one-shot materialization of a frozen contextual v3 processed candidate before independent exact CPU scoring",
+  "required_visible_gpu_count": 2,
+  "machine_shape": "NvidiaTeslaT4",
+  "whole_movie_sharding": true,
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "processed_ground_truth_read": false,
+  "exact_processed_scoring_performed": false,
+  "public_leaderboard_used_for_selection": false,
+  "public_predictions_copied": false,
+  "public_comparator_topology_used": true,
+  "replica_refusal": "candidate must change at least one association edge and have a different CSV hash from the frozen comparator",
+  "inputs": {
+    "appearance_run": "temporal-contextual-pair-fusion-v3",
+    "appearance_family": "temporal_contextual_pair_fusion_v3",
+    "calibration_run": "temporal-contextual-pair-fusion-blend-v3",
+    "calibration_both_folds_must_improve": true,
+    "trackastra_control_run": "trackastra-dual-fold-synthetic-v1",
+    "processed_comparator_source": "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2",
+    "processed_comparator_sha256": "6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b",
+    "raw_graph_tree_sha256": "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e",
+    "processed_stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "runtime_dataset": "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+    "runtime_dataset_version": 3,
+    "runtime_manifest_sha256": "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+  },
+  "execution": {
+    "notebook_watchdog_seconds": 21600,
+    "materializer_hard_stop_seconds": 19800,
+    "gpu_workers": 2,
+    "movies_per_worker": 2,
+    "one_shot": true,
+    "selection_or_tuning_allowed": false,
+    "competition_test_data_read": false,
+    "competition_submission_command_included": false
+  },
+  "kernel": {
+    "id": "indarkarhana/biohub-temporal-contextual-processed-acceptance-v3",
+    "status": "local_staged_not_pushed",
+    "notebook_sha256": "f51d6a41d019316da0aeb697bd630f76ebafa043c2fc27cf95e0b72dfdc3efb0",
+    "metadata_sha256": "0fd5798a6ab4b2c005c93b4991070abf4025f8ef7dcb454f20081c5468a6a3c6"
+  },
+  "source": {
+    "materializer_sha256": "e0cec2342d6c60ce1450d8eb307ca1ee0a5d99fe276b43e43da733135f8a0b3c",
+    "exact_cpu_scorer_sha256": "c006a05c76ec4f9c1513e20c31560c49c81897cce66f43802e19812e41eb30b5",
+    "future_whole_movie_candidate_builder_sha256": "9ad0168fc28c5fea378f4f5f016303570e0cdb39b1e2c35c764a897aa1a63f7e",
+    "kernel_builder_sha256": "81793dd183bc2bb1cbc9b0fbecd1ac9a0cee8ebdf7f5df4364b0393a360c237c",
+    "kernel_builder_test_sha256": "7bd9f735dbd6fedce4b9d4521beef9af276ac548837d5e791114afc9aa7b43de"
+  },
+  "promotion_gate": {
+    "independent_exact_cpu_scoring_required": true,
+    "pooled_exact_gain_must_be_positive": true,
+    "node_recall_must_be_identical": true,
+    "maximum_movie_regression": 0.002,
+    "accepted_evidence_must_remain_hash_bound": true
+  },
+  "execution_target": "user-provided two-GPU cloud instance after the contextual transfer and clean calibration pass",
+  "hypothesis": "Frozen contextual reciprocal association evidence that transfers across both embryos will improve exact processed graph topology over the public comparator while preserving its detector nodes."
+}
