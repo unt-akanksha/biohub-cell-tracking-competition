@@ -31,6 +31,28 @@ def test_submission_plan_refuses_single_gpu_or_duplicate_movies() -> None:
         build_movie_shards(["a", "a"], ["0", "1"])
 
 
+def test_weighted_plan_balances_large_whole_movies_deterministically() -> None:
+    movies = ["large", "medium", "small_a", "small_b"]
+    weights = {"large": 10, "medium": 6, "small_a": 2, "small_b": 2}
+
+    shards = build_movie_shards(movies, ["0", "1"], movie_weights=weights)
+
+    assert shards[0].movie_ids == ("large",)
+    assert shards[1].movie_ids == ("medium", "small_a", "small_b")
+    assert {
+        movie for shard in shards for movie in shard.movie_ids
+    } == set(movies)
+
+
+def test_weighted_plan_requires_exact_positive_cost_inventory() -> None:
+    with pytest.raises(ValueError, match="cover exactly"):
+        build_movie_shards(["a", "b"], ["0", "1"], movie_weights={"a": 1})
+    with pytest.raises(ValueError, match="finite and positive"):
+        build_movie_shards(
+            ["a", "b"], ["0", "1"], movie_weights={"a": 1, "b": 0}
+        )
+
+
 def test_visible_tokens_preserve_parent_device_mapping() -> None:
     assert visible_cuda_tokens(detected_devices=2, environ={}) == ("0", "1")
     assert visible_cuda_tokens(

@@ -43,8 +43,16 @@ def build_movie_shards(
     cuda_tokens: Sequence[str],
     *,
     required_devices: int = 2,
+    movie_weights: Mapping[str, float] | None = None,
 ) -> tuple[MovieShard, ...]:
-    """Assign each movie exactly once across the required GPU workers."""
+    """Assign each movie exactly once across the required GPU workers.
+
+    When runtime weights are supplied, longest-processing-time scheduling
+    balances whole movies without splitting one movie across workers.  This is
+    the production path for Biohub, where movie sizes differ substantially.
+    The unweighted round-robin behavior remains deterministic for callers that
+    do not yet have a cost inventory.
+    """
 
     if required_devices != 2:
         raise ValueError("Biohub submission policy requires exactly two devices")
@@ -63,12 +71,32 @@ def build_movie_shards(
     selected_tokens = tokens[:required_devices]
     if len(set(selected_tokens)) != required_devices:
         raise ValueError("CUDA device tokens must be unique")
+    if movie_weights is None:
+        assigned_movies = [list(movies[index::required_devices]) for index in range(required_devices)]
+    else:
+        normalized_weights = {str(movie): float(weight) for movie, weight in movie_weights.items()}
+        if set(normalized_weights) != set(movies):
+            raise ValueError("movie weights must cover exactly the planned movies")
+        if any(not (weight > 0.0) for weight in normalized_weights.values()):
+            raise ValueError("movie weights must be finite and positive")
+        if any(weight == float("inf") for weight in normalized_weights.values()):
+            raise ValueError("movie weights must be finite and positive")
+        assigned_movies = [[] for _ in range(required_devices)]
+        assigned_costs = [0.0 for _ in range(required_devices)]
+        ranked_movies = sorted(movies, key=lambda movie: (-normalized_weights[movie], movie))
+        for movie in ranked_movies:
+            shard_index = min(
+                range(required_devices),
+                key=lambda index: (assigned_costs[index], index),
+            )
+            assigned_movies[shard_index].append(movie)
+            assigned_costs[shard_index] += normalized_weights[movie]
     assignments = tuple(
         MovieShard(
             shard_index=index,
             shard_count=required_devices,
             cuda_token=selected_tokens[index],
-            movie_ids=movies[index::required_devices],
+            movie_ids=tuple(assigned_movies[index]),
         )
         for index in range(required_devices)
     )
