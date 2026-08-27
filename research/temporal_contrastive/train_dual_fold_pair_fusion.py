@@ -59,10 +59,78 @@ except ModuleNotFoundError:
 
 RUN_ID = "temporal-patch-pair-fusion-v2"
 EMBEDDING_AUXILIARY_LOSS_WEIGHT = 0.25
+MINIMUM_REAL_COMPOSITE_GAIN = 0.005
+MAXIMUM_SYNTHETIC_METRIC_REGRESSION = 0.01
 APPEARANCE_FAMILY = PAIR_FUSION_FAMILY
 MODEL_CLASS = PhysicalPairFusionAssociationModel
 WORKER_SCRIPT_PATH = Path(__file__).resolve()
 pair_loss_for_transition = masked_multi_positive_pair_nll
+
+
+def finetuning_improvement_gate(
+    initial_real: dict[str, float | int],
+    candidate_real: dict[str, float | int],
+    initial_synthetic: dict[str, float | int],
+    candidate_synthetic: dict[str, float | int],
+    *,
+    minimum_real_composite_gain: float = MINIMUM_REAL_COMPOSITE_GAIN,
+    maximum_synthetic_metric_regression: float = (
+        MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+    ),
+) -> dict[str, object]:
+    """Require reciprocal real gain without erasing synthetic generalization."""
+
+    if minimum_real_composite_gain <= 0:
+        raise ValueError("minimum real composite gain must be positive")
+    if maximum_synthetic_metric_regression < 0:
+        raise ValueError("maximum synthetic metric regression must be nonnegative")
+    metrics = ("composite", "top1", "mrr", "division_top2")
+    real_gains = {
+        name: float(candidate_real[name]) - float(initial_real[name])
+        for name in metrics
+    }
+    synthetic_gains = {
+        name: float(candidate_synthetic[name]) - float(initial_synthetic[name])
+        for name in metrics
+    }
+
+    def inventory_unchanged(
+        initial: dict[str, float | int], candidate: dict[str, float | int]
+    ) -> bool:
+        return all(
+            int(candidate[name]) == int(initial[name])
+            for name in ("rows", "division_rows", "transitions")
+        )
+
+    real_inventory_unchanged = inventory_unchanged(
+        initial_real, candidate_real
+    )
+    synthetic_inventory_unchanged = inventory_unchanged(
+        initial_synthetic, candidate_synthetic
+    )
+    passed = bool(
+        real_inventory_unchanged
+        and synthetic_inventory_unchanged
+        and real_gains["composite"] >= minimum_real_composite_gain
+        and real_gains["top1"] > 0.0
+        and real_gains["mrr"] > 0.0
+        and real_gains["division_top2"] >= 0.0
+        and all(
+            gain >= -maximum_synthetic_metric_regression
+            for gain in synthetic_gains.values()
+        )
+    )
+    return {
+        "passed": passed,
+        "minimum_real_composite_gain": float(minimum_real_composite_gain),
+        "maximum_synthetic_metric_regression": float(
+            maximum_synthetic_metric_regression
+        ),
+        "real_inventory_unchanged": real_inventory_unchanged,
+        "synthetic_inventory_unchanged": synthetic_inventory_unchanged,
+        "real_gains": real_gains,
+        "synthetic_gains": synthetic_gains,
+    }
 
 
 def family_metadata() -> dict[str, object]:
@@ -351,6 +419,16 @@ def train_worker(args: argparse.Namespace) -> None:
     best_score = 0.85 * float(initial_real["composite"]) + 0.15 * float(
         initial_synthetic["composite"]
     )
+    best_gate = finetuning_improvement_gate(
+        initial_real,
+        initial_real,
+        initial_synthetic,
+        initial_synthetic,
+        minimum_real_composite_gain=args.minimum_real_composite_gain,
+        maximum_synthetic_metric_regression=(
+            args.maximum_synthetic_metric_regression
+        ),
+    )
     history = [
         {
             "step": 0,
@@ -405,6 +483,10 @@ def train_worker(args: argparse.Namespace) -> None:
             ),
             "calibration_ground_truth_read": False,
             "candidate_radius_um": args.candidate_radius_um,
+            "minimum_real_composite_gain": args.minimum_real_composite_gain,
+            "maximum_synthetic_metric_regression": (
+                args.maximum_synthetic_metric_regression
+            ),
             "patch_shape": [17, 17, 17],
             "patch_half_extent_um": [8.0, 8.0, 8.0],
             "input_channels": 3,
@@ -534,15 +616,27 @@ def train_worker(args: argparse.Namespace) -> None:
             score = 0.85 * float(real_metrics["composite"]) + 0.15 * float(
                 synthetic_metrics["composite"]
             )
+            gate = finetuning_improvement_gate(
+                initial_real,
+                real_metrics,
+                initial_synthetic,
+                synthetic_metrics,
+                minimum_real_composite_gain=args.minimum_real_composite_gain,
+                maximum_synthetic_metric_regression=(
+                    args.maximum_synthetic_metric_regression
+                ),
+            )
             eligible = bool(
                 float(real_metrics["top1"]) >= args.minimum_real_top1
                 and float(synthetic_metrics["top1"])
                 >= args.minimum_synthetic_top1
+                and gate["passed"] is True
             )
             row = {
                 "step": step,
                 "score": score,
                 "eligible": eligible,
+                "finetuning_gate": gate,
                 "real": real_metrics,
                 "synthetic": synthetic_metrics,
             }
@@ -553,6 +647,7 @@ def train_worker(args: argparse.Namespace) -> None:
                 best_score = score
                 best_real = real_metrics
                 best_synthetic = synthetic_metrics
+                best_gate = gate
                 best_state = base.state_dict_cpu(ema_model)
             model.train()
 
@@ -588,6 +683,8 @@ def train_worker(args: argparse.Namespace) -> None:
         "initial_synthetic": initial_synthetic,
         "best_real": best_real,
         "best_synthetic": best_synthetic,
+        "finetuning_gate": best_gate,
+        "finetuning_gate_passed": bool(best_gate["passed"]),
         "model_sha256": base.sha256_file(model_path),
         "parameter_count": parameter_count,
         "input_channels": 3,
@@ -679,7 +776,14 @@ def orchestrate(args: argparse.Namespace) -> None:
         "gpu_count": 2,
         "folds": terminals,
         "both_folds_trained": all(
-            int(row["best_step"]) > 0 for row in terminals.values()
+            int(row["best_step"]) > 0
+            and row.get("finetuning_gate_passed") is True
+            for row in terminals.values()
+        ),
+        "both_folds_improved": all(
+            int(row["best_step"]) > 0
+            and row.get("finetuning_gate_passed") is True
+            for row in terminals.values()
         ),
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
@@ -738,6 +842,16 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--gradient-accumulation", type=int, default=2)
     result.add_argument("--minimum-real-top1", type=float, default=0.70)
     result.add_argument("--minimum-synthetic-top1", type=float, default=0.85)
+    result.add_argument(
+        "--minimum-real-composite-gain",
+        type=float,
+        default=MINIMUM_REAL_COMPOSITE_GAIN,
+    )
+    result.add_argument(
+        "--maximum-synthetic-metric-regression",
+        type=float,
+        default=MAXIMUM_SYNTHETIC_METRIC_REGRESSION,
+    )
     result.add_argument("--validation-every", type=int, default=3000)
     result.add_argument("--log-every", type=int, default=100)
     return result

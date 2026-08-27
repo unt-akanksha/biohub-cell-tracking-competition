@@ -19,6 +19,12 @@ CONTEXTUAL_TARGET = (
     / "staging"
     / "biohub-temporal-contextual-pair-fusion-runtime-v3"
 )
+TRANSFER_TARGET = (
+    ROOT
+    / ".biohub"
+    / "staging"
+    / "biohub-temporal-contextual-transfer-runtime-v1"
+)
 
 
 def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
@@ -168,3 +174,55 @@ def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None
     assert (
         CONTEXTUAL_TARGET / "train_dual_fold_contextual_pair_fusion.py"
     ).is_file()
+
+
+def test_runtime_builder_emits_gated_contextual_transfer_package() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(BUILDER),
+            "--replace",
+            "--family",
+            "contextual_transfer_v3",
+        ],
+        check=True,
+    )
+    manifest = json.loads(
+        (TRANSFER_TARGET / "SOURCE_MANIFEST.json").read_text(encoding="utf-8")
+    )
+    metadata = json.loads(
+        (TRANSFER_TARGET / "dataset-metadata.json").read_text(encoding="utf-8")
+    )
+    experiment = json.loads(
+        (TRANSFER_TARGET / "experiment.json").read_text(encoding="utf-8")
+    )
+    trainer = (TRANSFER_TARGET / "train_dual_fold_pair_fusion.py").read_text(
+        encoding="utf-8"
+    )
+    verifier = (TRANSFER_TARGET / "verify_appearance_output.py").read_text(
+        encoding="utf-8"
+    )
+
+    assert manifest["run_id"] == "temporal-contextual-pair-fusion-v3"
+    assert manifest["runtime_family"] == "contextual_transfer_v3"
+    assert metadata["id"] == (
+        "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1"
+    )
+    assert metadata["isPrivate"] is True
+    assert "def finetuning_improvement_gate" in trainer
+    assert "MINIMUM_REAL_COMPOSITE_GAIN = 0.005" in trainer
+    assert "MAXIMUM_SYNTHETIC_METRIC_REGRESSION = 0.01" in trainer
+    assert "verify_finetuning_gate" in verifier
+    assert 'aggregate.get("both_folds_improved") is True' in verifier
+    assert experiment["transfer_execution"]["status"] == "runtime_package"
+    assert (
+        experiment["transfer_execution"]["runtime_manifest_sha256"]
+        == "see_SOURCE_MANIFEST.json"
+    )
+    assert (
+        experiment["transfer_execution"]["runtime_dataset_version"]
+        == "recorded_outside_runtime_package"
+    )
+    assert set(experiment["source"].values()) == {
+        "recorded_outside_runtime_package"
+    }

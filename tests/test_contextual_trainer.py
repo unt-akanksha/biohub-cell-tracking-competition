@@ -104,3 +104,67 @@ def test_contextual_trainer_requires_external_pretraining_evidence() -> None:
     )
     with pytest.raises(ValueError, match="requires hash-bound ZebraHub"):
         contextual.require_external_pretraining(["--orchestrate"])
+
+
+def test_transfer_gate_requires_broad_real_gain_without_forgetting() -> None:
+    initial_real = {
+        "composite": 0.70,
+        "top1": 0.68,
+        "mrr": 0.75,
+        "division_top2": 0.40,
+        "rows": 500,
+        "division_rows": 50,
+        "transitions": 48,
+    }
+    initial_synthetic = {
+        "composite": 0.90,
+        "top1": 0.91,
+        "mrr": 0.94,
+        "division_top2": 0.80,
+        "rows": 1_500,
+        "division_rows": 450,
+        "transitions": 32,
+    }
+    candidate_real = {
+        **initial_real,
+        "composite": 0.72,
+        "top1": 0.70,
+        "mrr": 0.77,
+        "division_top2": 0.42,
+    }
+    candidate_synthetic = {
+        **initial_synthetic,
+        "composite": 0.895,
+        "top1": 0.905,
+        "mrr": 0.935,
+        "division_top2": 0.795,
+    }
+
+    gate = generic.finetuning_improvement_gate(
+        initial_real,
+        candidate_real,
+        initial_synthetic,
+        candidate_synthetic,
+    )
+
+    assert gate["passed"] is True
+    assert gate["real_gains"]["composite"] == pytest.approx(0.02)
+    assert gate["synthetic_gains"]["composite"] == pytest.approx(-0.005)
+    assert generic.finetuning_improvement_gate(
+        initial_real,
+        {**candidate_real, "division_top2": 0.39},
+        initial_synthetic,
+        candidate_synthetic,
+    )["passed"] is False
+    assert generic.finetuning_improvement_gate(
+        initial_real,
+        candidate_real,
+        initial_synthetic,
+        {**candidate_synthetic, "composite": 0.88},
+    )["passed"] is False
+    assert generic.finetuning_improvement_gate(
+        initial_real,
+        {**candidate_real, "rows": 499},
+        initial_synthetic,
+        candidate_synthetic,
+    )["passed"] is False

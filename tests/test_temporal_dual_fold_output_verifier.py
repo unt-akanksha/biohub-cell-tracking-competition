@@ -9,9 +9,12 @@ import pytest
 
 from research.temporal_contrastive.appearance_family import COSINE_PARAMETER_COUNT
 from research.temporal_contrastive.verify_dual_fold_training_output import (
+    MAXIMUM_SYNTHETIC_METRIC_REGRESSION,
+    MINIMUM_REAL_COMPOSITE_GAIN,
     EXPECTED_SYNTHETIC_MANIFEST_SHA256,
     FOLDS,
     OPENED_ACCEPTANCE_STEMS,
+    verify_finetuning_gate,
     verify_output,
 )
 
@@ -181,3 +184,87 @@ def test_verifier_rejects_global_real_partition_overlap(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="global real partition overlaps"):
         verify_output(root)
+
+
+def test_contextual_transfer_gate_is_recomputed_from_metrics() -> None:
+    fold = "target_44b6"
+    initial_real = {
+        "composite": 0.70,
+        "top1": 0.68,
+        "mrr": 0.75,
+        "division_top2": 0.40,
+        "rows": 500,
+        "division_rows": 50,
+        "transitions": 48,
+    }
+    best_real = {
+        **initial_real,
+        "composite": 0.72,
+        "top1": 0.70,
+        "mrr": 0.77,
+        "division_top2": 0.42,
+    }
+    initial_synthetic = {
+        "composite": 0.90,
+        "top1": 0.91,
+        "mrr": 0.94,
+        "division_top2": 0.80,
+        "rows": 1_500,
+        "division_rows": 450,
+        "transitions": 32,
+    }
+    best_synthetic = {
+        **initial_synthetic,
+        "composite": 0.895,
+        "top1": 0.905,
+        "mrr": 0.935,
+        "division_top2": 0.795,
+    }
+    initialization = {
+        "policy": "hash-bound ZebraHub external pretraining",
+        "run_id": "zebrahub-contextual-pretrain-v1",
+        "fold": fold,
+        "model_sha256": "a" * 64,
+        "external_training_source": "ZSNS004",
+        "external_validation_source": "ZSNS005",
+    }
+    real_gains = {
+        name: best_real[name] - initial_real[name]
+        for name in ("composite", "top1", "mrr", "division_top2")
+    }
+    synthetic_gains = {
+        name: best_synthetic[name] - initial_synthetic[name]
+        for name in ("composite", "top1", "mrr", "division_top2")
+    }
+    worker = {
+        "initial_real": initial_real,
+        "best_real": best_real,
+        "initial_synthetic": initial_synthetic,
+        "best_synthetic": best_synthetic,
+        "initialization": initialization,
+        "finetuning_gate_passed": True,
+        "finetuning_gate": {
+            "passed": True,
+            "minimum_real_composite_gain": MINIMUM_REAL_COMPOSITE_GAIN,
+            "maximum_synthetic_metric_regression": (
+                MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+            ),
+            "real_inventory_unchanged": True,
+            "synthetic_inventory_unchanged": True,
+            "real_gains": real_gains,
+            "synthetic_gains": synthetic_gains,
+        },
+    }
+    config = {
+        "initialization": initialization,
+        "minimum_real_composite_gain": MINIMUM_REAL_COMPOSITE_GAIN,
+        "maximum_synthetic_metric_regression": (
+            MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+        ),
+    }
+
+    verify_finetuning_gate(worker, config, fold=fold)
+
+    worker["finetuning_gate"]["real_gains"]["composite"] = 0.5
+    with pytest.raises(ValueError, match="gains diverge"):
+        verify_finetuning_gate(worker, config, fold=fold)

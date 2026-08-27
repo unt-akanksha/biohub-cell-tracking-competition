@@ -16,17 +16,24 @@ TARGET_BY_FAMILY = {
     "contextual_pair_fusion_v3": (
         STAGING_ROOT / "biohub-temporal-contextual-pair-fusion-runtime-v3"
     ),
+    "contextual_transfer_v3": (
+        STAGING_ROOT / "biohub-temporal-contextual-transfer-runtime-v1"
+    ),
 }
 RUN_ID_BY_FAMILY = {
     "cosine_v1": "temporal-patch-dual-fold-v1",
     "pair_fusion_v2": "temporal-patch-pair-fusion-v2",
     "contextual_pair_fusion_v3": "temporal-contextual-pair-fusion-v3",
+    "contextual_transfer_v3": "temporal-contextual-pair-fusion-v3",
 }
 DATASET_ID_BY_FAMILY = {
     "cosine_v1": "indarkarhana/biohub-temporal-patch-runtime-v1",
     "pair_fusion_v2": "indarkarhana/biohub-temporal-pair-fusion-runtime-v2",
     "contextual_pair_fusion_v3": (
         "indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3"
+    ),
+    "contextual_transfer_v3": (
+        "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1"
     ),
 }
 EXPERIMENT_BY_FAMILY = {
@@ -42,12 +49,19 @@ EXPERIMENT_BY_FAMILY = {
     / "config"
     / "experiments"
     / "temporal-contextual-pair-fusion-v3.json",
+    "contextual_transfer_v3": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-contextual-pair-fusion-v3.json",
 }
 TITLE_BY_FAMILY = {
     "cosine_v1": "Biohub Temporal Patch Runtime v1",
     "pair_fusion_v2": "Biohub Temporal Pair Fusion Runtime v2",
     "contextual_pair_fusion_v3": (
         "Biohub Temporal Contextual Pair Fusion Runtime v3"
+    ),
+    "contextual_transfer_v3": (
+        "Biohub Temporal Contextual Transfer Runtime v1"
     ),
 }
 TRACKASTRA_REPOSITORY = ROOT / ".biohub" / "cache" / "repos" / "trackastra"
@@ -170,7 +184,7 @@ def packaged_experiment(source: Path, family: str) -> dict:
     """Remove a contextual runtime's recursive reference to its own manifest."""
 
     payload = json.loads(source.read_text(encoding="utf-8"))
-    if family == "contextual_pair_fusion_v3":
+    if family in {"contextual_pair_fusion_v3", "contextual_transfer_v3"}:
         execution = payload.get("pretraining_execution")
         if not isinstance(execution, dict):
             raise ValueError("contextual v3 pretraining execution contract is missing")
@@ -192,6 +206,27 @@ def packaged_experiment(source: Path, family: str) -> dict:
             "technique_report_sha256",
         ):
             source_inventory[key] = "recorded_outside_runtime_package"
+        if family == "contextual_transfer_v3":
+            transfer = payload.get("transfer_execution")
+            if not isinstance(transfer, dict):
+                raise ValueError("contextual v3 transfer execution contract is missing")
+            transfer["status"] = "runtime_package"
+            transfer["kernel_notebook_sha256"] = (
+                "recorded_outside_runtime_package"
+            )
+            transfer["kernel_metadata_sha256"] = (
+                "recorded_outside_runtime_package"
+            )
+            transfer["runtime_dataset_version"] = (
+                "recorded_outside_runtime_package"
+            )
+            transfer["excluded_runtime_dataset_versions"] = (
+                "recorded_outside_runtime_package"
+            )
+            transfer["runtime_manifest_sha256"] = "see_SOURCE_MANIFEST.json"
+            transfer["runtime_remote_redownload_verified"] = False
+            for key in source_inventory:
+                source_inventory[key] = "recorded_outside_runtime_package"
     return payload
 
 

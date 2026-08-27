@@ -13,6 +13,7 @@ from typing import Any
 try:
     from appearance_family import (
         COSINE_FAMILY,
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
         FAMILIES,
         PAIR_FUSION_FAMILY,
         PARAMETER_COUNT_BY_FAMILY,
@@ -23,6 +24,7 @@ try:
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_family import (
         COSINE_FAMILY,
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
         FAMILIES,
         PAIR_FUSION_FAMILY,
         PARAMETER_COUNT_BY_FAMILY,
@@ -63,6 +65,8 @@ EXPECTED_REAL_VALIDATION_COUNT = 12
 EXPECTED_REAL_CALIBRATION_COUNT = 12
 MINIMUM_REAL_TOP1 = 0.70
 MINIMUM_SYNTHETIC_TOP1 = 0.85
+MINIMUM_REAL_COMPOSITE_GAIN = 0.005
+MAXIMUM_SYNTHETIC_METRIC_REGRESSION = 0.01
 
 
 def sha256_file(path: Path) -> str:
@@ -123,6 +127,103 @@ def _verify_checkpoint_strict(path: Path, family: str) -> None:
             raise ValueError(f"appearance checkpoint tensor is invalid: {name}")
 
 
+def verify_finetuning_gate(
+    worker: dict[str, Any], config: dict[str, Any], *, fold: str
+) -> None:
+    """Recompute the contextual transfer gate from terminal metrics."""
+
+    initial_real = worker.get("initial_real")
+    best_real = worker.get("best_real")
+    initial_synthetic = worker.get("initial_synthetic")
+    best_synthetic = worker.get("best_synthetic")
+    gate = worker.get("finetuning_gate")
+    initialization = worker.get("initialization")
+    if not all(
+        isinstance(value, dict)
+        for value in (
+            initial_real,
+            best_real,
+            initial_synthetic,
+            best_synthetic,
+            gate,
+            initialization,
+        )
+    ):
+        raise ValueError(f"contextual transfer evidence is missing: {fold}")
+    if config.get("initialization") != initialization:
+        raise ValueError(f"contextual initialization evidence diverges: {fold}")
+    if not (
+        initialization.get("policy") == "hash-bound ZebraHub external pretraining"
+        and initialization.get("run_id") == "zebrahub-contextual-pretrain-v1"
+        and initialization.get("fold") == fold
+        and len(str(initialization.get("model_sha256", ""))) == 64
+        and initialization.get("external_training_source") == "ZSNS004"
+        and initialization.get("external_validation_source") == "ZSNS005"
+        and config.get("minimum_real_composite_gain")
+        == MINIMUM_REAL_COMPOSITE_GAIN
+        and config.get("maximum_synthetic_metric_regression")
+        == MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+        and worker.get("finetuning_gate_passed") is True
+        and gate.get("passed") is True
+        and gate.get("minimum_real_composite_gain")
+        == MINIMUM_REAL_COMPOSITE_GAIN
+        and gate.get("maximum_synthetic_metric_regression")
+        == MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+        and gate.get("real_inventory_unchanged") is True
+        and gate.get("synthetic_inventory_unchanged") is True
+    ):
+        raise ValueError(f"contextual transfer contract changed: {fold}")
+    metrics = ("composite", "top1", "mrr", "division_top2")
+    real_gains = {
+        name: finite_float(best_real, name, fold=fold)
+        - finite_float(initial_real, name, fold=fold)
+        for name in metrics
+    }
+    synthetic_gains = {
+        name: finite_float(best_synthetic, name, fold=fold)
+        - finite_float(initial_synthetic, name, fold=fold)
+        for name in metrics
+    }
+    recorded_real = gate.get("real_gains")
+    recorded_synthetic = gate.get("synthetic_gains")
+    if not isinstance(recorded_real, dict) or not isinstance(
+        recorded_synthetic, dict
+    ):
+        raise ValueError(f"contextual transfer gains are missing: {fold}")
+    if any(
+        not math.isclose(
+            float(recorded[name]), gain, rel_tol=1e-9, abs_tol=1e-12
+        )
+        for recorded, observed in (
+            (recorded_real, real_gains),
+            (recorded_synthetic, synthetic_gains),
+        )
+        for name, gain in observed.items()
+    ):
+        raise ValueError(f"contextual transfer gains diverge: {fold}")
+    inventory_names = ("rows", "division_rows", "transitions")
+    inventory_unchanged = all(
+        int(initial[name]) == int(candidate[name])
+        for initial, candidate in (
+            (initial_real, best_real),
+            (initial_synthetic, best_synthetic),
+        )
+        for name in inventory_names
+    )
+    if not (
+        inventory_unchanged
+        and real_gains["composite"] >= MINIMUM_REAL_COMPOSITE_GAIN
+        and real_gains["top1"] > 0.0
+        and real_gains["mrr"] > 0.0
+        and real_gains["division_top2"] >= 0.0
+        and all(
+            value >= -MAXIMUM_SYNTHETIC_METRIC_REGRESSION
+            for value in synthetic_gains.values()
+        )
+    ):
+        raise ValueError(f"contextual transfer gate failed: {fold}")
+
+
 def verify_output(
     root: Path,
     *,
@@ -143,6 +244,10 @@ def verify_output(
         and aggregate.get("run_id") == expected_run
         and aggregate.get("gpu_count") == 2
         and aggregate.get("both_folds_trained") is True
+        and (
+            family != CONTEXTUAL_PAIR_FUSION_FAMILY
+            or aggregate.get("both_folds_improved") is True
+        )
         and aggregate.get("public_predictions_copied") is False
         and aggregate.get("public_leaderboard_used_for_selection") is False
         and aggregate.get("submission_created") is False
@@ -269,6 +374,8 @@ def verify_output(
             and len(real_calibration) == EXPECTED_REAL_CALIBRATION_COUNT
         ):
             raise ValueError(f"appearance training configuration changed: {fold}")
+        if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+            verify_finetuning_gate(worker, config, fold=fold)
         synthetic_names = set(map(str, synthetic_train))
         synthetic_validation_names = set(map(str, synthetic_validation))
         if synthetic_names & synthetic_validation_names:
