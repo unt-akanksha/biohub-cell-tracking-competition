@@ -336,3 +336,36 @@ base Trackastra scorer already used autocast; leaving the dense candidate-edge
 head in FP32 would have preserved a large avoidable T4 bottleneck. CPU behavior
 is unchanged, outputs are converted to finite FP32 probabilities, and the
 two-GPU whole-movie sharding and ten-hour hard stop remain mandatory.
+
+## Untouched third-embryo acceptance
+
+ZSNS005 is now protected by disjoint selection and one-shot audit windows, but
+both partitions still come from one embryo. A further pre-weight gate therefore
+freezes ZSNS001 as an entirely separate `external_acceptance` source. This is
+consistent with Trackastra's primary finding that diverse training improves
+out-of-domain behavior, while avoiding any claim based on public code,
+predictions, or leaderboard feedback: <https://arxiv.org/abs/2405.15700>.
+
+ZSNS001 also exposed a useful domain shift before model evaluation: its public
+lineage CSV uses track-level identifiers rather than ZSNS004/005's node-level
+identifiers. A project-owned converter now maps same-track continuations and
+new daughter tracks to adjacent-frame parent IDs, with a pinned synthetic test.
+The public movie has the same physical level-0 and level-1 spacings as the
+training embryos and 791 frames.
+
+Sixteen fixed transitions span four developmental windows at timepoints
+`120-123`, `300-303`, `480-483`, and `660-663`. The verified derived asset has
+1,023 sources, 1,536 targets, 80,485 candidates, 1,150 positives, and 127
+division sources. Its inventory SHA-256 is
+`e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667` and
+manifest SHA-256 is
+`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`.
+The asset contains 8,496,478 bytes of derived patches/evidence and no raw CSV or
+Zarr files.
+
+The verifier records `model_predictions_read: false`. ZSNS001 must remain
+unopened until both v3 folds pass and freeze their ZSNS005 selection/audit
+checkpoints. It will then be evaluated once against the exact seeded initial
+model with the same broad gain gate; its result may reject v3 but may not tune
+or redirect checkpoint selection. Construction and verification used no Kaggle
+GPU, competition data, leaderboard result, or submission.
