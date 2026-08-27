@@ -108,6 +108,14 @@ This direction addresses same-organism representation coverage and known
 transition failure modes. Merely increasing encoder width is lower value until
 these structured sources of error are measured.
 
+The project-authored v3 adapter is also wired to the native Biohub training
+contract: overlapping `t-1,t,t+1` temporal volumes supply their central
+adjacent frames to the label-free estimator, physical node coordinates produce
+residual candidate context, and the contextual head returns the same dense
+finite/`-inf` candidate matrix expected by the all-positive loss. Synthetic
+integer-shift tests recover the exact physical shift and backpropagate finite
+gradients through source embeddings, target embeddings, and division logits.
+
 ## Selective extraction smoke
 
 The CPU/network-only extractor completed one frozen ZSNS004 transition at

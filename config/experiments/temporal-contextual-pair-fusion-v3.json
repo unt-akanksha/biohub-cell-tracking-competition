@@ -42,6 +42,7 @@
     "ZSNS005_must_improve_over_v2": true,
     "both_biohub_reciprocal_folds_must_improve_over_v2": true,
     "zero_appearance_zero_context_control_required": true,
+    "biohub_temporal_volume_adapter_verified": true,
     "processed_acceptance_remains_unopened_until_weights_frozen": true,
     "leaderboard_selection_forbidden": true,
     "future_submission_requires_exactly_two_gpus": true,
@@ -76,6 +77,8 @@
   "source": {
     "transition_context_sha256": "85c711721fe2edeb9eaac202cc3b6ff1eef25e28cd75023d37ed79598fea56f3",
     "contextual_pair_fusion_sha256": "17b97bc02bc3bf82cd10280c89e2e44f8f23cd71d65b2201dbb158c226b6078f",
+    "contextual_training_adapter_sha256": "352d98a2299b2fc1d51c2342a364c22772d7f804a9d733c8210a5ac8122e63cf",
+    "contextual_training_test_sha256": "88357fbcf1a5022baa94af3e4b386dabd821ae7b743dbb90fb196b6a9ea873fc",
     "zebrahub_external_sha256": "836216f611cc508bce05d25c9d1bbc582fb097ddb7a8e1ea76b17e956655ac93",
     "zebrahub_builder_sha256": "b80f962ecfd4561ec36ec1d62d14701dab9929c0b5014a633384165c8b3ef396",
     "contextual_smoke_sha256": "13fbf01c5b25ea5c70b71cf6c81040b4512bbecc8f6a0544141bf4dca4535d14",
