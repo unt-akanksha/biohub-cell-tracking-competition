@@ -88,3 +88,14 @@ def test_contextual_pair_adapter_fails_closed_without_transition_volumes() -> No
             source_volume=np.zeros((3, 3, 3, 3), dtype=np.float32),
             target_volume=None,
         )
+
+
+def test_contextual_trainer_requires_external_pretraining_evidence() -> None:
+    contextual.require_external_pretraining(
+        ["--orchestrate", "--initial-model-root", "/evidence"]
+    )
+    contextual.require_external_pretraining(
+        ["--worker", "--initial-model-root=/evidence"]
+    )
+    with pytest.raises(ValueError, match="requires hash-bound ZebraHub"):
+        contextual.require_external_pretraining(["--orchestrate"])

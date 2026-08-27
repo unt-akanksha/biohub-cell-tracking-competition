@@ -84,6 +84,10 @@ SOURCES = {
     / "research"
     / "temporal_contrastive"
     / "train_dual_fold_contextual_pair_fusion.py",
+    "train_zebrahub_contextual_pretrain.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_zebrahub_contextual_pretrain.py",
     "appearance_blend.py": ROOT
     / "research"
     / "temporal_contrastive"
@@ -214,7 +218,7 @@ def main() -> None:
             "schema_version": 1,
             "run_id": RUN_ID_BY_FAMILY[args.family],
             "runtime_family": args.family,
-            "purpose": "portable two-GPU appearance training, clean calibration, exact processed materialization, and candidate building; no submit command",
+            "purpose": "portable two-GPU external pretraining and reciprocal appearance training, clean calibration, exact processed materialization, and candidate building; no submit command",
             "trackastra": {
                 "repository": "https://github.com/weigertlab/trackastra",
                 "commit": commit,
@@ -240,7 +244,11 @@ def main() -> None:
                 },
                 "input_channels": 3,
                 "temporal_frame_offsets": [-1, 0, 1],
-                "external_pretrained_weights": False,
+                "external_pretrained_weights_required_by_family": {
+                    "temporal_cosine_v1": False,
+                    "temporal_pair_fusion_v2": False,
+                    "temporal_contextual_pair_fusion_v3": True,
+                },
                 "division_head_used_at_inference": True,
                 "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
             },
@@ -257,6 +265,7 @@ def main() -> None:
                 "submission_internet_enabled": False,
                 "timed_out_worker_termination_grace_seconds": 15,
                 "predeclared_trackastra_control_allowed": True,
+                "contextual_v3_requires_hash_bound_external_pretraining": True,
             },
             "files": files,
         },

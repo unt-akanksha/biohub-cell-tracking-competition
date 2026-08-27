@@ -76,6 +76,59 @@ def family_metadata() -> dict[str, object]:
     }
 
 
+def load_initial_model(
+    model: torch.nn.Module,
+    root: Path | None,
+    fold: str,
+) -> dict[str, object]:
+    """Load one hash-bound external-pretraining fold or declare random init."""
+
+    if root is None:
+        return {"policy": "seeded_random_initialization"}
+    root = root.resolve()
+    aggregate_path = root / "pretraining_terminal.json"
+    worker_path = root / fold / "worker_terminal.json"
+    model_path = root / fold / "pretrained_model.pt"
+    if not all(path.is_file() for path in (aggregate_path, worker_path, model_path)):
+        raise FileNotFoundError(f"incomplete external pretraining evidence for {fold}")
+    aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
+    worker = json.loads(worker_path.read_text(encoding="utf-8"))
+    model_hash = base.sha256_file(model_path)
+    if not (
+        aggregate.get("status") == "completed"
+        and aggregate.get("run_id") == "zebrahub-contextual-pretrain-v1"
+        and aggregate.get("appearance_family")
+        == "temporal_contextual_pair_fusion_v3"
+        and aggregate.get("gpu_count") == 2
+        and aggregate.get("both_folds_improved") is True
+        and aggregate.get("submission_created") is False
+        and worker.get("status") == "completed"
+        and worker.get("run_id") == aggregate.get("run_id")
+        and worker.get("fold") == fold
+        and worker.get("appearance_family")
+        == aggregate.get("appearance_family")
+        and int(worker.get("parameter_count", 0)) == EXPECTED_PARAMETER_COUNT
+        and int(worker.get("best_step", 0)) > 0
+        and worker.get("model_sha256") == model_hash
+        and worker.get("external_training_source") == "ZSNS004"
+        and worker.get("external_validation_source") == "ZSNS005"
+        and worker.get("competition_data_read") is False
+        and worker.get("public_leaderboard_used_for_selection") is False
+        and worker.get("submission_created") is False
+    ):
+        raise ValueError(f"invalid external pretraining evidence for {fold}")
+    state = torch.load(model_path, map_location="cpu", weights_only=True)
+    model.load_state_dict(state, strict=True)
+    return {
+        "policy": "hash-bound ZebraHub external pretraining",
+        "run_id": aggregate["run_id"],
+        "fold": fold,
+        "model_sha256": model_hash,
+        "external_training_source": "ZSNS004",
+        "external_validation_source": "ZSNS005",
+    }
+
+
 def physical_coordinates(
     values: np.ndarray,
     voxel_size_zyx_um: tuple[float, float, float],
@@ -254,6 +307,7 @@ def train_worker(args: argparse.Namespace) -> None:
         base_channels=args.base_channels,
         embedding_channels=args.embedding_channels,
     ).to(device)
+    initialization = load_initial_model(model, args.initial_model_root, args.fold)
     ema_model = MODEL_CLASS(
         base_channels=args.base_channels,
         embedding_channels=args.embedding_channels,
@@ -310,6 +364,7 @@ def train_worker(args: argparse.Namespace) -> None:
             "base_channels": args.base_channels,
             "embedding_channels": args.embedding_channels,
             **architecture_metadata,
+            "initialization": initialization,
             "checkpoint_weight_source": (
                 "optimizer-step exponential moving average"
             ),
@@ -530,6 +585,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "input_channels": 3,
         "temporal_frame_offsets": [-1, 0, 1],
         **architecture_metadata,
+        "initialization": initialization,
         "checkpoint_weight_source": "optimizer-step exponential moving average",
         "ema_decay": args.ema_decay,
         "division_prior_correction": "class-conditional importance weighting",
@@ -634,6 +690,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--competition-dir", type=Path, required=True)
     result.add_argument("--synthetic-root", type=Path, required=True)
     result.add_argument("--output-dir", type=Path, required=True)
+    result.add_argument("--initial-model-root", type=Path)
     result.add_argument("--seed", type=int, default=41027)
     result.add_argument("--steps", type=int, default=30000)
     result.add_argument("--max-wall-seconds", type=int, default=36000)

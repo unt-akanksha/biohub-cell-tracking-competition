@@ -9,6 +9,7 @@ evidence only and has no competition submission path.
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 
 import numpy as np
 import torch
@@ -126,7 +127,19 @@ def configure() -> None:
     generic.validate_pair_model = validate_contextual_model
 
 
+def require_external_pretraining(argv: list[str]) -> None:
+    if not any(
+        value == "--initial-model-root"
+        or value.startswith("--initial-model-root=")
+        for value in argv
+    ):
+        raise ValueError(
+            "contextual v3 requires hash-bound ZebraHub external pretraining"
+        )
+
+
 def main() -> None:
+    require_external_pretraining(sys.argv[1:])
     configure()
     generic.main()
 

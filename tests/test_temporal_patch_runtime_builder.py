@@ -39,6 +39,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "submission_internet_enabled": False,
         "timed_out_worker_termination_grace_seconds": 15,
         "predeclared_trackastra_control_allowed": True,
+        "contextual_v3_requires_hash_bound_external_pretraining": True,
     }
     required = {
         "train_dual_fold_patch.py",
@@ -48,6 +49,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "contextual_pair_fusion.py",
         "contextual_training.py",
         "train_dual_fold_contextual_pair_fusion.py",
+        "train_zebrahub_contextual_pretrain.py",
         "appearance_family.py",
         "calibrate_dual_fold_blend.py",
         "dual_fold_appearance_processed_acceptance.py",
@@ -123,6 +125,9 @@ def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None
     assert manifest["appearance_model"]["families"][
         "temporal_contextual_pair_fusion_v3"
     ]["parameters_per_fold"] == 20_747_761
+    assert manifest["appearance_model"][
+        "external_pretrained_weights_required_by_family"
+    ]["temporal_contextual_pair_fusion_v3"] is True
     assert experiment["model"]["family"] == "temporal_contextual_pair_fusion_v3"
     assert experiment["public_code_copied"] is False
     assert (

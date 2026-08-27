@@ -169,3 +169,16 @@ whole-movie scoring, downstream acceptance contracts, and all three runtime
 families. This is implementation evidence, not scientific promotion evidence;
 v3 remains staged until the running v1 experiment and clean calibration gates
 produce terminal results.
+
+The external-pretraining requirement is now executable and fail-closed rather
+than aspirational. Two independent GPU-isolated v3 workers optimize only
+hash-verified ZSNS004 derived shards and select EMA checkpoints only on
+disjoint ZSNS005 shards. The default evidence floor is 64 training transitions
+and 16 validation transitions. Dataset manifests must prove the frozen source
+role, organizer authorization lineage, exact bytes/hash, 18-value context
+contract, and absence of competition data, public predictions, leaderboard
+selection, or submission activity. Biohub v3 fine-tuning now refuses to start
+unless both external folds improve after step zero and the aggregate and worker
+terminals bind the exact checkpoint hashes. Randomly initialized v3 can no
+longer masquerade as the predeclared same-organism candidate; v1 and v2 remain
+unchanged controls.
