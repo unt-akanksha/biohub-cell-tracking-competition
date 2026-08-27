@@ -218,3 +218,21 @@ It declares exactly two visible GPUs and contains no submission command. The
 focused dataset/runtime checks passed 20/20, and the expanded temporal,
 contextual, and ZebraHub regression set passed 90/90. No pretraining launch is
 authorized while the current two-GPU v1 evidence gate is still running.
+
+## Staged original pretraining kernel
+
+The code-only runtime is now private Kaggle dataset
+`indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3` version 1. A
+complete remote redownload reproduced the 36-file, 520,791-byte integrity
+inventory and the exact runtime manifest above. This publication used no GPU.
+
+The deterministic private notebook
+`indarkarhana/biohub-zebrahub-contextual-pretrain-v1` is built locally but has
+not been pushed or started. Its only inputs are the private runtime and the
+hash-pinned ZebraHub version-3 derived shards; it does not attach the Biohub
+competition. It refuses any machine other than exactly two visible GPUs, runs
+two isolated 20.7M-parameter folds, caps each worker at 21,600 seconds, selects
+only on ZSNS005, and writes checkpoints plus evidence without a submission
+command. Four notebook-contract tests pass, including deterministic bytes and
+both direct-directory and archive-style Kaggle mounts. Launch remains gated on
+the current v1 terminal and the eight-hour Kaggle reserve.
