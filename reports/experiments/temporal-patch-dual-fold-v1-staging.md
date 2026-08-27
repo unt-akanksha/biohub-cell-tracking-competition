@@ -112,8 +112,9 @@ named artifact in the downloaded training output.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 42 tests across the normal
-and pinned exact-scorer environments. It covers physical
+The updated temporal/Trackastra checks and the full environment-split
+repository suite pass across the normal and pinned exact-scorer environments.
+Coverage includes physical
 resampling, temporal boundary clamping and shared-channel grids, all-daughter
 supervised-contrastive loss, partial-accumulation normalization,
 candidate-radius failure,
@@ -139,11 +140,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 513 unique tests
+The cumulative environment-split repository suite now passes 517 unique tests
 with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 454 tests after excluding the scorer-only files, and all 59
+environment passed 462 tests after excluding the scorer-only files, and all 55
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
