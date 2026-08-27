@@ -1,0 +1,182 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STAGING_ROOT = ROOT / ".biohub" / "staging"
+TARGET = STAGING_ROOT / "biohub-temporal-patch-runtime-v1"
+TRACKASTRA_REPOSITORY = ROOT / ".biohub" / "cache" / "repos" / "trackastra"
+EXPECTED_TRACKASTRA_COMMIT = "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b"
+SOURCES = {
+    "model.py": ROOT / "research" / "temporal_contrastive" / "model.py",
+    "patch_model.py": ROOT / "research" / "temporal_contrastive" / "patch_model.py",
+    "train_dual_fold_patch.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_dual_fold_patch.py",
+    "appearance_blend.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "appearance_blend.py",
+    "calibrate_dual_fold_blend.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "calibrate_dual_fold_blend.py",
+    "dual_fold_appearance_processed_acceptance.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "dual_fold_appearance_processed_acceptance.py",
+    "dual_fold_appearance_submission.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "dual_fold_appearance_submission.py",
+    "trainer.py": ROOT
+    / "research"
+    / "trackastra_graph"
+    / "train_biohub_graph_transformer.py",
+    "synthetic_data.py": ROOT / "research" / "synthetic_pretrain" / "data.py",
+    "hybrid_linker.py": ROOT / "research" / "trackastra_graph" / "hybrid_linker.py",
+    "rerank_submission.py": ROOT
+    / "research"
+    / "trackastra_graph"
+    / "rerank_submission.py",
+    "dual_fold_processed_acceptance.py": ROOT
+    / "research"
+    / "trackastra_graph"
+    / "dual_fold_processed_acceptance.py",
+    "dual_fold_rerank_submission.py": ROOT
+    / "research"
+    / "trackastra_graph"
+    / "dual_fold_rerank_submission.py",
+    "submission_sharding.py": ROOT / "research" / "submission_sharding.py",
+    "experiment.json": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-patch-dual-fold-v1.json",
+}
+TRACKASTRA_FILES = (
+    "trackastra/__init__.py",
+    "trackastra/_version.py",
+    "trackastra/model/__init__.py",
+    "trackastra/model/model.py",
+    "trackastra/model/model_parts.py",
+    "trackastra/model/rope.py",
+    "trackastra/utils/__init__.py",
+    "trackastra/utils/utils.py",
+)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def write_json(path: Path, payload: dict) -> None:
+    path.write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+
+def checked_target() -> Path:
+    staging = STAGING_ROOT.resolve()
+    target = TARGET.resolve()
+    if target.parent != staging or target.name != "biohub-temporal-patch-runtime-v1":
+        raise RuntimeError(f"unsafe temporal runtime target: {target}")
+    return target
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--replace", action="store_true")
+    args = parser.parse_args()
+    target = checked_target()
+    if target.exists():
+        if not args.replace:
+            raise FileExistsError(f"{target} exists; pass --replace to rebuild")
+        shutil.rmtree(target)
+    target.mkdir(parents=True)
+
+    commit = subprocess.check_output(
+        ["git", "-C", str(TRACKASTRA_REPOSITORY), "rev-parse", "HEAD"], text=True
+    ).strip()
+    if commit != EXPECTED_TRACKASTRA_COMMIT:
+        raise RuntimeError(f"Trackastra source commit changed: {commit}")
+    missing = [str(path) for path in SOURCES.values() if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(f"temporal runtime sources are missing: {missing}")
+    for name, source in SOURCES.items():
+        shutil.copy2(source, target / name)
+    shutil.copy2(TRACKASTRA_REPOSITORY / "LICENSE", target / "TRACKASTRA_LICENSE")
+    for relative in TRACKASTRA_FILES:
+        source = TRACKASTRA_REPOSITORY / relative
+        destination = target / "trackastra_source" / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination)
+
+    files = {
+        path.relative_to(target).as_posix(): {
+            "bytes": path.stat().st_size,
+            "sha256": sha256_file(path),
+        }
+        for path in sorted(target.rglob("*"))
+        if path.is_file()
+    }
+    write_json(
+        target / "SOURCE_MANIFEST.json",
+        {
+            "schema_version": 1,
+            "run_id": "temporal-patch-dual-fold-v1",
+            "purpose": "portable two-GPU appearance training, clean calibration, exact processed materialization, and candidate building; no submit command",
+            "trackastra": {
+                "repository": "https://github.com/weigertlab/trackastra",
+                "commit": commit,
+                "license": "BSD-3-Clause",
+            },
+            "appearance_model": {
+                "implementation": "independent Biohub physical-scale 3D residual encoder",
+                "parameters_per_fold": 7_498_890,
+                "external_pretrained_weights": False,
+            },
+            "integrity": {
+                "required_gpu_count": 2,
+                "opened_processed_acceptance_stems_excluded_from_training": True,
+                "public_predictions_copied": False,
+                "public_leaderboard_used_for_selection": False,
+                "competition_submission_command_included": False,
+            },
+            "files": files,
+        },
+    )
+    write_json(
+        target / "dataset-metadata.json",
+        {
+            "title": "Biohub Temporal Patch Runtime v1",
+            "id": "indarkarhana/biohub-temporal-patch-runtime-v1",
+            "licenses": [{"name": "BSD-3-Clause"}],
+            "isPrivate": True,
+        },
+    )
+    print(
+        json.dumps(
+            {
+                "target": str(target),
+                "source_files": len(files),
+                "bytes": sum(
+                    path.stat().st_size for path in target.rglob("*") if path.is_file()
+                ),
+            }
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()

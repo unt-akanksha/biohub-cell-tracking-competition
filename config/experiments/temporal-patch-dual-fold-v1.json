@@ -16,7 +16,8 @@
     "calibrator_sha256": "89011168ab401cc0729b0197b60821dd39d5917d6765605f9d72b21961ee80e4",
     "processed_materializer_sha256": "076c8014b736997641f48093441e5cf91333a93cb8dbd43d900a5a4154bbf8a1",
     "exact_gate_sha256": "f07137f1901539be9160843421ea0ace43f2169ce8842744f007f4eeb6a814aa",
-    "two_gpu_candidate_builder_sha256": "fc5063a11624449c26d5bf7fe0aaebefc5f874c3d6990e44d33908f78d7c3c25"
+    "two_gpu_candidate_builder_sha256": "fc5063a11624449c26d5bf7fe0aaebefc5f874c3d6990e44d33908f78d7c3c25",
+    "runtime_builder_sha256": "77caec246a1d9e28ac840710c98e40912fbca1b27665f0be37ed150f9ea54b4b"
   },
   "model": {
     "architecture": "independent physical-scale 3D residual patch encoder",
