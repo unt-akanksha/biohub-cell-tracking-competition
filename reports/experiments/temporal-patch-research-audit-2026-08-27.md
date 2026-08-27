@@ -113,3 +113,6 @@ Its manifest SHA-256 is
 all 29 declared source files verified after fresh extraction. The package has
 no submission command. No v2 model has been trained yet, no Kaggle GPU was
 used, and no competition artifact was submitted.
+
+The exact execution commands and stop conditions are frozen in
+`reports/experiments/temporal-patch-pair-fusion-cloud-handoff-v2.md`.
