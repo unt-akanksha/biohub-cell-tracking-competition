@@ -1913,13 +1913,13 @@
       "failure_reason": null,
       "hypothesis": "A conservative radius-2, power-2, 0.25 blend from frozen public nodes toward an independently trained 35.1M-parameter LSM-FM probability centroid will improve integer-submission-space organizer score without changing node IDs, counts, frame assignments, or graph topology.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "lsm-fm-public-node-refinement-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-27T01:50:00.204463Z",
       "run_id": "lsm-fm-public-node-refinement-v2",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1
