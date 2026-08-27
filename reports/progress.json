@@ -1817,6 +1817,49 @@
       "registered_at": "2026-08-26T21:57:03.857749Z",
       "run_id": "lsm-fm-center-enhancement-v1",
       "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Bind the fresh immutable preflight, independently downloaded private runtime, frozen detector, honest public-topology inheritance, and no-submission notebook before GPU launch.",
+          "replacement_fields": {
+            "acceptance_labels_opened": false,
+            "broad_lsm_fm_tests_passed": 70,
+            "exact_public_replica": false,
+            "focused_tests_passed": 7,
+            "preflight_file_sha256": "f9b1e26dd8006ec69febdf75bd61aa66674424c6319e02b8ae3bbb07ed4a6a2a",
+            "preflight_report": "artifacts/preflights/lsm-fm-public-node-refinement-v1-r2.json",
+            "preflight_report_sha256": "d9ab1439b88a9d9fe5a95d9d6bd6ea2d241468d99c488e5a7a0b38935f27551a",
+            "public_graph_topology_preserved": true,
+            "public_graph_used_as_base": true,
+            "public_leaderboard_used_for_selection": false,
+            "remote_dataset_download_verified": true,
+            "runtime_dataset": "indarkarhana/biohub-lsm-fm-public-node-runtime-v1",
+            "runtime_dataset_version": 1,
+            "runtime_manifest_sha256": "2cea1bd05fd35f687ecbe47f04128b37fba3d542b5aed95b6fe6900b9d8479fe",
+            "submission_path_present": false
+          },
+          "target_event_id": "evt-9e1d3d47a57847b08c6a2a5bd8945c0d"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "1.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A single global coordinate blend from the frozen high-recall public graph toward the independently trained 35.1M-parameter LSM-FM feature-36 probability centroid will strictly increase matched held-out nodes while preserving every node ID, edge, frame assignment, and node count.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "public-0927-clean-repro-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-27T00:57:43.841806Z",
+      "run_id": "lsm-fm-public-node-refinement-v1",
+      "status": "running"
     }
   ],
   "schema_version": 1

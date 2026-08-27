@@ -50,6 +50,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `lsm-fm-ensemble-validation-v1` | lsm-fm-image-text-pu-adaptation-v1 | A fixed equal-probability ensemble of independently pretrained LSM-FM feature-24 and feature-36 detectors plus a single global sub-voxel refinement can recover the 14 hard-movie matches needed to cross the unchanged 0.65 gate without retraining or leaderboard selection. | rejected | not recorded | — | 0.29 / 1.00 | retain | No predeclared candidate crossed the immutable 0.65 worst-movie gate; feature36 control remained best at 0.641953 and acceptance stayed sealed. | — |
 | `lsm-fm-image-text-localization-refinement-v1` | lsm-fm-ensemble-validation-v1 | A single global raw-intensity-aware or wider-radius sub-voxel refinement of frozen feature-36 peaks will recover the 14 limiting-movie matches needed to cross 0.65 without material regression elsewhere. | rejected | not recorded | — | 0.30 / 1.00 | retain | Probability radius-2 reached 1078/1659=0.649789 on the limiting movie, exactly one match below the immutable 0.65 gate; acceptance remained sealed and no submission was created. | — |
 | `lsm-fm-center-enhancement-v1` | lsm-fm-image-text-localization-refinement-v1 | A learned count-preserving 3D center-enhancement head trained only on one-to-one sparse annotation matches from non-validation movies will add the single limiting-movie match needed beyond probability_r2_p2 without a material per-movie regression. | rejected | not recorded | — | 0.44 / 1.25 | retain | The learned residual improved pooled selection matching by 32 nodes but regressed the limiting movie from 1078 to 1062 matches at full scale; half scale reached 1077. Neither crossed the immutable 0.65 gate, acceptance stayed sealed, and no submission was created. | — |
+| `lsm-fm-public-node-refinement-v1` | public-0927-clean-repro-v2 | A single global coordinate blend from the frozen high-recall public graph toward the independently trained 35.1M-parameter LSM-FM feature-36 probability centroid will strictly increase matched held-out nodes while preserving every node ID, edge, frame assignment, and node count. | running | not recorded | — | unknown / 1.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -318,6 +319,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `["reports/experiments/lsm-fm-center-enhancement-v1-result.json"]`
+
+### lsm-fm-public-node-refinement-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls
