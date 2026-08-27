@@ -14,6 +14,7 @@ MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS = 7_200
 DEFAULT_INFERENCE_HARD_STOP_SECONDS = (
     KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
 )
+KAGGLE_T4_X2_MACHINE_SHAPE = "NvidiaTeslaT4"
 
 
 def validate_inference_hard_stop(seconds: int) -> int:
@@ -27,6 +28,24 @@ def validate_inference_hard_stop(seconds: int) -> int:
             "notebook finalization reserve"
         )
     return value
+
+
+def validate_submission_kernel_metadata(metadata: Mapping[str, object]) -> None:
+    """Require the Kaggle T4 x2 request before runtime device verification."""
+
+    expected = {
+        "enable_gpu": True,
+        "enable_tpu": False,
+        "enable_internet": False,
+        "machine_shape": KAGGLE_T4_X2_MACHINE_SHAPE,
+    }
+    drift = {
+        key: {"expected": value, "observed": metadata.get(key)}
+        for key, value in expected.items()
+        if metadata.get(key) != value
+    }
+    if drift:
+        raise ValueError(f"unsafe Kaggle submission kernel metadata: {drift}")
 
 
 @dataclass(frozen=True)

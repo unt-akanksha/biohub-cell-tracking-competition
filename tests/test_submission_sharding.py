@@ -4,11 +4,13 @@ import pytest
 
 from research.submission_sharding import (
     DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+    KAGGLE_T4_X2_MACHINE_SHAPE,
     KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
     MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS,
     build_movie_shards,
     shard_plan_sha256,
     validate_inference_hard_stop,
+    validate_submission_kernel_metadata,
     validate_shard_outputs,
     visible_cuda_tokens,
     worker_environment,
@@ -25,6 +27,23 @@ def test_submission_runtime_policy_preserves_two_hours() -> None:
     assert validate_inference_hard_stop(36_000) == 36_000
     with pytest.raises(ValueError, match="finalization reserve"):
         validate_inference_hard_stop(36_001)
+
+
+def test_submission_metadata_requires_offline_t4_x2_shape() -> None:
+    metadata = {
+        "enable_gpu": True,
+        "enable_tpu": False,
+        "enable_internet": False,
+        "machine_shape": KAGGLE_T4_X2_MACHINE_SHAPE,
+    }
+    validate_submission_kernel_metadata(metadata)
+
+    with pytest.raises(ValueError, match="unsafe Kaggle"):
+        validate_submission_kernel_metadata({**metadata, "enable_internet": True})
+    with pytest.raises(ValueError, match="unsafe Kaggle"):
+        validate_submission_kernel_metadata(
+            {**metadata, "machine_shape": "NvidiaTeslaP100"}
+        )
 
 
 def test_dual_gpu_plan_assigns_every_movie_once() -> None:
