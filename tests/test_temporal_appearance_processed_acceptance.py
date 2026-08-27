@@ -59,7 +59,11 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
         calibration_folds[fold] = {
             "status": "completed",
             "fold": fold,
-            "selection": {"selected_weight": 0.1 * index, "improved": True},
+            "selection": {
+                "selected_weight": 0.1 * index,
+                "selected_division_weight": 0.05 * index,
+                "improved": True,
+            },
             "appearance_temperature": 0.10,
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "trackastra_model_sha256": trackastra_fold["model_sha256"],
@@ -105,6 +109,7 @@ def test_processed_appearance_sources_are_reciprocally_hash_bound(tmp_path: Path
     assert set(folds) == set(FOLDS)
     assert folds["target_44b6"]["appearance_weight"] == 0.1
     assert folds["target_6bba"]["appearance_weight"] == 0.2
+    assert folds["target_44b6"]["division_weight"] == 0.05
 
 
 def test_processed_appearance_sources_reject_mutated_model(tmp_path: Path) -> None:

@@ -26,6 +26,7 @@ try:
     from appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from patch_model import PhysicalPatchAssociationModel
@@ -33,6 +34,7 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -51,9 +53,15 @@ OPENED_ACCEPTANCE_STEMS = frozenset(
     }
 )
 APPEARANCE_WEIGHTS = (0.0, 0.05, 0.10, 0.20, 0.35)
+DIVISION_WEIGHTS = (0.0, 0.05, 0.10, 0.20)
 APPEARANCE_TEMPERATURE = 0.10
 MINIMUM_POOLED_GAIN = 0.001
 MAXIMUM_MOVIE_REGRESSION = 0.002
+FROZEN_LINK_CONFIGURATION = {
+    "edge_threshold": 0.08,
+    "division_threshold": 0.18,
+    "division_ratio": 0.50,
+}
 
 
 def atomic_json(path: Path, payload: Mapping[str, Any]) -> None:
@@ -220,40 +228,138 @@ def aggregate_metrics(rows: Sequence[Mapping[str, Any]]) -> dict[str, float | in
     }
 
 
+def association_metrics_for_video(
+    video: Any,
+    pair_scores: Mapping[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+) -> dict[str, float | int]:
+    """Score the actual frozen clean linker, including daughter recovery."""
+
+    predicted = set(
+        graph_base.link_movie(
+            dict(pair_scores),
+            edge_threshold=FROZEN_LINK_CONFIGURATION["edge_threshold"],
+            division_threshold=FROZEN_LINK_CONFIGURATION["division_threshold"],
+            division_ratio=FROZEN_LINK_CONFIGURATION["division_ratio"],
+        )
+    )
+    truth = {(int(source), int(target)) for source, target in video.edges.tolist()}
+    edge_tp = len(predicted & truth)
+    edge_fp = len(predicted - truth)
+    edge_fn = len(truth - predicted)
+
+    def division_sources(edges: set[tuple[int, int]]) -> set[int]:
+        counts: dict[int, int] = {}
+        for source, _target in edges:
+            counts[source] = counts.get(source, 0) + 1
+        return {source for source, count in counts.items() if count >= 2}
+
+    predicted_divisions = division_sources(predicted)
+    true_divisions = division_sources(truth)
+    division_tp = len(predicted_divisions & true_divisions)
+    division_fp = len(predicted_divisions - true_divisions)
+    division_fn = len(true_divisions - predicted_divisions)
+
+    def jaccard(tp: int, fp: int, fn: int) -> float:
+        denominator = tp + fp + fn
+        return float(tp / denominator) if denominator else 1.0
+
+    edge_jaccard = jaccard(edge_tp, edge_fp, edge_fn)
+    division_jaccard = jaccard(division_tp, division_fp, division_fn)
+    return {
+        "stem": video.stem,
+        "composite": 0.90 * edge_jaccard + 0.10 * division_jaccard,
+        "edge_jaccard": edge_jaccard,
+        "division_jaccard": division_jaccard,
+        "edge_tp": edge_tp,
+        "edge_fp": edge_fp,
+        "edge_fn": edge_fn,
+        "division_tp": division_tp,
+        "division_fp": division_fp,
+        "division_fn": division_fn,
+        "predicted_edges": len(predicted),
+        "true_edges": len(truth),
+    }
+
+
+def aggregate_association_metrics(
+    rows: Sequence[Mapping[str, Any]],
+) -> dict[str, float | int]:
+    totals = {
+        key: sum(int(row[key]) for row in rows)
+        for key in (
+            "edge_tp",
+            "edge_fp",
+            "edge_fn",
+            "division_tp",
+            "division_fp",
+            "division_fn",
+            "predicted_edges",
+            "true_edges",
+        )
+    }
+
+    def jaccard(prefix: str) -> float:
+        denominator = (
+            totals[f"{prefix}_tp"]
+            + totals[f"{prefix}_fp"]
+            + totals[f"{prefix}_fn"]
+        )
+        return float(totals[f"{prefix}_tp"] / denominator) if denominator else 1.0
+
+    edge = jaccard("edge")
+    division = jaccard("division")
+    return {
+        **totals,
+        "edge_jaccard": edge,
+        "division_jaccard": division,
+        "composite": 0.90 * edge + 0.10 * division,
+        "movies": len(rows),
+    }
+
+
 def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
-    by_weight = {float(row["appearance_weight"]): row for row in rows}
-    if set(by_weight) != set(APPEARANCE_WEIGHTS):
+    by_weight = {
+        (float(row["appearance_weight"]), float(row.get("division_weight", 0.0))): row
+        for row in rows
+    }
+    expected = {
+        (appearance_weight, division_weight)
+        for appearance_weight in APPEARANCE_WEIGHTS
+        for division_weight in DIVISION_WEIGHTS
+    }
+    if set(by_weight) != expected:
         raise ValueError("calibration grid is incomplete")
-    control = by_weight[0.0]
+    control = by_weight[(0.0, 0.0)]
     control_movies = {
         str(row["stem"]): float(row["composite"]) for row in control["by_movie"]
     }
     evaluated = []
-    for weight in APPEARANCE_WEIGHTS:
-        row = by_weight[weight]
-        movie_deltas = {
-            str(movie["stem"]): float(movie["composite"])
-            - control_movies[str(movie["stem"])]
-            for movie in row["by_movie"]
-        }
-        pooled_gain = float(row["pooled"]["composite"]) - float(
-            control["pooled"]["composite"]
-        )
-        worst_delta = min(movie_deltas.values())
-        eligible = bool(
-            weight > 0
-            and pooled_gain >= MINIMUM_POOLED_GAIN
-            and worst_delta >= -MAXIMUM_MOVIE_REGRESSION
-        )
-        evaluated.append(
-            {
-                **dict(row),
-                "pooled_gain_vs_zero": pooled_gain,
-                "worst_movie_delta_vs_zero": worst_delta,
-                "movie_deltas_vs_zero": movie_deltas,
-                "eligible": eligible,
+    for appearance_weight in APPEARANCE_WEIGHTS:
+        for division_weight in DIVISION_WEIGHTS:
+            row = by_weight[(appearance_weight, division_weight)]
+            movie_deltas = {
+                str(movie["stem"]): float(movie["composite"])
+                - control_movies[str(movie["stem"])]
+                for movie in row["by_movie"]
             }
-        )
+            pooled_gain = float(row["pooled"]["composite"]) - float(
+                control["pooled"]["composite"]
+            )
+            worst_delta = min(movie_deltas.values())
+            eligible = bool(
+                appearance_weight > 0
+                and pooled_gain >= MINIMUM_POOLED_GAIN
+                and worst_delta >= -MAXIMUM_MOVIE_REGRESSION
+            )
+            evaluated.append(
+                {
+                    **dict(row),
+                    "pooled_gain_vs_zero": pooled_gain,
+                    "worst_movie_delta_vs_zero": worst_delta,
+                    "movie_deltas_vs_zero": movie_deltas,
+                    "eligible": eligible,
+                }
+            )
     eligible = [row for row in evaluated if row["eligible"]]
     selected = (
         max(
@@ -261,18 +367,28 @@ def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             key=lambda row: (
                 float(row["worst_movie_delta_vs_zero"]),
                 float(row["pooled_gain_vs_zero"]),
+                -float(row["division_weight"]),
                 -float(row["appearance_weight"]),
             ),
         )
         if eligible
-        else next(row for row in evaluated if float(row["appearance_weight"]) == 0.0)
+        else next(
+            row
+            for row in evaluated
+            if float(row["appearance_weight"]) == 0.0
+            and float(row["division_weight"]) == 0.0
+        )
     )
     return {
         "selected_weight": float(selected["appearance_weight"]),
+        "selected_division_weight": float(selected["division_weight"]),
         "improved": bool(selected["eligible"]),
         "selected": selected,
         "control": next(
-            row for row in evaluated if float(row["appearance_weight"]) == 0.0
+            row
+            for row in evaluated
+            if float(row["appearance_weight"]) == 0.0
+            and float(row["division_weight"]) == 0.0
         ),
         "grid": evaluated,
     }
@@ -310,8 +426,10 @@ def worker(args: argparse.Namespace) -> None:
     trackastra_model.eval()
     import zarr
 
-    rows_by_weight: dict[float, list[dict[str, Any]]] = {
-        weight: [] for weight in APPEARANCE_WEIGHTS
+    rows_by_weight: dict[tuple[float, float], list[dict[str, Any]]] = {
+        (appearance_weight, division_weight): []
+        for appearance_weight in APPEARANCE_WEIGHTS
+        for division_weight in DIVISION_WEIGHTS
     }
     extraction = {}
     for stem in stems:
@@ -330,26 +448,47 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, _division_logits, extraction[stem] = extract_movie_embeddings(
+        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
             appearance_model, video, image, device, node_batch_size=args.node_batch_size
         )
         appearance_scores = appearance_scores_for_movie(video, embeddings, pair_scores)
-        for weight in APPEARANCE_WEIGHTS:
-            blended = blend_movie_pair_scores(
-                pair_scores,
-                appearance_scores,
-                appearance_weight=weight,
-                appearance_temperature=APPEARANCE_TEMPERATURE,
-            )
-            rows_by_weight[weight].append(ranking_metrics_for_video(video, blended))
+        source_divisions = division_logits_for_movie(video, division_logits, pair_scores)
+        for appearance_weight in APPEARANCE_WEIGHTS:
+            for division_weight in DIVISION_WEIGHTS:
+                blended = blend_movie_pair_scores(
+                    pair_scores,
+                    appearance_scores,
+                    appearance_weight=appearance_weight,
+                    appearance_temperature=APPEARANCE_TEMPERATURE,
+                    source_division_logits=source_divisions,
+                    division_weight=division_weight,
+                )
+                association = association_metrics_for_video(video, blended)
+                ranking = ranking_metrics_for_video(video, blended)
+                rows_by_weight[(appearance_weight, division_weight)].append(
+                    {
+                        **association,
+                        "ranking": ranking,
+                    }
+                )
     calibration_rows = [
         {
-            "appearance_weight": weight,
+            "appearance_weight": appearance_weight,
+            "division_weight": division_weight,
             "appearance_temperature": APPEARANCE_TEMPERATURE,
-            "pooled": aggregate_metrics(rows_by_weight[weight]),
-            "by_movie": rows_by_weight[weight],
+            "pooled": aggregate_association_metrics(
+                rows_by_weight[(appearance_weight, division_weight)]
+            ),
+            "ranking_pooled": aggregate_metrics(
+                [
+                    row["ranking"]
+                    for row in rows_by_weight[(appearance_weight, division_weight)]
+                ]
+            ),
+            "by_movie": rows_by_weight[(appearance_weight, division_weight)],
         }
-        for weight in APPEARANCE_WEIGHTS
+        for appearance_weight in APPEARANCE_WEIGHTS
+        for division_weight in DIVISION_WEIGHTS
     ]
     selection = select_weight(calibration_rows)
     output = {
@@ -364,7 +503,9 @@ def worker(args: argparse.Namespace) -> None:
         "appearance_model_sha256": appearance_terminal["model_sha256"],
         "trackastra_model_sha256": trackastra_terminal["model_sha256"],
         "appearance_weight_grid": list(APPEARANCE_WEIGHTS),
+        "division_weight_grid": list(DIVISION_WEIGHTS),
         "appearance_temperature": APPEARANCE_TEMPERATURE,
+        "frozen_clean_link_configuration": FROZEN_LINK_CONFIGURATION,
         "minimum_pooled_gain": MINIMUM_POOLED_GAIN,
         "maximum_movie_regression": MAXIMUM_MOVIE_REGRESSION,
         "processed_acceptance_ground_truth_read": False,

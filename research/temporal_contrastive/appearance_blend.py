@@ -22,12 +22,17 @@ def blend_pair_scores(
     *,
     appearance_weight: float,
     appearance_temperature: float = 0.10,
+    source_division_logits: np.ndarray | None = None,
+    division_weight: float = 0.0,
 ) -> np.ndarray:
-    """Add row-centered appearance evidence in log-odds space.
+    """Add appearance and source-division evidence in log-odds space.
 
     Non-finite Trackastra entries remain unavailable. A zero appearance weight
-    returns an exact copy of the Trackastra matrix, making the unmodified model
-    an explicit calibration candidate.
+    and zero division weight return an exact copy of the Trackastra matrix,
+    making the unmodified model an explicit calibration candidate. Appearance
+    evidence is row-centered because it ranks candidate children. Division
+    evidence is constant within a source row because it changes the confidence
+    that a second child should clear the frozen association thresholds.
     """
 
     track = np.asarray(trackastra_scores, dtype=np.float32)
@@ -38,12 +43,23 @@ def blend_pair_scores(
         raise ValueError("appearance scores must be finite")
     if appearance_weight < 0:
         raise ValueError("appearance_weight cannot be negative")
+    if division_weight < 0:
+        raise ValueError("division_weight cannot be negative")
     if appearance_temperature <= 0:
         raise ValueError("appearance_temperature must be positive")
+    division = None
+    if source_division_logits is not None:
+        division = np.asarray(source_division_logits, dtype=np.float32)
+        if division.shape != (track.shape[0],):
+            raise ValueError("one source division logit is required per score row")
+        if not np.isfinite(division).all():
+            raise ValueError("source division logits must be finite")
+    if division_weight > 0 and division is None:
+        raise ValueError("positive division_weight requires source division logits")
     available = np.isfinite(track)
     if np.any(available & ((track < 0) | (track > 1))):
         raise ValueError("finite Trackastra probabilities must be in [0, 1]")
-    if appearance_weight == 0:
+    if appearance_weight == 0 and division_weight == 0:
         return track.copy()
 
     centered = np.zeros_like(appearance)
@@ -59,6 +75,9 @@ def blend_pair_scores(
     clipped = np.clip(track, 1e-5, 1.0 - 1e-5)
     track_logits = np.log(clipped) - np.log1p(-clipped)
     combined = track_logits + float(appearance_weight) * centered
+    if division_weight > 0:
+        division_evidence = np.clip(division, -8.0, 8.0)[:, None]
+        combined = combined + float(division_weight) * division_evidence
     output = (1.0 / (1.0 + np.exp(-combined))).astype(np.float32)
     output[~available] = -np.inf
     return output
@@ -141,15 +160,48 @@ def appearance_scores_for_movie(
     return result
 
 
+def division_logits_for_movie(
+    video: Any,
+    node_division_logits: np.ndarray,
+    pair_scores: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+) -> dict[int, np.ndarray]:
+    """Align one learned division logit to each Trackastra source row."""
+
+    divisions = np.asarray(node_division_logits, dtype=np.float32)
+    if divisions.shape != (len(video.node_ids),):
+        raise ValueError("node division logits do not align with the video")
+    if not np.isfinite(divisions).all():
+        raise ValueError("node division logits must be finite")
+    id_to_row = {
+        int(node_id): row for row, node_id in enumerate(video.node_ids.tolist())
+    }
+    result: dict[int, np.ndarray] = {}
+    for timepoint, (source_ids, _target_ids, track_scores) in pair_scores.items():
+        source_rows = np.asarray([id_to_row[int(node)] for node in source_ids])
+        aligned = divisions[source_rows]
+        if aligned.shape != (track_scores.shape[0],):
+            raise RuntimeError("division logits and Trackastra source rows diverged")
+        result[int(timepoint)] = aligned.astype(np.float32, copy=False)
+    return result
+
+
 def blend_movie_pair_scores(
     pair_scores: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
     appearance_scores: dict[int, np.ndarray],
     *,
     appearance_weight: float,
     appearance_temperature: float = 0.10,
+    source_division_logits: dict[int, np.ndarray] | None = None,
+    division_weight: float = 0.0,
 ) -> dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]]:
     if set(pair_scores) != set(appearance_scores):
         raise ValueError("appearance scores do not cover every frame transition")
+    if source_division_logits is not None and set(pair_scores) != set(
+        source_division_logits
+    ):
+        raise ValueError("division logits do not cover every frame transition")
+    if division_weight > 0 and source_division_logits is None:
+        raise ValueError("positive division_weight requires movie division logits")
     return {
         timepoint: (
             source_ids,
@@ -159,6 +211,12 @@ def blend_movie_pair_scores(
                 appearance_scores[timepoint],
                 appearance_weight=appearance_weight,
                 appearance_temperature=appearance_temperature,
+                source_division_logits=(
+                    None
+                    if source_division_logits is None
+                    else source_division_logits[timepoint]
+                ),
+                division_weight=division_weight,
             ),
         )
         for timepoint, (source_ids, target_ids, scores) in pair_scores.items()

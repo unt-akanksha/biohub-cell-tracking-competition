@@ -150,6 +150,9 @@ def validate_materialization(
             if not (
                 isinstance(blend, dict)
                 and float(blend.get("appearance_weight", 0.0)) > 0.0
+                and "division_weight" in blend
+                and math.isfinite(float(blend["division_weight"]))
+                and float(blend["division_weight"]) >= 0.0
                 and math.isclose(
                     float(blend.get("appearance_temperature", 0.0)),
                     0.10,

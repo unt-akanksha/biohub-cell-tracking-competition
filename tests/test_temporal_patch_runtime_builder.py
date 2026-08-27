@@ -23,12 +23,14 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "competition_submission_command_included": False,
+        "calibration_grid_includes_exact_zero_control": True,
     }
     required = {
         "train_dual_fold_patch.py",
         "calibrate_dual_fold_blend.py",
         "dual_fold_appearance_processed_acceptance.py",
         "dual_fold_appearance_submission.py",
+        "verify_runtime.py",
         "submission_sharding.py",
         "trackastra_source/trackastra/model/model.py",
     }

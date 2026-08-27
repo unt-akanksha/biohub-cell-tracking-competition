@@ -12,12 +12,13 @@
     "loss_sha256": "f08a82a6a38c62c6dee28938352343637206cc9e71a362943a29332d642fbc5a",
     "patch_model_sha256": "1bcfbd0fee8c303004398661e646893f1163cc818243ec5fc9de716de3448873",
     "trainer_sha256": "43d80ee199bf2f8c85dac1c848e24f0886b00b24789e238988d14803f8a4264d",
-    "blend_sha256": "ae02c3eee64a63ff5accd87270a89ed9df722b019a97d4e5ff1b32fcd4495b83",
-    "calibrator_sha256": "89011168ab401cc0729b0197b60821dd39d5917d6765605f9d72b21961ee80e4",
-    "processed_materializer_sha256": "076c8014b736997641f48093441e5cf91333a93cb8dbd43d900a5a4154bbf8a1",
-    "exact_gate_sha256": "f07137f1901539be9160843421ea0ace43f2169ce8842744f007f4eeb6a814aa",
-    "two_gpu_candidate_builder_sha256": "e90e458d02e99ff112f33f639a4fb17826108d08404915f96f807c6746c804ab",
-    "runtime_builder_sha256": "77caec246a1d9e28ac840710c98e40912fbca1b27665f0be37ed150f9ea54b4b"
+    "blend_sha256": "32c2fdef4685c24f2a6d36f66af3346e2d43a848ef260d04f098643d382bc846",
+    "calibrator_sha256": "946722472d5affcdd1f3e8c8d74042a9d2de978b5bedd44cdee4489723ef7217",
+    "processed_materializer_sha256": "26e45083af73ad9662c23a8814207200c65e58dab6a24c44aa2cbf70a637dec6",
+    "exact_gate_sha256": "9cf534cbf54680c9d2879ed8b8358fb78dabcb1d7a958a743c0943615215c3d0",
+    "two_gpu_candidate_builder_sha256": "42466615e1c167aaef43880db88b45bae782e1763ea026ff0d18e0cea8a87d01",
+    "runtime_verifier_sha256": "9775df2b8fc39ce042e09dc447830de7e8a07fc8a6931f89869b690b773cb9ff",
+    "runtime_builder_sha256": "ea39022e8b87c43771367b736d1babe41ca0632b9d69a137d8019301f4ca10e3"
   },
   "model": {
     "architecture": "independent physical-scale 3D residual patch encoder",
@@ -79,6 +80,10 @@
   },
   "downstream_protocol": {
     "blend_weight_zero_is_explicit_control": true,
+    "division_head_used_at_inference": true,
+    "appearance_weight_grid": [0.0, 0.05, 0.10, 0.20, 0.35],
+    "division_weight_grid": [0.0, 0.05, 0.10, 0.20],
+    "blend_selection_metric": "frozen clean-link pooled edge/division Jaccard with per-movie regression floor",
     "blend_calibration_uses_reserved_unopened_movies": true,
     "processed_four_movie_gate_runs_once_after_weight_freeze": true,
     "competition_submission_requires_separate_user_authorization": true,

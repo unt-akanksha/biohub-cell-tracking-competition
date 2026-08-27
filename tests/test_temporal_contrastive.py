@@ -23,10 +23,13 @@ from research.temporal_contrastive.train_dual_fold_patch import (
 from research.temporal_contrastive.appearance_blend import (
     appearance_scores_for_movie,
     blend_pair_scores,
+    division_logits_for_movie,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
 from research.temporal_contrastive.calibrate_dual_fold_blend import (
     APPEARANCE_WEIGHTS,
+    DIVISION_WEIGHTS,
+    association_metrics_for_video,
     ranking_metrics_for_video,
     select_weight,
 )
@@ -210,6 +213,58 @@ def test_zero_weight_blend_is_exact_and_positive_weight_changes_ambiguity() -> N
     assert np.isneginf(blended[1, 1])
 
 
+def test_division_evidence_can_restore_a_second_daughter() -> None:
+    video = GraphVideo(
+        "fixture",
+        node_ids=np.asarray([1, 2, 3, 4]),
+        times=np.asarray([0, 1, 1, 1]),
+        coords_voxel=np.zeros((4, 3), dtype=np.float32),
+        edges=np.asarray([[1, 2], [1, 3]], dtype=np.int64),
+    )
+    track = np.asarray([[0.90, 0.44, 0.10]], dtype=np.float32)
+    appearance = np.zeros_like(track)
+    control = {0: (np.asarray([1]), np.asarray([2, 3, 4]), track)}
+    boosted = {
+        0: (
+            np.asarray([1]),
+            np.asarray([2, 3, 4]),
+            blend_pair_scores(
+                track,
+                appearance,
+                appearance_weight=0.05,
+                source_division_logits=np.asarray([2.0], dtype=np.float32),
+                division_weight=0.20,
+            ),
+        )
+    }
+
+    assert association_metrics_for_video(video, control)["division_jaccard"] == 0.0
+    assert association_metrics_for_video(video, boosted)["division_jaccard"] == 1.0
+
+
+def test_division_logits_align_arbitrary_source_identifiers() -> None:
+    video = GraphVideo(
+        "fixture",
+        node_ids=np.asarray([20, 10, 40, 30]),
+        times=np.asarray([0, 0, 1, 1]),
+        coords_voxel=np.zeros((4, 3), dtype=np.float32),
+        edges=np.empty((0, 2), dtype=np.int64),
+    )
+    pair_scores = {
+        0: (
+            np.asarray([10, 20]),
+            np.asarray([30, 40]),
+            np.full((2, 2), 0.5, dtype=np.float32),
+        )
+    }
+
+    aligned = division_logits_for_movie(
+        video, np.asarray([2.0, -3.0, 0.0, 0.0]), pair_scores
+    )
+
+    np.testing.assert_array_equal(aligned[0], [-3.0, 2.0])
+
+
 def test_appearance_scores_align_arbitrary_node_identifiers() -> None:
     video = GraphVideo(
         "fixture",
@@ -294,21 +349,24 @@ def test_blend_calibration_ranking_uses_true_division_children() -> None:
 
 def test_blend_selection_requires_gain_and_movie_floor() -> None:
     rows = []
-    for weight in APPEARANCE_WEIGHTS:
-        gain = 0.0 if weight == 0 else 0.002
-        movie_a_gain = -0.001 if weight == 0.10 else gain
-        rows.append(
-            {
-                "appearance_weight": weight,
-                "pooled": {"composite": 0.80 + gain},
-                "by_movie": [
-                    {"stem": "a", "composite": 0.80 + movie_a_gain},
-                    {"stem": "b", "composite": 0.80 + gain},
-                ],
-            }
-        )
+    for appearance_weight in APPEARANCE_WEIGHTS:
+        for division_weight in DIVISION_WEIGHTS:
+            gain = 0.0 if appearance_weight == 0 else 0.002
+            movie_a_gain = -0.001 if appearance_weight == 0.10 else gain
+            rows.append(
+                {
+                    "appearance_weight": appearance_weight,
+                    "division_weight": division_weight,
+                    "pooled": {"composite": 0.80 + gain},
+                    "by_movie": [
+                        {"stem": "a", "composite": 0.80 + movie_a_gain},
+                        {"stem": "b", "composite": 0.80 + gain},
+                    ],
+                }
+            )
 
     selected = select_weight(rows)
 
     assert selected["improved"] is True
     assert selected["selected_weight"] == 0.05
+    assert selected["selected_division_weight"] == 0.0

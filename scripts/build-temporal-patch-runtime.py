@@ -36,6 +36,10 @@ SOURCES = {
     / "research"
     / "temporal_contrastive"
     / "dual_fold_appearance_submission.py",
+    "verify_runtime.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "verify_runtime.py",
     "trainer.py": ROOT
     / "research"
     / "trackastra_graph"
@@ -145,6 +149,7 @@ def main() -> None:
                 "implementation": "independent Biohub physical-scale 3D residual encoder",
                 "parameters_per_fold": 7_498_890,
                 "external_pretrained_weights": False,
+                "division_head_used_at_inference": True,
             },
             "integrity": {
                 "required_gpu_count": 2,
@@ -152,6 +157,7 @@ def main() -> None:
                 "public_predictions_copied": False,
                 "public_leaderboard_used_for_selection": False,
                 "competition_submission_command_included": False,
+                "calibration_grid_includes_exact_zero_control": True,
             },
             "files": files,
         },

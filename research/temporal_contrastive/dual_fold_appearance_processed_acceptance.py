@@ -24,6 +24,7 @@ try:
     from appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from dual_fold_processed_acceptance import (
@@ -39,6 +40,7 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -117,6 +119,9 @@ def verify_sources(
         calibration_fold = calibration["folds"][fold]
         selection = calibration_fold.get("selection", {})
         selected_weight = float(selection.get("selected_weight", 0.0))
+        selected_division_weight = float(
+            selection.get("selected_division_weight", 0.0)
+        )
         if not (
             calibration_fold.get("status") == "completed"
             and calibration_fold.get("fold") == fold
@@ -125,6 +130,7 @@ def verify_sources(
             and calibration_fold.get("submission_created") is False
             and selection.get("improved") is True
             and selected_weight > 0.0
+            and selected_division_weight >= 0.0
             and calibration_fold.get("appearance_temperature")
             == APPEARANCE_TEMPERATURE
             and calibration_fold.get("appearance_model_sha256")
@@ -141,6 +147,7 @@ def verify_sources(
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "appearance_best_step": appearance_terminal["best_step"],
             "appearance_weight": selected_weight,
+            "division_weight": selected_division_weight,
         }
     return calibration, verified_folds
 
@@ -209,7 +216,7 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, _division_logits, extraction[stem] = extract_movie_embeddings(
+        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
             appearance,
             video,
             image,
@@ -219,11 +226,16 @@ def worker(args: argparse.Namespace) -> None:
         appearance_scores = appearance_scores_for_movie(
             video, embeddings, trackastra_scores
         )
+        source_divisions = division_logits_for_movie(
+            video, division_logits, trackastra_scores
+        )
         blended = blend_movie_pair_scores(
             trackastra_scores,
             appearance_scores,
             appearance_weight=args.appearance_weight,
             appearance_temperature=APPEARANCE_TEMPERATURE,
+            source_division_logits=source_divisions,
+            division_weight=args.division_weight,
         )
         edges = rerank.hybrid_link_movie(
             video,
@@ -254,6 +266,7 @@ def worker(args: argparse.Namespace) -> None:
             "elapsed_seconds": time.monotonic() - started,
             "datasets": list(requested),
             "appearance_weight": args.appearance_weight,
+            "division_weight": args.division_weight,
             "candidate_edges": {
                 stem: [[int(source), int(target)] for source, target in edges]
                 for stem, edges in candidate_edges.items()
@@ -313,6 +326,8 @@ def orchestrate(args: argparse.Namespace) -> None:
             str(fold_source["appearance_model"]),
             "--appearance-weight",
             str(fold_source["appearance_weight"]),
+            "--division-weight",
+            str(fold_source["division_weight"]),
             "--prefix",
             prefix,
             "--datasets",
@@ -410,6 +425,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "appearance_blend": {
             fold: {
                 "appearance_weight": source["appearance_weight"],
+                "division_weight": source["division_weight"],
                 "appearance_temperature": APPEARANCE_TEMPERATURE,
             }
             for fold, source in folds.items()
@@ -450,6 +466,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--trackastra-model-dir", type=Path)
     result.add_argument("--appearance-model", type=Path)
     result.add_argument("--appearance-weight", type=float)
+    result.add_argument("--division-weight", type=float)
     result.add_argument("--prefix", choices=sorted(FOLD_BY_PREFIX))
     result.add_argument("--datasets", default="")
     result.add_argument("--worker-output", type=Path)
@@ -467,6 +484,7 @@ def main() -> None:
             args.trackastra_model_dir,
             args.appearance_model,
             args.appearance_weight,
+            args.division_weight,
             args.prefix,
             args.worker_output,
         )

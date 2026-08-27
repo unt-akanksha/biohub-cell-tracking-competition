@@ -67,10 +67,12 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
             "appearance_blend": {
                 "target_44b6": {
                     "appearance_weight": 0.10,
+                    "division_weight": 0.05,
                     "appearance_temperature": 0.10,
                 },
                 "target_6bba": {
                     "appearance_weight": 0.20,
+                    "division_weight": 0.10,
                     "appearance_temperature": 0.10,
                 },
             },

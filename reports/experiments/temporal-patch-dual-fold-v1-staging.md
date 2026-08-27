@@ -38,8 +38,13 @@ negative, so an apparently good contrastive loss cannot come from trivial
 single-choice rows.
 
 After both models pass their absolute retrieval gates, a separate calibration
-step must compare a small predeclared blend grid whose zero weight is the exact
-Trackastra control. Only after freezing that weight may the four processed
+step must compare a small predeclared appearance/division blend grid whose
+zero/zero setting is the exact Trackastra control. Unlike a retrieval-only
+proxy, selection now executes the frozen clean graph linker and measures pooled
+edge and division Jaccard with a per-movie regression floor. The trained source
+division logit shifts link confidence for that source, allowing a genuine
+second daughter to clear frozen thresholds without changing candidate rank.
+Only after freezing both weights may the four processed
 movies be materialized once and scored by the pinned exact evaluator. No
 leaderboard feedback participates in any decision.
 
@@ -53,11 +58,22 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The focused temporal/Trackastra suite passes 40 tests. These cover physical
+The updated focused temporal/Trackastra suite passes 29 tests across the normal
+and pinned exact-scorer environments. It covers physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
-alignment, exact zero-weight fallback, the frozen processed exact gate, and
-two-GPU whole-movie sharding.
+alignment, exact zero/zero fallback, source-division alignment, actual
+second-daughter recovery, the frozen processed exact gate, runtime-package
+integrity, and two-GPU whole-movie sharding.
+
+The rebuilt portable archive is
+`.biohub/staging/biohub-temporal-patch-runtime-v1-division-aware-20260827.zip`
+(92,116 bytes, SHA-256
+`ca57cba93f5b45a679cd0ca1d1e9a14fff45e397e247ee74db28bddf90cbd1c1`).
+An independent extraction verified all 25 manifest-bound files; the embedded
+verifier reported manifest SHA-256
+`bd61b0945fce4e5408f077a57f428dc9075a6c649ead49784238c240aae0d6c9`,
+required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
 3D cells, their shifted children, and one distractor. Over 40 CPU optimizer

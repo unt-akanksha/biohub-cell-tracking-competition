@@ -47,6 +47,7 @@ def accepted_fixture(tmp_path: Path):
         }
         blends[fold] = {
             "appearance_weight": index * 0.1,
+            "division_weight": index * 0.05,
             "appearance_temperature": 0.10,
         }
     evidence = tmp_path / "acceptance.json"

@@ -24,6 +24,7 @@ try:
     from appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from dual_fold_processed_acceptance import FROZEN_ASSOCIATION_CONFIGURATION
@@ -47,6 +48,7 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
         appearance_scores_for_movie,
         blend_movie_pair_scores,
+        division_logits_for_movie,
         extract_movie_embeddings,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -125,6 +127,7 @@ def load_acceptance(
             int(expected_trackastra[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("best_step", 0)) > 0
             and float(blends[fold].get("appearance_weight", 0.0)) > 0.0
+            and float(blends[fold].get("division_weight", 0.0)) >= 0.0
             and float(blends[fold].get("appearance_temperature", 0.0)) == 0.10
         ):
             raise RuntimeError(f"accepted reciprocal evidence is invalid: {fold}")
@@ -218,7 +221,7 @@ def worker(args: argparse.Namespace) -> None:
         image = zarr.open_group(
             str(args.image_root / f"{stem}.zarr"), mode="r"
         )["0"]
-        embeddings, _division_logits, extraction[stem] = extract_movie_embeddings(
+        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
             appearance_models[fold],
             video,
             image,
@@ -226,12 +229,17 @@ def worker(args: argparse.Namespace) -> None:
             node_batch_size=args.node_batch_size,
         )
         appearance_scores = appearance_scores_for_movie(video, embeddings, track_scores)
+        source_divisions = division_logits_for_movie(
+            video, division_logits, track_scores
+        )
         blend = acceptance["appearance_blend"][fold]
         pair_scores = blend_movie_pair_scores(
             track_scores,
             appearance_scores,
             appearance_weight=float(blend["appearance_weight"]),
             appearance_temperature=float(blend["appearance_temperature"]),
+            source_division_logits=source_divisions,
+            division_weight=float(blend.get("division_weight", 0.0)),
         )
         selected = acceptance["association_configuration"]
         edges = rerank.hybrid_link_movie(
