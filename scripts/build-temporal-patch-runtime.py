@@ -88,6 +88,10 @@ SOURCES = {
     / "research"
     / "temporal_contrastive"
     / "train_zebrahub_contextual_pretrain.py",
+    "verify_zebrahub_contextual_dataset.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "verify_zebrahub_contextual_dataset.py",
     "appearance_blend.py": ROOT
     / "research"
     / "temporal_contrastive"

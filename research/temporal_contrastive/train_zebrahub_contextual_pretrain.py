@@ -36,6 +36,7 @@ try:
     )
     from model import masked_multi_positive_info_nce
     from pair_fusion import masked_multi_positive_pair_nll, pair_logit_metrics
+    from verify_zebrahub_contextual_dataset import verify_dataset
 except ModuleNotFoundError:
     from research.temporal_contrastive import train_dual_fold_patch as base
     from research.temporal_contrastive.contextual_pair_fusion import (
@@ -49,6 +50,9 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.pair_fusion import (
         masked_multi_positive_pair_nll,
         pair_logit_metrics,
+    )
+    from research.temporal_contrastive.verify_zebrahub_contextual_dataset import (
+        verify_dataset,
     )
 
 
@@ -266,6 +270,7 @@ def train_worker(args: argparse.Namespace) -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     rng = np.random.default_rng(seed)
+    dataset_verification = verify_dataset(args.data_root)
     train_records = discover_shards(
         args.data_root / "train",
         expected_source=TRAIN_SOURCE,
@@ -324,6 +329,7 @@ def train_worker(args: argparse.Namespace) -> None:
             "validation_shards": len(validation_records),
             "train_inventory_sha256": inventory_sha256(train_records),
             "validation_inventory_sha256": inventory_sha256(validation_records),
+            "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
             "selection_policy": "ZSNS005 contextual pair composite only",
             "competition_data_read": False,
             "public_predictions_copied": False,
@@ -416,6 +422,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "parameter_count": parameter_count,
         "external_training_source": TRAIN_SOURCE,
         "external_validation_source": VALIDATION_SOURCE,
+        "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
         "competition_data_read": False,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,

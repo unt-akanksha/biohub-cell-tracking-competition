@@ -50,6 +50,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "contextual_training.py",
         "train_dual_fold_contextual_pair_fusion.py",
         "train_zebrahub_contextual_pretrain.py",
+        "verify_zebrahub_contextual_dataset.py",
         "appearance_family.py",
         "calibrate_dual_fold_blend.py",
         "dual_fold_appearance_processed_acceptance.py",

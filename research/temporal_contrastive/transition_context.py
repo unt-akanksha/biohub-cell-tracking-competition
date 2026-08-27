@@ -18,6 +18,7 @@ import numpy as np
 DEFAULT_MAX_FFT_SHAPE_ZYX = (64, 128, 128)
 DEFAULT_CANDIDATE_RADIUS_UM = 32.0
 DUPLICATE_NCC_FLOOR = 0.995
+TRANSITION_CONTEXT_WIDTH = 8
 CANDIDATE_CONTEXT_WIDTH = 18
 
 
@@ -148,7 +149,7 @@ class TransitionContext:
         radius = float(candidate_radius_um)
         if not np.isfinite(radius) or radius <= 0:
             raise ValueError("candidate radius must be positive and finite")
-        return np.asarray(
+        result = np.asarray(
             (
                 *(np.asarray(self.global_shift_zyx_um, dtype=np.float64) / radius),
                 self.zero_shift_ncc,
@@ -159,6 +160,9 @@ class TransitionContext:
             ),
             dtype=np.float32,
         )
+        if result.shape != (TRANSITION_CONTEXT_WIDTH,):
+            raise RuntimeError("transition context feature width changed")
+        return result
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)

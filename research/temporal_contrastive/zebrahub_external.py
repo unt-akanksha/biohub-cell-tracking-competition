@@ -437,6 +437,9 @@ def build_temporal_patch_shard(
     max_sources: int = 64,
     max_targets: int = 96,
     radius_um: float = 32.0,
+    preloaded_rows: dict[int, dict[str, np.ndarray]] | None = None,
+    tracks_record: dict[str, Any] | None = None,
+    zarr_reader: PublicZarrV2Array | None = None,
 ) -> dict[str, Any]:
     """Build one deterministic four-frame ZebraHub temporal-patch shard."""
 
@@ -449,10 +452,26 @@ def build_temporal_patch_shard(
     source_root = cache_root / source_name
     tracks_url = f"{PUBLIC_ROOT}/{source_name}_tracks.csv"
     tracks_path = source_root / f"{source_name}_tracks.csv"
-    tracks_record = download_public_file(
-        tracks_url, tracks_path, expected_bytes=int(spec["tracks_bytes"])
-    )
-    rows = filtered_csv_frames(tracks_path, (timepoint, timepoint + 1))
+    if tracks_record is None:
+        tracks_record = download_public_file(
+            tracks_url, tracks_path, expected_bytes=int(spec["tracks_bytes"])
+        )
+    elif not (
+        tracks_record.get("url") == tracks_url
+        and tracks_record.get("bytes") == int(spec["tracks_bytes"])
+        and tracks_record.get("sha256") == sha256_file(tracks_path)
+    ):
+        raise ValueError("preloaded ZebraHub tracks evidence changed")
+    if preloaded_rows is None:
+        rows = filtered_csv_frames(tracks_path, (timepoint, timepoint + 1))
+    else:
+        try:
+            rows = {
+                timepoint: preloaded_rows[timepoint],
+                timepoint + 1: preloaded_rows[timepoint + 1],
+            }
+        except KeyError as error:
+            raise ValueError("preloaded ZebraHub rows omit the transition") from error
     source_rows = rows[timepoint]
     target_rows = rows[timepoint + 1]
     transition = select_dense_transition(
@@ -468,9 +487,13 @@ def build_temporal_patch_shard(
     )
 
     level_url = f"{PUBLIC_ROOT}/{source_name}.ome.zarr/1"
-    zarr_reader = PublicZarrV2Array(level_url, source_root / "level1")
+    if zarr_reader is None:
+        zarr_reader = PublicZarrV2Array(level_url, source_root / "level1")
+    elif zarr_reader.base_url != level_url:
+        raise ValueError("preloaded ZebraHub image source changed")
     if zarr_reader.shape[0] != int(spec["frames"]):
         raise ValueError("ZebraHub frame count changed")
+    download_start = len(zarr_reader.downloads)
     source_patches = np.empty((len(transition.source_ids), 3, 17, 17, 17), dtype=np.float16)
     target_patches = np.empty((len(transition.target_ids), 3, 17, 17, 17), dtype=np.float16)
     required_csv_times = (timepoint - 1, timepoint, timepoint + 1, timepoint + 2)
@@ -540,7 +563,7 @@ def build_temporal_patch_shard(
     )
     shard_hash = sha256_file(output_path)
     unique_downloads = {
-        row["url"]: row for row in zarr_reader.downloads
+        row["url"]: row for row in zarr_reader.downloads[download_start:]
     }
     manifest = {
         "schema_version": 1,

@@ -182,3 +182,39 @@ unless both external folds improve after step zero and the aggregate and worker
 terminals bind the exact checkpoint hashes. Randomly initialized v3 can no
 longer masquerade as the predeclared same-organism candidate; v1 and v2 remain
 unchanged controls.
+
+## Production ZebraHub pretraining asset
+
+The frozen 64/16 external split is now materialized rather than represented by
+single-transition smokes. ZSNS004 contributes 64 training transitions sampled
+evenly across four developmental windows; ZSNS005 contributes 16 disjoint
+selection transitions across four separately frozen windows. The derived asset
+contains 984/261 source nodes, 4,065/1,090 candidate edges, 1,844/504 positive
+edges, and 860/243 division sources in train/validation respectively. It is
+232,051,776 bytes and contains normalized temporal patches, coordinates, masks,
+targets, and context only—no raw CSV, Zarr metadata/chunks, competition data,
+or public predictions.
+
+The private Kaggle dataset
+`indarkarhana/biohub-zebrahub-contextual-shards-v1` version 3 is the only
+admissible remote asset. Version 1 is excluded because the CLI default skipped
+the shard directories; version 2 is excluded because its bundled verifier
+incorrectly required Kaggle's consumed publication-metadata file. The final
+version carries the generator, extractor, transition-context, patch-sampler,
+and verifier sources. A complete remote redownload passed all 80 shard and
+manifest hashes plus array inventory, shape, mask, hard-negative, division,
+finiteness, split, and raw-file checks. Its authoritative manifest SHA-256 is
+`d9f009518fb26a2aeebebf405485ff7cf36c7e3982cfbf9501aa98346e8b77a8`.
+
+The v3 pretrainer now runs this complete verifier inside each isolated GPU
+worker before reading a shard. Thus a partial Kaggle mount, altered archive, or
+source/provenance mismatch fails before optimization. This publication and
+verification used no Kaggle GPU and created no competition submission.
+
+The rebuilt portable v3 runtime contains 36 hash-bound source files and passed
+its independent integrity check over 520,791 bytes with manifest SHA-256
+`7f402b14cd54c4fe8139b37645a2db068edf7432a6525e33ce902091f319c51f`.
+It declares exactly two visible GPUs and contains no submission command. The
+focused dataset/runtime checks passed 20/20, and the expanded temporal,
+contextual, and ZebraHub regression set passed 90/90. No pretraining launch is
+authorized while the current two-GPU v1 evidence gate is still running.
