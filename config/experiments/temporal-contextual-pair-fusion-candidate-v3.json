@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-contextual-pair-fusion-candidate-v3",
+  "parent": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+  "status": "staged_waiting_exact_acceptance",
+  "purpose": "construct a local non-replica competition candidate after exact processed acceptance",
+  "required_visible_gpu_count": 2,
+  "machine_shape": "NvidiaTeslaT4",
+  "whole_movie_sharding": true,
+  "internet_required": false,
+  "competition_submission_performed": false,
+  "authorized_for_submission": false,
+  "public_leaderboard_used_for_selection": false,
+  "public_predictions_copied": false,
+  "inputs": {
+    "appearance_run": "temporal-contextual-pair-fusion-v3",
+    "appearance_family": "temporal_contextual_pair_fusion_v3",
+    "trackastra_control_run": "trackastra-dual-fold-synthetic-v1",
+    "required_acceptance_run": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+    "required_acceptance_status": "accepted",
+    "required_acceptance_kind": "exact_processed_dual_fold_acceptance",
+    "required_candidate_family": "trackastra_contextual_pair_fusion_blend",
+    "acceptance_dataset": "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
+    "acceptance_dataset_status": "must_not_be_created_until_exact_gate_passes",
+    "base_source": "indarkarhana/biohub-clean-0-927-reproduction-v1",
+    "base_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+    "base_raw_graph_tree_sha256": "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e",
+    "runtime_dataset": "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+    "runtime_dataset_version": 3,
+    "runtime_manifest_sha256": "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+  },
+  "execution": {
+    "notebook_budget_seconds": 43200,
+    "inference_hard_stop_seconds": 36000,
+    "finalization_reserve_seconds": 7200,
+    "gpu_workers": 2,
+    "sharding_unit": "complete_movie",
+    "shard_weight": "contextual candidate-pair cost plus one or two temporal encoders according to the accepted reciprocal ensemble mode",
+    "worker_termination_grace_seconds": 15,
+    "nodes_must_be_preserved_exactly": true,
+    "candidate_must_change_edges": true,
+    "candidate_hash_must_differ_from_base": true,
+    "submission_upload_command_included": false
+  },
+  "kernel": {
+    "id": "indarkarhana/biohub-temporal-contextual-submission-candidate-v3",
+    "status": "local_staged_not_pushed",
+    "notebook_sha256": "6e54ac2af540b4c3745db8589e0d8809fb2ac8e00f834e2172a8f147df14dbb6",
+    "metadata_sha256": "3c232d084b6a35e7524621a2baf4c5f3d9f0397378c8b22e3edb4021feb95d8a"
+  },
+  "source": {
+    "candidate_builder_sha256": "9ad0168fc28c5fea378f4f5f016303570e0cdb39b1e2c35c764a897aa1a63f7e",
+    "kernel_builder_sha256": "5a04a8ed1490234e7f5b8e50c9bc9d3ae6a9d49773f3f48ce9fd94cb43d70752",
+    "kernel_builder_test_sha256": "1e62fc162c935c84c229bcd744238b0369904dc7349981ce0459cc86d2053dc9"
+  },
+  "execution_target": "two-GPU cloud instance unless a fresh Kaggle guard can preserve at least eight Kaggle GPU hours",
+  "hypothesis": "A contextual v3 candidate that independently passes transfer, clean calibration, and exact processed acceptance will improve test association generalization while retaining the strong frozen detector nodes."
+}
