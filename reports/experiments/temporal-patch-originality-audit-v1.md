@@ -8,9 +8,12 @@ notebook or public prediction artifact.
 ## Provenance
 
 - Association backbone: upstream Trackastra CTC v0.3.0 initialization, source
-  commit `6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b`, BSD-3-Clause. Two reciprocal
-  27,456,880-parameter copies are fine-tuned independently on corrected public
-  synthetic graphs and disjoint opposite-embryo real folds.
+  commit `6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b`, BSD-3-Clause. A two-fold
+  fine-tune was attempted on corrected synthetic graphs and disjoint real folds,
+  but failed its clean real-data gate. The staged candidate therefore uses two
+  byte-identical, hash-verified copies of the predeclared 27,456,880-parameter
+  initialization as its frozen geometry control; no rejected adapted state is
+  admitted.
 - Appearance backbone: project-authored 19,221,954-parameter physical-scale 3D
   residual encoder per fold. It starts without external pretrained weights and
   learns aligned `t-1,t,t+1` cell patches, all-daughter supervised contrastive
@@ -39,11 +42,11 @@ public-base replica cannot become accepted evidence or a local final candidate.
 ## Bound package
 
 - Archive:
-  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-allreaped-20260827.zip`
+  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
 - SHA-256:
-  `39de54db40c9620591519d0c9bd3baaa89ebe314c2ef9a8045f7e43444e13230`
+  `7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`
 - Manifest SHA-256:
-  `8d39fcedb424498e6e6dd07bc224ab6a1748c74c91959ee620906233a0ad066c`
+  `5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`
 - Competition submission performed: false
 
 The candidate remains conditional on clean fold improvement, one-shot pinned

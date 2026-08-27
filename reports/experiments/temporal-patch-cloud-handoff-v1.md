@@ -2,16 +2,16 @@
 
 Date: 2026-08-27
 
-Status: ready after the active Kaggle reciprocal Trackastra run reaches a
-terminal state. This runbook creates evidence and a candidate only; it contains
-no Kaggle submission command.
+Status: ready for cloud execution using the verified predeclared Trackastra
+initialization as the frozen geometry control. This runbook creates evidence
+and a candidate only; it contains no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-allreaped-20260827.zip`
-- Archive bytes: `102908`
-- Archive SHA-256: `39de54db40c9620591519d0c9bd3baaa89ebe314c2ef9a8045f7e43444e13230`
-- Extracted manifest SHA-256: `8d39fcedb424498e6e6dd07bc224ab6a1748c74c91959ee620906233a0ad066c`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
+- Archive bytes: `103920`
+- Archive SHA-256: `7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`
+- Extracted manifest SHA-256: `5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
@@ -45,13 +45,16 @@ python "$BIOHUB_RUNTIME/verify_runtime.py" \
   --require-gpus
 
 python "$BIOHUB_RUNTIME/verify_trackastra_output.py" \
-  --root "$BIOHUB_TRACKASTRA"
+  --root "$BIOHUB_TRACKASTRA" \
+  --allow-pretrained-control
 ```
 
 Stop if the runtime verifier does not report 26 files, two GPUs, the bound
-manifest hash, the bound runtime reserve, and no submission command. Also stop unless the Trackastra
-verifier reports `status: verified`, two hash-bound improved folds, corrected
-native synthetic geometry, and no competition artifacts.
+manifest hash, the bound runtime reserve, and no submission command. Also stop
+unless the Trackastra verifier reports `status: verified`, source policy
+`predeclared_pretrained_control`, two byte-identical hash-bound initial models,
+corrected native synthetic geometry, and no competition artifacts. The failed
+fine-tuned states were not checkpointed or admitted.
 
 ## Stage 1: reciprocal heavy appearance training
 

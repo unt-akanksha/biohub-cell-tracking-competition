@@ -3,11 +3,13 @@
 Date: 2026-08-27
 
 Status: implemented and locally verified; reserved for the cloud handoff, not
-launched on Kaggle.
+launched on Kaggle. Its frozen geometry source is the verified predeclared
+Trackastra initialization because the reciprocal fine-tune failed its clean
+real-data gate.
 
 ## Why this is a new candidate
 
-The public 0.927 comparator and the active reciprocal Trackastra experiment are
+The public 0.927 comparator and the completed reciprocal Trackastra experiment are
 predominantly geometry-driven. Frozen SpatialDINO patch similarity previously
 made zero safe corrections, which is evidence against weakening its swap gates,
 not evidence that local image appearance is useless. The missing experiment is
@@ -97,18 +99,20 @@ leaderboard feedback participates in any decision.
 
 ## Runtime boundary
 
-This is deliberately staged for the user-provided cloud instance. The active
-Kaggle training run is projected to leave about 20.45 GPU-hours, so launching
-this roughly ten-hour reciprocal image experiment on Kaggle would violate the
-reserve handoff rule. Any future competition inference remains exactly two-GPU,
-whole-movie sharded, and separately authorized.
+This is deliberately staged for the user-provided cloud instance. The completed
+Kaggle training run left 21.29 GPU-hours, so launching this roughly ten-hour
+reciprocal image experiment on Kaggle would violate the reserve handoff rule.
+Any future competition inference remains exactly two-GPU, whole-movie sharded,
+and separately authorized.
 
-The package now includes a fail-closed Trackastra ingestion verifier. Before
-appearance training, it requires both on-disk worker terminals to equal the
-aggregate evidence, validates the declared real and synthetic gain gates,
-checks the corrected-geometry manifest and 27,456,880-parameter model hashes,
-rechecks every clean split inventory, and rejects any CSV, ZIP, or submission-
-named artifact in the downloaded training output.
+The package now includes a fail-closed Trackastra ingestion verifier. The
+adapted-model mode still requires both on-disk worker terminals to equal the
+aggregate evidence and pass the original gains. The explicitly enabled control
+mode instead requires `best_step: 0`, exact initial/best metric equality, the
+same model hash in both folds, the corrected-geometry manifest, exact available
+real split sizes (96 and 69 training movies), and no CSV, ZIP, or
+submission-named artifact. This admits only the initialization that was
+predeclared as a candidate, never a rejected fine-tuned state.
 
 ## Verification
 
@@ -124,12 +128,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-allreaped-20260827.zip`
-(102,908 bytes, SHA-256
-`39de54db40c9620591519d0c9bd3baaa89ebe314c2ef9a8045f7e43444e13230`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
+(103,920 bytes, SHA-256
+`7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`8d39fcedb424498e6e6dd07bc224ab6a1748c74c91959ee620906233a0ad066c`,
+`5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -140,11 +144,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 519 unique tests
+The cumulative environment-split repository suite now passes 522 unique tests
 with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 464 tests after excluding the scorer-only files, and all 55
+environment passed 466 tests after excluding the scorer-only files, and all 56
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its

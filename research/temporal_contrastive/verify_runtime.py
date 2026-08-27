@@ -37,6 +37,7 @@ def verify_runtime(root: Path, *, require_gpus: bool = False) -> dict[str, Any]:
         and integrity.get("required_kaggle_machine_shape") == "NvidiaTeslaT4"
         and integrity.get("submission_internet_enabled") is False
         and integrity.get("timed_out_worker_termination_grace_seconds") == 15
+        and integrity.get("predeclared_trackastra_control_allowed") is True
     ):
         raise RuntimeError("runtime integrity policy changed")
 

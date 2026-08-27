@@ -170,6 +170,7 @@ def main() -> None:
                 "required_kaggle_machine_shape": "NvidiaTeslaT4",
                 "submission_internet_enabled": False,
                 "timed_out_worker_termination_grace_seconds": 15,
+                "predeclared_trackastra_control_allowed": True,
             },
             "files": files,
         },

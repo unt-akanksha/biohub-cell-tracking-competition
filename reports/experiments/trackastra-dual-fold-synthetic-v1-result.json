@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-dual-fold-synthetic-v1",
+  "kernel_ref": "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
+  "kernel_status": "complete",
+  "decision": "reject_finetune_retain_predeclared_control",
+  "strict_adapted_model_gate_passed": false,
+  "predeclared_pretrained_control_verified": true,
+  "pretrained_control_source_policy": "predeclared_pretrained_control",
+  "failure_reason": "Both fine-tuned folds missed the immutable real-gain gate and reverted to the predeclared initialization. The target_44b6 initial real composite was 0.9991586726784338, leaving only 0.0008413273215662 theoretical headroom for a +0.001 gate, so that fold could not pass even at a perfect score.",
+  "launcher": {
+    "status": "completed",
+    "elapsed_seconds": 11363.186,
+    "declared_budget_seconds": 14400,
+    "hard_stop_seconds": 14100,
+    "submission_created": false
+  },
+  "aggregate": {
+    "gpu_count": 2,
+    "whole_fold_coverage": [
+      "target_44b6",
+      "target_6bba"
+    ],
+    "both_folds_improved": false,
+    "training_terminal_sha256": "b95a3f52b6bd1a3dc36701acce854dff37b3529ee1ae9a2979dae26df3fdbdcf",
+    "competition_artifacts_found": false,
+    "competition_submission_performed": false
+  },
+  "folds": {
+    "target_44b6": {
+      "completed_step": 65866,
+      "retained_best_step": 0,
+      "initial_real_composite": 0.9991586726784338,
+      "real_gate_headroom": 0.0008413273215662,
+      "step_65000_real_composite": 0.998956385858265,
+      "step_65000_real_delta": -0.0002022868201688,
+      "initial_synthetic_composite": 0.9234228958180559,
+      "step_65000_synthetic_composite": 0.9795507143222553,
+      "step_65000_synthetic_delta": 0.0561278185041994,
+      "initial_selection_score": 0.9877983061493771,
+      "step_65000_selection_score": 0.9960455351278634,
+      "step_65000_selection_delta": 0.0082472289784863,
+      "model_sha256": "9f30f0ffdcb34ae46f927fe835e1a8ffc9788c25e9347eefd97f69b5fb58ff33",
+      "training_config_sha256": "73859466e58e2ed44368f30f1261c534403b67e0b54f5a77ce8b7529db2c80d4",
+      "worker_terminal_sha256": "e05eb8405d25f7a26080442fb89c8c80ddb86dc2b7c977a882506e4f0a2045dd"
+    },
+    "target_6bba": {
+      "completed_step": 66265,
+      "retained_best_step": 0,
+      "initial_real_composite": 0.9989954601011881,
+      "real_gate_headroom": 0.0010045398988119,
+      "step_65000_real_composite": 0.9988035934956284,
+      "step_65000_real_delta": -0.0001918666055597,
+      "initial_synthetic_composite": 0.9204778708852889,
+      "step_65000_synthetic_composite": 0.982298822472075,
+      "step_65000_synthetic_delta": 0.0618209515867861,
+      "initial_selection_score": 0.9872178217188031,
+      "step_65000_selection_score": 0.9963278778420953,
+      "step_65000_selection_delta": 0.0091100561232922,
+      "model_sha256": "9f30f0ffdcb34ae46f927fe835e1a8ffc9788c25e9347eefd97f69b5fb58ff33",
+      "training_config_sha256": "f374fb195d4e083b3e1b81d433ac37bad846119176386a327360505c298394e4",
+      "worker_terminal_sha256": "8e5ea989c098f4b4c18199078f20ed5c38e9ffa10f2533e3dbe7ff6f16008416"
+    }
+  },
+  "quota_after": {
+    "gpu_used_hours": 8.71,
+    "gpu_remaining_hours": 21.29,
+    "gpu_total_hours": 30.0,
+    "refresh_at": "2026-08-29T00:00:00"
+  },
+  "next_action": "Stop Kaggle GPU use. Use the verified identical pretrained Trackastra folds as the frozen geometry control for two-GPU cloud appearance training and clean calibration.",
+  "public_leaderboard_used_for_selection": false,
+  "processed_acceptance_ground_truth_read": false,
+  "authorized_for_submission": false
+}
