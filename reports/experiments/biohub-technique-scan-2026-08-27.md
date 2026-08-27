@@ -359,7 +359,7 @@ Sixteen fixed transitions span four developmental windows at timepoints
 division sources. Its inventory SHA-256 is
 `e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667` and
 manifest SHA-256 is
-`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`.
+`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0`.
 The asset contains 8,496,478 bytes of derived patches/evidence and no raw CSV or
 Zarr files.
 
@@ -373,7 +373,7 @@ GPU, competition data, leaderboard result, or submission.
 The derived asset is now private Kaggle dataset
 `indarkarhana/biohub-zebrahub-contextual-acceptance-v1` version 1. A complete
 remote re-download reproduced manifest
-`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`,
+`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0`,
 inventory
 `e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667`,
 all 16 shards, and the unopened provenance state. No GPU was used.

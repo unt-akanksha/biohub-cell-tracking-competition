@@ -54,7 +54,7 @@ synthetic continuation/division test pins this behavior.
 - Inventory SHA-256:
   `e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667`
 - Manifest SHA-256:
-  `cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`
+  `cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0`
 - Private Kaggle dataset:
   `indarkarhana/biohub-zebrahub-contextual-acceptance-v1`, version 1
 - Remote re-download:

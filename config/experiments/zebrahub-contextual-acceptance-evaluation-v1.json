@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "run_id": "zebrahub-contextual-acceptance-evaluation-v1",
+  "parent": "zebrahub-contextual-pretrain-v1",
+  "status": "staged_not_launched",
+  "hypothesis": "Both independently seeded project-authored contextual v3 folds retain broad association gains on a third ZebraHub embryo that was frozen before their weights existed.",
+  "authorized_for_submission": false,
+  "required_visible_gpu_count": 2,
+  "internet_required": false,
+  "competition_data_read": false,
+  "public_code_copied": false,
+  "public_predictions_copied": false,
+  "public_leaderboard_used_for_selection": false,
+  "submission_created": false,
+  "selection_or_checkpoint_redirect_permitted": false,
+  "inputs": {
+    "pretraining_kernel": "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
+    "runtime_dataset": "indarkarhana/biohub-zebrahub-contextual-acceptance-runtime-v1",
+    "runtime_dataset_version": 2,
+    "runtime_manifest_sha256": "bb9cd258a51f45141086104bba8f16c28a9cbdc55bc5c4cdaac5b04b7d07ad44",
+    "acceptance_dataset": "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+    "acceptance_dataset_version": 1,
+    "acceptance_source": "ZSNS001",
+    "acceptance_manifest_sha256": "cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0",
+    "acceptance_inventory_sha256": "e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667",
+    "acceptance_record_inventory_sha256": "05ad8b3195aa2786ffb8a2ffcb247d118d1e5cf96026264e0534c468979e6e0e"
+  },
+  "folds": {
+    "target_44b6": {
+      "gpu_index": 0,
+      "seed": 51004
+    },
+    "target_6bba": {
+      "gpu_index": 1,
+      "seed": 61007
+    }
+  },
+  "acceptance_gate": {
+    "minimum_composite_gain": 0.01,
+    "top1_gain": "strictly_positive",
+    "mrr_gain": "strictly_positive",
+    "division_top2_gain": "nonnegative",
+    "inventory_must_be_unchanged": true,
+    "both_folds_must_pass": true,
+    "baseline": "exact seeded pretraining initialization",
+    "checkpoint": "hash-bound final checkpoint selected only on ZSNS005",
+    "future_reuse_for_tuning": false
+  },
+  "runtime": {
+    "declared_max_runtime_hours": 1.0,
+    "watchdog_seconds": 3600,
+    "evaluator_hard_stop_seconds": 3300,
+    "kaggle_reserve_hours": 8.0,
+    "launch_only_after_parent_terminal_verification": true,
+    "launch_only_if_live_guard_projects_reserve": true,
+    "kaggle_machine_shape": "NvidiaTeslaT4"
+  },
+  "source": {
+    "evaluator_sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2",
+    "runtime_builder_sha256": "8f4bdd2db98254e5429a1521a4007f5990fd674e4756e43a809fb01c0aaa7a52",
+    "kernel_builder_sha256": "29458022723d0638c652b7b3c20bd3771ad21f46ede271100a4fc14fa8727cf6",
+    "notebook_sha256": "054ecd49c4dbdb0a16ec546d2ebe53acf65f36b19f9503587ad31fe5aa70252b",
+    "kernel_metadata_sha256": "691e8fc2c4d1e7ea27df2a2dc483d1159237714c38c3555b6ef0c913b68d8a0e"
+  }
+}

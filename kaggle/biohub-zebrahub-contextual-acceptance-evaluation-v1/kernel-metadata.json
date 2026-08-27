@@ -1,0 +1,28 @@
+{
+  "id": "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
+  "title": "Biohub ZebraHub Contextual Acceptance Evaluation v1",
+  "code_file": "biohub-zebrahub-contextual-acceptance-evaluation-v1.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu",
+    "cell-tracking",
+    "acceptance",
+    "non-replica"
+  ],
+  "dataset_sources": [
+    "indarkarhana/biohub-zebrahub-contextual-acceptance-runtime-v1",
+    "indarkarhana/biohub-zebrahub-contextual-acceptance-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-zebrahub-contextual-pretrain-v1"
+  ],
+  "competition_sources": [],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "machine_shape": "NvidiaTeslaT4"
+}
