@@ -108,9 +108,13 @@ def verify_sources(
     if sha256_file(appearance_model) != appearance_terminal.get("model_sha256"):
         raise RuntimeError(f"appearance model hash mismatch: {fold}")
     if not (
-        int(appearance_terminal.get("parameter_count", 0)) == 19_218_498
+        int(appearance_terminal.get("parameter_count", 0)) == 19_221_954
         and appearance_config.get("base_channels") == 64
         and appearance_config.get("embedding_channels") == 256
+        and appearance_config.get("input_channels") == 3
+        and appearance_config.get("temporal_frame_offsets") == [-1, 0, 1]
+        and appearance_terminal.get("input_channels") == 3
+        and appearance_terminal.get("temporal_frame_offsets") == [-1, 0, 1]
         and appearance_config.get("checkpoint_weight_source")
         == "optimizer-step exponential moving average"
         and appearance_config.get("ema_decay") == 0.997

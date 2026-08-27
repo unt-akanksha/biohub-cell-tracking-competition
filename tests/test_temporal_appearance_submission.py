@@ -44,7 +44,9 @@ def accepted_fixture(tmp_path: Path):
         appearances[fold] = {
             "model_sha256": digest(appearance_model),
             "best_step": 200,
-            "parameter_count": 19_218_498,
+            "parameter_count": 19_221_954,
+            "input_channels": 3,
+            "temporal_frame_offsets": [-1, 0, 1],
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
             "link_loss_policy": "all-positive supervised contrastive mean-log-probability",

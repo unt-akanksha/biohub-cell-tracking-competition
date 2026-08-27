@@ -64,7 +64,9 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                 "target_44b6": {
                     "model_sha256": "f" * 64,
                     "best_step": 30,
-                    "parameter_count": 19_218_498,
+                    "parameter_count": 19_221_954,
+                    "input_channels": 3,
+                    "temporal_frame_offsets": [-1, 0, 1],
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
                     "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
@@ -72,7 +74,9 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                 "target_6bba": {
                     "model_sha256": "1" * 64,
                     "best_step": 40,
-                    "parameter_count": 19_218_498,
+                    "parameter_count": 19_221_954,
+                    "input_channels": 3,
+                    "temporal_frame_offsets": [-1, 0, 1],
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
                     "link_loss_policy": "all-positive supervised contrastive mean-log-probability",

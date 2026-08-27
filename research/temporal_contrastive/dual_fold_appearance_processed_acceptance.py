@@ -112,7 +112,9 @@ def verify_sources(
             appearance_terminal.get("status") == "completed"
             and appearance_terminal.get("fold") == fold
             and int(appearance_terminal.get("best_step", 0)) > 0
-            and int(appearance_terminal.get("parameter_count", 0)) == 19_218_498
+            and int(appearance_terminal.get("parameter_count", 0)) == 19_221_954
+            and appearance_terminal.get("input_channels") == 3
+            and appearance_terminal.get("temporal_frame_offsets") == [-1, 0, 1]
             and appearance_terminal.get("checkpoint_weight_source")
             == "optimizer-step exponential moving average"
             and appearance_terminal.get("ema_decay") == 0.997
@@ -179,6 +181,10 @@ def verify_sources(
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "appearance_best_step": appearance_terminal["best_step"],
             "appearance_parameter_count": appearance_terminal["parameter_count"],
+            "appearance_input_channels": appearance_terminal["input_channels"],
+            "appearance_temporal_frame_offsets": appearance_terminal[
+                "temporal_frame_offsets"
+            ],
             "appearance_checkpoint_weight_source": appearance_terminal[
                 "checkpoint_weight_source"
             ],
@@ -514,6 +520,10 @@ def orchestrate(args: argparse.Namespace) -> None:
                 "model_sha256": source["appearance_model_sha256"],
                 "best_step": source["appearance_best_step"],
                 "parameter_count": source["appearance_parameter_count"],
+                "input_channels": source["appearance_input_channels"],
+                "temporal_frame_offsets": source[
+                    "appearance_temporal_frame_offsets"
+                ],
                 "checkpoint_weight_source": source[
                     "appearance_checkpoint_weight_source"
                 ],

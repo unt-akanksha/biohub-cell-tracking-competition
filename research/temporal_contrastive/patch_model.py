@@ -32,7 +32,12 @@ def sample_physical_patches(
     half_extent_zyx_um: Sequence[float] = (8.0, 8.0, 8.0),
     chunk_size: int = 64,
 ) -> torch.Tensor:
-    """Resample center-aligned patches onto a shared physical coordinate grid."""
+    """Resample center-aligned channel volumes onto one physical grid.
+
+    A single volume may be ``(Z, Y, X)``. Temporal or multimodal input may be
+    ``(C, Z, Y, X)``; every channel uses the same node-centered sampling grid
+    and is normalized independently so intensity drift cannot dominate motion.
+    """
 
     image = torch.as_tensor(volume, dtype=torch.float32)
     centers = torch.as_tensor(
@@ -43,8 +48,10 @@ def sample_physical_patches(
         int(value) for value in _positive_tuple3(output_shape_zyx, "output_shape_zyx")
     )
     half_extent = _positive_tuple3(half_extent_zyx_um, "half_extent_zyx_um")
-    if image.ndim != 3:
-        raise ValueError("volume must have shape (Z, Y, X)")
+    if image.ndim == 3:
+        image = image.unsqueeze(0)
+    if image.ndim != 4:
+        raise ValueError("volume must have shape (Z, Y, X) or (C, Z, Y, X)")
     if centers.ndim != 2 or centers.shape[1] != 3:
         raise ValueError("centers_zyx_voxel must have shape (N, 3)")
     if chunk_size <= 0:
@@ -52,7 +59,7 @@ def sample_physical_patches(
     if not torch.isfinite(image).all() or not torch.isfinite(centers).all():
         raise ValueError("volume and centers must be finite")
     if len(centers) == 0:
-        return image.new_empty((0, 1, *output_shape))
+        return image.new_empty((0, image.shape[0], *output_shape))
 
     axis_offsets = [
         torch.linspace(-float(extent), float(extent), count, device=image.device)
@@ -64,8 +71,8 @@ def sample_physical_patches(
     offset_grid = torch.stack(
         torch.meshgrid(*axis_offsets, indexing="ij"), dim=-1
     )
-    spatial_shape = tuple(int(value) for value in image.shape)
-    input_tensor = image[None, None]
+    spatial_shape = tuple(int(value) for value in image.shape[-3:])
+    input_tensor = image[None]
     patches: list[torch.Tensor] = []
     for start in range(0, len(centers), chunk_size):
         batch_centers = centers[start : start + chunk_size]
@@ -93,6 +100,28 @@ def sample_physical_patches(
     means = result.mean(dim=(2, 3, 4), keepdim=True)
     scales = result.std(dim=(2, 3, 4), keepdim=True).clamp_min(1e-4)
     return ((result - means) / scales).clamp(-6.0, 6.0)
+
+
+def temporal_context_volume(
+    volumes: np.ndarray | torch.Tensor,
+    timepoint: int,
+    *,
+    offsets: Sequence[int] = (-1, 0, 1),
+) -> np.ndarray | torch.Tensor:
+    """Stack boundary-clamped movie frames as channels around one timepoint."""
+
+    if len(offsets) == 0 or 0 not in offsets:
+        raise ValueError("temporal offsets must be nonempty and include zero")
+    if len(getattr(volumes, "shape", ())) != 4:
+        raise ValueError("movie volumes must have shape (T, Z, Y, X)")
+    frame_count = int(volumes.shape[0])
+    if frame_count <= 0 or not 0 <= int(timepoint) < frame_count:
+        raise ValueError("timepoint is outside the movie")
+    indices = [min(max(int(timepoint) + int(offset), 0), frame_count - 1) for offset in offsets]
+    if isinstance(volumes, torch.Tensor):
+        index = torch.as_tensor(indices, dtype=torch.long, device=volumes.device)
+        return volumes.index_select(0, index)
+    return np.stack([np.asarray(volumes[index]) for index in indices], axis=0)
 
 
 def physical_candidate_masks(
@@ -196,15 +225,23 @@ class PhysicalPatchAssociationModel(nn.Module):
     def __init__(
         self,
         *,
+        input_channels: int = 3,
         base_channels: int = 64,
         embedding_channels: int = 256,
     ) -> None:
         super().__init__()
-        if base_channels <= 0 or embedding_channels <= 0:
+        if input_channels <= 0 or base_channels <= 0 or embedding_channels <= 0:
             raise ValueError("channel counts must be positive")
+        self.input_channels = int(input_channels)
         groups = next(value for value in (8, 4, 2, 1) if base_channels % value == 0)
         self.stem = nn.Sequential(
-            nn.Conv3d(1, base_channels, kernel_size=3, padding=1, bias=False),
+            nn.Conv3d(
+                self.input_channels,
+                base_channels,
+                kernel_size=3,
+                padding=1,
+                bias=False,
+            ),
             nn.GroupNorm(groups, base_channels),
             nn.SiLU(inplace=True),
         )
@@ -231,8 +268,10 @@ class PhysicalPatchAssociationModel(nn.Module):
         self.logit_scale = nn.Parameter(torch.tensor(math.log(10.0)))
 
     def forward(self, patches: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        if patches.ndim != 5 or patches.shape[1] != 1:
-            raise ValueError("patches must have shape (N, 1, Z, Y, X)")
+        if patches.ndim != 5 or patches.shape[1] != self.input_channels:
+            raise ValueError(
+                f"patches must have shape (N, {self.input_channels}, Z, Y, X)"
+            )
         hidden = self.encoder(self.stem(patches)).mean(dim=(2, 3, 4))
         embeddings = F.normalize(self.projection(hidden), p=2, dim=1, eps=1e-8)
         return embeddings, self.division(hidden).squeeze(1)

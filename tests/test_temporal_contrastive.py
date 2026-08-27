@@ -15,6 +15,7 @@ from research.temporal_contrastive.patch_model import (
     PhysicalPatchAssociationModel,
     physical_candidate_masks,
     sample_physical_patches,
+    temporal_context_volume,
 )
 from research.temporal_contrastive.train_dual_fold_patch import (
     aggregate_metrics,
@@ -149,6 +150,27 @@ def test_physical_patch_sampling_matches_anisotropic_and_isotropic_views() -> No
     assert 0.9 < float(patch.std()) < 1.1
 
 
+def test_temporal_context_clamps_boundaries_and_shares_physical_grid() -> None:
+    movie = np.stack(
+        [np.full((5, 7, 7), value, dtype=np.float32) for value in (1, 2, 4)]
+    )
+
+    first = temporal_context_volume(movie, 0)
+    last = temporal_context_volume(movie, 2)
+    patches = sample_physical_patches(
+        first,
+        [[2.0, 3.0, 3.0]],
+        voxel_size_zyx_um=(1.0, 1.0, 1.0),
+        output_shape_zyx=(3, 3, 3),
+        half_extent_zyx_um=(1.0, 1.0, 1.0),
+    )
+
+    assert first[:, 0, 0, 0].tolist() == [1.0, 1.0, 2.0]
+    assert last[:, 0, 0, 0].tolist() == [2.0, 4.0, 4.0]
+    assert patches.shape == (1, 3, 3, 3, 3)
+    assert torch.isfinite(patches).all()
+
+
 def test_candidate_mask_fails_closed_when_radius_drops_a_true_jump() -> None:
     source = np.asarray([[0.0, 0.0, 0.0]], dtype=np.float32)
     target = np.asarray([[0.0, 2.0, 0.0], [0.0, 20.0, 0.0]], dtype=np.float32)
@@ -175,7 +197,7 @@ def test_candidate_mask_fails_closed_when_radius_drops_a_true_jump() -> None:
 def test_patch_association_model_has_normalized_embeddings_and_sparse_divisions() -> None:
     torch.manual_seed(11)
     model = PhysicalPatchAssociationModel(base_channels=8, embedding_channels=16)
-    patches = torch.randn(3, 1, 17, 17, 17)
+    patches = torch.randn(3, 3, 17, 17, 17)
 
     embeddings, divisions = model(patches)
     logits = model.pair_logits(embeddings[:2], embeddings[1:])
@@ -190,7 +212,8 @@ def test_patch_association_model_has_normalized_embeddings_and_sparse_divisions(
 def test_default_patch_model_is_the_declared_heavy_candidate() -> None:
     model = PhysicalPatchAssociationModel()
 
-    assert sum(parameter.numel() for parameter in model.parameters()) == 19_218_498
+    assert sum(parameter.numel() for parameter in model.parameters()) == 19_221_954
+    assert model.input_channels == 3
     assert model.projection[-1].out_features == 256
 
 

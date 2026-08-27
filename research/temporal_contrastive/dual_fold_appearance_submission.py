@@ -134,7 +134,10 @@ def load_acceptance(
             int(expected_trackastra[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("parameter_count", 0))
-            == 19_218_498
+            == 19_221_954
+            and expected_appearance[fold].get("input_channels") == 3
+            and expected_appearance[fold].get("temporal_frame_offsets")
+            == [-1, 0, 1]
             and expected_appearance[fold].get("checkpoint_weight_source")
             == "optimizer-step exponential moving average"
             and expected_appearance[fold].get("ema_decay") == 0.997

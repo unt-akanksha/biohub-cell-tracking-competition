@@ -147,7 +147,9 @@ def main() -> None:
             },
             "appearance_model": {
                 "implementation": "independent Biohub physical-scale 3D residual encoder",
-                "parameters_per_fold": 19_218_498,
+                "parameters_per_fold": 19_221_954,
+                "input_channels": 3,
+                "temporal_frame_offsets": [-1, 0, 1],
                 "external_pretrained_weights": False,
                 "division_head_used_at_inference": True,
                 "link_loss_policy": "all-positive supervised contrastive mean-log-probability",

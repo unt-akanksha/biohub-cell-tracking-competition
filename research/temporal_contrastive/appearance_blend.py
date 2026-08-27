@@ -8,11 +8,16 @@ import numpy as np
 import torch
 
 try:
-    from patch_model import PhysicalPatchAssociationModel, sample_physical_patches
+    from patch_model import (
+        PhysicalPatchAssociationModel,
+        sample_physical_patches,
+        temporal_context_volume,
+    )
 except ModuleNotFoundError:
     from research.temporal_contrastive.patch_model import (
         PhysicalPatchAssociationModel,
         sample_physical_patches,
+        temporal_context_volume,
     )
 
 
@@ -108,7 +113,10 @@ def extract_movie_embeddings(
         rows = np.flatnonzero(video.times == timepoint)
         if timepoint < 0 or timepoint >= int(image_array.shape[0]):
             raise ValueError(f"node frame is outside image array: {timepoint}")
-        frame = torch.as_tensor(np.asarray(image_array[timepoint]), device=device)
+        frame = torch.as_tensor(
+            np.asarray(temporal_context_volume(image_array, timepoint)),
+            device=device,
+        )
         for start in range(0, len(rows), node_batch_size):
             selected_rows = rows[start : start + node_batch_size]
             patches = sample_physical_patches(
@@ -172,7 +180,10 @@ def extract_reciprocal_movie_embeddings(
         rows = np.flatnonzero(video.times == timepoint)
         if timepoint < 0 or timepoint >= int(image_array.shape[0]):
             raise ValueError(f"node frame is outside image array: {timepoint}")
-        frame = torch.as_tensor(np.asarray(image_array[timepoint]), device=device)
+        frame = torch.as_tensor(
+            np.asarray(temporal_context_volume(image_array, timepoint)),
+            device=device,
+        )
         for start in range(0, len(rows), node_batch_size):
             selected_rows = rows[start : start + node_batch_size]
             patches = sample_physical_patches(

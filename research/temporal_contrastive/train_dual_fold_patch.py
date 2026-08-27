@@ -47,6 +47,7 @@ try:
         PhysicalPatchAssociationModel,
         physical_candidate_masks,
         sample_physical_patches,
+        temporal_context_volume,
     )
 except ModuleNotFoundError:
     from research.temporal_contrastive.model import masked_multi_positive_info_nce
@@ -54,6 +55,7 @@ except ModuleNotFoundError:
         PhysicalPatchAssociationModel,
         physical_candidate_masks,
         sample_physical_patches,
+        temporal_context_volume,
     )
 
 
@@ -455,8 +457,8 @@ def load_random_transition(
         rng=rng,
     )
     return (
-        np.asarray(volumes[timepoint]),
-        np.asarray(volumes[timepoint + 1]),
+        np.asarray(temporal_context_volume(volumes, timepoint)),
+        np.asarray(temporal_context_volume(volumes, timepoint + 1)),
         batch,
         voxel_size,
     )
@@ -484,7 +486,9 @@ def encode_transition(
     )
     patches = torch.cat((source_patches, target_patches), dim=0)
     if augment:
-        contrast = torch.empty((len(patches), 1, 1, 1, 1), device=device).uniform_(0.8, 1.2)
+        contrast = torch.empty(
+            (len(patches), patches.shape[1], 1, 1, 1), device=device
+        ).uniform_(0.8, 1.2)
         noise = torch.randn_like(patches) * 0.03
         patches = patches * contrast + noise
         for axis in (2, 3, 4):
@@ -778,6 +782,8 @@ def train_worker(args: argparse.Namespace) -> None:
             "candidate_radius_um": args.candidate_radius_um,
             "patch_shape": [17, 17, 17],
             "patch_half_extent_um": [8.0, 8.0, 8.0],
+            "input_channels": 3,
+            "temporal_frame_offsets": [-1, 0, 1],
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
@@ -924,6 +930,8 @@ def train_worker(args: argparse.Namespace) -> None:
         "best_synthetic": best_synthetic,
         "model_sha256": sha256_file(model_path),
         "parameter_count": parameter_count,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
         "checkpoint_weight_source": "optimizer-step exponential moving average",
         "ema_decay": args.ema_decay,
         "division_prior_correction": "class-conditional importance weighting",

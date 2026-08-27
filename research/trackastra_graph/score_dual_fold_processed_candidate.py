@@ -143,7 +143,9 @@ def validate_materialization(
             if not (
                 isinstance(model, dict)
                 and int(model.get("best_step", 0)) > 0
-                and int(model.get("parameter_count", 0)) == 19_218_498
+                and int(model.get("parameter_count", 0)) == 19_221_954
+                and model.get("input_channels") == 3
+                and model.get("temporal_frame_offsets") == [-1, 0, 1]
                 and isinstance(digest, str)
                 and len(digest) == 64
                 and model.get("checkpoint_weight_source")
