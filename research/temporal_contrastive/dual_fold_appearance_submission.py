@@ -29,6 +29,7 @@ try:
         reciprocal_movie_evidence,
     )
     from appearance_family import (
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
         PAIR_FUSION_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
@@ -70,6 +71,7 @@ except ModuleNotFoundError:
         reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.appearance_family import (
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
         PAIR_FUSION_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
@@ -329,6 +331,7 @@ def worker(args: argparse.Namespace) -> None:
             embeddings,
             division_logits,
             track_scores,
+            image=image,
         )
         primary_divisions = division_logits_for_movie(
             video, division_logits, track_scores
@@ -341,6 +344,7 @@ def worker(args: argparse.Namespace) -> None:
                 peer_embeddings,
                 peer_logits,
                 track_scores,
+                image=image,
             )
             peer_divisions = division_logits_for_movie(
                 video, peer_logits, track_scores
@@ -438,7 +442,10 @@ def orchestrate(args: argparse.Namespace) -> None:
                 == "reciprocal_mean"
                 else 1
             ),
-            pair_fusion=(acceptance["appearance_family"] == PAIR_FUSION_FAMILY),
+            pair_fusion=(
+                acceptance["appearance_family"]
+                in {PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY}
+            ),
         )
         for stem, video in videos.items()
     }
@@ -576,7 +583,8 @@ def orchestrate(args: argparse.Namespace) -> None:
         "appearance_node_cost_weight": APPEARANCE_NODE_COST,
         "pair_fusion_pair_cost_weight": (
             PAIR_FUSION_PAIR_COST
-            if acceptance["appearance_family"] == PAIR_FUSION_FAMILY
+            if acceptance["appearance_family"]
+            in {PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY}
             else 1.0
         ),
         "base_submission_sha256": sha256_file(args.base_submission),

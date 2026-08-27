@@ -215,6 +215,76 @@ def test_processed_appearance_sources_accept_pair_fusion_contract(
     )
 
 
+def test_processed_appearance_sources_accept_contextual_v3_contract(
+    tmp_path: Path,
+) -> None:
+    trackastra_root, appearance_root, calibration_path = source_fixture(tmp_path)
+    contextual_contract = {
+        "run_id": "temporal-contextual-pair-fusion-v3",
+        "appearance_family": "temporal_contextual_pair_fusion_v3",
+        "parameter_count": 20_747_761,
+        "candidate_context_width": 18,
+        "contextual_pair_feature_width": 1_047,
+        "edge_token_width": 256,
+        "edge_set_feature_width": 1_536,
+        "edge_head_hidden_widths": [512, 128],
+        "contextual_pair_policy": (
+            "candidate-limited temporal-context outgoing-incoming edge-set pooling"
+        ),
+        "transition_context_policy": (
+            "bounded phase-correlation with projection refinement, duplicate evidence, "
+            "and robust residual-motion context"
+        ),
+        "pair_loss_policy": (
+            "all-positive contextual candidate-pair mean-log-probability"
+        ),
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    for fold in FOLDS:
+        terminal_path = appearance_root / fold / "worker_terminal.json"
+        terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+        terminal.update(contextual_contract)
+        write_json(terminal_path, terminal)
+    aggregate_path = appearance_root / "training_terminal.json"
+    aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
+    aggregate.update(
+        run_id="temporal-contextual-pair-fusion-v3",
+        appearance_family="temporal_contextual_pair_fusion_v3",
+    )
+    aggregate["folds"] = {
+        fold: json.loads(
+            (appearance_root / fold / "worker_terminal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        for fold in FOLDS
+    }
+    write_json(aggregate_path, aggregate)
+    calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
+    calibration.update(
+        run_id="temporal-contextual-pair-fusion-blend-v3",
+        appearance_family="temporal_contextual_pair_fusion_v3",
+    )
+    for fold in FOLDS:
+        calibration["folds"][fold]["appearance_family"] = (
+            "temporal_contextual_pair_fusion_v3"
+        )
+    write_json(calibration_path, calibration)
+
+    _calibration, folds = verify_sources(
+        trackastra_root, appearance_root, calibration_path
+    )
+
+    assert {row["appearance_family"] for row in folds.values()} == {
+        "temporal_contextual_pair_fusion_v3"
+    }
+    assert all(
+        row["appearance_metadata"]["candidate_context_width"] == 18
+        for row in folds.values()
+    )
+
+
 def test_processed_appearance_sources_reject_worker_aggregate_divergence(
     tmp_path: Path,
 ) -> None:

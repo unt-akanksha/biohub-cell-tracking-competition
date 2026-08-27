@@ -13,14 +13,21 @@ STAGING_ROOT = ROOT / ".biohub" / "staging"
 TARGET_BY_FAMILY = {
     "cosine_v1": STAGING_ROOT / "biohub-temporal-patch-runtime-v1",
     "pair_fusion_v2": STAGING_ROOT / "biohub-temporal-pair-fusion-runtime-v2",
+    "contextual_pair_fusion_v3": (
+        STAGING_ROOT / "biohub-temporal-contextual-pair-fusion-runtime-v3"
+    ),
 }
 RUN_ID_BY_FAMILY = {
     "cosine_v1": "temporal-patch-dual-fold-v1",
     "pair_fusion_v2": "temporal-patch-pair-fusion-v2",
+    "contextual_pair_fusion_v3": "temporal-contextual-pair-fusion-v3",
 }
 DATASET_ID_BY_FAMILY = {
     "cosine_v1": "indarkarhana/biohub-temporal-patch-runtime-v1",
     "pair_fusion_v2": "indarkarhana/biohub-temporal-pair-fusion-runtime-v2",
+    "contextual_pair_fusion_v3": (
+        "indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3"
+    ),
 }
 EXPERIMENT_BY_FAMILY = {
     "cosine_v1": ROOT
@@ -31,6 +38,17 @@ EXPERIMENT_BY_FAMILY = {
     / "config"
     / "experiments"
     / "temporal-patch-pair-fusion-v2.json",
+    "contextual_pair_fusion_v3": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-contextual-pair-fusion-v3.json",
+}
+TITLE_BY_FAMILY = {
+    "cosine_v1": "Biohub Temporal Patch Runtime v1",
+    "pair_fusion_v2": "Biohub Temporal Pair Fusion Runtime v2",
+    "contextual_pair_fusion_v3": (
+        "Biohub Temporal Contextual Pair Fusion Runtime v3"
+    ),
 }
 TRACKASTRA_REPOSITORY = ROOT / ".biohub" / "cache" / "repos" / "trackastra"
 EXPECTED_TRACKASTRA_COMMIT = "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b"
@@ -38,6 +56,18 @@ SOURCES = {
     "model.py": ROOT / "research" / "temporal_contrastive" / "model.py",
     "patch_model.py": ROOT / "research" / "temporal_contrastive" / "patch_model.py",
     "pair_fusion.py": ROOT / "research" / "temporal_contrastive" / "pair_fusion.py",
+    "transition_context.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "transition_context.py",
+    "contextual_pair_fusion.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "contextual_pair_fusion.py",
+    "contextual_training.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "contextual_training.py",
     "appearance_family.py": ROOT
     / "research"
     / "temporal_contrastive"
@@ -50,6 +80,10 @@ SOURCES = {
     / "research"
     / "temporal_contrastive"
     / "train_dual_fold_pair_fusion.py",
+    "train_dual_fold_contextual_pair_fusion.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_dual_fold_contextual_pair_fusion.py",
     "appearance_blend.py": ROOT
     / "research"
     / "temporal_contrastive"
@@ -187,7 +221,7 @@ def main() -> None:
                 "license": "BSD-3-Clause",
             },
             "appearance_model": {
-                "implementation": "independent Biohub physical-scale 3D residual encoder with optional learned candidate-pair fusion",
+                "implementation": "independent Biohub physical-scale 3D residual encoder with optional learned candidate-pair and project-authored transition-context fusion",
                 "families": {
                     "temporal_cosine_v1": {"parameters_per_fold": 19_221_954},
                     "temporal_pair_fusion_v2": {
@@ -195,6 +229,13 @@ def main() -> None:
                         "pair_feature_width": 1_029,
                         "pair_projection_width": 1_024,
                         "pair_hidden_widths": [512, 128],
+                    },
+                    "temporal_contextual_pair_fusion_v3": {
+                        "parameters_per_fold": 20_747_761,
+                        "candidate_context_width": 18,
+                        "contextual_pair_feature_width": 1_047,
+                        "edge_token_width": 256,
+                        "edge_set_feature_width": 1_536,
                     },
                 },
                 "input_channels": 3,
@@ -223,11 +264,7 @@ def main() -> None:
     write_json(
         target / "dataset-metadata.json",
         {
-            "title": (
-                "Biohub Temporal Patch Runtime v1"
-                if args.family == "cosine_v1"
-                else "Biohub Temporal Pair Fusion Runtime v2"
-            ),
+            "title": TITLE_BY_FAMILY[args.family],
             "id": DATASET_ID_BY_FAMILY[args.family],
             "licenses": [{"name": "BSD-3-Clause"}],
             "isPrivate": True,

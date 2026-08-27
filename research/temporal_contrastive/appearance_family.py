@@ -7,6 +7,19 @@ from typing import Any
 
 try:
     from appearance_blend import appearance_scores_for_movie
+    from contextual_pair_fusion import (
+        CONTEXTUAL_PAIR_FEATURE_WIDTH,
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
+        CONTEXTUAL_PAIR_LOSS_POLICY,
+        CONTEXTUAL_PAIR_POLICY,
+        EDGE_HEAD_HIDDEN_WIDTHS,
+        EDGE_SET_FEATURE_WIDTH,
+        EDGE_TOKEN_WIDTH,
+        EXPECTED_PARAMETER_COUNT as CONTEXTUAL_PAIR_PARAMETER_COUNT,
+        TRANSITION_CONTEXT_POLICY,
+        ContextualPairFusionAssociationModel,
+        contextual_pair_fusion_scores_for_movie,
+    )
     from pair_fusion import (
         DEFAULT_PAIR_CHUNK_SIZE,
         EXPECTED_PARAMETER_COUNT as PAIR_FUSION_PARAMETER_COUNT,
@@ -23,6 +36,19 @@ try:
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
         appearance_scores_for_movie,
+    )
+    from research.temporal_contrastive.contextual_pair_fusion import (
+        CONTEXTUAL_PAIR_FEATURE_WIDTH,
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
+        CONTEXTUAL_PAIR_LOSS_POLICY,
+        CONTEXTUAL_PAIR_POLICY,
+        EDGE_HEAD_HIDDEN_WIDTHS,
+        EDGE_SET_FEATURE_WIDTH,
+        EDGE_TOKEN_WIDTH,
+        EXPECTED_PARAMETER_COUNT as CONTEXTUAL_PAIR_PARAMETER_COUNT,
+        TRANSITION_CONTEXT_POLICY,
+        ContextualPairFusionAssociationModel,
+        contextual_pair_fusion_scores_for_movie,
     )
     from research.temporal_contrastive.pair_fusion import (
         DEFAULT_PAIR_CHUNK_SIZE,
@@ -45,22 +71,26 @@ COSINE_FAMILY = "temporal_cosine_v1"
 COSINE_PARAMETER_COUNT = 19_221_954
 PAIR_FUSION_EMBEDDING_LOSS_WEIGHT = 0.25
 LINK_LOSS_POLICY = "all-positive supervised contrastive mean-log-probability"
-FAMILIES = (COSINE_FAMILY, PAIR_FUSION_FAMILY)
+FAMILIES = (COSINE_FAMILY, PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY)
 TRAINING_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-v2",
+    CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-v3",
 }
 CALIBRATION_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-blend-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-blend-v2",
+    CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-blend-v3",
 }
 PROCESSED_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-processed-acceptance-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-processed-acceptance-v2",
+    CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-processed-acceptance-v3",
 }
 CANDIDATE_FAMILY_BY_APPEARANCE = {
     COSINE_FAMILY: "trackastra_appearance_blend",
     PAIR_FUSION_FAMILY: "trackastra_pair_fusion_blend",
+    CONTEXTUAL_PAIR_FUSION_FAMILY: "trackastra_contextual_pair_fusion_blend",
 }
 APPEARANCE_FAMILY_BY_CANDIDATE = {
     candidate: family for family, candidate in CANDIDATE_FAMILY_BY_APPEARANCE.items()
@@ -68,6 +98,7 @@ APPEARANCE_FAMILY_BY_CANDIDATE = {
 PARAMETER_COUNT_BY_FAMILY = {
     COSINE_FAMILY: COSINE_PARAMETER_COUNT,
     PAIR_FUSION_FAMILY: PAIR_FUSION_PARAMETER_COUNT,
+    CONTEXTUAL_PAIR_FUSION_FAMILY: CONTEXTUAL_PAIR_PARAMETER_COUNT,
 }
 COMMON_METADATA_KEYS = (
     "appearance_family",
@@ -85,6 +116,18 @@ PAIR_FUSION_METADATA_KEYS = (
     "pair_projection_width",
     "pair_hidden_widths",
     "pair_fusion_policy",
+    "pair_loss_policy",
+    "embedding_auxiliary_loss_weight",
+    "pair_chunk_size",
+)
+CONTEXTUAL_PAIR_METADATA_KEYS = (
+    "candidate_context_width",
+    "contextual_pair_feature_width",
+    "edge_token_width",
+    "edge_set_feature_width",
+    "edge_head_hidden_widths",
+    "contextual_pair_policy",
+    "transition_context_policy",
     "pair_loss_policy",
     "embedding_auxiliary_loss_weight",
     "pair_chunk_size",
@@ -145,6 +188,26 @@ def verify_appearance_metadata(
         )
         if not pair_valid:
             raise ValueError("pair-fusion architecture contract changed")
+    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+        contextual_valid = bool(
+            payload.get("appearance_family") == CONTEXTUAL_PAIR_FUSION_FAMILY
+            and payload.get("candidate_context_width") == 18
+            and payload.get("contextual_pair_feature_width")
+            == CONTEXTUAL_PAIR_FEATURE_WIDTH
+            and payload.get("edge_token_width") == EDGE_TOKEN_WIDTH
+            and payload.get("edge_set_feature_width") == EDGE_SET_FEATURE_WIDTH
+            and payload.get("edge_head_hidden_widths")
+            == list(EDGE_HEAD_HIDDEN_WIDTHS)
+            and payload.get("contextual_pair_policy") == CONTEXTUAL_PAIR_POLICY
+            and payload.get("transition_context_policy")
+            == TRANSITION_CONTEXT_POLICY
+            and payload.get("pair_loss_policy") == CONTEXTUAL_PAIR_LOSS_POLICY
+            and payload.get("embedding_auxiliary_loss_weight")
+            == PAIR_FUSION_EMBEDDING_LOSS_WEIGHT
+            and payload.get("pair_chunk_size") == DEFAULT_PAIR_CHUNK_SIZE
+        )
+        if not contextual_valid:
+            raise ValueError("contextual pair-fusion architecture contract changed")
     return family
 
 
@@ -155,6 +218,8 @@ def appearance_metadata(payload: Mapping[str, Any]) -> dict[str, Any]:
     keys = COMMON_METADATA_KEYS
     if family == PAIR_FUSION_FAMILY:
         keys += PAIR_FUSION_METADATA_KEYS
+    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+        keys += CONTEXTUAL_PAIR_METADATA_KEYS
     result = {key: payload[key] for key in keys if key in payload}
     result["appearance_family"] = family
     return result
@@ -174,6 +239,8 @@ def build_appearance_model(family: str) -> PhysicalPatchAssociationModel:
         return PhysicalPatchAssociationModel()
     if family == PAIR_FUSION_FAMILY:
         return PhysicalPairFusionAssociationModel()
+    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+        return ContextualPairFusionAssociationModel()
     raise ValueError(f"unknown appearance model family: {family}")
 
 
@@ -184,6 +251,8 @@ def appearance_evidence_for_movie(
     embeddings: Any,
     division_logits: Any,
     pair_scores: Any,
+    *,
+    image: Any | None = None,
 ) -> dict[int, Any]:
     if family == COSINE_FAMILY:
         if type(model) is not PhysicalPatchAssociationModel:
@@ -195,6 +264,21 @@ def appearance_evidence_for_movie(
         return pair_fusion_scores_for_movie(
             model,
             video,
+            embeddings,
+            division_logits,
+            pair_scores,
+            candidate_radius_um=32.0,
+            chunk_size=DEFAULT_PAIR_CHUNK_SIZE,
+        )
+    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+        if not isinstance(model, ContextualPairFusionAssociationModel):
+            raise TypeError("contextual pair-fusion appearance model type changed")
+        if image is None:
+            raise ValueError("contextual pair-fusion inference requires movie images")
+        return contextual_pair_fusion_scores_for_movie(
+            model,
+            video,
+            image,
             embeddings,
             division_logits,
             pair_scores,

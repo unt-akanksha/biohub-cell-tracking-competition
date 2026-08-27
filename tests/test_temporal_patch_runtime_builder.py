@@ -13,6 +13,12 @@ TARGET = ROOT / ".biohub" / "staging" / "biohub-temporal-patch-runtime-v1"
 PAIR_TARGET = (
     ROOT / ".biohub" / "staging" / "biohub-temporal-pair-fusion-runtime-v2"
 )
+CONTEXTUAL_TARGET = (
+    ROOT
+    / ".biohub"
+    / "staging"
+    / "biohub-temporal-contextual-pair-fusion-runtime-v3"
+)
 
 
 def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
@@ -38,6 +44,10 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "train_dual_fold_patch.py",
         "train_dual_fold_pair_fusion.py",
         "pair_fusion.py",
+        "transition_context.py",
+        "contextual_pair_fusion.py",
+        "contextual_training.py",
+        "train_dual_fold_contextual_pair_fusion.py",
         "appearance_family.py",
         "calibrate_dual_fold_blend.py",
         "dual_fold_appearance_processed_acceptance.py",
@@ -88,3 +98,33 @@ def test_runtime_builder_emits_distinct_pair_fusion_package() -> None:
     assert experiment["model"]["appearance_family"] == "temporal_pair_fusion_v2"
     assert experiment["model"]["public_code_copied"] is False
     assert (PAIR_TARGET / "train_dual_fold_pair_fusion.py").is_file()
+
+
+def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(BUILDER),
+            "--replace",
+            "--family",
+            "contextual_pair_fusion_v3",
+        ],
+        check=True,
+    )
+    manifest = json.loads(
+        (CONTEXTUAL_TARGET / "SOURCE_MANIFEST.json").read_text(encoding="utf-8")
+    )
+    experiment = json.loads(
+        (CONTEXTUAL_TARGET / "experiment.json").read_text(encoding="utf-8")
+    )
+
+    assert manifest["run_id"] == "temporal-contextual-pair-fusion-v3"
+    assert manifest["runtime_family"] == "contextual_pair_fusion_v3"
+    assert manifest["appearance_model"]["families"][
+        "temporal_contextual_pair_fusion_v3"
+    ]["parameters_per_fold"] == 20_747_761
+    assert experiment["model"]["family"] == "temporal_contextual_pair_fusion_v3"
+    assert experiment["public_code_copied"] is False
+    assert (
+        CONTEXTUAL_TARGET / "train_dual_fold_contextual_pair_fusion.py"
+    ).is_file()

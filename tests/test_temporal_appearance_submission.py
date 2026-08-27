@@ -149,6 +149,45 @@ def test_candidate_builder_accepts_exact_pair_fusion_evidence(tmp_path: Path) ->
         load_acceptance(evidence, trackastra_dirs, appearance_models)
 
 
+def test_candidate_builder_accepts_exact_contextual_v3_evidence(
+    tmp_path: Path,
+) -> None:
+    evidence, trackastra_dirs, appearance_models = accepted_fixture(tmp_path)
+    payload = json.loads(evidence.read_text(encoding="utf-8"))
+    payload.update(
+        candidate_family="trackastra_contextual_pair_fusion_blend",
+        appearance_family="temporal_contextual_pair_fusion_v3",
+    )
+    contextual_contract = {
+        "appearance_family": "temporal_contextual_pair_fusion_v3",
+        "parameter_count": 20_747_761,
+        "candidate_context_width": 18,
+        "contextual_pair_feature_width": 1_047,
+        "edge_token_width": 256,
+        "edge_set_feature_width": 1_536,
+        "edge_head_hidden_widths": [512, 128],
+        "contextual_pair_policy": (
+            "candidate-limited temporal-context outgoing-incoming edge-set pooling"
+        ),
+        "transition_context_policy": (
+            "bounded phase-correlation with projection refinement, duplicate evidence, "
+            "and robust residual-motion context"
+        ),
+        "pair_loss_policy": (
+            "all-positive contextual candidate-pair mean-log-probability"
+        ),
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    for model in payload["appearance_models"].values():
+        model.update(contextual_contract)
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+
+    accepted = load_acceptance(evidence, trackastra_dirs, appearance_models)
+
+    assert accepted["appearance_family"] == "temporal_contextual_pair_fusion_v3"
+
+
 def test_candidate_builder_accepts_exact_predeclared_trackastra_control(
     tmp_path: Path,
 ) -> None:

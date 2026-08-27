@@ -59,6 +59,21 @@ except ModuleNotFoundError:
 
 RUN_ID = "temporal-patch-pair-fusion-v2"
 EMBEDDING_AUXILIARY_LOSS_WEIGHT = 0.25
+APPEARANCE_FAMILY = PAIR_FUSION_FAMILY
+MODEL_CLASS = PhysicalPairFusionAssociationModel
+WORKER_SCRIPT_PATH = Path(__file__).resolve()
+
+
+def family_metadata() -> dict[str, object]:
+    return {
+        "pair_feature_width": PAIR_FEATURE_WIDTH,
+        "pair_projection_width": PAIR_PROJECTION_WIDTH,
+        "pair_hidden_widths": list(PAIR_HIDDEN_WIDTHS),
+        "pair_fusion_policy": PAIR_FUSION_POLICY,
+        "pair_loss_policy": PAIR_LOSS_POLICY,
+        "embedding_auxiliary_loss_weight": EMBEDDING_AUXILIARY_LOSS_WEIGHT,
+        "pair_chunk_size": DEFAULT_PAIR_CHUNK_SIZE,
+    }
 
 
 def physical_coordinates(
@@ -90,6 +105,8 @@ def pair_logits_for_transition(
     *,
     candidate_radius_um: float,
     pair_chunk_size: int,
+    source_volume: np.ndarray | None = None,
+    target_volume: np.ndarray | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     candidates = torch.as_tensor(
         batch.candidate_mask, dtype=torch.bool, device=device
@@ -204,6 +221,10 @@ def train_worker(args: argparse.Namespace) -> None:
             training_count=args.real_train_movies,
         )
     )
+    if len(real_train) != int(spec["expected_real_train_movies"]):
+        raise RuntimeError(
+            f"{args.fold} real training inventory changed: {len(real_train)}"
+        )
     if len(real_calibration) != args.real_calibration_movies:
         raise RuntimeError("reciprocal target pool cannot fill calibration")
     used_stems = {
@@ -229,11 +250,11 @@ def train_worker(args: argparse.Namespace) -> None:
         args=args,
     )
 
-    model = PhysicalPairFusionAssociationModel(
+    model = MODEL_CLASS(
         base_channels=args.base_channels,
         embedding_channels=args.embedding_channels,
     ).to(device)
-    ema_model = PhysicalPairFusionAssociationModel(
+    ema_model = MODEL_CLASS(
         base_channels=args.base_channels,
         embedding_channels=args.embedding_channels,
     ).to(device)
@@ -253,6 +274,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "candidate_radius_um": args.candidate_radius_um,
         "pair_chunk_size": args.pair_chunk_size,
     }
+    architecture_metadata = family_metadata()
     initial_real = validate_pair_model(
         ema_model, real_fixed, device, **validation_options
     )
@@ -281,19 +303,13 @@ def train_worker(args: argparse.Namespace) -> None:
         {
             "schema_version": 1,
             "run_id": RUN_ID,
-            "appearance_family": PAIR_FUSION_FAMILY,
+            "appearance_family": APPEARANCE_FAMILY,
             "fold": args.fold,
             "seed": seed,
             "parameter_count": parameter_count,
             "base_channels": args.base_channels,
             "embedding_channels": args.embedding_channels,
-            "pair_feature_width": PAIR_FEATURE_WIDTH,
-            "pair_projection_width": PAIR_PROJECTION_WIDTH,
-            "pair_hidden_widths": list(PAIR_HIDDEN_WIDTHS),
-            "pair_fusion_policy": PAIR_FUSION_POLICY,
-            "pair_loss_policy": PAIR_LOSS_POLICY,
-            "embedding_auxiliary_loss_weight": args.embedding_loss_weight,
-            "pair_chunk_size": args.pair_chunk_size,
+            **architecture_metadata,
             "checkpoint_weight_source": (
                 "optimizer-step exponential moving average"
             ),
@@ -306,6 +322,8 @@ def train_worker(args: argparse.Namespace) -> None:
             "synthetic_division_rate": base.SYNTHETIC_DIVISION_RATE,
             "source_prefix": spec["source_prefix"],
             "target_prefix": spec["target_prefix"],
+            "requested_real_train_movies": args.real_train_movies,
+            "effective_real_train_movies": len(real_train),
             "opened_acceptance_stems_excluded": sorted(
                 base.OPENED_ACCEPTANCE_STEMS
             ),
@@ -385,6 +403,8 @@ def train_worker(args: argparse.Namespace) -> None:
                 device,
                 candidate_radius_um=args.candidate_radius_um,
                 pair_chunk_size=args.pair_chunk_size,
+                source_volume=source_volume,
+                target_volume=target_volume,
             )
             pair_loss = masked_multi_positive_pair_nll(
                 pair_logits, positives, candidates
@@ -492,7 +512,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "schema_version": 1,
         "status": "completed",
         "run_id": RUN_ID,
-        "appearance_family": PAIR_FUSION_FAMILY,
+        "appearance_family": APPEARANCE_FAMILY,
         "fold": args.fold,
         "elapsed_seconds": time.monotonic() - started,
         "attempted_batches": attempted_batches,
@@ -509,13 +529,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "parameter_count": parameter_count,
         "input_channels": 3,
         "temporal_frame_offsets": [-1, 0, 1],
-        "pair_feature_width": PAIR_FEATURE_WIDTH,
-        "pair_projection_width": PAIR_PROJECTION_WIDTH,
-        "pair_hidden_widths": list(PAIR_HIDDEN_WIDTHS),
-        "pair_fusion_policy": PAIR_FUSION_POLICY,
-        "pair_loss_policy": PAIR_LOSS_POLICY,
-        "embedding_auxiliary_loss_weight": args.embedding_loss_weight,
-        "pair_chunk_size": args.pair_chunk_size,
+        **architecture_metadata,
         "checkpoint_weight_source": "optimizer-step exponential moving average",
         "ema_decay": args.ema_decay,
         "division_prior_correction": "class-conditional importance weighting",
@@ -548,7 +562,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         )
         command = [
             sys.executable,
-            str(Path(__file__).resolve()),
+            str(WORKER_SCRIPT_PATH),
             *[item for item in sys.argv[1:] if item != "--orchestrate"],
             "--worker",
             "--fold",
@@ -596,7 +610,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "schema_version": 1,
         "status": "completed",
         "run_id": RUN_ID,
-        "appearance_family": PAIR_FUSION_FAMILY,
+        "appearance_family": APPEARANCE_FAMILY,
         "elapsed_seconds": time.monotonic() - started,
         "gpu_count": 2,
         "folds": terminals,

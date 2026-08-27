@@ -17,7 +17,11 @@ from torch import nn
 try:
     from pair_fusion import DEFAULT_CANDIDATE_RADIUS_UM
     from patch_model import PhysicalPatchAssociationModel
-    from transition_context import CANDIDATE_CONTEXT_WIDTH
+    from transition_context import (
+        CANDIDATE_CONTEXT_WIDTH,
+        candidate_transition_features,
+        estimate_transition_context,
+    )
 except ModuleNotFoundError:
     from research.temporal_contrastive.pair_fusion import (
         DEFAULT_CANDIDATE_RADIUS_UM,
@@ -27,12 +31,21 @@ except ModuleNotFoundError:
     )
     from research.temporal_contrastive.transition_context import (
         CANDIDATE_CONTEXT_WIDTH,
+        candidate_transition_features,
+        estimate_transition_context,
     )
 
 
 CONTEXTUAL_PAIR_FUSION_FAMILY = "temporal_contextual_pair_fusion_v3"
 CONTEXTUAL_PAIR_POLICY = (
     "candidate-limited temporal-context outgoing-incoming edge-set pooling"
+)
+TRANSITION_CONTEXT_POLICY = (
+    "bounded phase-correlation with projection refinement, duplicate evidence, "
+    "and robust residual-motion context"
+)
+CONTEXTUAL_PAIR_LOSS_POLICY = (
+    "all-positive contextual candidate-pair mean-log-probability"
 )
 BASE_PAIR_FEATURE_WIDTH = 1_029
 CONTEXTUAL_PAIR_FEATURE_WIDTH = BASE_PAIR_FEATURE_WIDTH + CANDIDATE_CONTEXT_WIDTH
@@ -229,3 +242,105 @@ class ContextualPairFusionAssociationModel(PhysicalPatchAssociationModel):
         logits = self.edge_head(edge_set_features).squeeze(1)
         output[source_rows, target_rows] = logits
         return output
+
+
+@torch.inference_mode()
+def contextual_pair_fusion_scores_for_movie(
+    model: ContextualPairFusionAssociationModel,
+    video: object,
+    image: object,
+    node_embeddings: np.ndarray,
+    node_division_logits: np.ndarray,
+    pair_scores: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
+    *,
+    voxel_size_zyx_um: tuple[float, float, float] = (
+        1.625,
+        0.40625,
+        0.40625,
+    ),
+    candidate_radius_um: float = DEFAULT_CANDIDATE_RADIUS_UM,
+    chunk_size: int = DEFAULT_PAIR_CHUNK_SIZE,
+) -> dict[int, np.ndarray]:
+    """Score whole-movie candidates with the same v3 context used in training."""
+
+    node_ids = np.asarray(getattr(video, "node_ids"), dtype=np.int64)
+    coords_voxel = np.asarray(getattr(video, "coords_voxel"), dtype=np.float32)
+    embeddings = np.asarray(node_embeddings, dtype=np.float32)
+    divisions = np.asarray(node_division_logits, dtype=np.float32)
+    if embeddings.ndim != 2 or embeddings.shape[0] != len(node_ids):
+        raise ValueError("node embeddings do not align with the video")
+    if divisions.shape != (len(node_ids),):
+        raise ValueError("node division logits do not align with the video")
+    spacing = np.asarray(voxel_size_zyx_um, dtype=np.float32)
+    if spacing.shape != (3,) or not np.isfinite(spacing).all() or np.any(spacing <= 0):
+        raise ValueError("voxel size must contain three positive finite values")
+    coords_um = coords_voxel * spacing[None]
+    if coords_um.shape != (len(node_ids), 3) or not np.isfinite(coords_um).all():
+        raise ValueError("video coordinates do not align with node identifiers")
+    image_shape = tuple(int(value) for value in getattr(image, "shape"))
+    if len(image_shape) != 4 or image_shape[0] < 2:
+        raise ValueError("movie image must have shape (T, Z, Y, X)")
+    id_to_row = {int(node_id): row for row, node_id in enumerate(node_ids)}
+    device = next(model.parameters()).device
+    embedding_tensor = torch.as_tensor(embeddings, device=device)
+    division_tensor = torch.as_tensor(divisions, device=device)
+    coordinate_tensor = torch.as_tensor(coords_um, device=device)
+    frame_cache: dict[int, np.ndarray] = {}
+
+    def frame(timepoint: int) -> np.ndarray:
+        if timepoint not in frame_cache:
+            value = np.asarray(image[timepoint], dtype=np.float32)
+            if value.shape != image_shape[1:] or not np.isfinite(value).all():
+                raise ValueError("movie frame shape or values changed")
+            frame_cache[timepoint] = value
+        return frame_cache[timepoint]
+
+    result: dict[int, np.ndarray] = {}
+    for timepoint, (source_ids, target_ids, track_scores) in sorted(
+        pair_scores.items()
+    ):
+        current_time = int(timepoint)
+        if not 0 <= current_time < image_shape[0] - 1:
+            raise ValueError("candidate transition timepoint is outside the movie")
+        source_rows = np.asarray(
+            [id_to_row[int(node)] for node in source_ids], dtype=np.int64
+        )
+        target_rows = np.asarray(
+            [id_to_row[int(node)] for node in target_ids], dtype=np.int64
+        )
+        candidates = np.isfinite(np.asarray(track_scores))
+        transition = estimate_transition_context(
+            frame(current_time),
+            frame(current_time + 1),
+            voxel_size_zyx_um=spacing,
+        )
+        context = candidate_transition_features(
+            coords_um[source_rows],
+            coords_um[target_rows],
+            candidates,
+            transition,
+            candidate_radius_um=candidate_radius_um,
+        )
+        logits = model.candidate_pair_logits(
+            embedding_tensor[source_rows],
+            embedding_tensor[target_rows],
+            coordinate_tensor[source_rows],
+            coordinate_tensor[target_rows],
+            division_tensor[source_rows],
+            torch.as_tensor(candidates, dtype=torch.bool, device=device),
+            torch.as_tensor(context, dtype=torch.float32, device=device),
+            candidate_radius_um=candidate_radius_um,
+            chunk_size=chunk_size,
+        )
+        probabilities = np.full(candidates.shape, 0.5, dtype=np.float32)
+        if np.any(candidates):
+            probabilities[candidates] = (
+                torch.sigmoid(logits[torch.isfinite(logits)]).float().cpu().numpy()
+            )
+        if not np.isfinite(probabilities).all():
+            raise RuntimeError("contextual pair model produced non-finite evidence")
+        result[current_time] = probabilities
+        stale = [key for key in frame_cache if key < current_time]
+        for key in stale:
+            del frame_cache[key]
+    return result

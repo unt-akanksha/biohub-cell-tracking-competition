@@ -611,6 +611,7 @@ def worker(args: argparse.Namespace) -> None:
             embeddings,
             division_logits,
             pair_scores,
+            image=image,
         )
         primary_divisions = division_logits_for_movie(
             video, division_logits, pair_scores
@@ -622,6 +623,7 @@ def worker(args: argparse.Namespace) -> None:
             peer_embeddings,
             peer_division_logits,
             pair_scores,
+            image=image,
         )
         peer_divisions = division_logits_for_movie(
             video, peer_division_logits, pair_scores

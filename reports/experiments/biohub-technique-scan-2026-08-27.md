@@ -141,3 +141,31 @@ initialization losses are not model-selection evidence.
 
 This proves feasibility only; it does not authorize ZebraHub training before
 the existing reciprocal competition calibration gate.
+
+## Downstream v3 integration evidence
+
+The v3 lane now has a complete project-owned path from reciprocal training to
+whole-movie inference. Its trainer is a thin, fail-closed configuration of the
+tested v2 reciprocal engine: one isolated fold worker per GPU, exactly two
+visible GPUs at orchestration, the repaired effective Biohub inventories of 96
+and 45 source-prefix movies, EMA checkpoints, and no submission command. The
+adapter refuses to train without both source and target temporal volumes, so it
+cannot silently degrade to the context-free v2 head.
+
+At inference, each complete movie is processed transition-by-transition with a
+two-frame rolling cache. The same label-free global shift, duplicate evidence,
+reliability, and residual-motion features used in training are calculated from
+the real movie frames. Only Trackastra candidate edges receive contextual v3
+probabilities; non-candidates remain neutral at 0.5. The exact model-family
+metadata is verified before calibration, processed acceptance, or candidate
+materialization, and every downstream call supplies the movie image explicitly.
+
+The portable private runtime builder now emits a distinct
+`contextual_pair_fusion_v3` package containing the transition estimator,
+contextual model, Biohub adapter, two-GPU trainer, calibration, processed
+acceptance, and whole-movie candidate builder. Focused regression coverage
+passes for the unchanged v2 trainer, v3 metadata/configuration, image-dependent
+whole-movie scoring, downstream acceptance contracts, and all three runtime
+families. This is implementation evidence, not scientific promotion evidence;
+v3 remains staged until the running v1 experiment and clean calibration gates
+produce terminal results.

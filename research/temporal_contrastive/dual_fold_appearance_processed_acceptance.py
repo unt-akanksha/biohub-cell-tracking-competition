@@ -385,6 +385,7 @@ def worker(args: argparse.Namespace) -> None:
             embeddings,
             division_logits,
             trackastra_scores,
+            image=image,
         )
         primary_divisions = division_logits_for_movie(
             video, division_logits, trackastra_scores
@@ -400,6 +401,7 @@ def worker(args: argparse.Namespace) -> None:
                 peer_embeddings,
                 peer_logits,
                 trackastra_scores,
+                image=image,
             )
             peer_divisions = division_logits_for_movie(
                 video, peer_logits, trackastra_scores
