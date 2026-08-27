@@ -41,7 +41,10 @@ After both models pass their absolute retrieval gates, a separate calibration
 step must compare a small predeclared appearance/division blend grid whose
 zero/zero setting is the exact Trackastra control. Unlike a retrieval-only
 proxy, selection now executes the frozen clean graph linker and measures pooled
-edge and division Jaccard with a per-movie regression floor. The trained source
+organizer-aligned score (adjusted edge Jaccard plus 0.1 division Jaccard), using
+the organizer's lineage-aware division matching and a per-movie regression
+floor. Because calibration predicts edges over the exact ground-truth node
+inventory, adjusted edge Jaccard equals edge Jaccard in this clean stage. The trained source
 division logit shifts link confidence for that source, allowing a genuine
 second daughter to clear frozen thresholds without changing candidate rank.
 Only after freezing both weights may the four processed
@@ -67,12 +70,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-division-aware-20260827.zip`
-(92,116 bytes, SHA-256
-`ca57cba93f5b45a679cd0ca1d1e9a14fff45e397e247ee74db28bddf90cbd1c1`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-organizer-aligned-20260827.zip`
+(92,089 bytes, SHA-256
+`a4ae28e030f3287a3b5913881b076266f3fd70f27daa811a643fcdc703525b88`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`bd61b0945fce4e5408f077a57f428dc9075a6c649ead49784238c240aae0d6c9`,
+`0e4b970f12f2f599411c1bbc55083d19cb8a65499a032ffdb278cd0b86aa21ca`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic

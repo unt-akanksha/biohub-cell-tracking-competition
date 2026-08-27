@@ -247,17 +247,16 @@ def association_metrics_for_video(
     edge_fp = len(predicted - truth)
     edge_fn = len(truth - predicted)
 
-    def division_sources(edges: set[tuple[int, int]]) -> set[int]:
-        counts: dict[int, int] = {}
-        for source, _target in edges:
-            counts[source] = counts.get(source, 0) + 1
-        return {source for source, count in counts.items() if count >= 2}
-
-    predicted_divisions = division_sources(predicted)
-    true_divisions = division_sources(truth)
-    division_tp = len(predicted_divisions & true_divisions)
-    division_fp = len(predicted_divisions - true_divisions)
-    division_fn = len(true_divisions - predicted_divisions)
+    node_ids = {int(node_id) for node_id in video.node_ids.tolist()}
+    identity = {node_id: node_id for node_id in node_ids}
+    division_tp, division_fp, division_fn = graph_base.compute_division_confusion(
+        node_ids,
+        predicted,
+        node_ids,
+        truth,
+        identity,
+        identity,
+    )
 
     def jaccard(tp: int, fp: int, fn: int) -> float:
         denominator = tp + fp + fn
@@ -267,8 +266,9 @@ def association_metrics_for_video(
     division_jaccard = jaccard(division_tp, division_fp, division_fn)
     return {
         "stem": video.stem,
-        "composite": 0.90 * edge_jaccard + 0.10 * division_jaccard,
+        "composite": edge_jaccard + 0.10 * division_jaccard,
         "edge_jaccard": edge_jaccard,
+        "adjusted_edge_jaccard": edge_jaccard,
         "division_jaccard": division_jaccard,
         "edge_tp": edge_tp,
         "edge_fp": edge_fp,
@@ -311,8 +311,9 @@ def aggregate_association_metrics(
     return {
         **totals,
         "edge_jaccard": edge,
+        "adjusted_edge_jaccard": edge,
         "division_jaccard": division,
-        "composite": 0.90 * edge + 0.10 * division,
+        "composite": edge + 0.10 * division,
         "movies": len(rows),
     }
 

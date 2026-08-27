@@ -238,8 +238,12 @@ def test_division_evidence_can_restore_a_second_daughter() -> None:
         )
     }
 
-    assert association_metrics_for_video(video, control)["division_jaccard"] == 0.0
-    assert association_metrics_for_video(video, boosted)["division_jaccard"] == 1.0
+    control_metrics = association_metrics_for_video(video, control)
+    boosted_metrics = association_metrics_for_video(video, boosted)
+    assert control_metrics["division_jaccard"] == 0.0
+    assert control_metrics["composite"] == 0.5
+    assert boosted_metrics["division_jaccard"] == 1.0
+    assert boosted_metrics["composite"] == 1.1
 
 
 def test_division_logits_align_arbitrary_source_identifiers() -> None:
