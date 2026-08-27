@@ -42,6 +42,11 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
     from research.trackastra_graph import train_biohub_graph_transformer as graph_base
 
+try:
+    from submission_sharding import terminate_and_reap_processes
+except ModuleNotFoundError:
+    from research.submission_sharding import terminate_and_reap_processes
+
 
 RUN_ID = "temporal-patch-dual-fold-blend-v1"
 FOLDS = ("target_44b6", "target_6bba")
@@ -659,9 +664,10 @@ def orchestrate(args: argparse.Namespace) -> None:
             if len(return_codes) < len(processes):
                 time.sleep(5)
     finally:
+        terminate_and_reap_processes(
+            [process for _fold, process, _handle in processes]
+        )
         for _fold, process, handle in processes:
-            if process.poll() is None:
-                process.terminate()
             handle.close()
     failures = {fold: code for fold, code in return_codes.items() if code != 0}
     if failures:

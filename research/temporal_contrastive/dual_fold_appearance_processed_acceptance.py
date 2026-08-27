@@ -58,6 +58,11 @@ except ModuleNotFoundError:
         sha256_file,
     )
 
+try:
+    from submission_sharding import terminate_and_reap_processes
+except ModuleNotFoundError:
+    from research.submission_sharding import terminate_and_reap_processes
+
 
 RUN_ID = "temporal-patch-dual-fold-processed-acceptance-v1"
 EXPECTED_CALIBRATION_RUN = "temporal-patch-dual-fold-blend-v1"
@@ -463,9 +468,10 @@ def orchestrate(args: argparse.Namespace) -> None:
             if len(return_codes) < len(processes):
                 time.sleep(3)
     finally:
+        terminate_and_reap_processes(
+            [process for _fold, process, _handle, _output in processes]
+        )
         for _fold, process, handle, _output in processes:
-            if process.poll() is None:
-                process.terminate()
             handle.close()
     failures = {fold: code for fold, code in return_codes.items() if code != 0}
     if failures:
