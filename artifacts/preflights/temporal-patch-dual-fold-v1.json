@@ -1,0 +1,179 @@
+{
+  "checks": [
+    {
+      "detail": "Every notebook code cell compiles; the runtime imports and focused temporal, kernel, runtime, and sharding tests pass.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-dual-fold-kernel.py",
+          "sha256": "886c4e5997c851cfc3cba834414ad677708f913f5b0832fe4da8d6af09615c71"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "1a4048ffc461acae000ab856749808c5c72eab78a3cc51205b39e4e6509951d2"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private 29-file runtime, corrected synthetic kernel, coherent Trackastra control, support wheels, and Biohub competition are attached with T4 x2, TPU off, and internet off.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1.json",
+          "sha256": "abb5bc7a0e97dcb3e689f94f017138681f7ccc0f4dd06678d289afe338891e91"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/kernel-metadata.json",
+          "sha256": "4cdd45cdf0b4e916fd5c4e7043b61d00d7003ef137e282667abc1f8442cee8de"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "e26925d558e21d44919e611a0aed20c331ab75adeec55c888ac76bccfd11f218"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact three-channel 17-cubed model path completes a forward pass with normalized embeddings and division logits.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": "tests/test_temporal_contrastive.py",
+          "sha256": "86856516ae2a10ec355c8d213fb1e2ce3a0369bb368d17f73575f1381a630a3d"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The shared production forward/loss path completes backward with finite gradients; the notebook repeats it at production width before training.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        },
+        {
+          "path": "tests/test_temporal_contrastive.py",
+          "sha256": "86856516ae2a10ec355c8d213fb1e2ce3a0369bb368d17f73575f1381a630a3d"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Before optimizer training, one T4 must complete the production 176-patch mixed-precision forward/backward used by the maximum 48-source/128-target transition.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "1a4048ffc461acae000ab856749808c5c72eab78a3cc51205b39e4e6509951d2"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact 19,221,954-parameter state dict strict-roundtrips locally and again on Kaggle after the production dense probe.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "1a4048ffc461acae000ab856749808c5c72eab78a3cc51205b39e4e6509951d2"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only launcher and reciprocal training evidence are written below /kaggle/working; the notebook contains no submission command and declares submission_created false.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "1a4048ffc461acae000ab856749808c5c72eab78a3cc51205b39e4e6509951d2"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/kernel-metadata.json",
+          "sha256": "4cdd45cdf0b4e916fd5c4e7043b61d00d7003ef137e282667abc1f8442cee8de"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/submission_sharding.py",
+          "sha256": "c44cd105825d175210e00f3e91dfa66696f89b7237b8e0dcf5db6454f66ec838"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Setup requires at least 2,028 complete synthetic movies and 120 image/GEFF pairs per embryo before deterministic disjoint validation, calibration, and training partitions are formed.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "1a4048ffc461acae000ab856749808c5c72eab78a3cc51205b39e4e6509951d2"
+        },
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1.json",
+          "sha256": "abb5bc7a0e97dcb3e689f94f017138681f7ccc0f4dd06678d289afe338891e91"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "The appearance encoder and objectives are project-authored; no public predictions, Kaggle notebook code, leaderboard selection, or external appearance weights are admitted.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1.json",
+          "sha256": "abb5bc7a0e97dcb3e689f94f017138681f7ccc0f4dd06678d289afe338891e91"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": "reports/experiments/temporal-patch-originality-audit-v1.md",
+          "sha256": "05c788e2bf864271c8083be27edb4f54746c6ea39020beff9ea3d4c2654da56c"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T07:48:28.825212Z",
+  "report_sha256": "9c84651de8b9cce05d5ae2cfecddc9e7ff7f54dc34d5d66ad6eeba36934e49dc",
+  "run_id": "temporal-patch-dual-fold-v1",
+  "schema_version": 1
+}

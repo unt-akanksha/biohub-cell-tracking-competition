@@ -1,0 +1,31 @@
+{
+  "id": "indarkarhana/biohub-temporal-patch-dual-fold-v1",
+  "title": "Biohub Temporal Patch Dual Fold v1",
+  "code_file": "biohub-temporal-patch-dual-fold-v1.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "gpu",
+    "cell-tracking",
+    "appearance",
+    "non-replica"
+  ],
+  "dataset_sources": [
+    "indarkarhana/biohub-temporal-patch-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "josefreitasalvesneto/biohub-synthetic-dataset",
+    "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1"
+  ],
+  "competition_sources": [
+    "biohub-cell-tracking-during-development"
+  ],
+  "model_sources": [],
+  "docker_image": "gcr.io/kaggle-private-byod/python@sha256:37c64f7dd9c54116ecd1bcc88817c5469b88387388fade02bfa8bf3fc647d461",
+  "machine_shape": "NvidiaTeslaT4"
+}
