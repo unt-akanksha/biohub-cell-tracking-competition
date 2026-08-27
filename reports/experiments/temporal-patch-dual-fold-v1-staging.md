@@ -16,15 +16,20 @@ a representation trained directly on adjacent Biohub cells.
 This lane implements an independent 19,218,498-parameter 3D residual encoder per
 fold. It samples 17-cubed patches over the same 16-micrometer physical field of
 view from both pooled isotropic synthetic images and anisotropic real movies.
-Multi-positive contrastive supervision treats two true daughters as positives
-instead of forcing one to be a negative; a separate sparse division head is
-trained with correction for the inflated synthetic division prior. Checkpoint
+All-positive supervised contrastive learning averages the log-probability of
+every true child. This prevents one easy daughter from hiding a missed second
+daughter in the loss; a separate sparse division head is trained with
+correction for the inflated synthetic division prior. Checkpoint
 selection uses a full-model optimizer-step exponential moving average (decay
 0.997), reducing sensitivity to one noisy minibatch or validation instant.
 The prior correction is class-conditional: synthetic positives are downweighted
 from the 4.07% synthetic rate toward the 0.26% real rate, while synthetic
 negatives retain approximately unit weight. This avoids the earlier failure
 mode where scaling the whole BCE nearly erased non-division supervision.
+Gradient accumulation is also driven by successful batches rather than loop
+attempt numbers, and a partial final window is explicitly rescaled. Invalid
+transitions can therefore no longer silently shrink or enlarge an optimizer
+update.
 
 Calibration now also compares the target-fold encoder against an equal mean of
 both reciprocal encoders. Because the global split keeps every calibration
@@ -38,6 +43,12 @@ image-extraction pass per node.
 No public Kaggle implementation, public prediction identity, CELLECT source, or
 external checkpoint is copied. CELLECT and the 2026 microscopy-embedding paper
 informed only the modeling hypothesis.
+
+The daughter-complete loss follows the all-positive formulation in
+[Supervised Contrastive Learning](https://arxiv.org/abs/2004.11362). Its use of
+local morphology alongside a separate division signal is also consistent with
+the 2025 primary study on
+[contrastive cell-division detection and tracking](https://doi.org/10.1186/s12859-025-06344-5).
 
 ## Leakage and selection boundaries
 
@@ -83,21 +94,22 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 35 tests across the normal
+The updated focused temporal/Trackastra suite passes 37 tests across the normal
 and pinned exact-scorer environments. It covers physical
-resampling, division-aware multi-positive loss, candidate-radius failure,
+resampling, all-daughter supervised-contrastive loss, partial-accumulation
+normalization, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
 alignment, exact zero/zero fallback, source-division alignment, actual
 second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-shared-20260827.zip`
-(96,381 bytes, SHA-256
-`68c10f7cba5270da3c66cfcddab151ad0937d2bbdee12cdc592a183107cf9e5f`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-shared-daughterloss-20260827.zip`
+(97,139 bytes, SHA-256
+`66658e9ea7bcfe44af3ef8130dc4944831cfae411ef0a76ef5a6b07902a27d1a`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`db1c76e38768ddb5bcb442da6d88ddfed8e49b88a9fc73473483b891109bd64b`,
+`576679f67e1810abb003140c35ad47b98c04bb71d3da4e9decbe1d1f0f809e36`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -108,10 +120,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite now passes 506 unique tests with zero failures
+The complete repository suite now passes 508 unique tests with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 469 tests, and the 55-test locked-scorer group passed in the
-pinned evaluator environment (19 tests overlap). For timeout resistance, final whole-movie LPT sharding now weights
+environment passed 449 tests after excluding the scorer-only files, and all 59
+locked-scorer tests passed in the pinned evaluator environment. For timeout
+resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
 node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.
