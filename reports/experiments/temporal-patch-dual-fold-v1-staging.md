@@ -13,7 +13,7 @@ made zero safe corrections, which is evidence against weakening its swap gates,
 not evidence that local image appearance is useless. The missing experiment is
 a representation trained directly on adjacent Biohub cells.
 
-This lane implements an independent 7,498,890-parameter 3D residual encoder per
+This lane implements an independent 19,218,498-parameter 3D residual encoder per
 fold. It samples 17-cubed patches over the same 16-micrometer physical field of
 view from both pooled isotropic synthetic images and anisotropic real movies.
 Multi-positive contrastive supervision treats two true daughters as positives
@@ -63,7 +63,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 30 tests across the normal
+The updated focused temporal/Trackastra suite passes 31 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
@@ -72,12 +72,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-ema-organizer-20260827.zip`
-(92,747 bytes, SHA-256
-`a23eec4c0f7442a3c4c75cc3f079f7fea9d3676c5b0f964530a2581474669266`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-organizer-20260827.zip`
+(92,958 bytes, SHA-256
+`4430ff064ca9724bfa8364c8ddee5f900a460cf519ae274f3b9554ece4ebaa53`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`f09f60a748d69c0e4d590d0dbe1bdfd6458e202ae877635cdc9fec7239f0232e`,
+`ef362093113bf46799a4ff1a0e27a80ebf9cfb5f7a7386d4f59e8300046ca146`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -91,4 +91,5 @@ shape checks.
 The complete repository suite subsequently passed 495 tests with zero failures;
 two Windows tests were skipped only because unprivileged symlink creation is
 unavailable. For timeout resistance, final whole-movie LPT sharding now weights
-both Trackastra frame-pair products and the added per-node 3D encoding work.
+both Trackastra frame-pair products and the added per-node 3D encoding work; its
+node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.

@@ -49,7 +49,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "status": "completed",
             "fold": fold,
             "best_step": index * 200,
-            "parameter_count": 7_498_890,
+            "parameter_count": 19_218_498,
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
             "model_sha256": digest(appearance_model),

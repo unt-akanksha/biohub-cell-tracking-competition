@@ -10,21 +10,21 @@
   "authorized_for_submission": false,
   "source": {
     "loss_sha256": "f08a82a6a38c62c6dee28938352343637206cc9e71a362943a29332d642fbc5a",
-    "patch_model_sha256": "1bcfbd0fee8c303004398661e646893f1163cc818243ec5fc9de716de3448873",
-    "trainer_sha256": "e01b572aa64a245ef5d5ed4f49a925b5d7295167132bf9461bb08a6e7f9fbd8f",
+    "patch_model_sha256": "abf48d436c081ce62b25f268d3da32ba60ece8f5581d4ced787a35f94f89c514",
+    "trainer_sha256": "42ff716940ed625f354835fe25288aa899ca703d355c6ecaf931a0541186c2a4",
     "blend_sha256": "32c2fdef4685c24f2a6d36f66af3346e2d43a848ef260d04f098643d382bc846",
-    "calibrator_sha256": "aba1ea83c466624db66b935064f1ce3b26f0d9d25fe2945858cff12c48a38e5a",
-    "processed_materializer_sha256": "651a8d16f1719301683eec657f493d5d6b43e2980dc93bde3b5315b2e58de9e6",
-    "exact_gate_sha256": "4d39aae6a980646f65b82c6bbf777410887853eef295ccd7248c852d33101248",
-    "two_gpu_candidate_builder_sha256": "c4381d78cb33dab371b7dd31476e37a285adf77202bf77136f7663686dd4a1b3",
+    "calibrator_sha256": "43bb9c22126e3a9de419291ad437e817cc5580e02c487eeb130fba8df2d8108b",
+    "processed_materializer_sha256": "8390138d0f349f1aa36aa0a7c3dbe72c9ccc6cf3fb431fea12af2d5ad11b97f1",
+    "exact_gate_sha256": "a63682f72c3f5315b4bacb526ab27133b30f20f1696959d1079908fe3d2289ce",
+    "two_gpu_candidate_builder_sha256": "15e12433b67fea7dccdc42bb89a8eec4a9d24ceca46d94c58c7c279fff604771",
     "runtime_verifier_sha256": "9775df2b8fc39ce042e09dc447830de7e8a07fc8a6931f89869b690b773cb9ff",
-    "runtime_builder_sha256": "ea39022e8b87c43771367b736d1babe41ca0632b9d69a137d8019301f4ca10e3"
+    "runtime_builder_sha256": "98a144cdf4f2defcef5fbab295334b278969e138eac4558d0489c22caa64680d"
   },
   "model": {
     "architecture": "independent physical-scale 3D residual patch encoder",
-    "parameter_count_per_fold": 7498890,
-    "base_channels": 40,
-    "embedding_channels": 128,
+    "parameter_count_per_fold": 19218498,
+    "base_channels": 64,
+    "embedding_channels": 256,
     "patch_shape_zyx": [17, 17, 17],
     "patch_half_extent_zyx_um": [8.0, 8.0, 8.0],
     "public_code_copied": false,
@@ -91,7 +91,7 @@
     "competition_submission_requires_separate_user_authorization": true,
     "future_submission_inference_requires_exactly_two_gpus": true,
     "future_submission_sharding": "whole movie only",
-    "shard_cost": "Trackastra frame-pair products plus 4096 cost units per 3D-encoded node"
+    "shard_cost": "Trackastra frame-pair products plus 12288 cost units per 3D-encoded node for the 19.2M encoder"
   },
   "hypothesis": "A Biohub-trained physical-scale 3D appearance representation can resolve ambiguous geometrically plausible parent-child links that geometry-only Trackastra and frozen global SpatialDINO patch tokens cannot separate."
 }

@@ -64,12 +64,14 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                 "target_44b6": {
                     "model_sha256": "f" * 64,
                     "best_step": 30,
+                    "parameter_count": 19_218_498,
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
                 },
                 "target_6bba": {
                     "model_sha256": "1" * 64,
                     "best_step": 40,
+                    "parameter_count": 19_218_498,
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
                 },

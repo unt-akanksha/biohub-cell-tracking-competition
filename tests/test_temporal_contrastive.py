@@ -161,6 +161,13 @@ def test_patch_association_model_has_normalized_embeddings_and_sparse_divisions(
     assert float(divisions.detach().mean()) < -3.0
 
 
+def test_default_patch_model_is_the_declared_heavy_candidate() -> None:
+    model = PhysicalPatchAssociationModel()
+
+    assert sum(parameter.numel() for parameter in model.parameters()) == 19_218_498
+    assert model.projection[-1].out_features == 256
+
+
 def test_full_model_ema_averages_optimizer_weights() -> None:
     model = torch.nn.Linear(2, 1, bias=False)
     ema = torch.nn.Linear(2, 1, bias=False)

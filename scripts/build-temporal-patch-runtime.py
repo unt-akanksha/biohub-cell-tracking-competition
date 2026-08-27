@@ -147,7 +147,7 @@ def main() -> None:
             },
             "appearance_model": {
                 "implementation": "independent Biohub physical-scale 3D residual encoder",
-                "parameters_per_fold": 7_498_890,
+                "parameters_per_fold": 19_218_498,
                 "external_pretrained_weights": False,
                 "division_head_used_at_inference": True,
             },

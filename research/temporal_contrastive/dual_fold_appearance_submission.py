@@ -62,7 +62,10 @@ except ModuleNotFoundError:
 
 
 FOLD_BY_PREFIX = {"44b6": "target_44b6", "6bba": "target_6bba"}
-APPEARANCE_NODE_COST = 4096.0
+# The 19.2M-parameter encoder is about 2.56x the original staged 7.5M model.
+# Keep the whole-movie LPT estimate conservative so one GPU is not assigned
+# most of the node-encoding work even when pair-product counts look balanced.
+APPEARANCE_NODE_COST = 12_288.0
 
 
 def atomic_json(path: Path, payload: dict[str, Any]) -> None:
@@ -126,6 +129,8 @@ def load_acceptance(
         if not (
             int(expected_trackastra[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("best_step", 0)) > 0
+            and int(expected_appearance[fold].get("parameter_count", 0))
+            == 19_218_498
             and expected_appearance[fold].get("checkpoint_weight_source")
             == "optimizer-step exponential moving average"
             and expected_appearance[fold].get("ema_decay") == 0.997

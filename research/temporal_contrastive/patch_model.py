@@ -196,8 +196,8 @@ class PhysicalPatchAssociationModel(nn.Module):
     def __init__(
         self,
         *,
-        base_channels: int = 40,
-        embedding_channels: int = 128,
+        base_channels: int = 64,
+        embedding_channels: int = 256,
     ) -> None:
         super().__init__()
         if base_channels <= 0 or embedding_channels <= 0:
