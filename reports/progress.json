@@ -2201,6 +2201,27 @@
       "registered_at": "2026-08-27T09:18:09.198309Z",
       "run_id": "temporal-patch-dual-fold-v1-inventory-repair",
       "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "6.67",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Balanced same-organism temporal appearance plus reciprocal parent/child candidate-context ranking improves disjoint ZSNS005 checkpoint-selection and one-shot-audit windows in both seeded folds without competition data, public code, public predictions, or leaderboard selection.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "temporal-patch-dual-fold-v1-inventory-repair",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-27T12:30:10.942185Z",
+      "run_id": "zebrahub-contextual-pretrain-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1

@@ -57,6 +57,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `temporal-patch-dual-fold-blend-v1` | temporal-patch-dual-fold-v1 | A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression. | registered | not recorded | — | unknown / 6.00 | — | — | — |
 | `temporal-patch-dual-fold-v1-runtime-mount-retry` | temporal-patch-dual-fold-v1 | Accepting both Kaggle runtime mount representations allows the unchanged reciprocal temporal appearance experiment to reach its dense GPU probe and scientific training gates. | failed | not recorded | — | 0.15 / 11.00 | — | Mount-aware setup and both runtime verifiers passed, but the notebook's pre-training coverage guard incorrectly required at least 120 image/GEFF pairs for each embryo prefix. The exact attached inventory was 71 44b6 and 128 6bba movies. Execution aborted after 510.6 seconds before dense probing, optimizer training, model artifacts, calibration, or submission. | — |
 | `temporal-patch-dual-fold-v1-inventory-repair` | temporal-patch-dual-fold-v1-runtime-mount-retry | Binding the exact attached 71/128 real-movie inventory and its already intended up-to-96 reciprocal partitions allows the unchanged temporal appearance experiment to reach its dense GPU and scientific gates. | running | not recorded | — | unknown / 11 | — | — | — |
+| `zebrahub-contextual-pretrain-v1` | temporal-patch-dual-fold-v1-inventory-repair | Balanced same-organism temporal appearance plus reciprocal parent/child candidate-context ranking improves disjoint ZSNS005 checkpoint-selection and one-shot-audit windows in both seeded folds without competition data, public code, public predictions, or leaderboard selection. | registered | not recorded | — | unknown / 6.67 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -369,6 +370,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Decision evidence: `not recorded`
 
 ### temporal-patch-dual-fold-v1-inventory-repair
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### zebrahub-contextual-pretrain-v1
 
 - Authorized for submission: `false`
 - Imported audit: `false`
