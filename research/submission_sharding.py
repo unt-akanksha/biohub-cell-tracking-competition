@@ -9,6 +9,26 @@ from dataclasses import asdict, dataclass
 from typing import Mapping, Sequence
 
 
+KAGGLE_GPU_NOTEBOOK_MAX_SECONDS = 43_200
+MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS = 7_200
+DEFAULT_INFERENCE_HARD_STOP_SECONDS = (
+    KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
+)
+
+
+def validate_inference_hard_stop(seconds: int) -> int:
+    """Keep final inference inside Kaggle's 12-hour GPU notebook limit."""
+
+    value = int(seconds)
+    if not 0 < value <= DEFAULT_INFERENCE_HARD_STOP_SECONDS:
+        raise ValueError(
+            "inference hard stop must be positive and no greater than "
+            f"{DEFAULT_INFERENCE_HARD_STOP_SECONDS} to preserve the Kaggle "
+            "notebook finalization reserve"
+        )
+    return value
+
+
 @dataclass(frozen=True)
 class MovieShard:
     shard_index: int

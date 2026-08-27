@@ -3,22 +3,42 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
 from research.temporal_contrastive.dual_fold_appearance_submission import (
     APPEARANCE_NODE_COST,
+    DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+    KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
     appearance_movie_inference_weight,
     load_acceptance,
+    orchestrate,
+    parser,
 )
 from research.trackastra_graph.dual_fold_processed_acceptance import (
     FROZEN_ASSOCIATION_CONFIGURATION,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
+from research.submission_sharding import MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
 import numpy as np
 
 
 FOLDS = ("target_44b6", "target_6bba")
+
+
+def test_candidate_builder_preserves_two_hour_kaggle_runtime_reserve() -> None:
+    default = parser().get_default("hard_stop_seconds")
+
+    assert default == DEFAULT_INFERENCE_HARD_STOP_SECONDS == 36_000
+    assert KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - default == (
+        MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
+    )
+
+
+def test_candidate_builder_rejects_runtime_reserve_override() -> None:
+    with pytest.raises(ValueError, match="finalization reserve"):
+        orchestrate(SimpleNamespace(hard_stop_seconds=36_001))
 
 
 def digest(path: Path) -> str:

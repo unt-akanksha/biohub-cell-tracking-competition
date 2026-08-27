@@ -33,16 +33,22 @@ try:
     from dual_fold_rerank_submission import embryo_prefix
     from patch_model import PhysicalPatchAssociationModel
     from submission_sharding import (
+        DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+        KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
         worker_environment,
     )
 except ModuleNotFoundError:
     from research.submission_sharding import (
+        DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+        KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
         worker_environment,
@@ -354,6 +360,7 @@ def worker(args: argparse.Namespace) -> None:
 
 def orchestrate(args: argparse.Namespace) -> None:
     started = time.monotonic()
+    validate_inference_hard_stop(args.hard_stop_seconds)
     detected = torch.cuda.device_count()
     if detected != 2:
         raise RuntimeError(
@@ -504,6 +511,10 @@ def orchestrate(args: argparse.Namespace) -> None:
         "status": "completed",
         "candidate_family": "trackastra_appearance_blend",
         "elapsed_seconds": time.monotonic() - started,
+        "inference_hard_stop_seconds": args.hard_stop_seconds,
+        "notebook_runtime_reserve_seconds": (
+            KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - args.hard_stop_seconds
+        ),
         "gpu_count": 2,
         "whole_movie_coverage": list(coverage),
         "shard_plan_sha256": plan["shard_plan_sha256"],
@@ -547,7 +558,16 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--max-tokens", type=int, default=512)
     result.add_argument("--candidate-radius", type=float, default=80.0)
     result.add_argument("--node-batch-size", type=int, default=64)
-    result.add_argument("--hard-stop-seconds", type=int, default=39000)
+    result.add_argument(
+        "--hard-stop-seconds",
+        type=int,
+        default=DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+        help=(
+            "two-GPU inference ceiling; values above 36000 are rejected so the "
+            "12-hour Kaggle notebook retains at least two hours for setup and "
+            "finalization"
+        ),
+    )
     return result
 
 

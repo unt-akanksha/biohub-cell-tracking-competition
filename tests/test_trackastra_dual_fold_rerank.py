@@ -8,6 +8,7 @@ import pytest
 from research.trackastra_graph.dual_fold_rerank_submission import (
     embryo_prefix,
     movie_inference_weight,
+    parser,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
 
@@ -17,6 +18,10 @@ def test_embryo_prefix_routes_only_supported_reciprocal_models() -> None:
     assert embryo_prefix("6bba_example") == "6bba"
     with pytest.raises(ValueError, match="no reciprocal model"):
         embryo_prefix("unknown_example")
+
+
+def test_trackastra_candidate_uses_safe_inference_ceiling() -> None:
+    assert parser().get_default("hard_stop_seconds") == 36_000
 
 
 def test_movie_weight_tracks_pairwise_association_work() -> None:

@@ -3,12 +3,28 @@ from __future__ import annotations
 import pytest
 
 from research.submission_sharding import (
+    DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+    KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
+    MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS,
     build_movie_shards,
     shard_plan_sha256,
+    validate_inference_hard_stop,
     validate_shard_outputs,
     visible_cuda_tokens,
     worker_environment,
 )
+
+
+def test_submission_runtime_policy_preserves_two_hours() -> None:
+    assert DEFAULT_INFERENCE_HARD_STOP_SECONDS == 36_000
+    assert (
+        KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - DEFAULT_INFERENCE_HARD_STOP_SECONDS
+        == MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
+        == 7_200
+    )
+    assert validate_inference_hard_stop(36_000) == 36_000
+    with pytest.raises(ValueError, match="finalization reserve"):
+        validate_inference_hard_stop(36_001)
 
 
 def test_dual_gpu_plan_assigns_every_movie_once() -> None:

@@ -28,16 +28,22 @@ except ModuleNotFoundError:
 
 try:
     from submission_sharding import (
+        DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+        KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
         worker_environment,
     )
 except ModuleNotFoundError:
     from research.submission_sharding import (
+        DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+        KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
         worker_environment,
@@ -181,6 +187,7 @@ def worker_main(args: argparse.Namespace) -> None:
 
 def orchestrate(args: argparse.Namespace) -> None:
     started = time.monotonic()
+    validate_inference_hard_stop(args.hard_stop_seconds)
     detected_devices = torch.cuda.device_count()
     if detected_devices != 2:
         raise RuntimeError(f"submission inference requires exactly 2 GPUs, saw {detected_devices}")
@@ -288,6 +295,10 @@ def orchestrate(args: argparse.Namespace) -> None:
         "schema_version": 1,
         "status": "completed",
         "elapsed_seconds": time.monotonic() - started,
+        "inference_hard_stop_seconds": args.hard_stop_seconds,
+        "notebook_runtime_reserve_seconds": (
+            KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - args.hard_stop_seconds
+        ),
         "gpu_count": 2,
         "whole_movie_coverage": list(coverage),
         "shard_plan_sha256": plan_payload["shard_plan_sha256"],
@@ -322,7 +333,11 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--worker-output", type=Path)
     result.add_argument("--max-tokens", type=int, default=512)
     result.add_argument("--candidate-radius", type=float, default=80.0)
-    result.add_argument("--hard-stop-seconds", type=int, default=39000)
+    result.add_argument(
+        "--hard-stop-seconds",
+        type=int,
+        default=DEFAULT_INFERENCE_HARD_STOP_SECONDS,
+    )
     return result
 
 
