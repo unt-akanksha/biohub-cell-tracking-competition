@@ -70,6 +70,17 @@ AUGMENTATION_POLICY = (
     "fixed-physical-scale XY quarter-rotations, independent axis flips, "
     "per-patch/channel gain, and mild Gaussian noise; validation unaugmented"
 )
+VALIDATION_SELECTION_TIMEPOINTS = frozenset(
+    (*range(96, 100), *range(376, 380))
+)
+VALIDATION_AUDIT_TIMEPOINTS = frozenset(
+    (*range(236, 240), *range(516, 520))
+)
+VALIDATION_PARTITION_POLICY = (
+    "ZSNS005 disjoint developmental windows: t0096-0099/t0376-0379 "
+    "checkpoint selection; t0236-0239/t0516-0519 one-shot audit"
+)
+MINIMUM_VALIDATION_COMPOSITE_GAIN = 0.01
 
 
 @dataclass(frozen=True)
@@ -147,6 +158,56 @@ def inventory_sha256(records: list[ShardRecord]) -> str:
     return hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     ).hexdigest()
+
+
+def partition_validation_records(
+    records: list[ShardRecord],
+) -> tuple[list[ShardRecord], list[ShardRecord]]:
+    """Create a fixed, non-overlapping ZSNS005 selection/audit partition."""
+
+    by_timepoint = {row.csv_timepoint: row for row in records}
+    expected = VALIDATION_SELECTION_TIMEPOINTS | VALIDATION_AUDIT_TIMEPOINTS
+    if set(by_timepoint) != expected or len(by_timepoint) != len(records):
+        raise ValueError("ZSNS005 validation timepoint inventory changed")
+    selection = [by_timepoint[value] for value in sorted(VALIDATION_SELECTION_TIMEPOINTS)]
+    audit = [by_timepoint[value] for value in sorted(VALIDATION_AUDIT_TIMEPOINTS)]
+    if {row.sha256 for row in selection} & {row.sha256 for row in audit}:
+        raise RuntimeError("ZSNS005 selection and audit shards overlap")
+    return selection, audit
+
+
+def validation_improvement_gate(
+    initial: dict[str, float | int],
+    candidate: dict[str, float | int],
+    *,
+    minimum_composite_gain: float = MINIMUM_VALIDATION_COMPOSITE_GAIN,
+) -> dict[str, object]:
+    """Require broad association improvement, not a noisy composite uptick."""
+
+    if minimum_composite_gain <= 0:
+        raise ValueError("minimum validation composite gain must be positive")
+    metric_names = ("composite", "top1", "mrr", "division_top2")
+    gains = {
+        name: float(candidate[name]) - float(initial[name]) for name in metric_names
+    }
+    inventory_unchanged = bool(
+        int(candidate["rows"]) == int(initial["rows"])
+        and int(candidate["division_rows"]) == int(initial["division_rows"])
+        and int(candidate["transitions"]) == int(initial["transitions"])
+    )
+    passed = bool(
+        inventory_unchanged
+        and gains["composite"] >= float(minimum_composite_gain)
+        and gains["top1"] > 0.0
+        and gains["mrr"] > 0.0
+        and gains["division_top2"] >= 0.0
+    )
+    return {
+        "passed": passed,
+        "minimum_composite_gain": float(minimum_composite_gain),
+        "inventory_unchanged": inventory_unchanged,
+        "gains": gains,
+    }
 
 
 def load_shard(path: Path, device: torch.device) -> dict[str, torch.Tensor]:
@@ -390,6 +451,9 @@ def train_worker(args: argparse.Namespace) -> None:
         row.sha256 for row in validation_records
     }:
         raise RuntimeError("external train and validation shards overlap")
+    selection_records, audit_records = partition_validation_records(
+        validation_records
+    )
 
     train_cache, train_cache_bytes = preload_shards(train_records, device)
     validation_cache, validation_cache_bytes = preload_shards(
@@ -409,18 +473,34 @@ def train_worker(args: argparse.Namespace) -> None:
         model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
     )
     scaler = torch.amp.GradScaler("cuda")
-    initial = validate(
+    initial_selection = validate(
         ema_model,
-        validation_records,
+        selection_records,
         device,
         patch_batch_size=args.patch_batch_size,
         cache=validation_cache,
     )
-    best_score = float(initial["composite"])
+    initial_audit = validate(
+        ema_model,
+        audit_records,
+        device,
+        patch_batch_size=args.patch_batch_size,
+        cache=validation_cache,
+    )
+    best_score = float(initial_selection["composite"])
     best_step = 0
-    best_metrics = initial
+    best_metrics = initial_selection
     best_state = base.state_dict_cpu(ema_model)
-    history = [{"step": 0, "metrics": initial, "score": best_score}]
+    history = [
+        {
+            "step": 0,
+            "metrics": initial_selection,
+            "score": best_score,
+            "selection_gate": validation_improvement_gate(
+                initial_selection, initial_selection
+            ),
+        }
+    ]
     base.atomic_json(
         output_dir / "training_config.json",
         {
@@ -437,7 +517,18 @@ def train_worker(args: argparse.Namespace) -> None:
             "train_inventory_sha256": inventory_sha256(train_records),
             "validation_inventory_sha256": inventory_sha256(validation_records),
             "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
-            "selection_policy": "ZSNS005 contextual pair composite only",
+            "selection_policy": (
+                "ZSNS005 fixed selection windows; composite ranking among "
+                "checkpoints that improve top1, MRR, and division recall"
+            ),
+            "validation_partition_policy": VALIDATION_PARTITION_POLICY,
+            "selection_shards": len(selection_records),
+            "audit_shards": len(audit_records),
+            "selection_inventory_sha256": inventory_sha256(selection_records),
+            "audit_inventory_sha256": inventory_sha256(audit_records),
+            "minimum_validation_composite_gain": (
+                MINIMUM_VALIDATION_COMPOSITE_GAIN
+            ),
             "pair_loss_policy": (
                 "outgoing all-positive child ranking plus eligible incoming "
                 "one-parent ranking"
@@ -520,16 +611,24 @@ def train_worker(args: argparse.Namespace) -> None:
         if completed_step % args.validation_every == 0:
             metrics = validate(
                 ema_model,
-                validation_records,
+                selection_records,
                 device,
                 patch_batch_size=args.patch_batch_size,
                 cache=validation_cache,
             )
             score = float(metrics["composite"])
-            row = {"step": completed_step, "metrics": metrics, "score": score}
+            selection_gate = validation_improvement_gate(
+                initial_selection, metrics
+            )
+            row = {
+                "step": completed_step,
+                "metrics": metrics,
+                "score": score,
+                "selection_gate": selection_gate,
+            }
             history.append(row)
             base.atomic_json(output_dir / "validation_latest.json", row)
-            if score > best_score:
+            if bool(selection_gate["passed"]) and score > best_score:
                 best_score = score
                 best_step = completed_step
                 best_metrics = metrics
@@ -546,6 +645,17 @@ def train_worker(args: argparse.Namespace) -> None:
         )
         optimizer_steps += 1
     model.load_state_dict(best_state, strict=True)
+    final_audit = validate(
+        model,
+        audit_records,
+        device,
+        patch_batch_size=args.patch_batch_size,
+        cache=validation_cache,
+    )
+    selection_gate = validation_improvement_gate(
+        initial_selection, best_metrics
+    )
+    audit_gate = validation_improvement_gate(initial_audit, final_audit)
     model_path = output_dir / "pretrained_model.pt"
     torch.save(model.state_dict(), model_path)
     base.atomic_json(output_dir / "validation_history.json", {"rows": history})
@@ -559,8 +669,19 @@ def train_worker(args: argparse.Namespace) -> None:
         "completed_step": completed_step,
         "optimizer_steps": optimizer_steps,
         "best_step": best_step,
-        "initial_validation": initial,
+        "initial_validation": initial_selection,
         "best_validation": best_metrics,
+        "initial_selection": initial_selection,
+        "best_selection": best_metrics,
+        "initial_audit": initial_audit,
+        "final_audit": final_audit,
+        "selection_gate": selection_gate,
+        "audit_gate": audit_gate,
+        "selection_gate_passed": bool(selection_gate["passed"]),
+        "audit_gate_passed": bool(audit_gate["passed"]),
+        "validation_partition_policy": VALIDATION_PARTITION_POLICY,
+        "selection_inventory_sha256": inventory_sha256(selection_records),
+        "audit_inventory_sha256": inventory_sha256(audit_records),
         "best_score": best_score,
         "model_sha256": base.sha256_file(model_path),
         "parameter_count": parameter_count,
@@ -655,8 +776,13 @@ def orchestrate(args: argparse.Namespace) -> None:
         "gpu_count": 2,
         "folds": terminals,
         "both_folds_improved": all(
-            int(row["best_step"]) > 0 for row in terminals.values()
+            int(row["best_step"]) > 0
+            and row.get("selection_gate_passed") is True
+            and row.get("audit_gate_passed") is True
+            for row in terminals.values()
         ),
+        "validation_partition_policy": VALIDATION_PARTITION_POLICY,
+        "minimum_validation_composite_gain": MINIMUM_VALIDATION_COMPOSITE_GAIN,
         "augmentation_mode": args.augmentation_mode,
         "augmentation_policy": (
             AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"

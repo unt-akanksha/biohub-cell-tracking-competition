@@ -110,6 +110,13 @@ def load_initial_model(
         == aggregate.get("appearance_family")
         and int(worker.get("parameter_count", 0)) == EXPECTED_PARAMETER_COUNT
         and int(worker.get("best_step", 0)) > 0
+        and worker.get("selection_gate_passed") is True
+        and worker.get("audit_gate_passed") is True
+        and worker.get("validation_partition_policy")
+        == (
+            "ZSNS005 disjoint developmental windows: t0096-0099/t0376-0379 "
+            "checkpoint selection; t0236-0239/t0516-0519 one-shot audit"
+        )
         and worker.get("model_sha256") == model_hash
         and worker.get("external_training_source") == "ZSNS004"
         and worker.get("external_validation_source") == "ZSNS005"

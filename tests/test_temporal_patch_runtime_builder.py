@@ -135,6 +135,9 @@ def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None
     assert manifest["appearance_model"]["families"][
         "temporal_contextual_pair_fusion_v3"
     ]["candidate_pair_inference_precision"] == "CUDA float16 autocast"
+    assert manifest["appearance_model"]["families"][
+        "temporal_contextual_pair_fusion_v3"
+    ]["minimum_external_composite_gain"] == 0.01
     assert manifest["appearance_model"][
         "external_pretrained_weights_required_by_family"
     ]["temporal_contextual_pair_fusion_v3"] is True

@@ -16,13 +16,19 @@ from research.temporal_contrastive.contextual_pair_fusion import (
 )
 from research.temporal_contrastive.train_zebrahub_contextual_pretrain import (
     CONTEXTUAL_PAIR_FUSION_FAMILY,
+    VALIDATION_AUDIT_TIMEPOINTS,
+    VALIDATION_PARTITION_POLICY,
+    VALIDATION_SELECTION_TIMEPOINTS,
+    ShardRecord,
     augment_normalized_patches,
     cached_batch,
     discover_shards,
     inventory_sha256,
     load_shard,
+    partition_validation_records,
     preload_shards,
     shard_forward,
+    validation_improvement_gate,
 )
 
 
@@ -165,6 +171,66 @@ def test_preloaded_shards_are_complete_and_assignment_isolated(tmp_path: Path) -
     assert not torch.equal(first["source_patches"], second["source_patches"])
 
 
+def test_zsns005_selection_and_audit_use_disjoint_developmental_windows() -> None:
+    timepoints = sorted(
+        VALIDATION_SELECTION_TIMEPOINTS | VALIDATION_AUDIT_TIMEPOINTS
+    )
+    records = [
+        ShardRecord(
+            path=Path(f"ZSNS005-t{timepoint:04d}.npz"),
+            manifest_path=Path(f"ZSNS005-t{timepoint:04d}.manifest.json"),
+            sha256=f"{timepoint:064x}",
+            manifest_sha256=f"{timepoint + 1:064x}",
+            csv_timepoint=timepoint,
+        )
+        for timepoint in reversed(timepoints)
+    ]
+
+    selection, audit = partition_validation_records(records)
+
+    assert {row.csv_timepoint for row in selection} == set(
+        VALIDATION_SELECTION_TIMEPOINTS
+    )
+    assert {row.csv_timepoint for row in audit} == set(
+        VALIDATION_AUDIT_TIMEPOINTS
+    )
+    assert {row.sha256 for row in selection}.isdisjoint(
+        {row.sha256 for row in audit}
+    )
+    with pytest.raises(ValueError, match="timepoint inventory changed"):
+        partition_validation_records(records[:-1])
+
+
+def test_validation_gate_requires_broad_gain_and_unchanged_inventory() -> None:
+    initial = {
+        "composite": 0.20,
+        "top1": 0.15,
+        "mrr": 0.25,
+        "division_top2": 0.10,
+        "rows": 500,
+        "division_rows": 50,
+        "transitions": 8,
+    }
+    candidate = {
+        **initial,
+        "composite": 0.35,
+        "top1": 0.30,
+        "mrr": 0.40,
+        "division_top2": 0.20,
+    }
+
+    assert validation_improvement_gate(initial, candidate)["passed"] is True
+    assert validation_improvement_gate(
+        initial, {**candidate, "division_top2": 0.09}
+    )["passed"] is False
+    assert validation_improvement_gate(
+        initial, {**candidate, "composite": 0.205}
+    )["passed"] is False
+    assert validation_improvement_gate(
+        initial, {**candidate, "rows": 499}
+    )["passed"] is False
+
+
 def test_microscopy_augmentation_is_seeded_finite_and_fixed_shape() -> None:
     patches = torch.linspace(
         -3.0, 3.0, 2 * 3 * 17 * 17 * 17, dtype=torch.float32
@@ -219,6 +285,9 @@ def test_finetuning_initialization_requires_complete_hash_bound_evidence(
         "fold": fold,
         "parameter_count": 2,
         "best_step": 1,
+        "selection_gate_passed": True,
+        "audit_gate_passed": True,
+        "validation_partition_policy": VALIDATION_PARTITION_POLICY,
         "model_sha256": model_hash,
         "external_training_source": "ZSNS004",
         "external_validation_source": "ZSNS005",

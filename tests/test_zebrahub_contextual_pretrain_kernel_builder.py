@@ -58,6 +58,9 @@ def test_pretraining_kernel_is_exact_two_gpu_external_training_only() -> None:
     assert 'row.get("validation_augmentation") == "none"' in code
     assert 'row.get("reciprocal_parent_loss_weight") == 0.35' in code
     assert 'row.get("validation_precision") == "CUDA float16 autocast"' in code
+    assert 'row.get("selection_gate_passed") is True' in code
+    assert 'row.get("audit_gate_passed") is True' in code
+    assert 'result.get("both_folds_improved") is True' in code
     assert "verify_zebrahub_contextual_dataset.py" in code
     assert "public_leaderboard_used_for_selection" in code
     assert "submission_created" in code

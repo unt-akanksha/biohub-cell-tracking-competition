@@ -99,7 +99,7 @@ import zipfile
 import torch
 
 EXPECTED_DATASET_MANIFEST_SHA256 = "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "e7025eb3c6fbb8b648e540f20a5dd4da9aa0982f478efe8bbd999428db04099e"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "85cfd63f75340502e3c810d71a8006fd15342dbc263f6ae45b0c376cf9b1ff7b"
 
 
 def first_existing(candidates):
@@ -287,6 +287,14 @@ valid_folds = bool(
         and row.get("shard_cache_policy")
             == "verified immutable tensors preloaded once per GPU"
         and row.get("validation_precision") == "CUDA float16 autocast"
+        and row.get("selection_gate_passed") is True
+        and row.get("audit_gate_passed") is True
+        and int(row.get("best_step", 0)) > 0
+        and row.get("validation_partition_policy")
+            == (
+                "ZSNS005 disjoint developmental windows: t0096-0099/t0376-0379 "
+                "checkpoint selection; t0236-0239/t0516-0519 one-shot audit"
+            )
         and row.get("competition_data_read") is False
         and row.get("public_predictions_copied") is False
         and row.get("public_leaderboard_used_for_selection") is False
@@ -301,7 +309,7 @@ if not (
     result.get("status") == "completed"
     and result.get("run_id") == RUN_ID
     and result.get("gpu_count") == 2
-    and isinstance(result.get("both_folds_improved"), bool)
+    and result.get("both_folds_improved") is True
     and result.get("augmentation_mode") == "microscopy_v1"
     and result.get("validation_augmentation") == "none"
     and result.get("competition_data_read") is False

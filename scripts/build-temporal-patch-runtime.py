@@ -280,6 +280,8 @@ def main() -> None:
                         "reciprocal_parent_loss_weight": 0.35,
                         "external_shard_cache_policy": "verified immutable tensors preloaded once per GPU",
                         "external_validation_precision": "CUDA float16 autocast",
+                        "external_validation_partition": "ZSNS005 disjoint developmental-window selection and one-shot audit, 8 shards each",
+                        "minimum_external_composite_gain": 0.01,
                         "candidate_pair_inference_precision": "CUDA float16 autocast",
                     },
                 },

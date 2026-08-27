@@ -226,11 +226,11 @@ source/provenance mismatch fails before optimization. This publication and
 verification used no Kaggle GPU and created no competition submission.
 
 The rebuilt portable v3 runtime contains 36 hash-bound source files and passed
-its independent integrity check over 534,585 bytes with manifest SHA-256
-`e7025eb3c6fbb8b648e540f20a5dd4da9aa0982f478efe8bbd999428db04099e`.
+its independent integrity check over 540,225 bytes with manifest SHA-256
+`85cfd63f75340502e3c810d71a8006fd15342dbc263f6ae45b0c376cf9b1ff7b`.
 It declares exactly two visible GPUs and contains no submission command. The
 focused dataset/runtime checks passed 20/20, and the latest temporal,
-contextual, ZebraHub, and appearance-contract regression set passed 100/100. No pretraining launch is
+contextual, ZebraHub, and appearance-contract regression set passed 102/102. No pretraining launch is
 authorized while the current two-GPU v1 evidence gate is still running.
 
 ## Staged original pretraining kernel
@@ -241,9 +241,10 @@ superseded because it predates microscopy-safe augmentation; version 2 forced
 per-step GPU synchronization; version 3 accepted the division-biased shards;
 version 4 allowed a post-publication flag to perturb rebuild hashes. Version 5
 lacks the reciprocal-parent objective and cached AMP validation; version 6
-leaves contextual candidate-edge inference in FP32. Version 7 is the only
+leaves contextual candidate-edge inference in FP32; version 7 lacks the
+disjoint one-shot ZSNS005 audit. Version 8 is the only
 admissible pretraining and inference runtime. A complete remote redownload
-reproduced the 36-file, 534,585-byte integrity inventory and exact
+reproduced the 36-file, 540,225-byte integrity inventory and exact
 runtime manifest above. This publication used no GPU.
 
 The deterministic private notebook
@@ -316,6 +317,18 @@ loss 3.771015, incoming-parent loss 3.378578, total weighted loss 5.882180, and
 2.871466, total weighted loss 4.592559, and 64/64 finite gradients. These
 random-initialization values are implementation smokes only; checkpoint
 selection still requires improvement on the complete frozen ZSNS005 inventory.
+
+The ZSNS005 evidence gate is now protected from checkpoint-selection bias.
+Eight shards from developmental windows `t0096-0099` and `t0376-0379` are the
+only checkpoint-selection data. The eight shards from `t0236-0239` and
+`t0516-0519` form a one-shot audit that is never evaluated while choosing a
+checkpoint. The windows are separated rather than interleaved so their
+overlapping temporal patch frames cannot cross the selection/audit boundary.
+Each fold must gain at least 0.01 composite on both partitions, improve top-1
+and MRR, preserve division top-2 recall, and retain the exact row inventory.
+The audit result cannot redirect checkpoint choice: a failed audit rejects the
+fold. Fine-tuning refuses weights unless both independently seeded folds pass
+both gates with hash-bound terminals.
 
 The production v3 candidate scorer now also evaluates its edge-token and
 contextual edge-head MLPs under CUDA FP16 autocast. Node-patch encoding and the
