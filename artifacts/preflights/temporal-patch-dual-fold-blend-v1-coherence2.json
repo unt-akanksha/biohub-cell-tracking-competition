@@ -1,0 +1,118 @@
+{
+  "checks": [
+    {
+      "detail": "Every notebook code cell compiles, the runtime verifies, and focused calibration, output-verifier, and processed-boundary tests pass.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-blend-kernel.py",
+          "sha256": "a973440f179bb56d18608d945a242a7f002fa052886830236a4509f2074bd9ae"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/biohub-temporal-patch-dual-fold-blend-v1.ipynb",
+          "sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450"
+        },
+        {
+          "path": "research/temporal_contrastive/verify_dual_fold_training_output.py",
+          "sha256": "48086c68692948907ded6fbb2eabd5f1f03216257e1522d2c3bab0ed38d75ebd"
+        },
+        {
+          "path": "research/temporal_contrastive/calibrate_dual_fold_blend.py",
+          "sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private appearance runtime, reciprocal appearance output, coherent Trackastra control, support wheels, and Biohub competition are declared with T4 x2 and internet off.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-blend-v1.json",
+          "sha256": "3908cd28e6208d2191346602d33fecf4a2ef7bcbfd3c8cea0e581b19c96db49a"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/kernel-metadata.json",
+          "sha256": "cb9769b1f472ea3b8797ca5b308bd05b850803e2aaf155339fcad544077feea7"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Calibration requires exact worker/aggregate equality, model hashes, strict checkpoint loading, threshold-eligible folds, and globally disjoint reciprocal inventories.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/biohub-temporal-patch-dual-fold-blend-v1.ipynb",
+          "sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450"
+        },
+        {
+          "path": "research/temporal_contrastive/verify_dual_fold_training_output.py",
+          "sha256": "48086c68692948907ded6fbb2eabd5f1f03216257e1522d2c3bab0ed38d75ebd"
+        },
+        {
+          "path": "research/temporal_contrastive/calibrate_dual_fold_blend.py",
+          "sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361"
+        }
+      ],
+      "name": "training_evidence_boundary",
+      "status": "passed"
+    },
+    {
+      "detail": "Only 12 pre-reserved movies per embryo select one global fold-specific blend from a grid containing the exact zero control; processed acceptance remains unread.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-blend-v1.json",
+          "sha256": "3908cd28e6208d2191346602d33fecf4a2ef7bcbfd3c8cea0e581b19c96db49a"
+        },
+        {
+          "path": "research/temporal_contrastive/calibrate_dual_fold_blend.py",
+          "sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361"
+        },
+        {
+          "path": "research/temporal_contrastive/dual_fold_appearance_processed_acceptance.py",
+          "sha256": "d813b0da5b009ee3c9452424d04d7e7377d295021f31c7284df4151e43e95189"
+        }
+      ],
+      "name": "clean_selection_boundary",
+      "status": "passed"
+    },
+    {
+      "detail": "Only calibration evidence is written below /kaggle/working; no processed candidate, archive, or competition submission command exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/biohub-temporal-patch-dual-fold-blend-v1.ipynb",
+          "sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/kernel-metadata.json",
+          "sha256": "cb9769b1f472ea3b8797ca5b308bd05b850803e2aaf155339fcad544077feea7"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "The immutable six-hour ceiling is staged only; launch remains subject to a fresh live guard preserving at least eight Kaggle GPU hours.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-blend-v1.json",
+          "sha256": "3908cd28e6208d2191346602d33fecf4a2ef7bcbfd3c8cea0e581b19c96db49a"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-blend-v1/biohub-temporal-patch-dual-fold-blend-v1.ipynb",
+          "sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T08:14:31.885807Z",
+  "report_sha256": "0c8e1ea41d6f43619a087617a4f1e4fe123ddcc9b5a1ff28b869664aa499c3db",
+  "run_id": "temporal-patch-dual-fold-blend-v1",
+  "schema_version": 1
+}

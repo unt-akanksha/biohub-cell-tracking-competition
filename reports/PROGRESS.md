@@ -52,8 +52,9 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `lsm-fm-center-enhancement-v1` | lsm-fm-image-text-localization-refinement-v1 | A learned count-preserving 3D center-enhancement head trained only on one-to-one sparse annotation matches from non-validation movies will add the single limiting-movie match needed beyond probability_r2_p2 without a material per-movie regression. | rejected | not recorded | — | 0.44 / 1.25 | retain | The learned residual improved pooled selection matching by 32 nodes but regressed the limiting movie from 1078 to 1062 matches at full scale; half scale reached 1077. Neither crossed the immutable 0.65 gate, acceptance stayed sealed, and no submission was created. | — |
 | `lsm-fm-public-node-refinement-v1` | public-0927-clean-repro-v2 | A single global coordinate blend from the frozen high-recall public graph toward the independently trained 35.1M-parameter LSM-FM feature-36 probability centroid will strictly increase matched held-out nodes while preserving every node ID, edge, frame assignment, and node count. | failed | not recorded | — | 0.04 / 1.00 | — | Kaggle run aborted after 105.603 seconds before scientific evaluation because the attached graph runtime contained only four acceptance control GEFFs; the first selection control 44b6_d29c9ab2.geff was absent. No result, acceptance labels, or submission artifact was created. | — |
 | `lsm-fm-public-node-refinement-v2` | lsm-fm-public-node-refinement-v1 | A conservative radius-2, power-2, 0.25 blend from frozen public nodes toward an independently trained 35.1M-parameter LSM-FM probability centroid will improve integer-submission-space organizer score without changing node IDs, counts, frame assignments, or graph topology. | rejected | not recorded | — | 0.07 / 1.00 | retire | The predeclared LSM-FM coordinate blend gained four pooled matches and improved mean localization distance, but lost one match on 6bba_07e24132 (-0.0027855 recall), exceeding the frozen -0.002 per-movie regression limit. No exact scoring, production materialization, or submission was performed. | — |
-
-| `temporal-patch-pair-fusion-v2` | temporal-patch-dual-fold-v1 | A learned candidate-pair scorer combining clean temporal 3D appearance, physical displacement, and division state improves ambiguous Trackastra association beyond fixed cosine similarity without using public predictions or leaderboard selection. | registered | not recorded | — | 0.00 / 20.00 | retain | Implementation, reciprocal evidence contracts, two-GPU sharding, 480 ordinary tests, and 57 pinned scorer tests passed; runtime ZIP is independently verified. No model has been trained because no two-GPU cloud host is connected and the protected Kaggle reserve is not being spent. | two_fold_cloud_training_then_reserved_movie_calibration |
+| `trackastra-dual-fold-synthetic-v1` | trackastra-graph-finetune-v6 | Correct native synthetic geometry plus long 95/5 synthetic-real replay and frame-global motion augmentation improves association and division ranking without v6 real-only drift. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `temporal-patch-dual-fold-v1` | trackastra-dual-fold-synthetic-v1 | A project-authored physical-scale temporal 3D appearance representation resolves ambiguous geometrically plausible parent-child links beyond the coherent Trackastra geometry control without public predictions or leaderboard selection. | running | not recorded | — | unknown / 11.00 | — | — | — |
+| `temporal-patch-dual-fold-blend-v1` | temporal-patch-dual-fold-v1 | A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression. | registered | not recorded | — | unknown / 6.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -336,6 +337,27 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `["reports/experiments/lsm-fm-public-node-refinement-v2-result.json"]`
+
+### trackastra-dual-fold-synthetic-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### temporal-patch-dual-fold-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### temporal-patch-dual-fold-blend-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls

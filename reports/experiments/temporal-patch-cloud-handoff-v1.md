@@ -8,10 +8,11 @@ and a candidate only; it contains no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
-- Archive bytes: `104312`
-- Archive SHA-256: `7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`
-- Extracted manifest SHA-256: `002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-outputverified-final-20260827.zip`
+- Archive bytes: `121241`
+- Archive SHA-256: `f0f83b1e061b74118c042c99301a89d5bfbb8e896f57717b32cf92d3df3d9f8a`
+- Extracted manifest SHA-256: `66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5`
+- Manifest-bound source files: `30`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
@@ -49,7 +50,7 @@ python "$BIOHUB_RUNTIME/verify_trackastra_output.py" \
   --allow-pretrained-control
 ```
 
-Stop if the runtime verifier does not report 26 files, two GPUs, the bound
+Stop if the runtime verifier does not report 30 files, two GPUs, the bound
 manifest hash, the bound runtime reserve, and no submission command. Also stop
 unless the Trackastra verifier reports `status: verified`, source policy
 `predeclared_pretrained_control`, two byte-identical hash-bound initial models,
@@ -82,6 +83,20 @@ folds trained beyond step zero, and no submission. Each fold must report
 EMA checkpoints, class-conditional division-prior correction, the all-positive
 supervised-contrastive loss policy, successful-batch gradient accumulation,
 and the global disjoint real-movie split policy.
+
+Before calibration, independently audit the downloaded output and strictly
+load both checkpoints:
+
+```bash
+python "$BIOHUB_RUNTIME/verify_appearance_output.py" \
+  --root "$BIOHUB_RUN/appearance" \
+  --expected-family temporal_cosine_v1 \
+  --strict-checkpoint
+```
+
+Stop unless it reports both threshold-eligible folds, exact worker/aggregate
+equality, the frozen synthetic inventory, globally disjoint reciprocal real
+partitions, no competition artifacts, and `authorized_for_calibration: true`.
 
 ## Stage 2: clean blend and reciprocal-ensemble calibration
 

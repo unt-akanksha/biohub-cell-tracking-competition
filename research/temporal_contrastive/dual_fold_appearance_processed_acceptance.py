@@ -34,6 +34,7 @@ try:
         COSINE_FAMILY,
         FAMILIES,
         PROCESSED_RUN_BY_FAMILY,
+        TRAINING_RUN_BY_FAMILY,
         appearance_evidence_for_movie,
         appearance_metadata,
         build_appearance_model,
@@ -61,6 +62,7 @@ except ModuleNotFoundError:
         COSINE_FAMILY,
         FAMILIES,
         PROCESSED_RUN_BY_FAMILY,
+        TRAINING_RUN_BY_FAMILY,
         appearance_evidence_for_movie,
         appearance_metadata,
         build_appearance_model,
@@ -114,6 +116,9 @@ def verify_sources(
         and trackastra_terminal.get("submission_created") is False
     ):
         raise RuntimeError("reciprocal Trackastra source is not accepted")
+    appearance_aggregate = json.loads(
+        (appearance_root / "training_terminal.json").read_text(encoding="utf-8")
+    )
     calibration = json.loads(calibration_terminal_path.read_text(encoding="utf-8"))
     model_family = str(calibration.get("appearance_family", COSINE_FAMILY))
     if model_family not in FAMILIES:
@@ -130,6 +135,21 @@ def verify_sources(
         raise RuntimeError("appearance blend calibration is not eligible")
     if set(calibration.get("folds", {})) != set(FOLD_BY_PREFIX.values()):
         raise RuntimeError("appearance calibration does not cover both folds")
+    aggregate_family = str(appearance_aggregate.get("appearance_family", COSINE_FAMILY))
+    if not (
+        appearance_aggregate.get("status") == "completed"
+        and appearance_aggregate.get("run_id")
+        == TRAINING_RUN_BY_FAMILY[model_family]
+        and appearance_aggregate.get("gpu_count") == 2
+        and appearance_aggregate.get("both_folds_trained") is True
+        and appearance_aggregate.get("public_predictions_copied") is False
+        and appearance_aggregate.get("public_leaderboard_used_for_selection") is False
+        and appearance_aggregate.get("submission_created") is False
+        and aggregate_family == model_family
+        and set(appearance_aggregate.get("folds", {}))
+        == set(FOLD_BY_PREFIX.values())
+    ):
+        raise RuntimeError("reciprocal appearance source is not accepted")
 
     verified_folds: dict[str, dict[str, Any]] = {}
     for fold in sorted(FOLD_BY_PREFIX.values()):
@@ -156,6 +176,8 @@ def verify_sources(
         appearance_terminal = json.loads(
             appearance_terminal_path.read_text(encoding="utf-8")
         )
+        if appearance_terminal != appearance_aggregate["folds"].get(fold):
+            raise RuntimeError(f"appearance worker/aggregate mismatch: {fold}")
         appearance_model = appearance_root / fold / "appearance_model.pt"
         try:
             fold_family = verify_appearance_metadata(

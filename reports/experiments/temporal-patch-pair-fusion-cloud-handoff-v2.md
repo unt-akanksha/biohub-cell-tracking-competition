@@ -9,11 +9,11 @@ candidate only; it contains no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-20260827.zip`
-- Archive bytes: `116550`
-- Archive SHA-256: `87c98fecec484fdbbeb2f2aa334793439e6a39f750ef163b12c6d923106edcb8`
-- Extracted manifest SHA-256: `2266fbd7b64b88a786aa7951292caf2fa11579e4e1febb3adfa6b5f583ae217d`
-- Manifest-bound source files: `29`
+- Archive: `.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-outputverified-final-20260827.zip`
+- Archive bytes: `120930`
+- Archive SHA-256: `f76ae69f557d72f038b297b9b80d9d6765e571aaa181242b3521fc62925bfb59`
+- Extracted manifest SHA-256: `aa1bb0d4c92eff75848111ab5a0c05decd4ddfabe414dec1979992292df612b2`
+- Manifest-bound source files: `30`
 - Required visible GPUs for every GPU stage: exactly `2`
 - Final inference hard stop: `36000` seconds
 - Kaggle notebook finalization reserve: at least `7200` seconds
@@ -42,7 +42,7 @@ python "$BIOHUB_RUNTIME/verify_trackastra_output.py" \
   --allow-pretrained-control
 ```
 
-Stop unless the first command verifies 29 files, the bound manifest, exactly
+Stop unless the first command verifies 30 files, the bound manifest, exactly
 two GPUs, and no submission command. Stop unless the second verifies one
 coherent source policy, byte-identical worker/aggregate evidence, both model
 hashes, and no competition artifact.
@@ -73,6 +73,19 @@ Stop unless `appearance/training_terminal.json` reports family
 both best steps above zero, exact pair widths `1029 -> 1024 -> 512 -> 128 ->
 1`, EMA checkpoints, the fixed 0.25 embedding auxiliary loss, and no public
 prediction, leaderboard, or submission use.
+
+Before calibration, independently verify and strictly load both checkpoints:
+
+```bash
+python "$BIOHUB_RUNTIME/verify_appearance_output.py" \
+  --root "$BIOHUB_RUN/appearance" \
+  --expected-family temporal_pair_fusion_v2 \
+  --strict-checkpoint
+```
+
+This must prove exact worker/aggregate equality, the frozen family contract,
+threshold eligibility, globally disjoint reciprocal inventories, and no
+competition artifacts.
 
 ## Stage 2: reserved-movie calibration
 

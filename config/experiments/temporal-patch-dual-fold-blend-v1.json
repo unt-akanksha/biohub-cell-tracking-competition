@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-patch-dual-fold-blend-v1",
+  "parent": "temporal-patch-dual-fold-v1",
+  "status": "staged_not_launched",
+  "required_visible_gpu_count": 2,
+  "internet_required": false,
+  "declared_max_runtime_hours": 6.0,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "source": {
+    "kernel_builder_sha256": "a973440f179bb56d18608d945a242a7f002fa052886830236a4509f2074bd9ae",
+    "notebook_sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450",
+    "kernel_metadata_sha256": "cb9769b1f472ea3b8797ca5b308bd05b850803e2aaf155339fcad544077feea7",
+    "calibrator_sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361",
+    "appearance_output_verifier_sha256": "48086c68692948907ded6fbb2eabd5f1f03216257e1522d2c3bab0ed38d75ebd",
+    "runtime_manifest_sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+  },
+  "inputs": {
+    "appearance_training_run": "temporal-patch-dual-fold-v1",
+    "appearance_family": "temporal_cosine_v1",
+    "trackastra_source_run": "trackastra-dual-fold-synthetic-v1",
+    "trackastra_source_policy": "predeclared_pretrained_control",
+    "runtime_dataset": "indarkarhana/biohub-temporal-patch-runtime-v1",
+    "competition": "biohub-cell-tracking-during-development"
+  },
+  "integrity_gates": {
+    "aggregate_status_completed": true,
+    "aggregate_gpu_count": 2,
+    "both_folds_trained": true,
+    "worker_aggregate_exact_equality": true,
+    "checkpoint_sha256_and_strict_load": true,
+    "global_reciprocal_split_disjointness": true,
+    "opened_processed_acceptance_stems_excluded": true,
+    "public_predictions_copied": false,
+    "public_leaderboard_used_for_selection": false,
+    "submission_created": false
+  },
+  "calibration": {
+    "reserved_movies_per_fold": 12,
+    "appearance_ensemble_mode_grid": ["target_only", "reciprocal_mean"],
+    "appearance_weight_grid": [0.0, 0.05, 0.1, 0.2, 0.35],
+    "division_weight_grid": [0.0, 0.05, 0.1, 0.2],
+    "appearance_temperature": 0.1,
+    "zero_weight_control_required": true,
+    "minimum_pooled_gain": 0.001,
+    "maximum_movie_regression": 0.002,
+    "processed_acceptance_ground_truth_read": false,
+    "selection_requires_both_folds_improved": true
+  },
+  "runtime": {
+    "worker_max_wall_seconds": 18000,
+    "orchestrator_hard_stop_seconds": 19800,
+    "notebook_hard_stop_seconds": 21600,
+    "kaggle_reserve_hours": 8.0,
+    "launch_only_if_live_guard_projects_reserve": true
+  },
+  "next_gate": "Run exactly once only if reciprocal v1 training passes the independent strict output verifier; otherwise retain the geometry control or move compute to cloud.",
+  "hypothesis": "A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression."
+}

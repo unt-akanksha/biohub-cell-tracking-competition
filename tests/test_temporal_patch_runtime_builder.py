@@ -44,6 +44,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "dual_fold_appearance_submission.py",
         "verify_runtime.py",
         "verify_trackastra_output.py",
+        "verify_appearance_output.py",
         "submission_sharding.py",
         "trackastra_source/trackastra/model/model.py",
     }

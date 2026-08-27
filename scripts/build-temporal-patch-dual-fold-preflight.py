@@ -87,7 +87,7 @@ def verify_sources() -> tuple[dict, str]:
     compile(code, str(NOTEBOOK), "exec")
     if manifest.get("run_id") != RUN_ID or manifest.get("runtime_family") != "cosine_v1":
         raise RuntimeError("runtime family or run identity changed")
-    if len(manifest.get("files", {})) != 29:
+    if len(manifest.get("files", {})) != 30:
         raise RuntimeError("runtime file inventory changed")
     if not (
         metadata.get("enable_gpu") is True
@@ -144,7 +144,7 @@ def main() -> None:
         check(
             "inputs",
             [CONFIG, METADATA, runtime_manifest],
-            "The private 29-file runtime, corrected synthetic kernel, coherent Trackastra control, support wheels, and Biohub competition are attached with T4 x2, TPU off, and internet off.",
+            "The private 30-file runtime, corrected synthetic kernel, coherent Trackastra control, support wheels, and Biohub competition are attached with T4 x2, TPU off, and internet off.",
         ),
         check(
             "single_batch",

@@ -104,6 +104,25 @@ def test_calibration_source_contract_propagates_predeclared_control(
     (appearance_dir / "training_config.json").write_text(
         json.dumps(appearance_config), encoding="utf-8"
     )
+    appearance_peer_terminal = dict(appearance_terminal, fold="target_6bba")
+    (appearance_root / "training_terminal.json").write_text(
+        json.dumps(
+            {
+                "status": "completed",
+                "run_id": "temporal-patch-dual-fold-v1",
+                "gpu_count": 2,
+                "both_folds_trained": True,
+                "public_predictions_copied": False,
+                "public_leaderboard_used_for_selection": False,
+                "submission_created": False,
+                "folds": {
+                    fold: appearance_terminal,
+                    "target_6bba": appearance_peer_terminal,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
 
     trackastra_root = tmp_path / "trackastra"
     trackastra_dir = trackastra_root / fold
@@ -191,12 +210,51 @@ def test_calibration_source_contract_accepts_exact_pair_fusion_family(
     config.update(pair_contract, run_id="temporal-patch-pair-fusion-v2")
     terminal_path.write_text(json.dumps(terminal), encoding="utf-8")
     config_path.write_text(json.dumps(config), encoding="utf-8")
+    appearance_aggregate_path = tmp_path / "appearance" / "training_terminal.json"
+    appearance_aggregate = json.loads(
+        appearance_aggregate_path.read_text(encoding="utf-8")
+    )
+    appearance_aggregate.update(
+        run_id="temporal-patch-pair-fusion-v2",
+        appearance_family="temporal_pair_fusion_v2",
+    )
+    appearance_aggregate["folds"][fold] = terminal
+    appearance_aggregate_path.write_text(
+        json.dumps(appearance_aggregate), encoding="utf-8"
+    )
 
     verified = verify_sources(
         fold, tmp_path / "appearance", trackastra_root
     )
 
     assert verified[-2] == "temporal_pair_fusion_v2"
+
+
+def test_calibration_rejects_appearance_worker_aggregate_divergence(
+    tmp_path: Path,
+) -> None:
+    test_calibration_source_contract_propagates_predeclared_control(tmp_path)
+    fold = "target_44b6"
+    trackastra_root = tmp_path / "trackastra"
+    trackastra_aggregate = json.loads(
+        (trackastra_root / "training_terminal.json").read_text(encoding="utf-8")
+    )
+    (trackastra_root / fold / "worker_terminal.json").write_text(
+        json.dumps(trackastra_aggregate["folds"][fold]), encoding="utf-8"
+    )
+    appearance_worker_path = (
+        tmp_path / "appearance" / fold / "worker_terminal.json"
+    )
+    appearance_worker = json.loads(
+        appearance_worker_path.read_text(encoding="utf-8")
+    )
+    appearance_worker["best_step"] += 1
+    appearance_worker_path.write_text(
+        json.dumps(appearance_worker), encoding="utf-8"
+    )
+
+    with pytest.raises(RuntimeError, match="appearance worker/aggregate mismatch"):
+        verify_sources(fold, tmp_path / "appearance", trackastra_root)
 
 
 def test_temporal_head_outputs_normalized_embedding_and_sparse_division_prior() -> None:

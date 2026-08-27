@@ -31,6 +31,7 @@ try:
     )
     from appearance_family import (
         CALIBRATION_RUN_BY_FAMILY,
+        COSINE_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
         verify_appearance_metadata,
@@ -44,6 +45,7 @@ except ModuleNotFoundError:
     )
     from research.temporal_contrastive.appearance_family import (
         CALIBRATION_RUN_BY_FAMILY,
+        COSINE_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
         verify_appearance_metadata,
@@ -122,9 +124,29 @@ def verify_sources(
         appearance_terminal_path.read_text(encoding="utf-8")
     )
     appearance_config = json.loads(appearance_config_path.read_text(encoding="utf-8"))
+    appearance_aggregate = json.loads(
+        (appearance_root / "training_terminal.json").read_text(encoding="utf-8")
+    )
     appearance_model = appearance_dir / "appearance_model.pt"
+    aggregate_family = str(
+        appearance_aggregate.get(
+            "appearance_family",
+            appearance_terminal.get("appearance_family", COSINE_FAMILY),
+        )
+    )
     if not (
-        appearance_terminal.get("status") == "completed"
+        appearance_aggregate.get("status") == "completed"
+        and appearance_aggregate.get("run_id")
+        == appearance_terminal.get("run_id")
+        and appearance_aggregate.get("gpu_count") == 2
+        and appearance_aggregate.get("both_folds_trained") is True
+        and appearance_aggregate.get("public_predictions_copied") is False
+        and appearance_aggregate.get("public_leaderboard_used_for_selection")
+        is False
+        and appearance_aggregate.get("submission_created") is False
+        and aggregate_family
+        == appearance_terminal.get("appearance_family", COSINE_FAMILY)
+        and appearance_terminal.get("status") == "completed"
         and appearance_terminal.get("fold") == fold
         and int(appearance_terminal.get("best_step", 0)) > 0
         and appearance_terminal.get("public_predictions_copied") is False
@@ -132,6 +154,8 @@ def verify_sources(
         and appearance_terminal.get("submission_created") is False
     ):
         raise RuntimeError(f"appearance source is not eligible: {fold}")
+    if appearance_terminal != appearance_aggregate.get("folds", {}).get(fold):
+        raise RuntimeError(f"appearance worker/aggregate mismatch: {fold}")
     if sha256_file(appearance_model) != appearance_terminal.get("model_sha256"):
         raise RuntimeError(f"appearance model hash mismatch: {fold}")
     try:

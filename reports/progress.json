@@ -1922,6 +1922,162 @@
       "registered_at": "2026-08-27T01:50:00.204463Z",
       "run_id": "lsm-fm-public-node-refinement-v2",
       "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Correct native synthetic geometry plus long 95/5 synthetic-real replay and frame-global motion augmentation improves association and division ranking without v6 real-only drift.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "trackastra-graph-finetune-v6",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-27T02:31:32.842660Z",
+      "run_id": "trackastra-dual-fold-synthetic-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Registration recorded the CLI base seed and an assumed consecutive seed instead of the trainer's immutable fold-offset effective seeds. The launched source derives 41027+4400 and 41027+6600.",
+          "replacement_fields": {
+            "seeds": [
+              45427,
+              47627
+            ]
+          },
+          "target_event_id": "evt-d499fc4a10d24655becacf63b2510425"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "11.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A project-authored physical-scale temporal 3D appearance representation resolves ambiguous geometrically plausible parent-child links beyond the coherent Trackastra geometry control without public predictions or leaderboard selection.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "trackastra-dual-fold-synthetic-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-27T07:49:08.596084Z",
+      "run_id": "temporal-patch-dual-fold-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Finalize shared family constants and bind the resulting private runtime manifest without changing calibration behavior or budget.",
+          "replacement_fields": {
+            "config": {
+              "authorized_for_submission": false,
+              "calibration": {
+                "appearance_ensemble_mode_grid": [
+                  "target_only",
+                  "reciprocal_mean"
+                ],
+                "appearance_temperature": "0.1",
+                "appearance_weight_grid": [
+                  "0.0",
+                  "0.05",
+                  "0.1",
+                  "0.2",
+                  "0.35"
+                ],
+                "division_weight_grid": [
+                  "0.0",
+                  "0.05",
+                  "0.1",
+                  "0.2"
+                ],
+                "maximum_movie_regression": "0.002",
+                "minimum_pooled_gain": "0.001",
+                "processed_acceptance_ground_truth_read": false,
+                "reserved_movies_per_fold": 12,
+                "selection_requires_both_folds_improved": true,
+                "zero_weight_control_required": true
+              },
+              "declared_max_runtime_hours": "6.0",
+              "hypothesis": "A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression.",
+              "inputs": {
+                "appearance_family": "temporal_cosine_v1",
+                "appearance_training_run": "temporal-patch-dual-fold-v1",
+                "competition": "biohub-cell-tracking-during-development",
+                "runtime_dataset": "indarkarhana/biohub-temporal-patch-runtime-v1",
+                "trackastra_source_policy": "predeclared_pretrained_control",
+                "trackastra_source_run": "trackastra-dual-fold-synthetic-v1"
+              },
+              "integrity_gates": {
+                "aggregate_gpu_count": 2,
+                "aggregate_status_completed": true,
+                "both_folds_trained": true,
+                "checkpoint_sha256_and_strict_load": true,
+                "global_reciprocal_split_disjointness": true,
+                "opened_processed_acceptance_stems_excluded": true,
+                "public_leaderboard_used_for_selection": false,
+                "public_predictions_copied": false,
+                "submission_created": false,
+                "worker_aggregate_exact_equality": true
+              },
+              "internet_required": false,
+              "next_gate": "Run exactly once only if reciprocal v1 training passes the independent strict output verifier; otherwise retain the geometry control or move compute to cloud.",
+              "parent": "temporal-patch-dual-fold-v1",
+              "required_visible_gpu_count": 2,
+              "run_id": "temporal-patch-dual-fold-blend-v1",
+              "runtime": {
+                "kaggle_reserve_hours": "8.0",
+                "launch_only_if_live_guard_projects_reserve": true,
+                "notebook_hard_stop_seconds": 21600,
+                "orchestrator_hard_stop_seconds": 19800,
+                "worker_max_wall_seconds": 18000
+              },
+              "schema_version": 1,
+              "source": {
+                "appearance_output_verifier_sha256": "48086c68692948907ded6fbb2eabd5f1f03216257e1522d2c3bab0ed38d75ebd",
+                "calibrator_sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361",
+                "kernel_builder_sha256": "a973440f179bb56d18608d945a242a7f002fa052886830236a4509f2074bd9ae",
+                "kernel_metadata_sha256": "cb9769b1f472ea3b8797ca5b308bd05b850803e2aaf155339fcad544077feea7",
+                "notebook_sha256": "9b1cfde513177792031a6c96381208a98d456e94f959931f4fac9fd66fd7e450",
+                "runtime_manifest_sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+              },
+              "status": "staged_not_launched",
+              "submission_created": false
+            },
+            "config_sha256": "3908cd28e6208d2191346602d33fecf4a2ef7bcbfd3c8cea0e581b19c96db49a"
+          },
+          "target_event_id": "evt-c42e117e767c4abdb3fff854b67330e5"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "6.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "temporal-patch-dual-fold-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-27T08:10:43.957649Z",
+      "run_id": "temporal-patch-dual-fold-blend-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1

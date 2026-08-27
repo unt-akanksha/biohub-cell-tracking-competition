@@ -100,6 +100,19 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "folds": trackastra_folds,
         },
     )
+    write_json(
+        appearance_root / "training_terminal.json",
+        {
+            "status": "completed",
+            "run_id": "temporal-patch-dual-fold-v1",
+            "gpu_count": 2,
+            "both_folds_trained": True,
+            "public_predictions_copied": False,
+            "public_leaderboard_used_for_selection": False,
+            "submission_created": False,
+            "folds": appearance_terminals,
+        },
+    )
     calibration_path = tmp_path / "calibration_terminal.json"
     write_json(
         calibration_path,
@@ -161,6 +174,23 @@ def test_processed_appearance_sources_accept_pair_fusion_contract(
         terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
         terminal.update(pair_contract)
         write_json(terminal_path, terminal)
+    appearance_aggregate_path = appearance_root / "training_terminal.json"
+    appearance_aggregate = json.loads(
+        appearance_aggregate_path.read_text(encoding="utf-8")
+    )
+    appearance_aggregate.update(
+        run_id="temporal-patch-pair-fusion-v2",
+        appearance_family="temporal_pair_fusion_v2",
+    )
+    appearance_aggregate["folds"] = {
+        fold: json.loads(
+            (appearance_root / fold / "worker_terminal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        for fold in FOLDS
+    }
+    write_json(appearance_aggregate_path, appearance_aggregate)
     calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
     calibration.update(
         run_id="temporal-patch-pair-fusion-blend-v2",
@@ -195,6 +225,19 @@ def test_processed_appearance_sources_reject_worker_aggregate_divergence(
     write_json(worker_path, worker)
 
     with pytest.raises(RuntimeError, match="worker/aggregate mismatch"):
+        verify_sources(trackastra_root, appearance_root, calibration_path)
+
+
+def test_processed_appearance_sources_reject_appearance_worker_aggregate_divergence(
+    tmp_path: Path,
+) -> None:
+    trackastra_root, appearance_root, calibration_path = source_fixture(tmp_path)
+    worker_path = appearance_root / "target_44b6" / "worker_terminal.json"
+    worker = json.loads(worker_path.read_text(encoding="utf-8"))
+    worker["best_step"] += 1
+    write_json(worker_path, worker)
+
+    with pytest.raises(RuntimeError, match="appearance worker/aggregate mismatch"):
         verify_sources(trackastra_root, appearance_root, calibration_path)
 
 
