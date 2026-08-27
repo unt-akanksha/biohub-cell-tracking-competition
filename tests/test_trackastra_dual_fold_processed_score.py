@@ -54,6 +54,38 @@ def test_materialization_must_be_hash_bound_and_selection_safe() -> None:
         )
 
 
+def test_appearance_materialization_requires_two_positive_hash_bound_blends() -> None:
+    payload = materialization()
+    payload.update(
+        {
+            "candidate_family": "trackastra_appearance_blend",
+            "calibration_terminal_sha256": "e" * 64,
+            "appearance_models": {
+                "target_44b6": {"model_sha256": "f" * 64, "best_step": 30},
+                "target_6bba": {"model_sha256": "1" * 64, "best_step": 40},
+            },
+            "appearance_blend": {
+                "target_44b6": {
+                    "appearance_weight": 0.10,
+                    "appearance_temperature": 0.10,
+                },
+                "target_6bba": {
+                    "appearance_weight": 0.20,
+                    "appearance_temperature": 0.10,
+                },
+            },
+        }
+    )
+    validate_materialization(
+        payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+    )
+    payload["appearance_blend"]["target_44b6"]["appearance_weight"] = 0.0
+    with pytest.raises(ValueError, match="blend evidence"):
+        validate_materialization(
+            payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+        )
+
+
 def test_node_identity_ignores_csv_row_id_but_not_coordinates() -> None:
     schema = {
         "id": pl.Int64,

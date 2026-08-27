@@ -13,7 +13,10 @@
     "patch_model_sha256": "1bcfbd0fee8c303004398661e646893f1163cc818243ec5fc9de716de3448873",
     "trainer_sha256": "43d80ee199bf2f8c85dac1c848e24f0886b00b24789e238988d14803f8a4264d",
     "blend_sha256": "ae02c3eee64a63ff5accd87270a89ed9df722b019a97d4e5ff1b32fcd4495b83",
-    "calibrator_sha256": "89011168ab401cc0729b0197b60821dd39d5917d6765605f9d72b21961ee80e4"
+    "calibrator_sha256": "89011168ab401cc0729b0197b60821dd39d5917d6765605f9d72b21961ee80e4",
+    "processed_materializer_sha256": "076c8014b736997641f48093441e5cf91333a93cb8dbd43d900a5a4154bbf8a1",
+    "exact_gate_sha256": "f07137f1901539be9160843421ea0ace43f2169ce8842744f007f4eeb6a814aa",
+    "two_gpu_candidate_builder_sha256": "fc5063a11624449c26d5bf7fe0aaebefc5f874c3d6990e44d33908f78d7c3c25"
   },
   "model": {
     "architecture": "independent physical-scale 3D residual patch encoder",

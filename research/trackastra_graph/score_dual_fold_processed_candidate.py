@@ -125,6 +125,42 @@ def validate_materialization(
         digest = model.get("model_sha256")
         if not isinstance(digest, str) or len(digest) != 64:
             raise ValueError(f"materialization model hash is invalid: {fold}")
+    family = payload.get("candidate_family", "trackastra_dual_fold")
+    if family not in {"trackastra_dual_fold", "trackastra_appearance_blend"}:
+        raise ValueError(f"unsupported processed candidate family: {family}")
+    if family == "trackastra_appearance_blend":
+        appearance_models = payload.get("appearance_models")
+        appearance_blend = payload.get("appearance_blend")
+        folds = {"target_44b6", "target_6bba"}
+        if not isinstance(appearance_models, dict) or set(appearance_models) != folds:
+            raise ValueError("appearance materialization omits a reciprocal model")
+        if not isinstance(appearance_blend, dict) or set(appearance_blend) != folds:
+            raise ValueError("appearance materialization omits a reciprocal blend")
+        for fold in folds:
+            model = appearance_models[fold]
+            blend = appearance_blend[fold]
+            digest = model.get("model_sha256") if isinstance(model, dict) else None
+            if not (
+                isinstance(model, dict)
+                and int(model.get("best_step", 0)) > 0
+                and isinstance(digest, str)
+                and len(digest) == 64
+            ):
+                raise ValueError(f"appearance model evidence is invalid: {fold}")
+            if not (
+                isinstance(blend, dict)
+                and float(blend.get("appearance_weight", 0.0)) > 0.0
+                and math.isclose(
+                    float(blend.get("appearance_temperature", 0.0)),
+                    0.10,
+                    rel_tol=0.0,
+                    abs_tol=FLOAT_TOLERANCE,
+                )
+            ):
+                raise ValueError(f"appearance blend evidence is invalid: {fold}")
+        calibration_digest = payload.get("calibration_terminal_sha256")
+        if not isinstance(calibration_digest, str) or len(calibration_digest) != 64:
+            raise ValueError("appearance calibration terminal hash is invalid")
 
 
 def load_submission(path: Path) -> pl.DataFrame:
@@ -332,6 +368,17 @@ def main() -> None:
         "gate": gate,
         "note": "Exact CPU acceptance only; no leaderboard query, artifact promotion, or submission was performed.",
     }
+    if materialization.get("candidate_family") == "trackastra_appearance_blend":
+        result.update(
+            {
+                "candidate_family": "trackastra_appearance_blend",
+                "appearance_models": materialization["appearance_models"],
+                "appearance_blend": materialization["appearance_blend"],
+                "calibration_terminal_sha256": materialization[
+                    "calibration_terminal_sha256"
+                ],
+            }
+        )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     atomic_write_json(args.output, result)
     print(json.dumps(result, indent=2, sort_keys=True))

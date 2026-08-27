@@ -53,7 +53,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The focused temporal/Trackastra suite passes 33 tests. These cover physical
+The focused temporal/Trackastra suite passes 38 tests. These cover physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
 alignment, exact zero-weight fallback, the frozen processed exact gate, and
