@@ -369,3 +369,11 @@ checkpoints. It will then be evaluated once against the exact seeded initial
 model with the same broad gain gate; its result may reject v3 but may not tune
 or redirect checkpoint selection. Construction and verification used no Kaggle
 GPU, competition data, leaderboard result, or submission.
+
+The derived asset is now private Kaggle dataset
+`indarkarhana/biohub-zebrahub-contextual-acceptance-v1` version 1. A complete
+remote re-download reproduced manifest
+`cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`,
+inventory
+`e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667`,
+all 16 shards, and the unopened provenance state. No GPU was used.

@@ -55,6 +55,10 @@ synthetic continuation/division test pins this behavior.
   `e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667`
 - Manifest SHA-256:
   `cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc88e7c6d0`
+- Private Kaggle dataset:
+  `indarkarhana/biohub-zebrahub-contextual-acceptance-v1`, version 1
+- Remote re-download:
+  `.biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-v1-version1`
 
 Only normalized temporal 17-cubed patches, physical coordinates, candidate and
 positive masks, division targets, and label-free transition/candidate context
@@ -70,6 +74,12 @@ and source file. Its terminal state is `verified_unopened` and records:
 - `public_competition_predictions_read: false`
 - `leaderboard_used: false`
 - `submission_created: false`
+
+The private version-1 publication was re-downloaded through the Kaggle CLI and
+the downloaded copy reproduced the exact manifest, inventory, counts, and all
+16 shard checks. The first relative-path upload attempt failed locally before
+dataset creation; the successful upload used an absolute path and Kaggle's
+zipped-directory mode. No alternate dataset version exists.
 
 ## Future one-shot gate
 
