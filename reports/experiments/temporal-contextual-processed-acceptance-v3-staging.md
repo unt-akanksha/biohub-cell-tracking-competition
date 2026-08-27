@@ -34,13 +34,14 @@ advancing.
 ## Package
 
 - Runtime: `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`, only
-  version `3`
+  version `4`; version `3` is excluded because its sparse contextual-logit
+  scatter was not autocast dtype-safe
 - Runtime manifest SHA-256:
-  `193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1`
+  `cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d`
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-processed-acceptance-v3`
 - Notebook SHA-256:
-  `f51d6a41d019316da0aeb697bd630f76ebafa043c2fc27cf95e0b72dfdc3efb0`
+  `973f30cd25833d60b0552f4358566c7e6c535ce6717789f264cf2b5a185294a7`
 - Metadata SHA-256:
   `0fd5798a6ab4b2c005c93b4991070abf4025f8ef7dcb454f20081c5468a6a3c6`
 - Notebook watchdog: `21,600` seconds

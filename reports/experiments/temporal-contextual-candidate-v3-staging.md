@@ -65,10 +65,16 @@ explicit runtime failure.
 
 ## Frozen package
 
+- Runtime dataset:
+  `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`, only version
+  `4`; version `3` is excluded because its sparse contextual-logit scatter was
+  not autocast dtype-safe
+- Runtime manifest SHA-256:
+  `cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d`
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-submission-candidate-v3`
 - Notebook SHA-256:
-  `6e54ac2af540b4c3745db8589e0d8809fb2ac8e00f834e2172a8f147df14dbb6`
+  `e21119833e11fe514caf355dc46e57e8448f0fcd4a1fb4b47f7607e25959813c`
 - Metadata SHA-256:
   `3c232d084b6a35e7524621a2baf4c5f3d9f0397378c8b22e3edb4021feb95d8a`
 

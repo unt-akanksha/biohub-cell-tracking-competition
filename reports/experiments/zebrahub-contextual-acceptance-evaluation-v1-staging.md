@@ -37,26 +37,29 @@ hyperparameter selection and cannot be reused for tuning.
 - Trainer-record inventory SHA-256:
   `05ad8b3195aa2786ffb8a2ffcb247d118d1e5cf96026264e0534c468979e6e0e`
 - Evaluation runtime:
-  `indarkarhana/biohub-zebrahub-contextual-acceptance-runtime-v1`, version 2
+  `indarkarhana/biohub-zebrahub-contextual-acceptance-runtime-v1`, version 3
 - Runtime manifest SHA-256:
-  `bb9cd258a51f45141086104bba8f16c28a9cbdc55bc5c4cdaac5b04b7d07ad44`
+  `6aefc98b953a15b853731bc970a9734ddcab08a51938bcc9769f29fa6bba1f29`
 - Runtime files: `15`
-- Runtime verified bytes: `281,181`
+- Runtime verified bytes: `281,596`
 - Remote re-download:
-  `.biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version2`
+  `.biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3`
 - Notebook SHA-256:
-  `054ecd49c4dbdb0a16ec546d2ebe53acf65f36b19f9503587ad31fe5aa70252b`
+  `41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874`
 - Kernel metadata SHA-256:
   `691e8fc2c4d1e7ea27df2a2dc483d1159237714c38c3555b6ef0c913b68d8a0e`
 
 The first relative-path dataset publication command failed locally before
 creation because of a Kaggle CLI temporary-path bug. The absolute-path retry
 created private version 1. Registration then caught a 65-character manifest
-constant before launch. Version 2 corrects that fail-closed binding to the
-actual 64-character local/remote acceptance manifest. A full CLI re-download
-of version 2 reproduced the exact runtime manifest and all 15 content hashes.
-Only runtime version 2 is admissible for the acceptance launch; version 1 is
-retained solely as failed pre-launch provenance.
+constant before launch. Version 2 corrected that fail-closed binding to the
+actual 64-character local/remote acceptance manifest. Version 3 additionally
+promotes compact autocast contextual logits to the sparse output dtype before
+index scatter. A full CLI re-download of version 3 reproduced the exact runtime
+manifest and all 15 content hashes. Only runtime version 3 is admissible for
+the acceptance launch; version 1 is retained as failed pre-launch provenance
+and version 2 is excluded because its contextual scatter was not autocast
+dtype-safe.
 
 No GPU run, competition submission, public prediction, or leaderboard result
 was used while staging this gate.

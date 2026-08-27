@@ -61,7 +61,7 @@ def test_transfer_kernel_is_two_gpu_gated_training_only() -> None:
     assert 'row.get("finetuning_gate_passed") is True' in code
     assert "Contextual 176-patch/6,144-edge" in code
     assert (
-        "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+        "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
         in code
     )
     assert "public_predictions_copied" in code

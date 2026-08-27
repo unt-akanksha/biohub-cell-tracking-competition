@@ -1,6 +1,6 @@
 # Temporal contextual transfer v3 staging
 
-Status: private transfer runtime version 3 remotely verified; training staged
+Status: private transfer runtime version 4 remotely verified; training staged
 for the user-provided cloud, not launched and not submitted.
 
 This is the competition-specific continuation of the project-authored
@@ -57,23 +57,26 @@ both checkpoints, and rejects any competition artifact in the training output.
 
 - Runtime dataset:
   `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`
-- Only admissible version: `3`
+- Only admissible version: `4`
 - Excluded versions: `1` (nested source omitted), `2` (pre-freeze experiment
-  package)
+  package), `3` (autocast-unsafe sparse contextual-logit scatter)
 - Runtime manifest SHA-256:
-  `193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1`
+  `cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d`
 - Runtime files: `36`
-- Runtime verified bytes: `550,023`
+- Runtime verified bytes: `550,438`
 - Remote re-download:
-  `.biohub/cache/dataset-redownloads/biohub-temporal-contextual-transfer-runtime-v1-version3`
+  `.biohub/cache/dataset-redownloads/biohub-temporal-contextual-transfer-runtime-v1-version4`
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-transfer-v3`
 - Notebook SHA-256:
-  `cff6ca176ce7b62dcf170c9f09b3718ecc1b8c5de9f1f1fb1b7959bb0d6b2f88`
+  `7ca20f9097d14dba745a3eb0aededc561e691e904cb85274d91219a282c4ee61`
 - Kernel metadata SHA-256:
   `0d2afe024afb1da581ba2b4860188b48c5617ceda3aa49ff55875ff30b3fb5c6`
 
-The runtime version-3 re-download reproduced its exact manifest and all 36
+The runtime version-4 re-download reproduced its exact manifest and all 36
 content hashes after materializing the packaged Trackastra source directory.
-No Kaggle GPU, leaderboard result, or competition submission was used to stage
-this transfer lane.
+Version 4 carries only the mixed-precision compatibility repair: autocast
+contextual logits are differentiably promoted to the FP32 sparse output dtype
+before index scatter. No recipe, split, seed, gate, or selection policy was
+changed. No Kaggle GPU, leaderboard result, or competition submission was used
+to stage this transfer lane.

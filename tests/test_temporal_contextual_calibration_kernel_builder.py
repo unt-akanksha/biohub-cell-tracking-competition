@@ -53,7 +53,7 @@ def test_calibration_kernel_is_clean_two_gpu_evidence_only() -> None:
     assert '"--max-wall-seconds", "18000"' in code
     assert '"--orchestrator-hard-stop-seconds", "19800"' in code
     assert (
-        "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+        "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
         in code
     )
     assert '"--expected-family", "temporal_contextual_pair_fusion_v3"' in code

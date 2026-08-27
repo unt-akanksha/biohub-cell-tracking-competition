@@ -99,7 +99,7 @@ import zipfile
 
 import torch
 
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
 
 
 def first_existing(candidates):

@@ -12,9 +12,9 @@ No command below uploads a competition submission.
 - Frozen ZebraHub acceptance run:
   `zebrahub-contextual-acceptance-evaluation-v1`
 - Transfer runtime dataset:
-  `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`, version `3`
+  `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`, version `4`
 - Runtime manifest SHA-256:
-  `193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1`
+  `cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d`
 - Parameters per reciprocal fold: `20,747,761`
 - Required visible GPUs for every GPU stage: exactly `2`
 - Internet during all GPU stages: disabled

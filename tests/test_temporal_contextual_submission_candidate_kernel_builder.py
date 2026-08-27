@@ -62,6 +62,10 @@ def test_candidate_kernel_is_accepted_two_gpu_whole_movie_only() -> None:
     assert '"trackastra_contextual_pair_fusion_blend"' in code
     assert '"temporal_contextual_pair_fusion_v3"' in code
     assert '"--strict-checkpoint"' in code
+    assert (
+        "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
+        in code
+    )
     assert 'report.get("gpu_count") == 2' in code
     assert 'report.get("whole_movie_coverage", [])' in code
     assert 'report.get("nodes_preserved_exactly") is True' in code

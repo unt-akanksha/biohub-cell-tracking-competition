@@ -52,7 +52,7 @@ def test_processed_kernel_is_one_shot_two_gpu_evidence_only() -> None:
     assert "DECLARED_BUDGET_SECONDS = 21_600" in code
     assert '"--hard-stop-seconds", "19800"' in code
     assert (
-        "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1"
+        "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
         in code
     )
     assert (

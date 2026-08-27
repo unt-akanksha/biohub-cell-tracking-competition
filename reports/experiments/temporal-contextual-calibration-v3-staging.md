@@ -33,12 +33,13 @@ not improved.
 ## Frozen local package
 
 - Runtime dataset: `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`
-- Only admissible version: `3`
+- Only admissible version: `4`; version `3` is excluded because its sparse
+  contextual-logit scatter was not autocast dtype-safe
 - Runtime manifest SHA-256:
-  `193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1`
+  `cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d`
 - Kernel: `indarkarhana/biohub-temporal-contextual-calibration-v3`
 - Notebook SHA-256:
-  `525126fc8008aba78fcefea6093ef9a32a610e7e88fab2f03c1aa0576d11560a`
+  `4596cd9fd7211c27f6b437268c8e719847f0e7cce91438cc86195e79aba497e1`
 - Kernel metadata SHA-256:
   `46f0b73396f50d1e3bebb40ce2f811b20d791347dbf51b0b512e2e71e492b955`
 - Notebook watchdog: `21,600` seconds

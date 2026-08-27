@@ -53,7 +53,7 @@ def test_acceptance_kernel_is_exactly_two_gpu_and_external_only() -> None:
     assert "DECLARED_BUDGET_SECONDS = 3_600" in code
     assert '"--hard-stop-seconds", "3300"' in code
     assert (
-        "bb9cd258a51f45141086104bba8f16c28a9cbdc55bc5c4cdaac5b04b7d07ad44"
+        "6aefc98b953a15b853731bc970a9734ddcab08a51938bcc9769f29fa6bba1f29"
         in code
     )
     assert (
