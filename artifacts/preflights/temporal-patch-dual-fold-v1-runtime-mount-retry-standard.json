@@ -1,0 +1,166 @@
+{
+  "checks": [
+    {
+      "detail": "Every notebook cell compiles and focused runtime, training, output-verifier, mount-representation, and sharding tests pass.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-dual-fold-kernel.py",
+          "sha256": "aace5ee40249f3212820e5b697a357ce3bd5b47843243544ef7e69217a234166"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "4b15227c78e276ca2abe1b5afb43feb8138c9356a6174db91aa8f53be46b6b9a"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private 30-file runtime, corrected synthetic kernel, coherent Trackastra control, support wheels, and Biohub competition are attached; the exact materializer passes directory and ZIP mount regression tests.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-dual-fold-kernel.py",
+          "sha256": "aace5ee40249f3212820e5b697a357ce3bd5b47843243544ef7e69217a234166"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "4b15227c78e276ca2abe1b5afb43feb8138c9356a6174db91aa8f53be46b6b9a"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The unchanged three-channel 17-cubed appearance model completes the focused forward-path contract.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": "tests/test_temporal_contrastive.py",
+          "sha256": "c3364cb0c9ef2c89dd7f429d8b91ce79ddc4c1b8df6f72dc4aedf919327910bd"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The unchanged production forward/loss/backward path and mount-aware setup tests pass with finite gradients.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/train_dual_fold_patch.py",
+          "sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "4b15227c78e276ca2abe1b5afb43feb8138c9356a6174db91aa8f53be46b6b9a"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "The strict 19,221,954-parameter checkpoint roundtrip remains required before optimizer training.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "The retry writes training and launcher evidence only; it contains no competition artifact or submission command.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/kernel-metadata.json",
+          "sha256": "4cdd45cdf0b4e916fd5c4e7043b61d00d7003ef137e282667abc1f8442cee8de"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "The unchanged 1,900/128 synthetic and 96/12/12 reciprocal real partitions retain all coverage and opened-acceptance exclusions.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Before optimizer training, each T4 path still requires the production 176-patch mixed-precision forward/backward and strict 19,221,954-parameter checkpoint roundtrip.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "The 11.964-second pre-training mount failure and both downloaded evidence hashes are bound; it is not treated as a scientific model result.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        }
+      ],
+      "name": "failure_provenance",
+      "status": "passed"
+    },
+    {
+      "detail": "The retry retains an immutable 11-hour ceiling and requires a fresh live guard projecting at least eight Kaggle GPU hours remaining.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T08:34:44.985131Z",
+  "report_sha256": "60cc59087dc3da8f37d00727f06d98bad63fc5c076a5ad27e949a320daf3f510",
+  "run_id": "temporal-patch-dual-fold-v1-runtime-mount-retry",
+  "schema_version": 1
+}

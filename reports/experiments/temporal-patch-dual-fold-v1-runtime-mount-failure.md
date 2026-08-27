@@ -35,6 +35,8 @@ The exact generated materializer now:
 
 The retry changes no model, data split, seed, objective, threshold, step count,
 GPU count, wall-time ceiling, or submission policy. Its preflight report is
-`artifacts/preflights/temporal-patch-dual-fold-v1-runtime-mount-retry.json`,
+`artifacts/preflights/temporal-patch-dual-fold-v1-runtime-mount-retry-standard.json`,
 SHA-256
-`b6aaee97caaec63272a5cd694289eebd1069bd0e9c072a4331d6be5a04b7886c`.
+`60cc59087dc3da8f37d00727f06d98bad63fc5c076a5ad27e949a320daf3f510`.
+The first immutable retry report is retained as historical evidence of the
+guard's safe refusal over noncanonical check names.

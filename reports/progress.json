@@ -2173,13 +2173,13 @@
       "failure_reason": null,
       "hypothesis": "Accepting both Kaggle runtime mount representations allows the unchanged reciprocal temporal appearance experiment to reach its dense GPU probe and scientific training gates.",
       "imported_audit": false,
-      "lifecycle_status": "registered",
+      "lifecycle_status": "running",
       "next_gate": null,
       "parent": "temporal-patch-dual-fold-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-27T08:32:25.474018Z",
       "run_id": "temporal-patch-dual-fold-v1-runtime-mount-retry",
-      "status": "registered"
+      "status": "running"
     }
   ],
   "schema_version": 1

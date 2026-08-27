@@ -25,7 +25,7 @@ METADATA = KERNEL_DIR / "kernel-metadata.json"
 BUILDER = ROOT / "scripts" / "build-temporal-patch-dual-fold-kernel.py"
 RUNTIME = ROOT / ".biohub" / "staging" / "biohub-temporal-patch-runtime-v1"
 CONFIG = ROOT / "config" / "experiments" / f"{RUN_ID}.json"
-OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}.json"
+OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-standard.json"
 
 
 def relative(path: Path) -> str:
@@ -114,17 +114,37 @@ def main() -> None:
             "Every notebook cell compiles and focused runtime, training, output-verifier, mount-representation, and sharding tests pass.",
         ),
         check(
-            "mount_repair",
+            "inputs",
             [BUILDER, NOTEBOOK, test_path],
-            "The exact generated materializer is executed against both a Kaggle-style mounted directory and an explicit ZIP; ambiguous duplicates fail closed.",
+            "The private 30-file runtime, corrected synthetic kernel, coherent Trackastra control, support wheels, and Biohub competition are attached; the exact materializer passes directory and ZIP mount regression tests.",
         ),
         check(
-            "unchanged_science",
+            "single_batch",
+            [RUNTIME / "patch_model.py", ROOT / "tests" / "test_temporal_contrastive.py"],
+            "The unchanged three-channel 17-cubed appearance model completes the focused forward-path contract.",
+        ),
+        check(
+            "model_step",
+            [RUNTIME / "patch_model.py", RUNTIME / "train_dual_fold_patch.py", test_path],
+            "The unchanged production forward/loss/backward path and mount-aware setup tests pass with finite gradients.",
+        ),
+        check(
+            "checkpoint_roundtrip",
+            [NOTEBOOK, RUNTIME / "patch_model.py"],
+            "The strict 19,221,954-parameter checkpoint roundtrip remains required before optimizer training.",
+        ),
+        check(
+            "output_location",
+            [NOTEBOOK, METADATA],
+            "The retry writes training and launcher evidence only; it contains no competition artifact or submission command.",
+        ),
+        check(
+            "dataset_coverage",
             [CONFIG, runtime_manifest],
-            "Model family, data partitions, seeds, thresholds, 30,000-step target, two-GPU requirement, and no-submission policy are unchanged from the failed infrastructure attempt.",
+            "The unchanged 1,900/128 synthetic and 96/12/12 reciprocal real partitions retain all coverage and opened-acceptance exclusions.",
         ),
         check(
-            "dense_gpu_gate",
+            "dense_memory",
             [NOTEBOOK, RUNTIME / "patch_model.py"],
             "Before optimizer training, each T4 path still requires the production 176-patch mixed-precision forward/backward and strict 19,221,954-parameter checkpoint roundtrip.",
         ),
