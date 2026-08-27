@@ -8,8 +8,9 @@ predictions, or tuned constants.
 ## Evidence
 
 The authenticated Kaggle CLI pulled the public notebook and metadata into the
-read-only local cache. Its metadata declares one `NvidiaTeslaT4`, internet off,
-the Biohub competition input, and three public datasets owned by `pilkwang`.
+read-only local cache. Its metadata declares the `NvidiaTeslaT4` machine shape,
+internet off, the Biohub competition input, and three public datasets owned by
+`pilkwang`.
 The notebook text advertises leaderboard score `0.923` and labels the method as
 dual-seed harmonic bidirectional fusion.
 
@@ -21,8 +22,10 @@ This is not an independently clean solution:
   revert values after leaderboard regressions;
 - it identifies a parent diagnostic kernel and attributes the fusion rule to
   another public CC0 notebook;
-- it uses a single T4, so it also does not meet this project's mandatory
-  exactly-two-GPU final-inference policy.
+- its code checks and names only CUDA device zero and does not implement or
+  verify exhaustive two-worker sharding, so it does not meet this project's
+  mandatory exactly-two-GPU final-inference policy even when Kaggle allocates
+  the T4 x2 machine shape.
 
 Those facts make it unsuitable for either direct reuse or evidence-based model
 selection in this project. Its reported score cannot establish generalization
