@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-contextual-pair-fusion-blend-v3",
+  "parent": "temporal-contextual-pair-fusion-v3",
+  "status": "staged_not_launched",
+  "purpose": "clean reciprocal calibration of contextual v3 against an exact zero-weight Trackastra control",
+  "required_visible_gpu_count": 2,
+  "machine_shape": "NvidiaTeslaT4",
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "public_code_copied": false,
+  "public_predictions_copied": false,
+  "public_leaderboard_used_for_selection": false,
+  "processed_acceptance_ground_truth_read": false,
+  "inputs": {
+    "appearance_run": "temporal-contextual-pair-fusion-v3",
+    "appearance_family": "temporal_contextual_pair_fusion_v3",
+    "appearance_both_folds_must_improve": true,
+    "trackastra_control_run": "trackastra-dual-fold-synthetic-v1",
+    "competition_training_source_attached": true,
+    "runtime_dataset": "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+    "runtime_dataset_version": 3,
+    "excluded_runtime_dataset_versions": [1, 2],
+    "runtime_manifest_sha256": "193478079a0d3f83c1307416c60ed5ad7c74a840fafc5e046ef7f30e2db4b3c1",
+    "runtime_remote_redownload_verified": true
+  },
+  "calibration": {
+    "folds": ["target_44b6", "target_6bba"],
+    "movies_per_fold": 12,
+    "movie_partition": "reserved before competition transfer training and disjoint from processed acceptance",
+    "ensemble_modes": ["target_only", "reciprocal_mean"],
+    "appearance_weights": [0.0, 0.05, 0.1, 0.2, 0.35],
+    "division_weights": [0.0, 0.05, 0.1, 0.2],
+    "exact_control": {
+      "ensemble_mode": "target_only",
+      "appearance_weight": 0.0,
+      "division_weight": 0.0
+    },
+    "minimum_pooled_composite_gain": 0.001,
+    "maximum_per_movie_composite_regression": 0.002,
+    "promotion_requires_both_folds_improved": true,
+    "worker_max_wall_seconds": 18000,
+    "orchestrator_hard_stop_seconds": 19800,
+    "notebook_watchdog_seconds": 21600
+  },
+  "kernel": {
+    "id": "indarkarhana/biohub-temporal-contextual-calibration-v3",
+    "status": "local_staged_not_pushed",
+    "notebook_sha256": "525126fc8008aba78fcefea6093ef9a32a610e7e88fab2f03c1aa0576d11560a",
+    "metadata_sha256": "46f0b73396f50d1e3bebb40ce2f811b20d791347dbf51b0b512e2e71e492b955",
+    "gpu_count_assertion": "torch.cuda.device_count() == 2",
+    "submission_command_included": false
+  },
+  "source": {
+    "calibrator_sha256": "55237c6080bc648f546c05216b5e697f4a619512f23563fe9e3cc4bb842959c4",
+    "appearance_family_sha256": "e1821bd0351ee6022b4354765e82ccaab83d3e1e19b964cc9432ffbf24e5fab7",
+    "kernel_builder_sha256": "497a7eb5ae2cd6b87ed6b738a4f9f4f76accb9274e82b8969f6e56f62fe43bb9",
+    "kernel_builder_test_sha256": "ee2e49146c544233b609fa56f3a0f01be578eb3b767a7ef617a5599bdff2ebb8"
+  },
+  "execution_target": "user-provided two-GPU cloud instance after Kaggle reaches the eight-hour reserve",
+  "hypothesis": "A contextual association model that improves both reciprocal competition folds can add clean held-out graph-association value over the exact Trackastra zero-weight control without public predictions or leaderboard selection."
+}
