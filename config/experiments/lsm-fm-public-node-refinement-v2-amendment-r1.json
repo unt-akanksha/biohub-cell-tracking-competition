@@ -1,0 +1,21 @@
+{
+  "preflight_report": "artifacts/preflights/lsm-fm-public-node-refinement-v2.json",
+  "preflight_report_sha256": "f6da58742878df21908f4c7f31c33e07122c34aa03e38c029f3eba4153ca2cd3",
+  "preflight_file_sha256": "6bad67374e4a5afa3c42d6608bf90fa618ebef60366205a73b8915ccd9161ff6",
+  "focused_tests_passed": 11,
+  "notebook_code_cells_compiled": 4,
+  "remote_dataset_download_verified": true,
+  "runtime_dataset": "indarkarhana/biohub-lsm-fm-public-node-runtime-v2",
+  "runtime_dataset_version": 1,
+  "runtime_manifest_sha256": "7d3ab65f733fbe82a8a5207932cc74fcdf4581cf2bca13482c32c10572156b15",
+  "required_public_graphs": 4,
+  "required_public_graph_coverage_checked_before_evaluation": true,
+  "predeclared_strategy": "public_lsm_r2_p2_b025",
+  "hyperparameter_selection_performed": false,
+  "public_graph_used_as_base": true,
+  "public_predictions_copied": true,
+  "exact_public_replica": false,
+  "public_graph_topology_preserved": true,
+  "public_leaderboard_used_for_selection": false,
+  "submission_path_present": false
+}

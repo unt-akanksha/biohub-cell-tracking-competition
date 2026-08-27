@@ -9,7 +9,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUN_ID = "lsm-fm-public-node-refinement-v1"
 KAGGLE_SLUG = "biohub-lsm-fm-public-node-refine-v1"
+KAGGLE_TITLE = "Biohub LSM-FM Public Node Refinement v1"
 RUNTIME_NAME = "biohub-lsm-fm-public-node-runtime-v1"
+PREDECLARED_STRATEGY: str | None = None
+SCREEN_STEMS = (
+    "44b6_d29c9ab2",
+    "44b6_3a861e03",
+    "44b6_d5e7d891",
+    "44b6_ddf577ad",
+    "6bba_09961292",
+    "6bba_bb9f20c3",
+    "6bba_784a78c9",
+    "6bba_57b7cc1e",
+)
+ACCEPTANCE_STEMS = (
+    "44b6_12dfb391",
+    "44b6_267148e4",
+    "6bba_062c8d37",
+    "6bba_07e24132",
+)
 RUNTIME = ROOT / ".biohub" / "staging" / RUNTIME_NAME
 TEMPLATE = (
     ROOT
@@ -70,9 +88,8 @@ def main() -> None:
     watchdog = watchdog.replace(provenance, replacement)
     set_source(notebook["cells"][0], watchdog)
 
-    set_source(
-        notebook["cells"][1],
-        """
+    if PREDECLARED_STRATEGY is None:
+        description = """
         # Independent LSM-FM refinement of frozen public graph nodes
 
         This private validation run preserves every public node identifier,
@@ -81,8 +98,20 @@ def main() -> None:
         uses eight disjoint movies and requires a strict matched-node gain.
         Four acceptance movies stay sealed unless that gate passes. There is no
         leaderboard feedback and no submission path.
-        """,
-    )
+        """
+        required_graph_stems = (*SCREEN_STEMS, *ACCEPTANCE_STEMS)
+    else:
+        description = f"""
+        # Predeclared LSM-FM refinement of frozen public graph nodes
+
+        This private acceptance run preserves every public node identifier,
+        node count, and edge. It evaluates exactly one strategy,
+        `{PREDECLARED_STRATEGY}`, frozen before any labels are read. The choice
+        comes from prior independent detector localization evidence, not these
+        four movies or leaderboard feedback. There is no submission path.
+        """
+        required_graph_stems = ACCEPTANCE_STEMS
+    set_source(notebook["cells"][1], description)
 
     setup = source(notebook["cells"][2])
     old_hash_line = next(
@@ -97,6 +126,30 @@ def main() -> None:
         if old not in setup:
             raise ValueError(f"setup template changed: {old}")
         setup = setup.replace(old, new)
+    old_probe = '''probe = importlib.import_module("tracksdata").graph.IndexedRXGraph.from_geff(
+    graph_runtime / "validator_raw" / "44b6_12dfb391.geff"
+)
+probe = probe[0] if isinstance(probe, tuple) else probe
+if probe.node_attrs().height <= 0 or probe.edge_attrs().height <= 0:
+    raise RuntimeError("baseline graph IO probe is empty")'''
+    required_literal = repr(tuple(required_graph_stems))
+    new_probe = f'''required_public_graph_stems = {required_literal}
+missing_public_graphs = [
+    stem for stem in required_public_graph_stems
+    if not (graph_runtime / "validator_raw" / f"{{stem}}.geff").is_dir()
+]
+if missing_public_graphs:
+    raise FileNotFoundError({{"missing_public_graph_stems": missing_public_graphs}})
+for stem in required_public_graph_stems:
+    probe = importlib.import_module("tracksdata").graph.IndexedRXGraph.from_geff(
+        graph_runtime / "validator_raw" / f"{{stem}}.geff"
+    )
+    probe = probe[0] if isinstance(probe, tuple) else probe
+    if probe.node_attrs().height <= 0 or probe.edge_attrs().height <= 0:
+        raise RuntimeError(f"baseline graph IO probe is empty: {{stem}}")'''
+    if setup.count(old_probe) != 1:
+        raise ValueError("setup graph-coverage probe changed")
+    setup = setup.replace(old_probe, new_probe)
     set_source(notebook["cells"][2], setup)
 
     set_source(
@@ -139,6 +192,17 @@ def main() -> None:
         }, indent=2, sort_keys=True))
         ''',
     )
+    if PREDECLARED_STRATEGY is not None:
+        launch = source(notebook["cells"][3])
+        marker = '    "--max-wall-seconds", "3000",\n]'
+        replacement = (
+            '    "--max-wall-seconds", "3000",\n'
+            f'    "--predeclared-strategy", "{PREDECLARED_STRATEGY}",\n'
+            ']'
+        )
+        if launch.count(marker) != 1:
+            raise ValueError("launch command template changed")
+        set_source(notebook["cells"][3], launch.replace(marker, replacement))
 
     finish = source(notebook["cells"][4])
     old = 'print("LSM-FM boundary refinement complete; no submission was created.")'
@@ -153,7 +217,7 @@ def main() -> None:
     )
     metadata = {
         "id": f"indarkarhana/{KAGGLE_SLUG}",
-        "title": "Biohub LSM-FM Public Node Refinement v1",
+        "title": KAGGLE_TITLE,
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

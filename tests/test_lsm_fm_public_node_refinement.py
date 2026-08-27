@@ -6,6 +6,7 @@ from research.lsm_fm_detection.evaluate_public_node_refinement import (
     CONTROL_NAME,
     PublicNodeStrategy,
     refine_public_points,
+    resolve_predeclared_strategy,
     select_public_node_strategy,
 )
 
@@ -81,3 +82,18 @@ def test_strategy_rejects_invalid_blend() -> None:
 
     with pytest.raises(ValueError, match="blend"):
         PublicNodeStrategy("invalid", 1, 2.0, 1.01)
+
+
+def test_predeclared_strategy_is_frozen_and_non_control() -> None:
+    strategy = resolve_predeclared_strategy("public_lsm_r2_p2_b025")
+    assert strategy == PublicNodeStrategy(
+        "public_lsm_r2_p2_b025", radius=2, probability_power=2.0, blend=0.25
+    )
+
+
+def test_predeclared_strategy_fails_closed_for_control_or_unknown() -> None:
+    import pytest
+
+    for name in (CONTROL_NAME, "unknown"):
+        with pytest.raises(ValueError, match="invalid predeclared"):
+            resolve_predeclared_strategy(name)

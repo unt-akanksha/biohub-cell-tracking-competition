@@ -56,6 +56,9 @@ def main() -> None:
         {
             "architecture": "independent frozen 35.1M-parameter LSM-FM feature-36 detector",
             "coordinate_base": "frozen clean public graph",
+            "public_graph_used_as_base": True,
+            "public_predictions_copied": True,
+            "exact_public_replica": False,
             "node_ids_preserved": True,
             "node_count_preserved": True,
             "edges_preserved": True,

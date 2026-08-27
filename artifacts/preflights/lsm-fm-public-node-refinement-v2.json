@@ -1,0 +1,143 @@
+{
+  "checks": [
+    {
+      "detail": "Four code cells compile; 11 focused tests pass; predeclared strategy resolution and exact integer-space scoring are covered.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v2/biohub-lsm-fm-public-node-refinement-v2.ipynb",
+          "sha256": "1d4c625145038accb7cf1b28fd14b977f5973989a78dbbd886696814bdf21d06"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v2-version1/evaluate_public_node_refinement.py",
+          "sha256": "8bd3000c9dc99faf1549a85fed89ec295159f56f8bd9b197a967566484a1e929"
+        },
+        {
+          "path": "tests/test_lsm_fm_public_node_refinement.py",
+          "sha256": "843931889bc0584fdbcc9d9785eba13d1498fa290b7ae7df1afc3e0a24f2c59e"
+        },
+        {
+          "path": "tests/test_lsm_fm_public_node_packaging.py",
+          "sha256": "9b2423003580f185585dee4e2ed5b781d098b17ce14a6a268508124419a1f43f"
+        },
+        {
+          "path": "tests/test_lsm_fm_public_node_exact.py",
+          "sha256": "60a229c0f7d81ed6926f815826b02912e34027808e348d5b33a9af2e5b57f6d2"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The independently downloaded private runtime is exact-hash verified. Competition input and the public graph source remain attached with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-public-node-refinement-v2.json",
+          "sha256": "7328c85739cfd638a16306d1f25ba5600d63f0133bcc5e67dc8cc5bf319ba274"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v2/kernel-metadata.json",
+          "sha256": "ed9dbdc61162ea0b202d7d03290b7385d04eadbe7f3ece02b57a18b99ebacd0a"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v2-version1/SOURCE_MANIFEST.json",
+          "sha256": "7d3ab65f733fbe82a8a5207932cc74fcdf4581cf2bca13482c32c10572156b15"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The frozen radius-2/power-2/0.25 strategy is bounded, non-control, and selected without label access; invalid names fail closed.",
+      "evidence": [
+        {
+          "path": "tests/test_lsm_fm_public_node_refinement.py",
+          "sha256": "843931889bc0584fdbcc9d9785eba13d1498fa290b7ae7df1afc3e0a24f2c59e"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only experiment; the frozen 35.1M-parameter detector is strict-hash loaded and no optimizer exists.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "The base checkpoint, learned detector, training result, and source launcher are exact-hash bound before loading.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v2-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only acceptance evidence and four refined GEFFs can be written; submission artifacts cause failure and no competition-submit command exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v2/biohub-lsm-fm-public-node-refinement-v2.ipynb",
+          "sha256": "1d4c625145038accb7cf1b28fd14b977f5973989a78dbbd886696814bdf21d06"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v2-version1/evaluate_public_node_refinement.py",
+          "sha256": "8bd3000c9dc99faf1549a85fed89ec295159f56f8bd9b197a967566484a1e929"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "The notebook verifies all four required public-control GEFF directories and nonempty graph IO before evaluator launch.",
+      "evidence": [
+        {
+          "path": ".biohub/staging/biohub-trackastra-graph-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "202c976c888adeb9ae907e00f965a1b95e17f8aacdbcde830f948526d2db78e7"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v2/biohub-lsm-fm-public-node-refinement-v2.ipynb",
+          "sha256": "1d4c625145038accb7cf1b28fd14b977f5973989a78dbbd886696814bdf21d06"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "Public graph inheritance is explicit, exact-public-replica is false, and coordinate displacement comes from independent LSM-FM image evidence.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-public-node-refinement-v2.json",
+          "sha256": "7328c85739cfd638a16306d1f25ba5600d63f0133bcc5e67dc8cc5bf319ba274"
+        },
+        {
+          "path": "reports/experiments/lsm-fm-public-node-refinement-v2-design.md",
+          "sha256": "d63521e0d405509f10c1ba0c894e4a36526534fcd09094c4f481314180d5f2ca"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v2-version1/SOURCE_MANIFEST.json",
+          "sha256": "7d3ab65f733fbe82a8a5207932cc74fcdf4581cf2bca13482c32c10572156b15"
+        }
+      ],
+      "name": "provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T01:48:48.072956Z",
+  "report_sha256": "f6da58742878df21908f4c7f31c33e07122c34aa03e38c029f3eba4153ca2cd3",
+  "run_id": "lsm-fm-public-node-refinement-v2",
+  "schema_version": 1
+}

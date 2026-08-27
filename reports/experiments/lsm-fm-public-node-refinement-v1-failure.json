@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-public-node-refinement-v1",
+  "status": "failed",
+  "actual_kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-refinement-v1",
+  "elapsed_seconds": 105.603,
+  "actual_gpu_hours": "0.04",
+  "quota_after_hours": "24.52",
+  "failure_class": "input_coverage_contract",
+  "failure_reason": "The attached public-graph runtime contains the four acceptance controls but none of the eight requested selection controls. Evaluation stopped on missing 44b6_d29c9ab2.geff before reading any selection or acceptance label.",
+  "missing_first_path": "/kaggle/input/datasets/indarkarhana/biohub-trackastra-graph-runtime-v1/validator_raw/44b6_d29c9ab2.geff",
+  "result_exists": false,
+  "acceptance_labels_opened": false,
+  "competition_submission_performed": false,
+  "public_graph_used_as_base": true,
+  "exact_public_replica": false,
+  "evidence": {
+    "launcher_terminal_sha256": "9f83d9e5619d5d976da14153abf8ce0715b70f820c6c19314d84e8c2aed1e1cc",
+    "kernel_log_sha256": "04b6315c48a38051ba5df275855d1c4e4f2dec4760b94d2cafede46e1acc380c"
+  },
+  "repair": "A new v2 run will use one strategy frozen from prior independent detector evidence, perform no label-based hyperparameter selection, verify all four required control graphs before launching, and retain the pinned integer-space official metric as the final diagnostic gate."
+}

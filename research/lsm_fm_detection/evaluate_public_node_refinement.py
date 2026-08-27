@@ -88,6 +88,15 @@ STRATEGIES = (
 )
 
 
+def resolve_predeclared_strategy(name: str) -> PublicNodeStrategy:
+    """Return one non-control strategy without reading selection labels."""
+
+    matches = [strategy for strategy in STRATEGIES if strategy.name == name]
+    if len(matches) != 1 or name == CONTROL_NAME:
+        raise ValueError(f"invalid predeclared public-node strategy: {name}")
+    return matches[0]
+
+
 def refine_public_points(
     probability: np.ndarray,
     points_input: np.ndarray,
@@ -343,6 +352,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=1)
     parser.add_argument("--max-wall-seconds", type=float, default=3000.0)
+    parser.add_argument(
+        "--predeclared-strategy",
+        help=(
+            "Skip hyperparameter selection and evaluate exactly this frozen "
+            "non-control strategy on the acceptance movies."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -380,20 +396,37 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
 
-    selection_rows = evaluate_movies(
-        model,
-        args.competition_dir,
-        args.public_predictions,
-        SCREEN_STEMS,
-        device=device,
-        batch_size=args.batch_size,
-        strategies=STRATEGIES,
-        partial_path=args.output_dir / "selection_public_node_refinement_partial.json",
-        started=started,
-        max_wall_seconds=args.max_wall_seconds,
-    )
-    selection = {name: summarize_rows(rows) for name, rows in selection_rows.items()}
-    selected, diagnostics = select_public_node_strategy(selection)
+    if args.predeclared_strategy:
+        selected_strategy = resolve_predeclared_strategy(args.predeclared_strategy)
+        selected = selected_strategy.name
+        selection = None
+        diagnostics = {
+            selected: {
+                "selection_passed": True,
+                "selection_source": "predeclared_without_label_access",
+            }
+        }
+        selection_mode = "predeclared_without_label_access"
+        selection_stems: list[str] = []
+    else:
+        selection_rows = evaluate_movies(
+            model,
+            args.competition_dir,
+            args.public_predictions,
+            SCREEN_STEMS,
+            device=device,
+            batch_size=args.batch_size,
+            strategies=STRATEGIES,
+            partial_path=args.output_dir / "selection_public_node_refinement_partial.json",
+            started=started,
+            max_wall_seconds=args.max_wall_seconds,
+        )
+        selection = {
+            name: summarize_rows(rows) for name, rows in selection_rows.items()
+        }
+        selected, diagnostics = select_public_node_strategy(selection)
+        selection_mode = "held_out_strategy_selection"
+        selection_stems = list(SCREEN_STEMS)
     result: dict[str, Any] = {
         "schema_version": 1,
         "status": "completed",
@@ -401,6 +434,11 @@ def main() -> None:
         "selection_diagnostics": diagnostics,
         "selected_strategy": selected,
         "selection_passed": selected is not None,
+        "selection_mode": selection_mode,
+        "selection_stems": selection_stems,
+        "acceptance_stems": list(ACCEPTANCE_STEMS),
+        "hyperparameter_selection_performed": args.predeclared_strategy is None,
+        "predeclared_strategy": args.predeclared_strategy,
         "acceptance": None,
         "acceptance_opened": False,
         "promotion_passed": False,

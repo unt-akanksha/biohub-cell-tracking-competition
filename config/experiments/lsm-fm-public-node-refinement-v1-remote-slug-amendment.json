@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-public-node-refinement-v1",
+  "classification": "execution_metadata_only",
+  "competition_submission_performed": false,
+  "old_kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-refine-v1",
+  "actual_kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-refinement-v1",
+  "reason": "Kaggle canonicalized the remote slug from the notebook title even though kernel-metadata.json requested the shorter slug. The scientific notebook was unchanged."
+}

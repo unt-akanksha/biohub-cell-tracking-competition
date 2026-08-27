@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-public-node-refinement-v2",
+  "parent": "lsm-fm-public-node-refinement-v1",
+  "hypothesis": "A conservative radius-2, power-2, 0.25 blend from frozen public nodes toward an independently trained 35.1M-parameter LSM-FM probability centroid will improve integer-submission-space organizer score without changing node IDs, counts, frame assignments, or graph topology.",
+  "scientific_change_from_parent": "Replace the unavailable eight-movie strategy sweep with one strategy frozen before label access from prior independent detector evidence; all four available control movies are used only for acceptance.",
+  "accelerator": "NvidiaTeslaT4",
+  "declared_max_runtime_hours": "1.00",
+  "watchdog_hard_stop_seconds": 3300,
+  "evaluator_max_wall_seconds": 3000,
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-preset-v2",
+  "runtime_dataset_ref": "indarkarhana/biohub-lsm-fm-public-node-runtime-v2@version1",
+  "runtime_builder_sha256": "aa77c82ab39ff5ebf6dca7604e5a8658528fe49a1b15a7dc27ab5a714ac0ca13",
+  "kernel_builder_sha256": "6ce52dd77ed37a97ceaa1272fd608957073c3532124d775c56c3e71480aa369d",
+  "evaluator_sha256": "8bd3000c9dc99faf1549a85fed89ec295159f56f8bd9b197a967566484a1e929",
+  "notebook_sha256": "1d4c625145038accb7cf1b28fd14b977f5973989a78dbbd886696814bdf21d06",
+  "kernel_metadata_sha256": "ed9dbdc61162ea0b202d7d03290b7385d04eadbe7f3ece02b57a18b99ebacd0a",
+  "runtime_manifest_sha256": "7d3ab65f733fbe82a8a5207932cc74fcdf4581cf2bca13482c32c10572156b15",
+  "exact_diagnostic_scorer_sha256": "e27fed90266f1f1f98008700ac799d5748cd455f0533bf6c2b1d211157bad8eb",
+  "dataset_sources": [
+    "indarkarhana/biohub-lsm-fm-public-node-runtime-v2@version1",
+    "indarkarhana/biohub-trackastra-graph-runtime-v1",
+    "pilkwang/biohub-tracking-support-pack-50ep-v1"
+  ],
+  "kernel_sources": [
+    "indarkarhana/biohub-lsm-fm-pu-adaptation-v2",
+    "indarkarhana/biohub-lsm-fm-image-text-pu-adaptation-v1"
+  ],
+  "predeclared_strategy": {
+    "name": "public_lsm_r2_p2_b025",
+    "radius_voxels": 2,
+    "probability_power": 2.0,
+    "blend": 0.25,
+    "selection_source": "prior independent feature-36 detector localization experiments; no public-node acceptance labels or leaderboard feedback"
+  },
+  "validation": {
+    "selection_movies": 0,
+    "hyperparameter_selection_performed": false,
+    "acceptance_movies": 4,
+    "required_public_graph_coverage_checked_before_evaluation": true,
+    "maximum_movie_recall_regression": 0.002,
+    "exact_native_and_integer_submission_scoring_required_after_node_gate": true,
+    "public_leaderboard_used_for_selection": false
+  },
+  "frozen_detector": {
+    "architecture": "LSM-FM image-text SwinUNETR feature-36 plus Biohub heatmap head",
+    "parameters": 35072515,
+    "base_checkpoint_sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7",
+    "learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+  },
+  "public_graph_used_as_base": true,
+  "public_predictions_copied": true,
+  "exact_public_replica": false,
+  "public_graph_topology_preserved": true,
+  "coordinate_source": "independent_lsm_fm_probability",
+  "competition_submission_performed": false,
+  "submission_path_present": false,
+  "future_submission_requirement": "Any eventual competition submission requires explicit user authorization, exactly two CUDA devices, and whole-movie sharding."
+}
