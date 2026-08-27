@@ -53,6 +53,7 @@ def test_contextual_trainer_configures_reciprocal_engine_and_restores() -> None:
         "WORKER_SCRIPT_PATH",
         "family_metadata",
         "pair_logits_for_transition",
+        "pair_loss_for_transition",
         "validate_pair_model",
     )
     original = {name: getattr(generic, name) for name in names}
@@ -65,6 +66,10 @@ def test_contextual_trainer_configures_reciprocal_engine_and_restores() -> None:
         assert generic.WORKER_SCRIPT_PATH == Path(contextual.__file__).resolve()
         assert generic.family_metadata is contextual.contextual_family_metadata
         assert generic.pair_logits_for_transition is contextual.contextual_pair_adapter
+        assert (
+            generic.pair_loss_for_transition
+            is contextual.contextual_bidirectional_pair_nll
+        )
         assert generic.validate_pair_model is contextual.validate_contextual_model
     finally:
         for name, value in original.items():

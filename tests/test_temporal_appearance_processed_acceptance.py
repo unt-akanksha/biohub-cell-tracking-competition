@@ -235,9 +235,11 @@ def test_processed_appearance_sources_accept_contextual_v3_contract(
             "bounded phase-correlation with projection refinement, duplicate evidence, "
             "and robust residual-motion context"
         ),
-        "pair_loss_policy": (
-            "all-positive contextual candidate-pair mean-log-probability"
-        ),
+            "pair_loss_policy": (
+                "outgoing all-positive child ranking plus eligible incoming "
+                "one-parent ranking"
+            ),
+            "reciprocal_parent_loss_weight": 0.35,
         "embedding_auxiliary_loss_weight": 0.25,
         "pair_chunk_size": 4_096,
     }

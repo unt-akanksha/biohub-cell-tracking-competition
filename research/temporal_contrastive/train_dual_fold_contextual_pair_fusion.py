@@ -25,8 +25,10 @@ try:
         EDGE_SET_FEATURE_WIDTH,
         EDGE_TOKEN_WIDTH,
         EXPECTED_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         TRANSITION_CONTEXT_POLICY,
         ContextualPairFusionAssociationModel,
+        contextual_bidirectional_pair_nll,
     )
     from contextual_training import (
         contextual_pair_logits_for_transition,
@@ -46,8 +48,10 @@ except ModuleNotFoundError:
         EDGE_SET_FEATURE_WIDTH,
         EDGE_TOKEN_WIDTH,
         EXPECTED_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         TRANSITION_CONTEXT_POLICY,
         ContextualPairFusionAssociationModel,
+        contextual_bidirectional_pair_nll,
     )
     from research.temporal_contrastive.contextual_training import (
         contextual_pair_logits_for_transition,
@@ -73,6 +77,7 @@ def contextual_family_metadata() -> dict[str, object]:
         "contextual_pair_policy": CONTEXTUAL_PAIR_POLICY,
         "transition_context_policy": TRANSITION_CONTEXT_POLICY,
         "pair_loss_policy": CONTEXTUAL_PAIR_LOSS_POLICY,
+        "reciprocal_parent_loss_weight": RECIPROCAL_PARENT_LOSS_WEIGHT,
         "embedding_auxiliary_loss_weight": (
             generic.EMBEDDING_AUXILIARY_LOSS_WEIGHT
         ),
@@ -124,6 +129,7 @@ def configure() -> None:
     generic.WORKER_SCRIPT_PATH = Path(__file__).resolve()
     generic.family_metadata = contextual_family_metadata
     generic.pair_logits_for_transition = contextual_pair_adapter
+    generic.pair_loss_for_transition = contextual_bidirectional_pair_nll
     generic.validate_pair_model = validate_contextual_model
 
 

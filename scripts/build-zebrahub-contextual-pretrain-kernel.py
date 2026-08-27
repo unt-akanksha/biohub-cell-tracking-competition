@@ -99,7 +99,7 @@ import zipfile
 import torch
 
 EXPECTED_DATASET_MANIFEST_SHA256 = "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "7912b0ad2f6fa806abd931fa43a43d3327e7efdad07f211810557203844a2be4"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "e7025eb3c6fbb8b648e540f20a5dd4da9aa0982f478efe8bbd999428db04099e"
 
 
 def first_existing(candidates):
@@ -283,6 +283,10 @@ valid_folds = bool(
         and row.get("dataset_manifest_sha256") == EXPECTED_DATASET_MANIFEST_SHA256
         and row.get("augmentation_mode") == "microscopy_v1"
         and row.get("validation_augmentation") == "none"
+        and row.get("reciprocal_parent_loss_weight") == 0.35
+        and row.get("shard_cache_policy")
+            == "verified immutable tensors preloaded once per GPU"
+        and row.get("validation_precision") == "CUDA float16 autocast"
         and row.get("competition_data_read") is False
         and row.get("public_predictions_copied") is False
         and row.get("public_leaderboard_used_for_selection") is False
@@ -345,7 +349,8 @@ def main() -> None:
                 "# Original ZebraHub contextual pretraining\n\n"
                 "Two independently seeded project-authored 20.7M-parameter contextual "
                 "models optimize only the frozen ZSNS004 derived shards and select EMA "
-                "checkpoints only on disjoint ZSNS005 shards. The competition dataset, "
+                "checkpoints only on disjoint ZSNS005 shards. Outgoing child and incoming "
+                "parent ranking are trained jointly. The competition dataset, "
                 "public predictions, leaderboard selection, and submission are excluded.\n"
             ),
             code_cell(SETUP),

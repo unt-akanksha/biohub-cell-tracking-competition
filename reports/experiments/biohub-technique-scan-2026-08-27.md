@@ -226,11 +226,11 @@ source/provenance mismatch fails before optimization. This publication and
 verification used no Kaggle GPU and created no competition submission.
 
 The rebuilt portable v3 runtime contains 36 hash-bound source files and passed
-its independent integrity check over 527,241 bytes with manifest SHA-256
-`7912b0ad2f6fa806abd931fa43a43d3327e7efdad07f211810557203844a2be4`.
+its independent integrity check over 534,585 bytes with manifest SHA-256
+`e7025eb3c6fbb8b648e540f20a5dd4da9aa0982f478efe8bbd999428db04099e`.
 It declares exactly two visible GPUs and contains no submission command. The
-focused dataset/runtime checks passed 20/20, and the expanded temporal,
-contextual, and ZebraHub regression set passed 98/98. No pretraining launch is
+focused dataset/runtime checks passed 20/20, and the latest temporal,
+contextual, ZebraHub, and appearance-contract regression set passed 100/100. No pretraining launch is
 authorized while the current two-GPU v1 evidence gate is still running.
 
 ## Staged original pretraining kernel
@@ -240,8 +240,10 @@ The code-only runtime is private Kaggle dataset
 superseded because it predates microscopy-safe augmentation; version 2 forced
 per-step GPU synchronization; version 3 accepted the division-biased shards;
 version 4 allowed a post-publication flag to perturb rebuild hashes. Version 5
-is the only admissible pretraining runtime. A complete remote
-redownload reproduced the 36-file, 527,241-byte integrity inventory and exact
+lacks the reciprocal-parent objective and cached AMP validation; version 6
+leaves contextual candidate-edge inference in FP32. Version 7 is the only
+admissible pretraining and inference runtime. A complete remote redownload
+reproduced the 36-file, 534,585-byte integrity inventory and exact
 runtime manifest above. This publication used no GPU.
 
 The deterministic private notebook
@@ -279,3 +281,45 @@ tests pass. The final implementation derives the discrete spatial transform
 from the worker's seeded CPU sampler and keeps gain/noise generation on-device,
 avoiding eight GPU synchronization points per optimization step. No GPU was
 used for this change.
+
+## Reciprocal lineage objective and runtime hardening
+
+A final prelaunch objective audit found that v3 compared both outgoing and
+incoming edge sets in its contextual head, but optimized only the outgoing
+child ranking. This left the biological at-most-one-parent constraint to be
+learned indirectly. Trackastra's published formulation applies a parental
+normalization and its linking stage enforces at most one parent and at most two
+children per vertex. The v3 loss now preserves the all-positive outgoing
+daughter objective and adds a fixed 0.35-weight incoming-parent ranking term.
+Only labeled targets with at least one competing candidate parent contribute;
+uncontested targets remain neutral. In the frozen balanced assets, 3,948 of
+4,434 training links and 1,019 of 1,124 validation links have this reciprocal
+signal, and every labeled target has exactly one true parent. This is a
+predeclared structural improvement, not leaderboard tuning. Primary evidence:
+[Trackastra paper](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/09819.pdf).
+
+The same audit addressed the previous timeout risk without reducing training
+coverage. Each isolated worker now verifies and preloads the immutable 64/16
+shards once instead of decompressing and transferring one archive on every
+step, and ZSNS005 validation uses CUDA FP16 autocast just like training. Shallow
+dictionary copies isolate augmentation assignments from the cached tensors;
+validation stays unaugmented. The new loss, empty-competition behavior,
+gradients, cache completeness, assignment isolation, metadata propagation, and
+downstream fail-closed contracts are covered by focused CPU tests. No GPU,
+competition data, leaderboard feedback, or submission was used.
+
+The exact balanced production shards were replayed with seed 31003 after this
+change. ZSNS004 `t=100` produced 2,800/2,800 finite candidate logits, outgoing
+loss 3.771015, incoming-parent loss 3.378578, total weighted loss 5.882180, and
+64/64 finite populated gradients. Disjoint ZSNS005 `t=96` produced
+1,258/1,258 finite logits, outgoing loss 2.846684, incoming-parent loss
+2.871466, total weighted loss 4.592559, and 64/64 finite gradients. These
+random-initialization values are implementation smokes only; checkpoint
+selection still requires improvement on the complete frozen ZSNS005 inventory.
+
+The production v3 candidate scorer now also evaluates its edge-token and
+contextual edge-head MLPs under CUDA FP16 autocast. Node-patch encoding and the
+base Trackastra scorer already used autocast; leaving the dense candidate-edge
+head in FP32 would have preserved a large avoidable T4 bottleneck. CPU behavior
+is unchanged, outputs are converted to finite FP32 probabilities, and the
+two-GPU whole-movie sharding and ten-hour hard stop remain mandatory.

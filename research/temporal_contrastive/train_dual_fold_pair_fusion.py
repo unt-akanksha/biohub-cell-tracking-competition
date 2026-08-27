@@ -62,6 +62,7 @@ EMBEDDING_AUXILIARY_LOSS_WEIGHT = 0.25
 APPEARANCE_FAMILY = PAIR_FUSION_FAMILY
 MODEL_CLASS = PhysicalPairFusionAssociationModel
 WORKER_SCRIPT_PATH = Path(__file__).resolve()
+pair_loss_for_transition = masked_multi_positive_pair_nll
 
 
 def family_metadata() -> dict[str, object]:
@@ -461,7 +462,7 @@ def train_worker(args: argparse.Namespace) -> None:
                 source_volume=source_volume,
                 target_volume=target_volume,
             )
-            pair_loss = masked_multi_positive_pair_nll(
+            pair_loss = pair_loss_for_transition(
                 pair_logits, positives, candidates
             )
             embedding_loss = masked_multi_positive_info_nce(

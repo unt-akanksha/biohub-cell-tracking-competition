@@ -16,6 +16,7 @@ try:
         EDGE_SET_FEATURE_WIDTH,
         EDGE_TOKEN_WIDTH,
         EXPECTED_PARAMETER_COUNT as CONTEXTUAL_PAIR_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         TRANSITION_CONTEXT_POLICY,
         ContextualPairFusionAssociationModel,
         contextual_pair_fusion_scores_for_movie,
@@ -46,6 +47,7 @@ except ModuleNotFoundError:
         EDGE_SET_FEATURE_WIDTH,
         EDGE_TOKEN_WIDTH,
         EXPECTED_PARAMETER_COUNT as CONTEXTUAL_PAIR_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         TRANSITION_CONTEXT_POLICY,
         ContextualPairFusionAssociationModel,
         contextual_pair_fusion_scores_for_movie,
@@ -129,6 +131,7 @@ CONTEXTUAL_PAIR_METADATA_KEYS = (
     "contextual_pair_policy",
     "transition_context_policy",
     "pair_loss_policy",
+    "reciprocal_parent_loss_weight",
     "embedding_auxiliary_loss_weight",
     "pair_chunk_size",
 )
@@ -202,6 +205,8 @@ def verify_appearance_metadata(
             and payload.get("transition_context_policy")
             == TRANSITION_CONTEXT_POLICY
             and payload.get("pair_loss_policy") == CONTEXTUAL_PAIR_LOSS_POLICY
+            and payload.get("reciprocal_parent_loss_weight")
+            == RECIPROCAL_PARENT_LOSS_WEIGHT
             and payload.get("embedding_auxiliary_loss_weight")
             == PAIR_FUSION_EMBEDDING_LOSS_WEIGHT
             and payload.get("pair_chunk_size") == DEFAULT_PAIR_CHUNK_SIZE

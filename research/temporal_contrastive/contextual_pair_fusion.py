@@ -15,7 +15,10 @@ import torch.nn.functional as F
 from torch import nn
 
 try:
-    from pair_fusion import DEFAULT_CANDIDATE_RADIUS_UM
+    from pair_fusion import (
+        DEFAULT_CANDIDATE_RADIUS_UM,
+        masked_multi_positive_pair_nll,
+    )
     from patch_model import PhysicalPatchAssociationModel
     from transition_context import (
         CANDIDATE_CONTEXT_WIDTH,
@@ -25,6 +28,7 @@ try:
 except ModuleNotFoundError:
     from research.temporal_contrastive.pair_fusion import (
         DEFAULT_CANDIDATE_RADIUS_UM,
+        masked_multi_positive_pair_nll,
     )
     from research.temporal_contrastive.patch_model import (
         PhysicalPatchAssociationModel,
@@ -45,8 +49,9 @@ TRANSITION_CONTEXT_POLICY = (
     "and robust residual-motion context"
 )
 CONTEXTUAL_PAIR_LOSS_POLICY = (
-    "all-positive contextual candidate-pair mean-log-probability"
+    "outgoing all-positive child ranking plus eligible incoming one-parent ranking"
 )
+RECIPROCAL_PARENT_LOSS_WEIGHT = 0.35
 BASE_PAIR_FEATURE_WIDTH = 1_029
 CONTEXTUAL_PAIR_FEATURE_WIDTH = BASE_PAIR_FEATURE_WIDTH + CANDIDATE_CONTEXT_WIDTH
 EDGE_TOKEN_HIDDEN_WIDTH = 512
@@ -55,6 +60,59 @@ EDGE_SET_FEATURE_WIDTH = 6 * EDGE_TOKEN_WIDTH
 EDGE_HEAD_HIDDEN_WIDTHS = (512, 128)
 DEFAULT_PAIR_CHUNK_SIZE = 4_096
 EXPECTED_PARAMETER_COUNT = 20_747_761
+
+
+def masked_reciprocal_parent_nll(
+    logits: torch.Tensor,
+    positive_mask: torch.Tensor,
+    candidate_mask: torch.Tensor,
+) -> torch.Tensor:
+    """Rank each labeled child among candidate parents when competition exists.
+
+    A target with only its true parent in the candidate set provides no
+    incoming ranking signal and is skipped. This preserves the sparse-label
+    contract while teaching the biological at-most-one-parent constraint.
+    """
+
+    if logits.ndim != 2:
+        raise ValueError("contextual pair logits must be a matrix")
+    if positive_mask.shape != logits.shape or candidate_mask.shape != logits.shape:
+        raise ValueError("positive and candidate masks must match pair logits")
+    if positive_mask.dtype != torch.bool or candidate_mask.dtype != torch.bool:
+        raise ValueError("positive and candidate masks must be boolean")
+    if torch.any(positive_mask & ~candidate_mask):
+        raise ValueError("a ground-truth link is absent from the candidate mask")
+    if torch.any(torch.isfinite(logits) != candidate_mask):
+        raise ValueError("finite pair logits must exactly match candidate eligibility")
+    incoming_logits = logits.transpose(0, 1)
+    incoming_positives = positive_mask.transpose(0, 1)
+    incoming_candidates = candidate_mask.transpose(0, 1)
+    eligible = incoming_positives.any(dim=1) & (
+        incoming_candidates.sum(dim=1) > incoming_positives.sum(dim=1)
+    )
+    if not torch.any(eligible):
+        return logits[candidate_mask].sum() * 0.0
+    return masked_multi_positive_pair_nll(
+        incoming_logits[eligible],
+        incoming_positives[eligible],
+        incoming_candidates[eligible],
+    )
+
+
+def contextual_bidirectional_pair_nll(
+    logits: torch.Tensor,
+    positive_mask: torch.Tensor,
+    candidate_mask: torch.Tensor,
+) -> torch.Tensor:
+    """Combine outgoing lineage ranking with an incoming-parent constraint."""
+
+    outgoing = masked_multi_positive_pair_nll(
+        logits, positive_mask, candidate_mask
+    )
+    incoming = masked_reciprocal_parent_nll(
+        logits, positive_mask, candidate_mask
+    )
+    return outgoing + RECIPROCAL_PARENT_LOSS_WEIGHT * incoming
 
 
 def _positive_radius(value: float) -> float:
@@ -321,17 +379,22 @@ def contextual_pair_fusion_scores_for_movie(
             transition,
             candidate_radius_um=candidate_radius_um,
         )
-        logits = model.candidate_pair_logits(
-            embedding_tensor[source_rows],
-            embedding_tensor[target_rows],
-            coordinate_tensor[source_rows],
-            coordinate_tensor[target_rows],
-            division_tensor[source_rows],
-            torch.as_tensor(candidates, dtype=torch.bool, device=device),
-            torch.as_tensor(context, dtype=torch.float32, device=device),
-            candidate_radius_um=candidate_radius_um,
-            chunk_size=chunk_size,
-        )
+        with torch.autocast(
+            device_type=device.type,
+            dtype=torch.float16,
+            enabled=device.type == "cuda",
+        ):
+            logits = model.candidate_pair_logits(
+                embedding_tensor[source_rows],
+                embedding_tensor[target_rows],
+                coordinate_tensor[source_rows],
+                coordinate_tensor[target_rows],
+                division_tensor[source_rows],
+                torch.as_tensor(candidates, dtype=torch.bool, device=device),
+                torch.as_tensor(context, dtype=torch.float32, device=device),
+                candidate_radius_um=candidate_radius_um,
+                chunk_size=chunk_size,
+            )
         probabilities = np.full(candidates.shape, 0.5, dtype=np.float32)
         if np.any(candidates):
             probabilities[candidates] = (

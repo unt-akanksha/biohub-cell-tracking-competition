@@ -17,6 +17,7 @@ from research.temporal_contrastive.contextual_pair_fusion import (
     CONTEXTUAL_PAIR_POLICY,
     EDGE_HEAD_HIDDEN_WIDTHS,
     EDGE_TOKEN_WIDTH,
+    RECIPROCAL_PARENT_LOSS_WEIGHT,
     TRANSITION_CONTEXT_POLICY,
     ContextualPairFusionAssociationModel,
     contextual_pair_fusion_scores_for_movie,
@@ -96,6 +97,7 @@ def test_contextual_family_contract_is_exact_and_buildable() -> None:
         "contextual_pair_policy": CONTEXTUAL_PAIR_POLICY,
         "transition_context_policy": TRANSITION_CONTEXT_POLICY,
         "pair_loss_policy": CONTEXTUAL_PAIR_LOSS_POLICY,
+        "reciprocal_parent_loss_weight": RECIPROCAL_PARENT_LOSS_WEIGHT,
         "embedding_auxiliary_loss_weight": 0.25,
         "pair_chunk_size": 4_096,
     }

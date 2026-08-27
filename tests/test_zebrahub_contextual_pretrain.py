@@ -11,13 +11,17 @@ import torch
 from research.temporal_contrastive import train_dual_fold_pair_fusion as generic
 from research.temporal_contrastive.contextual_pair_fusion import (
     ContextualPairFusionAssociationModel,
+    contextual_bidirectional_pair_nll,
+    masked_reciprocal_parent_nll,
 )
 from research.temporal_contrastive.train_zebrahub_contextual_pretrain import (
     CONTEXTUAL_PAIR_FUSION_FAMILY,
     augment_normalized_patches,
+    cached_batch,
     discover_shards,
     inventory_sha256,
     load_shard,
+    preload_shards,
     shard_forward,
 )
 
@@ -98,15 +102,67 @@ def test_pretraining_shard_runs_contextual_loss_backward(tmp_path: Path) -> None
     )
     batch = load_shard(path, torch.device("cpu"))
 
-    logits, pair_loss, embedding_loss, division_loss = shard_forward(
+    logits, pair_loss, parent_loss, embedding_loss, division_loss = shard_forward(
         model, batch, patch_batch_size=2
     )
-    loss = pair_loss + 0.25 * embedding_loss + 0.20 * division_loss
+    loss = pair_loss + 0.35 * parent_loss + 0.25 * embedding_loss + 0.20 * division_loss
     loss.backward()
 
     assert torch.isfinite(logits[batch["candidate_mask"]]).all()
     assert torch.isfinite(loss)
     assert any(parameter.grad is not None for parameter in model.parameters())
+
+
+def test_reciprocal_parent_loss_skips_uncontested_targets_and_backpropagates() -> None:
+    logits = torch.tensor(
+        [[3.0, 1.0, float("-inf")], [2.0, float("-inf"), 4.0]],
+        requires_grad=True,
+    )
+    candidates = torch.isfinite(logits)
+    positives = torch.tensor(
+        [[True, False, False], [False, False, True]], dtype=torch.bool
+    )
+
+    parent_loss = masked_reciprocal_parent_nll(logits, positives, candidates)
+    combined = contextual_bidirectional_pair_nll(logits, positives, candidates)
+    combined.backward()
+
+    assert torch.isfinite(parent_loss)
+    assert float(parent_loss.detach()) > 0.0
+    assert logits.grad is not None
+    assert torch.isfinite(logits.grad[candidates]).all()
+
+    uncontested_logits = torch.tensor(
+        [[1.0, float("-inf")], [float("-inf"), 2.0]], requires_grad=True
+    )
+    uncontested_candidates = torch.isfinite(uncontested_logits)
+    uncontested = masked_reciprocal_parent_nll(
+        uncontested_logits,
+        uncontested_candidates,
+        uncontested_candidates,
+    )
+    uncontested.backward()
+    assert float(uncontested.detach()) == 0.0
+    assert torch.equal(
+        uncontested_logits.grad[uncontested_candidates], torch.zeros(2)
+    )
+
+
+def test_preloaded_shards_are_complete_and_assignment_isolated(tmp_path: Path) -> None:
+    path = write_shard(tmp_path, "ZSNS004", "external_pretraining")
+    records = discover_shards(
+        tmp_path,
+        expected_source="ZSNS004",
+        expected_role="external_pretraining",
+    )
+    cache, tensor_bytes = preload_shards(records, torch.device("cpu"))
+    first = cached_batch(cache, path)
+    second = cached_batch(cache, path)
+    first["source_patches"] = torch.zeros_like(first["source_patches"])
+
+    assert tensor_bytes > 0
+    assert first is not second
+    assert not torch.equal(first["source_patches"], second["source_patches"])
 
 
 def test_microscopy_augmentation_is_seeded_finite_and_fixed_shape() -> None:

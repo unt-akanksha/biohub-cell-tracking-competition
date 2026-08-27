@@ -32,7 +32,9 @@ try:
     from contextual_pair_fusion import (
         CONTEXTUAL_PAIR_FUSION_FAMILY,
         EXPECTED_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         ContextualPairFusionAssociationModel,
+        masked_reciprocal_parent_nll,
     )
     from model import masked_multi_positive_info_nce
     from pair_fusion import masked_multi_positive_pair_nll, pair_logit_metrics
@@ -42,7 +44,9 @@ except ModuleNotFoundError:
     from research.temporal_contrastive.contextual_pair_fusion import (
         CONTEXTUAL_PAIR_FUSION_FAMILY,
         EXPECTED_PARAMETER_COUNT,
+        RECIPROCAL_PARENT_LOSS_WEIGHT,
         ContextualPairFusionAssociationModel,
+        masked_reciprocal_parent_nll,
     )
     from research.temporal_contrastive.model import (
         masked_multi_positive_info_nce,
@@ -184,6 +188,34 @@ def load_shard(path: Path, device: torch.device) -> dict[str, torch.Tensor]:
     return result
 
 
+def preload_shards(
+    records: list[ShardRecord], device: torch.device
+) -> tuple[dict[Path, dict[str, torch.Tensor]], int]:
+    """Materialize each verified immutable shard once on the worker device."""
+
+    cache: dict[Path, dict[str, torch.Tensor]] = {}
+    tensor_bytes = 0
+    for record in records:
+        batch = load_shard(record.path, device)
+        cache[record.path] = batch
+        tensor_bytes += sum(
+            value.numel() * value.element_size() for value in batch.values()
+        )
+    if len(cache) != len(records):
+        raise RuntimeError("preloaded shard cache changed the verified inventory")
+    return cache, tensor_bytes
+
+
+def cached_batch(
+    cache: dict[Path, dict[str, torch.Tensor]], path: Path
+) -> dict[str, torch.Tensor]:
+    """Return an assignment-isolated view over immutable cached tensors."""
+
+    if path not in cache:
+        raise KeyError(f"shard is absent from the device cache: {path.name}")
+    return dict(cache[path])
+
+
 def augment_normalized_patches(
     patches: torch.Tensor,
     *,
@@ -253,7 +285,7 @@ def shard_forward(
     batch: dict[str, torch.Tensor],
     *,
     patch_batch_size: int,
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     source, divisions = encode_patches(
         model, batch["source_patches"], batch_size=patch_batch_size
     )
@@ -272,6 +304,9 @@ def shard_forward(
     pair_loss = masked_multi_positive_pair_nll(
         logits, batch["positive_mask"], batch["candidate_mask"]
     )
+    reciprocal_parent_loss = masked_reciprocal_parent_nll(
+        logits, batch["positive_mask"], batch["candidate_mask"]
+    )
     embedding_loss = masked_multi_positive_info_nce(
         source,
         target,
@@ -282,7 +317,7 @@ def shard_forward(
     division_loss = F.binary_cross_entropy_with_logits(
         divisions.float(), batch["division_target"]
     )
-    return logits, pair_loss, embedding_loss, division_loss
+    return logits, pair_loss, reciprocal_parent_loss, embedding_loss, division_loss
 
 
 @torch.inference_mode()
@@ -292,14 +327,24 @@ def validate(
     device: torch.device,
     *,
     patch_batch_size: int,
+    cache: dict[Path, dict[str, torch.Tensor]] | None = None,
 ) -> dict[str, float | int]:
     model.eval()
     rows = []
     for record in records:
-        batch = load_shard(record.path, device)
-        logits, _pair, _embedding, _division = shard_forward(
-            model, batch, patch_batch_size=patch_batch_size
+        batch = (
+            cached_batch(cache, record.path)
+            if cache is not None
+            else load_shard(record.path, device)
         )
+        with torch.autocast(
+            device_type=device.type,
+            dtype=torch.float16,
+            enabled=device.type == "cuda",
+        ):
+            logits, _pair, _parent, _embedding, _division = shard_forward(
+                model, batch, patch_batch_size=patch_batch_size
+            )
         rows.append(
             pair_logit_metrics(
                 logits, batch["candidate_mask"], batch["positive_mask"]
@@ -346,6 +391,11 @@ def train_worker(args: argparse.Namespace) -> None:
     }:
         raise RuntimeError("external train and validation shards overlap")
 
+    train_cache, train_cache_bytes = preload_shards(train_records, device)
+    validation_cache, validation_cache_bytes = preload_shards(
+        validation_records, device
+    )
+
     output_dir = args.output_dir / args.fold
     output_dir.mkdir(parents=True, exist_ok=True)
     model = ContextualPairFusionAssociationModel().to(device)
@@ -364,6 +414,7 @@ def train_worker(args: argparse.Namespace) -> None:
         validation_records,
         device,
         patch_batch_size=args.patch_batch_size,
+        cache=validation_cache,
     )
     best_score = float(initial["composite"])
     best_step = 0
@@ -387,6 +438,15 @@ def train_worker(args: argparse.Namespace) -> None:
             "validation_inventory_sha256": inventory_sha256(validation_records),
             "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
             "selection_policy": "ZSNS005 contextual pair composite only",
+            "pair_loss_policy": (
+                "outgoing all-positive child ranking plus eligible incoming "
+                "one-parent ranking"
+            ),
+            "reciprocal_parent_loss_weight": RECIPROCAL_PARENT_LOSS_WEIGHT,
+            "shard_cache_policy": "verified immutable tensors preloaded once per GPU",
+            "train_cache_bytes": train_cache_bytes,
+            "validation_cache_bytes": validation_cache_bytes,
+            "validation_precision": "CUDA float16 autocast",
             "augmentation_mode": args.augmentation_mode,
             "augmentation_policy": (
                 AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"
@@ -408,7 +468,7 @@ def train_worker(args: argparse.Namespace) -> None:
             break
         completed_step += 1
         record = train_records[int(rng.integers(0, len(train_records)))]
-        batch = load_shard(record.path, device)
+        batch = cached_batch(train_cache, record.path)
         if args.augmentation_mode == "microscopy_v1":
             batch["source_patches"] = augment_normalized_patches(
                 batch["source_patches"],
@@ -421,10 +481,21 @@ def train_worker(args: argparse.Namespace) -> None:
                 spatial_code=int(rng.integers(0, 32)),
             )
         with torch.autocast(device_type="cuda", dtype=torch.float16):
-            logits, pair_loss, embedding_loss, division_loss = shard_forward(
+            (
+                logits,
+                pair_loss,
+                reciprocal_parent_loss,
+                embedding_loss,
+                division_loss,
+            ) = shard_forward(
                 model, batch, patch_batch_size=args.patch_batch_size
             )
-            loss = pair_loss + 0.25 * embedding_loss + 0.20 * division_loss
+            loss = (
+                pair_loss
+                + RECIPROCAL_PARENT_LOSS_WEIGHT * reciprocal_parent_loss
+                + 0.25 * embedding_loss
+                + 0.20 * division_loss
+            )
             scaled_loss = loss / args.gradient_accumulation
         scaler.scale(scaled_loss).backward()
         accumulated += 1
@@ -452,6 +523,7 @@ def train_worker(args: argparse.Namespace) -> None:
                 validation_records,
                 device,
                 patch_batch_size=args.patch_batch_size,
+                cache=validation_cache,
             )
             score = float(metrics["composite"])
             row = {"step": completed_step, "metrics": metrics, "score": score}
@@ -499,6 +571,15 @@ def train_worker(args: argparse.Namespace) -> None:
             AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"
         ),
         "validation_augmentation": "none",
+        "pair_loss_policy": (
+            "outgoing all-positive child ranking plus eligible incoming "
+            "one-parent ranking"
+        ),
+        "reciprocal_parent_loss_weight": RECIPROCAL_PARENT_LOSS_WEIGHT,
+        "shard_cache_policy": "verified immutable tensors preloaded once per GPU",
+        "train_cache_bytes": train_cache_bytes,
+        "validation_cache_bytes": validation_cache_bytes,
+        "validation_precision": "CUDA float16 autocast",
         "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
         "competition_data_read": False,
         "public_predictions_copied": False,
