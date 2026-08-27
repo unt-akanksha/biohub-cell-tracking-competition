@@ -99,7 +99,7 @@ import zipfile
 import torch
 
 EXPECTED_DATASET_MANIFEST_SHA256 = "d9f009518fb26a2aeebebf405485ff7cf36c7e3982cfbf9501aa98346e8b77a8"
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "7f402b14cd54c4fe8139b37645a2db068edf7432a6525e33ce902091f319c51f"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "7af79217c17162f377f43a7bba1bedc54a4a3b16d6a3dc45b9854fd11c4a2c1e"
 
 
 def first_existing(candidates):
@@ -259,6 +259,7 @@ TRAIN = r'''command = [
     "--minimum-learning-rate", "0.000002",
     "--weight-decay", "0.00001",
     "--ema-decay", "0.997",
+    "--augmentation-mode", "microscopy_v1",
     "--max-wall-seconds", "21600",
     "--orchestrator-hard-stop-seconds", "22800",
     "--finalization-reserve-seconds", "1200",
@@ -280,6 +281,8 @@ valid_folds = bool(
     and all(
         row.get("status") == "completed"
         and row.get("dataset_manifest_sha256") == EXPECTED_DATASET_MANIFEST_SHA256
+        and row.get("augmentation_mode") == "microscopy_v1"
+        and row.get("validation_augmentation") == "none"
         and row.get("competition_data_read") is False
         and row.get("public_predictions_copied") is False
         and row.get("public_leaderboard_used_for_selection") is False
@@ -295,6 +298,8 @@ if not (
     and result.get("run_id") == RUN_ID
     and result.get("gpu_count") == 2
     and isinstance(result.get("both_folds_improved"), bool)
+    and result.get("augmentation_mode") == "microscopy_v1"
+    and result.get("validation_augmentation") == "none"
     and result.get("competition_data_read") is False
     and result.get("public_predictions_copied") is False
     and result.get("public_leaderboard_used_for_selection") is False

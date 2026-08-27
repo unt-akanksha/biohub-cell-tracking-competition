@@ -61,6 +61,11 @@ TRAIN_SOURCE = "ZSNS004"
 VALIDATION_SOURCE = "ZSNS005"
 FOLDS = ("target_44b6", "target_6bba")
 SEED_OFFSETS = {"target_44b6": 0, "target_6bba": 10_003}
+AUGMENTATION_MODES = ("microscopy_v1", "none")
+AUGMENTATION_POLICY = (
+    "fixed-physical-scale XY quarter-rotations, independent axis flips, "
+    "per-patch/channel gain, and mild Gaussian noise; validation unaugmented"
+)
 
 
 @dataclass(frozen=True)
@@ -179,6 +184,55 @@ def load_shard(path: Path, device: torch.device) -> dict[str, torch.Tensor]:
     return result
 
 
+def augment_normalized_patches(
+    patches: torch.Tensor,
+    *,
+    generator: torch.Generator,
+    spatial_code: int,
+) -> torch.Tensor:
+    """Apply microscopy-safe invariances without changing physical scale."""
+
+    if patches.ndim != 5 or patches.shape[1:] != (3, 17, 17, 17):
+        raise ValueError("normalized patches must have shape (N, 3, 17, 17, 17)")
+    if not torch.is_floating_point(patches):
+        raise ValueError("normalized patches must be floating point")
+    if not 0 <= int(spatial_code) < 32:
+        raise ValueError("spatial augmentation code must be in [0, 32)")
+    if len(patches) == 0:
+        return patches.clone()
+    result = torch.rot90(
+        patches,
+        int(spatial_code) & 3,
+        dims=(-2, -1),
+    )
+    flip_axes = [
+        axis
+        for bit, axis in enumerate((-3, -2, -1), start=2)
+        if int(spatial_code) & (1 << bit)
+    ]
+    if flip_axes:
+        result = torch.flip(result, dims=flip_axes)
+    gain = 0.90 + 0.20 * torch.rand(
+        (len(result), result.shape[1], 1, 1, 1),
+        generator=generator,
+        device=result.device,
+        dtype=result.dtype,
+    )
+    noise_scale = 0.01 + 0.04 * torch.rand(
+        (len(result), result.shape[1], 1, 1, 1),
+        generator=generator,
+        device=result.device,
+        dtype=result.dtype,
+    )
+    noise = torch.randn(
+        result.shape,
+        generator=generator,
+        device=result.device,
+        dtype=result.dtype,
+    )
+    return (result * gain + noise * noise_scale).clamp(-6.0, 6.0)
+
+
 def encode_patches(
     model: ContextualPairFusionAssociationModel,
     patches: torch.Tensor,
@@ -270,6 +324,8 @@ def train_worker(args: argparse.Namespace) -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     rng = np.random.default_rng(seed)
+    augmentation_generator = torch.Generator(device=device)
+    augmentation_generator.manual_seed(seed + 77_777)
     dataset_verification = verify_dataset(args.data_root)
     train_records = discover_shards(
         args.data_root / "train",
@@ -331,6 +387,11 @@ def train_worker(args: argparse.Namespace) -> None:
             "validation_inventory_sha256": inventory_sha256(validation_records),
             "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
             "selection_policy": "ZSNS005 contextual pair composite only",
+            "augmentation_mode": args.augmentation_mode,
+            "augmentation_policy": (
+                AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"
+            ),
+            "validation_augmentation": "none",
             "competition_data_read": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
@@ -348,6 +409,17 @@ def train_worker(args: argparse.Namespace) -> None:
         completed_step += 1
         record = train_records[int(rng.integers(0, len(train_records)))]
         batch = load_shard(record.path, device)
+        if args.augmentation_mode == "microscopy_v1":
+            batch["source_patches"] = augment_normalized_patches(
+                batch["source_patches"],
+                generator=augmentation_generator,
+                spatial_code=int(rng.integers(0, 32)),
+            )
+            batch["target_patches"] = augment_normalized_patches(
+                batch["target_patches"],
+                generator=augmentation_generator,
+                spatial_code=int(rng.integers(0, 32)),
+            )
         with torch.autocast(device_type="cuda", dtype=torch.float16):
             logits, pair_loss, embedding_loss, division_loss = shard_forward(
                 model, batch, patch_batch_size=args.patch_batch_size
@@ -422,6 +494,11 @@ def train_worker(args: argparse.Namespace) -> None:
         "parameter_count": parameter_count,
         "external_training_source": TRAIN_SOURCE,
         "external_validation_source": VALIDATION_SOURCE,
+        "augmentation_mode": args.augmentation_mode,
+        "augmentation_policy": (
+            AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"
+        ),
+        "validation_augmentation": "none",
         "dataset_manifest_sha256": dataset_verification["manifest_sha256"],
         "competition_data_read": False,
         "public_predictions_copied": False,
@@ -499,6 +576,11 @@ def orchestrate(args: argparse.Namespace) -> None:
         "both_folds_improved": all(
             int(row["best_step"]) > 0 for row in terminals.values()
         ),
+        "augmentation_mode": args.augmentation_mode,
+        "augmentation_policy": (
+            AUGMENTATION_POLICY if args.augmentation_mode == "microscopy_v1" else "none"
+        ),
+        "validation_augmentation": "none",
         "competition_data_read": False,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
@@ -527,6 +609,9 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--minimum-learning-rate", type=float, default=2e-6)
     result.add_argument("--weight-decay", type=float, default=1e-5)
     result.add_argument("--ema-decay", type=float, default=0.997)
+    result.add_argument(
+        "--augmentation-mode", choices=AUGMENTATION_MODES, default="microscopy_v1"
+    )
     result.add_argument("--max-wall-seconds", type=int, default=21_600)
     result.add_argument("--orchestrator-hard-stop-seconds", type=int, default=22_800)
     result.add_argument("--finalization-reserve-seconds", type=int, default=1_200)

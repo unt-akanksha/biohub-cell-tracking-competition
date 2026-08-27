@@ -14,6 +14,7 @@ from research.temporal_contrastive.contextual_pair_fusion import (
 )
 from research.temporal_contrastive.train_zebrahub_contextual_pretrain import (
     CONTEXTUAL_PAIR_FUSION_FAMILY,
+    augment_normalized_patches,
     discover_shards,
     inventory_sha256,
     load_shard,
@@ -106,6 +107,43 @@ def test_pretraining_shard_runs_contextual_loss_backward(tmp_path: Path) -> None
     assert torch.isfinite(logits[batch["candidate_mask"]]).all()
     assert torch.isfinite(loss)
     assert any(parameter.grad is not None for parameter in model.parameters())
+
+
+def test_microscopy_augmentation_is_seeded_finite_and_fixed_shape() -> None:
+    patches = torch.linspace(
+        -3.0, 3.0, 2 * 3 * 17 * 17 * 17, dtype=torch.float32
+    ).reshape(2, 3, 17, 17, 17)
+    first_generator = torch.Generator().manual_seed(9107)
+    second_generator = torch.Generator().manual_seed(9107)
+    first = augment_normalized_patches(
+        patches, generator=first_generator, spatial_code=23
+    )
+    second = augment_normalized_patches(
+        patches, generator=second_generator, spatial_code=23
+    )
+
+    assert first.shape == patches.shape
+    assert torch.equal(first, second)
+    assert torch.isfinite(first).all()
+    assert not torch.equal(first, patches)
+    assert float(first.min()) >= -6.0
+    assert float(first.max()) <= 6.0
+
+
+def test_microscopy_augmentation_refuses_changed_patch_contract() -> None:
+    generator = torch.Generator().manual_seed(1)
+    with pytest.raises(ValueError, match="shape"):
+        augment_normalized_patches(
+            torch.zeros(1, 3, 15, 17, 17),
+            generator=generator,
+            spatial_code=0,
+        )
+    with pytest.raises(ValueError, match="spatial augmentation code"):
+        augment_normalized_patches(
+            torch.zeros(1, 3, 17, 17, 17),
+            generator=generator,
+            spatial_code=32,
+        )
 
 
 def test_finetuning_initialization_requires_complete_hash_bound_evidence(

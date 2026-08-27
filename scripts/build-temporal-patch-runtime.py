@@ -166,6 +166,31 @@ def write_json(path: Path, payload: dict) -> None:
     )
 
 
+def packaged_experiment(source: Path, family: str) -> dict:
+    """Remove a contextual runtime's recursive reference to its own manifest."""
+
+    payload = json.loads(source.read_text(encoding="utf-8"))
+    if family == "contextual_pair_fusion_v3":
+        execution = payload.get("pretraining_execution")
+        if not isinstance(execution, dict):
+            raise ValueError("contextual v3 pretraining execution contract is missing")
+        execution["status"] = "runtime_package"
+        execution["kernel_notebook_sha256"] = "recorded_outside_runtime_package"
+        execution["kernel_metadata_sha256"] = "recorded_outside_runtime_package"
+        execution["runtime_manifest_sha256"] = "see_SOURCE_MANIFEST.json"
+        execution["runtime_remote_redownload_verified"] = False
+        source_inventory = payload.get("source")
+        if not isinstance(source_inventory, dict):
+            raise ValueError("contextual v3 source inventory is missing")
+        for key in (
+            "zebrahub_pretraining_kernel_builder_sha256",
+            "zebrahub_pretraining_kernel_builder_test_sha256",
+            "technique_report_sha256",
+        ):
+            source_inventory[key] = "recorded_outside_runtime_package"
+    return payload
+
+
 def checked_target(family: str) -> Path:
     staging = STAGING_ROOT.resolve()
     target = TARGET_BY_FAMILY[family].resolve()
@@ -200,7 +225,10 @@ def main() -> None:
     if missing:
         raise FileNotFoundError(f"temporal runtime sources are missing: {missing}")
     for name, source in sources.items():
-        shutil.copy2(source, target / name)
+        if name == "experiment.json":
+            write_json(target / name, packaged_experiment(source, args.family))
+        else:
+            shutil.copy2(source, target / name)
     shutil.copy2(TRACKASTRA_REPOSITORY / "LICENSE", target / "TRACKASTRA_LICENSE")
     for relative in TRACKASTRA_FILES:
         source = TRACKASTRA_REPOSITORY / relative

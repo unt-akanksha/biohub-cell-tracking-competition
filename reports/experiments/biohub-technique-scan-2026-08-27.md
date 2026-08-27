@@ -212,19 +212,22 @@ source/provenance mismatch fails before optimization. This publication and
 verification used no Kaggle GPU and created no competition submission.
 
 The rebuilt portable v3 runtime contains 36 hash-bound source files and passed
-its independent integrity check over 520,791 bytes with manifest SHA-256
-`7f402b14cd54c4fe8139b37645a2db068edf7432a6525e33ce902091f319c51f`.
+its independent integrity check over 525,551 bytes with manifest SHA-256
+`7af79217c17162f377f43a7bba1bedc54a4a3b16d6a3dc45b9854fd11c4a2c1e`.
 It declares exactly two visible GPUs and contains no submission command. The
 focused dataset/runtime checks passed 20/20, and the expanded temporal,
-contextual, and ZebraHub regression set passed 90/90. No pretraining launch is
+contextual, and ZebraHub regression set passed 96/96. No pretraining launch is
 authorized while the current two-GPU v1 evidence gate is still running.
 
 ## Staged original pretraining kernel
 
-The code-only runtime is now private Kaggle dataset
-`indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3` version 1. A
-complete remote redownload reproduced the 36-file, 520,791-byte integrity
-inventory and the exact runtime manifest above. This publication used no GPU.
+The code-only runtime is private Kaggle dataset
+`indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3`. Version 1 is
+superseded because it predates microscopy-safe augmentation. Version 2 is also
+superseded because its spatial-transform sampling forced per-step GPU
+synchronization. Version 3 is the only admissible pretraining runtime; a
+complete remote redownload reproduced the 36-file, 525,551-byte integrity
+inventory and exact runtime manifest above. This publication used no GPU.
 
 The deterministic private notebook
 `indarkarhana/biohub-zebrahub-contextual-pretrain-v1` is built locally but has
@@ -236,3 +239,28 @@ only on ZSNS005, and writes checkpoints plus evidence without a submission
 command. Four notebook-contract tests pass, including deterministic bytes and
 both direct-directory and archive-style Kaggle mounts. Launch remains gated on
 the current v1 terminal and the eight-hour Kaggle reserve.
+
+## Microscopy-safe regularization before launch
+
+The first staged pretrainer replayed only 64 labeled ZSNS004 transitions for
+12,000 steps without image augmentation, creating an avoidable memorization
+risk. Primary microscopy studies support domain-specific views rather than
+natural-image policies: Cell Painting DINO work removes scale changes at fixed
+magnification and adds rotations, while a separate augmentation ablation finds
+flip plus intensity variation strongest and resizing harmful. Trackastra also
+shows that full spatiotemporal detection context is central for division-aware
+association. Relevant sources are the
+[Cell Painting DINO study](https://www.nature.com/articles/s41467-025-66778-6),
+[morphological SSL augmentation ablation](https://www.nature.com/articles/s41598-025-88825-4),
+and [Trackastra](https://arxiv.org/abs/2405.15700).
+
+The training-only path now has a seeded `microscopy_v1` policy: fixed-scale XY
+quarter-rotations, independent axis flips, per-patch/channel gain, and mild
+Gaussian noise. ZSNS005 remains byte-identical and unaugmented, physical-scale
+cropping/resizing is forbidden, and `none` remains an explicit future ablation
+mode. The policy and validation mode are written into each worker and aggregate
+terminal. CPU determinism, shape, finiteness, range, and fail-closed contract
+tests pass. The final implementation derives the discrete spatial transform
+from the worker's seeded CPU sampler and keeps gain/noise generation on-device,
+avoiding eight GPU synchronization points per optimization step. No GPU was
+used for this change.

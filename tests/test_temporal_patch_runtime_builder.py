@@ -131,6 +131,27 @@ def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None
     ]["temporal_contextual_pair_fusion_v3"] is True
     assert experiment["model"]["family"] == "temporal_contextual_pair_fusion_v3"
     assert experiment["public_code_copied"] is False
+    assert experiment["pretraining_execution"]["status"] == "runtime_package"
+    assert (
+        experiment["pretraining_execution"]["runtime_manifest_sha256"]
+        == "see_SOURCE_MANIFEST.json"
+    )
+    assert (
+        experiment["pretraining_execution"]["runtime_remote_redownload_verified"]
+        is False
+    )
+    assert (
+        experiment["pretraining_execution"]["kernel_notebook_sha256"]
+        == "recorded_outside_runtime_package"
+    )
+    assert (
+        experiment["source"]["zebrahub_pretraining_kernel_builder_sha256"]
+        == "recorded_outside_runtime_package"
+    )
+    assert (
+        experiment["source"]["technique_report_sha256"]
+        == "recorded_outside_runtime_package"
+    )
     assert (
         CONTEXTUAL_TARGET / "train_dual_fold_contextual_pair_fusion.py"
     ).is_file()
