@@ -28,11 +28,16 @@ import torch.nn.functional as F
 
 try:
     import trainer as graph_base
-    from synthetic_data import corrected_sequence_sample, division_prior_weight
+    from synthetic_data import (
+        REAL_DIVISION_RATE,
+        SYNTHETIC_DIVISION_RATE,
+        corrected_sequence_sample,
+    )
 except ModuleNotFoundError:
     from research.synthetic_pretrain.data import (
+        REAL_DIVISION_RATE,
+        SYNTHETIC_DIVISION_RATE,
         corrected_sequence_sample,
-        division_prior_weight,
     )
     from research.trackastra_graph import train_biohub_graph_transformer as graph_base
 
@@ -510,6 +515,41 @@ def state_dict_cpu(model: torch.nn.Module) -> dict[str, torch.Tensor]:
     }
 
 
+def division_prior_corrected_bce(
+    logits: torch.Tensor,
+    targets: torch.Tensor,
+    *,
+    synthetic: bool,
+    real_rate: float = REAL_DIVISION_RATE,
+    synthetic_rate: float = SYNTHETIC_DIVISION_RATE,
+) -> torch.Tensor:
+    """Match synthetic division BCE to the observed real positive prior.
+
+    Scaling the entire synthetic BCE would incorrectly suppress the abundant
+    non-division examples. Importance weighting instead downweights synthetic
+    positives and slightly upweights synthetic negatives, while real replay is
+    left unchanged.
+    """
+
+    if logits.shape != targets.shape:
+        raise ValueError("division logits and targets must have equal shape")
+    if not 0.0 < real_rate < 1.0 or not 0.0 < synthetic_rate < 1.0:
+        raise ValueError("division rates must lie strictly between zero and one")
+    if torch.any((targets < 0) | (targets > 1)):
+        raise ValueError("division targets must lie in [0, 1]")
+    losses = F.binary_cross_entropy_with_logits(
+        logits.float(), targets.float(), reduction="none"
+    )
+    if not synthetic:
+        return losses.mean()
+    positive_weight = float(real_rate / synthetic_rate)
+    negative_weight = float((1.0 - real_rate) / (1.0 - synthetic_rate))
+    weights = targets.float() * positive_weight + (1.0 - targets.float()) * (
+        negative_weight
+    )
+    return (losses * weights).mean()
+
+
 @torch.no_grad()
 def update_ema_model(
     ema_model: torch.nn.Module,
@@ -645,6 +685,9 @@ def train_worker(args: argparse.Namespace) -> None:
             "embedding_channels": args.embedding_channels,
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": args.ema_decay,
+            "division_prior_correction": "class-conditional importance weighting",
+            "real_division_rate": REAL_DIVISION_RATE,
+            "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
             "source_prefix": spec["source_prefix"],
             "target_prefix": spec["target_prefix"],
             "opened_acceptance_stems_excluded": sorted(OPENED_ACCEPTANCE_STEMS),
@@ -702,13 +745,12 @@ def train_worker(args: argparse.Namespace) -> None:
                 torch.as_tensor(batch.candidate_mask, device=device),
                 temperature=args.temperature,
             )
-            division_loss = F.binary_cross_entropy_with_logits(
-                division_logits.float(),
+            division_loss = division_prior_corrected_bce(
+                division_logits,
                 torch.as_tensor(batch.division_target, device=device),
+                synthetic=not use_real,
             )
-            loss = link_loss + args.division_loss_weight * division_loss * (
-                1.0 if use_real else division_prior_weight()
-            )
+            loss = link_loss + args.division_loss_weight * division_loss
             scaled_loss = loss / args.gradient_accumulation
         scaler.scale(scaled_loss).backward()
         if step % args.gradient_accumulation == 0:
@@ -788,6 +830,9 @@ def train_worker(args: argparse.Namespace) -> None:
         "parameter_count": parameter_count,
         "checkpoint_weight_source": "optimizer-step exponential moving average",
         "ema_decay": args.ema_decay,
+        "division_prior_correction": "class-conditional importance weighting",
+        "real_division_rate": REAL_DIVISION_RATE,
+        "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,

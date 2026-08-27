@@ -16,6 +16,7 @@ from research.temporal_contrastive.patch_model import (
 )
 from research.temporal_contrastive.train_dual_fold_patch import (
     aggregate_metrics,
+    division_prior_corrected_bce,
     prepare_transition,
     synthetic_split,
     transition_metrics,
@@ -180,6 +181,21 @@ def test_full_model_ema_averages_optimizer_weights() -> None:
     torch.testing.assert_close(ema.weight, torch.full_like(ema.weight, 0.5))
     with pytest.raises(ValueError, match="EMA decay"):
         update_ema_model(ema, model, decay=1.0)
+
+
+def test_synthetic_division_prior_correction_preserves_negative_learning() -> None:
+    logits = torch.zeros(2)
+    positive = division_prior_corrected_bce(
+        logits, torch.ones(2), synthetic=True
+    )
+    negative = division_prior_corrected_bce(
+        logits, torch.zeros(2), synthetic=True
+    )
+    real = division_prior_corrected_bce(logits, torch.zeros(2), synthetic=False)
+
+    assert float(positive) < 0.05
+    assert float(negative) > 0.70
+    assert float(negative) > float(real)
 
 
 def test_transition_sampler_preserves_division_positives_and_hard_negatives() -> None:

@@ -112,6 +112,8 @@ def verify_sources(
             and appearance_terminal.get("checkpoint_weight_source")
             == "optimizer-step exponential moving average"
             and appearance_terminal.get("ema_decay") == 0.997
+            and appearance_terminal.get("division_prior_correction")
+            == "class-conditional importance weighting"
             and appearance_terminal.get("public_predictions_copied") is False
             and appearance_terminal.get("public_leaderboard_used_for_selection") is False
             and appearance_terminal.get("submission_created") is False

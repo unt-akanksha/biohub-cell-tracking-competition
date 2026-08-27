@@ -114,6 +114,10 @@ def verify_sources(
         and appearance_terminal.get("checkpoint_weight_source")
         == "optimizer-step exponential moving average"
         and appearance_terminal.get("ema_decay") == 0.997
+        and appearance_terminal.get("division_prior_correction")
+        == "class-conditional importance weighting"
+        and appearance_config.get("division_prior_correction")
+        == "class-conditional importance weighting"
         and appearance_config.get("calibration_ground_truth_read") is False
     ):
         raise RuntimeError(f"appearance architecture or split boundary changed: {fold}")
