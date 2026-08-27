@@ -46,6 +46,10 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `spatialdino-pu-selective-distillation-v2` | spatialdino-pu-adaptation-v1 | A minority disagreement-weighted soft probability loss on two-seed-supported voxels will improve dense-movie localization enough for the independent SpatialDINO/UNETR detector to clear the unchanged worst-movie recall gate without copying public predictions. | rejected | not recorded | — | 0.18 / 2.00 | retire | Selective distillation completed 768 paired steps and left pooled recall effectively unchanged at 0.885906, but regressed the limiting movie from 0.611212 to 0.602170 versus the immutable 0.65 gate. Acceptance remained unopened and no submission was created. | — |
 | `lsm-fm-pu-adaptation-v1` | spatialdino-pu-selective-distillation-v2 | A geometry-matched 3D light-sheet foundation model will improve dim-cell localization beyond the retired 2D SpatialDINO hybrid while retaining conservative independent PU supervision. | failed | not recorded | — | 0.04 / 2.00 | — | Kaggle setup verified MONAI in the notebook, but the trainer subprocess omitted the verified MONAI import root from PYTHONPATH and failed before model construction or any optimizer step; no checkpoint, validation, or submission artifact was produced. | — |
 | `lsm-fm-pu-adaptation-v2` | lsm-fm-pu-adaptation-v1 | After propagating the already hash-verified MONAI import root into trainer and evaluator subprocesses, the unchanged geometry-matched 3D LSM-FM experiment can produce its first scientific localization evidence. | rejected | not recorded | — | 0.21 / 2.00 | retain | The independent 3D LSM-FM detector completed 768 steps and improved the limiting movie to 0.622061 versus SpatialDINO v1 0.611212 and v2 0.602170, but remained below the immutable 0.65 worst-movie gate. Pooled recall was 0.884206, acceptance stayed sealed, and no submission was created. | — |
+| `lsm-fm-image-text-pu-adaptation-v1` | lsm-fm-pu-adaptation-v2 | A larger feature-36 light-sheet image-text SwinUNETR with broader and deeper Biohub PU adaptation will lift the limiting movie above the unchanged 0.65 selection gate without copying public outputs. | rejected | not recorded | — | 0.57 / 2.00 | retain | Feature-36 completed all 3072 steps and improved pooled recall to 0.889128 and hard-movie recall to 0.641953, but remained 14 matches below the immutable 0.65 gate. Acceptance stayed sealed; no public predictions, leaderboard selection, or submission were used. | — |
+| `lsm-fm-ensemble-validation-v1` | lsm-fm-image-text-pu-adaptation-v1 | A fixed equal-probability ensemble of independently pretrained LSM-FM feature-24 and feature-36 detectors plus a single global sub-voxel refinement can recover the 14 hard-movie matches needed to cross the unchanged 0.65 gate without retraining or leaderboard selection. | rejected | not recorded | — | 0.29 / 1.00 | retain | No predeclared candidate crossed the immutable 0.65 worst-movie gate; feature36 control remained best at 0.641953 and acceptance stayed sealed. | — |
+| `lsm-fm-image-text-localization-refinement-v1` | lsm-fm-ensemble-validation-v1 | A single global raw-intensity-aware or wider-radius sub-voxel refinement of frozen feature-36 peaks will recover the 14 limiting-movie matches needed to cross 0.65 without material regression elsewhere. | rejected | not recorded | — | 0.30 / 1.00 | retain | Probability radius-2 reached 1078/1659=0.649789 on the limiting movie, exactly one match below the immutable 0.65 gate; acceptance remained sealed and no submission was created. | — |
+| `lsm-fm-center-enhancement-v1` | lsm-fm-image-text-localization-refinement-v1 | A learned count-preserving 3D center-enhancement head trained only on one-to-one sparse annotation matches from non-validation movies will add the single limiting-movie match needed beyond probability_r2_p2 without a material per-movie regression. | rejected | not recorded | — | 0.44 / 1.25 | retain | The learned residual improved pooled selection matching by 32 nodes but regressed the limiting movie from 1078 to 1062 matches at full scale; half scale reached 1077. Neither crossed the immutable 0.65 gate, acceptance stayed sealed, and no submission was created. | — |
 
 ## Exact Evidence Details
 
@@ -286,6 +290,34 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `["reports/experiments/lsm-fm-pu-adaptation-v2-result.json"]`
+
+### lsm-fm-image-text-pu-adaptation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `["reports/experiments/lsm-fm-image-text-pu-adaptation-v1-result.json"]`
+
+### lsm-fm-ensemble-validation-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `["reports/experiments/lsm-fm-ensemble-validation-v1-result.json"]`
+
+### lsm-fm-image-text-localization-refinement-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `["reports/experiments/lsm-fm-image-text-localization-refinement-v1-result.json"]`
+
+### lsm-fm-center-enhancement-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `["reports/experiments/lsm-fm-center-enhancement-v1-result.json"]`
 
 
 ## CPU Acceptance Controls

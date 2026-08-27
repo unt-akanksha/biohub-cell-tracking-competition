@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-center-enhancement-v1",
+  "status": "rejected_at_selection_retain_probability_r2_p2",
+  "kernel_ref": "indarkarhana/biohub-lsm-fm-cen-residual-v1",
+  "gpu": {
+    "quota_before_hours": 25.0,
+    "quota_after_hours": 24.56,
+    "charged_hours": 0.44,
+    "launcher_elapsed_seconds": 1589.71,
+    "declared_max_hours": 1.25,
+    "protected_reserve_hours": 8.0
+  },
+  "training": {
+    "status": "completed",
+    "steps": 768,
+    "parameter_count": 112673,
+    "training_movies": 187,
+    "matched_examples": 13904,
+    "fit_examples": 11818,
+    "internal_validation_examples": 2086,
+    "validation_overlap": [],
+    "selection_labels_read_during_training": false,
+    "acceptance_labels_read_during_training": false,
+    "elapsed_seconds": 1037.664
+  },
+  "selection": {
+    "movies": 8,
+    "annotated_gt_nodes": 11175,
+    "candidates": {
+      "feature36_control": {
+        "matched_gt_nodes": 10022,
+        "annotated_node_recall": 0.8968232662192394,
+        "worst_movie_recall": 0.6497890295358649,
+        "mean_movie_match_distance_um": 1.8468377248513013,
+        "minimum_movie_delta_from_control": 0.0
+      },
+      "center_enhancement_half": {
+        "matched_gt_nodes": 10050,
+        "annotated_node_recall": 0.8993288590604027,
+        "worst_movie_recall": 0.6491862567811935,
+        "mean_movie_match_distance_um": 1.7829110331966573,
+        "minimum_movie_delta_from_control": -0.0006027727546714656
+      },
+      "center_enhancement_full": {
+        "matched_gt_nodes": 10054,
+        "annotated_node_recall": 0.8996868008948545,
+        "worst_movie_recall": 0.6401446654611211,
+        "mean_movie_match_distance_um": 1.7462377397636737,
+        "minimum_movie_delta_from_control": -0.009644364074743783
+      }
+    },
+    "selected_candidate": null,
+    "pooled_gate": 0.8,
+    "worst_movie_gate": 0.65,
+    "passed": false
+  },
+  "limiting_movie": {
+    "stem": "6bba_57b7cc1e",
+    "annotated_gt_nodes": 1659,
+    "feature36_control_matched_gt_nodes": 1078,
+    "center_enhancement_half_matched_gt_nodes": 1077,
+    "center_enhancement_full_matched_gt_nodes": 1062,
+    "feature36_control_recall": 0.6497890295358649,
+    "center_enhancement_half_recall": 0.6491862567811935,
+    "center_enhancement_full_recall": 0.6401446654611211,
+    "additional_control_matches_required_for_gate": 1
+  },
+  "interpretation": {
+    "global_effect": "The learned residual improved pooled held-out matching by 28 nodes at half scale and 32 nodes at full scale while reducing mean matched-node distance, so the independent head learned a real localization signal.",
+    "limiting_movie": "The same residual lost one limiting-movie match at half scale and sixteen at full scale. Neither candidate crossed the immutable 0.65 worst-movie gate, so the gain does not generalize safely enough for promotion.",
+    "next_model": "Test independent LSM-FM coordinate refinement on the high-recall public graph while freezing every public node identity, frame assignment, edge, and count. This begins from 0.969 acceptance node recall and is a separate non-replica scientific contribution rather than resubmitting public code."
+  },
+  "acceptance": {
+    "opened": false,
+    "promotion_passed": false
+  },
+  "evidence": {
+    "launcher_terminal_sha256": "b475f961c648e382afa45db8d63abe6fd1240a11162270d0e3dd3d17bc0a6bd8",
+    "validation_result_sha256": "1d7872b34bc1f08791d753fe288a1b9fe885c8ae7ca88761fc08eb1cea8c081e",
+    "selection_partial_sha256": "36bfddf218f53d1aaebdf85e884f778bf239ca34483a0edbf7a70c9806bd9782",
+    "enhancement_checkpoint_sha256": "4c0de1935e8200229fc061c7c4c49d1ebb5b05019e7896468f687613d5ab2754",
+    "training_result_sha256": "6896155034359e43419fb4eb21215835e74530ca6b482e9e1c8f1d8c17739762",
+    "example_generation_sha256": "09291c838230613ef3f85ab9952975b6a71468f5fafd867552f5c3d774b55e57",
+    "training_progress_sha256": "444ad6a0c39955498338e6ca9131767fd32833fe2e977f7d4d6c3155caa51b90",
+    "kernel_log_sha256": "8dda8b80c5833e7fdc5b52bd3f7c8d5a03c12350414b3cf176ef025d2057554a",
+    "submission_artifacts_found": []
+  },
+  "decision": {
+    "selection_gate": "reject",
+    "family": "retain_probability_r2_p2_as_detector_parent",
+    "next_experiment": "lsm-fm-public-node-refinement-v1",
+    "reason": "The center enhancer improved aggregate localization but did not preserve the already borderline limiting movie. The next clean lane applies the independent detector only as coordinate displacement over the high-recall public topology and requires strict held-out matched-node gain before opening acceptance."
+  },
+  "public_leaderboard_used_for_selection": false,
+  "public_kaggle_code_copied": false,
+  "public_predictions_copied": false,
+  "competition_submission_performed": false
+}

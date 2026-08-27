@@ -1625,6 +1625,198 @@
       "registered_at": "2026-08-26T19:03:01.267590Z",
       "run_id": "lsm-fm-pu-adaptation-v2",
       "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": "0.57",
+      "amendments": [
+        {
+          "correction_reason": "Bind the independently downloaded private runtime, exact feature-36 transfer, full 64-cubed optimizer probe, non-replica provenance, and nine-check preflight before GPU launch.",
+          "replacement_fields": {
+            "acceptance_labels_opened": false,
+            "config_file_sha256": "bca54a10eab32f64d03b9be8a2479b22570a3704f7f8be27a5cd616930c54611",
+            "config_path": "config/experiments/lsm-fm-image-text-pu-adaptation-v1.json",
+            "detector_parameters": 35072515,
+            "exact_64_cube_forward_backward_optimizer_step": true,
+            "focused_tests_passed": 35,
+            "preflight_builder_sha256": "c184aeab6d3558134d67c4ee9c2d8e0cc800922519f01bdb2815d65cb397723f",
+            "preflight_file_sha256": "49cc87c315063fe4f83289ffd89709a88f08bee0f7ae00a07c1363627640a8c1",
+            "preflight_report": "artifacts/preflights/lsm-fm-image-text-pu-adaptation-v1.json",
+            "preflight_report_sha256": "966a3a36985f98a14ec469af7d674fde5f21bba5a5735c84b7847505f4b7530a",
+            "public_kaggle_code_copied": false,
+            "public_predictions_copied": false,
+            "remote_dataset_download_verified": true,
+            "runtime_dataset": "indarkarhana/biohub-lsm-fm-image-text-pu-runtime-v1",
+            "runtime_dataset_version": 1,
+            "runtime_manifest_sha256": "5b73f47d4695492ebad504539ee1be9538faa259115a848f1ecd348c74154721"
+          },
+          "target_event_id": "evt-2dec6d4f87f74b35984295ad747e4764"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-image-text-pu-adaptation-v1-result.json"
+      ],
+      "declared_gpu_hours": "2.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "selection_worst_movie_recall",
+      "failure_reason": "Feature-36 completed all 3072 steps and improved pooled recall to 0.889128 and hard-movie recall to 0.641953, but remained 14 matches below the immutable 0.65 gate. Acceptance stayed sealed; no public predictions, leaderboard selection, or submission were used.",
+      "hypothesis": "A larger feature-36 light-sheet image-text SwinUNETR with broader and deeper Biohub PU adaptation will lift the limiting movie above the unchanged 0.65 selection gate without copying public outputs.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "lsm-fm-pu-adaptation-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T19:49:16.231524Z",
+      "run_id": "lsm-fm-image-text-pu-adaptation-v1",
+      "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": "0.29",
+      "amendments": [
+        {
+          "correction_reason": "Bind the verified private runtime, both immutable source checkpoints, fixed ensemble weights, no-submission notebook, and eight-check preflight before GPU launch.",
+          "replacement_fields": {
+            "acceptance_labels_opened": false,
+            "candidate_count": 5,
+            "config_file_sha256": "96bc251a530dabb5666c11819a5f486a1e836944d3e3359af87dcf691bab519f",
+            "config_path": "config/experiments/lsm-fm-ensemble-validation-v1.json",
+            "feature24_learned_checkpoint_sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1",
+            "feature36_learned_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+            "fixed_ensemble_weights": [
+              "0.5",
+              "0.5"
+            ],
+            "focused_tests_passed": 18,
+            "preflight_builder_sha256": "6f4b8e81b9cfaeee37e0d38a9387addf22ba208ba8089be145968959a216fda5",
+            "preflight_file_sha256": "aa5bd3fa6dc42b290dbb3cd1cafedee58c80567d5f50ac5c9973795737fcba7c",
+            "preflight_report": "artifacts/preflights/lsm-fm-ensemble-validation-v1.json",
+            "preflight_report_sha256": "93c8a66d9dff18c2b71112fc8f10c767d97e04b7a6ec7bafe7452ef0cd73c0c7",
+            "public_kaggle_code_copied": false,
+            "public_leaderboard_used_for_selection": false,
+            "public_predictions_copied": false,
+            "remote_dataset_download_verified": true,
+            "remote_models_strict_loaded": true,
+            "runtime_dataset": "indarkarhana/biohub-lsm-fm-ensemble-runtime-v1",
+            "runtime_dataset_version": 1,
+            "runtime_manifest_sha256": "81c70961de251cbd20442cd618fba57b972df7b52de113a2ad9822357b0f3fc1",
+            "submission_path_present": false
+          },
+          "target_event_id": "evt-8d3368071acb4101894f60dd209a6aab"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-ensemble-validation-v1-result.json"
+      ],
+      "declared_gpu_hours": "1.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "selection_worst_movie_recall",
+      "failure_reason": "No predeclared candidate crossed the immutable 0.65 worst-movie gate; feature36 control remained best at 0.641953 and acceptance stayed sealed.",
+      "hypothesis": "A fixed equal-probability ensemble of independently pretrained LSM-FM feature-24 and feature-36 detectors plus a single global sub-voxel refinement can recover the 14 hard-movie matches needed to cross the unchanged 0.65 gate without retraining or leaderboard selection.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "lsm-fm-image-text-pu-adaptation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T20:38:31.009185Z",
+      "run_id": "lsm-fm-ensemble-validation-v1",
+      "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": "0.30",
+      "amendments": [
+        {
+          "correction_reason": "Kaggle rejected the 51-character kernel slug before creation; replace only execution metadata with a 33-character slug and fresh hash-bound preflight.",
+          "replacement_fields": {
+            "classification": "execution_metadata_only",
+            "competition_submission_performed": false,
+            "failed_launch_event_id": "evt-42b8b847753d45599d30b6ac2e6a232b",
+            "new_config_sha256": "dd6be6e9c0f56d4c0c7087710dbf104fcaaf4037d9e6aa78ed05d8900483a131",
+            "new_kernel_metadata_sha256": "c07e36b1c0771f2be6985c77886880d747eff398bdafa2b57fb7c672d92a5f28",
+            "new_kernel_ref": "indarkarhana/biohub-lsm-fm-f36-refinement-v1",
+            "new_slug_length": 33,
+            "old_kernel_ref": "indarkarhana/biohub-lsm-fm-image-text-localization-refinement-v1",
+            "old_slug_length": 51,
+            "reason": "Kaggle SaveKernel returned HTTP 400 before kernel creation; the original slug exceeded the 50-character API limit. The shorter slug changes only Kaggle execution metadata.",
+            "replacement_preflight_report": "artifacts/preflights/lsm-fm-image-text-localization-refinement-v1-r2.json",
+            "replacement_preflight_report_sha256": "3e100c06a7f64085f1298cb860620e4eea2924ed29325962ba6179a767cead26",
+            "run_id": "lsm-fm-image-text-localization-refinement-v1",
+            "schema_version": 1,
+            "scientific_notebook_changed": false,
+            "scientific_notebook_sha256": "39914a129db751d85f6dc21a786451a9361356faa081ef0f653ad733d427aca3"
+          },
+          "target_event_id": "evt-4a86ec97a9f8452d864310036ddd92a5"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-image-text-localization-refinement-v1-result.json"
+      ],
+      "declared_gpu_hours": "1.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "selection_worst_movie_recall",
+      "failure_reason": "Probability radius-2 reached 1078/1659=0.649789 on the limiting movie, exactly one match below the immutable 0.65 gate; acceptance remained sealed and no submission was created.",
+      "hypothesis": "A single global raw-intensity-aware or wider-radius sub-voxel refinement of frozen feature-36 peaks will recover the 14 limiting-movie matches needed to cross 0.65 without material regression elsewhere.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "lsm-fm-ensemble-validation-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T21:12:44.242902Z",
+      "run_id": "lsm-fm-image-text-localization-refinement-v1",
+      "status": "rejected"
+    },
+    {
+      "actual_gpu_hours": "0.44",
+      "amendments": [
+        {
+          "correction_reason": "Kaggle returned HTTP 409 before kernel creation; bind a unique replacement execution slug and fresh hash-bound preflight while preserving the identical scientific notebook.",
+          "replacement_fields": {
+            "classification": "execution_metadata_only",
+            "competition_submission_performed": false,
+            "failed_launch_event_id": "evt-762fe2fa075349e797c5c1acad41a529",
+            "new_config_sha256": "32c98897279c7d53d5c52302ed06fa21252062a1efa988ad715b112571ee7007",
+            "new_kernel_builder_sha256": "a1ff8248408246be006aea524fa2293e06ab1c6c40a3adc80ee63ba1f7276819",
+            "new_kernel_metadata_sha256": "a6329e7803b18c9ca0bd0d415326559daa3115e4d92206577600b707a346d355",
+            "new_kernel_ref": "indarkarhana/biohub-lsm-fm-cen-residual-v1",
+            "old_kernel_ref": "indarkarhana/biohub-lsm-fm-center-enhance-v1",
+            "reason": "Kaggle SaveKernel returned HTTP 409 before kernel creation and the old private slug is inaccessible. The unique replacement changes only the Kaggle execution slug and title.",
+            "replacement_preflight_file_sha256": "36576a46335ee4decb25a2e8436cf6778f0a36af85d3cfd8646171f3f824422f",
+            "replacement_preflight_report": "artifacts/preflights/lsm-fm-center-enhancement-v1-r3.json",
+            "replacement_preflight_report_sha256": "67de1770cad4e9dc5e9e9f6d7dbebebd1449c4ac10965bc5ddfee9864938b4ff",
+            "run_id": "lsm-fm-center-enhancement-v1",
+            "schema_version": 1,
+            "scientific_notebook_changed": false,
+            "scientific_notebook_sha256": "19c1c031322f1bfc73a08cafa068c5105381c6a9a38c299388bf205a62ca883c"
+          },
+          "target_event_id": "evt-67ebfaa502934d19aa45940fe8c0069f"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": "retain",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-center-enhancement-v1-result.json"
+      ],
+      "declared_gpu_hours": "1.25",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": "selection_worst_movie_recall",
+      "failure_reason": "The learned residual improved pooled selection matching by 32 nodes but regressed the limiting movie from 1078 to 1062 matches at full scale; half scale reached 1077. Neither crossed the immutable 0.65 gate, acceptance stayed sealed, and no submission was created.",
+      "hypothesis": "A learned count-preserving 3D center-enhancement head trained only on one-to-one sparse annotation matches from non-validation movies will add the single limiting-movie match needed beyond probability_r2_p2 without a material per-movie regression.",
+      "imported_audit": false,
+      "lifecycle_status": "rejected",
+      "next_gate": null,
+      "parent": "lsm-fm-image-text-localization-refinement-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-26T21:57:03.857749Z",
+      "run_id": "lsm-fm-center-enhancement-v1",
+      "status": "rejected"
     }
   ],
   "schema_version": 1
