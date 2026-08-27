@@ -140,11 +140,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 518 unique tests
+The cumulative environment-split repository suite now passes 519 unique tests
 with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 463 tests after excluding the scorer-only files, and all 55
+environment passed 464 tests after excluding the scorer-only files, and all 55
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
