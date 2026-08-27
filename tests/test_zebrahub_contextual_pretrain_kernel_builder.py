@@ -48,6 +48,10 @@ def test_pretraining_kernel_is_exact_two_gpu_external_training_only() -> None:
     assert "EXPECTED_DATASET_MANIFEST_SHA256" in code
     assert "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf" in code
     assert "EXPECTED_RUNTIME_MANIFEST_SHA256" in code
+    assert "aff4e21f675848f94cbfd42e4d1a43ebc5b470fbc21db3934f85797066fc65cb" in code
+    assert 'RUN_ID = "zebrahub-contextual-pretrain-v1-mp-repair"' in code
+    assert 'PRETRAINING_RUN_ID = "zebrahub-contextual-pretrain-v1"' in code
+    assert 'result.get("run_id") == PRETRAINING_RUN_ID' in code
     assert '"--steps", "12000"' in code
     assert '"--max-wall-seconds", "21600"' in code
     assert '"--orchestrator-hard-stop-seconds", "22800"' in code

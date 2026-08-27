@@ -77,6 +77,27 @@ def test_contextual_head_has_frozen_widths_and_finite_backward() -> None:
     assert all(torch.isfinite(gradient).all() for gradient in populated)
 
 
+def test_contextual_head_scatter_is_autocast_dtype_safe() -> None:
+    model = ContextualPairFusionAssociationModel()
+    values = inputs()
+
+    with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+        logits = model.candidate_pair_logits(*values, chunk_size=3)
+
+    assert logits.dtype == values[0].dtype == torch.float32
+    assert torch.isfinite(logits[values[5]]).all()
+    assert torch.isneginf(logits[~values[5]]).all()
+    loss = logits[values[5]].square().mean()
+    loss.backward()
+    populated = [
+        parameter.grad
+        for parameter in model.parameters()
+        if parameter.grad is not None
+    ]
+    assert populated
+    assert all(torch.isfinite(gradient).all() for gradient in populated)
+
+
 def test_contextual_family_contract_is_exact_and_buildable() -> None:
     payload = {
         "appearance_family": CONTEXTUAL_PAIR_FUSION_FAMILY,

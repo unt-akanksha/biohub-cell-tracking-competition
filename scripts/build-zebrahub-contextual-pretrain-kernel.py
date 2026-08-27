@@ -5,8 +5,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-RUN_ID = "zebrahub-contextual-pretrain-v1"
-KERNEL_ID = f"biohub-{RUN_ID}"
+RUN_ID = "zebrahub-contextual-pretrain-v1-mp-repair"
+PRETRAINING_RUN_ID = "zebrahub-contextual-pretrain-v1"
+KERNEL_ID = "biohub-zebrahub-contextual-pretrain-v1"
 TARGET = ROOT / "kaggle" / KERNEL_ID
 NOTEBOOK = TARGET / f"{KERNEL_ID}.ipynb"
 
@@ -37,7 +38,8 @@ import threading
 import time
 from pathlib import Path
 
-RUN_ID = "zebrahub-contextual-pretrain-v1"
+RUN_ID = "zebrahub-contextual-pretrain-v1-mp-repair"
+PRETRAINING_RUN_ID = "zebrahub-contextual-pretrain-v1"
 STARTED = time.monotonic()
 FINISHED = False
 TERMINAL = Path("/kaggle/working/launcher_terminal.json")
@@ -99,7 +101,7 @@ import zipfile
 import torch
 
 EXPECTED_DATASET_MANIFEST_SHA256 = "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "85cfd63f75340502e3c810d71a8006fd15342dbc263f6ae45b0c376cf9b1ff7b"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "aff4e21f675848f94cbfd42e4d1a43ebc5b470fbc21db3934f85797066fc65cb"
 
 
 def first_existing(candidates):
@@ -307,7 +309,7 @@ valid_folds = bool(
 )
 if not (
     result.get("status") == "completed"
-    and result.get("run_id") == RUN_ID
+    and result.get("run_id") == PRETRAINING_RUN_ID
     and result.get("gpu_count") == 2
     and result.get("both_folds_improved") is True
     and result.get("augmentation_mode") == "microscopy_v1"
@@ -354,11 +356,12 @@ def main() -> None:
         "cells": [
             code_cell(WATCHDOG),
             markdown_cell(
-                "# Original ZebraHub contextual pretraining\n\n"
+                "# Original ZebraHub contextual pretraining — mixed-precision repair\n\n"
                 "Two independently seeded project-authored 20.7M-parameter contextual "
                 "models optimize only the frozen ZSNS004 derived shards and select EMA "
                 "checkpoints only on disjoint ZSNS005 shards. Outgoing child and incoming "
-                "parent ranking are trained jointly. The competition dataset, "
+                "parent ranking are trained jointly. Runtime v9 promotes autocast edge "
+                "logits to the stable sparse-output dtype before scattering. The competition dataset, "
                 "public predictions, leaderboard selection, and submission are excluded.\n"
             ),
             code_cell(SETUP),

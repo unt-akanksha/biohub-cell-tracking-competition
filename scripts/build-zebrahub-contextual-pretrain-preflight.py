@@ -34,9 +34,10 @@ from research.temporal_contrastive.train_zebrahub_contextual_pretrain import (  
 )
 
 
-RUN_ID = "zebrahub-contextual-pretrain-v1"
-KERNEL_DIR = ROOT / "kaggle" / f"biohub-{RUN_ID}"
-NOTEBOOK = KERNEL_DIR / f"biohub-{RUN_ID}.ipynb"
+RUN_ID = "zebrahub-contextual-pretrain-v1-mp-repair"
+KERNEL_ID = "biohub-zebrahub-contextual-pretrain-v1"
+KERNEL_DIR = ROOT / "kaggle" / KERNEL_ID
+NOTEBOOK = KERNEL_DIR / f"{KERNEL_ID}.ipynb"
 METADATA = KERNEL_DIR / "kernel-metadata.json"
 KERNEL_BUILDER = ROOT / "scripts" / "build-zebrahub-contextual-pretrain-kernel.py"
 PREFLIGHT_BUILDER = Path(__file__).resolve()
@@ -45,7 +46,7 @@ RUNTIME = (
     / ".biohub"
     / "cache"
     / "dataset-redownloads"
-    / "biohub-temporal-contextual-pair-fusion-runtime-v3-version8"
+    / "biohub-temporal-contextual-pair-fusion-runtime-v3-version9"
 )
 DATASET = (
     ROOT
@@ -56,7 +57,12 @@ DATASET = (
 )
 RUNTIME_MANIFEST = RUNTIME / "SOURCE_MANIFEST.json"
 DATASET_MANIFEST = DATASET / "DATASET_MANIFEST.json"
-CONFIG = ROOT / "config" / "experiments" / "temporal-contextual-pair-fusion-v3.json"
+CONFIG = (
+    ROOT
+    / "config"
+    / "experiments"
+    / "zebrahub-contextual-pretrain-v1-mp-repair.json"
+)
 COMPETITION_CONFIG = ROOT / "config" / "competition.json"
 SMOKE = ROOT / "reports" / "experiments" / "zebrahub-contextual-reciprocal-smoke.json"
 TECHNIQUE_REPORT = ROOT / "reports" / "experiments" / "biohub-technique-scan-2026-08-27.md"
@@ -83,13 +89,13 @@ FOCUSED_TESTS = (
 )
 
 EXPECTED_RUNTIME_MANIFEST_SHA256 = (
-    "85cfd63f75340502e3c810d71a8006fd15342dbc263f6ae45b0c376cf9b1ff7b"
+    "aff4e21f675848f94cbfd42e4d1a43ebc5b470fbc21db3934f85797066fc65cb"
 )
 EXPECTED_DATASET_MANIFEST_SHA256 = (
     "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
 )
 EXPECTED_NOTEBOOK_SHA256 = (
-    "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+    "962a921ac2b13401aa8da63553c4bc5fb0f333ff8ecb853886f97a5a01dadae4"
 )
 EXPECTED_METADATA_SHA256 = (
     "0abddc3553ac9954f9af7ee9022d80bebbc2af65d824c33d9d14ea2b78e7ae01"
@@ -168,7 +174,7 @@ def verify_sources() -> tuple[str, dict, dict, dict]:
     )
 
     if sha256_file(RUNTIME_MANIFEST) != EXPECTED_RUNTIME_MANIFEST_SHA256:
-        raise RuntimeError("private runtime v8 manifest changed")
+        raise RuntimeError("private runtime v9 manifest changed")
     if sha256_file(DATASET_MANIFEST) != EXPECTED_DATASET_MANIFEST_SHA256:
         raise RuntimeError("private ZebraHub data v4 manifest changed")
     if sha256_file(NOTEBOOK) != EXPECTED_NOTEBOOK_SHA256:
@@ -182,7 +188,7 @@ def verify_sources() -> tuple[str, dict, dict, dict]:
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     code = notebook_code()
     if len(runtime_manifest.get("files", {})) != 36:
-        raise RuntimeError("private runtime v8 file inventory changed")
+        raise RuntimeError("private runtime v9 file inventory changed")
     if not (
         dataset_evidence.get("status") == "verified"
         and dataset_evidence.get("manifest_sha256") == EXPECTED_DATASET_MANIFEST_SHA256
@@ -236,8 +242,8 @@ def verify_sources() -> tuple[str, dict, dict, dict]:
         and config.get("submission_created") is False
         and config.get("required_visible_gpu_count") == 2
         and config.get("pretraining_execution", {}).get("required_visible_gpu_count") == 2
-        and config.get("pretraining_execution", {}).get("runtime_dataset_version") == 8
-        and config.get("external_data", {}).get("derived_dataset_version") == 4
+        and config.get("pretraining_execution", {}).get("runtime_dataset_version") == 9
+        and config.get("data", {}).get("derived_dataset_version") == 4
     ):
         raise RuntimeError("experiment provenance or two-GPU contract changed")
     return code, runtime_manifest, dataset_manifest, config
@@ -323,7 +329,7 @@ def main(output: Path = OUTPUT) -> None:
         check(
             "inputs",
             [CONFIG, METADATA, RUNTIME_MANIFEST, DATASET_MANIFEST, verifier_source],
-            "Only private runtime v8 and balanced ZebraHub shard data v4 are attached; competition inputs are absent, internet and TPU are off, and the notebook fails closed unless exactly two T4 GPUs are visible.",
+            "Only private autocast-repaired runtime v9 and balanced ZebraHub shard data v4 are attached; competition inputs are absent, internet and TPU are off, and the notebook fails closed unless exactly two T4 GPUs are visible.",
         ),
         check(
             "single_batch",

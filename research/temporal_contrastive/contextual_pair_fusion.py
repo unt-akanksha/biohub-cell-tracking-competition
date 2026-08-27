@@ -298,7 +298,12 @@ class ContextualPairFusionAssociationModel(PhysicalPatchAssociationModel):
         if edge_set_features.shape[1] != EDGE_SET_FEATURE_WIDTH:
             raise RuntimeError("edge-set context width changed")
         logits = self.edge_head(edge_set_features).squeeze(1)
-        output[source_rows, target_rows] = logits
+        # Autocast keeps the dense sentinel matrix in the input embedding dtype
+        # while the learned edge head emits fp16/bfloat16 values.  Index-put
+        # requires an exact dtype match, so promote the compact learned logits
+        # back to the stable output dtype before scattering them.  The cast is
+        # differentiable and keeps losses/softmaxes in fp32 during training.
+        output[source_rows, target_rows] = logits.to(dtype=output.dtype)
         return output
 
 
