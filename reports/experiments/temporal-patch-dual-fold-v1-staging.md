@@ -106,8 +106,10 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite subsequently passed 495 tests with zero failures;
-two Windows tests were skipped only because unprivileged symlink creation is
-unavailable. For timeout resistance, final whole-movie LPT sharding now weights
+The complete repository suite now passes 505 unique tests with zero failures
+when each group runs in its declared environment; two Windows tests are skipped
+only because unprivileged symlink creation is unavailable. The ordinary
+environment passed 469 tests, and the 55-test locked-scorer group passed in the
+pinned evaluator environment (19 tests overlap). For timeout resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
 node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.
