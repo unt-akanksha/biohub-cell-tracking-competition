@@ -30,8 +30,10 @@ try:
     from submission_sharding import (
         DEFAULT_INFERENCE_HARD_STOP_SECONDS,
         KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
+        WORKER_TERMINATION_GRACE_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        terminate_and_reap_processes,
         validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
@@ -41,8 +43,10 @@ except ModuleNotFoundError:
     from research.submission_sharding import (
         DEFAULT_INFERENCE_HARD_STOP_SECONDS,
         KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
+        WORKER_TERMINATION_GRACE_SECONDS,
         build_movie_shards,
         shard_plan_sha256,
+        terminate_and_reap_processes,
         validate_inference_hard_stop,
         validate_shard_outputs,
         visible_cuda_tokens,
@@ -261,9 +265,10 @@ def orchestrate(args: argparse.Namespace) -> None:
             if len(return_codes) < len(processes):
                 time.sleep(3)
     finally:
+        terminate_and_reap_processes(
+            [process for _index, process, _handle, _output in processes]
+        )
         for _shard_index, process, handle, _output in processes:
-            if process.poll() is None:
-                process.terminate()
             handle.close()
     failures = {index: code for index, code in return_codes.items() if code != 0}
     if failures:
@@ -299,6 +304,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "notebook_runtime_reserve_seconds": (
             KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - args.hard_stop_seconds
         ),
+        "worker_termination_grace_seconds": WORKER_TERMINATION_GRACE_SECONDS,
         "gpu_count": 2,
         "whole_movie_coverage": list(coverage),
         "shard_plan_sha256": plan_payload["shard_plan_sha256"],

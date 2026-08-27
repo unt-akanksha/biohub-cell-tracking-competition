@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import subprocess
+
 import pytest
 
 from research.submission_sharding import (
@@ -7,8 +9,10 @@ from research.submission_sharding import (
     KAGGLE_T4_X2_MACHINE_SHAPE,
     KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
     MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS,
+    WORKER_TERMINATION_GRACE_SECONDS,
     build_movie_shards,
     shard_plan_sha256,
+    terminate_and_reap_processes,
     validate_inference_hard_stop,
     validate_submission_kernel_metadata,
     validate_shard_outputs,
@@ -44,6 +48,46 @@ def test_submission_metadata_requires_offline_t4_x2_shape() -> None:
         validate_submission_kernel_metadata(
             {**metadata, "machine_shape": "NvidiaTeslaP100"}
         )
+
+
+class FakeProcess:
+    def __init__(self, *, exits_on_terminate: bool) -> None:
+        self.return_code = None
+        self.exits_on_terminate = exits_on_terminate
+        self.terminated = False
+        self.killed = False
+        self.waited = False
+
+    def poll(self):
+        return self.return_code
+
+    def terminate(self) -> None:
+        self.terminated = True
+        if self.exits_on_terminate:
+            self.return_code = -15
+
+    def wait(self, timeout=None):
+        self.waited = True
+        if self.return_code is None:
+            if timeout is not None:
+                raise subprocess.TimeoutExpired("fake", timeout)
+            raise AssertionError("unbounded wait occurred before force kill")
+        return self.return_code
+
+    def kill(self) -> None:
+        self.killed = True
+        self.return_code = -9
+
+
+def test_timed_out_workers_are_terminated_force_killed_and_reaped() -> None:
+    assert WORKER_TERMINATION_GRACE_SECONDS == 15.0
+    cooperative = FakeProcess(exits_on_terminate=True)
+    stuck = FakeProcess(exits_on_terminate=False)
+
+    terminate_and_reap_processes([cooperative, stuck], grace_seconds=0)
+
+    assert cooperative.terminated and cooperative.waited and not cooperative.killed
+    assert stuck.terminated and stuck.killed and stuck.waited
 
 
 def test_dual_gpu_plan_assigns_every_movie_once() -> None:

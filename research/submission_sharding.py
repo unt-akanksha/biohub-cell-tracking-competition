@@ -5,8 +5,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import subprocess
+import time
 from dataclasses import asdict, dataclass
-from typing import Mapping, Sequence
+from typing import Any, Mapping, Sequence
 
 
 KAGGLE_GPU_NOTEBOOK_MAX_SECONDS = 43_200
@@ -15,6 +17,7 @@ DEFAULT_INFERENCE_HARD_STOP_SECONDS = (
     KAGGLE_GPU_NOTEBOOK_MAX_SECONDS - MINIMUM_NOTEBOOK_RUNTIME_RESERVE_SECONDS
 )
 KAGGLE_T4_X2_MACHINE_SHAPE = "NvidiaTeslaT4"
+WORKER_TERMINATION_GRACE_SECONDS = 15.0
 
 
 def validate_inference_hard_stop(seconds: int) -> int:
@@ -46,6 +49,30 @@ def validate_submission_kernel_metadata(metadata: Mapping[str, object]) -> None:
     }
     if drift:
         raise ValueError(f"unsafe Kaggle submission kernel metadata: {drift}")
+
+
+def terminate_and_reap_processes(
+    processes: Sequence[Any], *, grace_seconds: float = WORKER_TERMINATION_GRACE_SECONDS
+) -> None:
+    """Bound worker shutdown so a timed-out shard cannot outlive its parent."""
+
+    if grace_seconds < 0:
+        raise ValueError("process termination grace must be nonnegative")
+    alive = [process for process in processes if process.poll() is None]
+    for process in alive:
+        process.terminate()
+    deadline = time.monotonic() + grace_seconds
+    for process in alive:
+        remaining = max(0.0, deadline - time.monotonic())
+        try:
+            process.wait(timeout=remaining)
+        except subprocess.TimeoutExpired:
+            pass
+    survivors = [process for process in alive if process.poll() is None]
+    for process in survivors:
+        process.kill()
+    for process in survivors:
+        process.wait()
 
 
 @dataclass(frozen=True)
