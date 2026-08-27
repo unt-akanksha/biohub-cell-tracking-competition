@@ -28,6 +28,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "minimum_kaggle_finalization_reserve_seconds": 7_200,
         "required_kaggle_machine_shape": "NvidiaTeslaT4",
         "submission_internet_enabled": False,
+        "timed_out_worker_termination_grace_seconds": 15,
     }
     required = {
         "train_dual_fold_patch.py",

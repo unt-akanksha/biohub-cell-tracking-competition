@@ -124,12 +124,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-20260827.zip`
-(102,247 bytes, SHA-256
-`7b5a3763728390b49d226b3fec8818da3cfe2e309ed89e3940f3c4243c8b17ef`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-reaped-20260827.zip`
+(102,734 bytes, SHA-256
+`9d190be8465fbf0365fda0cb7053569b43b3c69d0bd5e912567e36ee3408ab78`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`a9ffcf658803fa305b3a2558efb3227ff76aeeff362011b98e2948052c54d272`,
+`2308432be7ab2a8e647c9659c8969b7452aae2da8243258b0390029748bf6e4a`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -140,11 +140,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 517 unique tests
+The cumulative environment-split repository suite now passes 518 unique tests
 with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 462 tests after excluding the scorer-only files, and all 55
+environment passed 463 tests after excluding the scorer-only files, and all 55
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
@@ -155,3 +155,6 @@ setup, final assembly, artifact persistence, and shutdown. This ceiling cannot
 be raised through a command-line override. Final-kernel metadata is also
 fail-closed to Kaggle's `NvidiaTeslaT4` T4 x2 shape with TPU and internet
 disabled; runtime separately requires exactly two visible CUDA devices.
+Timed-out shard workers are terminated together, given one shared 15-second
+grace period, then force-killed and reaped if necessary so they cannot consume
+the reserved finalization window after the orchestrator exits.

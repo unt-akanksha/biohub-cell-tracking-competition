@@ -8,10 +8,10 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-20260827.zip`
-- Archive bytes: `102247`
-- Archive SHA-256: `7b5a3763728390b49d226b3fec8818da3cfe2e309ed89e3940f3c4243c8b17ef`
-- Extracted manifest SHA-256: `a9ffcf658803fa305b3a2558efb3227ff76aeeff362011b98e2948052c54d272`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-reaped-20260827.zip`
+- Archive bytes: `102734`
+- Archive SHA-256: `9d190be8465fbf0365fda0cb7053569b43b3c69d0bd5e912567e36ee3408ab78`
+- Extracted manifest SHA-256: `2308432be7ab2a8e647c9659c8969b7452aae2da8243258b0390029748bf6e4a`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
@@ -166,3 +166,6 @@ limit for setup, final assembly, artifact persistence, and shutdown. The final
 kernel metadata must request Kaggle's `NvidiaTeslaT4` shape with internet and
 TPU disabled, and runtime still fails before inference unless exactly two CUDA
 devices are visible.
+At the inference deadline, both shard workers receive termination together,
+share a 15-second grace period, and any survivor is force-killed and reaped.
+Thus a stuck child cannot silently continue consuming the finalization reserve.
