@@ -8,10 +8,10 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-ema-ensemble-daughterloss-20260827.zip`
-- Archive bytes: `97938`
-- Archive SHA-256: `7858a9f5ae181c5c22145a56eea6f7739448497de058297fde8074021691132c`
-- Extracted manifest SHA-256: `e422e987ec9a853d1306e8d334231257a58f210bcd3104560b3ad012417b3bee`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-ema-ensemble-daughterloss-20260827.zip`
+- Archive bytes: `98290`
+- Archive SHA-256: `16bfb6f79f19e593fa51ed89a479c5be216bba11c963cd61a4ee9311958ba69c`
+- Extracted manifest SHA-256: `9b53aa40b7b60630e802bbd9205085aa8e7f7bb5e3cc454d7b43648613d0f92c`
 - Required visible GPUs: exactly 2
 - Internet during model execution: not required
 - Submission command included: false

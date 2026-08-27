@@ -44,6 +44,13 @@ per-movie regression gates. In that path, both encoders consume the same
 already-resampled physical patch tensor, avoiding a second grid-sampling and
 image-extraction pass per node.
 
+Temporal contexts also use a bounded rolling frame cache. The two contexts in
+one training transition load their four unique frames once instead of loading
+the shared middle pair twice. Whole-movie inference reuses each decompressed
+Zarr frame across neighboring contexts, then evicts frames that cannot be used
+again. Predictions are unchanged, while the fixed wall clock can cover more
+optimizer work and final inference is less exposed to I/O timeout.
+
 No public Kaggle implementation, public prediction identity, CELLECT source, or
 external checkpoint is copied. CELLECT and the 2026 microscopy-embedding paper
 informed only the modeling hypothesis.
@@ -98,7 +105,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 38 tests across the normal
+The updated focused temporal/Trackastra suite passes 39 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, temporal boundary clamping and shared-channel grids, all-daughter
 supervised-contrastive loss, partial-accumulation normalization,
@@ -109,12 +116,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-ema-ensemble-daughterloss-20260827.zip`
-(97,938 bytes, SHA-256
-`7858a9f5ae181c5c22145a56eea6f7739448497de058297fde8074021691132c`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-ema-ensemble-daughterloss-20260827.zip`
+(98,290 bytes, SHA-256
+`16bfb6f79f19e593fa51ed89a479c5be216bba11c963cd61a4ee9311958ba69c`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`e422e987ec9a853d1306e8d334231257a58f210bcd3104560b3ad012417b3bee`,
+`9b53aa40b7b60630e802bbd9205085aa8e7f7bb5e3cc454d7b43648613d0f92c`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -125,10 +132,10 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite now passes 509 unique tests with zero failures
+The complete repository suite now passes 510 unique tests with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 450 tests after excluding the scorer-only files, and all 59
+environment passed 451 tests after excluding the scorer-only files, and all 59
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
