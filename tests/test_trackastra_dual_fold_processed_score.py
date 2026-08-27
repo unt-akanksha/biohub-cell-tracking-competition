@@ -108,6 +108,22 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
         )
 
 
+def test_appearance_materialization_accepts_hash_identical_predeclared_control() -> None:
+    payload = materialization()
+    for model in payload["models"].values():
+        model.update(
+            {
+                "model_sha256": "c" * 64,
+                "best_step": 0,
+                "source_policy": "predeclared_pretrained_control",
+            }
+        )
+
+    validate_materialization(
+        payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+    )
+
+
 def test_node_identity_ignores_csv_row_id_but_not_coordinates() -> None:
     schema = {
         "id": pl.Int64,

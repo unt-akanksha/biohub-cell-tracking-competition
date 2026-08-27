@@ -119,9 +119,38 @@ def validate_materialization(
     models = payload.get("models")
     if not isinstance(models, dict) or set(models) != {"target_44b6", "target_6bba"}:
         raise ValueError("materialization does not bind both reciprocal models")
+    control_hashes = {
+        str(model.get("model_sha256", ""))
+        for model in models.values()
+        if isinstance(model, dict)
+        and model.get("source_policy") == "predeclared_pretrained_control"
+    }
+    all_adapted = all(
+        isinstance(model, dict) and int(model.get("best_step", 0)) > 0
+        for model in models.values()
+    )
+    all_pretrained_control = bool(
+        len(control_hashes) == 1
+        and "" not in control_hashes
+        and all(
+            isinstance(model, dict)
+            and int(model.get("best_step", -1)) == 0
+            and model.get("source_policy") == "predeclared_pretrained_control"
+            for model in models.values()
+        )
+    )
+    if not (all_adapted or all_pretrained_control):
+        raise ValueError("materialization mixes Trackastra source policies")
     for fold, model in models.items():
-        if not isinstance(model, dict) or int(model.get("best_step", 0)) <= 0:
-            raise ValueError(f"materialization model did not improve initialization: {fold}")
+        valid_source = bool(
+            isinstance(model, dict)
+            and (
+                (all_adapted and int(model.get("best_step", 0)) > 0)
+                or (all_pretrained_control and int(model.get("best_step", -1)) == 0)
+            )
+        )
+        if not valid_source:
+            raise ValueError(f"materialization Trackastra source is invalid: {fold}")
         digest = model.get("model_sha256")
         if not isinstance(digest, str) or len(digest) != 64:
             raise ValueError(f"materialization model hash is invalid: {fold}")

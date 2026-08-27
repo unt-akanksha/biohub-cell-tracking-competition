@@ -140,8 +140,16 @@ def load_acceptance(
             "model_sha256"
         ):
             raise RuntimeError(f"accepted appearance hash mismatch: {fold}")
-        if not (
+        trackastra_source_valid = bool(
             int(expected_trackastra[fold].get("best_step", 0)) > 0
+            or (
+                int(expected_trackastra[fold].get("best_step", -1)) == 0
+                and expected_trackastra[fold].get("source_policy")
+                == "predeclared_pretrained_control"
+            )
+        )
+        if not (
+            trackastra_source_valid
             and int(expected_appearance[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("parameter_count", 0))
             == 19_221_954

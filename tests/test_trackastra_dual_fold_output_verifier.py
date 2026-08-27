@@ -65,7 +65,8 @@ def valid_output(tmp_path: Path) -> Path:
             "synthetic_validation_count": 128,
             "steps_target": 75000,
             "real_train_stems": [
-                f"{prefixes['source_prefix']}_train_{row:03d}" for row in range(96)
+                f"{prefixes['source_prefix']}_train_{row:03d}"
+                for row in range(prefixes["real_train_count"])
             ],
             "real_validation_stems": [
                 f"{prefixes['target_prefix']}_valid_{row:03d}" for row in range(12)
@@ -134,3 +135,39 @@ def test_verifier_rejects_gain_failure_and_competition_artifact(
     (root / "submission.csv").write_text("forbidden\n", encoding="utf-8")
     with pytest.raises(ValueError, match="competition artifacts"):
         verify_output(root)
+
+
+def test_verifier_accepts_only_explicit_hash_exact_pretrained_control(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = valid_output(tmp_path)
+    aggregate_path = root / "training_terminal.json"
+    aggregate = json.loads(aggregate_path.read_text())
+    aggregate["both_folds_improved"] = False
+    control_hash = digest(root / "target_44b6" / "model.pt")
+    monkeypatch.setattr(
+        "research.trackastra_graph.verify_dual_fold_training_output."
+        "EXPECTED_PRETRAINED_SHA256",
+        control_hash,
+    )
+    for fold in FOLDS:
+        model = root / fold / "model.pt"
+        model.write_bytes((root / "target_44b6" / "model.pt").read_bytes())
+        worker = aggregate["folds"][fold]
+        worker["best_step"] = 0
+        worker["pretrained_initialization_retained"] = True
+        worker["model_sha256"] = control_hash
+        worker["best_real"] = deepcopy(worker["initial_real"])
+        worker["best_synthetic"] = deepcopy(worker["initial_synthetic"])
+        worker["best_selection_score"] = worker["initial_selection_score"]
+        write_json(root / fold / "worker_terminal.json", worker)
+        config_path = root / fold / "training_config.json"
+        config = json.loads(config_path.read_text())
+        config["pretrained_sha256"] = control_hash
+        write_json(config_path, config)
+    write_json(aggregate_path, aggregate)
+
+    with pytest.raises(ValueError, match="aggregate"):
+        verify_output(root)
+    result = verify_output(root, allow_pretrained_control=True)
+    assert result["source_policy"] == "predeclared_pretrained_control"

@@ -78,10 +78,30 @@ def verify_sources(
     trackastra_terminal = json.loads(
         trackastra_terminal_path.read_text(encoding="utf-8")
     )
+    trackastra_folds = trackastra_terminal.get("folds", {})
+    control_hashes = {
+        str(row.get("model_sha256", ""))
+        for row in trackastra_folds.values()
+        if isinstance(row, dict)
+    }
+    pretrained_control = bool(
+        trackastra_terminal.get("both_folds_improved") is False
+        and set(trackastra_folds) == set(FOLD_BY_PREFIX.values())
+        and len(control_hashes) == 1
+        and "" not in control_hashes
+        and all(
+            int(row.get("best_step", -1)) == 0
+            and row.get("pretrained_initialization_retained") is True
+            and row.get("best_real") == row.get("initial_real")
+            and row.get("best_synthetic") == row.get("initial_synthetic")
+            for row in trackastra_folds.values()
+        )
+    )
+    adapted_trackastra = trackastra_terminal.get("both_folds_improved") is True
     if not (
         trackastra_terminal.get("status") == "completed"
         and trackastra_terminal.get("gpu_count") == 2
-        and trackastra_terminal.get("both_folds_improved") is True
+        and (adapted_trackastra or pretrained_control)
         and trackastra_terminal.get("submission_created") is False
     ):
         raise RuntimeError("reciprocal Trackastra source is not accepted")
@@ -103,8 +123,13 @@ def verify_sources(
     for fold in sorted(FOLD_BY_PREFIX.values()):
         trackastra_fold = trackastra_terminal["folds"][fold]
         trackastra_model = trackastra_root / fold / "model.pt"
-        if not (
+        valid_trackastra_step = bool(
             int(trackastra_fold.get("best_step", 0)) > 0
+            if adapted_trackastra
+            else int(trackastra_fold.get("best_step", -1)) == 0
+        )
+        if not (
+            valid_trackastra_step
             and sha256_file(trackastra_model) == trackastra_fold.get("model_sha256")
         ):
             raise RuntimeError(f"Trackastra fold hash or gain is invalid: {fold}")
@@ -180,6 +205,11 @@ def verify_sources(
             "trackastra_model_dir": trackastra_root / fold,
             "trackastra_model_sha256": trackastra_fold["model_sha256"],
             "trackastra_best_step": trackastra_fold["best_step"],
+            "trackastra_source_policy": (
+                "adapted_dual_fold"
+                if adapted_trackastra
+                else "predeclared_pretrained_control"
+            ),
             "appearance_model": appearance_model,
             "peer_appearance_model": peer_model,
             "peer_appearance_model_sha256": peer_terminal["model_sha256"],
@@ -518,6 +548,7 @@ def orchestrate(args: argparse.Namespace) -> None:
             fold: {
                 "model_sha256": source["trackastra_model_sha256"],
                 "best_step": source["trackastra_best_step"],
+                "source_policy": source["trackastra_source_policy"],
             }
             for fold, source in folds.items()
         },

@@ -155,10 +155,24 @@ def verify_sources(
         (trackastra_dir / "worker_terminal.json").read_text(encoding="utf-8")
     )
     trackastra_model = trackastra_dir / "model.pt"
+    adapted_trackastra = bool(
+        int(trackastra_terminal.get("best_step", 0)) > 0
+        and trackastra_terminal.get("pretrained_initialization_retained") is False
+    )
+    pretrained_control = bool(
+        int(trackastra_terminal.get("best_step", -1)) == 0
+        and trackastra_terminal.get("pretrained_initialization_retained") is True
+        and trackastra_terminal.get("best_real")
+        == trackastra_terminal.get("initial_real")
+        and trackastra_terminal.get("best_synthetic")
+        == trackastra_terminal.get("initial_synthetic")
+        and float(trackastra_terminal.get("best_selection_score", float("nan")))
+        == float(trackastra_terminal.get("initial_selection_score", float("nan")))
+    )
     if not (
         trackastra_terminal.get("status") == "completed"
         and trackastra_terminal.get("fold") == fold
-        and int(trackastra_terminal.get("best_step", 0)) > 0
+        and (adapted_trackastra or pretrained_control)
         and trackastra_terminal.get("submission_created") is False
     ):
         raise RuntimeError(f"Trackastra source is not eligible: {fold}")
@@ -607,6 +621,9 @@ def worker(args: argparse.Namespace) -> None:
         "peer_fold": peer_fold,
         "peer_appearance_model_sha256": peer_appearance_terminal["model_sha256"],
         "trackastra_model_sha256": trackastra_terminal["model_sha256"],
+        "trackastra_source_policy": (
+            "adapted_dual_fold" if adapted_trackastra else "predeclared_pretrained_control"
+        ),
         "ensemble_mode_grid": list(ENSEMBLE_MODES),
         "appearance_weight_grid": list(APPEARANCE_WEIGHTS),
         "division_weight_grid": list(DIVISION_WEIGHTS),

@@ -115,6 +115,21 @@ def test_candidate_builder_rejects_appearance_checkpoint_mutation(tmp_path: Path
         load_acceptance(evidence, trackastra_dirs, appearance_models)
 
 
+def test_candidate_builder_accepts_exact_predeclared_trackastra_control(
+    tmp_path: Path,
+) -> None:
+    evidence, trackastra_dirs, appearance_models = accepted_fixture(tmp_path)
+    payload = json.loads(evidence.read_text(encoding="utf-8"))
+    for model in payload["models"].values():
+        model.update(
+            {"best_step": 0, "source_policy": "predeclared_pretrained_control"}
+        )
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+
+    accepted = load_acceptance(evidence, trackastra_dirs, appearance_models)
+    assert all(row["best_step"] == 0 for row in accepted["models"].values())
+
+
 def test_appearance_shard_weight_includes_pair_and_patch_work() -> None:
     video = GraphVideo(
         "44b6_fixture",
