@@ -63,6 +63,13 @@ try:
 except ModuleNotFoundError:
     from research.submission_sharding import terminate_and_reap_processes
 
+try:
+    from verify_trackastra_output import terminal_source_policy
+except ModuleNotFoundError:
+    from research.trackastra_graph.verify_dual_fold_training_output import (
+        terminal_source_policy,
+    )
+
 
 RUN_ID = "temporal-patch-dual-fold-processed-acceptance-v1"
 EXPECTED_CALIBRATION_RUN = "temporal-patch-dual-fold-blend-v1"
@@ -79,25 +86,11 @@ def verify_sources(
         trackastra_terminal_path.read_text(encoding="utf-8")
     )
     trackastra_folds = trackastra_terminal.get("folds", {})
-    control_hashes = {
-        str(row.get("model_sha256", ""))
-        for row in trackastra_folds.values()
-        if isinstance(row, dict)
-    }
-    pretrained_control = bool(
-        trackastra_terminal.get("both_folds_improved") is False
-        and set(trackastra_folds) == set(FOLD_BY_PREFIX.values())
-        and len(control_hashes) == 1
-        and "" not in control_hashes
-        and all(
-            int(row.get("best_step", -1)) == 0
-            and row.get("pretrained_initialization_retained") is True
-            and row.get("best_real") == row.get("initial_real")
-            and row.get("best_synthetic") == row.get("initial_synthetic")
-            for row in trackastra_folds.values()
-        )
+    trackastra_source_policy = terminal_source_policy(trackastra_terminal)
+    adapted_trackastra = trackastra_source_policy == "adapted_dual_fold"
+    pretrained_control = (
+        trackastra_source_policy == "predeclared_pretrained_control"
     )
-    adapted_trackastra = trackastra_terminal.get("both_folds_improved") is True
     if not (
         trackastra_terminal.get("status") == "completed"
         and trackastra_terminal.get("gpu_count") == 2
@@ -122,6 +115,13 @@ def verify_sources(
     verified_folds: dict[str, dict[str, Any]] = {}
     for fold in sorted(FOLD_BY_PREFIX.values()):
         trackastra_fold = trackastra_terminal["folds"][fold]
+        trackastra_worker = json.loads(
+            (trackastra_root / fold / "worker_terminal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        if trackastra_worker != trackastra_fold:
+            raise RuntimeError(f"Trackastra worker/aggregate mismatch: {fold}")
         trackastra_model = trackastra_root / fold / "model.pt"
         valid_trackastra_step = bool(
             int(trackastra_fold.get("best_step", 0)) > 0

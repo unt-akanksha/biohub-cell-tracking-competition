@@ -42,11 +42,11 @@ public-base replica cannot become accepted evidence or a local final candidate.
 ## Bound package
 
 - Archive:
-  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
+  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
 - SHA-256:
-  `7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`
+  `7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`
 - Manifest SHA-256:
-  `5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`
+  `002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`
 - Competition submission performed: false
 
 The candidate remains conditional on clean fold improvement, one-shot pinned

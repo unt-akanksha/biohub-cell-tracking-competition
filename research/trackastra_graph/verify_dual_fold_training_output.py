@@ -65,6 +65,38 @@ def finite_metric(payload: dict[str, Any], key: str, *, fold: str) -> float:
     return value
 
 
+def terminal_source_policy(aggregate: dict[str, Any]) -> str:
+    """Classify one coherent two-fold adapted or predeclared-control source."""
+
+    rows = aggregate.get("folds")
+    if not isinstance(rows, dict) or set(rows) != set(FOLDS):
+        raise ValueError("aggregate Trackastra terminal does not cover both folds")
+    if aggregate.get("both_folds_improved") is True and all(
+        isinstance(row, dict)
+        and int(row.get("best_step", 0)) > 0
+        and row.get("pretrained_initialization_retained") is False
+        for row in rows.values()
+    ):
+        return "adapted_dual_fold"
+    control_hashes = {
+        str(row.get("model_sha256", ""))
+        for row in rows.values()
+        if isinstance(row, dict)
+    }
+    if aggregate.get("both_folds_improved") is False and all(
+        isinstance(row, dict)
+        and int(row.get("best_step", -1)) == 0
+        and row.get("pretrained_initialization_retained") is True
+        and row.get("best_real") == row.get("initial_real")
+        and row.get("best_synthetic") == row.get("initial_synthetic")
+        and float(row.get("best_selection_score", float("nan")))
+        == float(row.get("initial_selection_score", float("nan")))
+        for row in rows.values()
+    ) and len(control_hashes) == 1 and "" not in control_hashes:
+        return "predeclared_pretrained_control"
+    raise ValueError("aggregate Trackastra terminal mixes or rejects source policies")
+
+
 def verify_output(
     root: Path, *, allow_pretrained_control: bool = False
 ) -> dict[str, Any]:
@@ -82,11 +114,11 @@ def verify_output(
         and set(aggregate.get("folds", {})) == expected_folds
     ):
         raise ValueError("aggregate Trackastra terminal is not eligible")
-    if aggregate.get("both_folds_improved") is True:
-        source_policy = "adapted_dual_fold"
-    elif allow_pretrained_control and aggregate.get("both_folds_improved") is False:
-        source_policy = "predeclared_pretrained_control"
-    else:
+    source_policy = terminal_source_policy(aggregate)
+    if (
+        source_policy == "predeclared_pretrained_control"
+        and not allow_pretrained_control
+    ):
         raise ValueError("aggregate Trackastra terminal is not eligible")
     control_model_hash: str | None = None
     if source_policy == "predeclared_pretrained_control":

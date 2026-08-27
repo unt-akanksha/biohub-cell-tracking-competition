@@ -47,6 +47,13 @@ try:
 except ModuleNotFoundError:
     from research.submission_sharding import terminate_and_reap_processes
 
+try:
+    from verify_trackastra_output import terminal_source_policy
+except ModuleNotFoundError:
+    from research.trackastra_graph.verify_dual_fold_training_output import (
+        terminal_source_policy,
+    )
+
 
 RUN_ID = "temporal-patch-dual-fold-blend-v1"
 FOLDS = ("target_44b6", "target_6bba")
@@ -159,9 +166,21 @@ def verify_sources(
         raise RuntimeError(f"appearance calibration prefix mismatch: {fold}")
 
     trackastra_dir = trackastra_root / fold
+    trackastra_aggregate = json.loads(
+        (trackastra_root / "training_terminal.json").read_text(encoding="utf-8")
+    )
+    if not (
+        trackastra_aggregate.get("status") == "completed"
+        and trackastra_aggregate.get("gpu_count") == 2
+        and trackastra_aggregate.get("submission_created") is False
+    ):
+        raise RuntimeError("aggregate Trackastra source is not eligible")
+    trackastra_source_policy = terminal_source_policy(trackastra_aggregate)
     trackastra_terminal = json.loads(
         (trackastra_dir / "worker_terminal.json").read_text(encoding="utf-8")
     )
+    if trackastra_terminal != trackastra_aggregate["folds"].get(fold):
+        raise RuntimeError(f"Trackastra worker/aggregate mismatch: {fold}")
     trackastra_model = trackastra_dir / "model.pt"
     adapted_trackastra = bool(
         int(trackastra_terminal.get("best_step", 0)) > 0
@@ -186,11 +205,11 @@ def verify_sources(
         raise RuntimeError(f"Trackastra source is not eligible: {fold}")
     if sha256_file(trackastra_model) != trackastra_terminal.get("model_sha256"):
         raise RuntimeError(f"Trackastra model hash mismatch: {fold}")
-    trackastra_source_policy = (
-        "adapted_dual_fold"
-        if adapted_trackastra
-        else "predeclared_pretrained_control"
+    local_source_policy = (
+        "adapted_dual_fold" if adapted_trackastra else "predeclared_pretrained_control"
     )
+    if local_source_policy != trackastra_source_policy:
+        raise RuntimeError(f"Trackastra source policy mismatch: {fold}")
     return (
         appearance_terminal,
         appearance_config,

@@ -113,6 +113,10 @@ same model hash in both folds, the corrected-geometry manifest, exact available
 real split sizes (96 and 69 training movies), and no CSV, ZIP, or
 submission-named artifact. This admits only the initialization that was
 predeclared as a candidate, never a rejected fine-tuned state.
+The calibration and processed-acceptance stages independently repeat the
+two-fold policy classification and require each on-disk worker terminal to be
+byte-for-byte JSON-equivalent to its aggregate fold row. Mixed adapted/control
+folds and locally mutated evidence are rejected before model loading.
 
 ## Verification
 
@@ -128,12 +132,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
-(103,920 bytes, SHA-256
-`7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
+(104,312 bytes, SHA-256
+`7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`,
+`002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -144,11 +148,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 522 unique tests
+The cumulative environment-split repository suite now passes 526 unique tests
 with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 466 tests after excluding the scorer-only files, and all 56
+environment passed 470 tests after excluding the scorer-only files, and all 56
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its

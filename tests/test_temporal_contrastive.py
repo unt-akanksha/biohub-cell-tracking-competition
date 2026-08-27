@@ -127,10 +127,33 @@ def test_calibration_source_contract_propagates_predeclared_control(
     (trackastra_dir / "worker_terminal.json").write_text(
         json.dumps(trackastra_terminal), encoding="utf-8"
     )
+    peer_terminal = dict(trackastra_terminal, fold="target_6bba")
+    (trackastra_root / "training_terminal.json").write_text(
+        json.dumps(
+            {
+                "status": "completed",
+                "gpu_count": 2,
+                "both_folds_improved": False,
+                "submission_created": False,
+                "folds": {
+                    fold: trackastra_terminal,
+                    "target_6bba": peer_terminal,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
 
     verified = verify_sources(fold, appearance_root, trackastra_root)
 
     assert verified[-1] == "predeclared_pretrained_control"
+
+    mutated_terminal = dict(trackastra_terminal, best_selection_score=0.97)
+    (trackastra_dir / "worker_terminal.json").write_text(
+        json.dumps(mutated_terminal), encoding="utf-8"
+    )
+    with pytest.raises(RuntimeError, match="worker/aggregate mismatch"):
+        verify_sources(fold, appearance_root, trackastra_root)
 
 
 def test_temporal_head_outputs_normalized_embedding_and_sparse_division_prior() -> None:

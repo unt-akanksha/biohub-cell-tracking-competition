@@ -8,10 +8,10 @@ and a candidate only; it contains no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-20260827.zip`
-- Archive bytes: `103920`
-- Archive SHA-256: `7ac8a2ecf5887f0fb5a65250cc0c9292e8aba54445bea3691a86db02b4ca8c3e`
-- Extracted manifest SHA-256: `5eea2355619210ce54c115f979eb4a08ab23c18b638e98d3f2b1410abd55381b`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
+- Archive bytes: `104312`
+- Archive SHA-256: `7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`
+- Extracted manifest SHA-256: `002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
@@ -53,7 +53,8 @@ Stop if the runtime verifier does not report 26 files, two GPUs, the bound
 manifest hash, the bound runtime reserve, and no submission command. Also stop
 unless the Trackastra verifier reports `status: verified`, source policy
 `predeclared_pretrained_control`, two byte-identical hash-bound initial models,
-corrected native synthetic geometry, and no competition artifacts. The failed
+byte-identical on-disk worker/aggregate evidence for both folds, corrected
+native synthetic geometry, and no competition artifacts. The failed
 fine-tuned states were not checkpointed or admitted.
 
 ## Stage 1: reciprocal heavy appearance training

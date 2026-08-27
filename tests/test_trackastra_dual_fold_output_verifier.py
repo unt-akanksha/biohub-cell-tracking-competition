@@ -171,3 +171,23 @@ def test_verifier_accepts_only_explicit_hash_exact_pretrained_control(
         verify_output(root)
     result = verify_output(root, allow_pretrained_control=True)
     assert result["source_policy"] == "predeclared_pretrained_control"
+
+
+def test_verifier_rejects_mixed_adapted_and_pretrained_control(
+    tmp_path: Path,
+) -> None:
+    root = valid_output(tmp_path)
+    aggregate_path = root / "training_terminal.json"
+    aggregate = json.loads(aggregate_path.read_text())
+    aggregate["both_folds_improved"] = False
+    worker = aggregate["folds"]["target_44b6"]
+    worker["best_step"] = 0
+    worker["pretrained_initialization_retained"] = True
+    worker["best_real"] = deepcopy(worker["initial_real"])
+    worker["best_synthetic"] = deepcopy(worker["initial_synthetic"])
+    worker["best_selection_score"] = worker["initial_selection_score"]
+    write_json(root / "target_44b6" / "worker_terminal.json", worker)
+    write_json(aggregate_path, aggregate)
+
+    with pytest.raises(ValueError, match="mixes or rejects"):
+        verify_output(root, allow_pretrained_control=True)

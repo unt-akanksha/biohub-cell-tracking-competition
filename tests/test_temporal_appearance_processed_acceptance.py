@@ -37,6 +37,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "status": "completed",
             "fold": fold,
             "best_step": index * 100,
+            "pretrained_initialization_retained": False,
             "model_sha256": digest(trackastra_model),
             "submission_created": False,
         }
@@ -138,6 +139,19 @@ def test_processed_appearance_sources_reject_mutated_model(tmp_path: Path) -> No
         verify_sources(trackastra_root, appearance_root, calibration_path)
 
 
+def test_processed_appearance_sources_reject_worker_aggregate_divergence(
+    tmp_path: Path,
+) -> None:
+    trackastra_root, appearance_root, calibration_path = source_fixture(tmp_path)
+    worker_path = trackastra_root / "target_44b6" / "worker_terminal.json"
+    worker = json.loads(worker_path.read_text(encoding="utf-8"))
+    worker["best_step"] += 1
+    write_json(worker_path, worker)
+
+    with pytest.raises(RuntimeError, match="worker/aggregate mismatch"):
+        verify_sources(trackastra_root, appearance_root, calibration_path)
+
+
 def test_processed_appearance_sources_accept_identical_predeclared_control(
     tmp_path: Path,
 ) -> None:
@@ -160,6 +174,8 @@ def test_processed_appearance_sources_accept_identical_predeclared_control(
                 "best_real": initial_real,
                 "initial_synthetic": initial_synthetic,
                 "best_synthetic": initial_synthetic,
+                "initial_selection_score": 0.98,
+                "best_selection_score": 0.98,
                 "model_sha256": digest(model_path),
             }
         )
