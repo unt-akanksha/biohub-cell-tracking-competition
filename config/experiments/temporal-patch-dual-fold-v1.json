@@ -18,7 +18,8 @@
     "exact_gate_sha256": "7b8348b8066de53208400d61e2855fde2681064e516b53ccb5f38a04174eb611",
     "two_gpu_candidate_builder_sha256": "a9d7982008f441eee4c2a4c01f5a4fcd8ac63ce29c22e3887423a56c38dc479c",
     "runtime_verifier_sha256": "9775df2b8fc39ce042e09dc447830de7e8a07fc8a6931f89869b690b773cb9ff",
-    "runtime_builder_sha256": "891980bede14cf757303a4dd9721ac3251863223c1927f06e12505be46c745f8"
+    "trackastra_output_verifier_sha256": "b0594174aab6944e51dd3a1485f22a8143cc800a25b3cac104435c04fa955596",
+    "runtime_builder_sha256": "1a09fe45bad7e778b20bd00a693a4008bcf1fbdd976a49b318185335f79d64de"
   },
   "model": {
     "architecture": "independent physical-scale temporal-context 3D residual patch encoder",

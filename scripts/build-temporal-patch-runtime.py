@@ -40,6 +40,10 @@ SOURCES = {
     / "research"
     / "temporal_contrastive"
     / "verify_runtime.py",
+    "verify_trackastra_output.py": ROOT
+    / "research"
+    / "trackastra_graph"
+    / "verify_dual_fold_training_output.py",
     "trainer.py": ROOT
     / "research"
     / "trackastra_graph"
