@@ -7,11 +7,15 @@ from pathlib import Path
 import pytest
 
 from research.temporal_contrastive.dual_fold_appearance_submission import (
+    APPEARANCE_NODE_COST,
+    appearance_movie_inference_weight,
     load_acceptance,
 )
 from research.trackastra_graph.dual_fold_processed_acceptance import (
     FROZEN_ASSOCIATION_CONFIGURATION,
 )
+from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
+import numpy as np
 
 
 FOLDS = ("target_44b6", "target_6bba")
@@ -81,3 +85,17 @@ def test_candidate_builder_rejects_appearance_checkpoint_mutation(tmp_path: Path
 
     with pytest.raises(RuntimeError, match="appearance hash mismatch"):
         load_acceptance(evidence, trackastra_dirs, appearance_models)
+
+
+def test_appearance_shard_weight_includes_pair_and_patch_work() -> None:
+    video = GraphVideo(
+        "44b6_fixture",
+        node_ids=np.arange(9),
+        times=np.asarray([0, 0, 1, 1, 1, 2, 2, 2, 2]),
+        coords_voxel=np.zeros((9, 3), dtype=np.float32),
+        edges=np.empty((0, 2), dtype=np.int64),
+    )
+
+    assert appearance_movie_inference_weight(video) == (
+        2 * 3 + 3 * 4 + APPEARANCE_NODE_COST * 9
+    )

@@ -27,7 +27,7 @@ try:
         extract_movie_embeddings,
     )
     from dual_fold_processed_acceptance import FROZEN_ASSOCIATION_CONFIGURATION
-    from dual_fold_rerank_submission import embryo_prefix, movie_inference_weight
+    from dual_fold_rerank_submission import embryo_prefix
     from patch_model import PhysicalPatchAssociationModel
     from submission_sharding import (
         build_movie_shards,
@@ -56,11 +56,11 @@ except ModuleNotFoundError:
     )
     from research.trackastra_graph.dual_fold_rerank_submission import (
         embryo_prefix,
-        movie_inference_weight,
     )
 
 
 FOLD_BY_PREFIX = {"44b6": "target_44b6", "6bba": "target_6bba"}
+APPEARANCE_NODE_COST = 4096.0
 
 
 def atomic_json(path: Path, payload: dict[str, Any]) -> None:
@@ -143,6 +143,17 @@ def hybrid_configuration(selected: dict[str, Any]) -> rerank.HybridLinkConfig:
             selected["base_division_keep_probability"]
         ),
     )
+
+
+def appearance_movie_inference_weight(video: Any) -> float:
+    """Estimate transformer pairs plus the per-node 3D encoder workload."""
+
+    pair_products = 0
+    for timepoint, source_ids in video.ids_by_time.items():
+        targets = video.ids_by_time.get(timepoint + 1)
+        if targets is not None:
+            pair_products += len(source_ids) * len(targets)
+    return float(max(pair_products, 1) + APPEARANCE_NODE_COST * len(video.node_ids))
 
 
 def worker(args: argparse.Namespace) -> None:
@@ -280,7 +291,10 @@ def orchestrate(args: argparse.Namespace) -> None:
         args.acceptance_evidence, trackastra_dirs, appearance_models
     )
     videos = rerank.read_submission(args.base_submission)
-    weights = {stem: movie_inference_weight(video) for stem, video in videos.items()}
+    weights = {
+        stem: appearance_movie_inference_weight(video)
+        for stem, video in videos.items()
+    }
     shards = build_movie_shards(
         sorted(videos),
         visible_cuda_tokens(detected_devices=detected),
@@ -403,6 +417,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "gpu_count": 2,
         "whole_movie_coverage": list(coverage),
         "shard_plan_sha256": plan["shard_plan_sha256"],
+        "appearance_node_cost_weight": APPEARANCE_NODE_COST,
         "base_submission_sha256": sha256_file(args.base_submission),
         "candidate_submission_sha256": sha256_file(output_path),
         "acceptance_evidence_sha256": sha256_file(args.acceptance_evidence),

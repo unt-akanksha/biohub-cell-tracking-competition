@@ -53,7 +53,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The focused temporal/Trackastra suite passes 39 tests. These cover physical
+The focused temporal/Trackastra suite passes 40 tests. These cover physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
 alignment, exact zero-weight fallback, the frozen processed exact gate, and
@@ -66,3 +66,8 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 `0.9896` and `0.9962`. This confirms that physical crop extraction, the encoder,
 and the association objective form a learnable path rather than merely passing
 shape checks.
+
+The complete repository suite subsequently passed 495 tests with zero failures;
+two Windows tests were skipped only because unprivileged symlink creation is
+unavailable. For timeout resistance, final whole-movie LPT sharding now weights
+both Trackastra frame-pair products and the added per-node 3D encoding work.
