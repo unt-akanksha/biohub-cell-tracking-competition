@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-dual-fold-synthetic-v1",
+  "parent": "trackastra-graph-finetune-v6",
+  "kernel_ref": "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
+  "runtime_dataset": "indarkarhana/biohub-trackastra-dual-runtime-v1@version1",
+  "synthetic_kernel_source": "josefreitasalvesneto/biohub-synthetic-dataset",
+  "declared_max_runtime_hours": "4.00",
+  "watchdog_hard_stop_seconds": 14100,
+  "orchestrator_hard_stop_seconds": 13200,
+  "worker_max_wall_seconds": 12000,
+  "worker_finalization_reserve_seconds": 900,
+  "accelerator": "NvidiaTeslaT4",
+  "required_visible_gpu_count": 2,
+  "internet_enabled": false,
+  "tpu_enabled": false,
+  "notebook_sha256": "f977bde7f9de9225e5c571cdf045d41ba712fd723201ac88e8dc133e5c3e9037",
+  "kernel_metadata_sha256": "3253e494a89855f586388972f6af191c37b5c40c53f2677894ad26494df020ee",
+  "runtime_manifest_sha256": "87b1cb6ca5523c4c9983f2b4fbf88ff0a9581724f6ec82d67b92d6d9293e7439",
+  "dual_trainer_sha256": "c987968499f5a858722042aace29b1ddc860f47f33ad0208c81f59ff1c069d9a",
+  "base_trainer_sha256": "b59dcc3bdc8bc54fd1da203fed884bc6d3aa7d2e81f539390a1cf4f196d46757",
+  "synthetic_adapter_sha256": "8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc203160be",
+  "pretrained_model": {
+    "name": "Trackastra ctc v0.3.0",
+    "source_commit": "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b",
+    "license": "BSD-3-Clause",
+    "model_sha256": "24c290ce74289ee6dac952a3355c9fb7a0a477fda3012656a2c6d80af892981f",
+    "parameter_count_per_fold": 27456880,
+    "parallel_parameter_count": 54913760
+  },
+  "folds": {
+    "target_44b6": {
+      "real_training_prefix": "6bba",
+      "real_validation_prefix": "44b6",
+      "gpu_index": 0
+    },
+    "target_6bba": {
+      "real_training_prefix": "44b6",
+      "real_validation_prefix": "6bba",
+      "gpu_index": 1
+    }
+  },
+  "data": {
+    "synthetic_train_graphs": 2046,
+    "synthetic_validation_graphs": 128,
+    "real_train_graphs_per_fold": 96,
+    "real_validation_graphs_per_fold": 12,
+    "opened_acceptance_stems_excluded": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ],
+    "synthetic_manifest_sha256": "e8b5376b2ac6fdd55bd6e45d1b07b401339d375b211b6f67be93fb0de4d8ce14",
+    "synthetic_sequence_files": 2174,
+    "synthetic_nodes": 4056226,
+    "synthetic_edges": 3460295,
+    "synthetic_divisions": 165267,
+    "synthetic_native_geometry_restored": true
+  },
+  "training": {
+    "target_steps_per_fold": 75000,
+    "max_tokens": 512,
+    "learning_rate": 0.000008,
+    "minimum_learning_rate": 0.0000005,
+    "gradient_accumulation": 4,
+    "real_replay_probability": 0.05,
+    "synthetic_replay_probability": 0.95,
+    "false_positive_ratio": 0.75,
+    "global_motion_probability": 0.35,
+    "global_jump_probability": 0.08,
+    "checkpoint_selection": "fixed threshold-free opposite-embryo and heldout-synthetic ranking",
+    "pretrained_initialization_is_candidate": true
+  },
+  "selection_gate": {
+    "real_composite_minimum_gain": 0.001,
+    "synthetic_composite_maximum_regression": 0.005,
+    "public_leaderboard_used": false,
+    "opened_acceptance_labels_used": false,
+    "exact_processed_public_comparator_deferred": true
+  },
+  "hypothesis": "Correct native synthetic geometry plus long 95/5 synthetic-real replay and frame-global motion augmentation will improve association and division ranking without the catastrophic real-only drift observed in v6.",
+  "submission_policy": "training only; no archive creation and no competition submission",
+  "authorized_for_submission": false
+}

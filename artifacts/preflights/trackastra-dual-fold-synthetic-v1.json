@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "run_id": "trackastra-dual-fold-synthetic-v1",
+  "created_at": "2026-08-27T02:28:56Z",
+  "checks": [
+    {
+      "name": "imports",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_dual_fold_synthetic.py", "sha256": "c987968499f5a858722042aace29b1ddc860f47f33ad0208c81f59ff1c069d9a"},
+        {"path": "kaggle/biohub-trackastra-dual-fold-synthetic-v1/biohub-trackastra-dual-fold-synthetic-v1.ipynb", "sha256": "f977bde7f9de9225e5c571cdf045d41ba712fd723201ac88e8dc133e5c3e9037"}
+      ],
+      "detail": "Python compilation and the focused Trackastra suite pass; the generated notebook source imports from the hash-bound private runtime with internet disabled."
+    },
+    {
+      "name": "inputs",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-dual-fold-synthetic-v1/kernel-metadata.json", "sha256": "3253e494a89855f586388972f6af191c37b5c40c53f2677894ad26494df020ee"},
+        {"path": "config/experiments/trackastra-dual-fold-synthetic-v1.json", "sha256": "7532899ad6546f953f36b996286bd710b299d12a758e7612ef46d9ec00eabecf"},
+        {"path": ".biohub/staging/biohub-trackastra-dual-runtime-v1/SOURCE_MANIFEST.json", "sha256": "87b1cb6ca5523c4c9983f2b4fbf88ff0a9581724f6ec82d67b92d6d9293e7439"}
+      ],
+      "detail": "The private runtime is ready on Kaggle and its live file inventory contains the official checkpoint, both trainers, synthetic adapter, and pinned Trackastra source."
+    },
+    {
+      "name": "single_batch",
+      "status": "passed",
+      "evidence": [
+        {"path": "tests/test_trackastra_dual_fold_synthetic.py", "sha256": "a816c9dff1fd92280bfd1edb2cb9f9aa07e52ce5ea75c75cf838589abac4706e"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"}
+      ],
+      "detail": "The inherited exact 512-token Trackastra loss completed finite dense forward/backward; the new path preserves its bounded sample representation."
+    },
+    {
+      "name": "model_step",
+      "status": "passed",
+      "evidence": [
+        {"path": "tests/test_trackastra_graph.py", "sha256": "e6a5190aede06d6811130ed90de7ed5ac085124e8ffa0bc76f1b027aa3398e45"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"}
+      ],
+      "detail": "The same 27.46M model and CUDA-safe full-precision probability BCE have completed an optimizer-compatible backward pass."
+    },
+    {
+      "name": "checkpoint_roundtrip",
+      "status": "passed",
+      "evidence": [
+        {"path": ".biohub/staging/biohub-trackastra-dual-runtime-v1/SOURCE_MANIFEST.json", "sha256": "87b1cb6ca5523c4c9983f2b4fbf88ff0a9581724f6ec82d67b92d6d9293e7439"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v2-smoke.json", "sha256": "8d8d2b3b773c7f56b493afb9168d767751eeaf103c5b512813a92cb8f49782ca"}
+      ],
+      "detail": "The official checkpoint roundtrip is established; each worker atomically saves only its best state and matching config, then records the model hash."
+    },
+    {
+      "name": "output_location",
+      "status": "passed",
+      "evidence": [
+        {"path": "kaggle/biohub-trackastra-dual-fold-synthetic-v1/biohub-trackastra-dual-fold-synthetic-v1.ipynb", "sha256": "f977bde7f9de9225e5c571cdf045d41ba712fd723201ac88e8dc133e5c3e9037"},
+        {"path": "tests/test_trackastra_dual_fold_kernel_builder.py", "sha256": "4c20a2559ba7f2384e25edec825446061a5f601781a9064154ddf471344cac2c"}
+      ],
+      "detail": "Outputs are restricted to two model folders plus terminal evidence below /kaggle/working; tests prove there is no submission archive or submit command."
+    },
+    {
+      "name": "dense_memory",
+      "status": "passed",
+      "evidence": [
+        {"path": "research/trackastra_graph/train_dual_fold_synthetic.py", "sha256": "c987968499f5a858722042aace29b1ddc860f47f33ad0208c81f59ff1c069d9a"},
+        {"path": "reports/experiments/trackastra-graph-finetune-v5-dense-smoke.json", "sha256": "a7e5407a12eacf33130d219248e716fc92dcd8854e401d5f76ca6b3e2fe1e235"}
+      ],
+      "detail": "One isolated 512-token mixed-precision worker per T4 bounds GPU memory; graph-only NPZ reads avoid loading the 19.9 GB image corpus."
+    },
+    {
+      "name": "dataset_coverage",
+      "status": "passed",
+      "evidence": [
+        {"path": "config/experiments/trackastra-dual-fold-synthetic-v1.json", "sha256": "7532899ad6546f953f36b996286bd710b299d12a758e7612ef46d9ec00eabecf"},
+        {"path": "tests/test_trackastra_dual_fold_synthetic.py", "sha256": "a816c9dff1fd92280bfd1edb2cb9f9aa07e52ce5ea75c75cf838589abac4706e"}
+      ],
+      "detail": "The independently audited manifest covers all 2,174 six-frame sequence graphs (4,056,226 nodes, 3,460,295 edges, 165,267 divisions); 128 are deterministic holdout and 2,046 are training. All four opened acceptance stems are excluded."
+    }
+  ],
+  "report_sha256": "e6c108ac1ef6758e7d39a20044f19d7827e0689518f14f92c207d841da81558f"
+}
