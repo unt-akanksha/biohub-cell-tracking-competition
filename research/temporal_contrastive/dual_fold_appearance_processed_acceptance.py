@@ -199,6 +199,12 @@ def verify_sources(
             and sha256_file(peer_model) == peer_terminal.get("model_sha256")
             and calibration_fold.get("trackastra_model_sha256")
             == trackastra_fold["model_sha256"]
+            and calibration_fold.get("trackastra_source_policy")
+            == (
+                "adapted_dual_fold"
+                if adapted_trackastra
+                else "predeclared_pretrained_control"
+            )
         ):
             raise RuntimeError(f"appearance calibration/model binding is invalid: {fold}")
         verified_folds[fold] = {

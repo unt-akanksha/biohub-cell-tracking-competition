@@ -77,6 +77,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "appearance_temperature": 0.10,
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "trackastra_model_sha256": trackastra_fold["model_sha256"],
+            "trackastra_source_policy": "adapted_dual_fold",
             "processed_acceptance_ground_truth_read": False,
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
@@ -135,3 +136,50 @@ def test_processed_appearance_sources_reject_mutated_model(tmp_path: Path) -> No
 
     with pytest.raises(RuntimeError, match="appearance fold"):
         verify_sources(trackastra_root, appearance_root, calibration_path)
+
+
+def test_processed_appearance_sources_accept_identical_predeclared_control(
+    tmp_path: Path,
+) -> None:
+    trackastra_root, appearance_root, calibration_path = source_fixture(tmp_path)
+    aggregate_path = trackastra_root / "training_terminal.json"
+    aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
+    aggregate["both_folds_improved"] = False
+    control_bytes = b"one-predeclared-trackastra-control"
+    for fold in FOLDS:
+        model_path = trackastra_root / fold / "model.pt"
+        model_path.write_bytes(control_bytes)
+        worker = aggregate["folds"][fold]
+        initial_real = {"composite": 0.999}
+        initial_synthetic = {"composite": 0.92}
+        worker.update(
+            {
+                "best_step": 0,
+                "pretrained_initialization_retained": True,
+                "initial_real": initial_real,
+                "best_real": initial_real,
+                "initial_synthetic": initial_synthetic,
+                "best_synthetic": initial_synthetic,
+                "model_sha256": digest(model_path),
+            }
+        )
+        write_json(trackastra_root / fold / "worker_terminal.json", worker)
+    write_json(aggregate_path, aggregate)
+
+    calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
+    for fold in FOLDS:
+        calibration["folds"][fold]["trackastra_model_sha256"] = digest(
+            trackastra_root / fold / "model.pt"
+        )
+        calibration["folds"][fold]["trackastra_source_policy"] = (
+            "predeclared_pretrained_control"
+        )
+    write_json(calibration_path, calibration)
+
+    _calibration, folds = verify_sources(
+        trackastra_root, appearance_root, calibration_path
+    )
+
+    assert {
+        row["trackastra_source_policy"] for row in folds.values()
+    } == {"predeclared_pretrained_control"}

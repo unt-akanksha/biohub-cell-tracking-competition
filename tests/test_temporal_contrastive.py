@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 import numpy as np
@@ -43,7 +45,92 @@ from research.temporal_contrastive.calibrate_dual_fold_blend import (
     association_metrics_for_video,
     ranking_metrics_for_video,
     select_weight,
+    verify_sources,
 )
+
+
+def _digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def test_calibration_source_contract_propagates_predeclared_control(
+    tmp_path: Path,
+) -> None:
+    fold = "target_44b6"
+    appearance_root = tmp_path / "appearance"
+    appearance_dir = appearance_root / fold
+    appearance_dir.mkdir(parents=True)
+    appearance_model = appearance_dir / "appearance_model.pt"
+    appearance_model.write_bytes(b"appearance-control-fixture")
+    appearance_terminal = {
+        "status": "completed",
+        "run_id": "temporal-patch-dual-fold-v1",
+        "fold": fold,
+        "best_step": 100,
+        "model_sha256": _digest(appearance_model),
+        "parameter_count": 19_221_954,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": 0.997,
+        "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+    }
+    appearance_config = {
+        "base_channels": 64,
+        "embedding_channels": 256,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": 0.997,
+        "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
+        "calibration_ground_truth_read": False,
+        "real_calibration_stems_reserved": [
+            f"44b6_calibration_{index:02d}" for index in range(12)
+        ],
+        "real_train_stems": ["6bba_training_00"],
+    }
+    (appearance_dir / "worker_terminal.json").write_text(
+        json.dumps(appearance_terminal), encoding="utf-8"
+    )
+    (appearance_dir / "training_config.json").write_text(
+        json.dumps(appearance_config), encoding="utf-8"
+    )
+
+    trackastra_root = tmp_path / "trackastra"
+    trackastra_dir = trackastra_root / fold
+    trackastra_dir.mkdir(parents=True)
+    trackastra_model = trackastra_dir / "model.pt"
+    trackastra_model.write_bytes(b"predeclared-trackastra-control")
+    initial_real = {"composite": 0.999}
+    initial_synthetic = {"composite": 0.92}
+    trackastra_terminal = {
+        "status": "completed",
+        "fold": fold,
+        "best_step": 0,
+        "pretrained_initialization_retained": True,
+        "initial_real": initial_real,
+        "best_real": initial_real,
+        "initial_synthetic": initial_synthetic,
+        "best_synthetic": initial_synthetic,
+        "initial_selection_score": 0.98,
+        "best_selection_score": 0.98,
+        "model_sha256": _digest(trackastra_model),
+        "submission_created": False,
+    }
+    (trackastra_dir / "worker_terminal.json").write_text(
+        json.dumps(trackastra_terminal), encoding="utf-8"
+    )
+
+    verified = verify_sources(fold, appearance_root, trackastra_root)
+
+    assert verified[-1] == "predeclared_pretrained_control"
 
 
 def test_temporal_head_outputs_normalized_embedding_and_sparse_division_prior() -> None:

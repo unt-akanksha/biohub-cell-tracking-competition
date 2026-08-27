@@ -91,7 +91,15 @@ def sha256_file(path: Path) -> str:
 
 def verify_sources(
     fold: str, appearance_root: Path, trackastra_root: Path
-) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], list[str], Path, Path]:
+) -> tuple[
+    dict[str, Any],
+    dict[str, Any],
+    dict[str, Any],
+    list[str],
+    Path,
+    Path,
+    str,
+]:
     appearance_dir = appearance_root / fold
     appearance_terminal_path = appearance_dir / "worker_terminal.json"
     appearance_config_path = appearance_dir / "training_config.json"
@@ -178,6 +186,11 @@ def verify_sources(
         raise RuntimeError(f"Trackastra source is not eligible: {fold}")
     if sha256_file(trackastra_model) != trackastra_terminal.get("model_sha256"):
         raise RuntimeError(f"Trackastra model hash mismatch: {fold}")
+    trackastra_source_policy = (
+        "adapted_dual_fold"
+        if adapted_trackastra
+        else "predeclared_pretrained_control"
+    )
     return (
         appearance_terminal,
         appearance_config,
@@ -185,6 +198,7 @@ def verify_sources(
         [str(stem) for stem in stems],
         appearance_model,
         trackastra_dir,
+        trackastra_source_policy,
     )
 
 
@@ -466,6 +480,7 @@ def worker(args: argparse.Namespace) -> None:
         stems,
         appearance_model_path,
         trackastra_model_dir,
+        trackastra_source_policy,
     ) = verify_sources(args.fold, args.appearance_output_root, args.trackastra_output_root)
     peer_fold = next(fold for fold in FOLDS if fold != args.fold)
     (
@@ -475,6 +490,7 @@ def worker(args: argparse.Namespace) -> None:
         _peer_stems,
         peer_appearance_model_path,
         _peer_trackastra_model_dir,
+        _peer_trackastra_source_policy,
     ) = verify_sources(
         peer_fold, args.appearance_output_root, args.trackastra_output_root
     )
@@ -621,9 +637,7 @@ def worker(args: argparse.Namespace) -> None:
         "peer_fold": peer_fold,
         "peer_appearance_model_sha256": peer_appearance_terminal["model_sha256"],
         "trackastra_model_sha256": trackastra_terminal["model_sha256"],
-        "trackastra_source_policy": (
-            "adapted_dual_fold" if adapted_trackastra else "predeclared_pretrained_control"
-        ),
+        "trackastra_source_policy": trackastra_source_policy,
         "ensemble_mode_grid": list(ENSEMBLE_MODES),
         "appearance_weight_grid": list(APPEARANCE_WEIGHTS),
         "division_weight_grid": list(DIVISION_WEIGHTS),
