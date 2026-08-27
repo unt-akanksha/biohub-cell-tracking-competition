@@ -188,23 +188,37 @@ unchanged controls.
 The frozen 64/16 external split is now materialized rather than represented by
 single-transition smokes. ZSNS004 contributes 64 training transitions sampled
 evenly across four developmental windows; ZSNS005 contributes 16 disjoint
-selection transitions across four separately frozen windows. The derived asset
-contains 984/261 source nodes, 4,065/1,090 candidate edges, 1,844/504 positive
-edges, and 860/243 division sources in train/validation respectively. It is
-232,051,776 bytes and contains normalized temporal patches, coordinates, masks,
-targets, and context only—no raw CSV, Zarr metadata/chunks, competition data,
-or public predictions.
+selection transitions across four separately frozen windows.
+
+A prelaunch label audit found that dataset version 3 was structurally valid but
+scientifically biased. At ZSNS004 `t=96`, the complete lineage frame contains
+10,532 ordinary sources and only 46 division sources. The former selector put
+all divisions first, exhausted the 96-target budget, and then discarded most
+ordinary sources for lacking a selected hard negative. Across training this
+left only 984 sources, 4,065 candidate edges, and 860 division sources: 87.4%
+division labels from a frame population where divisions are rare. Version 3 is
+therefore excluded without spending GPU time.
+
+The replacement uses seeded local physical neighborhoods, an initial 12.5%
+division enrichment quota, a hard 25% per-shard division cap, and requires both
+ordinary links and hard negatives. Version 4 contains 4,009/1,010 source nodes,
+133,632/34,884 candidate edges, 4,434/1,124 positive edges, and 425/114 division
+sources in train/validation respectively. Division prevalence is 10.6%/11.3%,
+and training hard negatives increase from 2,221 to 129,198. The 331,655,946-byte
+asset contains normalized temporal patches, coordinates, masks, targets, and
+context only—no raw CSV, Zarr metadata/chunks, competition data, or public
+predictions.
 
 The private Kaggle dataset
-`indarkarhana/biohub-zebrahub-contextual-shards-v1` version 3 is the only
+`indarkarhana/biohub-zebrahub-contextual-shards-v1` version 4 is the only
 admissible remote asset. Version 1 is excluded because the CLI default skipped
 the shard directories; version 2 is excluded because its bundled verifier
-incorrectly required Kaggle's consumed publication-metadata file. The final
-version carries the generator, extractor, transition-context, patch-sampler,
-and verifier sources. A complete remote redownload passed all 80 shard and
-manifest hashes plus array inventory, shape, mask, hard-negative, division,
-finiteness, split, and raw-file checks. Its authoritative manifest SHA-256 is
-`d9f009518fb26a2aeebebf405485ff7cf36c7e3982cfbf9501aa98346e8b77a8`.
+incorrectly required Kaggle's consumed publication-metadata file; version 3 is
+excluded for the division-first sampling bias above. A complete version-4
+remote redownload passed all 80 shard and manifest hashes plus array inventory,
+shape, mask, hard-negative, balance, finiteness, split, and raw-file checks. Its
+authoritative manifest SHA-256 is
+`b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf`.
 
 The v3 pretrainer now runs this complete verifier inside each isolated GPU
 worker before reading a shard. Thus a partial Kaggle mount, altered archive, or
@@ -212,27 +226,28 @@ source/provenance mismatch fails before optimization. This publication and
 verification used no Kaggle GPU and created no competition submission.
 
 The rebuilt portable v3 runtime contains 36 hash-bound source files and passed
-its independent integrity check over 525,551 bytes with manifest SHA-256
-`7af79217c17162f377f43a7bba1bedc54a4a3b16d6a3dc45b9854fd11c4a2c1e`.
+its independent integrity check over 527,241 bytes with manifest SHA-256
+`7912b0ad2f6fa806abd931fa43a43d3327e7efdad07f211810557203844a2be4`.
 It declares exactly two visible GPUs and contains no submission command. The
 focused dataset/runtime checks passed 20/20, and the expanded temporal,
-contextual, and ZebraHub regression set passed 96/96. No pretraining launch is
+contextual, and ZebraHub regression set passed 98/98. No pretraining launch is
 authorized while the current two-GPU v1 evidence gate is still running.
 
 ## Staged original pretraining kernel
 
 The code-only runtime is private Kaggle dataset
 `indarkarhana/biohub-temporal-contextual-pair-fusion-runtime-v3`. Version 1 is
-superseded because it predates microscopy-safe augmentation. Version 2 is also
-superseded because its spatial-transform sampling forced per-step GPU
-synchronization. Version 3 is the only admissible pretraining runtime; a
-complete remote redownload reproduced the 36-file, 525,551-byte integrity
-inventory and exact runtime manifest above. This publication used no GPU.
+superseded because it predates microscopy-safe augmentation; version 2 forced
+per-step GPU synchronization; version 3 accepted the division-biased shards;
+version 4 allowed a post-publication flag to perturb rebuild hashes. Version 5
+is the only admissible pretraining runtime. A complete remote
+redownload reproduced the 36-file, 527,241-byte integrity inventory and exact
+runtime manifest above. This publication used no GPU.
 
 The deterministic private notebook
 `indarkarhana/biohub-zebrahub-contextual-pretrain-v1` is built locally but has
 not been pushed or started. Its only inputs are the private runtime and the
-hash-pinned ZebraHub version-3 derived shards; it does not attach the Biohub
+hash-pinned ZebraHub version-4 derived shards; it does not attach the Biohub
 competition. It refuses any machine other than exactly two visible GPUs, runs
 two isolated 20.7M-parameter folds, caps each worker at 21,600 seconds, selects
 only on ZSNS005, and writes checkpoints plus evidence without a submission

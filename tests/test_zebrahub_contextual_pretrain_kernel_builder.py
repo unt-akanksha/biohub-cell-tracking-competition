@@ -46,7 +46,7 @@ def test_pretraining_kernel_is_exact_two_gpu_external_training_only() -> None:
     assert metadata["competition_sources"] == []
     assert "torch.cuda.device_count() != 2" in code
     assert "EXPECTED_DATASET_MANIFEST_SHA256" in code
-    assert "d9f009518fb26a2aeebebf405485ff7cf36c7e3982cfbf9501aa98346e8b77a8" in code
+    assert "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf" in code
     assert "EXPECTED_RUNTIME_MANIFEST_SHA256" in code
     assert '"--steps", "12000"' in code
     assert '"--max-wall-seconds", "21600"' in code

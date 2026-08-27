@@ -29,6 +29,9 @@ SPLIT_CONTRACT = {
 }
 PROHIBITED_RAW_SUFFIXES = {".blosc", ".csv", ".zarray", ".zarr"}
 TRANSITION_CONTEXT_WIDTH = 8
+SAMPLING_POLICY = "seeded_local_neighborhood_balanced_v2"
+DIVISION_QUOTA_FRACTION = 0.125
+MAXIMUM_DIVISION_SOURCE_FRACTION = 0.25
 REQUIRED_SOURCE_FILES = {
     "zebrahub_external.py",
     "transition_context.py",
@@ -101,6 +104,13 @@ def validate_arrays(path: Path) -> dict[str, int]:
         expected_divisions = (positives.sum(axis=1) >= 2).astype(np.float32)
         if not np.array_equal(division_target, expected_divisions):
             raise ValueError(f"derived division targets changed: {path.name}")
+        division_count = int(division_target.sum())
+        if division_count > max(
+            1, int(np.floor(source_count * MAXIMUM_DIVISION_SOURCE_FRACTION))
+        ):
+            raise ValueError(f"derived division sampling is imbalanced: {path.name}")
+        if not np.any(expected_divisions == 0.0):
+            raise ValueError(f"derived shard contains no ordinary links: {path.name}")
         numeric = (
             data["source_patches"],
             data["target_patches"],
@@ -121,7 +131,7 @@ def validate_arrays(path: Path) -> dict[str, int]:
             "target_nodes": target_count,
             "candidate_edges": int(candidates.sum()),
             "positive_edges": int(positives.sum()),
-            "division_sources": int(division_target.sum()),
+            "division_sources": division_count,
         }
 
 
@@ -170,12 +180,20 @@ def verify_split(
             and evidence.get("leaderboard_used") is False
             and evidence.get("submission_created") is False
             and evidence.get("candidate_context_width") == 18
+            and evidence.get("sampling_policy") == SAMPLING_POLICY
+            and evidence.get("division_quota_fraction") == DIVISION_QUOTA_FRACTION
+            and evidence.get("maximum_division_source_fraction")
+            == MAXIMUM_DIVISION_SOURCE_FRACTION
+            and int(evidence.get("source_nodes", 0)) >= 32
             and evidence.get("shard", {}).get("path") == shard.name
             and evidence.get("shard", {}).get("bytes") == shard.stat().st_size
             and evidence.get("shard", {}).get("sha256") == actual_shard_hash
         ):
             raise ValueError(f"{name} per-shard evidence changed: {shard.name}")
-        summaries.append(validate_arrays(shard))
+        summary = validate_arrays(shard)
+        if any(evidence.get(key) != value for key, value in summary.items()):
+            raise ValueError(f"{name} per-shard counts changed: {shard.name}")
+        summaries.append(summary)
         shard_hashes.append(actual_shard_hash)
         manifest_hashes.append(actual_manifest_hash)
     expected_inventory = hashlib.sha256(
@@ -224,6 +242,10 @@ def verify_dataset(root: Path) -> dict[str, Any]:
         and manifest.get("leaderboard_used") is False
         and manifest.get("submission_created") is False
         and manifest.get("raw_movie_files_included") is False
+        and manifest.get("sampling_policy") == SAMPLING_POLICY
+        and manifest.get("division_quota_fraction") == DIVISION_QUOTA_FRACTION
+        and manifest.get("maximum_division_source_fraction")
+        == MAXIMUM_DIVISION_SOURCE_FRACTION
     ):
         raise ValueError("derived dataset global provenance changed")
     raw_files = [

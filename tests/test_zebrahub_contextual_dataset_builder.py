@@ -49,6 +49,11 @@ def test_existing_shard_resume_is_hash_and_provenance_bound(tmp_path: Path) -> N
         "leaderboard_used": False,
         "submission_created": False,
         "candidate_context_width": 18,
+        "sampling_policy": builder.SAMPLING_POLICY,
+        "division_quota_fraction": builder.DIVISION_QUOTA_FRACTION,
+        "maximum_division_source_fraction": (
+            builder.MAXIMUM_DIVISION_SOURCE_FRACTION
+        ),
         "shard": {
             "path": path.name,
             "bytes": path.stat().st_size,
@@ -84,4 +89,5 @@ def test_builder_source_has_frozen_split_and_no_submission_command() -> None:
     assert 'source="ZSNS004"' in source
     assert 'source="ZSNS005"' in source
     assert '"raw_movie_files_included": False' in source
+    assert '"sampling_policy": SAMPLING_POLICY' in source
     assert "kaggle competitions submit" not in source

@@ -179,6 +179,10 @@ def packaged_experiment(source: Path, family: str) -> dict:
         execution["kernel_metadata_sha256"] = "recorded_outside_runtime_package"
         execution["runtime_manifest_sha256"] = "see_SOURCE_MANIFEST.json"
         execution["runtime_remote_redownload_verified"] = False
+        external_data = payload.get("external_data")
+        if not isinstance(external_data, dict):
+            raise ValueError("contextual v3 external data contract is missing")
+        external_data["remote_redownload_verified"] = False
         source_inventory = payload.get("source")
         if not isinstance(source_inventory, dict):
             raise ValueError("contextual v3 source inventory is missing")

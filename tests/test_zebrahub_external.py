@@ -5,6 +5,7 @@ import pytest
 
 from research.temporal_contrastive.zebrahub_external import (
     EXPECTED_LEVEL0_SPACING_UM,
+    MAXIMUM_DIVISION_SOURCE_FRACTION,
     ORGANIZER_AUTHORIZATION,
     SOURCE_SPECS,
     select_dense_transition,
@@ -85,3 +86,50 @@ def test_dense_transition_rejects_positive_outside_radius() -> None:
             max_sources=1,
             max_targets=2,
         )
+
+
+def test_dense_transition_caps_division_enrichment_in_a_local_neighborhood() -> None:
+    ordinary_count = 96
+    division_count = 32
+    source_ids = np.arange(1, ordinary_count + division_count + 1, dtype=np.int64)
+    source_coords = np.stack(
+        (
+            np.zeros(len(source_ids), dtype=np.float32),
+            np.arange(len(source_ids), dtype=np.float32) * 0.1,
+            np.zeros(len(source_ids), dtype=np.float32),
+        ),
+        axis=1,
+    )
+    target_ids: list[int] = []
+    target_coords: list[np.ndarray] = []
+    parents: list[int] = []
+    next_target = 10_000
+    for index, source_id in enumerate(source_ids):
+        children = 2 if index < division_count else 1
+        for child in range(children):
+            target_ids.append(next_target)
+            next_target += 1
+            target_coords.append(
+                source_coords[index] + np.asarray([0.0, 0.01 * child, 0.0])
+            )
+            parents.append(int(source_id))
+    result = select_dense_transition(
+        source_ids,
+        source_coords,
+        np.asarray(target_ids, dtype=np.int64),
+        np.asarray(target_coords, dtype=np.float32),
+        np.asarray(parents, dtype=np.int64),
+        voxel_size_level0_um=(1.0, 1.0, 1.0),
+        radius_um=32.0,
+        max_sources=64,
+        max_targets=96,
+        seed=19,
+    )
+
+    divisions = int(result.division_target.sum())
+    assert len(result.source_ids) >= 32
+    assert divisions <= max(
+        1, int(np.floor(len(result.source_ids) * MAXIMUM_DIVISION_SOURCE_FRACTION))
+    )
+    assert np.any(result.division_target == 0.0)
+    assert np.all(result.candidate_mask.sum(axis=1) > result.positive_mask.sum(axis=1))

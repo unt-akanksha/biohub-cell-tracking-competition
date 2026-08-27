@@ -140,6 +140,7 @@ def test_runtime_builder_emits_distinct_contextual_pair_fusion_package() -> None
         experiment["pretraining_execution"]["runtime_remote_redownload_verified"]
         is False
     )
+    assert experiment["external_data"]["remote_redownload_verified"] is False
     assert (
         experiment["pretraining_execution"]["kernel_notebook_sha256"]
         == "recorded_outside_runtime_package"

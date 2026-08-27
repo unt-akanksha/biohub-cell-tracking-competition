@@ -62,6 +62,9 @@ SOURCE_SPECS = {
         "tracks_bytes": 341_483_571,
     },
 }
+SAMPLING_POLICY = "seeded_local_neighborhood_balanced_v2"
+DIVISION_QUOTA_FRACTION = 0.125
+MAXIMUM_DIVISION_SOURCE_FRACTION = 0.25
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -189,18 +192,48 @@ def select_dense_transition(
     if not positives_by_source:
         raise ValueError("selected frames contain no consecutive lineage edges")
 
+    source_um_all = source_coords * spacing[None]
+    target_um_all = target_coords * spacing[None]
+    eligible = np.asarray(
+        [
+            row
+            for row in sorted(positives_by_source)
+            if all(
+                np.linalg.norm(source_um_all[row] - target_um_all[target_row])
+                <= float(radius_um)
+                for target_row in positives_by_source[row]
+            )
+        ],
+        dtype=np.int64,
+    )
+    if not len(eligible):
+        raise ValueError(
+            "candidate radius omitted selected ZebraHub links; "
+            "no source retained all lineage edges"
+        )
     rng = np.random.default_rng(int(seed))
-    divisions = np.asarray(
-        sorted(row for row, children in positives_by_source.items() if len(children) >= 2),
-        dtype=np.int64,
+    anchor = int(eligible[int(rng.integers(0, len(eligible)))])
+    anchor_distances = np.linalg.norm(
+        source_um_all - source_um_all[anchor][None], axis=1
     )
-    ordinary = np.asarray(
-        sorted(row for row, children in positives_by_source.items() if len(children) == 1),
-        dtype=np.int64,
+
+    def nearest(rows: np.ndarray) -> np.ndarray:
+        if not len(rows):
+            return rows
+        return rows[np.lexsort((source_ids[rows], anchor_distances[rows]))]
+
+    division_mask = np.asarray(
+        [len(positives_by_source[int(row)]) >= 2 for row in eligible], dtype=bool
     )
-    rng.shuffle(divisions)
-    rng.shuffle(ordinary)
-    source_order = np.concatenate((divisions, ordinary))
+    divisions = nearest(eligible[division_mask])
+    ordinary = nearest(eligible[~division_mask])
+    division_quota = min(
+        len(divisions), max(1, int(round(max_sources * DIVISION_QUOTA_FRACTION)))
+    )
+    selected_pool = np.concatenate(
+        (divisions[:division_quota], ordinary[: max_sources - division_quota])
+    )
+    source_order = nearest(selected_pool)
     selected_sources: list[int] = []
     required_targets: set[int] = set()
     for source_row in source_order.tolist():
@@ -215,8 +248,7 @@ def select_dense_transition(
         raise ValueError("transition bounds cannot retain one labeled source")
 
     selected_source_rows = np.asarray(selected_sources, dtype=np.int64)
-    source_um = source_coords[selected_source_rows] * spacing[None]
-    target_um_all = target_coords * spacing[None]
+    source_um = source_um_all[selected_source_rows]
     distances = np.linalg.norm(
         source_um[:, None, :] - target_um_all[None, :, :], axis=2
     )
@@ -250,6 +282,26 @@ def select_dense_transition(
     selected_source_rows = selected_source_rows[usable]
     candidates = candidates[usable]
     positives = positives[usable]
+    division_rows = np.flatnonzero(positives.sum(axis=1) >= 2)
+    ordinary_count = int(np.sum(positives.sum(axis=1) == 1))
+    allowed_divisions = max(
+        1,
+        int(
+            math.floor(
+                ordinary_count
+                * MAXIMUM_DIVISION_SOURCE_FRACTION
+                / (1.0 - MAXIMUM_DIVISION_SOURCE_FRACTION)
+            )
+        ),
+    )
+    if len(division_rows) > allowed_divisions:
+        keep = np.ones(len(selected_source_rows), dtype=bool)
+        keep[division_rows[allowed_divisions:]] = False
+        selected_source_rows = selected_source_rows[keep]
+        candidates = candidates[keep]
+        positives = positives[keep]
+    if not np.any(positives.sum(axis=1) == 1):
+        raise ValueError("balanced ZebraHub selection contains no ordinary links")
 
     result = DenseTransition(
         source_ids=source_ids[selected_source_rows].copy(),
@@ -583,6 +635,9 @@ def build_temporal_patch_shard(
         "patch_shape": [17, 17, 17],
         "patch_half_extent_um": [8.0, 8.0, 8.0],
         "candidate_radius_um": float(radius_um),
+        "sampling_policy": SAMPLING_POLICY,
+        "division_quota_fraction": DIVISION_QUOTA_FRACTION,
+        "maximum_division_source_fraction": MAXIMUM_DIVISION_SOURCE_FRACTION,
         "source_nodes": len(transition.source_ids),
         "target_nodes": len(transition.target_ids),
         "positive_edges": int(transition.positive_mask.sum()),

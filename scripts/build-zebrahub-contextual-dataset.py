@@ -12,8 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from research.temporal_contrastive.zebrahub_external import (  # noqa: E402
+    DIVISION_QUOTA_FRACTION,
+    MAXIMUM_DIVISION_SOURCE_FRACTION,
     ORGANIZER_AUTHORIZATION,
     PUBLIC_ROOT,
+    SAMPLING_POLICY,
     SOURCE_SPECS,
     PublicZarrV2Array,
     build_temporal_patch_shard,
@@ -82,6 +85,10 @@ def verified_existing_shard(
         and manifest.get("leaderboard_used") is False
         and manifest.get("submission_created") is False
         and manifest.get("candidate_context_width") == 18
+        and manifest.get("sampling_policy") == SAMPLING_POLICY
+        and manifest.get("division_quota_fraction") == DIVISION_QUOTA_FRACTION
+        and manifest.get("maximum_division_source_fraction")
+        == MAXIMUM_DIVISION_SOURCE_FRACTION
         and manifest.get("shard", {}).get("path") == path.name
         and manifest.get("shard", {}).get("bytes") == path.stat().st_size
         and manifest.get("shard", {}).get("sha256") == actual_hash
@@ -297,6 +304,9 @@ def main() -> None:
         "leaderboard_used": False,
         "submission_created": False,
         "raw_movie_files_included": False,
+        "sampling_policy": SAMPLING_POLICY,
+        "division_quota_fraction": DIVISION_QUOTA_FRACTION,
+        "maximum_division_source_fraction": MAXIMUM_DIVISION_SOURCE_FRACTION,
         "training": training,
         "validation": validation,
         "generator": {
