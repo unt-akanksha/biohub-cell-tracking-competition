@@ -11,6 +11,7 @@ from research.temporal_contrastive.dual_fold_appearance_submission import (
     APPEARANCE_NODE_COST,
     DEFAULT_INFERENCE_HARD_STOP_SECONDS,
     KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
+    PAIR_FUSION_PAIR_COST,
     appearance_movie_inference_weight,
     load_acceptance,
     orchestrate,
@@ -69,7 +70,9 @@ def accepted_fixture(tmp_path: Path):
             "temporal_frame_offsets": [-1, 0, 1],
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
+            "division_prior_correction": "class-conditional importance weighting",
             "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+            "real_split_policy": "global deterministic disjoint partition per embryo prefix",
         }
         blends[fold] = {
             "appearance_weight": index * 0.1,
@@ -115,6 +118,37 @@ def test_candidate_builder_rejects_appearance_checkpoint_mutation(tmp_path: Path
         load_acceptance(evidence, trackastra_dirs, appearance_models)
 
 
+def test_candidate_builder_accepts_exact_pair_fusion_evidence(tmp_path: Path) -> None:
+    evidence, trackastra_dirs, appearance_models = accepted_fixture(tmp_path)
+    payload = json.loads(evidence.read_text(encoding="utf-8"))
+    payload.update(
+        candidate_family="trackastra_pair_fusion_blend",
+        appearance_family="temporal_pair_fusion_v2",
+    )
+    pair_contract = {
+        "appearance_family": "temporal_pair_fusion_v2",
+        "parameter_count": 20_869_325,
+        "pair_feature_width": 1_029,
+        "pair_projection_width": 1_024,
+        "pair_hidden_widths": [512, 128],
+        "pair_fusion_policy": "candidate-limited source-target-absolute-product-displacement-division MLP",
+        "pair_loss_policy": "all-positive candidate-pair mean-log-probability",
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    for model in payload["appearance_models"].values():
+        model.update(pair_contract)
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+
+    accepted = load_acceptance(evidence, trackastra_dirs, appearance_models)
+
+    assert accepted["appearance_family"] == "temporal_pair_fusion_v2"
+    payload["appearance_family"] = "temporal_cosine_v1"
+    evidence.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="accepted exact candidate"):
+        load_acceptance(evidence, trackastra_dirs, appearance_models)
+
+
 def test_candidate_builder_accepts_exact_predeclared_trackastra_control(
     tmp_path: Path,
 ) -> None:
@@ -144,4 +178,7 @@ def test_appearance_shard_weight_includes_pair_and_patch_work() -> None:
     )
     assert appearance_movie_inference_weight(video, encoder_count=2) == (
         2 * 3 + 3 * 4 + 2 * APPEARANCE_NODE_COST * 9
+    )
+    assert appearance_movie_inference_weight(video, pair_fusion=True) == (
+        PAIR_FUSION_PAIR_COST * (2 * 3 + 3 * 4) + APPEARANCE_NODE_COST * 9
     )

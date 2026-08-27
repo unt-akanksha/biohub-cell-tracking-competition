@@ -22,12 +22,22 @@ import torch
 try:
     import rerank_submission as rerank
     from appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
+    )
+    from appearance_family import (
+        CALIBRATION_RUN_BY_FAMILY,
+        CANDIDATE_FAMILY_BY_APPEARANCE,
+        COSINE_FAMILY,
+        FAMILIES,
+        PROCESSED_RUN_BY_FAMILY,
+        appearance_evidence_for_movie,
+        appearance_metadata,
+        build_appearance_model,
+        verify_appearance_metadata,
     )
     from dual_fold_processed_acceptance import (
         EXPECTED_STEMS,
@@ -37,17 +47,25 @@ try:
         configuration_sha256,
         sha256_file,
     )
-    from patch_model import PhysicalPatchAssociationModel
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
-    from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
+    from research.temporal_contrastive.appearance_family import (
+        CALIBRATION_RUN_BY_FAMILY,
+        CANDIDATE_FAMILY_BY_APPEARANCE,
+        COSINE_FAMILY,
+        FAMILIES,
+        PROCESSED_RUN_BY_FAMILY,
+        appearance_evidence_for_movie,
+        appearance_metadata,
+        build_appearance_model,
+        verify_appearance_metadata,
+    )
     from research.trackastra_graph import rerank_submission as rerank
     from research.trackastra_graph.dual_fold_processed_acceptance import (
         EXPECTED_STEMS,
@@ -71,8 +89,6 @@ except ModuleNotFoundError:
     )
 
 
-RUN_ID = "temporal-patch-dual-fold-processed-acceptance-v1"
-EXPECTED_CALIBRATION_RUN = "temporal-patch-dual-fold-blend-v1"
 APPEARANCE_TEMPERATURE = 0.10
 
 
@@ -99,9 +115,12 @@ def verify_sources(
     ):
         raise RuntimeError("reciprocal Trackastra source is not accepted")
     calibration = json.loads(calibration_terminal_path.read_text(encoding="utf-8"))
+    model_family = str(calibration.get("appearance_family", COSINE_FAMILY))
+    if model_family not in FAMILIES:
+        raise RuntimeError("appearance calibration declares an unknown model family")
     if not (
         calibration.get("status") == "completed"
-        and calibration.get("run_id") == EXPECTED_CALIBRATION_RUN
+        and calibration.get("run_id") == CALIBRATION_RUN_BY_FAMILY[model_family]
         and calibration.get("gpu_count") == 2
         and calibration.get("both_folds_improved") is True
         and calibration.get("processed_acceptance_ground_truth_read") is False
@@ -138,22 +157,19 @@ def verify_sources(
             appearance_terminal_path.read_text(encoding="utf-8")
         )
         appearance_model = appearance_root / fold / "appearance_model.pt"
+        try:
+            fold_family = verify_appearance_metadata(
+                appearance_terminal, require_training_run=True
+            )
+        except (TypeError, ValueError) as error:
+            raise RuntimeError(
+                f"appearance fold hash or gain is invalid: {fold}"
+            ) from error
         if not (
             appearance_terminal.get("status") == "completed"
             and appearance_terminal.get("fold") == fold
             and int(appearance_terminal.get("best_step", 0)) > 0
-            and int(appearance_terminal.get("parameter_count", 0)) == 19_221_954
-            and appearance_terminal.get("input_channels") == 3
-            and appearance_terminal.get("temporal_frame_offsets") == [-1, 0, 1]
-            and appearance_terminal.get("checkpoint_weight_source")
-            == "optimizer-step exponential moving average"
-            and appearance_terminal.get("ema_decay") == 0.997
-            and appearance_terminal.get("division_prior_correction")
-            == "class-conditional importance weighting"
-            and appearance_terminal.get("link_loss_policy")
-            == "all-positive supervised contrastive mean-log-probability"
-            and appearance_terminal.get("real_split_policy")
-            == "global deterministic disjoint partition per embryo prefix"
+            and fold_family == model_family
             and appearance_terminal.get("public_predictions_copied") is False
             and appearance_terminal.get("public_leaderboard_used_for_selection") is False
             and appearance_terminal.get("submission_created") is False
@@ -179,9 +195,20 @@ def verify_sources(
             )
         )
         peer_model = appearance_root / peer_fold / "appearance_model.pt"
+        try:
+            peer_family = verify_appearance_metadata(
+                peer_terminal, require_training_run=True
+            )
+        except (TypeError, ValueError) as error:
+            raise RuntimeError(
+                f"appearance calibration/model binding is invalid: {fold}"
+            ) from error
         if not (
             calibration_fold.get("status") == "completed"
             and calibration_fold.get("fold") == fold
+            and calibration_fold.get("appearance_family", model_family)
+            == model_family
+            and peer_family == model_family
             and calibration_fold.get("processed_acceptance_ground_truth_read") is False
             and calibration_fold.get("public_leaderboard_used_for_selection") is False
             and calibration_fold.get("submission_created") is False
@@ -221,18 +248,8 @@ def verify_sources(
             "peer_appearance_model_sha256": peer_terminal["model_sha256"],
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "appearance_best_step": appearance_terminal["best_step"],
-            "appearance_parameter_count": appearance_terminal["parameter_count"],
-            "appearance_input_channels": appearance_terminal["input_channels"],
-            "appearance_temporal_frame_offsets": appearance_terminal[
-                "temporal_frame_offsets"
-            ],
-            "appearance_checkpoint_weight_source": appearance_terminal[
-                "checkpoint_weight_source"
-            ],
-            "appearance_ema_decay": appearance_terminal["ema_decay"],
-            "appearance_link_loss_policy": appearance_terminal[
-                "link_loss_policy"
-            ],
+            "appearance_metadata": appearance_metadata(appearance_terminal),
+            "appearance_family": model_family,
             "appearance_weight": selected_weight,
             "division_weight": selected_division_weight,
             "ensemble_mode": selected_ensemble_mode,
@@ -263,7 +280,7 @@ def worker(args: argparse.Namespace) -> None:
         args.trackastra_model_dir, map_location="cpu"
     ).to(device)
     trackastra.eval()
-    appearance = PhysicalPatchAssociationModel().to(device)
+    appearance = build_appearance_model(args.appearance_family).to(device)
     appearance.load_state_dict(
         torch.load(args.appearance_model, map_location="cpu", weights_only=True),
         strict=True,
@@ -271,7 +288,7 @@ def worker(args: argparse.Namespace) -> None:
     appearance.eval()
     peer_appearance = None
     if args.ensemble_mode == "reciprocal_mean":
-        peer_appearance = PhysicalPatchAssociationModel().to(device)
+        peer_appearance = build_appearance_model(args.appearance_family).to(device)
         peer_appearance.load_state_dict(
             torch.load(
                 args.peer_appearance_model, map_location="cpu", weights_only=True
@@ -339,8 +356,13 @@ def worker(args: argparse.Namespace) -> None:
                 device,
                 node_batch_size=args.node_batch_size,
             )
-        primary_scores = appearance_scores_for_movie(
-            video, embeddings, trackastra_scores
+        primary_scores = appearance_evidence_for_movie(
+            args.appearance_family,
+            appearance,
+            video,
+            embeddings,
+            division_logits,
+            trackastra_scores,
         )
         primary_divisions = division_logits_for_movie(
             video, division_logits, trackastra_scores
@@ -349,8 +371,13 @@ def worker(args: argparse.Namespace) -> None:
             peer_scores = primary_scores
             peer_divisions = primary_divisions
         else:
-            peer_scores = appearance_scores_for_movie(
-                video, peer_embeddings, trackastra_scores
+            peer_scores = appearance_evidence_for_movie(
+                args.appearance_family,
+                peer_appearance,
+                video,
+                peer_embeddings,
+                peer_logits,
+                trackastra_scores,
             )
             peer_divisions = division_logits_for_movie(
                 video, peer_logits, trackastra_scores
@@ -402,6 +429,7 @@ def worker(args: argparse.Namespace) -> None:
             "status": "completed",
             "elapsed_seconds": time.monotonic() - started,
             "datasets": list(requested),
+            "appearance_family": args.appearance_family,
             "appearance_weight": args.appearance_weight,
             "division_weight": args.division_weight,
             "candidate_edges": {
@@ -463,6 +491,8 @@ def orchestrate(args: argparse.Namespace) -> None:
             str(fold_source["appearance_model"]),
             "--peer-appearance-model",
             str(fold_source["peer_appearance_model"]),
+            "--appearance-family",
+            str(fold_source["appearance_family"]),
             "--appearance-weight",
             str(fold_source["appearance_weight"]),
             "--division-weight",
@@ -519,6 +549,8 @@ def orchestrate(args: argparse.Namespace) -> None:
     extraction: dict[str, Any] = {}
     for fold, _process, _handle, output in processes:
         payload = json.loads(output.read_text(encoding="utf-8"))
+        if payload.get("appearance_family") != folds[fold]["appearance_family"]:
+            raise RuntimeError(f"processed worker family mismatch: {fold}")
         for stem, edges in payload["candidate_edges"].items():
             if stem in candidate_edges:
                 raise RuntimeError(f"duplicate acceptance movie: {stem}")
@@ -538,11 +570,16 @@ def orchestrate(args: argparse.Namespace) -> None:
     ):
         raise RuntimeError("processed appearance candidate is an exact control replica")
 
+    model_families = {source["appearance_family"] for source in folds.values()}
+    if len(model_families) != 1:
+        raise RuntimeError("processed sources mix appearance model families")
+    model_family = model_families.pop()
     result = {
         "schema_version": 1,
         "status": "completed",
-        "run_id": RUN_ID,
-        "candidate_family": "trackastra_appearance_blend",
+        "run_id": PROCESSED_RUN_BY_FAMILY[model_family],
+        "candidate_family": CANDIDATE_FAMILY_BY_APPEARANCE[model_family],
+        "appearance_family": model_family,
         "evaluation_kind": "predeclared_processed_candidate_materialization",
         "elapsed_seconds": time.monotonic() - started,
         "gpu_count": 2,
@@ -562,16 +599,7 @@ def orchestrate(args: argparse.Namespace) -> None:
             fold: {
                 "model_sha256": source["appearance_model_sha256"],
                 "best_step": source["appearance_best_step"],
-                "parameter_count": source["appearance_parameter_count"],
-                "input_channels": source["appearance_input_channels"],
-                "temporal_frame_offsets": source[
-                    "appearance_temporal_frame_offsets"
-                ],
-                "checkpoint_weight_source": source[
-                    "appearance_checkpoint_weight_source"
-                ],
-                "ema_decay": source["appearance_ema_decay"],
-                "link_loss_policy": source["appearance_link_loss_policy"],
+                **source["appearance_metadata"],
             }
             for fold, source in folds.items()
         },
@@ -620,6 +648,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--trackastra-model-dir", type=Path)
     result.add_argument("--appearance-model", type=Path)
     result.add_argument("--peer-appearance-model", type=Path)
+    result.add_argument("--appearance-family", choices=FAMILIES)
     result.add_argument("--appearance-weight", type=float)
     result.add_argument("--division-weight", type=float)
     result.add_argument(
@@ -642,6 +671,7 @@ def main() -> None:
             args.trackastra_model_dir,
             args.appearance_model,
             args.peer_appearance_model,
+            args.appearance_family,
             args.appearance_weight,
             args.division_weight,
             args.ensemble_mode,

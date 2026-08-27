@@ -10,6 +10,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BUILDER = ROOT / "scripts" / "build-temporal-patch-runtime.py"
 TARGET = ROOT / ".biohub" / "staging" / "biohub-temporal-patch-runtime-v1"
+PAIR_TARGET = (
+    ROOT / ".biohub" / "staging" / "biohub-temporal-pair-fusion-runtime-v2"
+)
 
 
 def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
@@ -33,6 +36,9 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
     }
     required = {
         "train_dual_fold_patch.py",
+        "train_dual_fold_pair_fusion.py",
+        "pair_fusion.py",
+        "appearance_family.py",
         "calibrate_dual_fold_blend.py",
         "dual_fold_appearance_processed_acceptance.py",
         "dual_fold_appearance_submission.py",
@@ -53,3 +59,31 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
     )
     assert "device_count() != 2" in combined
     assert "kaggle competitions submit" not in combined
+
+
+def test_runtime_builder_emits_distinct_pair_fusion_package() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(BUILDER),
+            "--replace",
+            "--family",
+            "pair_fusion_v2",
+        ],
+        check=True,
+    )
+    manifest = json.loads(
+        (PAIR_TARGET / "SOURCE_MANIFEST.json").read_text(encoding="utf-8")
+    )
+    experiment = json.loads(
+        (PAIR_TARGET / "experiment.json").read_text(encoding="utf-8")
+    )
+
+    assert manifest["run_id"] == "temporal-patch-pair-fusion-v2"
+    assert manifest["runtime_family"] == "pair_fusion_v2"
+    assert manifest["appearance_model"]["families"][
+        "temporal_pair_fusion_v2"
+    ]["parameters_per_fold"] == 20_869_325
+    assert experiment["model"]["appearance_family"] == "temporal_pair_fusion_v2"
+    assert experiment["model"]["public_code_copied"] is False
+    assert (PAIR_TARGET / "train_dual_fold_pair_fusion.py").is_file()

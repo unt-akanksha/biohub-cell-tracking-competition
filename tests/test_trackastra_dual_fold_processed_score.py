@@ -69,7 +69,9 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                     "temporal_frame_offsets": [-1, 0, 1],
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
+                    "division_prior_correction": "class-conditional importance weighting",
                     "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+                    "real_split_policy": "global deterministic disjoint partition per embryo prefix",
                 },
                 "target_6bba": {
                     "model_sha256": "1" * 64,
@@ -79,7 +81,9 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                     "temporal_frame_offsets": [-1, 0, 1],
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
+                    "division_prior_correction": "class-conditional importance weighting",
                     "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+                    "real_split_policy": "global deterministic disjoint partition per embryo prefix",
                 },
             },
             "appearance_blend": {
@@ -103,6 +107,55 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
     )
     payload["appearance_blend"]["target_44b6"]["appearance_weight"] = 0.0
     with pytest.raises(ValueError, match="blend evidence"):
+        validate_materialization(
+            payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+        )
+
+
+def test_pair_fusion_materialization_requires_exact_architecture_contract() -> None:
+    payload = materialization()
+    pair_contract = {
+        "appearance_family": "temporal_pair_fusion_v2",
+        "parameter_count": 20_869_325,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": 0.997,
+        "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
+        "pair_feature_width": 1_029,
+        "pair_projection_width": 1_024,
+        "pair_hidden_widths": [512, 128],
+        "pair_fusion_policy": "candidate-limited source-target-absolute-product-displacement-division MLP",
+        "pair_loss_policy": "all-positive candidate-pair mean-log-probability",
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    payload.update(
+        candidate_family="trackastra_pair_fusion_blend",
+        appearance_family="temporal_pair_fusion_v2",
+        calibration_terminal_sha256="e" * 64,
+        appearance_models={
+            "target_44b6": {**pair_contract, "model_sha256": "f" * 64, "best_step": 30},
+            "target_6bba": {**pair_contract, "model_sha256": "1" * 64, "best_step": 40},
+        },
+        appearance_blend={
+            fold: {
+                "appearance_weight": 0.10,
+                "division_weight": 0.05,
+                "ensemble_mode": "reciprocal_mean",
+                "appearance_temperature": 0.10,
+            }
+            for fold in ("target_44b6", "target_6bba")
+        },
+    )
+
+    validate_materialization(
+        payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+    )
+    payload["appearance_models"]["target_44b6"]["pair_feature_width"] -= 1
+    with pytest.raises(ValueError, match="appearance model evidence"):
         validate_materialization(
             payload, control_sha256="a" * 64, candidate_sha256="b" * 64
         )

@@ -52,6 +52,58 @@ CSV_COLUMNS = (
     "target_id",
 )
 NODE_IDENTITY_COLUMNS = ("dataset", "node_id", "t", "z", "y", "x")
+COSINE_FAMILY = "temporal_cosine_v1"
+PAIR_FUSION_FAMILY = "temporal_pair_fusion_v2"
+APPEARANCE_FAMILY_BY_CANDIDATE = {
+    "trackastra_appearance_blend": COSINE_FAMILY,
+    "trackastra_pair_fusion_blend": PAIR_FUSION_FAMILY,
+}
+PARAMETER_COUNT_BY_FAMILY = {
+    COSINE_FAMILY: 19_221_954,
+    PAIR_FUSION_FAMILY: 20_869_325,
+}
+
+
+def validate_appearance_model_evidence(
+    model: Mapping[str, Any], model_family: str
+) -> None:
+    digest = model.get("model_sha256")
+    common_valid = bool(
+        int(model.get("best_step", 0)) > 0
+        and int(model.get("parameter_count", 0))
+        == PARAMETER_COUNT_BY_FAMILY[model_family]
+        and model.get("appearance_family", COSINE_FAMILY) == model_family
+        and model.get("input_channels") == 3
+        and model.get("temporal_frame_offsets") == [-1, 0, 1]
+        and isinstance(digest, str)
+        and len(digest) == 64
+        and model.get("checkpoint_weight_source")
+        == "optimizer-step exponential moving average"
+        and model.get("ema_decay") == 0.997
+        and model.get("division_prior_correction")
+        == "class-conditional importance weighting"
+        and model.get("link_loss_policy")
+        == "all-positive supervised contrastive mean-log-probability"
+        and model.get("real_split_policy")
+        == "global deterministic disjoint partition per embryo prefix"
+    )
+    if not common_valid:
+        raise ValueError("appearance model common evidence is invalid")
+    if model_family == PAIR_FUSION_FAMILY:
+        pair_valid = bool(
+            model.get("appearance_family") == PAIR_FUSION_FAMILY
+            and model.get("pair_feature_width") == 1_029
+            and model.get("pair_projection_width") == 1_024
+            and model.get("pair_hidden_widths") == [512, 128]
+            and model.get("pair_fusion_policy")
+            == "candidate-limited source-target-absolute-product-displacement-division MLP"
+            and model.get("pair_loss_policy")
+            == "all-positive candidate-pair mean-log-probability"
+            and model.get("embedding_auxiliary_loss_weight") == 0.25
+            and model.get("pair_chunk_size") == 4_096
+        )
+        if not pair_valid:
+            raise ValueError("pair-fusion model evidence is invalid")
 
 
 @dataclass(frozen=True)
@@ -155,9 +207,12 @@ def validate_materialization(
         if not isinstance(digest, str) or len(digest) != 64:
             raise ValueError(f"materialization model hash is invalid: {fold}")
     family = payload.get("candidate_family", "trackastra_dual_fold")
-    if family not in {"trackastra_dual_fold", "trackastra_appearance_blend"}:
+    if family not in {"trackastra_dual_fold", *APPEARANCE_FAMILY_BY_CANDIDATE}:
         raise ValueError(f"unsupported processed candidate family: {family}")
-    if family == "trackastra_appearance_blend":
+    if family in APPEARANCE_FAMILY_BY_CANDIDATE:
+        model_family = APPEARANCE_FAMILY_BY_CANDIDATE[family]
+        if payload.get("appearance_family", COSINE_FAMILY) != model_family:
+            raise ValueError("appearance candidate/model family mismatch")
         appearance_models = payload.get("appearance_models")
         appearance_blend = payload.get("appearance_blend")
         folds = {"target_44b6", "target_6bba"}
@@ -168,22 +223,14 @@ def validate_materialization(
         for fold in folds:
             model = appearance_models[fold]
             blend = appearance_blend[fold]
-            digest = model.get("model_sha256") if isinstance(model, dict) else None
-            if not (
-                isinstance(model, dict)
-                and int(model.get("best_step", 0)) > 0
-                and int(model.get("parameter_count", 0)) == 19_221_954
-                and model.get("input_channels") == 3
-                and model.get("temporal_frame_offsets") == [-1, 0, 1]
-                and isinstance(digest, str)
-                and len(digest) == 64
-                and model.get("checkpoint_weight_source")
-                == "optimizer-step exponential moving average"
-                and model.get("ema_decay") == 0.997
-                and model.get("link_loss_policy")
-                == "all-positive supervised contrastive mean-log-probability"
-            ):
+            if not isinstance(model, dict):
                 raise ValueError(f"appearance model evidence is invalid: {fold}")
+            try:
+                validate_appearance_model_evidence(model, model_family)
+            except ValueError as error:
+                raise ValueError(
+                    f"appearance model evidence is invalid: {fold}"
+                ) from error
             if not (
                 isinstance(blend, dict)
                 and float(blend.get("appearance_weight", 0.0)) > 0.0
@@ -410,10 +457,13 @@ def main() -> None:
         "gate": gate,
         "note": "Exact CPU acceptance only; no leaderboard query, artifact promotion, or submission was performed.",
     }
-    if materialization.get("candidate_family") == "trackastra_appearance_blend":
+    if materialization.get("candidate_family") in APPEARANCE_FAMILY_BY_CANDIDATE:
         result.update(
             {
-                "candidate_family": "trackastra_appearance_blend",
+                "candidate_family": materialization["candidate_family"],
+                "appearance_family": materialization.get(
+                    "appearance_family", COSINE_FAMILY
+                ),
                 "appearance_models": materialization["appearance_models"],
                 "appearance_blend": materialization["appearance_blend"],
                 "calibration_terminal_sha256": materialization[

@@ -49,6 +49,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
         appearance_model.write_bytes(f"appearance-{fold}".encode())
         appearance_terminal = {
             "status": "completed",
+            "run_id": "temporal-patch-dual-fold-v1",
             "fold": fold,
             "best_step": index * 200,
             "parameter_count": 19_221_954,
@@ -137,6 +138,51 @@ def test_processed_appearance_sources_reject_mutated_model(tmp_path: Path) -> No
 
     with pytest.raises(RuntimeError, match="appearance fold"):
         verify_sources(trackastra_root, appearance_root, calibration_path)
+
+
+def test_processed_appearance_sources_accept_pair_fusion_contract(
+    tmp_path: Path,
+) -> None:
+    trackastra_root, appearance_root, calibration_path = source_fixture(tmp_path)
+    pair_contract = {
+        "run_id": "temporal-patch-pair-fusion-v2",
+        "appearance_family": "temporal_pair_fusion_v2",
+        "parameter_count": 20_869_325,
+        "pair_feature_width": 1_029,
+        "pair_projection_width": 1_024,
+        "pair_hidden_widths": [512, 128],
+        "pair_fusion_policy": "candidate-limited source-target-absolute-product-displacement-division MLP",
+        "pair_loss_policy": "all-positive candidate-pair mean-log-probability",
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    for fold in FOLDS:
+        terminal_path = appearance_root / fold / "worker_terminal.json"
+        terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+        terminal.update(pair_contract)
+        write_json(terminal_path, terminal)
+    calibration = json.loads(calibration_path.read_text(encoding="utf-8"))
+    calibration.update(
+        run_id="temporal-patch-pair-fusion-blend-v2",
+        appearance_family="temporal_pair_fusion_v2",
+    )
+    for fold in FOLDS:
+        calibration["folds"][fold]["appearance_family"] = (
+            "temporal_pair_fusion_v2"
+        )
+    write_json(calibration_path, calibration)
+
+    _calibration, folds = verify_sources(
+        trackastra_root, appearance_root, calibration_path
+    )
+
+    assert {row["appearance_family"] for row in folds.values()} == {
+        "temporal_pair_fusion_v2"
+    }
+    assert all(
+        row["appearance_metadata"]["pair_feature_width"] == 1_029
+        for row in folds.values()
+    )
 
 
 def test_processed_appearance_sources_reject_worker_aggregate_divergence(

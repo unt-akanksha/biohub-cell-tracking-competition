@@ -6,6 +6,13 @@ import numpy as np
 import pytest
 import torch
 
+from research.temporal_contrastive.appearance_family import (
+    COSINE_FAMILY,
+    PAIR_FUSION_FAMILY,
+    appearance_family,
+    build_appearance_model,
+    verify_appearance_metadata,
+)
 from research.temporal_contrastive.pair_fusion import (
     EXPECTED_PARAMETER_COUNT,
     PAIR_FEATURE_WIDTH,
@@ -15,6 +22,19 @@ from research.temporal_contrastive.pair_fusion import (
     pair_logit_metrics,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
+
+
+def common_metadata(parameter_count: int) -> dict:
+    return {
+        "parameter_count": parameter_count,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": 0.997,
+        "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
+    }
 
 
 def test_default_pair_fusion_model_matches_frozen_heavy_contract() -> None:
@@ -29,6 +49,40 @@ def test_default_pair_fusion_model_matches_frozen_heavy_contract() -> None:
     assert model.pair_head[3].out_features == 512
     assert model.pair_head[5].out_features == 128
     assert model.pair_head[7].out_features == 1
+
+
+def test_appearance_family_contract_supports_legacy_v1_and_exact_v2() -> None:
+    legacy = common_metadata(19_221_954)
+    assert appearance_family(legacy) == COSINE_FAMILY
+    assert verify_appearance_metadata(legacy) == COSINE_FAMILY
+    assert type(build_appearance_model(COSINE_FAMILY)).__name__ == (
+        "PhysicalPatchAssociationModel"
+    )
+
+    pair = {
+        **common_metadata(EXPECTED_PARAMETER_COUNT),
+        "appearance_family": PAIR_FUSION_FAMILY,
+        "run_id": "temporal-patch-pair-fusion-v2",
+        "pair_feature_width": 1_029,
+        "pair_projection_width": 1_024,
+        "pair_hidden_widths": [512, 128],
+        "pair_fusion_policy": (
+            "candidate-limited source-target-absolute-product-displacement-division MLP"
+        ),
+        "pair_loss_policy": "all-positive candidate-pair mean-log-probability",
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    assert verify_appearance_metadata(pair, require_training_run=True) == (
+        PAIR_FUSION_FAMILY
+    )
+    assert isinstance(
+        build_appearance_model(PAIR_FUSION_FAMILY),
+        PhysicalPairFusionAssociationModel,
+    )
+    pair["pair_hidden_widths"] = [512, 64]
+    with pytest.raises(ValueError, match="pair-fusion architecture"):
+        verify_appearance_metadata(pair, require_training_run=True)
 
 
 def test_candidate_pair_loss_backpropagates_through_encoder_pair_and_division() -> None:

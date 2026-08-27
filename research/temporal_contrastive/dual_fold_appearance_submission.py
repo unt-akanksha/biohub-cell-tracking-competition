@@ -22,16 +22,21 @@ import torch
 try:
     import rerank_submission as rerank
     from appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
+    from appearance_family import (
+        PAIR_FUSION_FAMILY,
+        appearance_evidence_for_movie,
+        build_appearance_model,
+        candidate_appearance_family,
+        verify_appearance_metadata,
+    )
     from dual_fold_processed_acceptance import FROZEN_ASSOCIATION_CONFIGURATION
     from dual_fold_rerank_submission import embryo_prefix
-    from patch_model import PhysicalPatchAssociationModel
     from submission_sharding import (
         DEFAULT_INFERENCE_HARD_STOP_SECONDS,
         KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
@@ -58,14 +63,19 @@ except ModuleNotFoundError:
         worker_environment,
     )
     from research.temporal_contrastive.appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
-    from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
+    from research.temporal_contrastive.appearance_family import (
+        PAIR_FUSION_FAMILY,
+        appearance_evidence_for_movie,
+        build_appearance_model,
+        candidate_appearance_family,
+        verify_appearance_metadata,
+    )
     from research.trackastra_graph import rerank_submission as rerank
     from research.trackastra_graph.dual_fold_processed_acceptance import (
         FROZEN_ASSOCIATION_CONFIGURATION,
@@ -80,6 +90,7 @@ FOLD_BY_PREFIX = {"44b6": "target_44b6", "6bba": "target_6bba"}
 # Keep the whole-movie LPT estimate conservative so one GPU is not assigned
 # most of the node-encoding work even when pair-product counts look balanced.
 APPEARANCE_NODE_COST = 12_288.0
+PAIR_FUSION_PAIR_COST = 1_024.0
 
 
 def atomic_json(path: Path, payload: dict[str, Any]) -> None:
@@ -107,11 +118,17 @@ def load_acceptance(
     appearance_models: dict[str, Path],
 ) -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        model_family = candidate_appearance_family(
+            str(payload.get("candidate_family", ""))
+        )
+    except ValueError as error:
+        raise RuntimeError("appearance evidence is not an accepted exact candidate") from error
     if not (
         payload.get("status") == "accepted"
         and payload.get("evaluation_kind") == "exact_processed_dual_fold_acceptance"
         and payload.get("exact_processed_gate_passed") is True
-        and payload.get("candidate_family") == "trackastra_appearance_blend"
+        and payload.get("appearance_family", model_family) == model_family
         and payload.get("public_leaderboard_used_for_selection") is False
         and payload.get("competition_submission_performed") is False
     ):
@@ -148,19 +165,16 @@ def load_acceptance(
                 == "predeclared_pretrained_control"
             )
         )
+        try:
+            fold_family = verify_appearance_metadata(expected_appearance[fold])
+        except (TypeError, ValueError) as error:
+            raise RuntimeError(
+                f"accepted reciprocal evidence is invalid: {fold}"
+            ) from error
         if not (
             trackastra_source_valid
             and int(expected_appearance[fold].get("best_step", 0)) > 0
-            and int(expected_appearance[fold].get("parameter_count", 0))
-            == 19_221_954
-            and expected_appearance[fold].get("input_channels") == 3
-            and expected_appearance[fold].get("temporal_frame_offsets")
-            == [-1, 0, 1]
-            and expected_appearance[fold].get("checkpoint_weight_source")
-            == "optimizer-step exponential moving average"
-            and expected_appearance[fold].get("ema_decay") == 0.997
-            and expected_appearance[fold].get("link_loss_policy")
-            == "all-positive supervised contrastive mean-log-probability"
+            and fold_family == model_family
             and float(blends[fold].get("appearance_weight", 0.0)) > 0.0
             and float(blends[fold].get("division_weight", 0.0)) >= 0.0
             and blends[fold].get("ensemble_mode")
@@ -168,6 +182,7 @@ def load_acceptance(
             and float(blends[fold].get("appearance_temperature", 0.0)) == 0.10
         ):
             raise RuntimeError(f"accepted reciprocal evidence is invalid: {fold}")
+    payload["appearance_family"] = model_family
     return payload
 
 
@@ -185,7 +200,12 @@ def hybrid_configuration(selected: dict[str, Any]) -> rerank.HybridLinkConfig:
     )
 
 
-def appearance_movie_inference_weight(video: Any, *, encoder_count: int = 1) -> float:
+def appearance_movie_inference_weight(
+    video: Any,
+    *,
+    encoder_count: int = 1,
+    pair_fusion: bool = False,
+) -> float:
     """Estimate transformer pairs plus the per-node 3D encoder workload."""
 
     if encoder_count not in {1, 2}:
@@ -195,8 +215,9 @@ def appearance_movie_inference_weight(video: Any, *, encoder_count: int = 1) -> 
         targets = video.ids_by_time.get(timepoint + 1)
         if targets is not None:
             pair_products += len(source_ids) * len(targets)
+    pair_cost = PAIR_FUSION_PAIR_COST if pair_fusion else 1.0
     return float(
-        max(pair_products, 1)
+        pair_cost * max(pair_products, 1)
         + encoder_count * APPEARANCE_NODE_COST * len(video.node_ids)
     )
 
@@ -217,6 +238,9 @@ def worker(args: argparse.Namespace) -> None:
     raw_videos = rerank.read_raw_graphs(args.base_graph_root, set(videos))
     transfer = rerank.transfer_raw_edge_probabilities(videos, raw_videos)
     acceptance = json.loads(args.acceptance_evidence.read_text(encoding="utf-8"))
+    model_family = candidate_appearance_family(acceptance["candidate_family"])
+    if acceptance.get("appearance_family", model_family) != model_family:
+        raise RuntimeError("worker acceptance evidence mixes appearance families")
     device = torch.device("cuda:0")
     sys.path.insert(0, str(args.trackastra_dir.resolve()))
     from trackastra.model.model import TrackingTransformer
@@ -230,7 +254,7 @@ def worker(args: argparse.Namespace) -> None:
         "target_6bba": args.appearance_6bba_model,
     }
     trackastra_models: dict[str, torch.nn.Module] = {}
-    appearance_models: dict[str, PhysicalPatchAssociationModel] = {}
+    appearance_models: dict[str, torch.nn.Module] = {}
     config = hybrid_configuration(acceptance["association_configuration"])
     import zarr
 
@@ -238,9 +262,9 @@ def worker(args: argparse.Namespace) -> None:
     dataset_stats: dict[str, dict[str, Any]] = {}
     extraction: dict[str, Any] = {}
 
-    def appearance_model_for(fold_name: str) -> PhysicalPatchAssociationModel:
+    def appearance_model_for(fold_name: str) -> torch.nn.Module:
         if fold_name not in appearance_models:
-            loaded = PhysicalPatchAssociationModel().to(device)
+            loaded = build_appearance_model(model_family).to(device)
             loaded.load_state_dict(
                 torch.load(
                     appearance_paths[fold_name], map_location="cpu", weights_only=True
@@ -298,13 +322,25 @@ def worker(args: argparse.Namespace) -> None:
             )
             peer_embeddings = embeddings
             peer_logits = division_logits
-        primary_scores = appearance_scores_for_movie(video, embeddings, track_scores)
+        primary_scores = appearance_evidence_for_movie(
+            model_family,
+            appearance_model_for(fold),
+            video,
+            embeddings,
+            division_logits,
+            track_scores,
+        )
         primary_divisions = division_logits_for_movie(
             video, division_logits, track_scores
         )
         if ensemble_mode == "reciprocal_mean":
-            peer_scores = appearance_scores_for_movie(
-                video, peer_embeddings, track_scores
+            peer_scores = appearance_evidence_for_movie(
+                model_family,
+                appearance_model_for(peer_fold),
+                video,
+                peer_embeddings,
+                peer_logits,
+                track_scores,
             )
             peer_divisions = division_logits_for_movie(
                 video, peer_logits, track_scores
@@ -359,6 +395,7 @@ def worker(args: argparse.Namespace) -> None:
             "status": "completed",
             "elapsed_seconds": time.monotonic() - started,
             "datasets": list(requested),
+            "appearance_family": model_family,
             "candidate_edges": {
                 stem: [[int(source), int(target)] for source, target in edges]
                 for stem, edges in candidate_edges.items()
@@ -401,6 +438,7 @@ def orchestrate(args: argparse.Namespace) -> None:
                 == "reciprocal_mean"
                 else 1
             ),
+            pair_fusion=(acceptance["appearance_family"] == PAIR_FUSION_FAMILY),
         )
         for stem, video in videos.items()
     }
@@ -501,6 +539,8 @@ def orchestrate(args: argparse.Namespace) -> None:
     transfers: dict[str, Any] = {}
     for index, _process, _handle, output in processes:
         payload = json.loads(output.read_text(encoding="utf-8"))
+        if payload.get("appearance_family") != acceptance["appearance_family"]:
+            raise RuntimeError(f"appearance shard family mismatch: {index}")
         observed_by_shard[index] = list(payload["datasets"])
         for stem, edges in payload["candidate_edges"].items():
             if stem in candidate_edges:
@@ -522,7 +562,8 @@ def orchestrate(args: argparse.Namespace) -> None:
     report = {
         "schema_version": 1,
         "status": "completed",
-        "candidate_family": "trackastra_appearance_blend",
+        "candidate_family": acceptance["candidate_family"],
+        "appearance_family": acceptance["appearance_family"],
         "elapsed_seconds": time.monotonic() - started,
         "inference_hard_stop_seconds": args.hard_stop_seconds,
         "notebook_runtime_reserve_seconds": (
@@ -533,6 +574,11 @@ def orchestrate(args: argparse.Namespace) -> None:
         "whole_movie_coverage": list(coverage),
         "shard_plan_sha256": plan["shard_plan_sha256"],
         "appearance_node_cost_weight": APPEARANCE_NODE_COST,
+        "pair_fusion_pair_cost_weight": (
+            PAIR_FUSION_PAIR_COST
+            if acceptance["appearance_family"] == PAIR_FUSION_FAMILY
+            else 1.0
+        ),
         "base_submission_sha256": sha256_file(args.base_submission),
         "candidate_submission_sha256": sha256_file(output_path),
         "acceptance_evidence_sha256": sha256_file(args.acceptance_evidence),

@@ -10,16 +10,46 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".biohub" / "staging"
-TARGET = STAGING_ROOT / "biohub-temporal-patch-runtime-v1"
+TARGET_BY_FAMILY = {
+    "cosine_v1": STAGING_ROOT / "biohub-temporal-patch-runtime-v1",
+    "pair_fusion_v2": STAGING_ROOT / "biohub-temporal-pair-fusion-runtime-v2",
+}
+RUN_ID_BY_FAMILY = {
+    "cosine_v1": "temporal-patch-dual-fold-v1",
+    "pair_fusion_v2": "temporal-patch-pair-fusion-v2",
+}
+DATASET_ID_BY_FAMILY = {
+    "cosine_v1": "indarkarhana/biohub-temporal-patch-runtime-v1",
+    "pair_fusion_v2": "indarkarhana/biohub-temporal-pair-fusion-runtime-v2",
+}
+EXPERIMENT_BY_FAMILY = {
+    "cosine_v1": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-patch-dual-fold-v1.json",
+    "pair_fusion_v2": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-patch-pair-fusion-v2.json",
+}
 TRACKASTRA_REPOSITORY = ROOT / ".biohub" / "cache" / "repos" / "trackastra"
 EXPECTED_TRACKASTRA_COMMIT = "6a8ce94ee7c5a1f22c8eb77229ea5a0bc95a7b5b"
 SOURCES = {
     "model.py": ROOT / "research" / "temporal_contrastive" / "model.py",
     "patch_model.py": ROOT / "research" / "temporal_contrastive" / "patch_model.py",
+    "pair_fusion.py": ROOT / "research" / "temporal_contrastive" / "pair_fusion.py",
+    "appearance_family.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "appearance_family.py",
     "train_dual_fold_patch.py": ROOT
     / "research"
     / "temporal_contrastive"
     / "train_dual_fold_patch.py",
+    "train_dual_fold_pair_fusion.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_dual_fold_pair_fusion.py",
     "appearance_blend.py": ROOT
     / "research"
     / "temporal_contrastive"
@@ -63,10 +93,6 @@ SOURCES = {
     / "trackastra_graph"
     / "dual_fold_rerank_submission.py",
     "submission_sharding.py": ROOT / "research" / "submission_sharding.py",
-    "experiment.json": ROOT
-    / "config"
-    / "experiments"
-    / "temporal-patch-dual-fold-v1.json",
 }
 TRACKASTRA_FILES = (
     "trackastra/__init__.py",
@@ -94,10 +120,12 @@ def write_json(path: Path, payload: dict) -> None:
     )
 
 
-def checked_target() -> Path:
+def checked_target(family: str) -> Path:
     staging = STAGING_ROOT.resolve()
-    target = TARGET.resolve()
-    if target.parent != staging or target.name != "biohub-temporal-patch-runtime-v1":
+    target = TARGET_BY_FAMILY[family].resolve()
+    if target.parent != staging or target not in {
+        path.resolve() for path in TARGET_BY_FAMILY.values()
+    }:
         raise RuntimeError(f"unsafe temporal runtime target: {target}")
     return target
 
@@ -105,8 +133,11 @@ def checked_target() -> Path:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--replace", action="store_true")
+    parser.add_argument(
+        "--family", choices=sorted(TARGET_BY_FAMILY), default="cosine_v1"
+    )
     args = parser.parse_args()
-    target = checked_target()
+    target = checked_target(args.family)
     if target.exists():
         if not args.replace:
             raise FileExistsError(f"{target} exists; pass --replace to rebuild")
@@ -118,10 +149,11 @@ def main() -> None:
     ).strip()
     if commit != EXPECTED_TRACKASTRA_COMMIT:
         raise RuntimeError(f"Trackastra source commit changed: {commit}")
-    missing = [str(path) for path in SOURCES.values() if not path.is_file()]
+    sources = {**SOURCES, "experiment.json": EXPERIMENT_BY_FAMILY[args.family]}
+    missing = [str(path) for path in sources.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"temporal runtime sources are missing: {missing}")
-    for name, source in SOURCES.items():
+    for name, source in sources.items():
         shutil.copy2(source, target / name)
     shutil.copy2(TRACKASTRA_REPOSITORY / "LICENSE", target / "TRACKASTRA_LICENSE")
     for relative in TRACKASTRA_FILES:
@@ -142,7 +174,8 @@ def main() -> None:
         target / "SOURCE_MANIFEST.json",
         {
             "schema_version": 1,
-            "run_id": "temporal-patch-dual-fold-v1",
+            "run_id": RUN_ID_BY_FAMILY[args.family],
+            "runtime_family": args.family,
             "purpose": "portable two-GPU appearance training, clean calibration, exact processed materialization, and candidate building; no submit command",
             "trackastra": {
                 "repository": "https://github.com/weigertlab/trackastra",
@@ -150,8 +183,16 @@ def main() -> None:
                 "license": "BSD-3-Clause",
             },
             "appearance_model": {
-                "implementation": "independent Biohub physical-scale 3D residual encoder",
-                "parameters_per_fold": 19_221_954,
+                "implementation": "independent Biohub physical-scale 3D residual encoder with optional learned candidate-pair fusion",
+                "families": {
+                    "temporal_cosine_v1": {"parameters_per_fold": 19_221_954},
+                    "temporal_pair_fusion_v2": {
+                        "parameters_per_fold": 20_869_325,
+                        "pair_feature_width": 1_029,
+                        "pair_projection_width": 1_024,
+                        "pair_hidden_widths": [512, 128],
+                    },
+                },
                 "input_channels": 3,
                 "temporal_frame_offsets": [-1, 0, 1],
                 "external_pretrained_weights": False,
@@ -178,8 +219,12 @@ def main() -> None:
     write_json(
         target / "dataset-metadata.json",
         {
-            "title": "Biohub Temporal Patch Runtime v1",
-            "id": "indarkarhana/biohub-temporal-patch-runtime-v1",
+            "title": (
+                "Biohub Temporal Patch Runtime v1"
+                if args.family == "cosine_v1"
+                else "Biohub Temporal Pair Fusion Runtime v2"
+            ),
+            "id": DATASET_ID_BY_FAMILY[args.family],
             "licenses": [{"name": "BSD-3-Clause"}],
             "isPrivate": True,
         },

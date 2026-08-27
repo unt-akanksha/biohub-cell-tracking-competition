@@ -81,6 +81,8 @@ def test_calibration_source_contract_propagates_predeclared_control(
         "submission_created": False,
     }
     appearance_config = {
+        "run_id": "temporal-patch-dual-fold-v1",
+        "parameter_count": 19_221_954,
         "base_channels": 64,
         "embedding_channels": 256,
         "input_channels": 3,
@@ -147,6 +149,7 @@ def test_calibration_source_contract_propagates_predeclared_control(
     verified = verify_sources(fold, appearance_root, trackastra_root)
 
     assert verified[-1] == "predeclared_pretrained_control"
+    assert verified[-2] == "temporal_cosine_v1"
 
     mutated_terminal = dict(trackastra_terminal, best_selection_score=0.97)
     (trackastra_dir / "worker_terminal.json").write_text(
@@ -154,6 +157,46 @@ def test_calibration_source_contract_propagates_predeclared_control(
     )
     with pytest.raises(RuntimeError, match="worker/aggregate mismatch"):
         verify_sources(fold, appearance_root, trackastra_root)
+
+
+def test_calibration_source_contract_accepts_exact_pair_fusion_family(
+    tmp_path: Path,
+) -> None:
+    test_calibration_source_contract_propagates_predeclared_control(tmp_path)
+    fold = "target_44b6"
+    trackastra_root = tmp_path / "trackastra"
+    aggregate = json.loads(
+        (trackastra_root / "training_terminal.json").read_text(encoding="utf-8")
+    )
+    (trackastra_root / fold / "worker_terminal.json").write_text(
+        json.dumps(aggregate["folds"][fold]), encoding="utf-8"
+    )
+    appearance_dir = tmp_path / "appearance" / fold
+    terminal_path = appearance_dir / "worker_terminal.json"
+    config_path = appearance_dir / "training_config.json"
+    terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    pair_contract = {
+        "appearance_family": "temporal_pair_fusion_v2",
+        "parameter_count": 20_869_325,
+        "pair_feature_width": 1_029,
+        "pair_projection_width": 1_024,
+        "pair_hidden_widths": [512, 128],
+        "pair_fusion_policy": "candidate-limited source-target-absolute-product-displacement-division MLP",
+        "pair_loss_policy": "all-positive candidate-pair mean-log-probability",
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    terminal.update(pair_contract, run_id="temporal-patch-pair-fusion-v2")
+    config.update(pair_contract, run_id="temporal-patch-pair-fusion-v2")
+    terminal_path.write_text(json.dumps(terminal), encoding="utf-8")
+    config_path.write_text(json.dumps(config), encoding="utf-8")
+
+    verified = verify_sources(
+        fold, tmp_path / "appearance", trackastra_root
+    )
+
+    assert verified[-2] == "temporal_pair_fusion_v2"
 
 
 def test_temporal_head_outputs_normalized_embedding_and_sparse_division_prior() -> None:

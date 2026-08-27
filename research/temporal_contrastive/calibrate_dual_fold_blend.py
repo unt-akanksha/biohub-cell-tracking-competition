@@ -24,22 +24,30 @@ import torch
 try:
     import trainer as graph_base
     from appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
-    from patch_model import PhysicalPatchAssociationModel
+    from appearance_family import (
+        CALIBRATION_RUN_BY_FAMILY,
+        appearance_evidence_for_movie,
+        build_appearance_model,
+        verify_appearance_metadata,
+    )
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
-        appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
-    from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
+    from research.temporal_contrastive.appearance_family import (
+        CALIBRATION_RUN_BY_FAMILY,
+        appearance_evidence_for_movie,
+        build_appearance_model,
+        verify_appearance_metadata,
+    )
     from research.trackastra_graph import train_biohub_graph_transformer as graph_base
 
 try:
@@ -55,7 +63,6 @@ except ModuleNotFoundError:
     )
 
 
-RUN_ID = "temporal-patch-dual-fold-blend-v1"
 FOLDS = ("target_44b6", "target_6bba")
 PREFIX_BY_FOLD = {"target_44b6": "44b6", "target_6bba": "6bba"}
 OPENED_ACCEPTANCE_STEMS = frozenset(
@@ -106,6 +113,7 @@ def verify_sources(
     Path,
     Path,
     str,
+    str,
 ]:
     appearance_dir = appearance_root / fold
     appearance_terminal_path = appearance_dir / "worker_terminal.json"
@@ -117,7 +125,6 @@ def verify_sources(
     appearance_model = appearance_dir / "appearance_model.pt"
     if not (
         appearance_terminal.get("status") == "completed"
-        and appearance_terminal.get("run_id") == "temporal-patch-dual-fold-v1"
         and appearance_terminal.get("fold") == fold
         and int(appearance_terminal.get("best_step", 0)) > 0
         and appearance_terminal.get("public_predictions_copied") is False
@@ -127,32 +134,21 @@ def verify_sources(
         raise RuntimeError(f"appearance source is not eligible: {fold}")
     if sha256_file(appearance_model) != appearance_terminal.get("model_sha256"):
         raise RuntimeError(f"appearance model hash mismatch: {fold}")
+    try:
+        model_family = verify_appearance_metadata(
+            appearance_terminal, require_training_run=True
+        )
+        config_family = verify_appearance_metadata(
+            appearance_config, require_training_run=True
+        )
+    except (TypeError, ValueError) as error:
+        raise RuntimeError(
+            f"appearance architecture or split boundary changed: {fold}"
+        ) from error
     if not (
-        int(appearance_terminal.get("parameter_count", 0)) == 19_221_954
+        config_family == model_family
         and appearance_config.get("base_channels") == 64
         and appearance_config.get("embedding_channels") == 256
-        and appearance_config.get("input_channels") == 3
-        and appearance_config.get("temporal_frame_offsets") == [-1, 0, 1]
-        and appearance_terminal.get("input_channels") == 3
-        and appearance_terminal.get("temporal_frame_offsets") == [-1, 0, 1]
-        and appearance_config.get("checkpoint_weight_source")
-        == "optimizer-step exponential moving average"
-        and appearance_config.get("ema_decay") == 0.997
-        and appearance_terminal.get("checkpoint_weight_source")
-        == "optimizer-step exponential moving average"
-        and appearance_terminal.get("ema_decay") == 0.997
-        and appearance_terminal.get("division_prior_correction")
-        == "class-conditional importance weighting"
-        and appearance_config.get("division_prior_correction")
-        == "class-conditional importance weighting"
-        and appearance_terminal.get("link_loss_policy")
-        == "all-positive supervised contrastive mean-log-probability"
-        and appearance_config.get("link_loss_policy")
-        == "all-positive supervised contrastive mean-log-probability"
-        and appearance_config.get("real_split_policy")
-        == "global deterministic disjoint partition per embryo prefix"
-        and appearance_terminal.get("real_split_policy")
-        == "global deterministic disjoint partition per embryo prefix"
         and appearance_config.get("calibration_ground_truth_read") is False
     ):
         raise RuntimeError(f"appearance architecture or split boundary changed: {fold}")
@@ -217,6 +213,7 @@ def verify_sources(
         [str(stem) for stem in stems],
         appearance_model,
         trackastra_dir,
+        model_family,
         trackastra_source_policy,
     )
 
@@ -499,6 +496,7 @@ def worker(args: argparse.Namespace) -> None:
         stems,
         appearance_model_path,
         trackastra_model_dir,
+        model_family,
         trackastra_source_policy,
     ) = verify_sources(args.fold, args.appearance_output_root, args.trackastra_output_root)
     peer_fold = next(fold for fold in FOLDS if fold != args.fold)
@@ -509,6 +507,7 @@ def worker(args: argparse.Namespace) -> None:
         _peer_stems,
         peer_appearance_model_path,
         _peer_trackastra_model_dir,
+        peer_model_family,
         _peer_trackastra_source_policy,
     ) = verify_sources(
         peer_fold, args.appearance_output_root, args.trackastra_output_root
@@ -519,14 +518,16 @@ def worker(args: argparse.Namespace) -> None:
         "real_split_policy"
     ):
         raise RuntimeError("reciprocal appearance split policies differ")
+    if peer_model_family != model_family:
+        raise RuntimeError("reciprocal appearance model families differ")
 
-    appearance_model = PhysicalPatchAssociationModel().to(device)
+    appearance_model = build_appearance_model(model_family).to(device)
     appearance_model.load_state_dict(
         torch.load(appearance_model_path, map_location="cpu", weights_only=True),
         strict=True,
     )
     appearance_model.eval()
-    peer_appearance_model = PhysicalPatchAssociationModel().to(device)
+    peer_appearance_model = build_appearance_model(model_family).to(device)
     peer_appearance_model.load_state_dict(
         torch.load(peer_appearance_model_path, map_location="cpu", weights_only=True),
         strict=True,
@@ -579,12 +580,24 @@ def worker(args: argparse.Namespace) -> None:
             node_batch_size=args.node_batch_size,
         )
         extraction[stem] = shared_extraction
-        primary_scores = appearance_scores_for_movie(video, embeddings, pair_scores)
+        primary_scores = appearance_evidence_for_movie(
+            model_family,
+            appearance_model,
+            video,
+            embeddings,
+            division_logits,
+            pair_scores,
+        )
         primary_divisions = division_logits_for_movie(
             video, division_logits, pair_scores
         )
-        peer_scores = appearance_scores_for_movie(
-            video, peer_embeddings, pair_scores
+        peer_scores = appearance_evidence_for_movie(
+            model_family,
+            peer_appearance_model,
+            video,
+            peer_embeddings,
+            peer_division_logits,
+            pair_scores,
         )
         peer_divisions = division_logits_for_movie(
             video, peer_division_logits, pair_scores
@@ -646,7 +659,8 @@ def worker(args: argparse.Namespace) -> None:
     output = {
         "schema_version": 1,
         "status": "completed",
-        "run_id": RUN_ID,
+        "run_id": CALIBRATION_RUN_BY_FAMILY[model_family],
+        "appearance_family": model_family,
         "fold": args.fold,
         "elapsed_seconds": time.monotonic() - started,
         "calibration_stems": stems,
@@ -730,10 +744,15 @@ def orchestrate(args: argparse.Namespace) -> None:
         )
         for fold in FOLDS
     }
+    model_families = {row.get("appearance_family") for row in folds.values()}
+    if len(model_families) != 1 or None in model_families:
+        raise RuntimeError("calibration workers produced mixed appearance families")
+    model_family = model_families.pop()
     terminal = {
         "schema_version": 1,
         "status": "completed",
-        "run_id": RUN_ID,
+        "run_id": CALIBRATION_RUN_BY_FAMILY[model_family],
+        "appearance_family": model_family,
         "elapsed_seconds": time.monotonic() - started,
         "gpu_count": 2,
         "folds": folds,
