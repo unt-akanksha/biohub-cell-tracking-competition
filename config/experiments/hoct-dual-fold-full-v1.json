@@ -9,7 +9,7 @@
   "submission_created": false,
   "authorized_for_submission": false,
   "source": {
-    "trainer_sha256": "e41d46024b71701fc06b64ce702b8f6117c31d21f02030126b36240cc2b00d98",
+    "trainer_sha256": "524cba1ff4dad10b4d5c9ae41d1c9c36efcfca78a64a5ecbe9a102b5c5e95294",
     "hoct_repository": "https://github.com/royerlab/hoct",
     "hoct_commit": "2ccc5040823bc944ab67790abd1f56eea7cd4f05",
     "pretrained_model": "general_v1.pt",
@@ -50,7 +50,7 @@
   },
   "training": {
     "steps_per_fold": 20000,
-    "candidate_neighbors": 8,
+    "candidate_neighbors": 16,
     "candidate_max_distance_model_units": 80.0,
     "candidate_recall_must_be_exact_per_frame": true,
     "core_size_model_units": 128.0,

@@ -769,7 +769,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--synthetic-validation-tiles", type=int, default=32)
     result.add_argument("--real-replay-probability", type=float, default=0.10)
     result.add_argument("--core-size", type=float, default=128.0)
-    result.add_argument("--neighbors", type=int, default=8)
+    result.add_argument("--neighbors", type=int, default=16)
     result.add_argument("--max-distance", type=float, default=80.0)
     result.add_argument("--prefer-division-probability", type=float, default=0.25)
     result.add_argument("--bce-weight", type=float, default=0.20)
