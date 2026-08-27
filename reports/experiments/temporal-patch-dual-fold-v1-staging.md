@@ -18,7 +18,9 @@ fold. It samples 17-cubed patches over the same 16-micrometer physical field of
 view from both pooled isotropic synthetic images and anisotropic real movies.
 Multi-positive contrastive supervision treats two true daughters as positives
 instead of forcing one to be a negative; a separate sparse division head is
-trained with correction for the inflated synthetic division prior.
+trained with correction for the inflated synthetic division prior. Checkpoint
+selection uses a full-model optimizer-step exponential moving average (decay
+0.997), reducing sensitivity to one noisy minibatch or validation instant.
 
 No public Kaggle implementation, public prediction identity, CELLECT source, or
 external checkpoint is copied. CELLECT and the 2026 microscopy-embedding paper
@@ -61,7 +63,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 29 tests across the normal
+The updated focused temporal/Trackastra suite passes 30 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
@@ -70,12 +72,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-organizer-aligned-20260827.zip`
-(92,089 bytes, SHA-256
-`a4ae28e030f3287a3b5913881b076266f3fd70f27daa811a643fcdc703525b88`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-ema-organizer-20260827.zip`
+(92,747 bytes, SHA-256
+`a23eec4c0f7442a3c4c75cc3f079f7fea9d3676c5b0f964530a2581474669266`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`0e4b970f12f2f599411c1bbc55083d19cb8a65499a032ffdb278cd0b86aa21ca`,
+`f09f60a748d69c0e4d590d0dbe1bdfd6458e202ae877635cdc9fec7239f0232e`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic

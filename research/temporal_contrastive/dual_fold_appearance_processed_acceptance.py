@@ -109,6 +109,9 @@ def verify_sources(
             and appearance_terminal.get("fold") == fold
             and int(appearance_terminal.get("best_step", 0)) > 0
             and int(appearance_terminal.get("parameter_count", 0)) == 7_498_890
+            and appearance_terminal.get("checkpoint_weight_source")
+            == "optimizer-step exponential moving average"
+            and appearance_terminal.get("ema_decay") == 0.997
             and appearance_terminal.get("public_predictions_copied") is False
             and appearance_terminal.get("public_leaderboard_used_for_selection") is False
             and appearance_terminal.get("submission_created") is False
@@ -146,6 +149,10 @@ def verify_sources(
             "appearance_model": appearance_model,
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "appearance_best_step": appearance_terminal["best_step"],
+            "appearance_checkpoint_weight_source": appearance_terminal[
+                "checkpoint_weight_source"
+            ],
+            "appearance_ema_decay": appearance_terminal["ema_decay"],
             "appearance_weight": selected_weight,
             "division_weight": selected_division_weight,
         }
@@ -419,6 +426,10 @@ def orchestrate(args: argparse.Namespace) -> None:
             fold: {
                 "model_sha256": source["appearance_model_sha256"],
                 "best_step": source["appearance_best_step"],
+                "checkpoint_weight_source": source[
+                    "appearance_checkpoint_weight_source"
+                ],
+                "ema_decay": source["appearance_ema_decay"],
             }
             for fold, source in folds.items()
         },

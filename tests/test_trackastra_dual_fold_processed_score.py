@@ -61,8 +61,18 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
             "candidate_family": "trackastra_appearance_blend",
             "calibration_terminal_sha256": "e" * 64,
             "appearance_models": {
-                "target_44b6": {"model_sha256": "f" * 64, "best_step": 30},
-                "target_6bba": {"model_sha256": "1" * 64, "best_step": 40},
+                "target_44b6": {
+                    "model_sha256": "f" * 64,
+                    "best_step": 30,
+                    "checkpoint_weight_source": "optimizer-step exponential moving average",
+                    "ema_decay": 0.997,
+                },
+                "target_6bba": {
+                    "model_sha256": "1" * 64,
+                    "best_step": 40,
+                    "checkpoint_weight_source": "optimizer-step exponential moving average",
+                    "ema_decay": 0.997,
+                },
             },
             "appearance_blend": {
                 "target_44b6": {

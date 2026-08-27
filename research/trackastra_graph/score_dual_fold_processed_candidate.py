@@ -145,6 +145,9 @@ def validate_materialization(
                 and int(model.get("best_step", 0)) > 0
                 and isinstance(digest, str)
                 and len(digest) == 64
+                and model.get("checkpoint_weight_source")
+                == "optimizer-step exponential moving average"
+                and model.get("ema_decay") == 0.997
             ):
                 raise ValueError(f"appearance model evidence is invalid: {fold}")
             if not (

@@ -510,6 +510,29 @@ def state_dict_cpu(model: torch.nn.Module) -> dict[str, torch.Tensor]:
     }
 
 
+@torch.no_grad()
+def update_ema_model(
+    ema_model: torch.nn.Module,
+    model: torch.nn.Module,
+    *,
+    decay: float,
+) -> None:
+    """Update a full-model exponential average after an optimizer step."""
+
+    if not 0.0 <= decay < 1.0:
+        raise ValueError("EMA decay must lie in [0, 1)")
+    model_state = model.state_dict()
+    ema_state = ema_model.state_dict()
+    if model_state.keys() != ema_state.keys():
+        raise ValueError("EMA and training model state inventories differ")
+    for name, averaged in ema_state.items():
+        current = model_state[name].detach()
+        if averaged.is_floating_point():
+            averaged.mul_(decay).add_(current, alpha=1.0 - decay)
+        else:
+            averaged.copy_(current)
+
+
 def train_worker(args: argparse.Namespace) -> None:
     started = time.monotonic()
     if args.fold not in FOLD_SPECS:
@@ -577,6 +600,13 @@ def train_worker(args: argparse.Namespace) -> None:
         base_channels=args.base_channels,
         embedding_channels=args.embedding_channels,
     ).to(device)
+    ema_model = PhysicalPatchAssociationModel(
+        base_channels=args.base_channels,
+        embedding_channels=args.embedding_channels,
+    ).to(device)
+    ema_model.load_state_dict(model.state_dict(), strict=True)
+    ema_model.requires_grad_(False)
+    ema_model.eval()
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
     if parameter_count < 5_000_000:
         raise RuntimeError(f"appearance network is unexpectedly small: {parameter_count}")
@@ -584,9 +614,10 @@ def train_worker(args: argparse.Namespace) -> None:
         model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
     )
     scaler = torch.amp.GradScaler("cuda")
-    initial_real = validate_model(model, real_fixed, device)
-    initial_synthetic = validate_model(model, synthetic_fixed, device)
-    best_state = state_dict_cpu(model)
+    initial_real = validate_model(ema_model, real_fixed, device)
+    initial_synthetic = validate_model(ema_model, synthetic_fixed, device)
+    ema_model.eval()
+    best_state = state_dict_cpu(ema_model)
     best_step = 0
     best_real = initial_real
     best_synthetic = initial_synthetic
@@ -612,6 +643,8 @@ def train_worker(args: argparse.Namespace) -> None:
             "parameter_count": parameter_count,
             "base_channels": args.base_channels,
             "embedding_channels": args.embedding_channels,
+            "checkpoint_weight_source": "optimizer-step exponential moving average",
+            "ema_decay": args.ema_decay,
             "source_prefix": spec["source_prefix"],
             "target_prefix": spec["target_prefix"],
             "opened_acceptance_stems_excluded": sorted(OPENED_ACCEPTANCE_STEMS),
@@ -683,6 +716,7 @@ def train_worker(args: argparse.Namespace) -> None:
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             scaler.step(optimizer)
             scaler.update()
+            update_ema_model(ema_model, model, decay=args.ema_decay)
             optimizer.zero_grad(set_to_none=True)
         completed_step = step
         rolling.append(float(loss))
@@ -699,8 +733,9 @@ def train_worker(args: argparse.Namespace) -> None:
                 flush=True,
             )
         if step in {500, 1500, 3000} or step % args.validation_every == 0 or step == args.steps:
-            real_metrics = validate_model(model, real_fixed, device)
-            synthetic_metrics = validate_model(model, synthetic_fixed, device)
+            real_metrics = validate_model(ema_model, real_fixed, device)
+            synthetic_metrics = validate_model(ema_model, synthetic_fixed, device)
+            ema_model.eval()
             score = 0.85 * float(real_metrics["composite"]) + 0.15 * float(
                 synthetic_metrics["composite"]
             )
@@ -722,7 +757,7 @@ def train_worker(args: argparse.Namespace) -> None:
                 best_score = score
                 best_real = real_metrics
                 best_synthetic = synthetic_metrics
-                best_state = state_dict_cpu(model)
+                best_state = state_dict_cpu(ema_model)
             model.train()
 
     if completed_step % args.gradient_accumulation:
@@ -730,6 +765,7 @@ def train_worker(args: argparse.Namespace) -> None:
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         scaler.step(optimizer)
         scaler.update()
+        update_ema_model(ema_model, model, decay=args.ema_decay)
     model.load_state_dict(best_state)
     model_path = output_dir / "appearance_model.pt"
     torch.save(model.state_dict(), model_path)
@@ -750,6 +786,8 @@ def train_worker(args: argparse.Namespace) -> None:
         "best_synthetic": best_synthetic,
         "model_sha256": sha256_file(model_path),
         "parameter_count": parameter_count,
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": args.ema_decay,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,
@@ -859,6 +897,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--learning-rate", type=float, default=2e-4)
     result.add_argument("--minimum-learning-rate", type=float, default=2e-6)
     result.add_argument("--weight-decay", type=float, default=1e-5)
+    result.add_argument("--ema-decay", type=float, default=0.997)
     result.add_argument("--gradient-accumulation", type=int, default=2)
     result.add_argument("--minimum-real-top1", type=float, default=0.70)
     result.add_argument("--minimum-synthetic-top1", type=float, default=0.85)

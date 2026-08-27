@@ -19,6 +19,7 @@ from research.temporal_contrastive.train_dual_fold_patch import (
     prepare_transition,
     synthetic_split,
     transition_metrics,
+    update_ema_model,
 )
 from research.temporal_contrastive.appearance_blend import (
     appearance_scores_for_movie,
@@ -158,6 +159,20 @@ def test_patch_association_model_has_normalized_embeddings_and_sparse_divisions(
     assert logits.shape == (2, 2)
     assert torch.allclose(torch.linalg.vector_norm(embeddings, dim=1), torch.ones(3), atol=1e-5)
     assert float(divisions.detach().mean()) < -3.0
+
+
+def test_full_model_ema_averages_optimizer_weights() -> None:
+    model = torch.nn.Linear(2, 1, bias=False)
+    ema = torch.nn.Linear(2, 1, bias=False)
+    with torch.no_grad():
+        model.weight.fill_(2.0)
+        ema.weight.zero_()
+
+    update_ema_model(ema, model, decay=0.75)
+
+    torch.testing.assert_close(ema.weight, torch.full_like(ema.weight, 0.5))
+    with pytest.raises(ValueError, match="EMA decay"):
+        update_ema_model(ema, model, decay=1.0)
 
 
 def test_transition_sampler_preserves_division_positives_and_hard_negatives() -> None:

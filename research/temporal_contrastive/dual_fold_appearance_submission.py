@@ -126,6 +126,9 @@ def load_acceptance(
         if not (
             int(expected_trackastra[fold].get("best_step", 0)) > 0
             and int(expected_appearance[fold].get("best_step", 0)) > 0
+            and expected_appearance[fold].get("checkpoint_weight_source")
+            == "optimizer-step exponential moving average"
+            and expected_appearance[fold].get("ema_decay") == 0.997
             and float(blends[fold].get("appearance_weight", 0.0)) > 0.0
             and float(blends[fold].get("division_weight", 0.0)) >= 0.0
             and float(blends[fold].get("appearance_temperature", 0.0)) == 0.10

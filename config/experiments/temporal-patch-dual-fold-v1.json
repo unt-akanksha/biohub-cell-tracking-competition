@@ -11,12 +11,12 @@
   "source": {
     "loss_sha256": "f08a82a6a38c62c6dee28938352343637206cc9e71a362943a29332d642fbc5a",
     "patch_model_sha256": "1bcfbd0fee8c303004398661e646893f1163cc818243ec5fc9de716de3448873",
-    "trainer_sha256": "43d80ee199bf2f8c85dac1c848e24f0886b00b24789e238988d14803f8a4264d",
+    "trainer_sha256": "e01b572aa64a245ef5d5ed4f49a925b5d7295167132bf9461bb08a6e7f9fbd8f",
     "blend_sha256": "32c2fdef4685c24f2a6d36f66af3346e2d43a848ef260d04f098643d382bc846",
-    "calibrator_sha256": "32c0ffd7d2704bcce00e2e464834d725b1ba7db5dc2d76ff6373bf11a4380321",
-    "processed_materializer_sha256": "26e45083af73ad9662c23a8814207200c65e58dab6a24c44aa2cbf70a637dec6",
-    "exact_gate_sha256": "9cf534cbf54680c9d2879ed8b8358fb78dabcb1d7a958a743c0943615215c3d0",
-    "two_gpu_candidate_builder_sha256": "42466615e1c167aaef43880db88b45bae782e1763ea026ff0d18e0cea8a87d01",
+    "calibrator_sha256": "aba1ea83c466624db66b935064f1ce3b26f0d9d25fe2945858cff12c48a38e5a",
+    "processed_materializer_sha256": "651a8d16f1719301683eec657f493d5d6b43e2980dc93bde3b5315b2e58de9e6",
+    "exact_gate_sha256": "4d39aae6a980646f65b82c6bbf777410887853eef295ccd7248c852d33101248",
+    "two_gpu_candidate_builder_sha256": "c4381d78cb33dab371b7dd31476e37a285adf77202bf77136f7663686dd4a1b3",
     "runtime_verifier_sha256": "9775df2b8fc39ce042e09dc447830de7e8a07fc8a6931f89869b690b773cb9ff",
     "runtime_builder_sha256": "ea39022e8b87c43771367b736d1babe41ca0632b9d69a137d8019301f4ca10e3"
   },
@@ -68,6 +68,8 @@
     "learning_rate": 0.0002,
     "minimum_learning_rate": 0.000002,
     "gradient_accumulation": 2,
+    "checkpoint_weight_source": "optimizer-step exponential moving average",
+    "ema_decay": 0.997,
     "maximum_worker_wall_seconds": 36000,
     "finalization_reserve_seconds": 1200
   },

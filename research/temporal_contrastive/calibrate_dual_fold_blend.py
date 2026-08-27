@@ -108,6 +108,12 @@ def verify_sources(
         int(appearance_terminal.get("parameter_count", 0)) == 7_498_890
         and appearance_config.get("base_channels") == 40
         and appearance_config.get("embedding_channels") == 128
+        and appearance_config.get("checkpoint_weight_source")
+        == "optimizer-step exponential moving average"
+        and appearance_config.get("ema_decay") == 0.997
+        and appearance_terminal.get("checkpoint_weight_source")
+        == "optimizer-step exponential moving average"
+        and appearance_terminal.get("ema_decay") == 0.997
         and appearance_config.get("calibration_ground_truth_read") is False
     ):
         raise RuntimeError(f"appearance architecture or split boundary changed: {fold}")
