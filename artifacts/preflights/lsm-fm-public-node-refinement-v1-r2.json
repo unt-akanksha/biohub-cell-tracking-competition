@@ -1,0 +1,120 @@
+{
+  "checks": [
+    {
+      "detail": "Notebook cells compile and the public-node evaluator plus packaging checks pass.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v1/biohub-lsm-fm-public-node-refinement-v1.ipynb",
+          "sha256": "0c5429c4de93d69882225d86b2a21bb0a4e27b50f747dd828f8c8a6fb70e638e"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v1-version1/evaluate_public_node_refinement.py",
+          "sha256": "abaa22be4c8be1dd8ec36a958851a368215601fb1adf680d945938b82fa74ef0"
+        },
+        {
+          "path": "tests/test_lsm_fm_public_node_refinement.py",
+          "sha256": "0fe7fb972e2d39582475f199c69d900f95211679c810f5b5999c110f5148540d"
+        },
+        {
+          "path": "tests/test_lsm_fm_public_node_packaging.py",
+          "sha256": "9b2423003580f185585dee4e2ed5b781d098b17ce14a6a268508124419a1f43f"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The private Kaggle-downloaded runtime, frozen LSM-FM detector, and public graph source are hash-bound; competition input remains attached with internet and TPU disabled.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-public-node-refinement-v1.json",
+          "sha256": "60548f456e1644e3609d026a9d3d8dad3502dad0f0354126f548b4575c7f832f"
+        },
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v1/kernel-metadata.json",
+          "sha256": "ef1f2bcace55a917dab5a73a1a9445fa5c7b54406b210168fb9d2b1ebc6044d5"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v1-version1/SOURCE_MANIFEST.json",
+          "sha256": "2cea1bd05fd35f687ecbe47f04128b37fba3d542b5aed95b6fe6900b9d8479fe"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/launcher_terminal.json",
+          "sha256": "d68d2a816c7aa610a96ad2dfdf40546a0bf30fadeeadfd65e394586b7cf7f8ac"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The coordinate control is identity-preserving, bounded blends move toward synthetic 3D probability centers, and invalid strategies fail closed.",
+      "evidence": [
+        {
+          "path": "tests/test_lsm_fm_public_node_refinement.py",
+          "sha256": "0fe7fb972e2d39582475f199c69d900f95211679c810f5b5999c110f5148540d"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "Inference-only experiment: no model optimization step exists; the frozen 35.1M-parameter detector is strict-hash loaded.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "The downloaded base checkpoint, learned detector checkpoint, training result, and launcher evidence are exact-hash bound before strict loading.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v1-version1/lsm_fm_image_text_student.pt",
+          "sha256": "aca3c5d43ef7f3d7ed2ff169d1ab72b71a03acec293a48283d73d38fcf3520e7"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/best.pt",
+          "sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/lsm-fm-image-text-pu-adaptation-v1/lsm_fm_image_text_pu_model/pu_training_result.json",
+          "sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "Only validation evidence and four acceptance GEFFs can be written; submission artifacts cause failure and no competition-submit command exists.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-lsm-fm-public-node-refinement-v1/biohub-lsm-fm-public-node-refinement-v1.ipynb",
+          "sha256": "0c5429c4de93d69882225d86b2a21bb0a4e27b50f747dd828f8c8a6fb70e638e"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-lsm-fm-public-node-runtime-v1-version1/evaluate_public_node_refinement.py",
+          "sha256": "abaa22be4c8be1dd8ec36a958851a368215601fb1adf680d945938b82fa74ef0"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "The candidate honestly declares public graph inheritance and exact-public-replica false; every displacement comes from independent LSM-FM image evidence.",
+      "evidence": [
+        {
+          "path": "config/experiments/lsm-fm-public-node-refinement-v1.json",
+          "sha256": "60548f456e1644e3609d026a9d3d8dad3502dad0f0354126f548b4575c7f832f"
+        },
+        {
+          "path": "reports/experiments/lsm-fm-public-node-refinement-design-2026-08-26.md",
+          "sha256": "3fc800f6870fed7b2a5963eef6a50120e3d4cff48b906e8424575e5bb4686981"
+        }
+      ],
+      "name": "provenance",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T00:57:19.628902Z",
+  "report_sha256": "d9ab1439b88a9d9fe5a95d9d6bd6ea2d241468d99c488e5a7a0b38935f27551a",
+  "run_id": "lsm-fm-public-node-refinement-v1",
+  "schema_version": 1
+}
