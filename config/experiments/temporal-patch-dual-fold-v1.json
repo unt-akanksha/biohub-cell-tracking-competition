@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-patch-dual-fold-v1",
+  "parent": "trackastra-dual-fold-synthetic-v1",
+  "status": "cloud_staged_not_launched",
+  "execution_target": "user-provided cloud GPU after Kaggle reserve handoff",
+  "required_visible_gpu_count": 2,
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "source": {
+    "loss_sha256": "f08a82a6a38c62c6dee28938352343637206cc9e71a362943a29332d642fbc5a",
+    "patch_model_sha256": "1bcfbd0fee8c303004398661e646893f1163cc818243ec5fc9de716de3448873",
+    "trainer_sha256": "43d80ee199bf2f8c85dac1c848e24f0886b00b24789e238988d14803f8a4264d",
+    "blend_sha256": "ae02c3eee64a63ff5accd87270a89ed9df722b019a97d4e5ff1b32fcd4495b83",
+    "calibrator_sha256": "89011168ab401cc0729b0197b60821dd39d5917d6765605f9d72b21961ee80e4"
+  },
+  "model": {
+    "architecture": "independent physical-scale 3D residual patch encoder",
+    "parameter_count_per_fold": 7498890,
+    "base_channels": 40,
+    "embedding_channels": 128,
+    "patch_shape_zyx": [17, 17, 17],
+    "patch_half_extent_zyx_um": [8.0, 8.0, 8.0],
+    "public_code_copied": false,
+    "public_predictions_copied": false,
+    "external_pretrained_weights_used": false
+  },
+  "folds": {
+    "target_44b6": {
+      "gpu_index": 0,
+      "real_training_prefix": "6bba",
+      "checkpoint_validation_prefix": "44b6"
+    },
+    "target_6bba": {
+      "gpu_index": 1,
+      "real_training_prefix": "44b6",
+      "checkpoint_validation_prefix": "6bba"
+    }
+  },
+  "data": {
+    "synthetic_train_movies": 1900,
+    "synthetic_validation_movies": 128,
+    "real_train_movies_per_fold": 96,
+    "real_checkpoint_validation_movies_per_fold": 12,
+    "real_blend_calibration_movies_reserved_per_fold": 12,
+    "real_replay_probability": 0.20,
+    "opened_processed_acceptance_stems_excluded": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ]
+  },
+  "training": {
+    "steps_per_fold": 30000,
+    "candidate_radius_um": 32.0,
+    "max_sources_per_transition": 48,
+    "max_targets_per_transition": 128,
+    "temperature": 0.10,
+    "division_loss_weight": 0.20,
+    "synthetic_division_prior_corrected": true,
+    "learning_rate": 0.0002,
+    "minimum_learning_rate": 0.000002,
+    "gradient_accumulation": 2,
+    "maximum_worker_wall_seconds": 36000,
+    "finalization_reserve_seconds": 1200
+  },
+  "checkpoint_gate": {
+    "minimum_opposite_embryo_top1": 0.70,
+    "minimum_heldout_synthetic_top1": 0.85,
+    "public_leaderboard_used": false,
+    "processed_acceptance_labels_used": false,
+    "zero_or_failed_model_may_not_replace_geometry_model": true
+  },
+  "downstream_protocol": {
+    "blend_weight_zero_is_explicit_control": true,
+    "blend_calibration_uses_reserved_unopened_movies": true,
+    "processed_four_movie_gate_runs_once_after_weight_freeze": true,
+    "competition_submission_requires_separate_user_authorization": true,
+    "future_submission_inference_requires_exactly_two_gpus": true,
+    "future_submission_sharding": "whole movie only"
+  },
+  "hypothesis": "A Biohub-trained physical-scale 3D appearance representation can resolve ambiguous geometrically plausible parent-child links that geometry-only Trackastra and frozen global SpatialDINO patch tokens cannot separate."
+}

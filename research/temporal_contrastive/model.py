@@ -112,3 +112,51 @@ def masked_link_info_nce(
     logits = (source @ target.transpose(0, 1)) / float(temperature)
     logits = logits.masked_fill(~valid_candidates, torch.finfo(logits.dtype).min)
     return F.cross_entropy(logits, positive)
+
+
+def masked_multi_positive_info_nce(
+    source_embeddings: torch.Tensor,
+    target_embeddings: torch.Tensor,
+    positive_mask: torch.Tensor,
+    candidate_mask: torch.Tensor,
+    *,
+    temperature: float = 0.10,
+) -> torch.Tensor:
+    """Contrast one or more true children against feasible target cells.
+
+    Unlike a single-label cross entropy, this objective represents divisions
+    without declaring one true daughter a negative. Sources without a labeled
+    child are excluded because the organizer graphs are sparse annotations, not
+    proof that an unlinked detection truly disappears.
+    """
+
+    if source_embeddings.ndim != 2 or target_embeddings.ndim != 2:
+        raise ValueError("source and target embeddings must be matrices")
+    if source_embeddings.shape[1] != target_embeddings.shape[1]:
+        raise ValueError("source and target embedding widths must match")
+    expected = (source_embeddings.shape[0], target_embeddings.shape[0])
+    if positive_mask.shape != expected or candidate_mask.shape != expected:
+        raise ValueError("positive and candidate masks must match the pair matrix")
+    if positive_mask.dtype != torch.bool or candidate_mask.dtype != torch.bool:
+        raise ValueError("positive and candidate masks must be boolean")
+    if temperature <= 0:
+        raise ValueError("temperature must be positive")
+    if torch.any(positive_mask & ~candidate_mask):
+        raise ValueError("a ground-truth link is absent from the candidate mask")
+
+    valid = positive_mask.any(dim=1)
+    if not torch.any(valid):
+        return source_embeddings.sum() * 0.0
+    candidates = candidate_mask[valid]
+    if torch.any(candidates.sum(dim=1) <= positive_mask[valid].sum(dim=1)):
+        raise ValueError("each labeled source needs at least one hard negative")
+
+    source = F.normalize(source_embeddings[valid], p=2, dim=1, eps=1e-8)
+    target = F.normalize(target_embeddings, p=2, dim=1, eps=1e-8)
+    logits = (source @ target.transpose(0, 1)) / float(temperature)
+    floor = torch.finfo(logits.dtype).min
+    all_logsumexp = torch.logsumexp(logits.masked_fill(~candidates, floor), dim=1)
+    positive_logsumexp = torch.logsumexp(
+        logits.masked_fill(~positive_mask[valid], floor), dim=1
+    )
+    return (all_logsumexp - positive_logsumexp).mean()

@@ -1,11 +1,34 @@
 from __future__ import annotations
 
+import numpy as np
 import pytest
 import torch
 
 from research.temporal_contrastive.model import (
     TemporalFusionHead,
     masked_link_info_nce,
+    masked_multi_positive_info_nce,
+)
+from research.temporal_contrastive.patch_model import (
+    PhysicalPatchAssociationModel,
+    physical_candidate_masks,
+    sample_physical_patches,
+)
+from research.temporal_contrastive.train_dual_fold_patch import (
+    aggregate_metrics,
+    prepare_transition,
+    synthetic_split,
+    transition_metrics,
+)
+from research.temporal_contrastive.appearance_blend import (
+    appearance_scores_for_movie,
+    blend_pair_scores,
+)
+from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
+from research.temporal_contrastive.calibrate_dual_fold_blend import (
+    APPEARANCE_WEIGHTS,
+    ranking_metrics_for_video,
+    select_weight,
 )
 
 
@@ -61,3 +84,231 @@ def test_masked_info_nce_rejects_missing_positive_candidate() -> None:
 
     with pytest.raises(ValueError, match="ground-truth link"):
         masked_link_info_nce(sources, targets, torch.tensor([0]), candidates)
+
+
+def test_multi_positive_info_nce_does_not_treat_a_second_daughter_as_negative() -> None:
+    sources = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
+    targets = torch.tensor([[1.0, 0.0], [0.9, 0.1], [0.0, 1.0], [-1.0, 0.0]])
+    positives = torch.tensor(
+        [[True, True, False, False], [False, False, True, False]]
+    )
+    candidates = torch.ones_like(positives)
+
+    good = masked_multi_positive_info_nce(sources, targets, positives, candidates)
+    bad = masked_multi_positive_info_nce(sources.flip(0), targets, positives, candidates)
+
+    assert float(good) < float(bad)
+
+
+def test_physical_patch_sampling_matches_anisotropic_and_isotropic_views() -> None:
+    z, y, x = torch.meshgrid(
+        torch.arange(9), torch.arange(17), torch.arange(17), indexing="ij"
+    )
+    anisotropic = z.float() * 2.0 + y.float() + x.float()
+    patch = sample_physical_patches(
+        anisotropic,
+        [[4.0, 8.0, 8.0]],
+        voxel_size_zyx_um=(2.0, 1.0, 1.0),
+        output_shape_zyx=(5, 5, 5),
+        half_extent_zyx_um=(4.0, 2.0, 2.0),
+    )
+
+    assert patch.shape == (1, 1, 5, 5, 5)
+    assert torch.isfinite(patch).all()
+    assert abs(float(patch.mean())) < 1e-5
+    assert 0.9 < float(patch.std()) < 1.1
+
+
+def test_candidate_mask_fails_closed_when_radius_drops_a_true_jump() -> None:
+    source = np.asarray([[0.0, 0.0, 0.0]], dtype=np.float32)
+    target = np.asarray([[0.0, 2.0, 0.0], [0.0, 20.0, 0.0]], dtype=np.float32)
+    candidates, positives = physical_candidate_masks(
+        source,
+        target,
+        np.asarray([[0, 0]]),
+        voxel_size_zyx_um=(1.0, 1.0, 1.0),
+        radius_um=3.0,
+    )
+    assert candidates.tolist() == [[True, False]]
+    assert positives.tolist() == [[True, False]]
+
+    with pytest.raises(ValueError, match="omitted"):
+        physical_candidate_masks(
+            source,
+            target,
+            np.asarray([[0, 1]]),
+            voxel_size_zyx_um=(1.0, 1.0, 1.0),
+            radius_um=3.0,
+        )
+
+
+def test_patch_association_model_has_normalized_embeddings_and_sparse_divisions() -> None:
+    torch.manual_seed(11)
+    model = PhysicalPatchAssociationModel(base_channels=8, embedding_channels=16)
+    patches = torch.randn(3, 1, 17, 17, 17)
+
+    embeddings, divisions = model(patches)
+    logits = model.pair_logits(embeddings[:2], embeddings[1:])
+
+    assert embeddings.shape == (3, 16)
+    assert divisions.shape == (3,)
+    assert logits.shape == (2, 2)
+    assert torch.allclose(torch.linalg.vector_norm(embeddings, dim=1), torch.ones(3), atol=1e-5)
+    assert float(divisions.detach().mean()) < -3.0
+
+
+def test_transition_sampler_preserves_division_positives_and_hard_negatives() -> None:
+    times = np.asarray([0, 0, 1, 1, 1], dtype=np.int32)
+    coords = np.asarray(
+        [[0, 0, 0], [0, 8, 0], [0, 1, 0], [0, 2, 0], [0, 7, 0]],
+        dtype=np.float32,
+    )
+    edges = np.asarray([[0, 2], [0, 3], [1, 4]], dtype=np.int64)
+    batch = prepare_transition(
+        times,
+        coords,
+        edges,
+        timepoint=0,
+        voxel_size_zyx_um=(1, 1, 1),
+        radius_um=10,
+        max_sources=2,
+        max_targets=3,
+        rng=np.random.default_rng(3),
+    )
+
+    assert batch.positive_mask.sum(axis=1).tolist() == [2, 1]
+    assert batch.division_target.tolist() == [1.0, 0.0]
+    assert np.all(batch.candidate_mask.sum(axis=1) > batch.positive_mask.sum(axis=1))
+
+
+def test_transition_metrics_reward_correct_division_ranking() -> None:
+    source = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
+    target = torch.tensor([[1.0, 0.0], [0.9, 0.1], [0.0, 1.0]])
+    positives = torch.tensor(
+        [[True, True, False], [False, False, True]], dtype=torch.bool
+    )
+    candidates = torch.ones_like(positives)
+
+    row = transition_metrics(source, target, candidates, positives)
+    pooled = aggregate_metrics([row, row])
+
+    assert row["top1"] == 1.0
+    assert row["division_top2"] == 1.0
+    assert pooled["top1"] == 1.0
+    assert pooled["division_rows"] == 2
+
+
+def test_zero_weight_blend_is_exact_and_positive_weight_changes_ambiguity() -> None:
+    track = np.asarray([[0.55, 0.54], [0.70, -np.inf]], dtype=np.float32)
+    appearance = np.asarray([[0.1, 0.9], [0.5, -0.2]], dtype=np.float32)
+
+    unchanged = blend_pair_scores(track, appearance, appearance_weight=0.0)
+    blended = blend_pair_scores(track, appearance, appearance_weight=0.25)
+
+    np.testing.assert_array_equal(unchanged, track)
+    assert blended[0, 1] > blended[0, 0]
+    assert np.isneginf(blended[1, 1])
+
+
+def test_appearance_scores_align_arbitrary_node_identifiers() -> None:
+    video = GraphVideo(
+        "fixture",
+        node_ids=np.asarray([20, 10, 40, 30]),
+        times=np.asarray([0, 0, 1, 1]),
+        coords_voxel=np.zeros((4, 3), dtype=np.float32),
+        edges=np.empty((0, 2), dtype=np.int64),
+    )
+    embeddings = np.asarray(
+        [[1, 0], [0, 1], [1, 0], [0, 1]], dtype=np.float32
+    )
+    pair_scores = {
+        0: (
+            np.asarray([10, 20]),
+            np.asarray([30, 40]),
+            np.full((2, 2), 0.5, dtype=np.float32),
+        )
+    }
+
+    appearance = appearance_scores_for_movie(video, embeddings, pair_scores)[0]
+
+    np.testing.assert_allclose(appearance, [[1, 0], [0, 1]])
+
+
+def test_synthetic_split_reads_public_manifest_schema_deterministically(tmp_path) -> None:
+    import json
+
+    sequence_dir = tmp_path / "sequences"
+    sequence_dir.mkdir()
+    records = []
+    for index in range(4):
+        path = sequence_dir / f"seq_{index:04d}.npz"
+        path.write_bytes(b"fixture")
+        records.append(
+            {"file": f"sequences/{path.name}", "T": 6, "n_edges": index + 1}
+        )
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"sequences": records}), encoding="utf-8")
+
+    observed_manifest, training, validation = synthetic_split(
+        tmp_path, validation_count=1, training_count=2
+    )
+
+    assert observed_manifest == manifest
+    assert len(training) == 2
+    assert len(validation) == 1
+    assert set(training).isdisjoint(validation)
+
+
+def test_blend_calibration_ranking_uses_true_division_children() -> None:
+    video = GraphVideo(
+        "fixture",
+        node_ids=np.asarray([1, 2, 3, 4]),
+        times=np.asarray([0, 1, 1, 1]),
+        coords_voxel=np.zeros((4, 3), dtype=np.float32),
+        edges=np.asarray([[1, 2], [1, 3]], dtype=np.int64),
+    )
+    pair_scores = {
+        0: (
+            np.asarray([1]),
+            np.asarray([2, 3, 4]),
+            np.asarray([[0.9, 0.8, 0.1]], dtype=np.float32),
+        )
+    }
+
+    metrics = ranking_metrics_for_video(video, pair_scores)
+
+    assert metrics["top1"] == 1.0
+    assert metrics["division_top2"] == 1.0
+    assert metrics["division_rows"] == 1
+
+    omitted = {
+        0: (
+            np.asarray([1]),
+            np.asarray([2, 3, 4]),
+            np.asarray([[0.9, -np.inf, 0.1]], dtype=np.float32),
+        )
+    }
+    with pytest.raises(RuntimeError, match="omitted"):
+        ranking_metrics_for_video(video, omitted)
+
+
+def test_blend_selection_requires_gain_and_movie_floor() -> None:
+    rows = []
+    for weight in APPEARANCE_WEIGHTS:
+        gain = 0.0 if weight == 0 else 0.002
+        movie_a_gain = -0.001 if weight == 0.10 else gain
+        rows.append(
+            {
+                "appearance_weight": weight,
+                "pooled": {"composite": 0.80 + gain},
+                "by_movie": [
+                    {"stem": "a", "composite": 0.80 + movie_a_gain},
+                    {"stem": "b", "composite": 0.80 + gain},
+                ],
+            }
+        )
+
+    selected = select_weight(rows)
+
+    assert selected["improved"] is True
+    assert selected["selected_weight"] == 0.05
