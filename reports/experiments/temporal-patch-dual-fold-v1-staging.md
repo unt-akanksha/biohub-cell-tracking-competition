@@ -124,12 +124,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-reaped-20260827.zip`
-(102,734 bytes, SHA-256
-`9d190be8465fbf0365fda0cb7053569b43b3c69d0bd5e912567e36ee3408ab78`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-allreaped-20260827.zip`
+(102,908 bytes, SHA-256
+`39de54db40c9620591519d0c9bd3baaa89ebe314c2ef9a8045f7e43444e13230`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`2308432be7ab2a8e647c9659c8969b7452aae2da8243258b0390029748bf6e4a`,
+`8d39fcedb424498e6e6dd07bc224ab6a1748c74c91959ee620906233a0ad066c`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -155,6 +155,7 @@ setup, final assembly, artifact persistence, and shutdown. This ceiling cannot
 be raised through a command-line override. Final-kernel metadata is also
 fail-closed to Kaggle's `NvidiaTeslaT4` T4 x2 shape with TPU and internet
 disabled; runtime separately requires exactly two visible CUDA devices.
-Timed-out shard workers are terminated together, given one shared 15-second
-grace period, then force-killed and reaped if necessary so they cannot consume
-the reserved finalization window after the orchestrator exits.
+Timed-out workers in every dual-GPU runtime stage are terminated together,
+given one shared 15-second grace period, then force-killed and reaped if
+necessary so they cannot consume the next stage's budget or the reserved
+finalization window after the orchestrator exits.

@@ -8,10 +8,10 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-reaped-20260827.zip`
-- Archive bytes: `102734`
-- Archive SHA-256: `9d190be8465fbf0365fda0cb7053569b43b3c69d0bd5e912567e36ee3408ab78`
-- Extracted manifest SHA-256: `2308432be7ab2a8e647c9659c8969b7452aae2da8243258b0390029748bf6e4a`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-allreaped-20260827.zip`
+- Archive bytes: `102908`
+- Archive SHA-256: `39de54db40c9620591519d0c9bd3baaa89ebe314c2ef9a8045f7e43444e13230`
+- Extracted manifest SHA-256: `8d39fcedb424498e6e6dd07bc224ab6a1748c74c91959ee620906233a0ad066c`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
@@ -166,6 +166,8 @@ limit for setup, final assembly, artifact persistence, and shutdown. The final
 kernel metadata must request Kaggle's `NvidiaTeslaT4` shape with internet and
 TPU disabled, and runtime still fails before inference unless exactly two CUDA
 devices are visible.
-At the inference deadline, both shard workers receive termination together,
-share a 15-second grace period, and any survivor is force-killed and reaped.
-Thus a stuck child cannot silently continue consuming the finalization reserve.
+At every two-GPU stage deadline—appearance training, clean calibration,
+processed materialization, and final inference—both workers receive termination
+together, share a 15-second grace period, and any survivor is force-killed and
+reaped. Thus a stuck child cannot silently continue consuming the next stage's
+budget or the Kaggle finalization reserve.
