@@ -419,7 +419,7 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 
 ### temporal-contextual-pair-fusion-candidate-v3
 
-- Authorized for submission: `false`
+- Authorized for submission: `true`
 - Imported audit: `false`
 - Evidence: `not recorded`
 - Decision evidence: `not recorded`

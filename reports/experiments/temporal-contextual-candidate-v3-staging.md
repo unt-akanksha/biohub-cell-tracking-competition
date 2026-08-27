@@ -80,5 +80,8 @@ explicit runtime failure.
 
 Execution belongs on the user-provided two-GPU cloud unless a fresh Kaggle
 quota guard proves the full declared window still leaves at least eight Kaggle
-GPU hours. Producing the CSV does not authorize uploading it; a competition
-submission remains a separate explicit user decision.
+GPU hours. On 2026-08-27, the user explicitly authorized uploading the first
+candidate that passes every frozen gate. Producing an unaccepted CSV still
+does not authorize an upload; once the hash-bound exact acceptance reports
+`accepted`, the separate CLI upload should proceed automatically and does not
+require a GPU.

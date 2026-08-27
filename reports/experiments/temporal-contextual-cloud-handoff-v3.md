@@ -194,4 +194,7 @@ Exactly two GPUs balance complete movies by contextual pair and encoder cost.
 The `36,000`-second inference ceiling leaves `7,200` seconds for notebook setup
 and finalization. The candidate must preserve every node, cover every movie
 once, change edges, and differ from the base hash. The resulting CSV is local
-evidence only; uploading it requires separate explicit authorization.
+evidence until exact acceptance passes. The user supplied prospective upload
+authorization on 2026-08-27: after every frozen gate passes, upload the accepted
+hash-bound CSV without another prompt. The upload step itself does not require
+a GPU.

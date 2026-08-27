@@ -2581,9 +2581,24 @@
             }
           },
           "target_event_id": "evt-bccb48d19eb243d6a969e4a2002bfca9"
+        },
+        {
+          "correction_reason": "User prospectively authorized upload of the first fully accepted non-replica candidate and allowed Kaggle GPU use down to the eight-hour reserve.",
+          "replacement_fields": {
+            "authorized_for_submission": true,
+            "submission_authorization": {
+              "authorized_at": "2026-08-27",
+              "gpu_required_for_upload": false,
+              "rejected_or_ungated_candidate_upload_forbidden": true,
+              "scope": "first_hash_bound_candidate_passing_all_external_reciprocal_calibration_exact_processed_integrity_and_non_replica_gates",
+              "training_and_inference_gpu_policy": "exactly_two_gpus_while_projected_kaggle_quota_remains_at_least_8_hours",
+              "upload_without_additional_prompt": true
+            }
+          },
+          "target_event_id": "evt-bccb48d19eb243d6a969e4a2002bfca9"
         }
       ],
-      "authorized_for_submission": false,
+      "authorized_for_submission": true,
       "decision": null,
       "decision_evidence": [],
       "declared_gpu_hours": "12",
