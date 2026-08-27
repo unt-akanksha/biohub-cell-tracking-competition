@@ -1,12 +1,12 @@
 # Biohub Competition Status
 
-Generated from snapshot: `2026-08-26T18:55:18.795887Z`
-Snapshot SHA-256: `28ad9e2e41ffb83ad5537d8cede50746d5326f27a93c514327e88c4396b57ae1`
+Generated from snapshot: `2026-08-27T09:47:01.678897Z`
+Snapshot SHA-256: `827e441107feffa19cd91efdbd8f2bedaf43698e05c84ae46b5bf4fece8f653a`
 
 ## Competition
 
 - Slug: `biohub-cell-tracking-during-development`
-- Public rank: 821
+- Public rank: 841
 - Best clean public score: 0.913
 - Clean-score evidence: Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.
 - Current public leader score: 0.962
@@ -14,16 +14,16 @@ Snapshot SHA-256: `28ad9e2e41ffb83ad5537d8cede50746d5326f27a93c514327e88c4396b57
 
 ## GPU Safety
 
-- Remaining: 26.37 hours
+- Remaining: 20.68 hours
 - Protected reserve: 8.00 hours
-- Spendable before reserve: 18.37 hours
+- Spendable before reserve: 12.68 hours
 - Quota refresh: 2026-08-29T00:00:00
 
 ## Personal Submissions
 
 - Returned by CLI: 60
-- Submitted today (UTC): 1 / 5
-- Remaining daily allowance: 4
+- Submitted today (UTC): 0 / 5
+- Remaining daily allowance: 5
 - Best personal public score: 0.913
 
 ## Notebook Provenance
@@ -32,21 +32,38 @@ Snapshot SHA-256: `28ad9e2e41ffb83ad5537d8cede50746d5326f27a93c514327e88c4396b57
 
 ### Clean Research Candidates
 
-- None in the collected notebook set.
+- `kunaldesale2408/biohub-cell-tracking` — reported\_post\_patch; No known exploit found in manual source audit; score claim remains unverified.
 
 ### Excluded Metric Hacks
 
-- None detected in the collected notebook set.
+- `kirneo/metric-hack-last-call-update` — matched explicit metric-hack policy
+- `amanatar/improved-metric-hack-last-call` — matched explicit metric-hack policy
+- `ravi123a321at/metric-hack-last-call` — matched explicit metric-hack policy
+- `outwrest/metric-hack-minimal-baseline-tta-2gpu` — matched explicit metric-hack policy
+- `anvithpothula/biohub-metric-hack` — matched explicit metric-hack policy
 
 ### Needs Source Review
 
-- None.
+- `kaiwalyaatulraut/biohub-solution` — unknown; source\_not\_audited
+- `kaiwalyaatulraut/biohub-competition-solution` — unknown; source\_not\_audited
+- `amanatar/biohub-v6-ultra-best` — unknown; source\_not\_audited
+- `muhammaddanyalmalik/cell-tracking` — unknown; source\_not\_audited
+- `ravi123a321at/dark-agi-biohub-cell-tracking-solution` — unknown; source\_not\_audited
+- `evgendvorkin/biohub-0-927-lb` — unknown; source\_not\_audited\_for\_curated\_hash
+- `anhadmahajan06/biohub-track-your-cells-development` — unknown; source\_not\_audited\_for\_curated\_hash
+- `arnav170/biohub-sdw60` — unknown; source\_not\_audited
+- `salemali7/biohub-cell-tracking-92-6` — unknown; source\_not\_audited\_for\_curated\_hash
+- `flexonafft/biohub-harmonic-fusion` — unknown; source\_not\_audited\_for\_curated\_hash
+- `rockerritesh/0-926-biohub-divsub` — unknown; source\_not\_audited\_for\_curated\_hash
+- `andressantossanz/biohub-harness-0926-probe` — unknown; source\_not\_audited
+- `ahmetyasreminolu/biohub-last-version` — unknown; source\_not\_audited
+- `arnav170/biohub-923` — unknown; source\_not\_audited
 
 ## Recent Discussions
 
-- 2026-08-26T16:27:51.320000 — Scoring after notebook ran (topic `737659`, 2 comments, 0 votes)
+- 2026-08-26T16:27:51.320000 — Scoring after notebook ran (topic `737659`, 4 comments, 0 votes)
 - 2026-08-26T08:00:08.592000 — division jaccard (topic `737577`, 2 comments, 1 votes)
-- 2026-08-26T03:10:45.084000 — what layer did ur gains actually come from (topic `737543`, 0 comments, 1 votes)
+- 2026-08-26T03:10:45.084000 — what layer did ur gains actually come from (topic `737543`, 2 comments, 1 votes)
 - 2026-08-25T14:20:22.701000 — does anyone have a different design for divisions (topic `737438`, 0 comments, 1 votes)
 - 2026-08-23T09:59:31.382000 — Hand labeling - is it external data? (topic `737103`, 5 comments, 7 votes)
 - 2026-08-23T09:12:21.220000 — Stuck at 0.928 (topic `737101`, 3 comments, 6 votes)
