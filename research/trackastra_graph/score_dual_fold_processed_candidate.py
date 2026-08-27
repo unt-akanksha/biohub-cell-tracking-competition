@@ -157,6 +157,8 @@ def validate_materialization(
                 and "division_weight" in blend
                 and math.isfinite(float(blend["division_weight"]))
                 and float(blend["division_weight"]) >= 0.0
+                and blend.get("ensemble_mode")
+                in {"target_only", "reciprocal_mean"}
                 and math.isclose(
                     float(blend.get("appearance_temperature", 0.0)),
                     0.10,

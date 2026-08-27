@@ -26,6 +26,13 @@ from the 4.07% synthetic rate toward the 0.26% real rate, while synthetic
 negatives retain approximately unit weight. This avoids the earlier failure
 mode where scaling the whole BCE nearly erased non-division supervision.
 
+Calibration now also compares the target-fold encoder against an equal mean of
+both reciprocal encoders. Because the global split keeps every calibration
+movie out of both models' training inventories, this is a clean ensemble test,
+not in-sample stacking. `target_only` wins exact ties to preserve runtime; the
+two-encoder path is selected only when it clears the same pooled-gain and
+per-movie regression gates.
+
 No public Kaggle implementation, public prediction identity, CELLECT source, or
 external checkpoint is copied. CELLECT and the 2026 microscopy-embedding paper
 informed only the modeling hypothesis.
@@ -37,6 +44,13 @@ synthetic movies plus 96 real movies from the opposite embryo prefix. Twelve
 unopened target-prefix movies select its checkpoint, and a different twelve are
 reserved for later appearance-weight calibration. The four already opened
 processed-acceptance movies are excluded from both stages.
+
+The two workers share one deterministic partition for each embryo prefix:
+12 checkpoint movies, 12 calibration movies, then up to 96 training movies
+(all remaining eligible movies if fewer are available). This is
+stricter than independently salted fold lists: neither reciprocal model can
+train on a movie used to select or calibrate the other, which also keeps a
+future two-model ensemble evaluation honest.
 
 The radius builder fails closed if a labeled edge falls outside the declared
 32-micrometer candidate neighborhood. It also rejects batches without a hard
@@ -67,7 +81,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 32 tests across the normal
+The updated focused temporal/Trackastra suite passes 34 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
@@ -76,12 +90,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-prior-20260827.zip`
-(93,560 bytes, SHA-256
-`f90ccba02f5c7bfbc77a46b41263d0eb302f0716e2e42818736f96662781ffb4`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-20260827.zip`
+(95,984 bytes, SHA-256
+`b1b38be2d96f4e2cb3ab87e8c22b60cb12adbb981fafc2eab1775b33dcc63b2d`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`f3a7e3f87e864e1d9cd1001eb9814665c11ea312797a099789bb0caff4dbc0fe`,
+`8c78caed13eaa125b6f8c72e76af13e4c5c696f2fae69f5162294540be5a2cb4`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic

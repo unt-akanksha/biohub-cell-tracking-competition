@@ -26,6 +26,7 @@ try:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from dual_fold_processed_acceptance import (
         EXPECTED_STEMS,
@@ -42,6 +43,7 @@ except ModuleNotFoundError:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
     from research.trackastra_graph import rerank_submission as rerank
@@ -114,6 +116,8 @@ def verify_sources(
             and appearance_terminal.get("ema_decay") == 0.997
             and appearance_terminal.get("division_prior_correction")
             == "class-conditional importance weighting"
+            and appearance_terminal.get("real_split_policy")
+            == "global deterministic disjoint partition per embryo prefix"
             and appearance_terminal.get("public_predictions_copied") is False
             and appearance_terminal.get("public_leaderboard_used_for_selection") is False
             and appearance_terminal.get("submission_created") is False
@@ -127,6 +131,18 @@ def verify_sources(
         selected_division_weight = float(
             selection.get("selected_division_weight", 0.0)
         )
+        selected_ensemble_mode = str(
+            selection.get("selected_ensemble_mode", "")
+        )
+        peer_fold = next(
+            candidate for candidate in FOLD_BY_PREFIX.values() if candidate != fold
+        )
+        peer_terminal = json.loads(
+            (appearance_root / peer_fold / "worker_terminal.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        peer_model = appearance_root / peer_fold / "appearance_model.pt"
         if not (
             calibration_fold.get("status") == "completed"
             and calibration_fold.get("fold") == fold
@@ -136,10 +152,15 @@ def verify_sources(
             and selection.get("improved") is True
             and selected_weight > 0.0
             and selected_division_weight >= 0.0
+            and selected_ensemble_mode in {"target_only", "reciprocal_mean"}
             and calibration_fold.get("appearance_temperature")
             == APPEARANCE_TEMPERATURE
             and calibration_fold.get("appearance_model_sha256")
             == appearance_terminal["model_sha256"]
+            and calibration_fold.get("peer_fold") == peer_fold
+            and calibration_fold.get("peer_appearance_model_sha256")
+            == peer_terminal.get("model_sha256")
+            and sha256_file(peer_model) == peer_terminal.get("model_sha256")
             and calibration_fold.get("trackastra_model_sha256")
             == trackastra_fold["model_sha256"]
         ):
@@ -149,6 +170,8 @@ def verify_sources(
             "trackastra_model_sha256": trackastra_fold["model_sha256"],
             "trackastra_best_step": trackastra_fold["best_step"],
             "appearance_model": appearance_model,
+            "peer_appearance_model": peer_model,
+            "peer_appearance_model_sha256": peer_terminal["model_sha256"],
             "appearance_model_sha256": appearance_terminal["model_sha256"],
             "appearance_best_step": appearance_terminal["best_step"],
             "appearance_parameter_count": appearance_terminal["parameter_count"],
@@ -158,6 +181,7 @@ def verify_sources(
             "appearance_ema_decay": appearance_terminal["ema_decay"],
             "appearance_weight": selected_weight,
             "division_weight": selected_division_weight,
+            "ensemble_mode": selected_ensemble_mode,
         }
     return calibration, verified_folds
 
@@ -191,6 +215,16 @@ def worker(args: argparse.Namespace) -> None:
         strict=True,
     )
     appearance.eval()
+    peer_appearance = None
+    if args.ensemble_mode == "reciprocal_mean":
+        peer_appearance = PhysicalPatchAssociationModel().to(device)
+        peer_appearance.load_state_dict(
+            torch.load(
+                args.peer_appearance_model, map_location="cpu", weights_only=True
+            ),
+            strict=True,
+        )
+        peer_appearance.eval()
     config = rerank.HybridLinkConfig(
         edge_threshold=float(FROZEN_ASSOCIATION_CONFIGURATION["edge_threshold"]),
         base_lock_probability=float(
@@ -226,19 +260,49 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
+        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
             appearance,
             video,
             image,
             device,
             node_batch_size=args.node_batch_size,
         )
-        appearance_scores = appearance_scores_for_movie(
+        primary_scores = appearance_scores_for_movie(
             video, embeddings, trackastra_scores
         )
-        source_divisions = division_logits_for_movie(
+        primary_divisions = division_logits_for_movie(
             video, division_logits, trackastra_scores
         )
+        if peer_appearance is None:
+            peer_scores = primary_scores
+            peer_divisions = primary_divisions
+            peer_extraction = None
+        else:
+            peer_embeddings, peer_logits, peer_extraction = extract_movie_embeddings(
+                peer_appearance,
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
+            peer_scores = appearance_scores_for_movie(
+                video, peer_embeddings, trackastra_scores
+            )
+            peer_divisions = division_logits_for_movie(
+                video, peer_logits, trackastra_scores
+            )
+        appearance_scores, source_divisions = reciprocal_movie_evidence(
+            primary_scores,
+            primary_divisions,
+            peer_scores,
+            peer_divisions,
+            mode=args.ensemble_mode,
+        )
+        extraction[stem] = {
+            "ensemble_mode": args.ensemble_mode,
+            "primary": primary_extraction,
+            "peer": peer_extraction,
+        }
         blended = blend_movie_pair_scores(
             trackastra_scores,
             appearance_scores,
@@ -334,10 +398,14 @@ def orchestrate(args: argparse.Namespace) -> None:
             str(fold_source["trackastra_model_dir"]),
             "--appearance-model",
             str(fold_source["appearance_model"]),
+            "--peer-appearance-model",
+            str(fold_source["peer_appearance_model"]),
             "--appearance-weight",
             str(fold_source["appearance_weight"]),
             "--division-weight",
             str(fold_source["division_weight"]),
+            "--ensemble-mode",
+            str(fold_source["ensemble_mode"]),
             "--prefix",
             prefix,
             "--datasets",
@@ -441,6 +509,7 @@ def orchestrate(args: argparse.Namespace) -> None:
             fold: {
                 "appearance_weight": source["appearance_weight"],
                 "division_weight": source["division_weight"],
+                "ensemble_mode": source["ensemble_mode"],
                 "appearance_temperature": APPEARANCE_TEMPERATURE,
             }
             for fold, source in folds.items()
@@ -480,8 +549,12 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--output-dir", type=Path, required=True)
     result.add_argument("--trackastra-model-dir", type=Path)
     result.add_argument("--appearance-model", type=Path)
+    result.add_argument("--peer-appearance-model", type=Path)
     result.add_argument("--appearance-weight", type=float)
     result.add_argument("--division-weight", type=float)
+    result.add_argument(
+        "--ensemble-mode", choices=("target_only", "reciprocal_mean")
+    )
     result.add_argument("--prefix", choices=sorted(FOLD_BY_PREFIX))
     result.add_argument("--datasets", default="")
     result.add_argument("--worker-output", type=Path)
@@ -498,8 +571,10 @@ def main() -> None:
         required = (
             args.trackastra_model_dir,
             args.appearance_model,
+            args.peer_appearance_model,
             args.appearance_weight,
             args.division_weight,
+            args.ensemble_mode,
             args.prefix,
             args.worker_output,
         )

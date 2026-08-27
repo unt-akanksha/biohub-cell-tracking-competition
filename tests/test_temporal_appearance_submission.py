@@ -51,6 +51,7 @@ def accepted_fixture(tmp_path: Path):
         blends[fold] = {
             "appearance_weight": index * 0.1,
             "division_weight": index * 0.05,
+            "ensemble_mode": "target_only",
             "appearance_temperature": 0.10,
         }
     evidence = tmp_path / "acceptance.json"
@@ -102,4 +103,7 @@ def test_appearance_shard_weight_includes_pair_and_patch_work() -> None:
 
     assert appearance_movie_inference_weight(video) == (
         2 * 3 + 3 * 4 + APPEARANCE_NODE_COST * 9
+    )
+    assert appearance_movie_inference_weight(video, encoder_count=2) == (
+        2 * 3 + 3 * 4 + 2 * APPEARANCE_NODE_COST * 9
     )

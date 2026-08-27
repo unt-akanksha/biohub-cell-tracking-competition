@@ -143,6 +143,53 @@ def select_paths(
     return ranked
 
 
+def real_prefix_partition(
+    paths: list[Path],
+    *,
+    prefix: str,
+    validation_count: int,
+    calibration_count: int,
+    training_count: int,
+) -> tuple[list[Path], list[Path], list[Path]]:
+    """Create one cross-worker partition for an embryo prefix.
+
+    Both reciprocal workers call this with the same prefix-specific salt. A
+    movie reserved for checkpoint selection or blend calibration can therefore
+    never appear in the opposite worker's in-domain training inventory.
+    """
+
+    counts = (validation_count, calibration_count, training_count)
+    if any(count <= 0 for count in counts):
+        raise ValueError("real partition counts must be positive")
+    ranked = select_paths(
+        paths,
+        salt=f"{RUN_ID}:real-prefix:{prefix}",
+        prefix=prefix,
+    )
+    reserved = validation_count + calibration_count
+    if len(ranked) <= reserved:
+        raise ValueError(
+            f"prefix {prefix} has {len(ranked)} eligible movies; more than "
+            f"{reserved} required to preserve reserved splits and training"
+        )
+    validation_end = validation_count
+    calibration_end = validation_end + calibration_count
+    training_end = min(calibration_end + training_count, len(ranked))
+    validation = ranked[:validation_end]
+    calibration = ranked[validation_end:calibration_end]
+    training = ranked[calibration_end:training_end]
+    inventories = [set(validation), set(calibration), set(training)]
+    if any(
+        inventories[left] & inventories[right]
+        for left in range(len(inventories))
+        for right in range(left + 1, len(inventories))
+    ):
+        raise RuntimeError("real prefix partition is not disjoint")
+    if not training:
+        raise RuntimeError("real prefix partition left no training movies")
+    return validation, calibration, training
+
+
 def synthetic_split(
     root: Path, *, validation_count: int, training_count: int
 ) -> tuple[Path, list[Path], list[Path]]:
@@ -600,23 +647,23 @@ def train_worker(args: argparse.Namespace) -> None:
         training_count=args.synthetic_train_movies,
     )
     real_paths = list((args.competition_dir / "train").glob("*.geff"))
-    real_train = select_paths(
+    _source_validation, _source_calibration, real_train = real_prefix_partition(
         real_paths,
-        salt=f"{RUN_ID}:train",
         prefix=str(spec["source_prefix"]),
-        limit=args.real_train_movies,
+        validation_count=args.real_validation_movies,
+        calibration_count=args.real_calibration_movies,
+        training_count=args.real_train_movies,
     )
-    target_pool = select_paths(
+    real_validation, real_calibration, _target_training = real_prefix_partition(
         real_paths,
-        salt=f"{RUN_ID}:target",
         prefix=str(spec["target_prefix"]),
-        limit=args.real_validation_movies + args.real_calibration_movies,
+        validation_count=args.real_validation_movies,
+        calibration_count=args.real_calibration_movies,
+        training_count=args.real_train_movies,
     )
-    real_validation = target_pool[: args.real_validation_movies]
-    real_calibration = target_pool[args.real_validation_movies :]
     if len(real_calibration) != args.real_calibration_movies:
         raise RuntimeError("reciprocal target pool cannot fill the calibration split")
-    if set(path.stem for path in real_train + target_pool) & OPENED_ACCEPTANCE_STEMS:
+    if set(path.stem for path in real_train + real_validation + real_calibration) & OPENED_ACCEPTANCE_STEMS:
         raise RuntimeError("opened acceptance labels entered appearance training")
     store = MovieStore(args.competition_dir)
     real_fixed = fixed_examples(
@@ -697,6 +744,7 @@ def train_worker(args: argparse.Namespace) -> None:
             "real_train_stems": [path.stem for path in real_train],
             "real_validation_stems": [path.stem for path in real_validation],
             "real_calibration_stems_reserved": [path.stem for path in real_calibration],
+            "real_split_policy": "global deterministic disjoint partition per embryo prefix",
             "calibration_ground_truth_read": False,
             "candidate_radius_um": args.candidate_radius_um,
             "patch_shape": [17, 17, 17],
@@ -833,6 +881,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "division_prior_correction": "class-conditional importance weighting",
         "real_division_rate": REAL_DIVISION_RATE,
         "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,

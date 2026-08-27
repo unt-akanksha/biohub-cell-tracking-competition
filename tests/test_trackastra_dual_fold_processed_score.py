@@ -80,11 +80,13 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                 "target_44b6": {
                     "appearance_weight": 0.10,
                     "division_weight": 0.05,
+                    "ensemble_mode": "target_only",
                     "appearance_temperature": 0.10,
                 },
                 "target_6bba": {
                     "appearance_weight": 0.20,
                     "division_weight": 0.10,
+                    "ensemble_mode": "reciprocal_mean",
                     "appearance_temperature": 0.10,
                 },
             },

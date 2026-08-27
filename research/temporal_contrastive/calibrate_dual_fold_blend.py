@@ -28,6 +28,7 @@ try:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from patch_model import PhysicalPatchAssociationModel
 except ModuleNotFoundError:
@@ -36,6 +37,7 @@ except ModuleNotFoundError:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
     from research.trackastra_graph import train_biohub_graph_transformer as graph_base
@@ -54,6 +56,7 @@ OPENED_ACCEPTANCE_STEMS = frozenset(
 )
 APPEARANCE_WEIGHTS = (0.0, 0.05, 0.10, 0.20, 0.35)
 DIVISION_WEIGHTS = (0.0, 0.05, 0.10, 0.20)
+ENSEMBLE_MODES = ("target_only", "reciprocal_mean")
 APPEARANCE_TEMPERATURE = 0.10
 MINIMUM_POOLED_GAIN = 0.001
 MAXIMUM_MOVIE_REGRESSION = 0.002
@@ -83,7 +86,7 @@ def sha256_file(path: Path) -> str:
 
 def verify_sources(
     fold: str, appearance_root: Path, trackastra_root: Path
-) -> tuple[dict[str, Any], dict[str, Any], list[str], Path, Path]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], list[str], Path, Path]:
     appearance_dir = appearance_root / fold
     appearance_terminal_path = appearance_dir / "worker_terminal.json"
     appearance_config_path = appearance_dir / "training_config.json"
@@ -118,6 +121,10 @@ def verify_sources(
         == "class-conditional importance weighting"
         and appearance_config.get("division_prior_correction")
         == "class-conditional importance weighting"
+        and appearance_config.get("real_split_policy")
+        == "global deterministic disjoint partition per embryo prefix"
+        and appearance_terminal.get("real_split_policy")
+        == "global deterministic disjoint partition per embryo prefix"
         and appearance_config.get("calibration_ground_truth_read") is False
     ):
         raise RuntimeError(f"appearance architecture or split boundary changed: {fold}")
@@ -146,6 +153,7 @@ def verify_sources(
         raise RuntimeError(f"Trackastra model hash mismatch: {fold}")
     return (
         appearance_terminal,
+        appearance_config,
         trackastra_terminal,
         [str(stem) for stem in stems],
         appearance_model,
@@ -330,47 +338,53 @@ def aggregate_association_metrics(
 
 def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     by_weight = {
-        (float(row["appearance_weight"]), float(row.get("division_weight", 0.0))): row
+        (
+            str(row.get("ensemble_mode", "target_only")),
+            float(row["appearance_weight"]),
+            float(row.get("division_weight", 0.0)),
+        ): row
         for row in rows
     }
     expected = {
-        (appearance_weight, division_weight)
+        (ensemble_mode, appearance_weight, division_weight)
+        for ensemble_mode in ENSEMBLE_MODES
         for appearance_weight in APPEARANCE_WEIGHTS
         for division_weight in DIVISION_WEIGHTS
     }
     if set(by_weight) != expected:
         raise ValueError("calibration grid is incomplete")
-    control = by_weight[(0.0, 0.0)]
+    control = by_weight[("target_only", 0.0, 0.0)]
     control_movies = {
         str(row["stem"]): float(row["composite"]) for row in control["by_movie"]
     }
     evaluated = []
-    for appearance_weight in APPEARANCE_WEIGHTS:
-        for division_weight in DIVISION_WEIGHTS:
-            row = by_weight[(appearance_weight, division_weight)]
-            movie_deltas = {
-                str(movie["stem"]): float(movie["composite"])
-                - control_movies[str(movie["stem"])]
-                for movie in row["by_movie"]
-            }
-            pooled_gain = float(row["pooled"]["composite"]) - float(
-                control["pooled"]["composite"]
-            )
-            worst_delta = min(movie_deltas.values())
-            eligible = bool(
-                appearance_weight > 0
-                and pooled_gain >= MINIMUM_POOLED_GAIN
-                and worst_delta >= -MAXIMUM_MOVIE_REGRESSION
-            )
-            evaluated.append(
-                {
-                    **dict(row),
-                    "pooled_gain_vs_zero": pooled_gain,
-                    "worst_movie_delta_vs_zero": worst_delta,
-                    "movie_deltas_vs_zero": movie_deltas,
-                    "eligible": eligible,
+    for ensemble_mode in ENSEMBLE_MODES:
+        for appearance_weight in APPEARANCE_WEIGHTS:
+            for division_weight in DIVISION_WEIGHTS:
+                row = by_weight[(ensemble_mode, appearance_weight, division_weight)]
+                movie_deltas = {
+                    str(movie["stem"]): float(movie["composite"])
+                    - control_movies[str(movie["stem"])]
+                    for movie in row["by_movie"]
                 }
-            )
+                pooled_gain = float(row["pooled"]["composite"]) - float(
+                    control["pooled"]["composite"]
+                )
+                worst_delta = min(movie_deltas.values())
+                eligible = bool(
+                    appearance_weight > 0
+                    and pooled_gain >= MINIMUM_POOLED_GAIN
+                    and worst_delta >= -MAXIMUM_MOVIE_REGRESSION
+                )
+                evaluated.append(
+                    {
+                        **dict(row),
+                        "pooled_gain_vs_zero": pooled_gain,
+                        "worst_movie_delta_vs_zero": worst_delta,
+                        "movie_deltas_vs_zero": movie_deltas,
+                        "eligible": eligible,
+                    }
+                )
     eligible = [row for row in evaluated if row["eligible"]]
     selected = (
         max(
@@ -378,6 +392,7 @@ def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             key=lambda row: (
                 float(row["worst_movie_delta_vs_zero"]),
                 float(row["pooled_gain_vs_zero"]),
+                1 if row["ensemble_mode"] == "target_only" else 0,
                 -float(row["division_weight"]),
                 -float(row["appearance_weight"]),
             ),
@@ -388,11 +403,13 @@ def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             for row in evaluated
             if float(row["appearance_weight"]) == 0.0
             and float(row["division_weight"]) == 0.0
+            and row["ensemble_mode"] == "target_only"
         )
     )
     return {
         "selected_weight": float(selected["appearance_weight"]),
         "selected_division_weight": float(selected["division_weight"]),
+        "selected_ensemble_mode": str(selected["ensemble_mode"]),
         "improved": bool(selected["eligible"]),
         "selected": selected,
         "control": next(
@@ -400,6 +417,7 @@ def select_weight(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
             for row in evaluated
             if float(row["appearance_weight"]) == 0.0
             and float(row["division_weight"]) == 0.0
+            and row["ensemble_mode"] == "target_only"
         ),
         "grid": evaluated,
     }
@@ -416,11 +434,29 @@ def worker(args: argparse.Namespace) -> None:
     device = torch.device("cuda:0")
     (
         appearance_terminal,
+        appearance_config,
         trackastra_terminal,
         stems,
         appearance_model_path,
         trackastra_model_dir,
     ) = verify_sources(args.fold, args.appearance_output_root, args.trackastra_output_root)
+    peer_fold = next(fold for fold in FOLDS if fold != args.fold)
+    (
+        peer_appearance_terminal,
+        peer_appearance_config,
+        _peer_trackastra_terminal,
+        _peer_stems,
+        peer_appearance_model_path,
+        _peer_trackastra_model_dir,
+    ) = verify_sources(
+        peer_fold, args.appearance_output_root, args.trackastra_output_root
+    )
+    if set(stems) & set(peer_appearance_config.get("real_train_stems", [])):
+        raise RuntimeError("peer appearance model trained on a calibration movie")
+    if appearance_config.get("real_split_policy") != peer_appearance_config.get(
+        "real_split_policy"
+    ):
+        raise RuntimeError("reciprocal appearance split policies differ")
 
     appearance_model = PhysicalPatchAssociationModel().to(device)
     appearance_model.load_state_dict(
@@ -428,6 +464,12 @@ def worker(args: argparse.Namespace) -> None:
         strict=True,
     )
     appearance_model.eval()
+    peer_appearance_model = PhysicalPatchAssociationModel().to(device)
+    peer_appearance_model.load_state_dict(
+        torch.load(peer_appearance_model_path, map_location="cpu", weights_only=True),
+        strict=True,
+    )
+    peer_appearance_model.eval()
     sys.path.insert(0, str(args.trackastra_dir.resolve()))
     from trackastra.model.model import TrackingTransformer
 
@@ -437,8 +479,9 @@ def worker(args: argparse.Namespace) -> None:
     trackastra_model.eval()
     import zarr
 
-    rows_by_weight: dict[tuple[float, float], list[dict[str, Any]]] = {
-        (appearance_weight, division_weight): []
+    rows_by_weight: dict[tuple[str, float, float], list[dict[str, Any]]] = {
+        (ensemble_mode, appearance_weight, division_weight): []
+        for ensemble_mode in ENSEMBLE_MODES
         for appearance_weight in APPEARANCE_WEIGHTS
         for division_weight in DIVISION_WEIGHTS
     }
@@ -459,45 +502,82 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
+        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
             appearance_model, video, image, device, node_batch_size=args.node_batch_size
         )
-        appearance_scores = appearance_scores_for_movie(video, embeddings, pair_scores)
-        source_divisions = division_logits_for_movie(video, division_logits, pair_scores)
-        for appearance_weight in APPEARANCE_WEIGHTS:
-            for division_weight in DIVISION_WEIGHTS:
-                blended = blend_movie_pair_scores(
-                    pair_scores,
-                    appearance_scores,
-                    appearance_weight=appearance_weight,
-                    appearance_temperature=APPEARANCE_TEMPERATURE,
-                    source_division_logits=source_divisions,
-                    division_weight=division_weight,
-                )
-                association = association_metrics_for_video(video, blended)
-                ranking = ranking_metrics_for_video(video, blended)
-                rows_by_weight[(appearance_weight, division_weight)].append(
-                    {
-                        **association,
-                        "ranking": ranking,
-                    }
-                )
+        peer_embeddings, peer_division_logits, peer_extraction = (
+            extract_movie_embeddings(
+                peer_appearance_model,
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
+        )
+        extraction[stem] = {
+            "primary": primary_extraction,
+            "peer": peer_extraction,
+        }
+        primary_scores = appearance_scores_for_movie(video, embeddings, pair_scores)
+        primary_divisions = division_logits_for_movie(
+            video, division_logits, pair_scores
+        )
+        peer_scores = appearance_scores_for_movie(
+            video, peer_embeddings, pair_scores
+        )
+        peer_divisions = division_logits_for_movie(
+            video, peer_division_logits, pair_scores
+        )
+        for ensemble_mode in ENSEMBLE_MODES:
+            appearance_scores, source_divisions = reciprocal_movie_evidence(
+                primary_scores,
+                primary_divisions,
+                peer_scores,
+                peer_divisions,
+                mode=ensemble_mode,
+            )
+            for appearance_weight in APPEARANCE_WEIGHTS:
+                for division_weight in DIVISION_WEIGHTS:
+                    blended = blend_movie_pair_scores(
+                        pair_scores,
+                        appearance_scores,
+                        appearance_weight=appearance_weight,
+                        appearance_temperature=APPEARANCE_TEMPERATURE,
+                        source_division_logits=source_divisions,
+                        division_weight=division_weight,
+                    )
+                    association = association_metrics_for_video(video, blended)
+                    ranking = ranking_metrics_for_video(video, blended)
+                    rows_by_weight[
+                        (ensemble_mode, appearance_weight, division_weight)
+                    ].append(
+                        {
+                            **association,
+                            "ranking": ranking,
+                        }
+                    )
     calibration_rows = [
         {
+            "ensemble_mode": ensemble_mode,
             "appearance_weight": appearance_weight,
             "division_weight": division_weight,
             "appearance_temperature": APPEARANCE_TEMPERATURE,
             "pooled": aggregate_association_metrics(
-                rows_by_weight[(appearance_weight, division_weight)]
+                rows_by_weight[(ensemble_mode, appearance_weight, division_weight)]
             ),
             "ranking_pooled": aggregate_metrics(
                 [
                     row["ranking"]
-                    for row in rows_by_weight[(appearance_weight, division_weight)]
+                    for row in rows_by_weight[
+                        (ensemble_mode, appearance_weight, division_weight)
+                    ]
                 ]
             ),
-            "by_movie": rows_by_weight[(appearance_weight, division_weight)],
+            "by_movie": rows_by_weight[
+                (ensemble_mode, appearance_weight, division_weight)
+            ],
         }
+        for ensemble_mode in ENSEMBLE_MODES
         for appearance_weight in APPEARANCE_WEIGHTS
         for division_weight in DIVISION_WEIGHTS
     ]
@@ -512,7 +592,10 @@ def worker(args: argparse.Namespace) -> None:
         "selection": selection,
         "extraction": extraction,
         "appearance_model_sha256": appearance_terminal["model_sha256"],
+        "peer_fold": peer_fold,
+        "peer_appearance_model_sha256": peer_appearance_terminal["model_sha256"],
         "trackastra_model_sha256": trackastra_terminal["model_sha256"],
+        "ensemble_mode_grid": list(ENSEMBLE_MODES),
         "appearance_weight_grid": list(APPEARANCE_WEIGHTS),
         "division_weight_grid": list(DIVISION_WEIGHTS),
         "appearance_temperature": APPEARANCE_TEMPERATURE,

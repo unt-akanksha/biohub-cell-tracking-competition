@@ -28,6 +28,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
     appearance_root = tmp_path / "appearance"
     trackastra_folds = {}
     calibration_folds = {}
+    appearance_terminals = {}
     for index, fold in enumerate(FOLDS, start=1):
         trackastra_model = trackastra_root / fold / "model.pt"
         trackastra_model.parent.mkdir(parents=True)
@@ -53,18 +54,21 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
             "division_prior_correction": "class-conditional importance weighting",
+            "real_split_policy": "global deterministic disjoint partition per embryo prefix",
             "model_sha256": digest(appearance_model),
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
         }
         write_json(appearance_root / fold / "worker_terminal.json", appearance_terminal)
+        appearance_terminals[fold] = appearance_terminal
         calibration_folds[fold] = {
             "status": "completed",
             "fold": fold,
             "selection": {
                 "selected_weight": 0.1 * index,
                 "selected_division_weight": 0.05 * index,
+                "selected_ensemble_mode": "reciprocal_mean",
                 "improved": True,
             },
             "appearance_temperature": 0.10,
@@ -74,6 +78,12 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
         }
+    for fold in FOLDS:
+        peer_fold = next(candidate for candidate in FOLDS if candidate != fold)
+        calibration_folds[fold]["peer_fold"] = peer_fold
+        calibration_folds[fold]["peer_appearance_model_sha256"] = (
+            appearance_terminals[peer_fold]["model_sha256"]
+        )
     write_json(
         trackastra_root / "training_terminal.json",
         {
@@ -113,6 +123,7 @@ def test_processed_appearance_sources_are_reciprocally_hash_bound(tmp_path: Path
     assert folds["target_44b6"]["appearance_weight"] == 0.1
     assert folds["target_6bba"]["appearance_weight"] == 0.2
     assert folds["target_44b6"]["division_weight"] == 0.05
+    assert folds["target_44b6"]["ensemble_mode"] == "reciprocal_mean"
 
 
 def test_processed_appearance_sources_reject_mutated_model(tmp_path: Path) -> None:

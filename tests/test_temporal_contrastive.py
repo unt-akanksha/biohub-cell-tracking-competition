@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 import torch
@@ -18,6 +20,7 @@ from research.temporal_contrastive.train_dual_fold_patch import (
     aggregate_metrics,
     division_prior_corrected_bce,
     prepare_transition,
+    real_prefix_partition,
     synthetic_split,
     transition_metrics,
     update_ema_model,
@@ -26,11 +29,13 @@ from research.temporal_contrastive.appearance_blend import (
     appearance_scores_for_movie,
     blend_pair_scores,
     division_logits_for_movie,
+    reciprocal_movie_evidence,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
 from research.temporal_contrastive.calibrate_dual_fold_blend import (
     APPEARANCE_WEIGHTS,
     DIVISION_WEIGHTS,
+    ENSEMBLE_MODES,
     association_metrics_for_video,
     ranking_metrics_for_video,
     select_weight,
@@ -307,6 +312,24 @@ def test_division_logits_align_arbitrary_source_identifiers() -> None:
     np.testing.assert_array_equal(aligned[0], [-3.0, 2.0])
 
 
+def test_reciprocal_appearance_mean_combines_both_clean_models() -> None:
+    primary_scores = {0: np.asarray([[1.0, 0.0]], dtype=np.float32)}
+    peer_scores = {0: np.asarray([[0.0, 1.0]], dtype=np.float32)}
+    primary_divisions = {0: np.asarray([2.0], dtype=np.float32)}
+    peer_divisions = {0: np.asarray([-2.0], dtype=np.float32)}
+
+    scores, divisions = reciprocal_movie_evidence(
+        primary_scores,
+        primary_divisions,
+        peer_scores,
+        peer_divisions,
+        mode="reciprocal_mean",
+    )
+
+    np.testing.assert_array_equal(scores[0], [[0.5, 0.5]])
+    np.testing.assert_array_equal(divisions[0], [0.0])
+
+
 def test_appearance_scores_align_arbitrary_node_identifiers() -> None:
     video = GraphVideo(
         "fixture",
@@ -356,6 +379,33 @@ def test_synthetic_split_reads_public_manifest_schema_deterministically(tmp_path
     assert set(training).isdisjoint(validation)
 
 
+def test_real_prefix_partition_is_cross_worker_disjoint() -> None:
+    paths = [Path(f"44b6_{index:08d}.geff") for index in range(130)]
+
+    validation, calibration, training = real_prefix_partition(
+        paths,
+        prefix="44b6",
+        validation_count=12,
+        calibration_count=12,
+        training_count=96,
+    )
+    repeated = real_prefix_partition(
+        list(reversed(paths)),
+        prefix="44b6",
+        validation_count=12,
+        calibration_count=12,
+        training_count=96,
+    )
+
+    assert (validation, calibration, training) == repeated
+    assert len(validation) == 12
+    assert len(calibration) == 12
+    assert len(training) == 96
+    assert set(validation).isdisjoint(calibration)
+    assert set(validation).isdisjoint(training)
+    assert set(calibration).isdisjoint(training)
+
+
 def test_blend_calibration_ranking_uses_true_division_children() -> None:
     video = GraphVideo(
         "fixture",
@@ -391,24 +441,27 @@ def test_blend_calibration_ranking_uses_true_division_children() -> None:
 
 def test_blend_selection_requires_gain_and_movie_floor() -> None:
     rows = []
-    for appearance_weight in APPEARANCE_WEIGHTS:
-        for division_weight in DIVISION_WEIGHTS:
-            gain = 0.0 if appearance_weight == 0 else 0.002
-            movie_a_gain = -0.001 if appearance_weight == 0.10 else gain
-            rows.append(
-                {
-                    "appearance_weight": appearance_weight,
-                    "division_weight": division_weight,
-                    "pooled": {"composite": 0.80 + gain},
-                    "by_movie": [
-                        {"stem": "a", "composite": 0.80 + movie_a_gain},
-                        {"stem": "b", "composite": 0.80 + gain},
-                    ],
-                }
-            )
+    for ensemble_mode in ENSEMBLE_MODES:
+        for appearance_weight in APPEARANCE_WEIGHTS:
+            for division_weight in DIVISION_WEIGHTS:
+                gain = 0.0 if appearance_weight == 0 else 0.002
+                movie_a_gain = -0.001 if appearance_weight == 0.10 else gain
+                rows.append(
+                    {
+                        "ensemble_mode": ensemble_mode,
+                        "appearance_weight": appearance_weight,
+                        "division_weight": division_weight,
+                        "pooled": {"composite": 0.80 + gain},
+                        "by_movie": [
+                            {"stem": "a", "composite": 0.80 + movie_a_gain},
+                            {"stem": "b", "composite": 0.80 + gain},
+                        ],
+                    }
+                )
 
     selected = select_weight(rows)
 
     assert selected["improved"] is True
     assert selected["selected_weight"] == 0.05
     assert selected["selected_division_weight"] == 0.0
+    assert selected["selected_ensemble_mode"] == "target_only"

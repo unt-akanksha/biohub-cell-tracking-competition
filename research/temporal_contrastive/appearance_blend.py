@@ -185,6 +185,49 @@ def division_logits_for_movie(
     return result
 
 
+def reciprocal_movie_evidence(
+    primary_appearance: dict[int, np.ndarray],
+    primary_divisions: dict[int, np.ndarray],
+    peer_appearance: dict[int, np.ndarray],
+    peer_divisions: dict[int, np.ndarray],
+    *,
+    mode: str,
+) -> tuple[dict[int, np.ndarray], dict[int, np.ndarray]]:
+    """Select one reciprocal model or an equal-probability clean ensemble."""
+
+    expected = set(primary_appearance)
+    if not (
+        expected == set(primary_divisions)
+        and expected == set(peer_appearance)
+        and expected == set(peer_divisions)
+    ):
+        raise ValueError("reciprocal appearance evidence has different transitions")
+    if mode not in {"target_only", "reciprocal_mean"}:
+        raise ValueError(f"unknown reciprocal appearance mode: {mode}")
+    appearance: dict[int, np.ndarray] = {}
+    divisions: dict[int, np.ndarray] = {}
+    for timepoint in expected:
+        primary_scores = np.asarray(primary_appearance[timepoint], dtype=np.float32)
+        primary_logits = np.asarray(primary_divisions[timepoint], dtype=np.float32)
+        peer_scores = np.asarray(peer_appearance[timepoint], dtype=np.float32)
+        peer_logits = np.asarray(peer_divisions[timepoint], dtype=np.float32)
+        if primary_scores.shape != peer_scores.shape:
+            raise ValueError("reciprocal appearance matrices have different shapes")
+        if primary_logits.shape != peer_logits.shape:
+            raise ValueError("reciprocal division vectors have different shapes")
+        if mode == "target_only":
+            appearance[timepoint] = primary_scores.copy()
+            divisions[timepoint] = primary_logits.copy()
+        else:
+            appearance[timepoint] = (
+                0.5 * primary_scores + 0.5 * peer_scores
+            ).astype(np.float32)
+            divisions[timepoint] = (
+                0.5 * primary_logits + 0.5 * peer_logits
+            ).astype(np.float32)
+    return appearance, divisions
+
+
 def blend_movie_pair_scores(
     pair_scores: dict[int, tuple[np.ndarray, np.ndarray, np.ndarray]],
     appearance_scores: dict[int, np.ndarray],

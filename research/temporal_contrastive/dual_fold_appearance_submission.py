@@ -26,6 +26,7 @@ try:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from dual_fold_processed_acceptance import FROZEN_ASSOCIATION_CONFIGURATION
     from dual_fold_rerank_submission import embryo_prefix
@@ -50,6 +51,7 @@ except ModuleNotFoundError:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
     from research.trackastra_graph import rerank_submission as rerank
@@ -136,6 +138,8 @@ def load_acceptance(
             and expected_appearance[fold].get("ema_decay") == 0.997
             and float(blends[fold].get("appearance_weight", 0.0)) > 0.0
             and float(blends[fold].get("division_weight", 0.0)) >= 0.0
+            and blends[fold].get("ensemble_mode")
+            in {"target_only", "reciprocal_mean"}
             and float(blends[fold].get("appearance_temperature", 0.0)) == 0.10
         ):
             raise RuntimeError(f"accepted reciprocal evidence is invalid: {fold}")
@@ -156,15 +160,20 @@ def hybrid_configuration(selected: dict[str, Any]) -> rerank.HybridLinkConfig:
     )
 
 
-def appearance_movie_inference_weight(video: Any) -> float:
+def appearance_movie_inference_weight(video: Any, *, encoder_count: int = 1) -> float:
     """Estimate transformer pairs plus the per-node 3D encoder workload."""
 
+    if encoder_count not in {1, 2}:
+        raise ValueError("appearance encoder_count must be one or two")
     pair_products = 0
     for timepoint, source_ids in video.ids_by_time.items():
         targets = video.ids_by_time.get(timepoint + 1)
         if targets is not None:
             pair_products += len(source_ids) * len(targets)
-    return float(max(pair_products, 1) + APPEARANCE_NODE_COST * len(video.node_ids))
+    return float(
+        max(pair_products, 1)
+        + encoder_count * APPEARANCE_NODE_COST * len(video.node_ids)
+    )
 
 
 def worker(args: argparse.Namespace) -> None:
@@ -203,6 +212,20 @@ def worker(args: argparse.Namespace) -> None:
     candidate_edges: dict[str, list[tuple[int, int]]] = {}
     dataset_stats: dict[str, dict[str, Any]] = {}
     extraction: dict[str, Any] = {}
+
+    def appearance_model_for(fold_name: str) -> PhysicalPatchAssociationModel:
+        if fold_name not in appearance_models:
+            loaded = PhysicalPatchAssociationModel().to(device)
+            loaded.load_state_dict(
+                torch.load(
+                    appearance_paths[fold_name], map_location="cpu", weights_only=True
+                ),
+                strict=True,
+            )
+            loaded.eval()
+            appearance_models[fold_name] = loaded
+        return appearance_models[fold_name]
+
     for stem, video in videos.items():
         fold = FOLD_BY_PREFIX[embryo_prefix(stem)]
         if fold not in trackastra_models:
@@ -210,15 +233,6 @@ def worker(args: argparse.Namespace) -> None:
                 trackastra_dirs[fold], map_location="cpu"
             ).to(device)
             trackastra_models[fold].eval()
-            appearance_model = PhysicalPatchAssociationModel().to(device)
-            appearance_model.load_state_dict(
-                torch.load(
-                    appearance_paths[fold], map_location="cpu", weights_only=True
-                ),
-                strict=True,
-            )
-            appearance_model.eval()
-            appearance_models[fold] = appearance_model
         track_scores = rerank.predict_movie_scores(
             trackastra_models[fold],
             video,
@@ -229,18 +243,50 @@ def worker(args: argparse.Namespace) -> None:
         image = zarr.open_group(
             str(args.image_root / f"{stem}.zarr"), mode="r"
         )["0"]
-        embeddings, division_logits, extraction[stem] = extract_movie_embeddings(
-            appearance_models[fold],
+        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
+            appearance_model_for(fold),
             video,
             image,
             device,
             node_batch_size=args.node_batch_size,
         )
-        appearance_scores = appearance_scores_for_movie(video, embeddings, track_scores)
-        source_divisions = division_logits_for_movie(
+        primary_scores = appearance_scores_for_movie(video, embeddings, track_scores)
+        primary_divisions = division_logits_for_movie(
             video, division_logits, track_scores
         )
         blend = acceptance["appearance_blend"][fold]
+        ensemble_mode = str(blend["ensemble_mode"])
+        if ensemble_mode == "reciprocal_mean":
+            peer_fold = next(candidate for candidate in FOLD_BY_PREFIX.values() if candidate != fold)
+            peer_embeddings, peer_logits, peer_extraction = extract_movie_embeddings(
+                appearance_model_for(peer_fold),
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
+            peer_scores = appearance_scores_for_movie(
+                video, peer_embeddings, track_scores
+            )
+            peer_divisions = division_logits_for_movie(
+                video, peer_logits, track_scores
+            )
+        else:
+            peer_scores = primary_scores
+            peer_divisions = primary_divisions
+            peer_extraction = None
+        appearance_scores, source_divisions = reciprocal_movie_evidence(
+            primary_scores,
+            primary_divisions,
+            peer_scores,
+            peer_divisions,
+            mode=ensemble_mode,
+        )
+        extraction[stem] = {
+            "ensemble_mode": ensemble_mode,
+            "primary": primary_extraction,
+            "peer": peer_extraction,
+        }
         pair_scores = blend_movie_pair_scores(
             track_scores,
             appearance_scores,
@@ -308,7 +354,17 @@ def orchestrate(args: argparse.Namespace) -> None:
     )
     videos = rerank.read_submission(args.base_submission)
     weights = {
-        stem: appearance_movie_inference_weight(video)
+        stem: appearance_movie_inference_weight(
+            video,
+            encoder_count=(
+                2
+                if acceptance["appearance_blend"][
+                    FOLD_BY_PREFIX[embryo_prefix(stem)]
+                ]["ensemble_mode"]
+                == "reciprocal_mean"
+                else 1
+            ),
+        )
         for stem, video in videos.items()
     }
     shards = build_movie_shards(
