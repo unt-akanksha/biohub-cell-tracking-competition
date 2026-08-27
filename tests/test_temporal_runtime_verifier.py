@@ -27,6 +27,8 @@ def runtime_fixture(tmp_path: Path) -> Path:
             "public_leaderboard_used_for_selection": False,
             "maximum_submission_inference_seconds": 36_000,
             "minimum_kaggle_finalization_reserve_seconds": 7_200,
+            "required_kaggle_machine_shape": "NvidiaTeslaT4",
+            "submission_internet_enabled": False,
         },
     }
     (tmp_path / "SOURCE_MANIFEST.json").write_text(

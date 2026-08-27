@@ -124,12 +124,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-20260827.zip`
-(101,901 bytes, SHA-256
-`e0bfebd8c7372ea0a0c07d3a524a80a4530eaca230f016fd739e51ac8f3d12a5`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-20260827.zip`
+(102,247 bytes, SHA-256
+`7b5a3763728390b49d226b3fec8818da3cfe2e309ed89e3940f3c4243c8b17ef`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`3dced7b3e26926a5e261aef26a99c98662b04a810592a040a02358fdaace03a2`,
+`a9ffcf658803fa305b3a2558efb3227ff76aeeff362011b98e2948052c54d272`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -152,4 +152,6 @@ node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.
 Both final candidate builders now enforce a 36,000-second inference ceiling,
 leaving at least 7,200 seconds of Kaggle's 12-hour GPU notebook limit for
 setup, final assembly, artifact persistence, and shutdown. This ceiling cannot
-be raised through a command-line override.
+be raised through a command-line override. Final-kernel metadata is also
+fail-closed to Kaggle's `NvidiaTeslaT4` T4 x2 shape with TPU and internet
+disabled; runtime separately requires exactly two visible CUDA devices.

@@ -18,10 +18,10 @@
     "exact_gate_sha256": "7b8348b8066de53208400d61e2855fde2681064e516b53ccb5f38a04174eb611",
     "two_gpu_candidate_builder_sha256": "1555fb93223dbd0d49694c989b29ca4104ca33dc32d4f1c52809c67ab4f1e699",
     "trackastra_candidate_builder_sha256": "d049199dd1918748a67918a6a49c90bdfa0210dd32b644a1bd19cb79f1dc098e",
-    "submission_sharding_sha256": "7b2562f543e1f9d8b37697697c90bc59c6860614cc07ab1763cf4218c77ef28b",
-    "runtime_verifier_sha256": "b1d01a462e39936b97ecb5902fbe5dd0b90839fd48a4f7b7db3234c963ac2bd7",
+    "submission_sharding_sha256": "f2196e2c2438af4e84c01b2c7c82db5c9d78c3eed4ce4072f1d50004637baa78",
+    "runtime_verifier_sha256": "07b627ead74f0095e2a30044da13a6a25e734d96605e1ea5c18134044955eed7",
     "trackastra_output_verifier_sha256": "b0594174aab6944e51dd3a1485f22a8143cc800a25b3cac104435c04fa955596",
-    "runtime_builder_sha256": "ff8a5ee820e21ac30e519bbcf5967aaaa757f791910e0973592bc4d8464c28dd"
+    "runtime_builder_sha256": "c02fc7212fab72b0fa48747ecad4572183739f3bb1ab7db251fca1afcf0e7427"
   },
   "model": {
     "architecture": "independent physical-scale temporal-context 3D residual patch encoder",
@@ -105,6 +105,8 @@
     "processed_four_movie_gate_runs_once_after_weight_freeze": true,
     "competition_submission_requires_separate_user_authorization": true,
     "future_submission_inference_requires_exactly_two_gpus": true,
+    "future_submission_kaggle_machine_shape": "NvidiaTeslaT4",
+    "future_submission_internet_enabled": false,
     "future_submission_sharding": "whole movie only",
     "future_submission_inference_hard_stop_seconds": 36000,
     "kaggle_notebook_finalization_reserve_seconds": 7200,

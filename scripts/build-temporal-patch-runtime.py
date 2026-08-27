@@ -167,6 +167,8 @@ def main() -> None:
                 "calibration_grid_includes_exact_zero_control": True,
                 "maximum_submission_inference_seconds": 36_000,
                 "minimum_kaggle_finalization_reserve_seconds": 7_200,
+                "required_kaggle_machine_shape": "NvidiaTeslaT4",
+                "submission_internet_enabled": False,
             },
             "files": files,
         },

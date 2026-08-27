@@ -8,11 +8,12 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-20260827.zip`
-- Archive bytes: `101901`
-- Archive SHA-256: `e0bfebd8c7372ea0a0c07d3a524a80a4530eaca230f016fd739e51ac8f3d12a5`
-- Extracted manifest SHA-256: `3dced7b3e26926a5e261aef26a99c98662b04a810592a040a02358fdaace03a2`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-20260827.zip`
+- Archive bytes: `102247`
+- Archive SHA-256: `7b5a3763728390b49d226b3fec8818da3cfe2e309ed89e3940f3c4243c8b17ef`
+- Extracted manifest SHA-256: `a9ffcf658803fa305b3a2558efb3227ff76aeeff362011b98e2948052c54d272`
 - Required visible GPUs: exactly 2
+- Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)
 - Maximum final inference wall time: 36,000 seconds
 - Kaggle notebook setup/finalization reserve: at least 7,200 seconds
 - Internet during model execution: not required
@@ -161,4 +162,7 @@ to create a local `submission.csv`. Uploading that CSV to Kaggle remains a
 separate action requiring explicit user authorization. Both the appearance
 builder and its Trackastra-only fallback reject any inference ceiling above
 36,000 seconds, preserving at least two hours of the 12-hour Kaggle notebook
-limit for setup, final assembly, artifact persistence, and shutdown.
+limit for setup, final assembly, artifact persistence, and shutdown. The final
+kernel metadata must request Kaggle's `NvidiaTeslaT4` shape with internet and
+TPU disabled, and runtime still fails before inference unless exactly two CUDA
+devices are visible.

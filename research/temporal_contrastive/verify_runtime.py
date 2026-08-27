@@ -34,6 +34,8 @@ def verify_runtime(root: Path, *, require_gpus: bool = False) -> dict[str, Any]:
         and integrity.get("public_leaderboard_used_for_selection") is False
         and integrity.get("maximum_submission_inference_seconds") == 36_000
         and integrity.get("minimum_kaggle_finalization_reserve_seconds") == 7_200
+        and integrity.get("required_kaggle_machine_shape") == "NvidiaTeslaT4"
+        and integrity.get("submission_internet_enabled") is False
     ):
         raise RuntimeError("runtime integrity policy changed")
 
