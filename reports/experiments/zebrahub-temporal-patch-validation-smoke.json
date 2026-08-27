@@ -18,9 +18,9 @@
     "downloaded_zarr_chunk_count": 24,
     "downloaded_zarr_bytes": 88973399,
     "zarr_metadata_sha256": "29e6b11c20ff2c641f5ae71e21b5859ce887ffa149c3ee4532d3a3c6c72e1648",
-    "derived_shard_bytes": 2747675,
-    "derived_shard_sha256": "a2cd7065130b9365753217900bbb1de0997e35cfc44b760f07bc9d6bf9c77a68",
-    "derived_manifest_sha256": "4a2b774d760ec0b8eefbc6e64f2ea24f658218e24ef10e9630e5ab07e522ca1a"
+    "derived_shard_bytes": 2747673,
+    "derived_shard_sha256": "4365bdb1da532de28f97f2d9a366ef01a014a537081b7144f59471a3b288a581",
+    "derived_manifest_sha256": "e9d4bc99ac096d19c7cbdacca0b8bf79e22c7cb7cfd193c13a133ba92a042f20"
   },
   "transition": {
     "source_nodes": 15,
@@ -31,11 +31,11 @@
     "candidate_context_shape": [15, 96, 18],
     "transition_context": {
       "global_shift_zyx_um": [0.0, 0.0, 0.0],
-      "zero_shift_ncc": 0.9916799409363993,
-      "aligned_ncc": 0.9916799409363993,
+      "zero_shift_ncc": 0.9913387166160588,
+      "aligned_ncc": 0.9913387166160588,
       "phase_peak_margin": 0.9917383324508625,
       "duplicate_confidence": 0.0,
-      "reliability": 0.9875834759428169,
+      "reliability": 0.9872436611634235,
       "fft_stride_zyx": [3, 8, 11]
     }
   },
@@ -46,12 +46,12 @@
     "source_embedding_shape": [15, 256],
     "target_embedding_shape": [96, 256],
     "finite_pair_logits": 62,
-    "pair_loss": 1.4131394624710083,
+    "pair_loss": 1.41313898563385,
     "embedding_loss": 1.3115979433059692,
-    "combined_loss": 1.7410389184951782,
+    "combined_loss": 1.74103844165802,
     "gradient_tensors": 64,
     "all_gradients_finite": true,
-    "cpu_forward_backward_seconds": 23.20299999997951
+    "cpu_forward_backward_seconds": 31.625
   },
   "decision": {
     "state": "retain_as_frozen_external_validation_source",

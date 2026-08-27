@@ -98,6 +98,7 @@ def test_context_bounds_fft_and_rejects_invalid_inputs() -> None:
         max_fft_shape_zyx=(16, 32, 32),
     )
     assert context.fft_stride_zyx == (3, 3, 3)
+    assert context.global_shift_zyx_voxel == pytest.approx((2, 4, -6))
     assert np.isfinite(context.feature_vector(candidate_radius_um=32.0)).all()
 
     with pytest.raises(ValueError, match="equal shape"):

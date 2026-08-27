@@ -54,36 +54,36 @@
     "training_source": {
       "source": "ZSNS004",
       "csv_timepoint": 100,
-      "shard_sha256": "f16855f77ddb0a2df2b4110b2f1d8d1857ad4f6b533b03d0bcf0d8e1a4ba6205",
-      "manifest_sha256": "12ca6951a3a807b765017e496f260e7b1c60b42162a32443020867bc75879bc2",
+      "shard_sha256": "e9939c32c88c7ab1bf60ff6d83176a2fc489c843587b0aef571fb9d84a6bc300",
+      "manifest_sha256": "8d8e1c046b0c07c21d2c61e09437315369e4038a1b708e27ee08dfcb53d49384",
       "candidate_edges": 77,
       "finite_pair_logits": 77,
       "all_gradients_finite": true,
-      "combined_loss": 1.7956417798995972
+      "combined_loss": 1.7956387996673584
     },
     "validation_source": {
       "source": "ZSNS005",
       "csv_timepoint": 100,
-      "shard_sha256": "a2cd7065130b9365753217900bbb1de0997e35cfc44b760f07bc9d6bf9c77a68",
-      "manifest_sha256": "4a2b774d760ec0b8eefbc6e64f2ea24f658218e24ef10e9630e5ab07e522ca1a",
+      "shard_sha256": "4365bdb1da532de28f97f2d9a366ef01a014a537081b7144f59471a3b288a581",
+      "manifest_sha256": "e9d4bc99ac096d19c7cbdacca0b8bf79e22c7cb7cfd193c13a133ba92a042f20",
       "candidate_edges": 62,
       "finite_pair_logits": 62,
       "all_gradients_finite": true,
-      "combined_loss": 1.7410389184951782
+      "combined_loss": 1.74103844165802
     },
     "gpu_used": false,
     "submission_created": false
   },
   "source": {
-    "transition_context_sha256": "85c711721fe2edeb9eaac202cc3b6ff1eef25e28cd75023d37ed79598fea56f3",
+    "transition_context_sha256": "5aa98dc083d3af4a311662fafd3ce0d7614a37d5f6a6f93c91bf35f8af1718fd",
     "contextual_pair_fusion_sha256": "17b97bc02bc3bf82cd10280c89e2e44f8f23cd71d65b2201dbb158c226b6078f",
     "contextual_training_adapter_sha256": "352d98a2299b2fc1d51c2342a364c22772d7f804a9d733c8210a5ac8122e63cf",
     "contextual_training_test_sha256": "88357fbcf1a5022baa94af3e4b386dabd821ae7b743dbb90fb196b6a9ea873fc",
     "zebrahub_external_sha256": "836216f611cc508bce05d25c9d1bbc582fb097ddb7a8e1ea76b17e956655ac93",
     "zebrahub_builder_sha256": "b80f962ecfd4561ec36ec1d62d14701dab9929c0b5014a633384165c8b3ef396",
     "contextual_smoke_sha256": "13fbf01c5b25ea5c70b71cf6c81040b4512bbecc8f6a0544141bf4dca4535d14",
-    "training_smoke_report_sha256": "bb7ba7622582fbb6ef4503b726b8b1e94ef6bf1ddc38b14bb290f84cf546fa2e",
-    "validation_smoke_report_sha256": "76fb011f59ff1c406a470e74c9eaa986678d061b2df4a7fb0e8e7e289c975428"
+    "training_smoke_report_sha256": "57d000a98a81def710d2c8458e603aaf9aea73bfd0a1b3f9761815eea4e41376",
+    "validation_smoke_report_sha256": "77aaa615abd539364b11ea71dc2506b56219f9f82fbf8fed4b82c0f51632863f"
   },
   "hypothesis": "Same-organism physical appearance plus label-free global-transition evidence and contextual comparison among competing incoming/outgoing edges improves clean complete-graph association beyond independent cosine and pair-MLP controls without metric hacks or public prediction copying."
 }

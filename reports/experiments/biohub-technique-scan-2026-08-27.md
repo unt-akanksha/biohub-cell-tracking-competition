@@ -124,10 +124,10 @@ The CPU/network-only extractor completed one frozen ZSNS004 transition at
 sources, 34 true daughter links, 43 hard-negative candidate links, 113
 normalized temporal patches, and 18 image/motion context values per eligible
 edge. The label-free full-frame estimate found zero global shift, aligned NCC
-0.983865, phase-peak margin 0.985382, reliability 0.976674, and zero duplicate
+0.982819, phase-peak margin 0.985382, reliability 0.975636, and zero duplicate
 confidence. A fresh 20,747,761-parameter v3 model completed a finite
 forward/backward pass: all 77 candidate logits were finite, the combined
-contextual-pair-plus-embedding loss was 1.795642 with pinned seed 31003, and all 64 populated gradient
+contextual-pair-plus-embedding loss was 1.795639 with pinned seed 31003, and all 64 populated gradient
 tensors were finite. The unchanged 20,869,325-parameter v2 smoke remains an
 independent control. Exact hashes and shapes are recorded in
 `reports/experiments/zebrahub-temporal-patch-shard-smoke.json`.
@@ -135,7 +135,7 @@ independent control. Exact hashes and shapes are recorded in
 The frozen ZSNS005 external-validation source independently completed the same
 pipeline at `t=100`: 15 division sources, 30 positive links, 32 hard negatives,
 62/62 finite contextual logits, and 64/64 finite populated gradient tensors.
-Its label-free transition reliability was 0.987583 with zero duplicate
+Its label-free transition reliability was 0.987244 with zero duplicate
 confidence. This is preprocessing and gradient evidence only; the random
 initialization losses are not model-selection evidence.
 

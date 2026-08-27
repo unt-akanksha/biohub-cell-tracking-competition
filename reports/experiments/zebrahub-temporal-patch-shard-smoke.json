@@ -19,8 +19,8 @@
     "downloaded_zarr_bytes": 76897723,
     "zarr_metadata_sha256": "7d801b2a976adbe29bd44e8d6fb79e1448dcc842bbf1034263d48332681baf8a",
     "derived_shard_bytes": 2886389,
-    "derived_shard_sha256": "f16855f77ddb0a2df2b4110b2f1d8d1857ad4f6b533b03d0bcf0d8e1a4ba6205",
-    "derived_manifest_sha256": "12ca6951a3a807b765017e496f260e7b1c60b42162a32443020867bc75879bc2"
+    "derived_shard_sha256": "e9939c32c88c7ab1bf60ff6d83176a2fc489c843587b0aef571fb9d84a6bc300",
+    "derived_manifest_sha256": "8d8e1c046b0c07c21d2c61e09437315369e4038a1b708e27ee08dfcb53d49384"
   },
   "transition": {
     "source_nodes": 17,
@@ -37,11 +37,11 @@
     "candidate_context_shape": [17, 96, 18],
     "transition_context": {
       "global_shift_zyx_um": [0.0, 0.0, 0.0],
-      "zero_shift_ncc": 0.9838651665747695,
-      "aligned_ncc": 0.9838651665747695,
+      "zero_shift_ncc": 0.9828192632073666,
+      "aligned_ncc": 0.9828192632073666,
       "phase_peak_margin": 0.9853815869905147,
       "duplicate_confidence": 0.0,
-      "reliability": 0.9766738928994515,
+      "reliability": 0.975635634255745,
       "fft_stride_zyx": [3, 8, 11]
     }
   },
@@ -65,12 +65,12 @@
     "source_embedding_shape": [17, 256],
     "target_embedding_shape": [96, 256],
     "finite_pair_logits": 77,
-    "pair_loss": 1.452392816543579,
+    "pair_loss": 1.4523898363113403,
     "embedding_loss": 1.3729959726333618,
-    "combined_loss": 1.7956417798995972,
+    "combined_loss": 1.7956387996673584,
     "gradient_tensors": 64,
     "all_gradients_finite": true,
-    "cpu_forward_backward_seconds": 18.094000000040978
+    "cpu_forward_backward_seconds": 31.46799999999348
   },
   "decision": {
     "state": "retain_preprocessing_lane",

@@ -81,6 +81,37 @@ def _bounded_view(
     return view, stride
 
 
+def _axis_projection_shift(
+    reference: np.ndarray, moved: np.ndarray, axis: int
+) -> int | None:
+    reduction_axes = tuple(value for value in range(3) if value != int(axis))
+    first = reference.mean(axis=reduction_axes, dtype=np.float64)
+    second = moved.mean(axis=reduction_axes, dtype=np.float64)
+    first = first - first.mean()
+    second = second - second.mean()
+    if np.linalg.vector_norm(first) <= 1e-12 or np.linalg.vector_norm(second) <= 1e-12:
+        return None
+    cross_power = np.fft.fft(second) * np.conj(np.fft.fft(first))
+    cross_power /= np.maximum(np.abs(cross_power), 1e-12)
+    correlation = np.fft.ifft(cross_power).real
+    peak = int(np.argmax(correlation))
+    return peak - len(correlation) if peak > len(correlation) // 2 else peak
+
+
+def _bounded_overlap_correlation(
+    reference: np.ndarray,
+    moved: np.ndarray,
+    shift_zyx: Sequence[int],
+    stride_zyx: Sequence[int],
+) -> float:
+    reference_slices, moved_slices = _overlap_slices(reference.shape, shift_zyx)
+    stride_slices = tuple(slice(None, None, int(value)) for value in stride_zyx)
+    return _normalized_correlation(
+        reference[reference_slices][stride_slices],
+        moved[moved_slices][stride_slices],
+    )
+
+
 def _second_peak_outside_neighborhood(
     correlation: np.ndarray, peak_index: Sequence[int]
 ) -> float:
@@ -173,12 +204,32 @@ def estimate_transition_context(
         ],
         dtype=np.int64,
     )
-    shift_voxel = shift_view * stride
-    reference_slices, moved_slices = _overlap_slices(reference.shape, shift_voxel)
-    zero_ncc = _normalized_correlation(reference, moved)
-    aligned_ncc = _normalized_correlation(
-        reference[reference_slices], moved[moved_slices]
+    coarse_shift_voxel = shift_view * stride
+    projection_shift = np.asarray(
+        [
+            refined if refined is not None else coarse
+            for refined, coarse in zip(
+                (
+                    _axis_projection_shift(reference, moved, axis)
+                    for axis in range(3)
+                ),
+                coarse_shift_voxel,
+                strict=True,
+            )
+        ],
+        dtype=np.int64,
     )
+    shift_candidates = (coarse_shift_voxel, projection_shift)
+    candidate_correlations = tuple(
+        _bounded_overlap_correlation(reference, moved, candidate, stride)
+        for candidate in shift_candidates
+    )
+    winner = max(range(len(shift_candidates)), key=lambda index: (candidate_correlations[index], index))
+    shift_voxel = shift_candidates[winner]
+    zero_ncc = _bounded_overlap_correlation(
+        reference, moved, (0, 0, 0), stride
+    )
+    aligned_ncc = candidate_correlations[winner]
     peak = float(correlation[peak_index])
     second_peak = _second_peak_outside_neighborhood(correlation, peak_index)
     peak_margin = float(
