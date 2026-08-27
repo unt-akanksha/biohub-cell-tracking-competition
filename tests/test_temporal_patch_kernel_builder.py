@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import ast
 import json
+import shutil
 import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 
@@ -49,6 +52,8 @@ def test_temporal_patch_kernel_is_strict_two_gpu_training_only() -> None:
     assert "--allow-pretrained-control" in code
     assert "Synthetic coverage is incomplete" in code
     assert "Real-movie coverage is incomplete" in code
+    assert "shutil.copytree(source, runtime / source.name)" in code
+    assert "Ambiguous runtime directory and archive" in code
     assert "Dense 176-patch production forward/backward" in code
     assert "probe_loss.backward()" in code
     assert "weights_only=True" in code
@@ -67,3 +72,41 @@ def test_temporal_patch_kernel_builder_is_byte_deterministic() -> None:
 
     assert NOTEBOOK.read_bytes() == first_notebook
     assert METADATA.read_bytes() == first_metadata
+
+
+def test_temporal_patch_runtime_materializer_accepts_kaggle_directory_and_zip_mounts(
+    tmp_path: Path,
+) -> None:
+    subprocess.run([sys.executable, str(BUILDER)], check=True)
+    notebook = json.loads(NOTEBOOK.read_text(encoding="ascii"))
+    setup = "".join(notebook["cells"][2]["source"])
+    tree = ast.parse(setup)
+    function = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef)
+        and node.name == "materialize_runtime_input"
+    )
+    namespace = {"shutil": shutil, "zipfile": zipfile}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), str(NOTEBOOK), "exec"), namespace)
+    materialize = namespace["materialize_runtime_input"]
+
+    directory_input = tmp_path / "directory_input"
+    nested = directory_input / "trackastra_source" / "trackastra"
+    nested.mkdir(parents=True)
+    (directory_input / "verify_runtime.py").write_text("pass\n", encoding="utf-8")
+    (directory_input / "dataset-metadata.json").write_text("{}\n", encoding="utf-8")
+    (nested / "__init__.py").write_text("\n", encoding="utf-8")
+    directory_output = tmp_path / "directory_output"
+    materialize(directory_input, directory_output)
+    assert (directory_output / "trackastra_source" / "trackastra" / "__init__.py").is_file()
+    assert (directory_output / "verify_runtime.py").is_file()
+    assert not (directory_output / "dataset-metadata.json").exists()
+
+    zip_input = tmp_path / "zip_input"
+    zip_input.mkdir()
+    with zipfile.ZipFile(zip_input / "trackastra_source.zip", "w") as archive:
+        archive.writestr("trackastra/__init__.py", "\n")
+    zip_output = tmp_path / "zip_output"
+    materialize(zip_input, zip_output)
+    assert (zip_output / "trackastra_source" / "trackastra" / "__init__.py").is_file()

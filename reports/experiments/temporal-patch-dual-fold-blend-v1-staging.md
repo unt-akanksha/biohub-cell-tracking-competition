@@ -50,8 +50,9 @@ binding checks, so later mutation of the downloaded source also fails closed.
 - Competition submission: not authorized and no submit command is present.
 
 Final preflight report:
-`artifacts/preflights/temporal-patch-dual-fold-blend-v1-coherence2.json`,
+`artifacts/preflights/temporal-patch-dual-fold-blend-v1-mount-aware.json`,
 SHA-256
-`0c8e1ea41d6f43619a087617a4f1e4fe123ddcc9b5a1ff28b869664aa499c3db`.
-The earlier immutable report is retained as historical evidence rather than
-overwritten.
+`d52b44d2d282f9dc0e26deebd684605c96fa69f48404e68630a94afc11fd96ee`.
+Earlier immutable reports are retained as historical evidence rather than
+overwritten. The final report includes the regression-tested Kaggle mounted-
+directory repair learned from the 11.964-second training infrastructure failure.

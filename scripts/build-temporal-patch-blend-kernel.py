@@ -102,6 +102,24 @@ def first_existing(candidates):
     return next((path for path in candidates if path.exists()), None)
 
 
+def materialize_runtime_input(runtime_input, runtime):
+    if runtime.exists():
+        shutil.rmtree(runtime)
+    runtime.mkdir(parents=True)
+    for source in runtime_input.iterdir():
+        if source.is_dir():
+            shutil.copytree(source, runtime / source.name)
+        elif source.is_file() and source.suffix != ".zip" and source.name != "dataset-metadata.json":
+            shutil.copy2(source, runtime / source.name)
+    for archive in runtime_input.glob("*.zip"):
+        destination = runtime / archive.stem
+        if destination.exists():
+            raise RuntimeError(f"Ambiguous runtime directory and archive: {archive.name}")
+        destination.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(archive) as handle:
+            handle.extractall(destination)
+
+
 if torch.cuda.device_count() != 2:
     raise RuntimeError(
         f"Temporal appearance calibration requires exactly two GPUs, saw {torch.cuda.device_count()}"
@@ -169,17 +187,7 @@ if None in (runtime_input, competition, support, appearance_output, trackastra_o
     })
 
 runtime = Path("/kaggle/working/temporal_patch_runtime")
-if runtime.exists():
-    shutil.rmtree(runtime)
-runtime.mkdir(parents=True)
-for source in runtime_input.iterdir():
-    if source.is_file() and source.suffix != ".zip" and source.name != "dataset-metadata.json":
-        shutil.copy2(source, runtime / source.name)
-for archive in runtime_input.glob("*.zip"):
-    destination = runtime / archive.stem
-    destination.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(archive) as handle:
-        handle.extractall(destination)
+materialize_runtime_input(runtime_input, runtime)
 
 subprocess.run(
     [

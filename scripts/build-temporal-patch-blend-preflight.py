@@ -25,7 +25,7 @@ METADATA = KERNEL_DIR / "kernel-metadata.json"
 BUILDER = ROOT / "scripts" / "build-temporal-patch-blend-kernel.py"
 RUNTIME = ROOT / ".biohub" / "staging" / "biohub-temporal-patch-runtime-v1"
 CONFIG = ROOT / "config" / "experiments" / f"{RUN_ID}.json"
-OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-coherence2.json"
+OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}-mount-aware.json"
 
 
 def relative(path: Path) -> str:

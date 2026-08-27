@@ -53,8 +53,9 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `lsm-fm-public-node-refinement-v1` | public-0927-clean-repro-v2 | A single global coordinate blend from the frozen high-recall public graph toward the independently trained 35.1M-parameter LSM-FM feature-36 probability centroid will strictly increase matched held-out nodes while preserving every node ID, edge, frame assignment, and node count. | failed | not recorded | — | 0.04 / 1.00 | — | Kaggle run aborted after 105.603 seconds before scientific evaluation because the attached graph runtime contained only four acceptance control GEFFs; the first selection control 44b6_d29c9ab2.geff was absent. No result, acceptance labels, or submission artifact was created. | — |
 | `lsm-fm-public-node-refinement-v2` | lsm-fm-public-node-refinement-v1 | A conservative radius-2, power-2, 0.25 blend from frozen public nodes toward an independently trained 35.1M-parameter LSM-FM probability centroid will improve integer-submission-space organizer score without changing node IDs, counts, frame assignments, or graph topology. | rejected | not recorded | — | 0.07 / 1.00 | retire | The predeclared LSM-FM coordinate blend gained four pooled matches and improved mean localization distance, but lost one match on 6bba_07e24132 (-0.0027855 recall), exceeding the frozen -0.002 per-movie regression limit. No exact scoring, production materialization, or submission was performed. | — |
 | `trackastra-dual-fold-synthetic-v1` | trackastra-graph-finetune-v6 | Correct native synthetic geometry plus long 95/5 synthetic-real replay and frame-global motion augmentation improves association and division ranking without v6 real-only drift. | running | not recorded | — | unknown / 4.00 | — | — | — |
-| `temporal-patch-dual-fold-v1` | trackastra-dual-fold-synthetic-v1 | A project-authored physical-scale temporal 3D appearance representation resolves ambiguous geometrically plausible parent-child links beyond the coherent Trackastra geometry control without public predictions or leaderboard selection. | running | not recorded | — | unknown / 11.00 | — | — | — |
+| `temporal-patch-dual-fold-v1` | trackastra-dual-fold-synthetic-v1 | A project-authored physical-scale temporal 3D appearance representation resolves ambiguous geometrically plausible parent-child links beyond the coherent Trackastra geometry control without public predictions or leaderboard selection. | failed | not recorded | — | 0.01 / 11.00 | — | Kaggle mounted the uploaded trackastra_source directory directly; notebook setup copied only top-level files or explicit ZIP archives, so the runtime verifier failed closed after 11.964 seconds before dense probing or optimizer training. No model, calibration, competition artifact, or submission was created. | — |
 | `temporal-patch-dual-fold-blend-v1` | temporal-patch-dual-fold-v1 | A fixed, cleanly held-out blend of project-authored temporal appearance evidence with coherent Trackastra geometry improves both reciprocal embryo folds without per-movie regression. | registered | not recorded | — | unknown / 6.00 | — | — | — |
+| `temporal-patch-dual-fold-v1-runtime-mount-retry` | temporal-patch-dual-fold-v1 | Accepting both Kaggle runtime mount representations allows the unchanged reciprocal temporal appearance experiment to reach its dense GPU probe and scientific training gates. | registered | not recorded | — | unknown / 11.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -353,6 +354,13 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Decision evidence: `not recorded`
 
 ### temporal-patch-dual-fold-blend-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### temporal-patch-dual-fold-v1-runtime-mount-retry
 
 - Authorized for submission: `false`
 - Imported audit: `false`

@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "detail": "Every notebook cell compiles and focused runtime, training, output-verifier, mount-representation, and sharding tests pass.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-dual-fold-kernel.py",
+          "sha256": "aace5ee40249f3212820e5b697a357ce3bd5b47843243544ef7e69217a234166"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "4b15227c78e276ca2abe1b5afb43feb8138c9356a6174db91aa8f53be46b6b9a"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact generated materializer is executed against both a Kaggle-style mounted directory and an explicit ZIP; ambiguous duplicates fail closed.",
+      "evidence": [
+        {
+          "path": "scripts/build-temporal-patch-dual-fold-kernel.py",
+          "sha256": "aace5ee40249f3212820e5b697a357ce3bd5b47843243544ef7e69217a234166"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "4b15227c78e276ca2abe1b5afb43feb8138c9356a6174db91aa8f53be46b6b9a"
+        }
+      ],
+      "name": "mount_repair",
+      "status": "passed"
+    },
+    {
+      "detail": "Model family, data partitions, seeds, thresholds, 30,000-step target, two-GPU requirement, and no-submission policy are unchanged from the failed infrastructure attempt.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/SOURCE_MANIFEST.json",
+          "sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+        }
+      ],
+      "name": "unchanged_science",
+      "status": "passed"
+    },
+    {
+      "detail": "Before optimizer training, each T4 path still requires the production 176-patch mixed-precision forward/backward and strict 19,221,954-parameter checkpoint roundtrip.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        },
+        {
+          "path": ".biohub/staging/biohub-temporal-patch-runtime-v1/patch_model.py",
+          "sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4"
+        }
+      ],
+      "name": "dense_gpu_gate",
+      "status": "passed"
+    },
+    {
+      "detail": "The 11.964-second pre-training mount failure and both downloaded evidence hashes are bound; it is not treated as a scientific model result.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        }
+      ],
+      "name": "failure_provenance",
+      "status": "passed"
+    },
+    {
+      "detail": "The retry retains an immutable 11-hour ceiling and requires a fresh live guard projecting at least eight Kaggle GPU hours remaining.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-patch-dual-fold-v1-runtime-mount-retry.json",
+          "sha256": "69233845be0bb754b85555037eec80c443b6e2cfd55131928fbdde4b2fd28a2c"
+        },
+        {
+          "path": "kaggle/biohub-temporal-patch-dual-fold-v1/biohub-temporal-patch-dual-fold-v1.ipynb",
+          "sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T08:31:16.512158Z",
+  "report_sha256": "b6aaee97caaec63272a5cd694289eebd1069bd0e9c072a4331d6be5a04b7886c",
+  "run_id": "temporal-patch-dual-fold-v1-runtime-mount-retry",
+  "schema_version": 1
+}

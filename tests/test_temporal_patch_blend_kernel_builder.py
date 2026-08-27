@@ -47,6 +47,8 @@ def test_temporal_patch_blend_kernel_is_strict_two_gpu_calibration_only() -> Non
     assert "verify_appearance_output.py" in code
     assert '"--strict-checkpoint"' in code
     assert "verify_trackastra_output.py" in code
+    assert "shutil.copytree(source, runtime / source.name)" in code
+    assert "Ambiguous runtime directory and archive" in code
     assert '"--max-wall-seconds", "18000"' in code
     assert '"--orchestrator-hard-stop-seconds", "19800"' in code
     assert "DECLARED_BUDGET_SECONDS = 21_600" in code

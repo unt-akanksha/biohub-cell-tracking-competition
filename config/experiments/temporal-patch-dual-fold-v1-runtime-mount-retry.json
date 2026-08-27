@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-patch-dual-fold-v1-runtime-mount-retry",
+  "parent": "temporal-patch-dual-fold-v1",
+  "retry_type": "infrastructure_only",
+  "scientific_configuration_changed": false,
+  "required_visible_gpu_count": 2,
+  "declared_max_runtime_hours": 11.0,
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "kernel_ref": "indarkarhana/biohub-temporal-patch-dual-fold-v1",
+  "source": {
+    "parent_scientific_config_sha256": "f721fdbdef62bd7b350d5d093934d150c9a44041c3bc0f40864faa0ccec9ed14",
+    "kernel_builder_sha256": "aace5ee40249f3212820e5b697a357ce3bd5b47843243544ef7e69217a234166",
+    "notebook_sha256": "ccb8ac138cc0dc1b5c89bc0c2effe417de8851b57889e25baa0434cee8b00d9b",
+    "kernel_metadata_sha256": "4cdd45cdf0b4e916fd5c4e7043b61d00d7003ef137e282667abc1f8442cee8de",
+    "runtime_manifest_sha256": "66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5"
+  },
+  "failure_evidence": {
+    "launcher_elapsed_seconds": 11.964,
+    "launcher_terminal_sha256": "e3a890cb886188f58768cf31003f50a2637ee9b31d7a12e8ad7f7679439d971c",
+    "kernel_log_sha256": "a2c6a807cdcca991c2e604f6e68ec8641ac1fa2845187ce17d545e83f7dc236b",
+    "failed_before_dense_probe": true,
+    "failed_before_optimizer_training": true,
+    "failed_before_model_artifact": true,
+    "failure": "Kaggle mounted the uploaded trackastra_source as a directory; setup ignored mounted directories and the runtime verifier failed closed."
+  },
+  "repair": {
+    "mounted_directories_copied_recursively": true,
+    "explicit_zip_archives_extracted": true,
+    "directory_archive_name_collision_rejected": true,
+    "regression_test_covers_directory_mount": true,
+    "regression_test_covers_zip_mount": true
+  },
+  "unchanged_training": {
+    "appearance_family": "temporal_cosine_v1",
+    "parameter_count_per_fold": 19221954,
+    "base_seed": 41027,
+    "effective_worker_seeds": [45427, 47627],
+    "steps_per_fold": 30000,
+    "synthetic_train_movies": 1900,
+    "synthetic_validation_movies": 128,
+    "real_train_movies_per_fold": 96,
+    "real_validation_movies_per_fold": 12,
+    "real_calibration_movies_reserved_per_fold": 12,
+    "opened_processed_acceptance_stems_excluded": true,
+    "public_predictions_copied": false,
+    "public_leaderboard_used_for_selection": false,
+    "submission_created": false
+  },
+  "quota": {
+    "remaining_before_retry_guard_hours": 21.28,
+    "reserve_hours": 8.0,
+    "maximum_projected_remaining_hours": 10.28,
+    "fresh_live_guard_required": true
+  },
+  "hypothesis": "Accepting both Kaggle runtime mount representations allows the unchanged reciprocal temporal appearance experiment to reach its dense GPU probe and scientific training gates."
+}
