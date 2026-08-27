@@ -103,9 +103,16 @@ this roughly ten-hour reciprocal image experiment on Kaggle would violate the
 reserve handoff rule. Any future competition inference remains exactly two-GPU,
 whole-movie sharded, and separately authorized.
 
+The package now includes a fail-closed Trackastra ingestion verifier. Before
+appearance training, it requires both on-disk worker terminals to equal the
+aggregate evidence, validates the declared real and synthetic gain gates,
+checks the corrected-geometry manifest and 27,456,880-parameter model hashes,
+rechecks every clean split inventory, and rejects any CSV, ZIP, or submission-
+named artifact in the downloaded training output.
+
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 39 tests across the normal
+The updated focused temporal/Trackastra suite passes 42 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, temporal boundary clamping and shared-channel grids, all-daughter
 supervised-contrastive loss, partial-accumulation normalization,
@@ -116,12 +123,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-ema-ensemble-daughterloss-20260827.zip`
-(98,290 bytes, SHA-256
-`16bfb6f79f19e593fa51ed89a479c5be216bba11c963cd61a4ee9311958ba69c`).
-An independent extraction verified all 25 manifest-bound files; the embedded
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-20260827.zip`
+(101,048 bytes, SHA-256
+`16fa051b565971b5cd5b4b40f737501161bdd938665152a38cc0506a935f3325`).
+An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`9b53aa40b7b60630e802bbd9205085aa8e7f7bb5e3cc454d7b43648613d0f92c`,
+`cc749ed7c319bcb2bdee5d9987ea2984898f198c92a3fad81161f14e41ce6d10`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -132,10 +139,11 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite now passes 510 unique tests with zero failures
+The cumulative environment-split repository suite now passes 513 unique tests
+with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 451 tests after excluding the scorer-only files, and all 59
+environment passed 454 tests after excluding the scorer-only files, and all 59
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its

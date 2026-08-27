@@ -8,10 +8,10 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-ema-ensemble-daughterloss-20260827.zip`
-- Archive bytes: `98290`
-- Archive SHA-256: `16bfb6f79f19e593fa51ed89a479c5be216bba11c963cd61a4ee9311958ba69c`
-- Extracted manifest SHA-256: `9b53aa40b7b60630e802bbd9205085aa8e7f7bb5e3cc454d7b43648613d0f92c`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-20260827.zip`
+- Archive bytes: `101048`
+- Archive SHA-256: `16fa051b565971b5cd5b4b40f737501161bdd938665152a38cc0506a935f3325`
+- Extracted manifest SHA-256: `cc749ed7c319bcb2bdee5d9987ea2984898f198c92a3fad81161f14e41ce6d10`
 - Required visible GPUs: exactly 2
 - Internet during model execution: not required
 - Submission command included: false
@@ -40,13 +40,15 @@ directory, then run:
 python "$BIOHUB_RUNTIME/verify_runtime.py" \
   --root "$BIOHUB_RUNTIME" \
   --require-gpus
+
+python "$BIOHUB_RUNTIME/verify_trackastra_output.py" \
+  --root "$BIOHUB_TRACKASTRA"
 ```
 
-Stop if the verifier does not report 25 files, two GPUs, the bound manifest
-hash, and no submission command. Also stop unless
-`$BIOHUB_TRACKASTRA/training_terminal.json` reports `status: completed`,
-`gpu_count: 2`, `both_folds_improved: true`, and
-`submission_created: false`.
+Stop if the runtime verifier does not report 26 files, two GPUs, the bound
+manifest hash, and no submission command. Also stop unless the Trackastra
+verifier reports `status: verified`, two hash-bound improved folds, corrected
+native synthetic geometry, and no competition artifacts.
 
 ## Stage 1: reciprocal heavy appearance training
 
