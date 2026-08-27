@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-contextual-pair-fusion-v3",
+  "parent": "temporal-patch-pair-fusion-v2",
+  "status": "staged_not_launched",
+  "required_visible_gpu_count": 2,
+  "internet_required_during_training": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "public_code_copied": false,
+  "public_predictions_copied": false,
+  "public_leaderboard_used_for_selection": false,
+  "model": {
+    "family": "temporal_contextual_pair_fusion_v3",
+    "parameter_count_per_fold": 20747761,
+    "input_channels": 3,
+    "temporal_frame_offsets": [-1, 0, 1],
+    "embedding_channels": 256,
+    "base_pair_feature_width": 1029,
+    "candidate_context_width": 18,
+    "contextual_pair_feature_width": 1047,
+    "edge_token_width": 256,
+    "edge_set_feature_width": 1536,
+    "edge_context": "project-authored mean/max pooling over competing outgoing and incoming candidate edges plus a transition mean",
+    "transition_context": "bounded label-free 3D phase correlation, aligned/zero-shift NCC, duplicate confidence, reliability, and robust residual-motion context",
+    "external_pretrained_weights": false
+  },
+  "external_data": {
+    "organizer_authorization": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734330",
+    "organizer_declared_test_overlap": false,
+    "training_source": "ZSNS004",
+    "validation_source": "ZSNS005",
+    "reserved_sources": ["ZSNS001", "ZSNS001-tail"],
+    "excluded_sources": ["ZSNS003"],
+    "competition_test_data_read": false,
+    "raw_movie_republication_forbidden": true,
+    "derived_asset_policy": "hash-bound normalized physical patches, candidate masks, lineage targets, and transition context only"
+  },
+  "promotion_gates": {
+    "launch_only_after_v1_reciprocal_training_and_clean_calibration_terminal": true,
+    "v2_pair_head_retained_as_independent_control": true,
+    "ZSNS005_must_improve_over_v2": true,
+    "both_biohub_reciprocal_folds_must_improve_over_v2": true,
+    "zero_appearance_zero_context_control_required": true,
+    "processed_acceptance_remains_unopened_until_weights_frozen": true,
+    "leaderboard_selection_forbidden": true,
+    "future_submission_requires_exactly_two_gpus": true,
+    "future_submission_requires_whole_movie_sharding": true,
+    "future_submission_internet_enabled": false
+  },
+  "smoke": {
+    "seed": 31003,
+    "training_source": {
+      "source": "ZSNS004",
+      "csv_timepoint": 100,
+      "shard_sha256": "f16855f77ddb0a2df2b4110b2f1d8d1857ad4f6b533b03d0bcf0d8e1a4ba6205",
+      "manifest_sha256": "12ca6951a3a807b765017e496f260e7b1c60b42162a32443020867bc75879bc2",
+      "candidate_edges": 77,
+      "finite_pair_logits": 77,
+      "all_gradients_finite": true,
+      "combined_loss": 1.7956417798995972
+    },
+    "validation_source": {
+      "source": "ZSNS005",
+      "csv_timepoint": 100,
+      "shard_sha256": "a2cd7065130b9365753217900bbb1de0997e35cfc44b760f07bc9d6bf9c77a68",
+      "manifest_sha256": "4a2b774d760ec0b8eefbc6e64f2ea24f658218e24ef10e9630e5ab07e522ca1a",
+      "candidate_edges": 62,
+      "finite_pair_logits": 62,
+      "all_gradients_finite": true,
+      "combined_loss": 1.7410389184951782
+    },
+    "gpu_used": false,
+    "submission_created": false
+  },
+  "source": {
+    "transition_context_sha256": "85c711721fe2edeb9eaac202cc3b6ff1eef25e28cd75023d37ed79598fea56f3",
+    "contextual_pair_fusion_sha256": "17b97bc02bc3bf82cd10280c89e2e44f8f23cd71d65b2201dbb158c226b6078f",
+    "zebrahub_external_sha256": "836216f611cc508bce05d25c9d1bbc582fb097ddb7a8e1ea76b17e956655ac93",
+    "zebrahub_builder_sha256": "b80f962ecfd4561ec36ec1d62d14701dab9929c0b5014a633384165c8b3ef396",
+    "contextual_smoke_sha256": "13fbf01c5b25ea5c70b71cf6c81040b4512bbecc8f6a0544141bf4dca4535d14",
+    "training_smoke_report_sha256": "bb7ba7622582fbb6ef4503b726b8b1e94ef6bf1ddc38b14bb290f84cf546fa2e",
+    "validation_smoke_report_sha256": "76fb011f59ff1c406a470e74c9eaa986678d061b2df4a7fb0e8e7e289c975428"
+  },
+  "hypothesis": "Same-organism physical appearance plus label-free global-transition evidence and contextual comparison among competing incoming/outgoing edges improves clean complete-graph association beyond independent cosine and pair-MLP controls without metric hacks or public prediction copying."
+}

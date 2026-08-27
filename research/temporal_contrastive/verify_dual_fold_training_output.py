@@ -37,11 +37,13 @@ FOLDS = {
         "source_prefix": "6bba",
         "target_prefix": "44b6",
         "seed": 45_427,
+        "real_train_count": 96,
     },
     "target_6bba": {
         "source_prefix": "44b6",
         "target_prefix": "6bba",
         "seed": 47_627,
+        "real_train_count": 45,
     },
 }
 OPENED_ACCEPTANCE_STEMS = frozenset(
@@ -57,7 +59,6 @@ EXPECTED_SYNTHETIC_MANIFEST_SHA256 = (
 )
 EXPECTED_SYNTHETIC_TRAIN_COUNT = 1_900
 EXPECTED_SYNTHETIC_VALIDATION_COUNT = 128
-EXPECTED_REAL_TRAIN_COUNT = 96
 EXPECTED_REAL_VALIDATION_COUNT = 12
 EXPECTED_REAL_CALIBRATION_COUNT = 12
 MINIMUM_REAL_TOP1 = 0.70
@@ -238,6 +239,9 @@ def verify_output(
             and config.get("seed") == expected["seed"]
             and config.get("source_prefix") == expected["source_prefix"]
             and config.get("target_prefix") == expected["target_prefix"]
+            and config.get("requested_real_train_movies") == 96
+            and config.get("effective_real_train_movies")
+            == expected["real_train_count"]
             and config.get("synthetic_manifest_sha256")
             == EXPECTED_SYNTHETIC_MANIFEST_SHA256
             and config.get("base_channels") == 64
@@ -258,7 +262,7 @@ def verify_output(
             and len(synthetic_validation) == EXPECTED_SYNTHETIC_VALIDATION_COUNT
             and len(set(map(str, synthetic_validation))) == len(synthetic_validation)
             and isinstance(real_train, list)
-            and len(real_train) == EXPECTED_REAL_TRAIN_COUNT
+            and len(real_train) == expected["real_train_count"]
             and isinstance(real_validation, list)
             and len(real_validation) == EXPECTED_REAL_VALIDATION_COUNT
             and isinstance(real_calibration, list)

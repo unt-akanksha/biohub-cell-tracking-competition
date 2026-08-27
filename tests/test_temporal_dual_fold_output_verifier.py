@@ -87,12 +87,15 @@ def valid_output(tmp_path: Path) -> Path:
             "embedding_channels": 256,
             "source_prefix": spec["source_prefix"],
             "target_prefix": spec["target_prefix"],
+            "requested_real_train_movies": 96,
+            "effective_real_train_movies": spec["real_train_count"],
             "opened_acceptance_stems_excluded": sorted(OPENED_ACCEPTANCE_STEMS),
             "synthetic_manifest_sha256": EXPECTED_SYNTHETIC_MANIFEST_SHA256,
             "synthetic_train_names": synthetic_train,
             "synthetic_validation_names": synthetic_validation,
             "real_train_stems": [
-                f"{spec['source_prefix']}_train_{row:03d}" for row in range(96)
+                f"{spec['source_prefix']}_train_{row:03d}"
+                for row in range(spec["real_train_count"])
             ],
             "real_validation_stems": [
                 f"{spec['target_prefix']}_validation_{row:03d}"

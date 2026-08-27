@@ -10,9 +10,9 @@ candidate only; it contains no Kaggle submission command.
 ## Bound runtime
 
 - Archive: `.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-outputverified-final-20260827.zip`
-- Archive bytes: `120930`
-- Archive SHA-256: `f76ae69f557d72f038b297b9b80d9d6765e571aaa181242b3521fc62925bfb59`
-- Extracted manifest SHA-256: `aa1bb0d4c92eff75848111ab5a0c05decd4ddfabe414dec1979992292df612b2`
+- Archive bytes: `121107`
+- Archive SHA-256: `3ffcef716e8ce7e964279b4d4d75621967f87238a1d693c2719db2bc607f9eab`
+- Extracted manifest SHA-256: `ed589b751d4be7454a73db5bbbc04a3f8b2aa552488c7035e536fad4f6c83f71`
 - Manifest-bound source files: `30`
 - Required visible GPUs for every GPU stage: exactly `2`
 - Final inference hard stop: `36000` seconds

@@ -52,6 +52,7 @@ def test_temporal_patch_kernel_is_strict_two_gpu_training_only() -> None:
     assert "--allow-pretrained-control" in code
     assert "Synthetic coverage is incomplete" in code
     assert "Real-movie coverage is incomplete" in code
+    assert 'expected_real_inventory = {"44b6": 71, "6bba": 128}' in code
     assert "shutil.copytree(source, runtime / source.name)" in code
     assert "Ambiguous runtime directory and archive" in code
     assert "Dense 176-patch production forward/backward" in code

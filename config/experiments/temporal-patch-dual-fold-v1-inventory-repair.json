@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "run_id": "temporal-patch-dual-fold-v1-inventory-repair",
+  "parent": "temporal-patch-dual-fold-v1-runtime-mount-retry",
+  "retry_type": "data_inventory_contract_only",
+  "scientific_configuration_changed": false,
+  "required_visible_gpu_count": 2,
+  "declared_max_runtime_hours": 11.0,
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "kernel_ref": "indarkarhana/biohub-temporal-patch-dual-fold-v1",
+  "source": {
+    "parent_scientific_config_sha256": "d999087d6f96b5999564574707cbbdac1a600ebcf47e56be627ec52d14850f83",
+    "kernel_builder_sha256": "900b7f240dfa65f26ee37cdf739a589fd05613e49c28a03a12ea9df9c5d2e572",
+    "notebook_sha256": "b0c19f4a5e563a932f8b1850e0d2c8b1a3e8937d12a94d56aa4a9a592f0cbbce",
+    "kernel_metadata_sha256": "4cdd45cdf0b4e916fd5c4e7043b61d00d7003ef137e282667abc1f8442cee8de",
+    "runtime_manifest_sha256": "131a35a3e72d4a0ba4e81c8af075613d1a73dc8e465d4a80282b558cd844af0d"
+  },
+  "failure_evidence": {
+    "launcher_elapsed_seconds": 510.6,
+    "launcher_terminal_sha256": "ba97616e94b67503c55741a9e51e337bad6773504c08b6b0cba33c232e4dd249",
+    "kernel_log_sha256": "a5e86dd9e6a15a8b04c33b3a75dcb8c3625b3c56f90883467a685e01eca335d5",
+    "runtime_verifier_passed": true,
+    "trackastra_output_verifier_passed": true,
+    "failed_before_dense_probe": true,
+    "failed_before_optimizer_training": true,
+    "failed_before_model_artifact": true,
+    "observed_complete_movie_pairs": {
+      "44b6": 71,
+      "6bba": 128
+    },
+    "failure": "The notebook incorrectly required at least 120 complete image/GEFF pairs for each prefix, rejecting the exact attached 71/128 competition inventory."
+  },
+  "repair": {
+    "kernel_requires_exact_observed_inventory": {
+      "44b6": 71,
+      "6bba": 128
+    },
+    "maximum_real_train_movies_requested": 96,
+    "effective_real_train_movies_by_fold": {
+      "target_44b6": 96,
+      "target_6bba": 45
+    },
+    "real_validation_movies_per_fold": 12,
+    "real_calibration_movies_reserved_per_fold": 12,
+    "opened_acceptance_movies_excluded_per_prefix": 2,
+    "trainer_fails_if_effective_inventory_changes": true,
+    "independent_output_verifier_binds_effective_counts": true
+  },
+  "unchanged_training": {
+    "appearance_family": "temporal_cosine_v1",
+    "parameter_count_per_fold": 19221954,
+    "base_seed": 41027,
+    "effective_worker_seeds": [45427, 47627],
+    "steps_per_fold": 30000,
+    "synthetic_train_movies": 1900,
+    "synthetic_validation_movies": 128,
+    "real_validation_movies_per_fold": 12,
+    "real_calibration_movies_reserved_per_fold": 12,
+    "opened_processed_acceptance_stems_excluded": true,
+    "public_predictions_copied": false,
+    "public_leaderboard_used_for_selection": false,
+    "submission_created": false
+  },
+  "quota": {
+    "remaining_before_repair_guard_hours": 21.13,
+    "reserve_hours": 8.0,
+    "maximum_projected_remaining_hours": 10.13,
+    "fresh_live_guard_required": true
+  },
+  "hypothesis": "Binding the exact attached 71/128 real-movie inventory and its already intended up-to-96 reciprocal partitions allows the unchanged temporal appearance experiment to reach its dense GPU and scientific gates."
+}

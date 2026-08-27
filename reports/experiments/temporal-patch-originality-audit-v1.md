@@ -27,7 +27,7 @@ notebook or public prediction artifact.
 
 ## Mechanical checks
 
-The independently extracted portable runtime contains 26 hash-bound files,
+The independently extracted portable runtime contains 30 hash-bound files,
 requires exactly two GPUs, and contains no competition submit command. A scan
 found none of the audited public-kernel owner or method identifiers
 (`arnav170`, `pilkwang`, `yusuketogashi`, `raykkretzsch`,
@@ -42,11 +42,11 @@ public-base replica cannot become accepted evidence or a local final candidate.
 ## Bound package
 
 - Archive:
-  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
+  `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-outputverified-final-20260827.zip`
 - SHA-256:
-  `7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`
+  `9f023821ae602b99d8b72fd018ea06417bd34f7a5a04853e5266c02dab3dae6c`
 - Manifest SHA-256:
-  `002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`
+  `131a35a3e72d4a0ba4e81c8af075613d1a73dc8e465d4a80282b558cd844af0d`
 - Competition submission performed: false
 
 The candidate remains conditional on clean fold improvement, one-shot pinned

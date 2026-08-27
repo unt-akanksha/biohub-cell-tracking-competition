@@ -2,8 +2,8 @@
 
 ## Decision
 
-Run the already verified `temporal-patch-dual-fold-v1` as the first cloud
-experiment without changing its architecture after seeing results. If its
+Run the already verified `temporal-patch-dual-fold-v1` without changing its
+architecture after seeing results. If its
 clean two-fold gate fails, the predeclared next family is
 `temporal-patch-pair-fusion-v2`: retain the physical 3D encoder and replace the
 fixed cosine-only appearance evidence with a learned, candidate-limited pair
@@ -78,7 +78,8 @@ result is observed:
 
 ## Execution order
 
-1. Execute v1 on the user-provided two-GPU cloud host.
+1. Execute v1 under the guarded two-GPU Kaggle budget, then use the
+   user-provided cloud host only after the protected reserve handoff.
 2. If both appearance folds and both clean calibration folds improve, run the
    one-shot processed gate; v2 remains unused.
 3. If v1 fails before the processed gate, implement and run the frozen v2 pair
@@ -98,21 +99,29 @@ load balance as well as the existing 12,288 units per encoded node.
 
 Verification completed before packaging:
 
-- ordinary environment: 480 passed, 2 skipped only for unavailable Windows
-  symlink privilege;
-- pinned official-scorer environment: 57 passed;
-- focused v1/v2 integration and runtime-builder checks: 49 passed;
+- full repository suite after the exact 71/128 inventory repair:
+  552 passed, 2 skipped only for unavailable Windows symlink privilege;
+- focused v1/v2 integration and runtime-builder checks: 51 passed;
 - focused pinned pair-fusion exact-gate checks: 6 passed.
 
 The independently extracted runtime package is
-`.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-20260827.zip`.
-It is 116,550 bytes with SHA-256
-`87c98fecec484fdbbeb2f2aa334793439e6a39f750ef163b12c6d923106edcb8`.
+`.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-outputverified-final-20260827.zip`.
+It is 121,107 bytes with SHA-256
+`3ffcef716e8ce7e964279b4d4d75621967f87238a1d693c2719db2bc607f9eab`.
 Its manifest SHA-256 is
-`2266fbd7b64b88a786aa7951292caf2fa11579e4e1febb3adfa6b5f583ae217d`;
-all 29 declared source files verified after fresh extraction. The package has
+`ed589b751d4be7454a73db5bbbc04a3f8b2aa552488c7035e536fad4f6c83f71`;
+all 30 declared source files verified after fresh extraction. The package has
 no submission command. No v2 model has been trained yet, no Kaggle GPU was
 used, and no competition artifact was submitted.
 
 The exact execution commands and stop conditions are frozen in
 `reports/experiments/temporal-patch-pair-fusion-cloud-handoff-v2.md`.
+
+The first v1 Kaggle launch failed closed after 11.964 seconds because Kaggle
+mounted one uploaded dataset directory directly. The mount-aware retry then
+passed both runtime verifiers but rejected the exact 71/128 competition movie
+inventory before dense probing. The exact-inventory repair binds effective
+96/45 reciprocal training counts without changing model science. Run
+`temporal-patch-dual-fold-v1-inventory-repair` was launched once under the live
+two-T4 guard with 21.13 hours remaining and an 11-hour ceiling, projecting
+10.13 hours after the ceiling versus the protected 8-hour reserve.

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "run_id": "zebrahub-temporal-patch-shard-smoke",
+  "status": "completed",
+  "source": "ZSNS004",
+  "source_role": "external_pretraining",
+  "csv_timepoint": 100,
+  "gpu_used": false,
+  "competition_test_data_read": false,
+  "public_competition_predictions_read": false,
+  "leaderboard_used": false,
+  "submission_created": false,
+  "organizer_authorization": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734330",
+  "organizer_declared_test_overlap": false,
+  "data": {
+    "tracks_bytes": 377693868,
+    "tracks_sha256": "23cbb173f7917120fff2827a81ad8db92373c6ef33a5593663e8d724a7bfdd90",
+    "downloaded_zarr_chunk_count": 24,
+    "downloaded_zarr_bytes": 76897723,
+    "zarr_metadata_sha256": "7d801b2a976adbe29bd44e8d6fb79e1448dcc842bbf1034263d48332681baf8a",
+    "derived_shard_bytes": 2886389,
+    "derived_shard_sha256": "f16855f77ddb0a2df2b4110b2f1d8d1857ad4f6b533b03d0bcf0d8e1a4ba6205",
+    "derived_manifest_sha256": "12ca6951a3a807b765017e496f260e7b1c60b42162a32443020867bc75879bc2"
+  },
+  "transition": {
+    "source_nodes": 17,
+    "target_nodes": 96,
+    "candidate_edges": 77,
+    "positive_edges": 34,
+    "division_sources": 17,
+    "source_patch_shape": [17, 3, 17, 17, 17],
+    "target_patch_shape": [96, 3, 17, 17, 17],
+    "source_patch_mean": 0.0000014901161193847656,
+    "source_patch_std": 0.9998973608016968,
+    "target_patch_mean": -0.000027418136596679688,
+    "target_patch_std": 0.9997266530990601,
+    "candidate_context_shape": [17, 96, 18],
+    "transition_context": {
+      "global_shift_zyx_um": [0.0, 0.0, 0.0],
+      "zero_shift_ncc": 0.9838651665747695,
+      "aligned_ncc": 0.9838651665747695,
+      "phase_peak_margin": 0.9853815869905147,
+      "duplicate_confidence": 0.0,
+      "reliability": 0.9766738928994515,
+      "fft_stride_zyx": [3, 8, 11]
+    }
+  },
+  "model_smoke": {
+    "family": "temporal_pair_fusion_v2",
+    "parameter_count": 20869325,
+    "source_embedding_shape": [17, 256],
+    "target_embedding_shape": [96, 256],
+    "finite_pair_logits": 77,
+    "pair_loss": 1.4467828273773193,
+    "embedding_loss": 1.3767805099487305,
+    "combined_loss": 1.790977954864502,
+    "gradient_tensors": 60,
+    "all_gradients_finite": true,
+    "cpu_forward_backward_seconds": 18.375
+  },
+  "context_model_smoke": {
+    "family": "temporal_contextual_pair_fusion_v3",
+    "seed": 31003,
+    "parameter_count": 20747761,
+    "source_embedding_shape": [17, 256],
+    "target_embedding_shape": [96, 256],
+    "finite_pair_logits": 77,
+    "pair_loss": 1.452392816543579,
+    "embedding_loss": 1.3729959726333618,
+    "combined_loss": 1.7956417798995972,
+    "gradient_tensors": 64,
+    "all_gradients_finite": true,
+    "cpu_forward_backward_seconds": 18.094000000040978
+  },
+  "decision": {
+    "state": "retain_preprocessing_lane",
+    "next_gate": "build_multiple_disjoint_ZSNS004_training_blocks_and_ZSNS005_validation_blocks_only_after_reciprocal_competition_calibration",
+    "reason": "The public dense lineage coordinates, multiscale image chunks, physical patch resampling, label-free transition context, division labels, hard negatives, and both project-authored v2/v3 pair models align end to end without GPU use."
+  }
+}

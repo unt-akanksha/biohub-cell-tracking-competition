@@ -9,9 +9,9 @@ and a candidate only; it contains no Kaggle submission command.
 ## Bound runtime
 
 - Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-outputverified-final-20260827.zip`
-- Archive bytes: `121241`
-- Archive SHA-256: `f0f83b1e061b74118c042c99301a89d5bfbb8e896f57717b32cf92d3df3d9f8a`
-- Extracted manifest SHA-256: `66a2de48da29a52803c6863778987bf461a3b330e04f409735dba3997e11ebb5`
+- Archive bytes: `121420`
+- Archive SHA-256: `9f023821ae602b99d8b72fd018ea06417bd34f7a5a04853e5266c02dab3dae6c`
+- Extracted manifest SHA-256: `131a35a3e72d4a0ba4e81c8af075613d1a73dc8e465d4a80282b558cd844af0d`
 - Manifest-bound source files: `30`
 - Required visible GPUs: exactly 2
 - Required Kaggle machine shape: `NvidiaTeslaT4` (T4 x2)

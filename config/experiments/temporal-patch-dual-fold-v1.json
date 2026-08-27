@@ -12,11 +12,11 @@
     "loss_sha256": "9a4e9defcf0aec8a7ac6be420e9358d8f9cbc533d25c0b3dfcd7b8ba2c542844",
     "patch_model_sha256": "27bd10567095560a90715eb6b303669ad872890fa65218a6aa4e08641af066a4",
     "appearance_family_sha256": "8fcafddbcb2ff80b5d45553506d6ff5983546fe31ed498cb593203c07df60910",
-    "trainer_sha256": "bafd88121e5e179ca302782c2db26ad41ff6e5dfd844c659213e0f14aedfa40a",
+    "trainer_sha256": "bee9fef49ef55a190c21df1adaea2cb0e4f20ce2d70b33cbe8deb798d942d04a",
     "blend_sha256": "8f9e126fb03e7e157619860651f305f445ebcf700a3003648de4a3da81fc4824",
     "calibrator_sha256": "ef727e9dcbd345d33a3c1ecb535212bacd085c4602d3266889b65e1048cf7361",
     "processed_materializer_sha256": "d813b0da5b009ee3c9452424d04d7e7377d295021f31c7284df4151e43e95189",
-    "appearance_output_verifier_sha256": "48086c68692948907ded6fbb2eabd5f1f03216257e1522d2c3bab0ed38d75ebd",
+    "appearance_output_verifier_sha256": "0a8b022598de0c5781ac02eab38a632c4bc67dbe5ec152d460ec71eeedf7963b",
     "trackastra_processed_materializer_sha256": "49fcf142d79e0c61394ccccda9df38e33a73025e80758f34227d8663a7c89649",
     "exact_gate_sha256": "c006a05c76ec4f9c1513e20c31560c49c81897cce66f43802e19812e41eb30b5",
     "two_gpu_candidate_builder_sha256": "701b538711dc46aa6149ea23b7f8add6cbec6046c23639763c7127366fa4ad02",
@@ -55,6 +55,14 @@
     "synthetic_train_movies": 1900,
     "synthetic_validation_movies": 128,
     "maximum_real_train_movies_per_fold": 96,
+    "observed_complete_movie_pairs_by_prefix": {
+      "44b6": 71,
+      "6bba": 128
+    },
+    "effective_real_train_movies_by_fold": {
+      "target_44b6": 96,
+      "target_6bba": 45
+    },
     "real_checkpoint_validation_movies_per_fold": 12,
     "real_blend_calibration_movies_reserved_per_fold": 12,
     "real_replay_probability": 0.20,

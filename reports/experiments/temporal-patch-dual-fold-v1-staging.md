@@ -2,10 +2,11 @@
 
 Date: 2026-08-27
 
-Status: implemented and locally verified; reserved for the cloud handoff, not
-launched on Kaggle. Its frozen geometry source is the verified predeclared
-Trackastra initialization because the reciprocal fine-tune failed its clean
-real-data gate.
+Status: exact-inventory repair locally verified and launched once on Kaggle as
+`temporal-patch-dual-fold-v1-inventory-repair`. Its frozen geometry source is
+the verified predeclared Trackastra initialization because the reciprocal
+fine-tune failed its clean real-data gate. No competition submission was
+created.
 
 ## Why this is a new candidate
 
@@ -66,7 +67,9 @@ the 2025 primary study on
 ## Leakage and selection boundaries
 
 Two isolated GPU workers train reciprocal embryo folds. Each worker uses 1,900
-synthetic movies plus 96 real movies from the opposite embryo prefix. Twelve
+synthetic movies plus up to 96 real movies from the opposite embryo prefix. The
+exact effective counts are 96 for the 6bba source fold and 45 for the smaller
+44b6 source fold after all reservations and exclusions. Twelve
 unopened target-prefix movies select its checkpoint, and a different twelve are
 reserved for later appearance-weight calibration. The four already opened
 processed-acceptance movies are excluded from both stages.
@@ -99,18 +102,22 @@ leaderboard feedback participates in any decision.
 
 ## Runtime boundary
 
-This is deliberately staged for the user-provided cloud instance. The completed
-Kaggle training run left 21.29 GPU-hours, so launching this roughly ten-hour
-reciprocal image experiment on Kaggle would violate the reserve handoff rule.
-Any future competition inference remains exactly two-GPU, whole-movie sharded,
-and separately authorized.
+The exact-inventory repair was launched under the live Kaggle guard with 21.13
+GPU-hours remaining, an immutable 11-hour ceiling, and 10.13 hours projected
+after that ceiling versus the protected 8-hour reserve. The notebook requires
+exactly two T4s and fails closed on any other visible-device count. No other GPU
+experiment will be launched speculatively; later work moves to the user-provided
+cloud instance when the reserve boundary is reached. Any future competition
+inference remains exactly two-GPU, whole-movie sharded, and separately
+authorized.
 
 The package now includes a fail-closed Trackastra ingestion verifier. The
 adapted-model mode still requires both on-disk worker terminals to equal the
 aggregate evidence and pass the original gains. The explicitly enabled control
 mode instead requires `best_step: 0`, exact initial/best metric equality, the
 same model hash in both folds, the corrected-geometry manifest, exact available
-real split sizes (96 and 69 training movies), and no CSV, ZIP, or
+real split sizes (96 and 69 training movies under that earlier Trackastra
+control's different reservation policy), and no CSV, ZIP, or
 submission-named artifact. This admits only the initialization that was
 predeclared as a candidate, never a rejected fine-tuned state.
 The calibration and processed-acceptance stages independently repeat the
@@ -133,11 +140,11 @@ integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
 `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-t4x2-controlsource-coherent-20260827.zip`
-(104,312 bytes, SHA-256
-`7b1e44a0ddcd62c4a071d559dacdae4f7c916c30ec861aa7db00206fabe84ca5`).
-An independent extraction verified all 26 manifest-bound files; the embedded
+(121,420 bytes, SHA-256
+`9f023821ae602b99d8b72fd018ea06417bd34f7a5a04853e5266c02dab3dae6c`).
+An independent extraction verified all 30 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`002d9d4f1b3779eca2b17987fbb66767071293b1ca0eeb2c716aa40a7ef29347`,
+`131a35a3e72d4a0ba4e81c8af075613d1a73dc8e465d4a80282b558cd844af0d`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -148,12 +155,9 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The cumulative environment-split repository suite now passes 526 unique tests
-with zero failures
-when each group runs in its declared environment; two Windows tests are skipped
-only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 470 tests after excluding the scorer-only files, and all 56
-locked-scorer tests passed in the pinned evaluator environment. For timeout
+The full pinned repository suite now passes 552 tests with zero failures; two
+Windows tests are skipped only because unprivileged symlink creation is
+unavailable. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
 node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.

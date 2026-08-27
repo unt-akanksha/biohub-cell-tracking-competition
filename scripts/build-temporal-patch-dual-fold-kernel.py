@@ -245,7 +245,8 @@ eligible_by_prefix = {
     prefix: sum(path.stem.startswith(f"{prefix}_") and path.stem in real_images for path in real_geffs)
     for prefix in ("44b6", "6bba")
 }
-if min(eligible_by_prefix.values()) < 120:
+expected_real_inventory = {"44b6": 71, "6bba": 128}
+if eligible_by_prefix != expected_real_inventory:
     raise RuntimeError(f"Real-movie coverage is incomplete: {eligible_by_prefix}")
 
 sys.path.insert(0, str(runtime))

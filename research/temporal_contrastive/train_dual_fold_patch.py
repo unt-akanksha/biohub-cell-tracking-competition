@@ -79,11 +79,13 @@ FOLD_SPECS = {
         "target_prefix": "44b6",
         "source_prefix": "6bba",
         "seed_offset": 4400,
+        "expected_real_train_movies": 96,
     },
     "target_6bba": {
         "target_prefix": "6bba",
         "source_prefix": "44b6",
         "seed_offset": 6600,
+        "expected_real_train_movies": 45,
     },
 }
 REAL_VOXEL_SIZE_UM = (1.625, 0.40625, 0.40625)
@@ -707,6 +709,10 @@ def train_worker(args: argparse.Namespace) -> None:
         calibration_count=args.real_calibration_movies,
         training_count=args.real_train_movies,
     )
+    if len(real_train) != int(spec["expected_real_train_movies"]):
+        raise RuntimeError(
+            f"{args.fold} real training inventory changed: {len(real_train)}"
+        )
     if len(real_calibration) != args.real_calibration_movies:
         raise RuntimeError("reciprocal target pool cannot fill the calibration split")
     if set(path.stem for path in real_train + real_validation + real_calibration) & OPENED_ACCEPTANCE_STEMS:
@@ -784,6 +790,8 @@ def train_worker(args: argparse.Namespace) -> None:
             "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
             "source_prefix": spec["source_prefix"],
             "target_prefix": spec["target_prefix"],
+            "requested_real_train_movies": args.real_train_movies,
+            "effective_real_train_movies": len(real_train),
             "opened_acceptance_stems_excluded": sorted(OPENED_ACCEPTANCE_STEMS),
             "synthetic_manifest_sha256": sha256_file(manifest),
             "synthetic_train_names": [path.name for path in synthetic_train],

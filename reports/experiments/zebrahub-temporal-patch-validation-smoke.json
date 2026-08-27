@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "run_id": "zebrahub-temporal-patch-validation-smoke",
+  "status": "completed",
+  "source": "ZSNS005",
+  "source_role": "external_validation",
+  "csv_timepoint": 100,
+  "gpu_used": false,
+  "competition_test_data_read": false,
+  "public_competition_predictions_read": false,
+  "leaderboard_used": false,
+  "submission_created": false,
+  "organizer_authorization": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/734330",
+  "organizer_declared_test_overlap": false,
+  "data": {
+    "tracks_bytes": 341483571,
+    "tracks_sha256": "0747389dd9f906ea95c7d48c967c8fae433d7a4403945893211c62f5be452163",
+    "downloaded_zarr_chunk_count": 24,
+    "downloaded_zarr_bytes": 88973399,
+    "zarr_metadata_sha256": "29e6b11c20ff2c641f5ae71e21b5859ce887ffa149c3ee4532d3a3c6c72e1648",
+    "derived_shard_bytes": 2747675,
+    "derived_shard_sha256": "a2cd7065130b9365753217900bbb1de0997e35cfc44b760f07bc9d6bf9c77a68",
+    "derived_manifest_sha256": "4a2b774d760ec0b8eefbc6e64f2ea24f658218e24ef10e9630e5ab07e522ca1a"
+  },
+  "transition": {
+    "source_nodes": 15,
+    "target_nodes": 96,
+    "candidate_edges": 62,
+    "positive_edges": 30,
+    "division_sources": 15,
+    "candidate_context_shape": [15, 96, 18],
+    "transition_context": {
+      "global_shift_zyx_um": [0.0, 0.0, 0.0],
+      "zero_shift_ncc": 0.9916799409363993,
+      "aligned_ncc": 0.9916799409363993,
+      "phase_peak_margin": 0.9917383324508625,
+      "duplicate_confidence": 0.0,
+      "reliability": 0.9875834759428169,
+      "fft_stride_zyx": [3, 8, 11]
+    }
+  },
+  "context_model_smoke": {
+    "family": "temporal_contextual_pair_fusion_v3",
+    "seed": 31003,
+    "parameter_count": 20747761,
+    "source_embedding_shape": [15, 256],
+    "target_embedding_shape": [96, 256],
+    "finite_pair_logits": 62,
+    "pair_loss": 1.4131394624710083,
+    "embedding_loss": 1.3115979433059692,
+    "combined_loss": 1.7410389184951782,
+    "gradient_tensors": 64,
+    "all_gradients_finite": true,
+    "cpu_forward_backward_seconds": 23.20299999997951
+  },
+  "decision": {
+    "state": "retain_as_frozen_external_validation_source",
+    "next_gate": "compare trained v3 against the unchanged v2 control on multiple frozen ZSNS005 blocks only after v1 reciprocal competition calibration terminates",
+    "reason": "A disjoint same-organism validation movie independently satisfies the physical patch, label-free transition context, contextual candidate head, and finite-gradient contracts without GPU use."
+  }
+}

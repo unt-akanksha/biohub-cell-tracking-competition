@@ -174,7 +174,7 @@ def main() -> None:
         check(
             "dataset_coverage",
             [NOTEBOOK, CONFIG, trainer_source],
-            "Setup requires at least 2,028 complete synthetic movies and 120 image/GEFF pairs per embryo before deterministic disjoint validation, calibration, and training partitions are formed.",
+            "Setup requires at least 2,028 complete synthetic movies and the exact observed 71 44b6 plus 128 6bba image/GEFF pairs. After excluding four opened movies and reserving 12 validation plus 12 calibration movies per prefix, the reciprocal folds bind 96 and 45 real training movies.",
         ),
         check(
             "non_replica_provenance",
