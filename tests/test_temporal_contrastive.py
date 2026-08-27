@@ -171,6 +171,28 @@ def test_temporal_context_clamps_boundaries_and_shares_physical_grid() -> None:
     assert torch.isfinite(patches).all()
 
 
+def test_temporal_context_cache_reads_overlapping_frames_once() -> None:
+    class CountingMovie:
+        shape = (4, 3, 3, 3)
+
+        def __init__(self) -> None:
+            self.reads: list[int] = []
+
+        def __getitem__(self, index: int) -> np.ndarray:
+            self.reads.append(int(index))
+            return np.full(self.shape[1:], index, dtype=np.float32)
+
+    movie = CountingMovie()
+    cache: dict[int, np.ndarray | torch.Tensor] = {}
+
+    source = temporal_context_volume(movie, 1, frame_cache=cache)
+    target = temporal_context_volume(movie, 2, frame_cache=cache)
+
+    assert movie.reads == [0, 1, 2, 3]
+    assert source[:, 0, 0, 0].tolist() == [0.0, 1.0, 2.0]
+    assert target[:, 0, 0, 0].tolist() == [1.0, 2.0, 3.0]
+
+
 def test_candidate_mask_fails_closed_when_radius_drops_a_true_jump() -> None:
     source = np.asarray([[0.0, 0.0, 0.0]], dtype=np.float32)
     target = np.asarray([[0.0, 2.0, 0.0], [0.0, 20.0, 0.0]], dtype=np.float32)

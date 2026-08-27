@@ -108,13 +108,18 @@ def extract_movie_embeddings(
     embeddings = np.empty((len(video.node_ids), embedding_width), dtype=np.float32)
     division_logits = np.empty(len(video.node_ids), dtype=np.float32)
     frame_rows: dict[int, int] = {}
+    frame_cache: dict[int, np.ndarray | torch.Tensor] = {}
     model.eval()
     for timepoint in sorted(int(value) for value in np.unique(video.times)):
         rows = np.flatnonzero(video.times == timepoint)
         if timepoint < 0 or timepoint >= int(image_array.shape[0]):
             raise ValueError(f"node frame is outside image array: {timepoint}")
         frame = torch.as_tensor(
-            np.asarray(temporal_context_volume(image_array, timepoint)),
+            np.asarray(
+                temporal_context_volume(
+                    image_array, timepoint, frame_cache=frame_cache
+                )
+            ),
             device=device,
         )
         for start in range(0, len(rows), node_batch_size):
@@ -134,6 +139,9 @@ def extract_movie_embeddings(
             embeddings[selected_rows] = encoded.float().cpu().numpy()
             division_logits[selected_rows] = divisions.float().cpu().numpy()
         frame_rows[timepoint] = len(rows)
+        for cached_timepoint in list(frame_cache):
+            if cached_timepoint < timepoint:
+                del frame_cache[cached_timepoint]
     if not np.isfinite(embeddings).all() or not np.isfinite(division_logits).all():
         raise RuntimeError("appearance model produced non-finite node outputs")
     return embeddings, division_logits, {
@@ -174,6 +182,7 @@ def extract_reciprocal_movie_embeddings(
     primary_divisions = np.empty(len(video.node_ids), dtype=np.float32)
     peer_divisions = np.empty_like(primary_divisions)
     frame_rows: dict[int, int] = {}
+    frame_cache: dict[int, np.ndarray | torch.Tensor] = {}
     primary_model.eval()
     peer_model.eval()
     for timepoint in sorted(int(value) for value in np.unique(video.times)):
@@ -181,7 +190,11 @@ def extract_reciprocal_movie_embeddings(
         if timepoint < 0 or timepoint >= int(image_array.shape[0]):
             raise ValueError(f"node frame is outside image array: {timepoint}")
         frame = torch.as_tensor(
-            np.asarray(temporal_context_volume(image_array, timepoint)),
+            np.asarray(
+                temporal_context_volume(
+                    image_array, timepoint, frame_cache=frame_cache
+                )
+            ),
             device=device,
         )
         for start in range(0, len(rows), node_batch_size):
@@ -204,6 +217,9 @@ def extract_reciprocal_movie_embeddings(
             primary_divisions[selected_rows] = primary_logits.float().cpu().numpy()
             peer_divisions[selected_rows] = peer_logits.float().cpu().numpy()
         frame_rows[timepoint] = len(rows)
+        for cached_timepoint in list(frame_cache):
+            if cached_timepoint < timepoint:
+                del frame_cache[cached_timepoint]
     outputs = (
         primary_embeddings,
         primary_divisions,

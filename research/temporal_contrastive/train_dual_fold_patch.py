@@ -456,9 +456,18 @@ def load_random_transition(
         max_targets=args.max_targets,
         rng=rng,
     )
+    frame_cache: dict[int, np.ndarray | torch.Tensor] = {}
     return (
-        np.asarray(temporal_context_volume(volumes, timepoint)),
-        np.asarray(temporal_context_volume(volumes, timepoint + 1)),
+        np.asarray(
+            temporal_context_volume(
+                volumes, timepoint, frame_cache=frame_cache
+            )
+        ),
+        np.asarray(
+            temporal_context_volume(
+                volumes, timepoint + 1, frame_cache=frame_cache
+            )
+        ),
         batch,
         voxel_size,
     )

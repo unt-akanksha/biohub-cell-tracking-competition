@@ -107,8 +107,14 @@ def temporal_context_volume(
     timepoint: int,
     *,
     offsets: Sequence[int] = (-1, 0, 1),
+    frame_cache: dict[int, np.ndarray | torch.Tensor] | None = None,
 ) -> np.ndarray | torch.Tensor:
-    """Stack boundary-clamped movie frames as channels around one timepoint."""
+    """Stack boundary-clamped movie frames as channels around one timepoint.
+
+    A caller-owned cache allows adjacent contexts to reuse decompressed frames.
+    The caller remains responsible for evicting old entries, keeping whole-
+    movie memory bounded.
+    """
 
     if len(offsets) == 0 or 0 not in offsets:
         raise ValueError("temporal offsets must be nonempty and include zero")
@@ -118,10 +124,18 @@ def temporal_context_volume(
     if frame_count <= 0 or not 0 <= int(timepoint) < frame_count:
         raise ValueError("timepoint is outside the movie")
     indices = [min(max(int(timepoint) + int(offset), 0), frame_count - 1) for offset in offsets]
+    def frame(index: int) -> np.ndarray | torch.Tensor:
+        if frame_cache is not None and index in frame_cache:
+            return frame_cache[index]
+        value = volumes[index] if isinstance(volumes, torch.Tensor) else np.asarray(volumes[index])
+        if frame_cache is not None:
+            frame_cache[index] = value
+        return value
+
+    selected = [frame(index) for index in indices]
     if isinstance(volumes, torch.Tensor):
-        index = torch.as_tensor(indices, dtype=torch.long, device=volumes.device)
-        return volumes.index_select(0, index)
-    return np.stack([np.asarray(volumes[index]) for index in indices], axis=0)
+        return torch.stack(selected)
+    return np.stack(selected, axis=0)
 
 
 def physical_candidate_masks(
