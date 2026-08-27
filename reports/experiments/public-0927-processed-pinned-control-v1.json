@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "run_id": "public-0927-processed-pinned-control-v1",
+  "status": "completed",
+  "evidence_kind": "diagnostic_only_exact_metric",
+  "coordinate_space": "integer_submission",
+  "graph_scope": "frozen public processed validation topology",
+  "official_scorer_source_verified": true,
+  "organizer_source_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "tracksdata_source_commit": "39dccf3a243e44274759468cb31b2ad9e7fc1d09",
+  "scorer_lock_file_sha256": "698858b60f711d62ec1d501469ec869bb251fa412fc9ef829e936ed6157ff861",
+  "processed_validation_csv_sha256": "6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b",
+  "processed_validation_report_sha256": "5a798804a0b56a081780b1d0213505e34d878c027d9e901dd3848eb9106db367",
+  "pooled": {
+    "score": 0.9343483108193262,
+    "adjusted_edge_jaccard": 0.9218483108193263,
+    "edge_jaccard": 0.917189460476788,
+    "division_jaccard": 0.125,
+    "node_recall_micro": 0.982605006364022,
+    "organizer_macro_node_recall": 0.9772128906543134,
+    "matched_gt_node_count": 2316,
+    "gt_node_count": 2357,
+    "official_counts": {
+      "edge_tp": 2193,
+      "edge_fp": 98,
+      "edge_fn": 100,
+      "division_tp": 1,
+      "division_fp": 3,
+      "division_fn": 4,
+      "num_pred_nodes": 97971
+    }
+  },
+  "by_movie": {
+    "44b6_12dfb391": {
+      "score": 0.9424336353735232,
+      "adjusted_edge_jaccard": 0.9424336353735232,
+      "division_jaccard": 0.0,
+      "node_recall": 0.9923857868020305,
+      "matched_gt_node_count": 782,
+      "gt_node_count": 788
+    },
+    "44b6_267148e4": {
+      "score": 0.8051376014172786,
+      "adjusted_edge_jaccard": 0.8051376014172786,
+      "division_jaccard": 0.0,
+      "node_recall": 0.9857142857142858,
+      "matched_gt_node_count": 276,
+      "gt_node_count": 280
+    },
+    "6bba_062c8d37": {
+      "score": 1.0780563517951085,
+      "adjusted_edge_jaccard": 0.9780563517951084,
+      "division_jaccard": 1.0,
+      "node_recall": 0.989247311827957,
+      "matched_gt_node_count": 920,
+      "gt_node_count": 930
+    },
+    "6bba_07e24132": {
+      "score": 0.8361469900950329,
+      "adjusted_edge_jaccard": 0.8361469900950329,
+      "division_jaccard": 0.0,
+      "node_recall": 0.9415041782729805,
+      "matched_gt_node_count": 338,
+      "gt_node_count": 359
+    }
+  },
+  "legacy_custom_proxy": {
+    "score": 0.9294432421394134,
+    "adjusted_edge_jaccard": 0.9151575278536992,
+    "division_jaccard": 0.14285714285714285,
+    "difference_from_pinned_processed_score": 0.0049050686799128,
+    "authoritative": false
+  },
+  "raw_pinned_control": {
+    "score": 0.9211665139698809,
+    "adjusted_edge_jaccard": 0.9211665139698809,
+    "division_jaccard": 0.0,
+    "authoritative_for_production_comparison": false
+  },
+  "conclusion": "The scorer mismatch came from both graph scope and metric version: the legacy notebook used an older custom validator on an in-memory processed graph, while the initial pinned diagnostic scored raw GEFFs. The pinned processed score is the production-aligned comparator.",
+  "authorized_for_promotion": false,
+  "authorized_for_submission": false,
+  "competition_submission_performed": false
+}
