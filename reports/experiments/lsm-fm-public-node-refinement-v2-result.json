@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "run_id": "lsm-fm-public-node-refinement-v2",
+  "status": "rejected",
+  "strategy": {
+    "name": "public_lsm_r2_p2_b025",
+    "radius_voxels": 2,
+    "probability_power": 2.0,
+    "blend": 0.25,
+    "selection_mode": "predeclared_without_label_access",
+    "hyperparameter_selection_performed": false
+  },
+  "acceptance": {
+    "movies": 4,
+    "annotated_gt_nodes": 2357,
+    "control_matched_gt_nodes": 2284,
+    "candidate_matched_gt_nodes": 2288,
+    "control_annotated_node_recall": 0.96902842596521,
+    "candidate_annotated_node_recall": 0.9707254985150615,
+    "pooled_recall_delta": 0.0016970725498515,
+    "control_mean_movie_match_distance_um": 1.6818344990849032,
+    "candidate_mean_movie_match_distance_um": 1.624922601533052,
+    "per_movie": {
+      "44b6_12dfb391": {
+        "control_matched_gt_nodes": 764,
+        "candidate_matched_gt_nodes": 769,
+        "control_recall": 0.9695431472081218,
+        "candidate_recall": 0.9758883248730964,
+        "recall_delta": 0.0063451776649746,
+        "control_mean_match_distance_um": 1.5124393973007815,
+        "candidate_mean_match_distance_um": 1.456104110326007
+      },
+      "44b6_267148e4": {
+        "control_matched_gt_nodes": 260,
+        "candidate_matched_gt_nodes": 260,
+        "control_recall": 0.9285714285714286,
+        "candidate_recall": 0.9285714285714286,
+        "recall_delta": 0.0,
+        "control_mean_match_distance_um": 1.8132375542461803,
+        "candidate_mean_match_distance_um": 1.7833904952416555
+      },
+      "6bba_062c8d37": {
+        "control_matched_gt_nodes": 923,
+        "candidate_matched_gt_nodes": 923,
+        "control_recall": 0.9924731182795699,
+        "candidate_recall": 0.9924731182795699,
+        "recall_delta": 0.0,
+        "control_mean_match_distance_um": 1.3691441767757089,
+        "candidate_mean_match_distance_um": 1.2894906652051288
+      },
+      "6bba_07e24132": {
+        "control_matched_gt_nodes": 337,
+        "candidate_matched_gt_nodes": 336,
+        "control_recall": 0.9387186629526463,
+        "candidate_recall": 0.935933147632312,
+        "recall_delta": -0.0027855153203343,
+        "control_mean_match_distance_um": 2.032516868016942,
+        "candidate_mean_match_distance_um": 1.9707051353594172
+      }
+    },
+    "maximum_allowed_movie_recall_regression": 0.002,
+    "minimum_movie_recall_delta": -0.0027855153203343,
+    "promotion_passed": false
+  },
+  "provenance": {
+    "public_graph_used_as_base": true,
+    "public_predictions_copied": true,
+    "exact_public_replica": false,
+    "coordinate_source": "independent_lsm_fm_probability",
+    "detector_parameters": 35072515,
+    "detector_checkpoint_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "detector_training_result_sha256": "d2e2c69713edb9402a16f393cc32098bfe2cf3a9b09547cd21e3845083a3066a",
+    "node_ids_preserved": true,
+    "node_count_preserved": true,
+    "edges_preserved": true,
+    "public_graph_topology_preserved": true,
+    "public_leaderboard_used_for_selection": false
+  },
+  "execution": {
+    "kernel_ref": "indarkarhana/biohub-lsm-fm-public-node-preset-v2",
+    "launcher_status": "completed",
+    "launcher_elapsed_seconds": 248.862,
+    "actual_gpu_hours": 0.07,
+    "quota_before_hours": 24.52,
+    "quota_after_hours": 24.45,
+    "submission_created": false,
+    "competition_submission_performed": false
+  },
+  "artifacts": {
+    "launcher_terminal_sha256": "70f097a53138a8263f023412b2c31650dc54f7b4b4c5513bed2d0522adfa459b",
+    "result_sha256": "aa5397c4cc15dc748362e2ab4cd23df156892dc40cf12dc45080268e22fdc226",
+    "partial_acceptance_sha256": "1f656b0f4cc32af921dd1f9a2ec044c224a20c122c803116a66514cccd071ff4",
+    "kernel_log_sha256": "8d6954e8554ee8bb115769149bc6f6600f734575865084dc692e9e597a921100",
+    "refined_graph_tree_sha256": {
+      "44b6_12dfb391.geff": "7c1b49a5e579c36b48454582477d1e0f4c28e4c4481099de813ae91cce41ca41",
+      "44b6_267148e4.geff": "272d960ad0b6180196c241a4772b8077882369ea0ecf354e831b7d522d1d3fa4",
+      "6bba_062c8d37.geff": "00991017bd0807287a2ce6acc65bc8cfe94f223691a0d4fdf5d58b8df52c5de4",
+      "6bba_07e24132.geff": "9e4716589f6726f17a43f69048f1431ea979b5f697da2210aaa78ba736161ee2"
+    }
+  },
+  "decision": {
+    "state": "retire_strategy",
+    "reason": "The predeclared coordinate blend improved pooled recall by four matched nodes and reduced mean localization distance on all four movies, but it lost one matched node on 6bba_07e24132. That -0.0027855 recall delta exceeds the frozen -0.002 per-movie gate. Acceptance labels are now open, so tuning radius, power, or blend against these four movies would be label overfitting.",
+    "exact_graph_scoring_performed": false,
+    "production_materialization_performed": false,
+    "next_test": "Keep the clean processed public control frozen and pursue a separately trained association/division improvement whose design is fixed without using these four acceptance labels."
+  }
+}

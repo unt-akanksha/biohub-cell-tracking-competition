@@ -1875,7 +1875,7 @@
       "status": "failed"
     },
     {
-      "actual_gpu_hours": null,
+      "actual_gpu_hours": "0.07",
       "amendments": [
         {
           "correction_reason": "Bind the fresh immutable preflight, independently re-downloaded private runtime, exact four-graph coverage contract, frozen predeclared strategy, honest public-graph inheritance, and no-submission notebook before GPU launch.",
@@ -1904,22 +1904,24 @@
         }
       ],
       "authorized_for_submission": false,
-      "decision": null,
-      "decision_evidence": [],
+      "decision": "retire",
+      "decision_evidence": [
+        "reports/experiments/lsm-fm-public-node-refinement-v2-result.json"
+      ],
       "declared_gpu_hours": "1.00",
       "dependencies": [],
       "exact_evidence": {},
-      "failed_gate": null,
-      "failure_reason": null,
+      "failed_gate": "acceptance_movie_no_regression",
+      "failure_reason": "The predeclared LSM-FM coordinate blend gained four pooled matches and improved mean localization distance, but lost one match on 6bba_07e24132 (-0.0027855 recall), exceeding the frozen -0.002 per-movie regression limit. No exact scoring, production materialization, or submission was performed.",
       "hypothesis": "A conservative radius-2, power-2, 0.25 blend from frozen public nodes toward an independently trained 35.1M-parameter LSM-FM probability centroid will improve integer-submission-space organizer score without changing node IDs, counts, frame assignments, or graph topology.",
       "imported_audit": false,
-      "lifecycle_status": "running",
+      "lifecycle_status": "rejected",
       "next_gate": null,
       "parent": "lsm-fm-public-node-refinement-v1",
       "public_score_non_authoritative": null,
       "registered_at": "2026-08-27T01:50:00.204463Z",
       "run_id": "lsm-fm-public-node-refinement-v2",
-      "status": "running"
+      "status": "rejected"
     }
   ],
   "schema_version": 1
