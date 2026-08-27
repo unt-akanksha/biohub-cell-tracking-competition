@@ -58,3 +58,11 @@ resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
 alignment, exact zero-weight fallback, the frozen processed exact gate, and
 two-GPU whole-movie sharding.
+
+A separate end-to-end gradient smoke test used two visibly different synthetic
+3D cells, their shifted children, and one distractor. Over 40 CPU optimizer
+steps, multi-positive contrastive loss fell from `1.0668325` to `0.00001049`;
+the two sources selected target columns `[0, 1]` with correct-pair cosine scores
+`0.9896` and `0.9962`. This confirms that physical crop extraction, the encoder,
+and the association objective form a learnable path rather than merely passing
+shape checks.
