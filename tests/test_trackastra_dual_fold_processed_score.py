@@ -67,6 +67,7 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                     "parameter_count": 19_218_498,
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
+                    "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
                 },
                 "target_6bba": {
                     "model_sha256": "1" * 64,
@@ -74,6 +75,7 @@ def test_appearance_materialization_requires_two_positive_hash_bound_blends() ->
                     "parameter_count": 19_218_498,
                     "checkpoint_weight_source": "optimizer-step exponential moving average",
                     "ema_decay": 0.997,
+                    "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
                 },
             },
             "appearance_blend": {

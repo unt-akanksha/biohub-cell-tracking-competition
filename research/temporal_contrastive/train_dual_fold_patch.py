@@ -58,6 +58,7 @@ except ModuleNotFoundError:
 
 
 RUN_ID = "temporal-patch-dual-fold-v1"
+LINK_LOSS_POLICY = "all-positive supervised contrastive mean-log-probability"
 OPENED_ACCEPTANCE_STEMS = frozenset(
     {
         "44b6_12dfb391",
@@ -620,6 +621,33 @@ def update_ema_model(
             averaged.copy_(current)
 
 
+def finish_optimizer_step(
+    model: torch.nn.Module,
+    ema_model: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    scaler: torch.amp.GradScaler,
+    *,
+    accumulated_batches: int,
+    gradient_accumulation: int,
+    ema_decay: float,
+) -> None:
+    """Apply one correctly normalized accumulated update and refresh the EMA."""
+
+    if not 0 < accumulated_batches <= gradient_accumulation:
+        raise ValueError("accumulated batch count is outside the configured window")
+    scaler.unscale_(optimizer)
+    if accumulated_batches < gradient_accumulation:
+        correction = float(gradient_accumulation / accumulated_batches)
+        for parameter in model.parameters():
+            if parameter.grad is not None:
+                parameter.grad.mul_(correction)
+    torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+    scaler.step(optimizer)
+    scaler.update()
+    update_ema_model(ema_model, model, decay=ema_decay)
+    optimizer.zero_grad(set_to_none=True)
+
+
 def train_worker(args: argparse.Namespace) -> None:
     started = time.monotonic()
     if args.fold not in FOLD_SPECS:
@@ -733,6 +761,7 @@ def train_worker(args: argparse.Namespace) -> None:
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": args.ema_decay,
             "division_prior_correction": "class-conditional importance weighting",
+            "link_loss_policy": LINK_LOSS_POLICY,
             "real_division_rate": REAL_DIVISION_RATE,
             "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
             "source_prefix": spec["source_prefix"],
@@ -756,12 +785,17 @@ def train_worker(args: argparse.Namespace) -> None:
     )
 
     optimizer.zero_grad(set_to_none=True)
+    attempted_batches = 0
     completed_step = 0
+    accumulated_batches = 0
+    optimizer_steps = 0
     skipped_batches = 0
     rolling: list[float] = []
-    for step in range(1, args.steps + 1):
+    maximum_attempts = max(args.steps * 2, args.steps + 100)
+    while completed_step < args.steps and attempted_batches < maximum_attempts:
         if time.monotonic() - started >= args.max_wall_seconds - args.finalization_reserve_seconds:
             break
+        attempted_batches += 1
         use_real = bool(rng.random() < args.real_replay_probability)
         paths = real_train if use_real else synthetic_train
         try:
@@ -775,6 +809,8 @@ def train_worker(args: argparse.Namespace) -> None:
         except ValueError:
             skipped_batches += 1
             continue
+        completed_step += 1
+        step = completed_step
         source_volume, target_volume, batch, voxel_size = example
         with torch.autocast(device_type="cuda", dtype=torch.float16):
             source, target, division_logits = encode_transition(
@@ -801,14 +837,19 @@ def train_worker(args: argparse.Namespace) -> None:
             loss = link_loss + args.division_loss_weight * division_loss
             scaled_loss = loss / args.gradient_accumulation
         scaler.scale(scaled_loss).backward()
-        if step % args.gradient_accumulation == 0:
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            scaler.step(optimizer)
-            scaler.update()
-            update_ema_model(ema_model, model, decay=args.ema_decay)
-            optimizer.zero_grad(set_to_none=True)
-        completed_step = step
+        accumulated_batches += 1
+        if accumulated_batches == args.gradient_accumulation:
+            finish_optimizer_step(
+                model,
+                ema_model,
+                optimizer,
+                scaler,
+                accumulated_batches=accumulated_batches,
+                gradient_accumulation=args.gradient_accumulation,
+                ema_decay=args.ema_decay,
+            )
+            accumulated_batches = 0
+            optimizer_steps += 1
         rolling.append(float(loss))
         progress = min(step / args.steps, 1.0)
         learning_rate = args.minimum_learning_rate + 0.5 * (
@@ -850,12 +891,17 @@ def train_worker(args: argparse.Namespace) -> None:
                 best_state = state_dict_cpu(ema_model)
             model.train()
 
-    if completed_step % args.gradient_accumulation:
-        scaler.unscale_(optimizer)
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        scaler.step(optimizer)
-        scaler.update()
-        update_ema_model(ema_model, model, decay=args.ema_decay)
+    if accumulated_batches:
+        finish_optimizer_step(
+            model,
+            ema_model,
+            optimizer,
+            scaler,
+            accumulated_batches=accumulated_batches,
+            gradient_accumulation=args.gradient_accumulation,
+            ema_decay=args.ema_decay,
+        )
+        optimizer_steps += 1
     model.load_state_dict(best_state)
     model_path = output_dir / "appearance_model.pt"
     torch.save(model.state_dict(), model_path)
@@ -866,7 +912,9 @@ def train_worker(args: argparse.Namespace) -> None:
         "run_id": RUN_ID,
         "fold": args.fold,
         "elapsed_seconds": time.monotonic() - started,
+        "attempted_batches": attempted_batches,
         "completed_step": completed_step,
+        "optimizer_steps": optimizer_steps,
         "skipped_batches": skipped_batches,
         "best_step": best_step,
         "best_score": best_score,
@@ -879,6 +927,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "checkpoint_weight_source": "optimizer-step exponential moving average",
         "ema_decay": args.ema_decay,
         "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": LINK_LOSS_POLICY,
         "real_division_rate": REAL_DIVISION_RATE,
         "synthetic_division_rate": SYNTHETIC_DIVISION_RATE,
         "real_split_policy": "global deterministic disjoint partition per embryo prefix",

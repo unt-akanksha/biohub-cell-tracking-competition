@@ -47,6 +47,7 @@ def accepted_fixture(tmp_path: Path):
             "parameter_count": 19_218_498,
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
+            "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
         }
         blends[fold] = {
             "appearance_weight": index * 0.1,

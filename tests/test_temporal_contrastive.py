@@ -19,6 +19,7 @@ from research.temporal_contrastive.patch_model import (
 from research.temporal_contrastive.train_dual_fold_patch import (
     aggregate_metrics,
     division_prior_corrected_bce,
+    finish_optimizer_step,
     prepare_transition,
     real_prefix_partition,
     synthetic_split,
@@ -112,6 +113,23 @@ def test_multi_positive_info_nce_does_not_treat_a_second_daughter_as_negative() 
     assert float(good) < float(bad)
 
 
+def test_multi_positive_info_nce_requires_both_daughters_to_score_well() -> None:
+    source = torch.tensor([[1.0, 0.0]])
+    candidates = torch.ones((1, 3), dtype=torch.bool)
+    positives = torch.tensor([[True, True, False]])
+    both_daughters = torch.tensor([[1.0, 0.0], [1.0, 0.0], [-1.0, 0.0]])
+    one_daughter_only = torch.tensor([[1.0, 0.0], [-1.0, 0.0], [0.0, 1.0]])
+
+    complete = masked_multi_positive_info_nce(
+        source, both_daughters, positives, candidates
+    )
+    incomplete = masked_multi_positive_info_nce(
+        source, one_daughter_only, positives, candidates
+    )
+
+    assert float(complete) < float(incomplete)
+
+
 def test_physical_patch_sampling_matches_anisotropic_and_isotropic_views() -> None:
     z, y, x = torch.meshgrid(
         torch.arange(9), torch.arange(17), torch.arange(17), indexing="ij"
@@ -188,6 +206,48 @@ def test_full_model_ema_averages_optimizer_weights() -> None:
     torch.testing.assert_close(ema.weight, torch.full_like(ema.weight, 0.5))
     with pytest.raises(ValueError, match="EMA decay"):
         update_ema_model(ema, model, decay=1.0)
+
+
+def test_partial_gradient_accumulation_is_rescaled_before_update() -> None:
+    full = torch.nn.Linear(1, 1, bias=False)
+    partial = torch.nn.Linear(1, 1, bias=False)
+    full.weight.data.zero_()
+    partial.weight.data.zero_()
+    full_ema = torch.nn.Linear(1, 1, bias=False)
+    partial_ema = torch.nn.Linear(1, 1, bias=False)
+    full_ema.weight.data.zero_()
+    partial_ema.weight.data.zero_()
+    full_optimizer = torch.optim.SGD(full.parameters(), lr=0.1)
+    partial_optimizer = torch.optim.SGD(partial.parameters(), lr=0.1)
+    full_scaler = torch.amp.GradScaler("cpu")
+    partial_scaler = torch.amp.GradScaler("cpu")
+
+    for _ in range(2):
+        full_scaler.scale((full(torch.ones(1, 1)).sum() - 1.0) ** 2 / 2).backward()
+    partial_scaler.scale(
+        (partial(torch.ones(1, 1)).sum() - 1.0) ** 2 / 2
+    ).backward()
+    finish_optimizer_step(
+        full,
+        full_ema,
+        full_optimizer,
+        full_scaler,
+        accumulated_batches=2,
+        gradient_accumulation=2,
+        ema_decay=0.0,
+    )
+    finish_optimizer_step(
+        partial,
+        partial_ema,
+        partial_optimizer,
+        partial_scaler,
+        accumulated_batches=1,
+        gradient_accumulation=2,
+        ema_decay=0.0,
+    )
+
+    torch.testing.assert_close(partial.weight, full.weight)
+    torch.testing.assert_close(partial_ema.weight, full_ema.weight)
 
 
 def test_synthetic_division_prior_correction_preserves_negative_learning() -> None:

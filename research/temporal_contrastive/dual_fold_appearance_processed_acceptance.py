@@ -118,6 +118,8 @@ def verify_sources(
             and appearance_terminal.get("ema_decay") == 0.997
             and appearance_terminal.get("division_prior_correction")
             == "class-conditional importance weighting"
+            and appearance_terminal.get("link_loss_policy")
+            == "all-positive supervised contrastive mean-log-probability"
             and appearance_terminal.get("real_split_policy")
             == "global deterministic disjoint partition per embryo prefix"
             and appearance_terminal.get("public_predictions_copied") is False
@@ -181,6 +183,9 @@ def verify_sources(
                 "checkpoint_weight_source"
             ],
             "appearance_ema_decay": appearance_terminal["ema_decay"],
+            "appearance_link_loss_policy": appearance_terminal[
+                "link_loss_policy"
+            ],
             "appearance_weight": selected_weight,
             "division_weight": selected_division_weight,
             "ensemble_mode": selected_ensemble_mode,
@@ -513,6 +518,7 @@ def orchestrate(args: argparse.Namespace) -> None:
                     "appearance_checkpoint_weight_source"
                 ],
                 "ema_decay": source["appearance_ema_decay"],
+                "link_loss_policy": source["appearance_link_loss_policy"],
             }
             for fold, source in folds.items()
         },

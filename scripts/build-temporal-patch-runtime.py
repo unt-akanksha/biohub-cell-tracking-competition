@@ -150,6 +150,7 @@ def main() -> None:
                 "parameters_per_fold": 19_218_498,
                 "external_pretrained_weights": False,
                 "division_head_used_at_inference": True,
+                "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
             },
             "integrity": {
                 "required_gpu_count": 2,

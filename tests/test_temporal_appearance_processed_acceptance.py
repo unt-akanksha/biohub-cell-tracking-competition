@@ -54,6 +54,7 @@ def source_fixture(tmp_path: Path) -> tuple[Path, Path, Path]:
             "checkpoint_weight_source": "optimizer-step exponential moving average",
             "ema_decay": 0.997,
             "division_prior_correction": "class-conditional importance weighting",
+            "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
             "real_split_policy": "global deterministic disjoint partition per embryo prefix",
             "model_sha256": digest(appearance_model),
             "public_predictions_copied": False,

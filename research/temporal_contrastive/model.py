@@ -122,12 +122,14 @@ def masked_multi_positive_info_nce(
     *,
     temperature: float = 0.10,
 ) -> torch.Tensor:
-    """Contrast one or more true children against feasible target cells.
+    """Contrast every true child against the feasible target cells.
 
-    Unlike a single-label cross entropy, this objective represents divisions
-    without declaring one true daughter a negative. Sources without a labeled
-    child are excluded because the organizer graphs are sparse annotations, not
-    proof that an unlinked detection truly disappears.
+    The loss follows the all-positive supervised-contrastive formulation: for
+    each source, it averages the log-probability assigned to every labeled
+    child. A log-sum numerator would allow one easy daughter to hide a missed
+    second daughter, which is specifically harmful to lineage reconstruction.
+    Sources without a labeled child are excluded because the organizer graphs
+    are sparse annotations, not proof that an unlinked detection disappears.
     """
 
     if source_embeddings.ndim != 2 or target_embeddings.ndim != 2:
@@ -156,7 +158,9 @@ def masked_multi_positive_info_nce(
     logits = (source @ target.transpose(0, 1)) / float(temperature)
     floor = torch.finfo(logits.dtype).min
     all_logsumexp = torch.logsumexp(logits.masked_fill(~candidates, floor), dim=1)
-    positive_logsumexp = torch.logsumexp(
-        logits.masked_fill(~positive_mask[valid], floor), dim=1
+    positives = positive_mask[valid]
+    positive_mean_logit = (
+        (logits * positives.to(logits.dtype)).sum(dim=1)
+        / positives.sum(dim=1).to(logits.dtype)
     )
-    return (all_logsumexp - positive_logsumexp).mean()
+    return (all_logsumexp - positive_mean_logit).mean()

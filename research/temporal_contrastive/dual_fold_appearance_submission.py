@@ -138,6 +138,8 @@ def load_acceptance(
             and expected_appearance[fold].get("checkpoint_weight_source")
             == "optimizer-step exponential moving average"
             and expected_appearance[fold].get("ema_decay") == 0.997
+            and expected_appearance[fold].get("link_loss_policy")
+            == "all-positive supervised contrastive mean-log-probability"
             and float(blends[fold].get("appearance_weight", 0.0)) > 0.0
             and float(blends[fold].get("division_weight", 0.0)) >= 0.0
             and blends[fold].get("ensemble_mode")

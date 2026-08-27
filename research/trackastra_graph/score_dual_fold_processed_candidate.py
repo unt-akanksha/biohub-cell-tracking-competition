@@ -149,6 +149,8 @@ def validate_materialization(
                 and model.get("checkpoint_weight_source")
                 == "optimizer-step exponential moving average"
                 and model.get("ema_decay") == 0.997
+                and model.get("link_loss_policy")
+                == "all-positive supervised contrastive mean-log-probability"
             ):
                 raise ValueError(f"appearance model evidence is invalid: {fold}")
             if not (

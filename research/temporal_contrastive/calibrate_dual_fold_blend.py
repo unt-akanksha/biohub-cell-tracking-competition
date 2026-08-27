@@ -121,6 +121,10 @@ def verify_sources(
         == "class-conditional importance weighting"
         and appearance_config.get("division_prior_correction")
         == "class-conditional importance weighting"
+        and appearance_terminal.get("link_loss_policy")
+        == "all-positive supervised contrastive mean-log-probability"
+        and appearance_config.get("link_loss_policy")
+        == "all-positive supervised contrastive mean-log-probability"
         and appearance_config.get("real_split_policy")
         == "global deterministic disjoint partition per embryo prefix"
         and appearance_terminal.get("real_split_policy")
