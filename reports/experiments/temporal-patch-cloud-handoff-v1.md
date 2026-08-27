@@ -8,10 +8,10 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-shared-daughterloss-20260827.zip`
-- Archive bytes: `97139`
-- Archive SHA-256: `66658e9ea7bcfe44af3ef8130dc4944831cfae411ef0a76ef5a6b07902a27d1a`
-- Extracted manifest SHA-256: `576679f67e1810abb003140c35ad47b98c04bb71d3da4e9decbe1d1f0f809e36`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-ema-ensemble-daughterloss-20260827.zip`
+- Archive bytes: `97938`
+- Archive SHA-256: `7858a9f5ae181c5c22145a56eea6f7739448497de058297fde8074021691132c`
+- Extracted manifest SHA-256: `e422e987ec9a853d1306e8d334231257a58f210bcd3104560b3ad012417b3bee`
 - Required visible GPUs: exactly 2
 - Internet during model execution: not required
 - Submission command included: false
@@ -69,9 +69,10 @@ python "$BIOHUB_RUNTIME/train_dual_fold_patch.py" \
 
 Stop unless `appearance/training_terminal.json` reports `gpu_count: 2`, both
 folds trained beyond step zero, and no submission. Each fold must report
-19,218,498 parameters, EMA checkpoints, class-conditional division-prior
-correction, the all-positive supervised-contrastive loss policy, successful-
-batch gradient accumulation, and the global disjoint real-movie split policy.
+19,221,954 parameters, three input channels with temporal offsets `[-1, 0, 1]`,
+EMA checkpoints, class-conditional division-prior correction, the all-positive
+supervised-contrastive loss policy, successful-batch gradient accumulation,
+and the global disjoint real-movie split policy.
 
 ## Stage 2: clean blend and reciprocal-ensemble calibration
 

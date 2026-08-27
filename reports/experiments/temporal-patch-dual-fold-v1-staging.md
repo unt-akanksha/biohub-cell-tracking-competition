@@ -13,9 +13,13 @@ made zero safe corrections, which is evidence against weakening its swap gates,
 not evidence that local image appearance is useless. The missing experiment is
 a representation trained directly on adjacent Biohub cells.
 
-This lane implements an independent 19,218,498-parameter 3D residual encoder per
+This lane implements an independent 19,221,954-parameter 3D residual encoder per
 fold. It samples 17-cubed patches over the same 16-micrometer physical field of
 view from both pooled isotropic synthetic images and anisotropic real movies.
+Each node is represented by aligned `t-1`, `t`, and `t+1` channels with
+deterministic boundary clamping. This exposes motion and mitotic morphology to
+both the identity and division heads while leaving the expensive 64-channel
+feature-map width unchanged.
 All-positive supervised contrastive learning averages the log-probability of
 every true child. This prevents one easy daughter from hiding a missed second
 daughter in the loss; a separate sparse division head is trained with
@@ -94,22 +98,23 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 37 tests across the normal
+The updated focused temporal/Trackastra suite passes 38 tests across the normal
 and pinned exact-scorer environments. It covers physical
-resampling, all-daughter supervised-contrastive loss, partial-accumulation
-normalization, candidate-radius failure,
+resampling, temporal boundary clamping and shared-channel grids, all-daughter
+supervised-contrastive loss, partial-accumulation normalization,
+candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
 alignment, exact zero/zero fallback, source-division alignment, actual
 second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-shared-daughterloss-20260827.zip`
-(97,139 bytes, SHA-256
-`66658e9ea7bcfe44af3ef8130dc4944831cfae411ef0a76ef5a6b07902a27d1a`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-ema-ensemble-daughterloss-20260827.zip`
+(97,938 bytes, SHA-256
+`7858a9f5ae181c5c22145a56eea6f7739448497de058297fde8074021691132c`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`576679f67e1810abb003140c35ad47b98c04bb71d3da4e9decbe1d1f0f809e36`,
+`e422e987ec9a853d1306e8d334231257a58f210bcd3104560b3ad012417b3bee`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -120,10 +125,10 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite now passes 508 unique tests with zero failures
+The complete repository suite now passes 509 unique tests with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
-environment passed 449 tests after excluding the scorer-only files, and all 59
+environment passed 450 tests after excluding the scorer-only files, and all 59
 locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
