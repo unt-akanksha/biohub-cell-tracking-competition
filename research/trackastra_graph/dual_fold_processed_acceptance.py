@@ -259,7 +259,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "association_configuration_sha256": configuration_sha256(
             FROZEN_ASSOCIATION_CONFIGURATION
         ),
-        "configuration_selection": "predeclared from the conservative historical raw-confidence preset without reading acceptance labels",
+        "configuration_selection": "predeclared historical raw-confidence preset; this acceptance run performs no configuration search",
         "datasets": dataset_stats,
         "edge_probability_transfer": transfers,
         "total_changed_edges": changed_edges,
