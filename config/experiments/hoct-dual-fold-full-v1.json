@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "run_id": "hoct-dual-fold-full-v1",
+  "parent": "hoct-multibackbone-probe-v1",
+  "status": "cloud_fallback_staged_not_launched",
+  "priority": "after temporal-patch-dual-fold-v1",
+  "required_visible_gpu_count": 2,
+  "internet_required": false,
+  "submission_created": false,
+  "authorized_for_submission": false,
+  "source": {
+    "trainer_sha256": "e41d46024b71701fc06b64ce702b8f6117c31d21f02030126b36240cc2b00d98",
+    "hoct_repository": "https://github.com/royerlab/hoct",
+    "hoct_commit": "2ccc5040823bc944ab67790abd1f56eea7cd4f05",
+    "pretrained_model": "general_v1.pt",
+    "pretrained_model_sha256": "5bd836dfcb15ad796ea79a9595841a3e73b650a71c4acba3fc66aac65d745b33"
+  },
+  "model": {
+    "parameter_count_per_fold": 6252593,
+    "full_backbone_trainable": true,
+    "old_probe_trainable_parameters": 289,
+    "pretrained_initialization_is_candidate": true,
+    "saved_format": "reload-verified TorchScript"
+  },
+  "folds": {
+    "target_44b6": {
+      "gpu_index": 0,
+      "real_training_prefix": "6bba",
+      "real_validation_prefix": "44b6"
+    },
+    "target_6bba": {
+      "gpu_index": 1,
+      "real_training_prefix": "44b6",
+      "real_validation_prefix": "6bba"
+    }
+  },
+  "data": {
+    "synthetic_train_graphs": 1900,
+    "synthetic_validation_graphs": 128,
+    "real_train_graphs_per_fold": 96,
+    "real_validation_graphs_per_fold": 12,
+    "real_replay_probability": 0.10,
+    "synthetic_native_geometry_restored": true,
+    "opened_processed_acceptance_stems_excluded": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "6bba_062c8d37",
+      "6bba_07e24132"
+    ]
+  },
+  "training": {
+    "steps_per_fold": 20000,
+    "candidate_neighbors": 8,
+    "candidate_max_distance_model_units": 80.0,
+    "candidate_recall_must_be_exact_per_frame": true,
+    "core_size_model_units": 128.0,
+    "prefer_division_probability": 0.25,
+    "parental_softmax_loss_weight": 0.80,
+    "balanced_edge_bce_weight": 0.20,
+    "l2sp_weight": 0.001,
+    "learning_rate": 0.000002,
+    "minimum_learning_rate": 0.0000001,
+    "gradient_accumulation": 4,
+    "gradient_clip": 0.5,
+    "maximum_worker_wall_seconds": 36000
+  },
+  "selection_gate": {
+    "minimum_real_composite_gain": 0.001,
+    "maximum_synthetic_composite_regression": 0.005,
+    "public_leaderboard_used": false,
+    "processed_acceptance_labels_used": false,
+    "both_reciprocal_folds_must_improve": true
+  },
+  "technical_spike": {
+    "nonzero_gradient_tensors": 114,
+    "total_parameter_tensors": 120,
+    "parameters_with_nonzero_gradient": 6245681,
+    "gradient_parameter_fraction": 0.998894,
+    "one_step_loss_before": 0.6708244681358337,
+    "one_step_loss_after": 0.6687861680984497,
+    "saved_reload_loss": 0.6687861680984497
+  },
+  "hypothesis": "Low-rate L2-SP adaptation of the full higher-order edge transformer on corrected synthetic lineage graphs and reciprocal Biohub replay can improve divisions and ambiguous parents beyond the rejected linear probe without catastrophic drift."
+}
