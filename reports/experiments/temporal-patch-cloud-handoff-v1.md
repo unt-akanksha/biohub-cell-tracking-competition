@@ -8,11 +8,13 @@ no Kaggle submission command.
 
 ## Bound runtime
 
-- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-20260827.zip`
-- Archive bytes: `101048`
-- Archive SHA-256: `16fa051b565971b5cd5b4b40f737501161bdd938665152a38cc0506a935f3325`
-- Extracted manifest SHA-256: `cc749ed7c319bcb2bdee5d9987ea2984898f198c92a3fad81161f14e41ce6d10`
+- Archive: `.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-20260827.zip`
+- Archive bytes: `101901`
+- Archive SHA-256: `e0bfebd8c7372ea0a0c07d3a524a80a4530eaca230f016fd739e51ac8f3d12a5`
+- Extracted manifest SHA-256: `3dced7b3e26926a5e261aef26a99c98662b04a810592a040a02358fdaace03a2`
 - Required visible GPUs: exactly 2
+- Maximum final inference wall time: 36,000 seconds
+- Kaggle notebook setup/finalization reserve: at least 7,200 seconds
 - Internet during model execution: not required
 - Submission command included: false
 
@@ -46,7 +48,7 @@ python "$BIOHUB_RUNTIME/verify_trackastra_output.py" \
 ```
 
 Stop if the runtime verifier does not report 26 files, two GPUs, the bound
-manifest hash, and no submission command. Also stop unless the Trackastra
+manifest hash, the bound runtime reserve, and no submission command. Also stop unless the Trackastra
 verifier reports `status: verified`, two hash-bound improved folds, corrected
 native synthetic geometry, and no competition artifacts.
 
@@ -156,4 +158,7 @@ candidate is not an edge replica.
 
 If the exact gate accepts, the two-GPU whole-movie candidate builder may be run
 to create a local `submission.csv`. Uploading that CSV to Kaggle remains a
-separate action requiring explicit user authorization.
+separate action requiring explicit user authorization. Both the appearance
+builder and its Trackastra-only fallback reject any inference ceiling above
+36,000 seconds, preserving at least two hours of the 12-hour Kaggle notebook
+limit for setup, final assembly, artifact persistence, and shutdown.

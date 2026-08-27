@@ -123,12 +123,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-20260827.zip`
-(101,048 bytes, SHA-256
-`16fa051b565971b5cd5b4b40f737501161bdd938665152a38cc0506a935f3325`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-temporal3-framecache-strictingest-ema-ensemble-daughterloss-runtimeguard-20260827.zip`
+(101,901 bytes, SHA-256
+`e0bfebd8c7372ea0a0c07d3a524a80a4530eaca230f016fd739e51ac8f3d12a5`).
 An independent extraction verified all 26 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`cc749ed7c319bcb2bdee5d9987ea2984898f198c92a3fad81161f14e41ce6d10`,
+`3dced7b3e26926a5e261aef26a99c98662b04a810592a040a02358fdaace03a2`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -148,3 +148,7 @@ locked-scorer tests passed in the pinned evaluator environment. For timeout
 resistance, final whole-movie LPT sharding now weights
 both Trackastra frame-pair products and the added per-node 3D encoding work; its
 node cost was increased to 12,288 after scaling the encoder to 19.2M parameters.
+Both final candidate builders now enforce a 36,000-second inference ceiling,
+leaving at least 7,200 seconds of Kaggle's 12-hour GPU notebook limit for
+setup, final assembly, artifact persistence, and shutdown. This ceiling cannot
+be raised through a command-line override.

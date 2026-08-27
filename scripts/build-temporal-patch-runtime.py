@@ -165,6 +165,8 @@ def main() -> None:
                 "public_leaderboard_used_for_selection": False,
                 "competition_submission_command_included": False,
                 "calibration_grid_includes_exact_zero_control": True,
+                "maximum_submission_inference_seconds": 36_000,
+                "minimum_kaggle_finalization_reserve_seconds": 7_200,
             },
             "files": files,
         },

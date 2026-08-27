@@ -25,6 +25,8 @@ def runtime_fixture(tmp_path: Path) -> Path:
             "competition_submission_command_included": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
+            "maximum_submission_inference_seconds": 36_000,
+            "minimum_kaggle_finalization_reserve_seconds": 7_200,
         },
     }
     (tmp_path / "SOURCE_MANIFEST.json").write_text(

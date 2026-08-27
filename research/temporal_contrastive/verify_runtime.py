@@ -32,6 +32,8 @@ def verify_runtime(root: Path, *, require_gpus: bool = False) -> dict[str, Any]:
         and integrity.get("competition_submission_command_included") is False
         and integrity.get("public_predictions_copied") is False
         and integrity.get("public_leaderboard_used_for_selection") is False
+        and integrity.get("maximum_submission_inference_seconds") == 36_000
+        and integrity.get("minimum_kaggle_finalization_reserve_seconds") == 7_200
     ):
         raise RuntimeError("runtime integrity policy changed")
 

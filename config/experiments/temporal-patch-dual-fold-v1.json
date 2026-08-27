@@ -16,10 +16,12 @@
     "calibrator_sha256": "12d6a953cc439ca5ab20f820172cb89f44254c74b37b33e2f305dd632c9dd4fa",
     "processed_materializer_sha256": "e8fc6869d882aebb4364e53a397f829b8bab3e1dbc8d7a3918e973cfb23c2b7f",
     "exact_gate_sha256": "7b8348b8066de53208400d61e2855fde2681064e516b53ccb5f38a04174eb611",
-    "two_gpu_candidate_builder_sha256": "a9d7982008f441eee4c2a4c01f5a4fcd8ac63ce29c22e3887423a56c38dc479c",
-    "runtime_verifier_sha256": "9775df2b8fc39ce042e09dc447830de7e8a07fc8a6931f89869b690b773cb9ff",
+    "two_gpu_candidate_builder_sha256": "1555fb93223dbd0d49694c989b29ca4104ca33dc32d4f1c52809c67ab4f1e699",
+    "trackastra_candidate_builder_sha256": "d049199dd1918748a67918a6a49c90bdfa0210dd32b644a1bd19cb79f1dc098e",
+    "submission_sharding_sha256": "7b2562f543e1f9d8b37697697c90bc59c6860614cc07ab1763cf4218c77ef28b",
+    "runtime_verifier_sha256": "b1d01a462e39936b97ecb5902fbe5dd0b90839fd48a4f7b7db3234c963ac2bd7",
     "trackastra_output_verifier_sha256": "b0594174aab6944e51dd3a1485f22a8143cc800a25b3cac104435c04fa955596",
-    "runtime_builder_sha256": "1a09fe45bad7e778b20bd00a693a4008bcf1fbdd976a49b318185335f79d64de"
+    "runtime_builder_sha256": "ff8a5ee820e21ac30e519bbcf5967aaaa757f791910e0973592bc4d8464c28dd"
   },
   "model": {
     "architecture": "independent physical-scale temporal-context 3D residual patch encoder",
@@ -104,6 +106,8 @@
     "competition_submission_requires_separate_user_authorization": true,
     "future_submission_inference_requires_exactly_two_gpus": true,
     "future_submission_sharding": "whole movie only",
+    "future_submission_inference_hard_stop_seconds": 36000,
+    "kaggle_notebook_finalization_reserve_seconds": 7200,
     "shard_cost": "Trackastra frame-pair products plus 12288 cost units per 3D-encoded node for the 19.2M encoder"
   },
   "hypothesis": "A Biohub-trained physical-scale 3D appearance representation can resolve ambiguous geometrically plausible parent-child links that geometry-only Trackastra and frozen global SpatialDINO patch tokens cannot separate."
