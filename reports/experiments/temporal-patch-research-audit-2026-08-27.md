@@ -85,3 +85,31 @@ result is observed:
    head. Do not spend another experiment on a wider cosine-only encoder.
 4. A competition submission remains a separate user-authorized action and
    must use exactly two GPUs with whole-movie sharding.
+
+## Implementation and verification status
+
+The predeclared v2 fallback is now implemented without changing the frozen
+scientific contract. Its project-authored pair head has 20,869,325 total
+parameters per fold and is integrated through reciprocal training, reserved
+movie calibration, two-GPU processed materialization, the pinned CPU exact
+gate, and exactly-two-GPU whole-movie final inference. The final sharder adds
+1,024 cost units per adjacent-frame pair for v2 so pair-head work influences
+load balance as well as the existing 12,288 units per encoded node.
+
+Verification completed before packaging:
+
+- ordinary environment: 480 passed, 2 skipped only for unavailable Windows
+  symlink privilege;
+- pinned official-scorer environment: 57 passed;
+- focused v1/v2 integration and runtime-builder checks: 49 passed;
+- focused pinned pair-fusion exact-gate checks: 6 passed.
+
+The independently extracted runtime package is
+`.biohub/staging/biohub-temporal-pair-fusion-runtime-v2-heavy-temporal3-candidatepair-ema-t4x2-controlsource-coherent-20260827.zip`.
+It is 116,550 bytes with SHA-256
+`87c98fecec484fdbbeb2f2aa334793439e6a39f750ef163b12c6d923106edcb8`.
+Its manifest SHA-256 is
+`2266fbd7b64b88a786aa7951292caf2fa11579e4e1febb3adfa6b5f583ae217d`;
+all 29 declared source files verified after fresh extraction. The package has
+no submission command. No v2 model has been trained yet, no Kaggle GPU was
+used, and no competition artifact was submitted.
