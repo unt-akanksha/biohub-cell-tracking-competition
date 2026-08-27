@@ -1,0 +1,302 @@
+{
+  "checks": [
+    {
+      "detail": "All notebook code compiles; the exact remote-redownloaded runtime verifies and the focused temporal/contextual/ZebraHub/appearance test suite passes.",
+      "evidence": [
+        {
+          "path": "scripts/build-zebrahub-contextual-pretrain-preflight.py",
+          "sha256": "832bef38ff6b45ed0b96eaa6d8b2b2d8d91ead80199bf38d24adc5c5d5c70572"
+        },
+        {
+          "path": "scripts/build-zebrahub-contextual-pretrain-kernel.py",
+          "sha256": "5f99f8239ff4e9e5a59bcd8a221cceb21be090de25ecfefe80a8875997544376"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/biohub-zebrahub-contextual-pretrain-v1.ipynb",
+          "sha256": "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/contextual_pair_fusion.py",
+          "sha256": "d28a6b5f7949f08db1c4704068dcb6fe5182811b05e050443f3bcd2effd9f504"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        },
+        {
+          "path": "tests/test_contextual_pair_fusion.py",
+          "sha256": "412d994408cabf027b840a866fcb06b7684d0b3b536f82e1e57bd9514b2d0c2e"
+        },
+        {
+          "path": "tests/test_contextual_training.py",
+          "sha256": "88357fbcf1a5022baa94af3e4b386dabd821ae7b743dbb90fb196b6a9ea873fc"
+        },
+        {
+          "path": "tests/test_contextual_trainer.py",
+          "sha256": "4e6fb4a38fec31f77edab1cdc4fbb00f0ca0529d5ef2f0a7c9dc357456837f8c"
+        },
+        {
+          "path": "tests/test_submission_sharding.py",
+          "sha256": "001ed9e7ec323e9f8388020542d88138e22d961c09a65475f64c89ac541f4dcb"
+        },
+        {
+          "path": "tests/test_temporal_appearance_processed_acceptance.py",
+          "sha256": "e43b7ae672019c4d11e77c77067fb0fa0b0c2a577001a32db7e285858ba1d191"
+        },
+        {
+          "path": "tests/test_temporal_appearance_submission.py",
+          "sha256": "8a03ec88ce63b29840ca0c27502b305153e7b040bb9cadbfbe6439673b159cfa"
+        },
+        {
+          "path": "tests/test_temporal_contrastive.py",
+          "sha256": "c3364cb0c9ef2c89dd7f429d8b91ce79ddc4c1b8df6f72dc4aedf919327910bd"
+        },
+        {
+          "path": "tests/test_temporal_dual_fold_output_verifier.py",
+          "sha256": "97954b7836fc58d740dce990334687448ca12b85f26aa9be23a558c562303917"
+        },
+        {
+          "path": "tests/test_temporal_pair_fusion.py",
+          "sha256": "91218ebe13c6d360a55260d0aadea1e9d4207cb3bf2d4ca252c9e18c04087be2"
+        },
+        {
+          "path": "tests/test_temporal_patch_blend_kernel_builder.py",
+          "sha256": "751e0dac5792bcafa7063b581d459001865f91eb23cb4f23b470ebf547fda750"
+        },
+        {
+          "path": "tests/test_temporal_patch_kernel_builder.py",
+          "sha256": "745125c82ae2e558064571a99cfd1890723e5afa3d1cdb704298bd59805bdfa0"
+        },
+        {
+          "path": "tests/test_temporal_patch_runtime_builder.py",
+          "sha256": "d2880b050e0b83dd52b71242b25ff540760791000202831cf7a928f2c8d39795"
+        },
+        {
+          "path": "tests/test_temporal_runtime_verifier.py",
+          "sha256": "fa20470c3a55ecaf9c05ebad92b2f5193d60f0a04b5c58200100f2f69df8d730"
+        },
+        {
+          "path": "tests/test_verify_zebrahub_contextual_dataset.py",
+          "sha256": "b3afa4685187782bbd112b62a9532d3123b2b747ea4700017309dbbe47181d71"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_dataset_builder.py",
+          "sha256": "91c007296b9b56455a9e8f8c1cf7ad7df81aff3da48ce182cad03003e638aedb"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_pretrain.py",
+          "sha256": "ec8cfd47af010c0a26bf3adff221cb4d20ba1d9a999294aefaf94830aac1640f"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_pretrain_kernel_builder.py",
+          "sha256": "309cc0b3a605b952a6e958307a4bef5371d9558419fb166fbfe4b94a189868f5"
+        },
+        {
+          "path": "tests/test_zebrahub_external.py",
+          "sha256": "c25168848b05327cdb5ace99da0e940425894d4031adbe8a3f3f3f38a5e44f14"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Only private runtime v8 and balanced ZebraHub shard data v4 are attached; competition inputs are absent, internet and TPU are off, and the notebook fails closed unless exactly two T4 GPUs are visible.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-contextual-pair-fusion-v3.json",
+          "sha256": "a90d5f672253702230a41cfcd3c03a815dfb851804af6776b1dcb015f520fef1"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/kernel-metadata.json",
+          "sha256": "0abddc3553ac9954f9af7ee9022d80bebbc2af65d824c33d9d14ea2b78e7ae01"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/SOURCE_MANIFEST.json",
+          "sha256": "85cfd63f75340502e3c810d71a8006fd15342dbc263f6ae45b0c376cf9b1ff7b"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/DATASET_MANIFEST.json",
+          "sha256": "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/verify_zebrahub_contextual_dataset.py",
+          "sha256": "53f21a3ef695e5645cbb9c21e39d2551ab64dec4edeccf152f6f15a8eef5519b"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The production 20,747,761-parameter v3 path scored 2,800 train and 1,258 validation candidate edges from exact v4 shards with finite logits.",
+      "evidence": [
+        {
+          "path": "reports/experiments/zebrahub-contextual-reciprocal-smoke.json",
+          "sha256": "343fba92164c7f1d5b6cfa46bbe42263d1701d4d6506664ffebcd91a2be02bdd"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/contextual_pair_fusion.py",
+          "sha256": "d28a6b5f7949f08db1c4704068dcb6fe5182811b05e050443f3bcd2effd9f504"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact outgoing-plus-0.35-incoming reciprocal objective completed backward on production shards with 64 populated finite gradients for both ZSNS004 and ZSNS005 smoke transitions.",
+      "evidence": [
+        {
+          "path": "reports/experiments/zebrahub-contextual-reciprocal-smoke.json",
+          "sha256": "343fba92164c7f1d5b6cfa46bbe42263d1701d4d6506664ffebcd91a2be02bdd"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/contextual_pair_fusion.py",
+          "sha256": "d28a6b5f7949f08db1c4704068dcb6fe5182811b05e050443f3bcd2effd9f504"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        },
+        {
+          "path": "tests/test_contextual_training.py",
+          "sha256": "88357fbcf1a5022baa94af3e4b386dabd821ae7b743dbb90fb196b6a9ea873fc"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Each worker preloads exactly 627,198,076 train plus 157,311,608 validation tensor bytes before constructing the 20.75M-parameter model; training and validation use CUDA autocast and the notebook requires a 16-GB T4 per fold.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/biohub-zebrahub-contextual-pretrain-v1.ipynb",
+          "sha256": "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/DATASET_MANIFEST.json",
+          "sha256": "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "The exact 20,747,761-parameter production state dict strict-roundtrips locally; Kaggle terminal evidence must hash each saved fold and downstream loading remains strict and provenance-gated.",
+      "evidence": [
+        {
+          "path": "scripts/build-zebrahub-contextual-pretrain-preflight.py",
+          "sha256": "832bef38ff6b45ed0b96eaa6d8b2b2d8d91ead80199bf38d24adc5c5d5c70572"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/contextual_pair_fusion.py",
+          "sha256": "d28a6b5f7949f08db1c4704068dcb6fe5182811b05e050443f3bcd2effd9f504"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/biohub-zebrahub-contextual-pretrain-v1.ipynb",
+          "sha256": "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "The notebook writes only pretrained fold weights and terminal evidence below /kaggle/working; it attaches no competition source and contains no submission command.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/biohub-zebrahub-contextual-pretrain-v1.ipynb",
+          "sha256": "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/kernel-metadata.json",
+          "sha256": "0abddc3553ac9954f9af7ee9022d80bebbc2af65d824c33d9d14ea2b78e7ae01"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/submission_sharding.py",
+          "sha256": "c44cd105825d175210e00f3e91dfa66696f89b7237b8e0dcf5db6454f66ec838"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "All 64 ZSNS004 training shards and 16 ZSNS005 validation shards are hash-verified; checkpoint selection and one-shot audit use disjoint 8-shard developmental windows.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/DATASET_MANIFEST.json",
+          "sha256": "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/train-inventory.json",
+          "sha256": "09ef1301b0017bfefe87365f2a6fc1b42c0d1ec132430934f19a6e6a66344b6d"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/validation-inventory.json",
+          "sha256": "59ba128c79260c18df92627bf0e368ef6be59e74068eb36cdabfde465edaf11b"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "The temporal encoder, candidate-context pooling, reciprocal loss, and validation protocol are project-authored; public notebook code, predictions, leaderboard selection, and metric hacks are excluded.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-contextual-pair-fusion-v3.json",
+          "sha256": "a90d5f672253702230a41cfcd3c03a815dfb851804af6776b1dcb015f520fef1"
+        },
+        {
+          "path": "reports/experiments/biohub-technique-scan-2026-08-27.md",
+          "sha256": "db9b460f02175716644bf2dbaa05fc5e1410d197addfda7afa2ce51bf8809d11"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/contextual_pair_fusion.py",
+          "sha256": "d28a6b5f7949f08db1c4704068dcb6fe5182811b05e050443f3bcd2effd9f504"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-contextual-pair-fusion-runtime-v3-version8/train_zebrahub_contextual_pretrain.py",
+          "sha256": "02ab5b43e19d5ab93fab51e74e87baca3248566e78ed5890a05eaff4d0daccce"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    },
+    {
+      "detail": "The registered ceiling is 6.67 GPU-hours versus a 24,000-second watchdog; launch remains forbidden while another GPU kernel is active or if projected remaining quota would fall below 8.00 hours.",
+      "evidence": [
+        {
+          "path": "config/competition.json",
+          "sha256": "ab721793727702577fe75c1103fbe3de011fad67470c26b91cdcfa181007a4b1"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-pretrain-v1/biohub-zebrahub-contextual-pretrain-v1.ipynb",
+          "sha256": "73baee5dd1ac91ab214c173c38fa86d4e9c4e508606c02c08daf764fca84e67c"
+        },
+        {
+          "path": "config/experiments/temporal-contextual-pair-fusion-v3.json",
+          "sha256": "a90d5f672253702230a41cfcd3c03a815dfb851804af6776b1dcb015f520fef1"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-27T13:07:36.023065Z",
+  "report_sha256": "d5e8f1b9b1d2a10dda851d3f3559f7b2325f46302ae69d95d87c22c4b097859f",
+  "run_id": "zebrahub-contextual-pretrain-v1",
+  "schema_version": 1
+}

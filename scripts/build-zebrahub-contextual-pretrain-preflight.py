@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import io
 import json
 import subprocess
@@ -299,7 +300,7 @@ def verify_model_and_data() -> tuple[dict, list, list]:
     return smoke, train_records, validation_records
 
 
-def main() -> None:
+def main(output: Path = OUTPUT) -> None:
     code, _, _, _ = verify_sources()
     _, train_records, validation_records = verify_model_and_data()
     model_source = RUNTIME / "contextual_pair_fusion.py"
@@ -368,11 +369,18 @@ def main() -> None:
     if "torch.cuda.device_count() != 2" not in code:
         raise RuntimeError("two-GPU execution gate disappeared")
     report = PreflightReport.create(RUN_ID, checks)
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    write_preflight_report(OUTPUT, report)
-    print(OUTPUT)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    write_preflight_report(output, report)
+    print(output)
     print(report.report_sha256)
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT,
+        help="unique immutable preflight output path",
+    )
+    main(parser.parse_args().output)
