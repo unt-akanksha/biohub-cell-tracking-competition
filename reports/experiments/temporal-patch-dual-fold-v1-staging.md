@@ -31,7 +31,9 @@ both reciprocal encoders. Because the global split keeps every calibration
 movie out of both models' training inventories, this is a clean ensemble test,
 not in-sample stacking. `target_only` wins exact ties to preserve runtime; the
 two-encoder path is selected only when it clears the same pooled-gain and
-per-movie regression gates.
+per-movie regression gates. In that path, both encoders consume the same
+already-resampled physical patch tensor, avoiding a second grid-sampling and
+image-extraction pass per node.
 
 No public Kaggle implementation, public prediction identity, CELLECT source, or
 external checkpoint is copied. CELLECT and the 2026 microscopy-embedding paper
@@ -81,7 +83,7 @@ whole-movie sharded, and separately authorized.
 
 ## Verification
 
-The updated focused temporal/Trackastra suite passes 34 tests across the normal
+The updated focused temporal/Trackastra suite passes 35 tests across the normal
 and pinned exact-scorer environments. It covers physical
 resampling, division-aware multi-positive loss, candidate-radius failure,
 transition construction, model output normalization, arbitrary node-ID
@@ -90,12 +92,12 @@ second-daughter recovery, the frozen processed exact gate, runtime-package
 integrity, and two-GPU whole-movie sharding.
 
 The rebuilt portable archive is
-`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-20260827.zip`
-(95,984 bytes, SHA-256
-`b1b38be2d96f4e2cb3ab87e8c22b60cb12adbb981fafc2eab1775b33dcc63b2d`).
+`.biohub/staging/biohub-temporal-patch-runtime-v1-heavy-ema-ensemble-shared-20260827.zip`
+(96,381 bytes, SHA-256
+`68c10f7cba5270da3c66cfcddab151ad0937d2bbdee12cdc592a183107cf9e5f`).
 An independent extraction verified all 25 manifest-bound files; the embedded
 verifier reported manifest SHA-256
-`8c78caed13eaa125b6f8c72e76af13e4c5c696f2fae69f5162294540be5a2cb4`,
+`db1c76e38768ddb5bcb442da6d88ddfed8e49b88a9fc73473483b891109bd64b`,
 required GPU count 2, and no submission command.
 
 A separate end-to-end gradient smoke test used two visibly different synthetic
@@ -106,7 +108,7 @@ the two sources selected target columns `[0, 1]` with correct-pair cosine scores
 and the association objective form a learnable path rather than merely passing
 shape checks.
 
-The complete repository suite now passes 505 unique tests with zero failures
+The complete repository suite now passes 506 unique tests with zero failures
 when each group runs in its declared environment; two Windows tests are skipped
 only because unprivileged symlink creation is unavailable. The ordinary
 environment passed 469 tests, and the 55-test locked-scorer group passed in the

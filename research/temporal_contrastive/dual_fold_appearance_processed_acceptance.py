@@ -26,6 +26,7 @@ try:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from dual_fold_processed_acceptance import (
@@ -43,6 +44,7 @@ except ModuleNotFoundError:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -260,13 +262,31 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
-            appearance,
-            video,
-            image,
-            device,
-            node_batch_size=args.node_batch_size,
-        )
+        if peer_appearance is None:
+            embeddings, division_logits, shared_extraction = extract_movie_embeddings(
+                appearance,
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
+            peer_embeddings = embeddings
+            peer_logits = division_logits
+        else:
+            (
+                embeddings,
+                division_logits,
+                peer_embeddings,
+                peer_logits,
+                shared_extraction,
+            ) = extract_reciprocal_movie_embeddings(
+                appearance,
+                peer_appearance,
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
         primary_scores = appearance_scores_for_movie(
             video, embeddings, trackastra_scores
         )
@@ -276,15 +296,7 @@ def worker(args: argparse.Namespace) -> None:
         if peer_appearance is None:
             peer_scores = primary_scores
             peer_divisions = primary_divisions
-            peer_extraction = None
         else:
-            peer_embeddings, peer_logits, peer_extraction = extract_movie_embeddings(
-                peer_appearance,
-                video,
-                image,
-                device,
-                node_batch_size=args.node_batch_size,
-            )
             peer_scores = appearance_scores_for_movie(
                 video, peer_embeddings, trackastra_scores
             )
@@ -300,8 +312,7 @@ def worker(args: argparse.Namespace) -> None:
         )
         extraction[stem] = {
             "ensemble_mode": args.ensemble_mode,
-            "primary": primary_extraction,
-            "peer": peer_extraction,
+            "shared": shared_extraction,
         }
         blended = blend_movie_pair_scores(
             trackastra_scores,

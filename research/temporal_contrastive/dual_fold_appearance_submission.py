@@ -26,6 +26,7 @@ try:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from dual_fold_processed_acceptance import FROZEN_ASSOCIATION_CONFIGURATION
@@ -51,6 +52,7 @@ except ModuleNotFoundError:
         blend_movie_pair_scores,
         division_logits_for_movie,
         extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -243,28 +245,41 @@ def worker(args: argparse.Namespace) -> None:
         image = zarr.open_group(
             str(args.image_root / f"{stem}.zarr"), mode="r"
         )["0"]
-        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
-            appearance_model_for(fold),
-            video,
-            image,
-            device,
-            node_batch_size=args.node_batch_size,
-        )
-        primary_scores = appearance_scores_for_movie(video, embeddings, track_scores)
-        primary_divisions = division_logits_for_movie(
-            video, division_logits, track_scores
-        )
         blend = acceptance["appearance_blend"][fold]
         ensemble_mode = str(blend["ensemble_mode"])
         if ensemble_mode == "reciprocal_mean":
-            peer_fold = next(candidate for candidate in FOLD_BY_PREFIX.values() if candidate != fold)
-            peer_embeddings, peer_logits, peer_extraction = extract_movie_embeddings(
+            peer_fold = next(
+                candidate for candidate in FOLD_BY_PREFIX.values() if candidate != fold
+            )
+            (
+                embeddings,
+                division_logits,
+                peer_embeddings,
+                peer_logits,
+                shared_extraction,
+            ) = extract_reciprocal_movie_embeddings(
+                appearance_model_for(fold),
                 appearance_model_for(peer_fold),
                 video,
                 image,
                 device,
                 node_batch_size=args.node_batch_size,
             )
+        else:
+            embeddings, division_logits, shared_extraction = extract_movie_embeddings(
+                appearance_model_for(fold),
+                video,
+                image,
+                device,
+                node_batch_size=args.node_batch_size,
+            )
+            peer_embeddings = embeddings
+            peer_logits = division_logits
+        primary_scores = appearance_scores_for_movie(video, embeddings, track_scores)
+        primary_divisions = division_logits_for_movie(
+            video, division_logits, track_scores
+        )
+        if ensemble_mode == "reciprocal_mean":
             peer_scores = appearance_scores_for_movie(
                 video, peer_embeddings, track_scores
             )
@@ -274,7 +289,6 @@ def worker(args: argparse.Namespace) -> None:
         else:
             peer_scores = primary_scores
             peer_divisions = primary_divisions
-            peer_extraction = None
         appearance_scores, source_divisions = reciprocal_movie_evidence(
             primary_scores,
             primary_divisions,
@@ -284,8 +298,7 @@ def worker(args: argparse.Namespace) -> None:
         )
         extraction[stem] = {
             "ensemble_mode": ensemble_mode,
-            "primary": primary_extraction,
-            "peer": peer_extraction,
+            "shared": shared_extraction,
         }
         pair_scores = blend_movie_pair_scores(
             track_scores,

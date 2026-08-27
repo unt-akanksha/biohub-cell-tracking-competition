@@ -29,6 +29,8 @@ from research.temporal_contrastive.appearance_blend import (
     appearance_scores_for_movie,
     blend_pair_scores,
     division_logits_for_movie,
+    extract_movie_embeddings,
+    extract_reciprocal_movie_embeddings,
     reciprocal_movie_evidence,
 )
 from research.trackastra_graph.train_biohub_graph_transformer import GraphVideo
@@ -328,6 +330,33 @@ def test_reciprocal_appearance_mean_combines_both_clean_models() -> None:
 
     np.testing.assert_array_equal(scores[0], [[0.5, 0.5]])
     np.testing.assert_array_equal(divisions[0], [0.0])
+
+
+def test_reciprocal_encoding_samples_shared_patches_without_changing_outputs() -> None:
+    torch.manual_seed(19)
+    primary = PhysicalPatchAssociationModel(base_channels=8, embedding_channels=16)
+    peer = PhysicalPatchAssociationModel(base_channels=8, embedding_channels=16)
+    video = GraphVideo(
+        "fixture",
+        node_ids=np.asarray([1, 2]),
+        times=np.asarray([0, 1]),
+        coords_voxel=np.asarray([[2, 2, 2], [2, 2, 2]], dtype=np.float32),
+        edges=np.asarray([[1, 2]], dtype=np.int64),
+    )
+    images = np.random.default_rng(5).normal(size=(2, 5, 5, 5)).astype(np.float32)
+    device = torch.device("cpu")
+
+    first = extract_movie_embeddings(primary, video, images, device)
+    second = extract_movie_embeddings(peer, video, images, device)
+    shared = extract_reciprocal_movie_embeddings(
+        primary, peer, video, images, device
+    )
+
+    np.testing.assert_allclose(shared[0], first[0], atol=1e-6)
+    np.testing.assert_allclose(shared[1], first[1], atol=1e-6)
+    np.testing.assert_allclose(shared[2], second[0], atol=1e-6)
+    np.testing.assert_allclose(shared[3], second[1], atol=1e-6)
+    assert shared[4]["physical_patch_extractions_per_node"] == 1
 
 
 def test_appearance_scores_align_arbitrary_node_identifiers() -> None:

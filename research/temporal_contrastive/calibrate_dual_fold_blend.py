@@ -27,7 +27,7 @@ try:
         appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
-        extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from patch_model import PhysicalPatchAssociationModel
@@ -36,7 +36,7 @@ except ModuleNotFoundError:
         appearance_scores_for_movie,
         blend_movie_pair_scores,
         division_logits_for_movie,
-        extract_movie_embeddings,
+        extract_reciprocal_movie_embeddings,
         reciprocal_movie_evidence,
     )
     from research.temporal_contrastive.patch_model import PhysicalPatchAssociationModel
@@ -502,22 +502,21 @@ def worker(args: argparse.Namespace) -> None:
             max_tokens=args.max_tokens,
             candidate_radius=args.candidate_radius,
         )
-        embeddings, division_logits, primary_extraction = extract_movie_embeddings(
-            appearance_model, video, image, device, node_batch_size=args.node_batch_size
+        (
+            embeddings,
+            division_logits,
+            peer_embeddings,
+            peer_division_logits,
+            shared_extraction,
+        ) = extract_reciprocal_movie_embeddings(
+            appearance_model,
+            peer_appearance_model,
+            video,
+            image,
+            device,
+            node_batch_size=args.node_batch_size,
         )
-        peer_embeddings, peer_division_logits, peer_extraction = (
-            extract_movie_embeddings(
-                peer_appearance_model,
-                video,
-                image,
-                device,
-                node_batch_size=args.node_batch_size,
-            )
-        )
-        extraction[stem] = {
-            "primary": primary_extraction,
-            "peer": peer_extraction,
-        }
+        extraction[stem] = shared_extraction
         primary_scores = appearance_scores_for_movie(video, embeddings, pair_scores)
         primary_divisions = division_logits_for_movie(
             video, division_logits, pair_scores

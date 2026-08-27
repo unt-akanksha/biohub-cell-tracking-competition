@@ -136,6 +136,81 @@ def extract_movie_embeddings(
     }
 
 
+@torch.inference_mode()
+def extract_reciprocal_movie_embeddings(
+    primary_model: PhysicalPatchAssociationModel,
+    peer_model: PhysicalPatchAssociationModel,
+    video: Any,
+    image_array: Any,
+    device: torch.device,
+    *,
+    voxel_size_zyx_um: tuple[float, float, float] = (1.625, 0.40625, 0.40625),
+    node_batch_size: int = 64,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
+    """Encode two reciprocal models while sampling every physical patch once."""
+
+    if node_batch_size <= 0:
+        raise ValueError("node_batch_size must be positive")
+    if len(video.node_ids) != len(video.times) or len(video.node_ids) != len(
+        video.coords_voxel
+    ):
+        raise ValueError("video node arrays are misaligned")
+    widths = (
+        int(primary_model.projection[-1].out_features),
+        int(peer_model.projection[-1].out_features),
+    )
+    if widths[0] != widths[1]:
+        raise ValueError("reciprocal appearance embedding widths differ")
+    primary_embeddings = np.empty((len(video.node_ids), widths[0]), dtype=np.float32)
+    peer_embeddings = np.empty_like(primary_embeddings)
+    primary_divisions = np.empty(len(video.node_ids), dtype=np.float32)
+    peer_divisions = np.empty_like(primary_divisions)
+    frame_rows: dict[int, int] = {}
+    primary_model.eval()
+    peer_model.eval()
+    for timepoint in sorted(int(value) for value in np.unique(video.times)):
+        rows = np.flatnonzero(video.times == timepoint)
+        if timepoint < 0 or timepoint >= int(image_array.shape[0]):
+            raise ValueError(f"node frame is outside image array: {timepoint}")
+        frame = torch.as_tensor(np.asarray(image_array[timepoint]), device=device)
+        for start in range(0, len(rows), node_batch_size):
+            selected_rows = rows[start : start + node_batch_size]
+            patches = sample_physical_patches(
+                frame,
+                video.coords_voxel[selected_rows],
+                voxel_size_zyx_um=voxel_size_zyx_um,
+                chunk_size=node_batch_size,
+            )
+            with torch.autocast(
+                device_type=device.type,
+                dtype=torch.float16,
+                enabled=device.type == "cuda",
+            ):
+                primary_encoded, primary_logits = primary_model(patches)
+                peer_encoded, peer_logits = peer_model(patches)
+            primary_embeddings[selected_rows] = primary_encoded.float().cpu().numpy()
+            peer_embeddings[selected_rows] = peer_encoded.float().cpu().numpy()
+            primary_divisions[selected_rows] = primary_logits.float().cpu().numpy()
+            peer_divisions[selected_rows] = peer_logits.float().cpu().numpy()
+        frame_rows[timepoint] = len(rows)
+    outputs = (
+        primary_embeddings,
+        primary_divisions,
+        peer_embeddings,
+        peer_divisions,
+    )
+    if any(not np.isfinite(output).all() for output in outputs):
+        raise RuntimeError("reciprocal appearance model produced non-finite outputs")
+    return (*outputs, {
+        "nodes": len(video.node_ids),
+        "frames": len(frame_rows),
+        "nodes_by_frame": frame_rows,
+        "embedding_width": widths[0],
+        "encoder_count": 2,
+        "physical_patch_extractions_per_node": 1,
+    })
+
+
 def appearance_scores_for_movie(
     video: Any,
     node_embeddings: np.ndarray,
