@@ -1,8 +1,21 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-08-26T16:23:00Z",
-  "discussions_audited_at": "2026-08-26T16:23:00Z",
-  "discussion_refs": ["730160", "734604", "730924", "735352"],
+  "audited_at": "2026-08-28T02:40:05.584509Z",
+  "discussions_audited_at": "2026-08-28T02:40:05.584509Z",
+  "discussion_refs": [
+    "730160",
+    "734604",
+    "730924",
+    "735352",
+    "737896",
+    "737659",
+    "737577",
+    "737543",
+    "737438",
+    "737103",
+    "737101",
+    "736937"
+  ],
   "notebooks": [
     {
       "ref": "xiaoleilian/biohub-ct-mix-divaug",
@@ -121,6 +134,30 @@
       "classification": "stale_or_ghost_risk",
       "disposition": "needs_source_review",
       "evidence": "Notebook title/page score conflicts with source-reported clean score near 0.913.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "kaiwalyaatulraut/biohub-competition-solution",
+      "classification": "public_temporalunet_50ep_lineage",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found the public 50-epoch TemporalUNet3D plus SimpleNodeTransformer checkpoint and standard ILP path; no distinct heavy model or clean independent evidence was present.",
+      "reviewed_sha256": "85008780c00f57a9cd8e1a8d8e2bdc41c72eb5279b43130ffd2f37edc04cc43a",
+      "score_reproduced": false
+    },
+    {
+      "ref": "muhammaddanyalmalik/cell-tracking",
+      "classification": "public_temporalunet_50ep_lineage",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found the same public 50-epoch TemporalUNet3D, SimpleNodeTransformer, and ILP pipeline with configuration wrappers; it is not a new model family.",
+      "reviewed_sha256": "37571585795c96f3ba0f6bcf937a14b2d90cff2316e9811a0018859f0cf54790",
+      "score_reproduced": false
+    },
+    {
+      "ref": "ravi123a321at/dark-agi-biohub-cell-tracking-solution",
+      "classification": "public_temporalunet_50ep_lineage",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found the same public 50-epoch TemporalUNet3D, SimpleNodeTransformer, and ILP inference lineage; the branding does not correspond to an independent architecture.",
+      "reviewed_sha256": "8c8baa3abb179d1dd1bb2830cd392f5b71ce43e8f2860198773abf5fd96624fe",
       "score_reproduced": false
     }
   ]
