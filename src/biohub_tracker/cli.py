@@ -744,7 +744,7 @@ def _main(argv: Sequence[str] | None = None, *, launch_runner=None) -> int:
         active = []
         input_error = None
         try:
-            active = list_active_gpu_kernels(runner, config["slug"])
+            active = list_active_gpu_kernels(runner)
             quota = read_gpu_quota(runner)
         except GuardInputError as exc:
             input_error = exc.reason_code

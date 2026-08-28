@@ -148,14 +148,18 @@ def read_gpu_quota(runner: GuardRunner) -> QuotaSnapshot:
     )
 
 
-def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[ActiveKernel]:
+def list_active_gpu_kernels(runner: GuardRunner) -> list[ActiveKernel]:
+    """Return active kernels across the whole authenticated Kaggle account.
+
+    GPU quota and accelerator concurrency are account-wide, so restricting this
+    check to the current competition can authorize a launch that Kaggle rejects
+    because an unrelated project is already running.
+    """
     payload = runner.run_json(
         [
             "kernels",
             "list",
             "--mine",
-            "--competition",
-            competition_slug,
             "--format",
             "json",
             "--sort-by",
@@ -166,21 +170,33 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
     )
     if not isinstance(payload, list):
         raise GuardInputError("KERNEL_STATUS_UNAVAILABLE", "Kaggle kernels payload is not a list")
-    active: list[ActiveKernel] = []
     seen: set[str] = set()
     refs: list[str] = []
     for row in payload:
-        if not isinstance(row, Mapping) or not str(row.get("ref", "")).strip():
+        if not isinstance(row, Mapping):
             raise GuardInputError("KERNEL_STATUS_UNAVAILABLE", "kernel listing has a missing ref")
-        ref = str(row["ref"]).strip()
+        ref = str(row.get("ref", "")).strip()
+        if not ref:
+            # Kaggle's account-wide listing currently includes one historical,
+            # opaque placeholder that cannot be addressed through `kernels
+            # status`. Ignore only that exact sentinel; fail closed for any
+            # other missing reference.
+            if (
+                str(row.get("title", "")).strip() == "[Private Notebook]"
+                and not str(row.get("author", "")).strip()
+                and str(row.get("lastRunTime", "")).startswith("2010-04-01")
+            ):
+                continue
+            raise GuardInputError("KERNEL_STATUS_UNAVAILABLE", "kernel listing has a missing ref")
         if ref in seen:
             continue
         seen.add(ref)
         refs.append(ref)
 
     # An executing or newly queued version sorts ahead of historical completed
-    # versions by dateRun. Inspecting the newest 20 sequentially avoids Kaggle's
-    # status-endpoint rate limit while covering far more than its concurrency cap.
+    # versions by dateRun. Inspect the newest 20 sequentially and stop at the
+    # first active result: one is enough to reject the launch, and stopping
+    # avoids unnecessary status-endpoint traffic while another job is running.
     for ref in refs:
         try:
             status = str(runner.kernel_status(ref)).removeprefix("KernelWorkerStatus.").upper()
@@ -189,8 +205,8 @@ def list_active_gpu_kernels(runner: GuardRunner, competition_slug: str) -> list[
                 "KERNEL_STATUS_UNAVAILABLE", f"could not resolve status for {ref}"
             ) from exc
         if status in ACTIVE_STATUSES:
-            active.append(ActiveKernel(ref=ref, status=status))
-    return sorted(active, key=lambda item: item.ref)
+            return [ActiveKernel(ref=ref, status=status)]
+    return []
 
 
 def snapshot_hash(quota: QuotaSnapshot, active_kernels: Sequence[ActiveKernel]) -> str:

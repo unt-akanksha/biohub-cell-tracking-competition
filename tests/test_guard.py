@@ -13,6 +13,7 @@ from biohub_tracker.guard import (
     QuotaSnapshot,
     evaluate_guard,
     hours_text,
+    list_active_gpu_kernels,
     parse_hours,
     read_gpu_quota,
 )
@@ -113,6 +114,44 @@ def test_quota_reader_rejects_missing_and_malformed_gpu_rows(tmp_path):
     with pytest.raises(GuardInputError) as malformed:
         read_gpu_quota(FixtureRunner(fixture))
     assert malformed.value.reason_code == "GPU_QUOTA_MALFORMED"
+
+
+def test_active_kernel_listing_is_account_wide_and_skips_kaggle_private_sentinel():
+    class RecordingRunner:
+        def __init__(self):
+            self.args = None
+            self.status_refs = []
+
+        def run_json(self, args):
+            self.args = list(args)
+            return [
+                {
+                    "ref": "",
+                    "title": "[Private Notebook]",
+                    "author": "",
+                    "lastRunTime": "2010-04-01T00:00:00",
+                },
+                {"ref": "owner/other-competition-job"},
+                {"ref": "owner/completed-job"},
+            ]
+
+        def kernel_status(self, ref):
+            self.status_refs.append(ref)
+            return {
+                "owner/other-competition-job": "KernelWorkerStatus.RUNNING",
+                "owner/completed-job": "COMPLETE",
+            }[ref]
+
+    runner = RecordingRunner()
+    active = list_active_gpu_kernels(runner)
+
+    assert "--competition" not in runner.args
+    assert runner.args == [
+        "kernels", "list", "--mine", "--format", "json",
+        "--sort-by", "dateRun", "--page-size", "20",
+    ]
+    assert active == [ActiveKernel("owner/other-competition-job", "RUNNING")]
+    assert runner.status_refs == ["owner/other-competition-job"]
 
 
 def test_guard_cli_is_read_only_and_appends_decision(tmp_path, capsys):

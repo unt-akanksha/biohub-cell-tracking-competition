@@ -299,7 +299,7 @@ def authorize_launch(
         declared_max_runtime_hours=runtime,
         now=current,
     )
-    active = list_active_gpu_kernels(runner, str(config["slug"]))
+    active = list_active_gpu_kernels(runner)
     quota = read_gpu_quota(runner)
     decision = evaluate_guard(
         run_id=run_id,
@@ -393,7 +393,7 @@ def validate_authorization(
     )
     if not secrets.compare_digest(report.report_sha256, authorization.preflight_report_sha256):
         raise LaunchError("PREFLIGHT_CHANGED", "preflight report changed after authorization")
-    active = list_active_gpu_kernels(runner, str(config["slug"]))
+    active = list_active_gpu_kernels(runner)
     quota = read_gpu_quota(runner)
     decision = evaluate_guard(
         run_id=authorization.run_id,
