@@ -59,6 +59,10 @@ def test_transfer_kernel_is_two_gpu_gated_training_only() -> None:
     assert '"--maximum-synthetic-metric-regression", "0.01"' in code
     assert 'result.get("both_folds_improved") is True' in code
     assert 'row.get("finetuning_gate_passed") is True' in code
+    assert "recompute_acceptance_gate" in code
+    assert "Acceptance aggregate and child terminal diverge" in code
+    assert 'launcher.get("acceptance_terminal_sha256")' in code
+    assert "for fold in ACCEPTANCE_FOLDS" in code
     assert "Contextual 176-patch/6,144-edge" in code
     assert (
         "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"

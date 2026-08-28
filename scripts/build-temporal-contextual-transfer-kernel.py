@@ -93,6 +93,7 @@ print("Contextual transfer watchdog armed for 39,600 seconds.")
 
 
 SETUP = r'''import importlib
+import math
 import shutil
 import subprocess
 import sys
@@ -102,6 +103,10 @@ import torch
 
 EXPECTED_RUNTIME_MANIFEST_SHA256 = "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
 EXPECTED_ACCEPTANCE_MANIFEST_SHA256 = "cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0"
+EXPECTED_ACCEPTANCE_INVENTORY_SHA256 = "e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667"
+EXPECTED_ACCEPTANCE_RECORD_INVENTORY_SHA256 = "05ad8b3195aa2786ffb8a2ffcb247d118d1e5cf96026264e0534c468979e6e0e"
+ACCEPTANCE_FOLDS = ("target_44b6", "target_6bba")
+ACCEPTANCE_SEEDS = {"target_44b6": 51004, "target_6bba": 61007}
 
 
 def first_existing(candidates):
@@ -135,6 +140,53 @@ def unique_json_parent(filename, predicate):
     if len(matches) != 1:
         raise RuntimeError({"filename": filename, "matches": [str(path) for path in matches]})
     return matches[0]
+
+
+def sha256_file(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def checked_acceptance_metrics(payload, fold, stage):
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"{fold} {stage} acceptance metrics are missing")
+    result = {}
+    for name in ("composite", "top1", "mrr", "division_top2"):
+        value = payload.get(name)
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise RuntimeError(f"{fold} {stage} acceptance metric is malformed: {name}")
+        value = float(value)
+        if not math.isfinite(value) or not 0.0 <= value <= 1.0:
+            raise RuntimeError(f"{fold} {stage} acceptance metric is outside [0, 1]: {name}")
+        result[name] = value
+    for name in ("rows", "division_rows", "transitions"):
+        value = payload.get(name)
+        if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+            raise RuntimeError(f"{fold} {stage} acceptance inventory is malformed: {name}")
+        result[name] = value
+    return result
+
+
+def recompute_acceptance_gate(initial, final):
+    gains = {
+        name: float(final[name]) - float(initial[name])
+        for name in ("composite", "top1", "mrr", "division_top2")
+    }
+    inventory_unchanged = all(
+        int(final[name]) == int(initial[name])
+        for name in ("rows", "division_rows", "transitions")
+    )
+    return {
+        "passed": bool(
+            inventory_unchanged
+            and gains["composite"] >= 0.01
+            and gains["top1"] > 0.0
+            and gains["mrr"] > 0.0
+            and gains["division_top2"] >= 0.0
+        ),
+        "minimum_composite_gain": 0.01,
+        "inventory_unchanged": inventory_unchanged,
+        "gains": gains,
+    }
 
 
 if torch.cuda.device_count() != 2:
@@ -199,6 +251,10 @@ acceptance_root = unique_json_parent(
         and payload.get("both_folds_improved") is True
         and payload.get("acceptance_manifest_sha256")
         == EXPECTED_ACCEPTANCE_MANIFEST_SHA256
+        and payload.get("acceptance_inventory_sha256")
+        == EXPECTED_ACCEPTANCE_INVENTORY_SHA256
+        and payload.get("acceptance_record_inventory_sha256")
+        == EXPECTED_ACCEPTANCE_RECORD_INVENTORY_SHA256
         and payload.get("selection_or_checkpoint_redirect_permitted") is False
         and payload.get("competition_data_read") is False
         and payload.get("public_predictions_copied") is False
@@ -278,10 +334,76 @@ acceptance = json.loads(
 )
 if acceptance.get("pretraining_terminal_sha256") != pretraining_terminal_sha256:
     raise RuntimeError("Acceptance and transfer pretraining roots diverge")
-for fold in ("target_44b6", "target_6bba"):
+acceptance_folds = acceptance.get("folds")
+if not isinstance(acceptance_folds, dict) or set(acceptance_folds) != set(ACCEPTANCE_FOLDS):
+    raise RuntimeError("Acceptance aggregate fold inventory changed")
+launcher_candidates = sorted(acceptance_root.parent.rglob("launcher_terminal.json"))
+if len(launcher_candidates) != 1:
+    raise RuntimeError(f"Expected one acceptance launcher terminal: {launcher_candidates}")
+launcher = json.loads(launcher_candidates[0].read_text(encoding="utf-8"))
+acceptance_terminal_sha256 = sha256_file(acceptance_root / "acceptance_terminal.json")
+if not (
+    launcher.get("schema_version") == 1
+    and launcher.get("run_id") == "zebrahub-contextual-acceptance-evaluation-v1"
+    and launcher.get("status") == "completed"
+    and launcher.get("declared_budget_seconds") == 3600
+    and launcher.get("evaluator_hard_stop_seconds") == 3300
+    and launcher.get("acceptance_terminal_exists") is True
+    and launcher.get("acceptance_terminal_sha256") == acceptance_terminal_sha256
+    and launcher.get("gpu_count_required") == 2
+    and launcher.get("competition_data_read") is False
+    and launcher.get("public_predictions_copied") is False
+    and launcher.get("public_leaderboard_used_for_selection") is False
+    and launcher.get("submission_created") is False
+):
+    raise RuntimeError("Acceptance launcher terminal is invalid")
+for fold in ACCEPTANCE_FOLDS:
     model_path = pretraining_root / fold / "pretrained_model.pt"
-    model_sha256 = hashlib.sha256(model_path.read_bytes()).hexdigest()
-    if acceptance["folds"][fold].get("pretrained_model_sha256") != model_sha256:
+    model_sha256 = sha256_file(model_path)
+    child_path = acceptance_root / fold / "acceptance_terminal.json"
+    worker_path = pretraining_root / fold / "worker_terminal.json"
+    if not child_path.is_file() or not worker_path.is_file():
+        raise FileNotFoundError(f"Acceptance or pretraining fold evidence is missing: {fold}")
+    child = json.loads(child_path.read_text(encoding="utf-8"))
+    aggregate_row = dict(acceptance_folds[fold])
+    if aggregate_row.pop("terminal_sha256", None) != sha256_file(child_path):
+        raise RuntimeError(f"Acceptance aggregate does not bind child terminal: {fold}")
+    if aggregate_row != child:
+        raise RuntimeError(f"Acceptance aggregate and child terminal diverge: {fold}")
+    initial = checked_acceptance_metrics(child.get("initial"), fold, "initial")
+    final = checked_acceptance_metrics(child.get("final"), fold, "final")
+    gate = recompute_acceptance_gate(initial, final)
+    if not (
+        child.get("schema_version") == 1
+        and child.get("status") == "completed"
+        and child.get("run_id") == "zebrahub-contextual-acceptance-evaluation-v1"
+        and child.get("fold") == fold
+        and child.get("seed") == ACCEPTANCE_SEEDS[fold]
+        and child.get("appearance_family") == "temporal_contextual_pair_fusion_v3"
+        and child.get("parameter_count") == 20_747_761
+        and child.get("acceptance_source") == "ZSNS001"
+        and child.get("acceptance_role") == "external_acceptance"
+        and child.get("acceptance_shards") == 16
+        and child.get("acceptance_manifest_sha256")
+        == EXPECTED_ACCEPTANCE_MANIFEST_SHA256
+        and child.get("acceptance_inventory_sha256")
+        == EXPECTED_ACCEPTANCE_INVENTORY_SHA256
+        and child.get("acceptance_record_inventory_sha256")
+        == EXPECTED_ACCEPTANCE_RECORD_INVENTORY_SHA256
+        and child.get("pretraining_terminal_sha256") == pretraining_terminal_sha256
+        and child.get("pretrained_model_sha256") == model_sha256
+        and child.get("pretraining_worker_terminal_sha256") == sha256_file(worker_path)
+        and child.get("gate") == gate
+        and child.get("gate_passed") is True
+        and gate["passed"] is True
+        and child.get("selection_or_checkpoint_redirect_permitted") is False
+        and child.get("competition_data_read") is False
+        and child.get("public_predictions_copied") is False
+        and child.get("public_leaderboard_used_for_selection") is False
+        and child.get("submission_created") is False
+    ):
+        raise RuntimeError(f"Acceptance fold evidence is invalid: {fold}")
+    if acceptance_folds[fold].get("pretrained_model_sha256") != model_sha256:
         raise RuntimeError(f"Acceptance and transfer checkpoint diverge: {fold}")
 
 sys.path.insert(0, str(runtime))
@@ -289,6 +411,20 @@ from contextual_pair_fusion import (
     ContextualPairFusionAssociationModel,
     contextual_bidirectional_pair_nll,
 )
+
+for fold in ACCEPTANCE_FOLDS:
+    strict_probe = ContextualPairFusionAssociationModel()
+    strict_probe.load_state_dict(
+        torch.load(
+            pretraining_root / fold / "pretrained_model.pt",
+            map_location="cpu",
+            weights_only=True,
+        ),
+        strict=True,
+    )
+    if sum(parameter.numel() for parameter in strict_probe.parameters()) != 20_747_761:
+        raise RuntimeError(f"Contextual checkpoint architecture changed: {fold}")
+    del strict_probe
 
 probe = ContextualPairFusionAssociationModel().to("cuda:0")
 probe.load_state_dict(

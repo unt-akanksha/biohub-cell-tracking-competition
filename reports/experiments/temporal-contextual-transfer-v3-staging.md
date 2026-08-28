@@ -69,7 +69,7 @@ both checkpoints, and rejects any competition artifact in the training output.
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-transfer-v3`
 - Notebook SHA-256:
-  `7ca20f9097d14dba745a3eb0aededc561e691e904cb85274d91219a282c4ee61`
+  `17f0f25562c4a0878d9070ea0b238867bf190b1b9b754899bf0d395dee86f353`
 - Kernel metadata SHA-256:
   `bbfbc009c9ffc9a18330f8556d88c7cea04542824550cf1a9c96922871f5f322`
 
@@ -84,4 +84,18 @@ to stage this transfer lane.
 The acceptance kernel input now resolves through the shortened remote slug
 `indarkarhana/biohub-zebrahub-contextual-acceptance-v1`. This is a metadata-only
 repair for Kaggle's identifier boundary; the transfer notebook remains byte
-identical.
+identical at that repair point.
+
+Before launch, the transfer-side acceptance verifier was hardened without
+changing training. It now binds the completed launcher to the aggregate
+terminal by SHA-256, binds the aggregate rows to both exact fold terminals,
+checks all frozen ZSNS001 inventory hashes, independently recomputes each
+composite/top-1/MRR/division-top-2 gate, verifies the pretraining terminal and
+worker hashes, and strict-loads both 20,747,761-parameter checkpoints. A copied,
+mutated, incomplete, or internally inconsistent acceptance output therefore
+cannot enter competition transfer. The builder SHA-256 is
+`c9623a50442ce5f26e3e4a9cc5be60ba597940329d7a327eae5e00e578ee8fd3`;
+its test SHA-256 is
+`3df845747b554a7041f96c90cb7f374c605731a07e41d6bae76e10fbcfb9e37c`.
+The metadata, runtime version, model, data splits, seeds, optimization recipe,
+gates, GPU contract, and absence of a submission command are unchanged.

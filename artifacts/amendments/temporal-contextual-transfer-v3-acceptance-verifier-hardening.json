@@ -1,0 +1,14 @@
+{
+  "acceptance_input_verifier_hardening": {
+    "change": "Bind the launcher, aggregate, and both fold terminals; independently recompute both broad ZSNS001 gates; strict-load both pretrained checkpoints before transfer.",
+    "kernel_builder_sha256": "c9623a50442ce5f26e3e4a9cc5be60ba597940329d7a327eae5e00e578ee8fd3",
+    "kernel_builder_test_sha256": "3df845747b554a7041f96c90cb7f374c605731a07e41d6bae76e10fbcfb9e37c",
+    "kernel_metadata_sha256": "bbfbc009c9ffc9a18330f8556d88c7cea04542824550cf1a9c96922871f5f322",
+    "new_notebook_sha256": "17f0f25562c4a0878d9070ea0b238867bf190b1b9b754899bf0d395dee86f353",
+    "old_notebook_sha256": "7ca20f9097d14dba745a3eb0aededc561e691e904cb85274d91219a282c4ee61",
+    "remote_kernel": "indarkarhana/biohub-temporal-contextual-transfer-v3",
+    "runtime_dataset_version": 4,
+    "scientific_recipe_changed": false,
+    "submission_command_added": false
+  }
+}
