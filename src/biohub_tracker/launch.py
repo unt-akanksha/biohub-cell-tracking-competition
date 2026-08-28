@@ -164,6 +164,9 @@ class LaunchAuthorization:
     declared_max_runtime_hours: str
     reserve_hours: str
     quota_snapshot_hash: str
+    quota_remaining_hours: str
+    quota_total_hours: str
+    quota_refresh_at: str
     preflight_report: str
     preflight_report_sha256: str
     issued_at: str
@@ -183,6 +186,9 @@ class LaunchAuthorization:
         declared_max_runtime_hours: str,
         reserve_hours: str,
         quota_snapshot_hash: str,
+        quota_remaining_hours: str,
+        quota_total_hours: str,
+        quota_refresh_at: str,
         preflight_report: str,
         preflight_report_sha256: str,
         now: datetime,
@@ -199,6 +205,9 @@ class LaunchAuthorization:
             declared_max_runtime_hours=declared_max_runtime_hours,
             reserve_hours=reserve_hours,
             quota_snapshot_hash=quota_snapshot_hash,
+            quota_remaining_hours=quota_remaining_hours,
+            quota_total_hours=quota_total_hours,
+            quota_refresh_at=quota_refresh_at,
             preflight_report=preflight_report,
             preflight_report_sha256=preflight_report_sha256,
             issued_at=_utc_text(now),
@@ -318,6 +327,9 @@ def authorize_launch(
         declared_max_runtime_hours=hours_text(parse_hours(runtime)),
         reserve_hours=hours_text(parse_hours(config["gpu_reserve_hours"])),
         quota_snapshot_hash=decision.quota_snapshot_hash or "",
+        quota_remaining_hours=hours_text(quota.remaining),
+        quota_total_hours=hours_text(quota.total),
+        quota_refresh_at=quota.refresh_at,
         preflight_report=report_path.relative_to(root).as_posix(),
         preflight_report_sha256=report.report_sha256,
         now=current,
@@ -395,8 +407,32 @@ def validate_authorization(
     )
     if not decision.authorized:
         raise LaunchError(decision.reason_codes[0], ", ".join(decision.reason_codes))
-    if not secrets.compare_digest(snapshot_hash(quota, active), authorization.quota_snapshot_hash):
-        raise LaunchError("KAGGLE_STATE_CHANGED", "quota or active-kernel state changed")
+    if not secrets.compare_digest(
+        snapshot_hash(quota, active), authorization.quota_snapshot_hash
+    ):
+        # Kaggle can account a just-completed kernel in small delayed quota
+        # decrements. A fresh guard above already proves that the launch still
+        # preserves the reserve and that no GPU kernel is active. Permit only
+        # conservative drift within the same quota window: remaining time may
+        # decrease, but it may not increase, reset, or change total capacity.
+        authorized_remaining = parse_hours(
+            authorization.quota_remaining_hours,
+            field="authorized GPU remaining",
+        )
+        authorized_total = parse_hours(
+            authorization.quota_total_hours,
+            field="authorized GPU total",
+        )
+        conservative_drift = bool(
+            not active
+            and quota.refresh_at == authorization.quota_refresh_at
+            and quota.total == authorized_total
+            and quota.remaining <= authorized_remaining
+        )
+        if not conservative_drift:
+            raise LaunchError(
+                "KAGGLE_STATE_CHANGED", "quota or active-kernel state changed"
+            )
     return decision, quota.remaining
 
 

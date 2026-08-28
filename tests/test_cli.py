@@ -24,7 +24,13 @@ from biohub_tracker.preflight import (
 NOW = datetime(2026, 8, 24, 0, 0, tzinfo=timezone.utc)
 
 
-def setup_launch_workspace(tmp_path: Path, runtime: str = "2.00"):
+def setup_launch_workspace(
+    tmp_path: Path,
+    runtime: str = "2.00",
+    *,
+    quota_used: str = "0.00",
+    quota_remaining: str = "30.00",
+):
     (tmp_path / "config").mkdir()
     config = {
         "slug": "biohub-cell-tracking-during-development",
@@ -35,7 +41,7 @@ def setup_launch_workspace(tmp_path: Path, runtime: str = "2.00"):
     fixture = tmp_path / "fixtures"
     fixture.mkdir()
     (fixture / "quota.json").write_text(json.dumps([{
-        "resource": "GPU", "used": "0.00h", "remaining": "30.00h", "total": "30.00h", "refreshAt": "2026-08-29T00:00:00"
+        "resource": "GPU", "used": f"{quota_used}h", "remaining": f"{quota_remaining}h", "total": "30.00h", "refreshAt": "2026-08-29T00:00:00"
     }]), encoding="utf-8")
     (fixture / "kernels.json").write_text("[]", encoding="utf-8")
     (fixture / "kernel_status.json").write_text("{}", encoding="utf-8")
@@ -61,8 +67,19 @@ def setup_launch_workspace(tmp_path: Path, runtime: str = "2.00"):
     return config, fixture, kernel, evidence, report_path, ledger
 
 
-def authorize_fixture(tmp_path, runtime="2.00"):
-    config, fixture, kernel, evidence, report_path, ledger = setup_launch_workspace(tmp_path, runtime)
+def authorize_fixture(
+    tmp_path,
+    runtime="2.00",
+    *,
+    quota_used="0.00",
+    quota_remaining="30.00",
+):
+    config, fixture, kernel, evidence, report_path, ledger = setup_launch_workspace(
+        tmp_path,
+        runtime,
+        quota_used=quota_used,
+        quota_remaining=quota_remaining,
+    )
     authorization, decision = authorize_launch(
         workspace_root=tmp_path,
         ledger=ledger,
@@ -146,10 +163,10 @@ def test_launch_authorization_identity_rejections(tmp_path, case):
         validate_authorization(**kwargs)
 
 
-def test_launch_changed_quota_active_kernel_and_preflight_reject(tmp_path):
+def test_launch_changed_quota_window_active_kernel_and_preflight_reject(tmp_path):
     authorization, config, fixture, _, evidence, ledger = authorize_fixture(tmp_path)
     (fixture / "quota.json").write_text(json.dumps([{
-        "resource": "GPU", "used": "1.00h", "remaining": "29.00h", "total": "30.00h", "refreshAt": "2026-08-29T00:00:00"
+        "resource": "GPU", "used": "0.00h", "remaining": "30.00h", "total": "30.00h", "refreshAt": "2026-09-05T00:00:00"
     }]), encoding="utf-8")
     with pytest.raises(LaunchError) as changed:
         validate_authorization(
@@ -175,6 +192,43 @@ def test_launch_changed_quota_active_kernel_and_preflight_reject(tmp_path):
             authorization, workspace_root=tmp_path, ledger=ledger,
             runner=FixtureRunner(fixture), config=config, nonce=authorization.nonce, now=NOW,
         )
+
+
+def test_launch_allows_conservative_delayed_quota_accounting(tmp_path):
+    authorization, config, fixture, _, _, ledger = authorize_fixture(
+        tmp_path,
+        quota_used="1.00",
+        quota_remaining="29.00",
+    )
+    (fixture / "quota.json").write_text(json.dumps([{
+        "resource": "GPU", "used": "1.50h", "remaining": "28.50h", "total": "30.00h", "refreshAt": "2026-08-29T00:00:00"
+    }]), encoding="utf-8")
+    decision, remaining = validate_authorization(
+        authorization,
+        workspace_root=tmp_path,
+        ledger=ledger,
+        runner=FixtureRunner(fixture),
+        config=config,
+        nonce=authorization.nonce,
+        now=NOW,
+    )
+    assert decision.authorized is True
+    assert str(remaining) == "28.50"
+
+    (fixture / "quota.json").write_text(json.dumps([{
+        "resource": "GPU", "used": "0.50h", "remaining": "29.50h", "total": "30.00h", "refreshAt": "2026-08-29T00:00:00"
+    }]), encoding="utf-8")
+    with pytest.raises(LaunchError) as increased:
+        validate_authorization(
+            authorization,
+            workspace_root=tmp_path,
+            ledger=ledger,
+            runner=FixtureRunner(fixture),
+            config=config,
+            nonce=authorization.nonce,
+            now=NOW,
+        )
+    assert increased.value.reason_code == "KAGGLE_STATE_CHANGED"
 
 
 def test_launch_cli_preview_does_not_call_runner(tmp_path, capsys):
