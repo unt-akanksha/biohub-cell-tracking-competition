@@ -74,3 +74,23 @@ adds 16 passing tests. No GPU was used during this work.
 
 Controller SHA-256:
 `bee24829f75e5fe0fac0a2e61963b266929d9149620ba233ed72c4c5e55b7465`.
+
+## Reciprocal-transfer continuation
+
+The next controller is also staged, but it remains downstream of the post-v3
+pretraining gate. After the v4 pretraining kernel completes, it:
+
+- downloads the exact launched kernel version;
+- independently recomputes both selection and audit improvement gates;
+- verifies the 12,000-step worker records, frozen shard inventories, accepted-v3
+  initialization hashes, and aggregate/worker equality;
+- strict-loads both 46,386,607-parameter checkpoints;
+- requires at least 11.0 remaining GPU hours with zero reserve; and
+- launches the exactly-two-T4 reciprocal Biohub transfer notebook once.
+
+Strict output verifier SHA-256:
+`150176d062679c0094a169be04b16638a89a45631dd9d70cf8209fd82a1dbf30`.
+Transfer controller SHA-256:
+`20ae542c53f5d4c8fb12b988d65a6c808a29fef9c5cef26e99aa32abd81de799`.
+The verifier/controller-focused suites add seven passing tests and contain no
+competition submission command.
