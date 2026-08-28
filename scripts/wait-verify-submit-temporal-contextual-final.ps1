@@ -18,9 +18,9 @@ $eventsPath = Join-Path $projectRoot 'experiments/events.jsonl'
 $downloadDir = Join-Path $projectRoot '.biohub/cache/kernel-outputs/temporal-contextual-submission-v3-autochain'
 $submitOutput = Join-Path $automationDir 'temporal-contextual-submission.stdout.log'
 $submitError = Join-Path $automationDir 'temporal-contextual-submission.stderr.log'
-$expectedSubmitScriptSha256 = 'f6122f465c9c39abd6f5e4dbbc476b00fa3c7dd2fe1d256826d22e41ea1be043'
-$expectedFinalMetadataSha256 = '429ddae35e0633069a5ac44151cd6a1e4782ccd130b1f315d448eb43be8276fe'
-$expectedFinalNotebookSha256 = '5dad76f56003be6f84e381dbf1a735cb2e091dcedf8f238edb184fd0091c03af'
+$expectedSubmitScriptSha256 = '7b43627a89b2d557c69665b3324da02ed8361a9f9a8b32f8df195725269ba6d6'
+$expectedFinalMetadataSha256 = 'ef010e45a6a10d1f00efee2d696a8c5a218c52b29e039673b32aa128ff248f43'
+$expectedFinalNotebookSha256 = 'f5a5e40827c0cd1b846dad0702faa7ae3697288f59c7ce24e8da7797d179db01'
 
 New-Item -ItemType Directory -Force -Path $automationDir | Out-Null
 

@@ -23,7 +23,7 @@ EXPECTED_BASE_SHA256 = (
     "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
 )
 EXPECTED_DATASET_SOURCES = [
-    "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+    "indarkarhana/biohub-temporal-contextual-final-runtime-v1",
     "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
 ]
@@ -186,6 +186,12 @@ def validate_downloaded_output(root: Path) -> dict[str, Any]:
         and report.get("candidate_family") == CANDIDATE_FAMILY
         and report.get("appearance_family") == APPEARANCE_FAMILY
         and report.get("gpu_count") == 2
+        and report.get("transition_partitioned_inference") is True
+        and report.get("transition_partition_kind")
+        in {"dominant_movie_transition_split_v1", "whole_movie_lpt_v1"}
+        and re.fullmatch(
+            r"[0-9a-f]{64}", str(report.get("transition_work_plan_sha256", ""))
+        )
         and isinstance(coverage, list)
         and len(coverage) > 0
         and len(coverage) == len(set(coverage))

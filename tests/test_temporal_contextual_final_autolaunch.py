@@ -15,6 +15,8 @@ def test_final_autolaunch_requires_exact_cpu_gate_and_uses_all_available_quota()
     assert "quota_reserve_hours = 0.0" in source
     assert "indarkarhana/biohub-temporal-contextual-processed-acceptance-v3" in source
     assert "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3" in source
+    assert "indarkarhana/biohub-temporal-contextual-final-runtime-v1" in source
+    assert "biohub-temporal-contextual-final-runtime-v1-version2" in source
     assert "indarkarhana/biohub-temporal-contextual-submission-candidate-v3" in source
     assert "run-temporal-contextual-exact-acceptance.py" in source
     assert "stage-temporal-contextual-kaggle-artifacts.py" in source
@@ -25,8 +27,8 @@ def test_final_autolaunch_requires_exact_cpu_gate_and_uses_all_available_quota()
     assert "datasets status" in source
     assert "NvidiaTeslaT4" in source
     assert "expected_gpu_count = 2" in source
-    assert "5dad76f56003be6f84e381dbf1a735cb2e091dcedf8f238edb184fd0091c03af" in source
-    assert "429ddae35e0633069a5ac44151cd6a1e4782ccd130b1f315d448eb43be8276fe" in source
+    assert "f5a5e40827c0cd1b846dad0702faa7ae3697288f59c7ce24e8da7797d179db01" in source
+    assert "ef010e45a6a10d1f00efee2d696a8c5a218c52b29e039673b32aa128ff248f43" in source
     assert "kaggle kernels output" in source
     assert "kaggle kernels push" in source
     assert "competitions submit" not in source.casefold()

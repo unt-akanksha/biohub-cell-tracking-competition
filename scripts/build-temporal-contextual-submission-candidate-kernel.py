@@ -60,7 +60,7 @@ def write_terminal(status, error=None):
         "inference_hard_stop_seconds": INFERENCE_HARD_STOP_SECONDS,
         "finalization_reserve_seconds": FINALIZATION_RESERVE_SECONDS,
         "gpu_count_required": 2,
-        "whole_movie_sharding_required": True,
+        "transition_partitioned_inference_required": True,
         "candidate_exists": candidate.is_file(),
         "candidate_report_exists": report.is_file(),
         "root_candidate_exists": root_candidate.is_file(),
@@ -106,7 +106,7 @@ import zipfile
 
 import torch
 
-EXPECTED_RUNTIME_MANIFEST_SHA256 = "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = "e69a20f10f56108818a6bf0715fe071e868fd176d1720cc2ffc04f2a645b41ff"
 EXPECTED_BASE_SHA256 = "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a"
 EXPECTED_RAW_GRAPH_TREE_SHA256 = "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e"
 
@@ -172,8 +172,8 @@ print({"gpu_count": 2, "gpu_names": gpu_names})
 
 input_root = Path("/kaggle/input")
 runtime_input = first_existing([
-    Path("/kaggle/input/datasets/indarkarhana/biohub-temporal-contextual-transfer-runtime-v1"),
-    Path("/kaggle/input/biohub-temporal-contextual-transfer-runtime-v1"),
+    Path("/kaggle/input/datasets/indarkarhana/biohub-temporal-contextual-final-runtime-v1"),
+    Path("/kaggle/input/biohub-temporal-contextual-final-runtime-v1"),
 ])
 competition = first_existing([
     Path("/kaggle/input/competitions/biohub-cell-tracking-during-development"),
@@ -268,7 +268,7 @@ if None in (runtime_input, competition, support):
         "support": support,
     })
 
-runtime = Path("/kaggle/working/temporal_contextual_transfer_runtime_v1")
+runtime = Path("/kaggle/working/temporal_contextual_final_runtime_v1")
 materialize_runtime_input(runtime_input, runtime)
 runtime_manifest_sha256 = hashlib.sha256(
     (runtime / "SOURCE_MANIFEST.json").read_bytes()
@@ -352,7 +352,7 @@ INFER = r'''command = [
     "--node-batch-size", "64",
     "--hard-stop-seconds", "36000",
 ]
-print("Launching two-GPU whole-movie contextual candidate inference:", " ".join(command))
+print("Launching transition-balanced two-GPU contextual candidate inference:", " ".join(command))
 try:
     subprocess.run(command, check=True)
 except Exception as error:
@@ -369,6 +369,11 @@ if not (
     and report.get("candidate_family") == "trackastra_contextual_pair_fusion_blend"
     and report.get("appearance_family") == "temporal_contextual_pair_fusion_v3"
     and report.get("gpu_count") == 2
+    and report.get("transition_partitioned_inference") is True
+    and report.get("transition_partition_kind")
+        in {"dominant_movie_transition_split_v1", "whole_movie_lpt_v1"}
+    and isinstance(report.get("transition_work_plan_sha256"), str)
+    and len(report.get("transition_work_plan_sha256")) == 64
     and report.get("inference_hard_stop_seconds") == INFERENCE_HARD_STOP_SECONDS
     and report.get("notebook_runtime_reserve_seconds") >= FINALIZATION_RESERVE_SECONDS
     and report.get("base_submission_sha256") == EXPECTED_BASE_SHA256
@@ -419,8 +424,9 @@ def main() -> None:
             code_cell(WATCHDOG),
             markdown_cell(
                 "# Accepted contextual v3 submission candidate\n\n"
-                "Exactly two T4 GPUs balance complete movies using contextual pair and "
-                "patch workload. Hash-bound exact processed acceptance is mandatory. "
+                "Exactly two T4 GPUs balance independent consecutive-frame transitions "
+                "using contextual pair and patch workload. Hash-bound exact processed "
+                "acceptance is mandatory. "
                 "The accepted contextual checkpoints are consumed directly from the "
                 "two-GPU Kaggle transfer kernel output. "
                 "The notebook reserves two hours for finalization, refuses an edge-identical "
@@ -447,7 +453,7 @@ def main() -> None:
         "enable_internet": False,
         "keywords": ["gpu", "cell-tracking", "submission-candidate", "non-replica"],
         "dataset_sources": [
-            "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+            "indarkarhana/biohub-temporal-contextual-final-runtime-v1",
             "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],

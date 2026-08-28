@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build an accepted appearance candidate with two whole-movie GPU shards.
+"""Build an accepted appearance candidate with two transition-safe GPU shards.
 
 The program creates a local ``submission.csv`` candidate but has no Kaggle
 submission command. It requires hash-bound exact acceptance evidence and fails
@@ -9,6 +9,7 @@ unless exactly two CUDA devices are visible.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -17,6 +18,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
 
 try:
@@ -44,12 +46,9 @@ try:
         KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         WORKER_TERMINATION_GRACE_SECONDS,
         build_movie_shards,
-        shard_plan_sha256,
         terminate_and_reap_processes,
         validate_inference_hard_stop,
-        validate_shard_outputs,
         visible_cuda_tokens,
-        worker_environment,
     )
 except ModuleNotFoundError:
     from research.submission_sharding import (
@@ -57,12 +56,9 @@ except ModuleNotFoundError:
         KAGGLE_GPU_NOTEBOOK_MAX_SECONDS,
         WORKER_TERMINATION_GRACE_SECONDS,
         build_movie_shards,
-        shard_plan_sha256,
         terminate_and_reap_processes,
         validate_inference_hard_stop,
-        validate_shard_outputs,
         visible_cuda_tokens,
-        worker_environment,
     )
     from research.temporal_contrastive.appearance_blend import (
         blend_movie_pair_scores,
@@ -226,18 +222,277 @@ def appearance_movie_inference_weight(
     )
 
 
+def movie_transition_starts(video: Any) -> tuple[int, ...]:
+    """Return every consecutive transition represented by one movie."""
+
+    return tuple(
+        int(timepoint)
+        for timepoint in sorted(video.ids_by_time)
+        if timepoint + 1 in video.ids_by_time
+        and len(video.ids_by_time[timepoint]) > 0
+        and len(video.ids_by_time[timepoint + 1]) > 0
+    )
+
+
+def transition_block_weight(
+    video: Any,
+    transition_starts: tuple[int, ...],
+    *,
+    encoder_count: int,
+    pair_fusion: bool,
+) -> float:
+    """Estimate one contiguous transition block without double-counting frames."""
+
+    starts = tuple(map(int, transition_starts))
+    available = set(movie_transition_starts(video))
+    if not starts or len(set(starts)) != len(starts) or not set(starts) <= available:
+        raise ValueError("transition block is empty, duplicated, or outside the movie")
+    frames = set(starts) | {timepoint + 1 for timepoint in starts}
+    nodes = sum(len(video.ids_by_time[timepoint]) for timepoint in frames)
+    pair_products = sum(
+        len(video.ids_by_time[timepoint])
+        * len(video.ids_by_time[timepoint + 1])
+        for timepoint in starts
+    )
+    pair_cost = PAIR_FUSION_PAIR_COST if pair_fusion else 1.0
+    return float(
+        pair_cost * max(pair_products, 1)
+        + encoder_count * APPEARANCE_NODE_COST * nodes
+    )
+
+
+def transition_subvideo(video: Any, transition_starts: tuple[int, ...]) -> Any:
+    """Slice a movie to complete frames for disjoint consecutive transitions."""
+
+    starts = tuple(sorted(map(int, transition_starts)))
+    available = set(movie_transition_starts(video))
+    if not starts or len(set(starts)) != len(starts) or not set(starts) <= available:
+        raise ValueError("transition slice is empty, duplicated, or outside the movie")
+    frames = set(starts) | {timepoint + 1 for timepoint in starts}
+    node_mask = np.asarray([int(value) in frames for value in video.times], dtype=bool)
+    edge_mask = np.asarray(
+        [
+            video.time_by_id[int(source)] in starts
+            and video.time_by_id[int(target)]
+            == video.time_by_id[int(source)] + 1
+            for source, target in video.edges.tolist()
+        ],
+        dtype=bool,
+    )
+    sliced = type(video)(
+        stem=video.stem,
+        node_ids=video.node_ids[node_mask],
+        times=video.times[node_mask],
+        coords_voxel=video.coords_voxel[node_mask],
+        edges=video.edges[edge_mask],
+        edge_probabilities=video.edge_probabilities[edge_mask],
+    )
+    if set(movie_transition_starts(sliced)) != set(starts):
+        raise RuntimeError("transition slice did not preserve its exact inventory")
+    return sliced
+
+
+def _work_plan_sha256(payload: dict[str, Any]) -> str:
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def build_transition_work_plan(
+    videos: dict[str, Any],
+    cuda_tokens: tuple[str, ...],
+    *,
+    encoder_count_by_stem: dict[str, int],
+    pair_fusion: bool,
+    dominant_fraction: float = 0.60,
+) -> dict[str, Any]:
+    """Split one dominant movie at a frame boundary, then LPT-place others."""
+
+    if len(cuda_tokens) != 2 or len(set(cuda_tokens)) != 2:
+        raise ValueError("transition inference requires two unique CUDA tokens")
+    if set(encoder_count_by_stem) != set(videos):
+        raise ValueError("encoder counts must cover every movie")
+    inventories = {
+        stem: movie_transition_starts(video) for stem, video in videos.items()
+    }
+    if any(not starts for starts in inventories.values()):
+        raise ValueError("every submission movie must contain a transition")
+    movie_weights = {
+        stem: appearance_movie_inference_weight(
+            video,
+            encoder_count=encoder_count_by_stem[stem],
+            pair_fusion=pair_fusion,
+        )
+        for stem, video in videos.items()
+    }
+    dominant = max(sorted(videos), key=lambda stem: movie_weights[stem])
+    total_weight = sum(movie_weights.values())
+
+    def whole_unit(stem: str) -> dict[str, Any]:
+        return {
+            "unit_id": f"{stem}@all",
+            "stem": stem,
+            "transition_starts": list(inventories[stem]),
+            "weight": movie_weights[stem],
+        }
+
+    partition_kind = "whole_movie_lpt_v1"
+    dominant_split: dict[str, Any] | None = None
+    if (
+        movie_weights[dominant] > dominant_fraction * total_weight
+        and len(inventories[dominant]) >= 2
+    ):
+        best: tuple[tuple[float, float, int, int], list[list[dict[str, Any]]]] | None = None
+        starts = inventories[dominant]
+        other_stems = sorted(
+            (stem for stem in videos if stem != dominant),
+            key=lambda stem: (-movie_weights[stem], stem),
+        )
+        for cut in range(1, len(starts)):
+            blocks = (starts[:cut], starts[cut:])
+            block_weights = tuple(
+                transition_block_weight(
+                    videos[dominant],
+                    block,
+                    encoder_count=encoder_count_by_stem[dominant],
+                    pair_fusion=pair_fusion,
+                )
+                for block in blocks
+            )
+            for orientation in (0, 1):
+                ordered = (
+                    (blocks[0], block_weights[0]),
+                    (blocks[1], block_weights[1]),
+                )
+                if orientation:
+                    ordered = (ordered[1], ordered[0])
+                units = [
+                    [
+                        {
+                            "unit_id": f"{dominant}@{block[0]}-{block[-1]}",
+                            "stem": dominant,
+                            "transition_starts": list(block),
+                            "weight": weight,
+                        }
+                    ]
+                    for block, weight in ordered
+                ]
+                loads = [ordered[0][1], ordered[1][1]]
+                for stem in other_stems:
+                    shard_index = min(range(2), key=lambda index: (loads[index], index))
+                    units[shard_index].append(whole_unit(stem))
+                    loads[shard_index] += movie_weights[stem]
+                objective = (
+                    max(loads),
+                    abs(loads[0] - loads[1]),
+                    cut,
+                    orientation,
+                )
+                if best is None or objective < best[0]:
+                    best = (objective, units)
+        if best is None:
+            raise RuntimeError("dominant transition split search produced no plan")
+        assigned_units = best[1]
+        partition_kind = "dominant_movie_transition_split_v1"
+        dominant_split = {
+            "stem": dominant,
+            "movie_weight": movie_weights[dominant],
+            "movie_fraction": movie_weights[dominant] / total_weight,
+        }
+    else:
+        shards = build_movie_shards(
+            sorted(videos), cuda_tokens, movie_weights=movie_weights
+        )
+        assigned_units = [
+            [whole_unit(stem) for stem in shard.movie_ids] for shard in shards
+        ]
+
+    planned = {
+        (str(unit["stem"]), int(timepoint))
+        for units in assigned_units
+        for unit in units
+        for timepoint in unit["transition_starts"]
+    }
+    expected = {
+        (stem, timepoint)
+        for stem, starts in inventories.items()
+        for timepoint in starts
+    }
+    if planned != expected or sum(
+        len(unit["transition_starts"])
+        for units in assigned_units
+        for unit in units
+    ) != len(expected):
+        raise RuntimeError("transition work plan does not cover every transition once")
+    plan = {
+        "schema_version": 1,
+        "partition_kind": partition_kind,
+        "dominant_split": dominant_split,
+        "movie_weights": movie_weights,
+        "movie_transition_inventory": {
+            stem: list(starts) for stem, starts in inventories.items()
+        },
+        "shards": [
+            {
+                "shard_index": index,
+                "cuda_token": cuda_tokens[index],
+                "units": units,
+                "total_weight": sum(float(unit["weight"]) for unit in units),
+            }
+            for index, units in enumerate(assigned_units)
+        ],
+    }
+    plan["work_plan_sha256"] = _work_plan_sha256(plan)
+    return plan
+
+
 def worker(args: argparse.Namespace) -> None:
     if torch.cuda.device_count() != 1:
         raise RuntimeError(
             f"isolated appearance inference worker requires one GPU, saw {torch.cuda.device_count()}"
         )
-    started = time.monotonic()
-    requested = tuple(item for item in args.datasets.split(",") if item)
-    if not requested or len(requested) != len(set(requested)):
-        raise ValueError("worker movies must be non-empty and unique")
     all_videos = rerank.read_submission(args.base_submission)
-    if not set(requested).issubset(all_videos):
-        raise ValueError("worker received an unknown movie")
+    started = time.monotonic()
+    if args.work_plan is not None:
+        plan = json.loads(args.work_plan.read_text(encoding="utf-8"))
+        recorded_hash = str(plan.get("work_plan_sha256", ""))
+        unhashed = dict(plan)
+        unhashed.pop("work_plan_sha256", None)
+        if recorded_hash != _work_plan_sha256(unhashed):
+            raise RuntimeError("worker transition plan hash mismatch")
+        matching = [
+            row
+            for row in plan.get("shards", [])
+            if int(row.get("shard_index", -1)) == args.shard_index
+        ]
+        if len(matching) != 1:
+            raise ValueError("worker transition shard is missing or ambiguous")
+        work_units = matching[0].get("units")
+        if not isinstance(work_units, list) or not work_units:
+            raise ValueError("worker transition shard has no work units")
+    else:
+        requested_legacy = tuple(item for item in args.datasets.split(",") if item)
+        if not requested_legacy or len(requested_legacy) != len(
+            set(requested_legacy)
+        ):
+            raise ValueError("worker movies must be non-empty and unique")
+        work_units = [
+            {
+                "unit_id": f"{stem}@all",
+                "stem": stem,
+                "transition_starts": list(movie_transition_starts(all_videos[stem])),
+            }
+            for stem in requested_legacy
+        ]
+    unit_ids = [str(unit.get("unit_id", "")) for unit in work_units]
+    requested = tuple(sorted({str(unit.get("stem", "")) for unit in work_units}))
+    if (
+        not requested
+        or "" in requested
+        or not set(requested).issubset(all_videos)
+        or "" in unit_ids
+        or len(set(unit_ids)) != len(unit_ids)
+    ):
+        raise ValueError("worker received an invalid transition work inventory")
     videos = {stem: all_videos[stem] for stem in requested}
     raw_videos = rerank.read_raw_graphs(args.base_graph_root, set(videos))
     transfer = rerank.transfer_raw_edge_probabilities(videos, raw_videos)
@@ -279,7 +534,12 @@ def worker(args: argparse.Namespace) -> None:
             appearance_models[fold_name] = loaded
         return appearance_models[fold_name]
 
-    for stem, video in videos.items():
+    for unit in work_units:
+        unit_id = str(unit["unit_id"])
+        stem = str(unit["stem"])
+        transitions = tuple(map(int, unit.get("transition_starts", [])))
+        full_video = videos[stem]
+        video = transition_subvideo(full_video, transitions)
         fold = FOLD_BY_PREFIX[embryo_prefix(stem)]
         if fold not in trackastra_models:
             trackastra_models[fold] = TrackingTransformer.from_folder(
@@ -361,7 +621,9 @@ def worker(args: argparse.Namespace) -> None:
             peer_divisions,
             mode=ensemble_mode,
         )
-        extraction[stem] = {
+        extraction[unit_id] = {
+            "stem": stem,
+            "transition_starts": list(transitions),
             "ensemble_mode": ensemble_mode,
             "shared": shared_extraction,
         }
@@ -382,10 +644,12 @@ def worker(args: argparse.Namespace) -> None:
             use_stored_edge_probabilities=True,
         )
         rerank.validate_edges(video, edges)
-        candidate_edges[stem] = edges
+        candidate_edges[unit_id] = edges
         base_set = set(map(tuple, video.edges.tolist()))
         candidate_set = set(edges)
-        dataset_stats[stem] = {
+        dataset_stats[unit_id] = {
+            "stem": stem,
+            "transition_starts": list(transitions),
             "fold": fold,
             "nodes": len(video.node_ids),
             "base_edges": len(base_set),
@@ -401,10 +665,11 @@ def worker(args: argparse.Namespace) -> None:
             "status": "completed",
             "elapsed_seconds": time.monotonic() - started,
             "datasets": list(requested),
+            "work_units": work_units,
             "appearance_family": model_family,
             "candidate_edges": {
-                stem: [[int(source), int(target)] for source, target in edges]
-                for stem, edges in candidate_edges.items()
+                unit_id: [[int(source), int(target)] for source, target in edges]
+                for unit_id, edges in candidate_edges.items()
             },
             "dataset_stats": dataset_stats,
             "extraction": extraction,
@@ -433,53 +698,36 @@ def orchestrate(args: argparse.Namespace) -> None:
         args.acceptance_evidence, trackastra_dirs, appearance_models
     )
     videos = rerank.read_submission(args.base_submission)
-    weights = {
-        stem: appearance_movie_inference_weight(
-            video,
-            encoder_count=(
-                2
-                if acceptance["appearance_blend"][
-                    FOLD_BY_PREFIX[embryo_prefix(stem)]
-                ]["ensemble_mode"]
-                == "reciprocal_mean"
-                else 1
-            ),
-            pair_fusion=(
-                acceptance["appearance_family"]
-                in {
-                    PAIR_FUSION_FAMILY,
-                    CONTEXTUAL_PAIR_FUSION_FAMILY,
-                    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
-                }
-            ),
+    encoder_count_by_stem = {
+        stem: (
+            2
+            if acceptance["appearance_blend"][
+                FOLD_BY_PREFIX[embryo_prefix(stem)]
+            ]["ensemble_mode"]
+            == "reciprocal_mean"
+            else 1
         )
-        for stem, video in videos.items()
+        for stem in videos
     }
-    shards = build_movie_shards(
-        sorted(videos),
+    pair_fusion = acceptance["appearance_family"] in {
+        PAIR_FUSION_FAMILY,
+        CONTEXTUAL_PAIR_FUSION_FAMILY,
+        MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+    }
+    plan = build_transition_work_plan(
+        videos,
         visible_cuda_tokens(detected_devices=detected),
-        movie_weights=weights,
+        encoder_count_by_stem=encoder_count_by_stem,
+        pair_fusion=pair_fusion,
     )
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    plan = {
-        "schema_version": 1,
-        "shard_plan_sha256": shard_plan_sha256(shards),
-        "weights": weights,
-        "shards": [
-            {
-                "shard_index": shard.shard_index,
-                "cuda_token": shard.cuda_token,
-                "movie_ids": list(shard.movie_ids),
-                "total_weight": sum(weights[movie] for movie in shard.movie_ids),
-            }
-            for shard in shards
-        ],
-    }
-    atomic_json(args.output_dir / "shard_plan.json", plan)
+    work_plan_path = args.output_dir / "transition_work_plan.json"
+    atomic_json(work_plan_path, plan)
     processes = []
-    for shard in shards:
-        output = args.output_dir / f"shard_{shard.shard_index}.json"
-        handle = (args.output_dir / f"shard_{shard.shard_index}.log").open(
+    for shard in plan["shards"]:
+        shard_index = int(shard["shard_index"])
+        output = args.output_dir / f"shard_{shard_index}.json"
+        handle = (args.output_dir / f"shard_{shard_index}.log").open(
             "w", encoding="utf-8"
         )
         command = [
@@ -506,8 +754,10 @@ def orchestrate(args: argparse.Namespace) -> None:
             str(args.trackastra_dir),
             "--output-dir",
             str(args.output_dir),
-            "--datasets",
-            ",".join(shard.movie_ids),
+            "--work-plan",
+            str(work_plan_path),
+            "--shard-index",
+            str(shard_index),
             "--worker-output",
             str(output),
             "--max-tokens",
@@ -517,14 +767,28 @@ def orchestrate(args: argparse.Namespace) -> None:
             "--node-batch-size",
             str(args.node_batch_size),
         ]
+        environment = dict(os.environ)
+        environment.update(
+            {
+                "CUDA_VISIBLE_DEVICES": str(shard["cuda_token"]),
+                "BIOHUB_SHARD_INDEX": str(shard_index),
+                "BIOHUB_SHARD_COUNT": "2",
+                "BIOHUB_SHARD_MOVIES": ",".join(
+                    sorted({str(unit["stem"]) for unit in shard["units"]})
+                ),
+                "BIOHUB_SHARD_UNITS": ",".join(
+                    str(unit["unit_id"]) for unit in shard["units"]
+                ),
+            }
+        )
         process = subprocess.Popen(
             command,
-            env=worker_environment(shard),
+            env=environment,
             stdout=handle,
             stderr=subprocess.STDOUT,
             text=True,
         )
-        processes.append((shard.shard_index, process, handle, output))
+        processes.append((shard_index, process, handle, output))
     return_codes = {}
     try:
         while len(return_codes) < len(processes):
@@ -545,28 +809,69 @@ def orchestrate(args: argparse.Namespace) -> None:
     failures = {index: code for index, code in return_codes.items() if code != 0}
     if failures:
         raise RuntimeError(f"appearance inference workers failed: {failures}")
-    observed_by_shard = {}
-    candidate_edges: dict[str, list[tuple[int, int]]] = {}
-    dataset_stats: dict[str, Any] = {}
+    expected_units_by_shard = {
+        int(shard["shard_index"]): {
+            str(unit["unit_id"]): unit for unit in shard["units"]
+        }
+        for shard in plan["shards"]
+    }
+    candidate_edges_by_stem: dict[str, list[tuple[int, int]]] = {
+        stem: [] for stem in videos
+    }
+    observed_units: set[str] = set()
     extraction: dict[str, Any] = {}
     transfers: dict[str, Any] = {}
     for index, _process, _handle, output in processes:
         payload = json.loads(output.read_text(encoding="utf-8"))
-        if payload.get("appearance_family") != acceptance["appearance_family"]:
+        if not (
+            payload.get("schema_version") == 1
+            and payload.get("status") == "completed"
+            and payload.get("appearance_family") == acceptance["appearance_family"]
+        ):
             raise RuntimeError(f"appearance shard family mismatch: {index}")
-        observed_by_shard[index] = list(payload["datasets"])
-        for stem, edges in payload["candidate_edges"].items():
-            if stem in candidate_edges:
-                raise RuntimeError(f"duplicate shard movie: {stem}")
-            candidate_edges[stem] = [tuple(map(int, edge)) for edge in edges]
-        dataset_stats.update(payload["dataset_stats"])
+        expected_units = expected_units_by_shard[index]
+        payload_units = {
+            str(unit.get("unit_id", "")): unit
+            for unit in payload.get("work_units", [])
+        }
+        if payload_units != expected_units:
+            raise RuntimeError(f"appearance shard work inventory mismatch: {index}")
+        for unit_id, edges in payload["candidate_edges"].items():
+            if unit_id in observed_units or unit_id not in expected_units:
+                raise RuntimeError(f"duplicate or unknown transition unit: {unit_id}")
+            unit = expected_units[unit_id]
+            stem = str(unit["stem"])
+            transitions = set(map(int, unit["transition_starts"]))
+            normalized = [tuple(map(int, edge)) for edge in edges]
+            if any(videos[stem].time_by_id[source] not in transitions for source, _target in normalized):
+                raise RuntimeError(f"transition unit emitted an edge outside its block: {unit_id}")
+            candidate_edges_by_stem[stem].extend(normalized)
+            observed_units.add(unit_id)
         extraction.update(payload["extraction"])
         transfers[str(index)] = payload["edge_probability_transfer"]
-    coverage = validate_shard_outputs(shards, observed_by_shard)
-    if set(candidate_edges) != set(videos) or set(coverage) != set(videos):
-        raise RuntimeError("appearance shards do not cover every movie exactly once")
+    expected_unit_ids = set().union(*[set(rows) for rows in expected_units_by_shard.values()])
+    if observed_units != expected_unit_ids:
+        raise RuntimeError("appearance shards do not cover every transition unit")
+    coverage = tuple(sorted(videos))
+    dataset_stats: dict[str, Any] = {}
+    for stem, video in videos.items():
+        edges = candidate_edges_by_stem[stem]
+        if len(edges) != len(set(edges)):
+            raise RuntimeError(f"transition shards emitted duplicate edges: {stem}")
+        rerank.validate_edges(video, edges)
+        base_set = set(map(tuple, video.edges.tolist()))
+        candidate_set = set(edges)
+        dataset_stats[stem] = {
+            "fold": FOLD_BY_PREFIX[embryo_prefix(stem)],
+            "nodes": len(video.node_ids),
+            "base_edges": len(base_set),
+            "candidate_edges": len(candidate_set),
+            "retained_edges": len(base_set & candidate_set),
+            "removed_edges": len(base_set - candidate_set),
+            "new_edges": len(candidate_set - base_set),
+        }
     output_path = args.output_dir / "submission.csv"
-    rerank.write_submission(output_path, videos, candidate_edges)
+    rerank.write_submission(output_path, videos, candidate_edges_by_stem)
     changed = sum(
         row["removed_edges"] + row["new_edges"] for row in dataset_stats.values()
     )
@@ -585,7 +890,16 @@ def orchestrate(args: argparse.Namespace) -> None:
         "worker_termination_grace_seconds": WORKER_TERMINATION_GRACE_SECONDS,
         "gpu_count": 2,
         "whole_movie_coverage": list(coverage),
-        "shard_plan_sha256": plan["shard_plan_sha256"],
+        "transition_partitioned_inference": True,
+        "transition_partition_kind": plan["partition_kind"],
+        "transition_work_plan_sha256": plan["work_plan_sha256"],
+        "shard_plan_sha256": plan["work_plan_sha256"],
+        "dominant_movie_split": plan["dominant_split"],
+        "shard_estimated_weights": {
+            str(shard["shard_index"]): shard["total_weight"]
+            for shard in plan["shards"]
+        },
+        "movie_transition_inventory": plan["movie_transition_inventory"],
         "appearance_node_cost_weight": APPEARANCE_NODE_COST,
         "pair_fusion_pair_cost_weight": (
             PAIR_FUSION_PAIR_COST
@@ -632,6 +946,8 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--trackastra-dir", type=Path, required=True)
     result.add_argument("--output-dir", type=Path, required=True)
     result.add_argument("--datasets", default="")
+    result.add_argument("--work-plan", type=Path)
+    result.add_argument("--shard-index", type=int, default=-1)
     result.add_argument("--worker-output", type=Path)
     result.add_argument("--max-tokens", type=int, default=512)
     result.add_argument("--candidate-radius", type=float, default=80.0)

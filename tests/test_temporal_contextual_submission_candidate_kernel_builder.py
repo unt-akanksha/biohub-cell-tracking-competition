@@ -27,7 +27,7 @@ def build() -> tuple[dict, dict, str]:
     return notebook, metadata, code
 
 
-def test_candidate_kernel_is_accepted_two_gpu_whole_movie_only() -> None:
+def test_candidate_kernel_is_accepted_two_gpu_transition_partitioned_only() -> None:
     _notebook, metadata, code = build()
     compile(code, str(NOTEBOOK), "exec")
 
@@ -40,7 +40,7 @@ def test_candidate_kernel_is_accepted_two_gpu_whole_movie_only() -> None:
     assert metadata["enable_internet"] is False
     assert metadata["machine_shape"] == "NvidiaTeslaT4"
     assert metadata["dataset_sources"] == [
-        "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+        "indarkarhana/biohub-temporal-contextual-final-runtime-v1",
         "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
         "pilkwang/biohub-tracking-support-pack-50ep-v1",
     ]
@@ -63,10 +63,12 @@ def test_candidate_kernel_is_accepted_two_gpu_whole_movie_only() -> None:
     assert '"temporal_contextual_pair_fusion_v3"' in code
     assert '"--strict-checkpoint"' in code
     assert (
-        "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
+        "e69a20f10f56108818a6bf0715fe071e868fd176d1720cc2ffc04f2a645b41ff"
         in code
     )
     assert 'report.get("gpu_count") == 2' in code
+    assert 'report.get("transition_partitioned_inference") is True' in code
+    assert 'report.get("transition_work_plan_sha256")' in code
     assert 'report.get("whole_movie_coverage", [])' in code
     assert 'report.get("nodes_preserved_exactly") is True' in code
     assert 'report.get("candidate_submission_sha256") != EXPECTED_BASE_SHA256' in code

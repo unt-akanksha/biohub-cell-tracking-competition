@@ -46,9 +46,12 @@ ACCEPTANCE_FILENAME = (
 )
 APPEARANCE_FAMILY = "temporal_contextual_pair_fusion_v3"
 CANDIDATE_FAMILY = "trackastra_contextual_pair_fusion_blend"
+EXPECTED_RUNTIME_MANIFEST_SHA256 = (
+    "e69a20f10f56108818a6bf0715fe071e868fd176d1720cc2ffc04f2a645b41ff"
+)
 FOLDS = {"target_44b6", "target_6bba"}
 EXPECTED_DATASET_SOURCES = [
-    "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+    "indarkarhana/biohub-temporal-contextual-final-runtime-v1",
     ACCEPTANCE_DATASET_ID,
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
 ]
@@ -69,6 +72,7 @@ FOCUSED_TESTS = (
     ROOT / "tests" / "test_temporal_contextual_submission_candidate_kernel_builder.py",
     ROOT / "tests" / "test_temporal_contextual_kernel_submission.py",
     ROOT / "tests" / "test_temporal_appearance_submission.py",
+    ROOT / "tests" / "test_temporal_contextual_final_runtime_builder.py",
 )
 
 
@@ -379,6 +383,19 @@ def main(
         appearance_root, acceptance_root, processed_root
     )
     runtime_root = checked_path(runtime_root, "runtime")
+    runtime_manifest = runtime_root / "SOURCE_MANIFEST.json"
+    if sha256_file(runtime_manifest) != EXPECTED_RUNTIME_MANIFEST_SHA256:
+        raise RuntimeError("final transition-partitioned runtime manifest changed")
+    subprocess.run(
+        [
+            sys.executable,
+            str(runtime_root / "verify_runtime.py"),
+            "--root",
+            str(runtime_root),
+        ],
+        cwd=ROOT,
+        check=True,
+    )
     subprocess.run(
         [
             sys.executable,
@@ -413,6 +430,7 @@ def main(
             "inputs",
             [
                 METADATA,
+                runtime_manifest,
                 staged["transfer_launcher"],
                 staged["acceptance_manifest"],
                 staged["training_terminal"],
@@ -426,7 +444,7 @@ def main(
                 ROOT / "tests" / "test_temporal_appearance_submission.py",
                 runtime_root / "dual_fold_appearance_submission.py",
             ],
-            "Contextual-v3 acceptance loading, family dispatch, two-GPU sharding, and candidate construction have focused finite fixtures.",
+            "Contextual-v3 acceptance loading, family dispatch, transition-safe two-GPU partitioning, and candidate construction have focused finite fixtures.",
         ),
         PreflightCheck.create(
             "model_step",
@@ -455,7 +473,7 @@ def main(
         check(
             "dense_memory",
             [staged["processed_launcher"], staged["materialization_result"]],
-            "The exact two-GPU whole-movie materializer completed on Kaggle under its frozen hard stop before final test inference.",
+            "The exact two-GPU materializer completed on Kaggle, and final test inference uses a hash-bound near-balanced transition partition under its frozen hard stop.",
         ),
         check(
             "dataset_coverage",
@@ -474,7 +492,7 @@ def main(
         check(
             "quota_policy",
             [COMPETITION_CONFIG, NOTEBOOK, staged["processed_launcher"]],
-            "The final launch still requires the live account-wide reserve guard and exactly two Kaggle GPUs.",
+            "The final launch requires enough live quota for its declared ceiling and exactly two Kaggle GPUs; the former reserve is intentionally zero after explicit authorization to use all quota.",
         ),
     ]
     if "torch.cuda.device_count() != 2" not in code:

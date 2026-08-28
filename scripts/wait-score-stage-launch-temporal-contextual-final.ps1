@@ -11,6 +11,7 @@ $logPath = Join-Path $automationDir 'temporal-contextual-final-launch.log'
 $terminalPath = Join-Path $automationDir 'temporal-contextual-final-launch.json'
 $processedRef = 'indarkarhana/biohub-temporal-contextual-processed-acceptance-v3'
 $acceptanceDatasetRef = 'indarkarhana/biohub-temporal-contextual-exact-acceptance-v3'
+$finalRuntimeRef = 'indarkarhana/biohub-temporal-contextual-final-runtime-v1'
 $finalRef = 'indarkarhana/biohub-temporal-contextual-submission-candidate-v3'
 $processedDownloadRoot = Join-Path $projectRoot '.biohub/cache/kernel-outputs/temporal-contextual-processed-v3-autochain'
 $appearanceRoot = Join-Path $projectRoot '.biohub/cache/kernel-outputs/temporal-contextual-transfer-v3-autochain'
@@ -32,16 +33,16 @@ $truthDir = Join-Path $projectRoot '.biohub/cache/competition-truth/public-node-
 $scorerLock = Join-Path $projectRoot 'config/official-scorer.lock.json'
 $organizerCheckout = Join-Path $projectRoot '.biohub/vendor/kaggle-cell-tracking-competition'
 $tracksdataCheckout = Join-Path $projectRoot '.biohub/vendor/tracksdata'
-$runtimeRoot = Join-Path $projectRoot '.biohub/cache/dataset-redownloads/biohub-temporal-contextual-transfer-runtime-v1-version4'
+$runtimeRoot = Join-Path $projectRoot '.biohub/cache/dataset-redownloads/biohub-temporal-contextual-final-runtime-v1-version2'
 $finalDir = Join-Path $projectRoot 'kaggle/biohub-temporal-contextual-submission-candidate-v3'
 $finalMetadata = Join-Path $finalDir 'kernel-metadata.json'
 $finalNotebook = Join-Path $finalDir 'biohub-temporal-contextual-submission-candidate-v3.ipynb'
 $expectedControlSha256 = '6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b'
 $expectedExactRunnerSha256 = 'dafd6fb978f1abc8ad56612113ec480a54cbd490bc12ff2ba88c4dae8133012f'
 $expectedStageScriptSha256 = '1bd2319310c2e24c637b0d2b0d909fe11f756af7d2e5e450cafc614fee4f98fa'
-$expectedPreflightScriptSha256 = '423d255816bc6c7bc197f183c50ad1cb01ea252970821c2640e91522059baa64'
-$expectedFinalMetadataSha256 = '429ddae35e0633069a5ac44151cd6a1e4782ccd130b1f315d448eb43be8276fe'
-$expectedFinalNotebookSha256 = '5dad76f56003be6f84e381dbf1a735cb2e091dcedf8f238edb184fd0091c03af'
+$expectedPreflightScriptSha256 = '6243592412ff7ce973c97390b72a463524bf7a0efde19f330272033ff9cbcd5c'
+$expectedFinalMetadataSha256 = 'ef010e45a6a10d1f00efee2d696a8c5a218c52b29e039673b32aa128ff248f43'
+$expectedFinalNotebookSha256 = 'f5a5e40827c0cd1b846dad0702faa7ae3697288f59c7ce24e8da7797d179db01'
 
 New-Item -ItemType Directory -Force -Path $automationDir | Out-Null
 
@@ -58,6 +59,8 @@ function Write-ChainTerminal([string]$Status, [hashtable]$Evidence) {
         status = $Status
         processed_ref = $processedRef
         acceptance_dataset_ref = $acceptanceDatasetRef
+        final_runtime_ref = $finalRuntimeRef
+        final_runtime_version = 2
         final_ref = $finalRef
         minimum_quota_hours = $MinimumQuotaHours
         quota_reserve_hours = 0.0
@@ -110,6 +113,7 @@ try {
         $metadata.enable_gpu -ne $true -or
         $metadata.enable_tpu -ne $false -or
         $metadata.enable_internet -ne $false -or
+        $metadata.dataset_sources -notcontains $finalRuntimeRef -or
         $metadata.dataset_sources -notcontains $acceptanceDatasetRef -or
         $metadata.kernel_sources -notcontains 'indarkarhana/biohub-temporal-contextual-transfer-v3' -or
         $metadata.kernel_sources -notcontains 'indarkarhana/biohub-trackastra-dual-fold-synthetic-v1' -or
