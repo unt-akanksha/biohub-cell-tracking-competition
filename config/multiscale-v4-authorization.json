@@ -1,0 +1,22 @@
+{
+  "authorized_for_submission": true,
+  "gpu_quota_policy": {
+    "provider": "kaggle",
+    "required_gpu_count": 2,
+    "reserve_hours": 0.0,
+    "use_all_available_quota": true
+  },
+  "scientific_boundary": {
+    "audit_source": "ZSNS005 disjoint fixed windows",
+    "public_leaderboard_used_for_selection": false,
+    "selection_source": "ZSNS005 fixed windows",
+    "zsns001_reopened_for_v4": false
+  },
+  "submission_authorization": {
+    "authorized_at": "2026-08-28",
+    "gpu_required_for_upload": false,
+    "rejected_or_ungated_candidate_upload_forbidden": true,
+    "scope": "first_hash_bound_candidate_passing_all_external_reciprocal_calibration_exact_processed_integrity_and_non_replica_gates",
+    "upload_without_additional_prompt": true
+  }
+}

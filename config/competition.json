@@ -13,7 +13,7 @@
   "daily_submission_limit": 5,
   "final_submission_slots": 2,
   "notebook_runtime_limit_hours": "12.00",
-  "gpu_reserve_hours": "8.00",
+  "gpu_reserve_hours": "0.00",
   "submission_execution_policy": {
     "required_machine_shape": "NvidiaTeslaT4",
     "required_cuda_devices": 2,
@@ -35,8 +35,8 @@
   "current_status": {
     "best_clean_public_score": "0.913",
     "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
-    "active_hypothesis": "Reciprocal calibration can convert ZebraHub selective_ssm_medium parent-ranking gains into an exact complete-graph OOF improvement.",
-    "next_gate": "Run reciprocal competition-graph calibration, then the patched exact complete-movie bilateral metric gate."
+    "active_hypothesis": "A 46.4M-parameter project-authored multiscale contextual branch can improve the accepted v3 candidate after clean ZSNS005 selection/audit and reciprocal Biohub gates.",
+    "next_gate": "Submit accepted v3 first, then run multiscale v4 pretraining, reciprocal transfer, calibration, exact processed acceptance, and final inference with zero GPU reserve."
   },
   "official_sources": {
     "competition": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview",

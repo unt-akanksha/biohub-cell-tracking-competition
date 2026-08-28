@@ -40,7 +40,7 @@ $finalNotebook = Join-Path $finalDir 'biohub-temporal-contextual-submission-cand
 $expectedControlSha256 = '6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b'
 $expectedExactRunnerSha256 = 'dafd6fb978f1abc8ad56612113ec480a54cbd490bc12ff2ba88c4dae8133012f'
 $expectedStageScriptSha256 = '1bd2319310c2e24c637b0d2b0d909fe11f756af7d2e5e450cafc614fee4f98fa'
-$expectedPreflightScriptSha256 = '6243592412ff7ce973c97390b72a463524bf7a0efde19f330272033ff9cbcd5c'
+$expectedPreflightScriptSha256 = 'b785a75f088c68ede25359a652510126a49a1758c9fb729ce956183576147b0f'
 $expectedFinalMetadataSha256 = 'ef010e45a6a10d1f00efee2d696a8c5a218c52b29e039673b32aa128ff248f43'
 $expectedFinalNotebookSha256 = 'f5a5e40827c0cd1b846dad0702faa7ae3697288f59c7ce24e8da7797d179db01'
 
@@ -205,16 +205,21 @@ try {
     }
 
     $listOutput = (& kaggle datasets list --mine -s biohub-temporal-contextual-exact-acceptance-v3 --format json 2>&1) -join "`n"
-    if ($listOutput -match [regex]::Escape($acceptanceDatasetRef)) {
-        $datasetOutput = (& kaggle datasets version -p $acceptanceDatasetDir -m 'Exact clean processed acceptance for contextual v3' 2>&1) -join "`n"
-        $datasetOperation = 'versioned'
-    } else {
-        $datasetOutput = (& kaggle datasets create -p $acceptanceDatasetDir 2>&1) -join "`n"
-        $datasetOperation = 'created'
-        if ($LASTEXITCODE -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
-            $datasetOutput = (& kaggle datasets version -p $acceptanceDatasetDir -m 'Exact clean processed acceptance for contextual v3' 2>&1) -join "`n"
-            $datasetOperation = 'versioned_after_create_conflict'
+    Push-Location -LiteralPath $acceptanceDatasetDir
+    try {
+        if ($listOutput -match [regex]::Escape($acceptanceDatasetRef)) {
+            $datasetOutput = (& kaggle datasets version -p . -m 'Exact clean processed acceptance for contextual v3' 2>&1) -join "`n"
+            $datasetOperation = 'versioned'
+        } else {
+            $datasetOutput = (& kaggle datasets create -p . 2>&1) -join "`n"
+            $datasetOperation = 'created'
+            if ($LASTEXITCODE -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
+                $datasetOutput = (& kaggle datasets version -p . -m 'Exact clean processed acceptance for contextual v3' 2>&1) -join "`n"
+                $datasetOperation = 'versioned_after_create_conflict'
+            }
         }
+    } finally {
+        Pop-Location
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Exact acceptance dataset upload failed: $datasetOutput"

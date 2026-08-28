@@ -484,7 +484,7 @@ def main(
             "non_replica_provenance",
             [
                 staged["acceptance_evidence"],
-                staged["candidate_report"],
+                staged["materialization_result"],
                 ROOT / "reports" / "experiments" / "biohub-public-frontier-refresh-2026-08-27.md",
             ],
             "Project-authored contextual evidence passed the exact clean gate; metric hacks, public predictions, and leaderboard selection remain excluded.",
