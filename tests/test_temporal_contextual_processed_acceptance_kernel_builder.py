@@ -39,11 +39,16 @@ def test_processed_kernel_is_one_shot_two_gpu_evidence_only() -> None:
     assert metadata["enable_tpu"] is False
     assert metadata["enable_internet"] is False
     assert metadata["machine_shape"] == "NvidiaTeslaT4"
+    assert metadata["dataset_sources"] == [
+        "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+        "indarkarhana/biohub-trackastra-graph-runtime-v1",
+        "indarkarhana/biohub-hoct-processed-validation-v1",
+        "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    ]
     assert metadata["kernel_sources"] == [
         "indarkarhana/biohub-temporal-contextual-transfer-v3",
         "indarkarhana/biohub-temporal-contextual-calibration-v3",
         "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
-        "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2",
     ]
     assert metadata["competition_sources"] == [
         "biohub-cell-tracking-during-development"
@@ -60,7 +65,7 @@ def test_processed_kernel_is_one_shot_two_gpu_evidence_only() -> None:
         in code
     )
     assert (
-        "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e"
+        "aedb0dd28375059ad158a4b0a30e4b270b55b8223b0c38b99929f5ee20b2a469"
         in code
     )
     assert 'payload.get("both_folds_improved") is True' in code

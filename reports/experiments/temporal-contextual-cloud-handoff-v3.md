@@ -199,7 +199,7 @@ chain, both frozen input artifact hashes, exactly two visible GPUs, all four
 predeclared movies, changed edges, and the absence of ground-truth access,
 selection, exact scoring, and submission. It only authorizes the pinned local
 CPU gate. Runner SHA-256:
-`83682e930b09aeaf9531d54ce1c30bfbb3bb7a78dbd1d5ef335b25b9d5c2f23f`.
+`ed8d6a3850274ea812991666add0b7903c33548ee0bbd9bf48b9abfcbb272e42`.
 Its test SHA-256 is
 `21051992d4fae5ef37bf3dc68f5506e1bc511d3adfae1fb85fb4eae00cdaa54e`;
 all five focused tests and the 29-test combined regression set pass.
@@ -224,7 +224,7 @@ python "$BIOHUB_RUNTIME/dual_fold_appearance_processed_acceptance.py" \
 The control CSV must hash to
 `6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b`
 and the raw graph tree to
-`559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e`.
+`aedb0dd28375059ad158a4b0a30e4b270b55b8223b0c38b99929f5ee20b2a469`.
 Stop unless two whole-movie GPU shards finish, the candidate changes edges and
 has a different CSV hash, ground truth remains unread, and the result is still
 unauthorized for submission.

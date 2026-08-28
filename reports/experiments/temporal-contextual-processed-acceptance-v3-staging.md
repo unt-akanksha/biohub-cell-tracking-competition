@@ -16,8 +16,8 @@ immutable at that point, so this stage cannot tune or redirect the candidate.
   `6bba_07e24132`
 - Frozen comparator CSV SHA-256:
   `6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b`
-- Frozen raw-confidence graph tree SHA-256:
-  `559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e`
+- Frozen raw validation graph tree SHA-256:
+  `aedb0dd28375059ad158a4b0a30e4b270b55b8223b0c38b99929f5ee20b2a469`
 - Comparator role: topology/control only
 - Processed ground truth: unread
 - Hyperparameter selection: forbidden
@@ -31,6 +31,14 @@ rejected during materialization if it does not change association edges or if
 its CSV hash equals the comparator, preventing an exact public replica from
 advancing.
 
+The remote input audit found that the originally attached raw-confidence
+acceptance kernel ended in error and exported only an incomplete temporary CSV.
+It is therefore excluded. The exact comparator CSV instead comes from the
+successful private `biohub-hoct-processed-validation-v1` dataset, and the four
+hash-bound raw validation GEFFs come from
+`biohub-trackastra-graph-runtime-v1`. Neither source adds labels or changes the
+frozen comparator.
+
 ## Package
 
 - Runtime: `indarkarhana/biohub-temporal-contextual-transfer-runtime-v1`, only
@@ -41,9 +49,9 @@ advancing.
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-processed-acceptance-v3`
 - Notebook SHA-256:
-  `973f30cd25833d60b0552f4358566c7e6c535ce6717789f264cf2b5a185294a7`
+  `08c0316da23940e21490d56909d3bb88c690b9103dfb0d2cf57c40de96e8665b`
 - Metadata SHA-256:
-  `0fd5798a6ab4b2c005c93b4991070abf4025f8ef7dcb454f20081c5468a6a3c6`
+  `624a14a202cde15a1bfc4cf942241df1f80801094e60e8886182c8dffc826125`
 - Notebook watchdog: `21,600` seconds
 - Materializer hard stop: `19,800` seconds
 - Internet: disabled

@@ -105,7 +105,7 @@ import torch
 
 EXPECTED_RUNTIME_MANIFEST_SHA256 = "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
 EXPECTED_PROCESSED_CONTROL_SHA256 = "6613545843ebd743dac66b5a0598702faaa5b3c0870566e55fa60250a009615b"
-EXPECTED_RAW_GRAPH_TREE_SHA256 = "559332597da65f161f1b0b116e10fc86c7ff35eb31fe48937e080889b909a43e"
+EXPECTED_RAW_GRAPH_TREE_SHA256 = "aedb0dd28375059ad158a4b0a30e4b270b55b8223b0c38b99929f5ee20b2a469"
 EXPECTED_PROCESSED_STEMS = {
     "44b6_12dfb391", "44b6_267148e4", "6bba_062c8d37", "6bba_07e24132"
 }
@@ -435,13 +435,14 @@ def main() -> None:
         "keywords": ["gpu", "cell-tracking", "acceptance", "non-replica"],
         "dataset_sources": [
             "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+            "indarkarhana/biohub-trackastra-graph-runtime-v1",
+            "indarkarhana/biohub-hoct-processed-validation-v1",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],
         "kernel_sources": [
             "indarkarhana/biohub-temporal-contextual-transfer-v3",
             "indarkarhana/biohub-temporal-contextual-calibration-v3",
             "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
-            "indarkarhana/biohub-trackastra-raw-confidence-acceptance-v2",
         ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],
