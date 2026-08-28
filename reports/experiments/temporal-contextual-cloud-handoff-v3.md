@@ -6,6 +6,14 @@ Status: downstream two-GPU workflow staged and tested. It must run sequentially
 after the active ZebraHub pretraining and frozen third-embryo acceptance pass.
 No command below uploads a competition submission.
 
+The preferred transfer entry point is now the fail-closed host runner
+`scripts/run-temporal-contextual-cloud-transfer.py`. It verifies the exact
+runtime manifest, requires exactly two visible GPUs, hash-binds the repository
+acceptance-verifier closure, independently verifies the complete accepted-v3
+chain, launches the frozen transfer recipe, strict-loads both output
+checkpoints, and writes `cloud_launcher_terminal.json`. It cannot authorize or
+create a competition submission.
+
 ## Immutable assets
 
 - ZebraHub pretraining run: `zebrahub-contextual-pretrain-v1`
@@ -50,6 +58,25 @@ kernel separately requires both pretraining folds to pass fixed ZSNS005
 selection/audit gates and the frozen ZSNS001 family gate.
 
 ## 1. Competition transfer
+
+Preferred automated command from an exact copy of this repository:
+
+```bash
+python scripts/run-temporal-contextual-cloud-transfer.py \
+  --repository-root /workspace/Biohub \
+  --runtime-root "$BIOHUB_RUNTIME" \
+  --competition-dir "$BIOHUB_COMPETITION" \
+  --synthetic-root "$BIOHUB_SYNTHETIC" \
+  --pretraining-root "$BIOHUB_PRETRAIN" \
+  --acceptance-root "$BIOHUB_ZSNS_ACCEPT" \
+  --output-dir "$BIOHUB_RUN/appearance"
+```
+
+Runner SHA-256:
+`bea7fc02aa010e0be2c66ada498d189836e7b09aee3a3eee3eacaf6270aafcc7`.
+Its test SHA-256 is
+`b19e83d1a0430359f3f632ca986a8fd74d812f0000b6a83608c901c7a7c01694`;
+all three focused fail-closed tests pass locally without GPU use.
 
 Use the staged private notebook
 `indarkarhana/biohub-temporal-contextual-transfer-v3`, or run its exact command:
