@@ -366,3 +366,23 @@ Wrapper SHA-256:
 `896a1e7719289dce310ec2f792787d99789211b627818f3bd8ba08061db8be3c`;
 test SHA-256:
 `328c6ea140465c9ba459e442fc7a4f956d994097594b3738133765c6859ba7af`.
+
+After the two private datasets are published and the cloud benchmark is copied
+under this workspace, generate the fresh guarded-launch preflight:
+
+```powershell
+python scripts\build-temporal-contextual-submission-candidate-preflight.py `
+  --appearance-root .biohub\kaggle-artifacts\biohub-temporal-contextual-transfer-output-v3 `
+  --acceptance-root .biohub\kaggle-artifacts\biohub-temporal-contextual-exact-acceptance-v3 `
+  --cloud-candidate-root .biohub\cloud-results\temporal-contextual-pair-fusion-v3\final `
+  --runtime-root .biohub\cache\dataset-redownloads\biohub-temporal-contextual-transfer-runtime-v1-version4
+```
+
+The preflight re-hashes every staged checkpoint, strict-loads the accepted
+models, binds exact acceptance to the cloud candidate and final CSV, reruns the
+focused boundary tests, and emits every check required for a 12-hour guarded
+launch. Its cloud elapsed evidence can support a later measured-runtime
+amendment without weakening the eight-hour reserve. Builder SHA-256:
+`9cf66591ad4ec54d786e9b4bb5e7d9a777de4d0aced8fd8f4ee740a1d739248b`;
+test SHA-256:
+`1aca00925cf1e86c6c6cc292c7a0a02dcb4c51bf9db5c9c2ddc4342e3dc3d966`.
