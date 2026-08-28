@@ -71,7 +71,7 @@ both checkpoints, and rejects any competition artifact in the training output.
 - Notebook SHA-256:
   `17f0f25562c4a0878d9070ea0b238867bf190b1b9b754899bf0d395dee86f353`
 - Kernel metadata SHA-256:
-  `bbfbc009c9ffc9a18330f8556d88c7cea04542824550cf1a9c96922871f5f322`
+  `ad275e1f816bd629b6b6bd677d1d9cb86029605abd1f04e44d5874ffc037461e`
 
 The runtime version-4 re-download reproduced its exact manifest and all 36
 content hashes after materializing the packaged Trackastra source directory.

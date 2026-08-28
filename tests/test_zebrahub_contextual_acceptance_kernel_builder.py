@@ -47,6 +47,7 @@ def test_acceptance_kernel_is_exactly_two_gpu_and_external_only() -> None:
         "indarkarhana/biohub-zebrahub-contextual-acceptance-runtime-v1",
         "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
     ]
+    assert metadata["id"] not in metadata["dataset_sources"]
     assert metadata["kernel_sources"] == [
         "indarkarhana/biohub-zebrahub-contextual-pretrain-v1"
     ]
