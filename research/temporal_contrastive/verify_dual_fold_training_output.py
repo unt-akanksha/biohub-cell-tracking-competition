@@ -13,6 +13,7 @@ from typing import Any
 try:
     from appearance_family import (
         COSINE_FAMILY,
+        CONTEXTUAL_FAMILIES,
         CONTEXTUAL_PAIR_FUSION_FAMILY,
         FAMILIES,
         PAIR_FUSION_FAMILY,
@@ -24,6 +25,7 @@ try:
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_family import (
         COSINE_FAMILY,
+        CONTEXTUAL_FAMILIES,
         CONTEXTUAL_PAIR_FUSION_FAMILY,
         FAMILIES,
         PAIR_FUSION_FAMILY,
@@ -245,7 +247,7 @@ def verify_output(
         and aggregate.get("gpu_count") == 2
         and aggregate.get("both_folds_trained") is True
         and (
-            family != CONTEXTUAL_PAIR_FUSION_FAMILY
+            family not in CONTEXTUAL_FAMILIES
             or aggregate.get("both_folds_improved") is True
         )
         and aggregate.get("public_predictions_copied") is False
@@ -374,7 +376,7 @@ def verify_output(
             and len(real_calibration) == EXPECTED_REAL_CALIBRATION_COUNT
         ):
             raise ValueError(f"appearance training configuration changed: {fold}")
-        if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+        if family in CONTEXTUAL_FAMILIES:
             verify_finetuning_gate(worker, config, fold=fold)
         synthetic_names = set(map(str, synthetic_train))
         synthetic_validation_names = set(map(str, synthetic_validation))

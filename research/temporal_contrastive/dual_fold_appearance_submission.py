@@ -30,6 +30,7 @@ try:
     )
     from appearance_family import (
         CONTEXTUAL_PAIR_FUSION_FAMILY,
+        MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
         PAIR_FUSION_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
@@ -72,6 +73,7 @@ except ModuleNotFoundError:
     )
     from research.temporal_contrastive.appearance_family import (
         CONTEXTUAL_PAIR_FUSION_FAMILY,
+        MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
         PAIR_FUSION_FAMILY,
         appearance_evidence_for_movie,
         build_appearance_model,
@@ -444,7 +446,11 @@ def orchestrate(args: argparse.Namespace) -> None:
             ),
             pair_fusion=(
                 acceptance["appearance_family"]
-                in {PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY}
+                in {
+                    PAIR_FUSION_FAMILY,
+                    CONTEXTUAL_PAIR_FUSION_FAMILY,
+                    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+                }
             ),
         )
         for stem, video in videos.items()
@@ -584,7 +590,11 @@ def orchestrate(args: argparse.Namespace) -> None:
         "pair_fusion_pair_cost_weight": (
             PAIR_FUSION_PAIR_COST
             if acceptance["appearance_family"]
-            in {PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY}
+            in {
+                PAIR_FUSION_FAMILY,
+                CONTEXTUAL_PAIR_FUSION_FAMILY,
+                MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+            }
             else 1.0
         ),
         "base_submission_sha256": sha256_file(args.base_submission),

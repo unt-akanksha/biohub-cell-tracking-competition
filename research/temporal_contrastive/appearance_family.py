@@ -33,6 +33,14 @@ try:
         PhysicalPairFusionAssociationModel,
         pair_fusion_scores_for_movie,
     )
+    from multiscale_contextual_pair_fusion import (
+        AXIAL_STATISTICS_PER_CHANNEL,
+        DEFAULT_PROJECTION_BASE_CHANNELS,
+        EXPECTED_PARAMETER_COUNT as MULTISCALE_CONTEXTUAL_PARAMETER_COUNT,
+        MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+        MULTISCALE_PROJECTION_POLICY,
+        MultiscaleContextualPairFusionAssociationModel,
+    )
     from patch_model import PhysicalPatchAssociationModel
 except ModuleNotFoundError:
     from research.temporal_contrastive.appearance_blend import (
@@ -64,6 +72,14 @@ except ModuleNotFoundError:
         PhysicalPairFusionAssociationModel,
         pair_fusion_scores_for_movie,
     )
+    from research.temporal_contrastive.multiscale_contextual_pair_fusion import (
+        AXIAL_STATISTICS_PER_CHANNEL,
+        DEFAULT_PROJECTION_BASE_CHANNELS,
+        EXPECTED_PARAMETER_COUNT as MULTISCALE_CONTEXTUAL_PARAMETER_COUNT,
+        MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+        MULTISCALE_PROJECTION_POLICY,
+        MultiscaleContextualPairFusionAssociationModel,
+    )
     from research.temporal_contrastive.patch_model import (
         PhysicalPatchAssociationModel,
     )
@@ -73,26 +89,42 @@ COSINE_FAMILY = "temporal_cosine_v1"
 COSINE_PARAMETER_COUNT = 19_221_954
 PAIR_FUSION_EMBEDDING_LOSS_WEIGHT = 0.25
 LINK_LOSS_POLICY = "all-positive supervised contrastive mean-log-probability"
-FAMILIES = (COSINE_FAMILY, PAIR_FUSION_FAMILY, CONTEXTUAL_PAIR_FUSION_FAMILY)
+CONTEXTUAL_FAMILIES = (
+    CONTEXTUAL_PAIR_FUSION_FAMILY,
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY,
+)
+FAMILIES = (COSINE_FAMILY, PAIR_FUSION_FAMILY, *CONTEXTUAL_FAMILIES)
 TRAINING_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-v2",
     CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-v3",
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY: (
+        "temporal-multiscale-contextual-pair-fusion-v4"
+    ),
 }
 CALIBRATION_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-blend-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-blend-v2",
     CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-blend-v3",
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY: (
+        "temporal-multiscale-contextual-pair-fusion-blend-v4"
+    ),
 }
 PROCESSED_RUN_BY_FAMILY = {
     COSINE_FAMILY: "temporal-patch-dual-fold-processed-acceptance-v1",
     PAIR_FUSION_FAMILY: "temporal-patch-pair-fusion-processed-acceptance-v2",
     CONTEXTUAL_PAIR_FUSION_FAMILY: "temporal-contextual-pair-fusion-processed-acceptance-v3",
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY: (
+        "temporal-multiscale-contextual-pair-fusion-processed-acceptance-v4"
+    ),
 }
 CANDIDATE_FAMILY_BY_APPEARANCE = {
     COSINE_FAMILY: "trackastra_appearance_blend",
     PAIR_FUSION_FAMILY: "trackastra_pair_fusion_blend",
     CONTEXTUAL_PAIR_FUSION_FAMILY: "trackastra_contextual_pair_fusion_blend",
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY: (
+        "trackastra_multiscale_contextual_pair_fusion_blend"
+    ),
 }
 APPEARANCE_FAMILY_BY_CANDIDATE = {
     candidate: family for family, candidate in CANDIDATE_FAMILY_BY_APPEARANCE.items()
@@ -101,6 +133,9 @@ PARAMETER_COUNT_BY_FAMILY = {
     COSINE_FAMILY: COSINE_PARAMETER_COUNT,
     PAIR_FUSION_FAMILY: PAIR_FUSION_PARAMETER_COUNT,
     CONTEXTUAL_PAIR_FUSION_FAMILY: CONTEXTUAL_PAIR_PARAMETER_COUNT,
+    MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY: (
+        MULTISCALE_CONTEXTUAL_PARAMETER_COUNT
+    ),
 }
 COMMON_METADATA_KEYS = (
     "appearance_family",
@@ -134,6 +169,13 @@ CONTEXTUAL_PAIR_METADATA_KEYS = (
     "reciprocal_parent_loss_weight",
     "embedding_auxiliary_loss_weight",
     "pair_chunk_size",
+)
+MULTISCALE_CONTEXTUAL_METADATA_KEYS = (
+    "architecture_parent",
+    "projection_base_channels",
+    "axial_statistics_per_channel",
+    "multiscale_projection_policy",
+    "shared_contextual_edge_head",
 )
 
 
@@ -191,9 +233,9 @@ def verify_appearance_metadata(
         )
         if not pair_valid:
             raise ValueError("pair-fusion architecture contract changed")
-    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+    if family in CONTEXTUAL_FAMILIES:
         contextual_valid = bool(
-            payload.get("appearance_family") == CONTEXTUAL_PAIR_FUSION_FAMILY
+            payload.get("appearance_family") == family
             and payload.get("candidate_context_width") == 18
             and payload.get("contextual_pair_feature_width")
             == CONTEXTUAL_PAIR_FEATURE_WIDTH
@@ -213,6 +255,19 @@ def verify_appearance_metadata(
         )
         if not contextual_valid:
             raise ValueError("contextual pair-fusion architecture contract changed")
+    if family == MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY:
+        multiscale_valid = bool(
+            payload.get("architecture_parent") == CONTEXTUAL_PAIR_FUSION_FAMILY
+            and payload.get("projection_base_channels")
+            == DEFAULT_PROJECTION_BASE_CHANNELS
+            and payload.get("axial_statistics_per_channel")
+            == AXIAL_STATISTICS_PER_CHANNEL
+            and payload.get("multiscale_projection_policy")
+            == MULTISCALE_PROJECTION_POLICY
+            and payload.get("shared_contextual_edge_head") is True
+        )
+        if not multiscale_valid:
+            raise ValueError("multiscale contextual architecture contract changed")
     return family
 
 
@@ -223,8 +278,10 @@ def appearance_metadata(payload: Mapping[str, Any]) -> dict[str, Any]:
     keys = COMMON_METADATA_KEYS
     if family == PAIR_FUSION_FAMILY:
         keys += PAIR_FUSION_METADATA_KEYS
-    if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
+    if family in CONTEXTUAL_FAMILIES:
         keys += CONTEXTUAL_PAIR_METADATA_KEYS
+    if family == MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY:
+        keys += MULTISCALE_CONTEXTUAL_METADATA_KEYS
     result = {key: payload[key] for key in keys if key in payload}
     result["appearance_family"] = family
     return result
@@ -246,6 +303,8 @@ def build_appearance_model(family: str) -> PhysicalPatchAssociationModel:
         return PhysicalPairFusionAssociationModel()
     if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
         return ContextualPairFusionAssociationModel()
+    if family == MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY:
+        return MultiscaleContextualPairFusionAssociationModel()
     raise ValueError(f"unknown appearance model family: {family}")
 
 
@@ -276,10 +335,25 @@ def appearance_evidence_for_movie(
             chunk_size=DEFAULT_PAIR_CHUNK_SIZE,
         )
     if family == CONTEXTUAL_PAIR_FUSION_FAMILY:
-        if not isinstance(model, ContextualPairFusionAssociationModel):
+        if type(model) is not ContextualPairFusionAssociationModel:
             raise TypeError("contextual pair-fusion appearance model type changed")
         if image is None:
             raise ValueError("contextual pair-fusion inference requires movie images")
+        return contextual_pair_fusion_scores_for_movie(
+            model,
+            video,
+            image,
+            embeddings,
+            division_logits,
+            pair_scores,
+            candidate_radius_um=32.0,
+            chunk_size=DEFAULT_PAIR_CHUNK_SIZE,
+        )
+    if family == MULTISCALE_CONTEXTUAL_PAIR_FUSION_FAMILY:
+        if not isinstance(model, MultiscaleContextualPairFusionAssociationModel):
+            raise TypeError("multiscale contextual appearance model type changed")
+        if image is None:
+            raise ValueError("multiscale contextual inference requires movie images")
         return contextual_pair_fusion_scores_for_movie(
             model,
             video,

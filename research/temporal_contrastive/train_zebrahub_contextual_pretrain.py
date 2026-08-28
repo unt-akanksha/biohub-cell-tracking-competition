@@ -61,6 +61,10 @@ except ModuleNotFoundError:
 
 
 RUN_ID = "zebrahub-contextual-pretrain-v1"
+APPEARANCE_FAMILY = CONTEXTUAL_PAIR_FUSION_FAMILY
+MODEL_CLASS = ContextualPairFusionAssociationModel
+MODEL_PARAMETER_COUNT = EXPECTED_PARAMETER_COUNT
+WORKER_SCRIPT_PATH = Path(__file__).resolve()
 TRAIN_SOURCE = "ZSNS004"
 VALIDATION_SOURCE = "ZSNS005"
 FOLDS = ("target_44b6", "target_6bba")
@@ -81,6 +85,21 @@ VALIDATION_PARTITION_POLICY = (
     "checkpoint selection; t0236-0239/t0516-0519 one-shot audit"
 )
 MINIMUM_VALIDATION_COMPOSITE_GAIN = 0.01
+
+
+def family_metadata() -> dict[str, object]:
+    """Return additive metadata for separately configured architecture lanes."""
+
+    return {}
+
+
+def initialize_model(
+    model: torch.nn.Module, args: argparse.Namespace, fold: str
+) -> dict[str, object]:
+    """Default v3 starts from the seeded architecture initialization."""
+
+    del model, args, fold
+    return {}
 
 
 @dataclass(frozen=True)
@@ -462,12 +481,13 @@ def train_worker(args: argparse.Namespace) -> None:
 
     output_dir = args.output_dir / args.fold
     output_dir.mkdir(parents=True, exist_ok=True)
-    model = ContextualPairFusionAssociationModel().to(device)
-    ema_model = ContextualPairFusionAssociationModel().to(device)
+    model = MODEL_CLASS().to(device)
+    initialization = initialize_model(model, args, args.fold)
+    ema_model = MODEL_CLASS().to(device)
     ema_model.load_state_dict(model.state_dict(), strict=True)
     ema_model.requires_grad_(False)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
-    if parameter_count != EXPECTED_PARAMETER_COUNT:
+    if parameter_count != MODEL_PARAMETER_COUNT:
         raise RuntimeError(f"unexpected contextual parameter count: {parameter_count}")
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay
@@ -506,7 +526,7 @@ def train_worker(args: argparse.Namespace) -> None:
         {
             "schema_version": 1,
             "run_id": RUN_ID,
-            "appearance_family": CONTEXTUAL_PAIR_FUSION_FAMILY,
+            "appearance_family": APPEARANCE_FAMILY,
             "fold": args.fold,
             "seed": seed,
             "parameter_count": parameter_count,
@@ -547,6 +567,8 @@ def train_worker(args: argparse.Namespace) -> None:
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
+            **family_metadata(),
+            **({"initialization": initialization} if initialization else {}),
         },
     )
 
@@ -663,7 +685,7 @@ def train_worker(args: argparse.Namespace) -> None:
         "schema_version": 1,
         "status": "completed",
         "run_id": RUN_ID,
-        "appearance_family": CONTEXTUAL_PAIR_FUSION_FAMILY,
+        "appearance_family": APPEARANCE_FAMILY,
         "fold": args.fold,
         "elapsed_seconds": time.monotonic() - started,
         "completed_step": completed_step,
@@ -706,6 +728,8 @@ def train_worker(args: argparse.Namespace) -> None:
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,
+        **family_metadata(),
+        **({"initialization": initialization} if initialization else {}),
     }
     base.atomic_json(output_dir / "worker_terminal.json", terminal)
     print(json.dumps(terminal, indent=2, sort_keys=True), flush=True)
@@ -723,7 +747,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         log_handle = (args.output_dir / f"{fold}.log").open("w", encoding="utf-8")
         command = [
             sys.executable,
-            str(Path(__file__).resolve()),
+            str(WORKER_SCRIPT_PATH),
             *[value for value in sys.argv[1:] if value != "--orchestrate"],
             "--worker",
             "--fold",
@@ -771,7 +795,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "schema_version": 1,
         "status": "completed",
         "run_id": RUN_ID,
-        "appearance_family": CONTEXTUAL_PAIR_FUSION_FAMILY,
+        "appearance_family": APPEARANCE_FAMILY,
         "elapsed_seconds": time.monotonic() - started,
         "gpu_count": 2,
         "folds": terminals,
@@ -792,6 +816,7 @@ def orchestrate(args: argparse.Namespace) -> None:
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,
+        **family_metadata(),
     }
     base.atomic_json(args.output_dir / "pretraining_terminal.json", terminal)
     print(json.dumps(terminal, indent=2, sort_keys=True), flush=True)
@@ -805,6 +830,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--fold", choices=FOLDS)
     result.add_argument("--data-root", type=Path, required=True)
     result.add_argument("--output-dir", type=Path, required=True)
+    result.add_argument("--initial-model-root", type=Path)
     result.add_argument("--seed", type=int, default=51_004)
     result.add_argument("--steps", type=int, default=12_000)
     result.add_argument("--minimum-train-shards", type=int, default=64)

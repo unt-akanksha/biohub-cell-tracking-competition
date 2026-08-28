@@ -377,3 +377,32 @@ remote re-download reproduced manifest
 inventory
 `e32bc686e14222e43acb8d6247351e286eae8ed6fdb1f4ab5087e55fb0c79667`,
 all 16 shards, and the unopened provenance state. No GPU was used.
+
+## Conditional high-capacity multiscale v4
+
+A fresh discussion/literature pass identified one capacity increase that is
+structurally complementary rather than merely wider. The current competition
+CV discussion documents that public weights contain all annotated movies and
+can invert local ablation conclusions, reinforcing our external and reciprocal
+split policy. ASCENT (ICCV 2025) reports that axial volume compression followed
+by a deep encoder can produce efficient discriminative 3D fluorescence
+tracking representations. Sources:
+
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/730160>
+- <https://openaccess.thecvf.com/content/ICCV2025/html/Han_ASCENT_Annotation-free_Self-supervised_Contrastive_Embeddings_for_3D_Neuron_Tracking_in_ICCV_2025_paper.html>
+
+The new project-authored `temporal_multiscale_contextual_pair_fusion_v4`
+retains the entire v3 3D encoder and contextual edge model, then adds per-frame
+axial mean/max/std/center/learned-attention projections and a 96-to-768-channel
+2D residual branch. Its 46,386,607 parameters are 2.2357 times v3. Every shared
+v3 tensor strict-loads, while zero-initialized residual outputs make the warm
+start numerically prediction-preserving. Therefore subsequent gain must be
+learned by the new branch rather than coming from a changed baseline.
+
+Separate two-GPU ZebraHub and reciprocal transfer wrappers preserve v3's
+shards, seeds, objectives, selection/audit windows, real/synthetic retention
+gates, and no-submission contract. V4 is not registered or launched and cannot
+delay an accepted v3 submission. It becomes eligible only after v3 passes and a
+live guard shows another run will leave at least eight Kaggle GPU hours. Full
+implementation details are in
+`reports/experiments/multiscale-contextual-v4-staging.md`.
