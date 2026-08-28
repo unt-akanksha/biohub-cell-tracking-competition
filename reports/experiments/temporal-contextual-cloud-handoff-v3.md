@@ -343,3 +343,26 @@ evidence until exact acceptance passes. The user supplied prospective upload
 authorization on 2026-08-27: after every frozen gate passes, upload the accepted
 hash-bound CSV without another prompt. The upload step itself does not require
 a GPU.
+
+For this code competition, submit the exact completed Kaggle notebook version,
+not the cloud CSV directly. The fail-closed boundary first verifies and
+downloads the current private notebook output:
+
+```powershell
+python scripts\submit-temporal-contextual-kernel.py `
+  --kernel-dir kaggle\biohub-temporal-contextual-submission-candidate-v3 `
+  --kernel-version <completed-version> `
+  --download-dir .biohub\candidate-downloads\contextual-v3-<completed-version> `
+  --receipt .biohub\submission-receipts\contextual-v3-<completed-version>.json
+```
+
+Only after that dry verification succeeds, invoke the identical command with
+`--execute`. The wrapper rechecks the current owned kernel version and COMPLETE
+status, exact private data sources, two-GPU/internet-off metadata, downloaded
+candidate/report/launcher hashes, non-replica edge changes, the five-per-day
+limit, and the narrowly scoped prospective authorization event. It then uses
+Kaggle's code-kernel `--kernel/--version` submission path and writes a receipt.
+Wrapper SHA-256:
+`896a1e7719289dce310ec2f792787d99789211b627818f3bd8ba08061db8be3c`;
+test SHA-256:
+`328c6ea140465c9ba459e442fc7a4f956d994097594b3738133765c6859ba7af`.
