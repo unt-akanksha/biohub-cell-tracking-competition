@@ -28,6 +28,11 @@ from research.lsm_fm_detection.score_public_node_refinement import (
     public_row,
     score_graph,
 )
+from research.temporal_contrastive.appearance_family import (
+    APPEARANCE_FAMILY_BY_CANDIDATE,
+    COSINE_FAMILY,
+    verify_appearance_metadata,
+)
 from research.trackastra_graph.dual_fold_processed_acceptance import (
     EXPECTED_STEMS,
     FROZEN_ASSOCIATION_CONFIGURATION,
@@ -52,58 +57,21 @@ CSV_COLUMNS = (
     "target_id",
 )
 NODE_IDENTITY_COLUMNS = ("dataset", "node_id", "t", "z", "y", "x")
-COSINE_FAMILY = "temporal_cosine_v1"
-PAIR_FUSION_FAMILY = "temporal_pair_fusion_v2"
-APPEARANCE_FAMILY_BY_CANDIDATE = {
-    "trackastra_appearance_blend": COSINE_FAMILY,
-    "trackastra_pair_fusion_blend": PAIR_FUSION_FAMILY,
-}
-PARAMETER_COUNT_BY_FAMILY = {
-    COSINE_FAMILY: 19_221_954,
-    PAIR_FUSION_FAMILY: 20_869_325,
-}
-
-
 def validate_appearance_model_evidence(
     model: Mapping[str, Any], model_family: str
 ) -> None:
     digest = model.get("model_sha256")
-    common_valid = bool(
-        int(model.get("best_step", 0)) > 0
-        and int(model.get("parameter_count", 0))
-        == PARAMETER_COUNT_BY_FAMILY[model_family]
-        and model.get("appearance_family", COSINE_FAMILY) == model_family
-        and model.get("input_channels") == 3
-        and model.get("temporal_frame_offsets") == [-1, 0, 1]
+    try:
+        observed_family = verify_appearance_metadata(model)
+    except ValueError as error:
+        raise ValueError("appearance model architecture evidence is invalid") from error
+    if not (
+        observed_family == model_family
+        and int(model.get("best_step", 0)) > 0
         and isinstance(digest, str)
         and len(digest) == 64
-        and model.get("checkpoint_weight_source")
-        == "optimizer-step exponential moving average"
-        and model.get("ema_decay") == 0.997
-        and model.get("division_prior_correction")
-        == "class-conditional importance weighting"
-        and model.get("link_loss_policy")
-        == "all-positive supervised contrastive mean-log-probability"
-        and model.get("real_split_policy")
-        == "global deterministic disjoint partition per embryo prefix"
-    )
-    if not common_valid:
+    ):
         raise ValueError("appearance model common evidence is invalid")
-    if model_family == PAIR_FUSION_FAMILY:
-        pair_valid = bool(
-            model.get("appearance_family") == PAIR_FUSION_FAMILY
-            and model.get("pair_feature_width") == 1_029
-            and model.get("pair_projection_width") == 1_024
-            and model.get("pair_hidden_widths") == [512, 128]
-            and model.get("pair_fusion_policy")
-            == "candidate-limited source-target-absolute-product-displacement-division MLP"
-            and model.get("pair_loss_policy")
-            == "all-positive candidate-pair mean-log-probability"
-            and model.get("embedding_auxiliary_loss_weight") == 0.25
-            and model.get("pair_chunk_size") == 4_096
-        )
-        if not pair_valid:
-            raise ValueError("pair-fusion model evidence is invalid")
 
 
 @dataclass(frozen=True)

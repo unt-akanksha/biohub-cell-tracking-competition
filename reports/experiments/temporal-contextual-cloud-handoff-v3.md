@@ -229,6 +229,31 @@ Transfer the processed output back to this workspace and run from the repository
 root, using a new output path:
 
 ```powershell
+.biohub\evaluation-venv\Scripts\python.exe `
+  scripts\run-temporal-contextual-exact-acceptance.py `
+  --processed-root .biohub\cloud-results\temporal-contextual-pair-fusion-v3\processed `
+  --control-csv .biohub\cache\kernel-outputs\hoct-multibackbone-probe-v1\processed_validation\processed_validation.csv `
+  --truth-dir .biohub\cache\competition-truth\public-node-acceptance-v1 `
+  --scorer-lock config\official-scorer.lock.json `
+  --organizer-checkout .biohub\vendor\kaggle-cell-tracking-competition `
+  --tracksdata-checkout .biohub\vendor\tracksdata `
+  --output reports\experiments\temporal-contextual-pair-fusion-v3-exact-acceptance.json
+```
+
+The preferred runner binds the processed cloud launcher to the materialization
+and CSV hashes before invoking the pinned scorer, then requires all five exact
+checks. Runner SHA-256:
+`0f77b8dff7706403d5f421d28b75bcf24bd234ec80f0b06e6fa2e4e59a0debb5`.
+Its test SHA-256 is
+`4f806c9ef7c5ccb50f2aacdd0740d4a5dde1c237601dea1b0deb62471669996b`.
+The exact scorer was also repaired to consume the centralized contextual-v3
+architecture contract (including the exact `20,747,761` parameter count)
+instead of rejecting that new family. The 16 host-runner tests and 20 pinned
+evaluation-environment scorer/model/materializer tests pass.
+
+The equivalent direct scorer command is:
+
+```powershell
 .biohub\evaluation-venv\Scripts\python.exe -m `
   research.trackastra_graph.score_dual_fold_processed_candidate `
   --control-csv .biohub\cache\kernel-outputs\hoct-multibackbone-probe-v1\processed_validation\processed_validation.csv `

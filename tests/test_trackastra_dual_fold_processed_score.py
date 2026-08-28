@@ -161,6 +161,78 @@ def test_pair_fusion_materialization_requires_exact_architecture_contract() -> N
         )
 
 
+def test_contextual_materialization_requires_exact_architecture_contract() -> None:
+    payload = materialization()
+    contextual_contract = {
+        "appearance_family": "temporal_contextual_pair_fusion_v3",
+        "parameter_count": 20_747_761,
+        "input_channels": 3,
+        "temporal_frame_offsets": [-1, 0, 1],
+        "checkpoint_weight_source": "optimizer-step exponential moving average",
+        "ema_decay": 0.997,
+        "division_prior_correction": "class-conditional importance weighting",
+        "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
+        "real_split_policy": "global deterministic disjoint partition per embryo prefix",
+        "candidate_context_width": 18,
+        "contextual_pair_feature_width": 1_047,
+        "edge_token_width": 256,
+        "edge_set_feature_width": 1_536,
+        "edge_head_hidden_widths": [512, 128],
+        "contextual_pair_policy": (
+            "candidate-limited temporal-context outgoing-incoming edge-set pooling"
+        ),
+        "transition_context_policy": (
+            "bounded phase-correlation with projection refinement, "
+            "duplicate evidence, "
+            "and robust residual-motion context"
+        ),
+        "pair_loss_policy": (
+            "outgoing all-positive child ranking plus eligible incoming "
+            "one-parent ranking"
+        ),
+        "reciprocal_parent_loss_weight": 0.35,
+        "embedding_auxiliary_loss_weight": 0.25,
+        "pair_chunk_size": 4_096,
+    }
+    payload.update(
+        candidate_family="trackastra_contextual_pair_fusion_blend",
+        appearance_family="temporal_contextual_pair_fusion_v3",
+        calibration_terminal_sha256="e" * 64,
+        appearance_models={
+            "target_44b6": {
+                **contextual_contract,
+                "model_sha256": "f" * 64,
+                "best_step": 30,
+            },
+            "target_6bba": {
+                **contextual_contract,
+                "model_sha256": "1" * 64,
+                "best_step": 40,
+            },
+        },
+        appearance_blend={
+            fold: {
+                "appearance_weight": 0.10,
+                "division_weight": 0.05,
+                "ensemble_mode": "reciprocal_mean",
+                "appearance_temperature": 0.10,
+            }
+            for fold in ("target_44b6", "target_6bba")
+        },
+    )
+
+    validate_materialization(
+        payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+    )
+    payload["appearance_models"]["target_44b6"]["transition_context_policy"] = (
+        "mutated"
+    )
+    with pytest.raises(ValueError, match="appearance model evidence"):
+        validate_materialization(
+            payload, control_sha256="a" * 64, candidate_sha256="b" * 64
+        )
+
+
 def test_appearance_materialization_accepts_hash_identical_predeclared_control() -> None:
     payload = materialization()
     for model in payload["models"].values():
