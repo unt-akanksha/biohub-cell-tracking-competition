@@ -3,9 +3,10 @@
 Date: 2026-08-27
 
 Status: project-authored model, ZebraHub pretraining wrapper, reciprocal Biohub
-transfer wrapper, metadata contract, and downstream model loader implemented
-and locally tested. Not registered, packaged, launched, calibrated, scored, or
-submitted. The running contextual v3 recipe and evidence remain unchanged.
+transfer wrapper, metadata contract, downstream model loader, and portable
+runtime implemented and locally tested. Not registered, remotely published,
+launched, calibrated, scored, or submitted. The contextual v3 recipe and
+evidence remain unchanged.
 
 ## Why this is the next distinct capacity ablation
 
@@ -102,3 +103,6 @@ submission.
   finite and populates gradients in both branches and the edge head.
 - The pretraining and transfer wrappers remain distinct run families and retain
   exactly-two-GPU/no-submission contracts.
+- The local portable runtime contains the v4 model and both wrappers alongside
+  the complete hash-bound v3 training, calibration, processed-acceptance, and
+  whole-movie inference stack. Its private remote dataset remains unpublished.

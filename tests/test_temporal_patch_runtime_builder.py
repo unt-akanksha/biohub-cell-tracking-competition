@@ -25,6 +25,12 @@ TRANSFER_TARGET = (
     / "staging"
     / "biohub-temporal-contextual-transfer-runtime-v1"
 )
+MULTISCALE_TARGET = (
+    ROOT
+    / ".biohub"
+    / "staging"
+    / "biohub-temporal-multiscale-contextual-runtime-v4"
+)
 
 
 def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
@@ -46,6 +52,7 @@ def test_runtime_builder_hashes_complete_two_gpu_appearance_pipeline() -> None:
         "timed_out_worker_termination_grace_seconds": 15,
         "predeclared_trackastra_control_allowed": True,
         "contextual_v3_requires_hash_bound_external_pretraining": True,
+        "multiscale_v4_requires_accepted_contextual_v3_warm_start": True,
     }
     required = {
         "train_dual_fold_patch.py",
@@ -226,3 +233,60 @@ def test_runtime_builder_emits_gated_contextual_transfer_package() -> None:
     assert set(experiment["source"].values()) == {
         "recorded_outside_runtime_package"
     }
+
+
+def test_runtime_builder_emits_high_capacity_multiscale_v4_package() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(BUILDER),
+            "--replace",
+            "--family",
+            "multiscale_contextual_v4",
+        ],
+        check=True,
+    )
+    manifest = json.loads(
+        (MULTISCALE_TARGET / "SOURCE_MANIFEST.json").read_text(encoding="utf-8")
+    )
+    metadata = json.loads(
+        (MULTISCALE_TARGET / "dataset-metadata.json").read_text(encoding="utf-8")
+    )
+    experiment = json.loads(
+        (MULTISCALE_TARGET / "experiment.json").read_text(encoding="utf-8")
+    )
+
+    family = manifest["appearance_model"]["families"][
+        "temporal_multiscale_contextual_pair_fusion_v4"
+    ]
+    assert manifest["run_id"] == "temporal-multiscale-contextual-pair-fusion-v4"
+    assert manifest["runtime_family"] == "multiscale_contextual_v4"
+    assert family["parameters_per_fold"] == 46_386_607
+    assert family["projection_base_channels"] == 96
+    assert family["zero_residual_warm_start_preserves_v3_predictions"] is True
+    assert metadata["id"] == (
+        "indarkarhana/biohub-temporal-multiscale-contextual-runtime-v4"
+    )
+    assert metadata["isPrivate"] is True
+    assert experiment["model"]["family"] == (
+        "temporal_multiscale_contextual_pair_fusion_v4"
+    )
+    assert experiment["model"]["parameter_count_per_fold"] == 46_386_607
+    assert experiment["pretraining_execution"]["status"] == "runtime_package"
+    assert experiment["pretraining_execution"]["runtime_dataset_version"] == (
+        "recorded_outside_runtime_package"
+    )
+    assert experiment["pretraining_execution"][
+        "excluded_runtime_dataset_versions"
+    ] == "recorded_outside_runtime_package"
+    assert experiment["transfer_execution"]["status"] == "runtime_package"
+    assert set(experiment["source"].values()) == {
+        "recorded_outside_runtime_package"
+    }
+    for name in (
+        "multiscale_contextual_pair_fusion.py",
+        "train_zebrahub_multiscale_contextual_pretrain.py",
+        "train_dual_fold_multiscale_contextual_pair_fusion.py",
+    ):
+        assert name in manifest["files"]
+        assert (MULTISCALE_TARGET / name).is_file()

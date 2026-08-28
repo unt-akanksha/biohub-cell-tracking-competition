@@ -19,12 +19,18 @@ TARGET_BY_FAMILY = {
     "contextual_transfer_v3": (
         STAGING_ROOT / "biohub-temporal-contextual-transfer-runtime-v1"
     ),
+    "multiscale_contextual_v4": (
+        STAGING_ROOT / "biohub-temporal-multiscale-contextual-runtime-v4"
+    ),
 }
 RUN_ID_BY_FAMILY = {
     "cosine_v1": "temporal-patch-dual-fold-v1",
     "pair_fusion_v2": "temporal-patch-pair-fusion-v2",
     "contextual_pair_fusion_v3": "temporal-contextual-pair-fusion-v3",
     "contextual_transfer_v3": "temporal-contextual-pair-fusion-v3",
+    "multiscale_contextual_v4": (
+        "temporal-multiscale-contextual-pair-fusion-v4"
+    ),
 }
 DATASET_ID_BY_FAMILY = {
     "cosine_v1": "indarkarhana/biohub-temporal-patch-runtime-v1",
@@ -34,6 +40,9 @@ DATASET_ID_BY_FAMILY = {
     ),
     "contextual_transfer_v3": (
         "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1"
+    ),
+    "multiscale_contextual_v4": (
+        "indarkarhana/biohub-temporal-multiscale-contextual-runtime-v4"
     ),
 }
 EXPERIMENT_BY_FAMILY = {
@@ -53,6 +62,10 @@ EXPERIMENT_BY_FAMILY = {
     / "config"
     / "experiments"
     / "temporal-contextual-pair-fusion-v3.json",
+    "multiscale_contextual_v4": ROOT
+    / "config"
+    / "experiments"
+    / "temporal-multiscale-contextual-pair-fusion-v4.json",
 }
 TITLE_BY_FAMILY = {
     "cosine_v1": "Biohub Temporal Patch Runtime v1",
@@ -62,6 +75,9 @@ TITLE_BY_FAMILY = {
     ),
     "contextual_transfer_v3": (
         "Biohub Temporal Contextual Transfer Runtime v1"
+    ),
+    "multiscale_contextual_v4": (
+        "Biohub Temporal Multiscale Contextual Runtime v4"
     ),
 }
 TRACKASTRA_REPOSITORY = ROOT / ".biohub" / "cache" / "repos" / "trackastra"
@@ -154,6 +170,20 @@ SOURCES = {
     / "dual_fold_rerank_submission.py",
     "submission_sharding.py": ROOT / "research" / "submission_sharding.py",
 }
+MULTISCALE_SOURCES = {
+    "multiscale_contextual_pair_fusion.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "multiscale_contextual_pair_fusion.py",
+    "train_zebrahub_multiscale_contextual_pretrain.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_zebrahub_multiscale_contextual_pretrain.py",
+    "train_dual_fold_multiscale_contextual_pair_fusion.py": ROOT
+    / "research"
+    / "temporal_contrastive"
+    / "train_dual_fold_multiscale_contextual_pair_fusion.py",
+}
 TRACKASTRA_FILES = (
     "trackastra/__init__.py",
     "trackastra/_version.py",
@@ -184,7 +214,11 @@ def packaged_experiment(source: Path, family: str) -> dict:
     """Remove a contextual runtime's recursive reference to its own manifest."""
 
     payload = json.loads(source.read_text(encoding="utf-8"))
-    if family in {"contextual_pair_fusion_v3", "contextual_transfer_v3"}:
+    if family in {
+        "contextual_pair_fusion_v3",
+        "contextual_transfer_v3",
+        "multiscale_contextual_v4",
+    }:
         execution = payload.get("pretraining_execution")
         if not isinstance(execution, dict):
             raise ValueError("contextual v3 pretraining execution contract is missing")
@@ -193,6 +227,13 @@ def packaged_experiment(source: Path, family: str) -> dict:
         execution["kernel_metadata_sha256"] = "recorded_outside_runtime_package"
         execution["runtime_manifest_sha256"] = "see_SOURCE_MANIFEST.json"
         execution["runtime_remote_redownload_verified"] = False
+        if family == "multiscale_contextual_v4":
+            execution["runtime_dataset_version"] = (
+                "recorded_outside_runtime_package"
+            )
+            execution["excluded_runtime_dataset_versions"] = (
+                "recorded_outside_runtime_package"
+            )
         external_data = payload.get("external_data")
         if not isinstance(external_data, dict):
             raise ValueError("contextual v3 external data contract is missing")
@@ -206,7 +247,7 @@ def packaged_experiment(source: Path, family: str) -> dict:
             "technique_report_sha256",
         ):
             source_inventory[key] = "recorded_outside_runtime_package"
-        if family == "contextual_transfer_v3":
+        if family in {"contextual_transfer_v3", "multiscale_contextual_v4"}:
             transfer = payload.get("transfer_execution")
             if not isinstance(transfer, dict):
                 raise ValueError("contextual v3 transfer execution contract is missing")
@@ -259,7 +300,14 @@ def main() -> None:
     ).strip()
     if commit != EXPECTED_TRACKASTRA_COMMIT:
         raise RuntimeError(f"Trackastra source commit changed: {commit}")
-    sources = {**SOURCES, "experiment.json": EXPERIMENT_BY_FAMILY[args.family]}
+    family_sources = (
+        MULTISCALE_SOURCES if args.family == "multiscale_contextual_v4" else {}
+    )
+    sources = {
+        **SOURCES,
+        **family_sources,
+        "experiment.json": EXPERIMENT_BY_FAMILY[args.family],
+    }
     missing = [str(path) for path in sources.values() if not path.is_file()]
     if missing:
         raise FileNotFoundError(f"temporal runtime sources are missing: {missing}")
@@ -319,6 +367,15 @@ def main() -> None:
                         "minimum_external_composite_gain": 0.01,
                         "candidate_pair_inference_precision": "CUDA float16 autocast",
                     },
+                    "temporal_multiscale_contextual_pair_fusion_v4": {
+                        "parameters_per_fold": 46_386_607,
+                        "architecture_parent": "temporal_contextual_pair_fusion_v3",
+                        "projection_base_channels": 96,
+                        "axial_statistics_per_channel": 5,
+                        "projection_policy": "per-temporal-channel axial mean-max-std-center-learned-attention fused with the native physical 3D encoder",
+                        "zero_residual_warm_start_preserves_v3_predictions": True,
+                        "requires_accepted_v3_warm_start": True,
+                    },
                 },
                 "input_channels": 3,
                 "temporal_frame_offsets": [-1, 0, 1],
@@ -326,6 +383,7 @@ def main() -> None:
                     "temporal_cosine_v1": False,
                     "temporal_pair_fusion_v2": False,
                     "temporal_contextual_pair_fusion_v3": True,
+                    "temporal_multiscale_contextual_pair_fusion_v4": True,
                 },
                 "division_head_used_at_inference": True,
                 "link_loss_policy": "all-positive supervised contrastive mean-log-probability",
@@ -344,6 +402,7 @@ def main() -> None:
                 "timed_out_worker_termination_grace_seconds": 15,
                 "predeclared_trackastra_control_allowed": True,
                 "contextual_v3_requires_hash_bound_external_pretraining": True,
+                "multiscale_v4_requires_accepted_contextual_v3_warm_start": True,
             },
             "files": files,
         },

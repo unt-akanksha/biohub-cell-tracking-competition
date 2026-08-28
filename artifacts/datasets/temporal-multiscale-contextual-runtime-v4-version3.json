@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "dataset": "indarkarhana/biohub-temporal-multiscale-contextual-runtime-v4",
+  "dataset_version": 3,
+  "status": "private_remote_redownload_verified",
+  "admissible_for_future_v4_kernels": true,
+  "excluded_versions": {
+    "1": "nested Trackastra source omitted by the default directory upload mode",
+    "2": "verification provenance superseded by frozen self-reference-free runtime metadata"
+  },
+  "remote_redownload_path": ".biohub/cache/dataset-redownloads/biohub-temporal-multiscale-contextual-runtime-v4-version3",
+  "runtime_manifest_sha256": "ac1c32a70f3dcc699806d18bde487d5d9154ba6774f06c7a812773c0e0efb8b3",
+  "files_checked": 39,
+  "bytes_checked": 572230,
+  "total_staged_bytes": 582195,
+  "required_visible_gpu_count": 2,
+  "internet_enabled": false,
+  "submission_command_included": false,
+  "source_experiment_sha256": "022cd4853bf6f3df9b1fa459d8cc076b28a2c4e0d6380beb5953e33248b16812",
+  "packaged_experiment_sha256": "3c9a4750d53d9037e700fbdec0653e129d96cb40037b0b9d4e1a6350f812fef3",
+  "dataset_metadata_sha256": "a10a507e61ba492c19a0a9fd9239a8f1f211343ecff077ebdb72d26f607c84b1",
+  "runtime_builder_sha256": "a687cba7c350c29c88e6541b1816bd3440bcd528a1f3e008762f07c114a3dfc0",
+  "runtime_builder_test_sha256": "0399f866b080e2897a85c0e721d569b39a9dda164722f4d349e4bb326871e14c",
+  "verified_at": "2026-08-27"
+}
