@@ -34,7 +34,7 @@ def test_acceptance_kernel_is_exactly_two_gpu_and_external_only() -> None:
     compile(code, str(NOTEBOOK), "exec")
 
     assert metadata["id"] == (
-        "indarkarhana/biohub-zebrahub-contextual-acceptance-v1"
+        "indarkarhana/biohub-zsns001-contextual-gate-v1"
     )
     assert len(metadata["id"].split("/", 1)[1]) <= 50
     assert len(metadata["title"]) <= 50

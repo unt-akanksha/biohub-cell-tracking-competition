@@ -44,7 +44,7 @@ def test_multiscale_transfer_kernel_is_two_gpu_gated_training_only() -> None:
     assert metadata["kernel_sources"] == [
         "josefreitasalvesneto/biohub-synthetic-dataset",
         "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
-        "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+        "indarkarhana/biohub-zsns001-contextual-gate-v1",
         "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1",
     ]
     assert metadata["competition_sources"] == [

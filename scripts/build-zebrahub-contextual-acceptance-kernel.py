@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RUN_ID = "zebrahub-contextual-acceptance-evaluation-v1"
 KERNEL_ID = f"biohub-{RUN_ID}"
-REMOTE_KERNEL_ID = "biohub-zebrahub-contextual-acceptance-v1"
+REMOTE_KERNEL_ID = "biohub-zsns001-contextual-gate-v1"
 TARGET = ROOT / "kaggle" / KERNEL_ID
 NOTEBOOK = TARGET / f"{KERNEL_ID}.ipynb"
 
@@ -298,7 +298,7 @@ def main() -> None:
     )
     metadata = {
         "id": f"indarkarhana/{REMOTE_KERNEL_ID}",
-        "title": "Biohub ZebraHub Contextual Acceptance v1",
+        "title": "Biohub ZSNS001 Contextual Gate v1",
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",

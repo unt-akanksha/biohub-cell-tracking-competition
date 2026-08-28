@@ -216,7 +216,7 @@ def main() -> None:
         ],
         "kernel_sources": [
             "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
-            "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+            "indarkarhana/biohub-zsns001-contextual-gate-v1",
         ],
         "competition_sources": [],
         "model_sources": [],

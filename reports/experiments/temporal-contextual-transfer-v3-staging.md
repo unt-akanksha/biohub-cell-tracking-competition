@@ -81,10 +81,11 @@ before index scatter. No recipe, split, seed, gate, or selection policy was
 changed. No Kaggle GPU, leaderboard result, or competition submission was used
 to stage this transfer lane.
 
-The acceptance kernel input now resolves through the shortened remote slug
-`indarkarhana/biohub-zebrahub-contextual-acceptance-v1`. This is a metadata-only
-repair for Kaggle's identifier boundary; the transfer notebook remains byte
-identical at that repair point.
+The acceptance kernel input now resolves through the distinct remote slug
+`indarkarhana/biohub-zsns001-contextual-gate-v1`. This is a metadata-only
+repair for Kaggle's identifier boundary and avoids collision with the frozen
+acceptance dataset slug; the transfer notebook remains byte identical at that
+repair point.
 
 Before launch, the transfer-side acceptance verifier was hardened without
 changing training. It now binds the completed launcher to the aggregate

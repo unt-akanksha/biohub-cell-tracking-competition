@@ -45,7 +45,7 @@ def test_multiscale_pretraining_kernel_is_two_gpu_accepted_v3_only() -> None:
     ]
     assert metadata["kernel_sources"] == [
         "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
-        "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+        "indarkarhana/biohub-zsns001-contextual-gate-v1",
     ]
     assert metadata["competition_sources"] == []
     assert "torch.cuda.device_count() != 2" in code

@@ -70,3 +70,12 @@ characters. Both now use the 41-character
 `biohub-zebrahub-contextual-acceptance-v1`; the scientific run ID, notebook
 bytes, runtime, inputs, gates, and budget are unchanged. The downstream
 transfer source was rebound to that shortened remote slug.
+
+The next live creation attempt returned HTTP 409 before a kernel version was
+created because that provisional kernel slug was identical to the attached
+acceptance dataset slug. The kernel alone is now named
+`indarkarhana/biohub-zsns001-contextual-gate-v1`, with title
+`Biohub ZSNS001 Contextual Gate v1`. The acceptance dataset retains its frozen
+original slug. This repair changes no notebook code, data, model, gate, or
+budget; dependent kernel-source metadata is rebound to the distinct kernel
+slug.
