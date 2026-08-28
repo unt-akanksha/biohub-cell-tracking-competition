@@ -147,6 +147,85 @@ def test_v3_warm_start_is_complete_and_numerically_prediction_preserving() -> No
     assert torch.equal(multiscale_divisions, control_divisions)
 
 
+def test_zero_residual_warm_start_unlocks_the_full_axial_path() -> None:
+    """The two intentional zero layers must delay, not strand, new features."""
+
+    torch.manual_seed(1907)
+    control = ContextualPairFusionAssociationModel(
+        base_channels=8, embedding_channels=16
+    )
+    model = MultiscaleContextualPairFusionAssociationModel(
+        base_channels=8,
+        embedding_channels=16,
+        projection_base_channels=8,
+    )
+    load_contextual_v3_warm_start(model, control.state_dict())
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.05)
+    patches = torch.randn(7, 3, 17, 17, 17)
+    candidates = torch.tensor(
+        [
+            [True, True, False, False],
+            [False, True, True, True],
+            [True, False, True, True],
+        ]
+    )
+    positives = torch.tensor(
+        [
+            [True, False, False, False],
+            [False, False, True, False],
+            [False, False, False, True],
+        ]
+    )
+    source_coords = torch.tensor(
+        [[0.0, 0.0, 0.0], [0.0, 5.0, 0.0], [0.0, 10.0, 0.0]]
+    )
+    target_coords = torch.tensor(
+        [[0.0, 1.0, 0.0], [0.0, 4.0, 0.0], [0.0, 7.0, 0.0], [0.0, 11.0, 0.0]]
+    )
+    context = torch.randn(3, 4, CANDIDATE_CONTEXT_WIDTH)
+    context[~candidates] = 0
+
+    def train_step() -> None:
+        optimizer.zero_grad(set_to_none=True)
+        embeddings, divisions = model(patches)
+        logits = model.candidate_pair_logits(
+            embeddings[:3],
+            embeddings[3:],
+            source_coords,
+            target_coords,
+            divisions[:3],
+            candidates,
+            context,
+            candidate_radius_um=16.0,
+            chunk_size=2,
+        )
+        loss = contextual_bidirectional_pair_nll(logits, positives, candidates)
+        loss = loss + 0.20 * divisions.square().mean()
+        loss.backward()
+
+    train_step()
+    assert float(model.appearance_adapter[-1].weight.grad.abs().sum()) > 0
+    assert float(model.division_adapter[-1].weight.grad.abs().sum()) > 0
+    # Both output adapters are exactly zero at the warm start, so upstream
+    # axial parameters correctly receive no first-step signal.
+    assert float(model.projection_stem[0].weight.grad.abs().sum()) == 0
+    optimizer.step()
+
+    train_step()
+    assert float(model.projection_stem[0].weight.grad.abs().sum()) > 0
+    assert float(
+        model.axial_projection.attention_logits[-1].weight.grad.abs().sum()
+    ) > 0
+    # The attention output layer was also initialized to zero. Its first
+    # update now unlocks the depthwise attention feature extractor.
+    optimizer.step()
+
+    train_step()
+    assert float(
+        model.axial_projection.attention_logits[0].weight.grad.abs().sum()
+    ) > 0
+
+
 def test_v3_warm_start_rejects_missing_shared_tensor() -> None:
     control = ContextualPairFusionAssociationModel(
         base_channels=8, embedding_channels=16

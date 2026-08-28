@@ -135,3 +135,15 @@ Both cases pass, so the published v4 training configuration is retained and no
 queued controller is restarted. Evidence is stored in
 `artifacts/profiles/temporal-multiscale-training-memory-v1.json`. The profiler
 used no GPU, read no leaderboard, and performed no submission.
+
+## Warm-start optimization audit
+
+A three-update regression now exercises the exact zero-residual initialization
+rather than only a randomly initialized v4 model. The first update gives
+nonzero gradients to both zeroed output adapters while preserving zero upstream
+axial gradients. After that update, the projection stem and zeroed attention
+output layer receive nonzero gradients; after the second update, the upstream
+depthwise attention extractor also receives nonzero gradients. Thus the staged
+zero initialization preserves accepted v3 predictions without stranding any
+new branch behind a permanent zero-gradient barrier. The focused architecture
+suite passes 9/9.
