@@ -19,11 +19,11 @@ EXPECTED_RUNTIME_MANIFEST_SHA256 = (
     "cbe5fe27639155746c95a98d91702d5fbe595172b058e0e9db330374ecfff25d"
 )
 EXPECTED_TEMPORAL_SOURCE_TREE_SHA256 = (
-    "9c1db520a098d70c746de2afbb4e1037796731cee9366c5aa0bd4d5f16d2b9c2"
+    "5af3db03e1d1790bddba54f77fd1cc9e16bf3ecdd7e946c72a6236e35f4e9ea4"
 )
 SOURCE_HASHES = {
     "research/temporal_contrastive/verify_zebrahub_contextual_acceptance_output.py": (
-        "2c9f45effaa8bb5eb23a6d86041cf2811755c1fd8c97ee98223bb5e7d9d2ba96"
+        "c8906e118e8479c0e2390dd7a0d3d97f40ed5fbff86a27e21e57bd6396f78e45"
     ),
     "research/temporal_contrastive/evaluate_zebrahub_contextual_acceptance.py": (
         "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"

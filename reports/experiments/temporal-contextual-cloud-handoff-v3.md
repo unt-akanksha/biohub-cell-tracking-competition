@@ -23,7 +23,7 @@ create a competition submission.
 The repository closure now binds all `27` Python files under
 `research/temporal_contrastive`, including the isolated future-division
 prototype, at tree SHA-256
-`9c1db520a098d70c746de2afbb4e1037796731cee9366c5aa0bd4d5f16d2b9c2`.
+`5af3db03e1d1790bddba54f77fd1cc9e16bf3ecdd7e946c72a6236e35f4e9ea4`.
 
 ## Immutable assets
 
@@ -37,7 +37,7 @@ prototype, at tree SHA-256
 - Parameters per reciprocal fold: `20,747,761`
 - Required visible GPUs for every GPU stage: exactly `2`
 - Internet during all GPU stages: disabled
-- Kaggle quota reserve: at least `8` hours
+- Kaggle quota reserve: lifted by explicit user direction on `2026-08-28`
 
 Set host paths without changing the recipes:
 
@@ -84,7 +84,7 @@ python scripts/run-temporal-contextual-cloud-transfer.py \
 ```
 
 Runner SHA-256:
-`758fd46dc59ba8f0ef11f10b2b2167ce42ac76d62ab1e0b191be8be5ebee4ee8`.
+`d7c06bc2b13b2ddd4c2c826b783d64b9ceb5992d4ae533d10eb33c923e795ec8`.
 Its test SHA-256 is
 `ba7215a51c369bb836b43dc06a90ade6e6517f41571e1d3d661f91b70e406b17`;
 all three focused fail-closed tests pass locally without GPU use, and the

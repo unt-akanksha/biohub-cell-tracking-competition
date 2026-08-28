@@ -52,10 +52,6 @@ def build_fixture(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path
         },
     )
     monkeypatch.setattr(verifier, "strict_load_checkpoint", lambda _path: None)
-    monkeypatch.setattr(
-        verifier, "initial_state_hash", lambda seed: f"initial-{seed}"
-    )
-
     aggregate_folds = {}
     aggregate_root = output / "zebrahub_contextual_acceptance_v1"
     for fold in verifier.FOLDS:
@@ -82,7 +78,7 @@ def build_fixture(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> tuple[Path
             "pretraining_worker_terminal_sha256": source_folds[fold][
                 "worker_terminal_sha256"
             ],
-            "initial_state_sha256": f"initial-{verifier.FOLD_SEEDS[fold]}",
+            "initial_state_sha256": verifier.EXPECTED_INITIAL_STATE_SHA256[fold],
             "initial": initial,
             "final": final,
             "gate": verifier.validation_improvement_gate(initial, final),
@@ -179,4 +175,37 @@ def test_downloaded_acceptance_rejects_submission_artifact(
     (output / "submission.csv").write_text("id,parent_id\n", encoding="utf-8")
 
     with pytest.raises(ValueError, match="prohibited artifacts"):
+        verifier.verify_acceptance_output(output, pretraining)
+
+
+def test_downloaded_acceptance_rejects_initial_state_hash_mutation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    output, pretraining = build_fixture(tmp_path, monkeypatch)
+    fold = verifier.FOLDS[0]
+    terminal_path = (
+        output
+        / "zebrahub_contextual_acceptance_v1"
+        / fold
+        / "acceptance_terminal.json"
+    )
+    terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+    terminal["initial_state_sha256"] = "0" * 64
+    write_json(terminal_path, terminal)
+
+    aggregate_path = (
+        output / "zebrahub_contextual_acceptance_v1" / "acceptance_terminal.json"
+    )
+    aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
+    aggregate["folds"][fold] = {
+        **terminal,
+        "terminal_sha256": verifier.sha256_file(terminal_path),
+    }
+    write_json(aggregate_path, aggregate)
+    launcher_path = output / "launcher_terminal.json"
+    launcher = json.loads(launcher_path.read_text(encoding="utf-8"))
+    launcher["acceptance_terminal_sha256"] = verifier.sha256_file(aggregate_path)
+    write_json(launcher_path, launcher)
+
+    with pytest.raises(ValueError, match="invalid downloaded ZSNS001 acceptance fold"):
         verifier.verify_acceptance_output(output, pretraining)

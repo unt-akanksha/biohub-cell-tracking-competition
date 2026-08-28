@@ -28,9 +28,7 @@ try:
         FOLD_SEEDS,
         PRETRAINING_RUN_ID,
         RUN_ID,
-        seed_initialization,
         sha256_file,
-        state_dict_sha256,
         verify_pretraining_source,
     )
     from train_zebrahub_contextual_pretrain import validation_improvement_gate
@@ -51,9 +49,7 @@ except ModuleNotFoundError:
         FOLD_SEEDS,
         PRETRAINING_RUN_ID,
         RUN_ID,
-        seed_initialization,
         sha256_file,
-        state_dict_sha256,
         verify_pretraining_source,
     )
     from research.temporal_contrastive.train_zebrahub_contextual_pretrain import (
@@ -64,6 +60,10 @@ except ModuleNotFoundError:
 PROHIBITED_OUTPUT_SUFFIXES = frozenset({".csv", ".ckpt", ".npz", ".pt", ".pth"})
 METRIC_NAMES = ("composite", "top1", "mrr", "division_top2")
 COUNT_NAMES = ("rows", "division_rows", "transitions")
+EXPECTED_INITIAL_STATE_SHA256 = {
+    "target_44b6": "b3843e00f18f4d4bc680c2428cf00fade6afd6f8cbe1c68a153a5fc4c53f0113",
+    "target_6bba": "cb3694aea997d2abf48f77af9884a9c474270aaa433ea9599795bb699416dde5",
+}
 
 
 def read_object(path: Path) -> dict[str, Any]:
@@ -114,14 +114,6 @@ def finite_metrics(payload: Any, *, fold: str, stage: str) -> dict[str, float | 
             raise ValueError(f"{fold} {stage} inventory is malformed: {name}")
         result[name] = value
     return result
-
-
-def initial_state_hash(seed: int) -> str:
-    seed_initialization(seed, torch.device("cpu"))
-    model = ContextualPairFusionAssociationModel()
-    if sum(parameter.numel() for parameter in model.parameters()) != EXPECTED_PARAMETER_COUNT:
-        raise RuntimeError("acceptance baseline parameter count changed")
-    return state_dict_sha256(model)
 
 
 def strict_load_checkpoint(path: Path) -> None:
@@ -184,7 +176,8 @@ def verify_fold(
         and terminal.get("pretrained_model_sha256") == source["model_sha256"]
         and terminal.get("pretraining_worker_terminal_sha256")
         == source["worker_terminal_sha256"]
-        and terminal.get("initial_state_sha256") == initial_state_hash(FOLD_SEEDS[fold])
+        and terminal.get("initial_state_sha256")
+        == EXPECTED_INITIAL_STATE_SHA256[fold]
         and terminal.get("gate") == recomputed_gate
         and terminal.get("gate_passed") is True
         and recomputed_gate["passed"] is True
