@@ -80,26 +80,104 @@ def scoring_command(
 def checked_cloud_processed_launcher(
     payload: dict, materialization_result: Path, candidate_csv: Path
 ) -> None:
-    if not (
+    materialization = json.loads(materialization_result.read_text(encoding="utf-8"))
+    materialization_valid = bool(
+        materialization.get("schema_version") == 1
+        and materialization.get("status") == "completed"
+        and materialization.get("run_id")
+        == "temporal-contextual-pair-fusion-processed-acceptance-v3"
+        and materialization.get("evaluation_kind")
+        == "predeclared_processed_candidate_materialization"
+        and materialization.get("candidate_family") == CANDIDATE_FAMILY
+        and materialization.get("appearance_family") == APPEARANCE_FAMILY
+        and materialization.get("gpu_count") == 2
+        and materialization.get("whole_movie_sharding") is True
+        and materialization.get("processed_control_sha256")
+        == EXPECTED_PROCESSED_CONTROL_SHA256
+        and materialization.get("processed_candidate_sha256")
+        == sha256_file(candidate_csv)
+        and int(materialization.get("total_changed_edges", 0)) > 0
+        and materialization.get("ground_truth_read") is False
+        and materialization.get("exact_processed_scoring_performed") is False
+        and materialization.get("public_leaderboard_used_for_selection") is False
+        and materialization.get("hyperparameter_selection_performed") is False
+        and materialization.get("competition_submission_performed") is False
+        and materialization.get("authorized_for_submission") is False
+    )
+    kaggle_launcher = "gpu_count_required" in payload
+    launcher_valid = bool(
         payload.get("schema_version") == 1
         and payload.get("status") == "completed"
         and payload.get("run_id")
         == "temporal-contextual-pair-fusion-processed-acceptance-v3"
-        and payload.get("gpu_count") == 2
-        and payload.get("processed_control_sha256")
-        == EXPECTED_PROCESSED_CONTROL_SHA256
-        and payload.get("materialization_result_sha256")
-        == sha256_file(materialization_result)
-        and payload.get("processed_candidate_sha256") == sha256_file(candidate_csv)
-        and int(payload.get("total_changed_edges", 0)) > 0
         and payload.get("processed_ground_truth_read") is False
         and payload.get("exact_processed_scoring_performed") is False
         and payload.get("public_leaderboard_used_for_selection") is False
         and payload.get("competition_submission_performed") is False
-        and payload.get("authorized_for_exact_cpu_scoring") is True
         and payload.get("authorized_for_submission") is False
-    ):
+        and (
+            (
+                kaggle_launcher
+                and payload.get("gpu_count_required") == 2
+                and payload.get("declared_budget_seconds") == 21_600
+                and payload.get("materializer_hard_stop_seconds") == 19_800
+                and payload.get("whole_movie_sharding_required") is True
+                and payload.get("materialization_result_exists") is True
+                and payload.get("processed_candidate_exists") is True
+                and payload.get("result_sha256") == sha256_file(materialization_result)
+                and payload.get("candidate_sha256") == sha256_file(candidate_csv)
+            )
+            or (
+                not kaggle_launcher
+                and payload.get("gpu_count") == 2
+                and payload.get("processed_control_sha256")
+                == EXPECTED_PROCESSED_CONTROL_SHA256
+                and payload.get("materialization_result_sha256")
+                == sha256_file(materialization_result)
+                and payload.get("processed_candidate_sha256")
+                == sha256_file(candidate_csv)
+                and int(payload.get("total_changed_edges", 0)) > 0
+                and payload.get("authorized_for_exact_cpu_scoring") is True
+            )
+        )
+    )
+    if not (materialization_valid and launcher_valid):
         raise RuntimeError("contextual-v3 processed launcher evidence is invalid")
+
+
+def discover_processed_artifacts(
+    processed_root: Path,
+) -> tuple[Path, Path, Path]:
+    materializations = []
+    for path in processed_root.rglob("materialization_result.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if payload.get("run_id") == "temporal-contextual-pair-fusion-processed-acceptance-v3":
+            materializations.append(path)
+    if len(materializations) != 1:
+        raise RuntimeError("processed materialization evidence is ambiguous")
+    materialization_result = materializations[0]
+    candidate_csv = require_file(
+        materialization_result.with_name("processed_candidate.csv"),
+        "processed candidate",
+    )
+    launchers = []
+    for name in (
+        "processed_launcher_terminal.json",
+        "cloud_processed_launcher_terminal.json",
+    ):
+        for path in processed_root.rglob(name):
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            if payload.get("run_id") == "temporal-contextual-pair-fusion-processed-acceptance-v3":
+                launchers.append(path)
+    if len(launchers) != 1:
+        raise RuntimeError("processed launcher evidence is ambiguous")
+    return materialization_result, candidate_csv, launchers[0]
 
 
 def checked_exact_acceptance(
@@ -161,15 +239,8 @@ def main() -> None:
     scorer_lock = require_file(args.scorer_lock, "scorer lock")
     organizer_checkout = require_directory(args.organizer_checkout, "organizer")
     tracksdata_checkout = require_directory(args.tracksdata_checkout, "tracksdata")
-    candidate_csv = require_file(
-        processed_root / "processed_candidate.csv", "processed candidate"
-    )
-    materialization_result = require_file(
-        processed_root / "materialization_result.json", "materialization result"
-    )
-    launcher_path = require_file(
-        processed_root / "cloud_processed_launcher_terminal.json",
-        "cloud processed launcher",
+    materialization_result, candidate_csv, launcher_path = discover_processed_artifacts(
+        processed_root
     )
     output = args.output.expanduser().resolve()
     if output.exists():

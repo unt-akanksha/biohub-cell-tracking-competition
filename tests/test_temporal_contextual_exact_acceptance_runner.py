@@ -90,7 +90,26 @@ def test_processed_launcher_chain_is_hash_bound(tmp_path: Path) -> None:
     candidate = tmp_path / "processed_candidate.csv"
     materialization = tmp_path / "materialization_result.json"
     candidate.write_bytes(b"candidate")
-    materialization.write_text("{}\n", encoding="utf-8")
+    materialization_payload = {
+        "schema_version": 1,
+        "status": "completed",
+        "run_id": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+        "evaluation_kind": "predeclared_processed_candidate_materialization",
+        "candidate_family": runner.CANDIDATE_FAMILY,
+        "appearance_family": runner.APPEARANCE_FAMILY,
+        "gpu_count": 2,
+        "whole_movie_sharding": True,
+        "processed_control_sha256": runner.EXPECTED_PROCESSED_CONTROL_SHA256,
+        "processed_candidate_sha256": runner.sha256_file(candidate),
+        "total_changed_edges": 3,
+        "ground_truth_read": False,
+        "exact_processed_scoring_performed": False,
+        "public_leaderboard_used_for_selection": False,
+        "hyperparameter_selection_performed": False,
+        "competition_submission_performed": False,
+        "authorized_for_submission": False,
+    }
+    materialization.write_text(json.dumps(materialization_payload), encoding="utf-8")
     launcher = {
         "schema_version": 1,
         "status": "completed",
@@ -113,6 +132,59 @@ def test_processed_launcher_chain_is_hash_bound(tmp_path: Path) -> None:
         runner.checked_cloud_processed_launcher(
             launcher, materialization, candidate
         )
+
+
+def test_kaggle_processed_launcher_and_nested_layout_are_supported(tmp_path: Path) -> None:
+    output = tmp_path / "temporal_contextual_processed_acceptance_v3"
+    output.mkdir()
+    candidate = output / "processed_candidate.csv"
+    materialization = output / "materialization_result.json"
+    candidate.write_bytes(b"candidate")
+    materialization_payload = {
+        "schema_version": 1,
+        "status": "completed",
+        "run_id": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+        "evaluation_kind": "predeclared_processed_candidate_materialization",
+        "candidate_family": runner.CANDIDATE_FAMILY,
+        "appearance_family": runner.APPEARANCE_FAMILY,
+        "gpu_count": 2,
+        "whole_movie_sharding": True,
+        "processed_control_sha256": runner.EXPECTED_PROCESSED_CONTROL_SHA256,
+        "processed_candidate_sha256": runner.sha256_file(candidate),
+        "total_changed_edges": 3,
+        "ground_truth_read": False,
+        "exact_processed_scoring_performed": False,
+        "public_leaderboard_used_for_selection": False,
+        "hyperparameter_selection_performed": False,
+        "competition_submission_performed": False,
+        "authorized_for_submission": False,
+    }
+    materialization.write_text(json.dumps(materialization_payload), encoding="utf-8")
+    launcher = {
+        "schema_version": 1,
+        "status": "completed",
+        "run_id": "temporal-contextual-pair-fusion-processed-acceptance-v3",
+        "declared_budget_seconds": 21_600,
+        "materializer_hard_stop_seconds": 19_800,
+        "gpu_count_required": 2,
+        "whole_movie_sharding_required": True,
+        "materialization_result_exists": True,
+        "processed_candidate_exists": True,
+        "result_sha256": runner.sha256_file(materialization),
+        "candidate_sha256": runner.sha256_file(candidate),
+        "processed_ground_truth_read": False,
+        "exact_processed_scoring_performed": False,
+        "public_leaderboard_used_for_selection": False,
+        "competition_submission_performed": False,
+        "authorized_for_submission": False,
+    }
+    launcher_path = tmp_path / "processed_launcher_terminal.json"
+    launcher_path.write_text(json.dumps(launcher), encoding="utf-8")
+
+    discovered = runner.discover_processed_artifacts(tmp_path)
+
+    assert discovered == (materialization, candidate, launcher_path)
+    runner.checked_cloud_processed_launcher(launcher, materialization, candidate)
 
 
 def test_exact_acceptance_script_has_no_submission_command() -> None:
