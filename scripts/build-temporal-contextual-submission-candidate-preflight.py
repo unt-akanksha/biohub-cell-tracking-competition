@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build the final contextual-v3 guarded-launch preflight after cloud staging."""
+"""Build the final contextual-v3 guarded-launch preflight for Kaggle outputs."""
 
 from __future__ import annotations
 
@@ -35,8 +35,8 @@ KERNEL_BUILDER = (
 PREFLIGHT_BUILDER = Path(__file__).resolve()
 COMPETITION_CONFIG = ROOT / "config" / "competition.json"
 OUTPUT = ROOT / "artifacts" / "preflights" / f"{RUN_ID}.json"
-APPEARANCE_DATASET_ID = (
-    "indarkarhana/biohub-temporal-contextual-transfer-output-v3"
+APPEARANCE_KERNEL_ID = (
+    "indarkarhana/biohub-temporal-contextual-transfer-v3"
 )
 ACCEPTANCE_DATASET_ID = (
     "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3"
@@ -49,17 +49,23 @@ CANDIDATE_FAMILY = "trackastra_contextual_pair_fusion_blend"
 FOLDS = {"target_44b6", "target_6bba"}
 EXPECTED_DATASET_SOURCES = [
     "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
-    APPEARANCE_DATASET_ID,
     ACCEPTANCE_DATASET_ID,
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
 ]
 EXPECTED_KERNEL_SOURCES = [
     "indarkarhana/biohub-clean-0-927-reproduction-v1",
     "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
+    APPEARANCE_KERNEL_ID,
 ]
+EXPECTED_PROCESSED_STEMS = {
+    "44b6_12dfb391",
+    "44b6_267148e4",
+    "6bba_062c8d37",
+    "6bba_07e24132",
+}
 FOCUSED_TESTS = (
-    ROOT / "tests" / "test_temporal_contextual_cloud_candidate.py",
-    ROOT / "tests" / "test_temporal_contextual_kaggle_artifact_staging.py",
+    ROOT / "tests" / "test_temporal_contextual_exact_acceptance_runner.py",
+    ROOT / "tests" / "test_temporal_contextual_processed_acceptance_kernel_builder.py",
     ROOT / "tests" / "test_temporal_contextual_submission_candidate_kernel_builder.py",
     ROOT / "tests" / "test_temporal_contextual_kernel_submission.py",
     ROOT / "tests" / "test_temporal_appearance_submission.py",
@@ -153,43 +159,86 @@ def notebook_policy() -> tuple[str, dict]:
 def verify_staged_inputs(
     appearance_root: Path,
     acceptance_root: Path,
-    cloud_candidate_root: Path,
+    processed_root: Path,
 ) -> dict[str, Any]:
-    appearance_root = checked_path(appearance_root, "appearance dataset")
+    appearance_root = checked_path(appearance_root, "Kaggle transfer output")
     acceptance_root = checked_path(acceptance_root, "acceptance dataset")
-    cloud_candidate_root = checked_path(cloud_candidate_root, "cloud candidate")
-    appearance_metadata = json.loads(
-        (appearance_root / "dataset-metadata.json").read_text(encoding="utf-8")
-    )
-    appearance_manifest_path = appearance_root / "ARTIFACT_MANIFEST.json"
-    appearance_manifest = json.loads(
-        appearance_manifest_path.read_text(encoding="utf-8")
-    )
-    if not (
-        appearance_metadata.get("id") == APPEARANCE_DATASET_ID
-        and appearance_metadata.get("isPrivate") is True
-        and appearance_manifest.get("artifact_kind")
-        == "contextual_v3_cloud_transfer_output"
-        and appearance_manifest.get("run_id")
-        == "temporal-contextual-pair-fusion-v3"
-        and appearance_manifest.get("appearance_family") == APPEARANCE_FAMILY
-        and appearance_manifest.get("public_leaderboard_used_for_selection")
-        is False
-        and appearance_manifest.get("submission_created") is False
-    ):
-        raise RuntimeError("staged appearance dataset is invalid")
-    appearance_files = verify_manifest_files(appearance_root, appearance_manifest)
-    training_terminal_path = appearance_root / "training_terminal.json"
+    processed_root = checked_path(processed_root, "processed Kaggle output")
+
+    training_candidates = []
+    for path in appearance_root.rglob("training_terminal.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (
+            payload.get("run_id") == "temporal-contextual-pair-fusion-v3"
+            and payload.get("appearance_family") == APPEARANCE_FAMILY
+        ):
+            training_candidates.append(path)
+    if len(training_candidates) != 1:
+        raise RuntimeError(
+            "Kaggle transfer output has ambiguous training evidence: "
+            f"{[str(path) for path in training_candidates]}"
+        )
+    training_terminal_path = training_candidates[0]
+    appearance_training_root = training_terminal_path.parent
     training = json.loads(training_terminal_path.read_text(encoding="utf-8"))
     if not (
         training.get("status") == "completed"
+        and training.get("run_id") == "temporal-contextual-pair-fusion-v3"
         and training.get("appearance_family") == APPEARANCE_FAMILY
         and training.get("gpu_count") == 2
         and training.get("both_folds_trained") is True
         and training.get("both_folds_improved") is True
         and set(training.get("folds", {})) == FOLDS
+        and training.get("public_predictions_copied") is False
+        and training.get("public_leaderboard_used_for_selection") is False
+        and training.get("submission_created") is False
     ):
-        raise RuntimeError("staged appearance training terminal is invalid")
+        raise RuntimeError("Kaggle transfer terminal is invalid")
+    appearance_files = []
+    for fold in FOLDS:
+        checkpoint = appearance_training_root / fold / "appearance_model.pt"
+        row = training["folds"][fold]
+        if not (
+            checkpoint.is_file()
+            and row.get("status") == "completed"
+            and row.get("appearance_family") == APPEARANCE_FAMILY
+            and int(row.get("best_step", 0)) > 0
+            and row.get("finetuning_gate_passed") is True
+            and row.get("model_sha256") == sha256_file(checkpoint)
+        ):
+            raise RuntimeError(f"Kaggle transfer checkpoint is invalid: {fold}")
+        appearance_files.append(checkpoint)
+    transfer_launchers = []
+    for path in appearance_root.rglob("launcher_terminal.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if payload.get("run_id") == "temporal-contextual-pair-fusion-v3":
+            transfer_launchers.append((path, payload))
+    if len(transfer_launchers) != 1:
+        raise RuntimeError("Kaggle transfer launcher evidence is ambiguous")
+    transfer_launcher_path, transfer_launcher = transfer_launchers[0]
+    if not (
+        transfer_launcher.get("schema_version") == 1
+        and transfer_launcher.get("run_id")
+        == "temporal-contextual-pair-fusion-v3"
+        and transfer_launcher.get("status") == "completed"
+        and transfer_launcher.get("gpu_count_required") == 2
+        and transfer_launcher.get("declared_budget_seconds") == 39_600
+        and transfer_launcher.get("trainer_max_wall_seconds") == 36_000
+        and transfer_launcher.get("trainer_hard_stop_seconds") == 37_800
+        and transfer_launcher.get("training_terminal_exists") is True
+        and transfer_launcher.get("training_terminal_sha256")
+        == sha256_file(training_terminal_path)
+        and transfer_launcher.get("public_predictions_copied") is False
+        and transfer_launcher.get("public_leaderboard_used_for_selection") is False
+        and transfer_launcher.get("submission_created") is False
+    ):
+        raise RuntimeError("Kaggle transfer launcher evidence is invalid")
 
     acceptance_metadata = json.loads(
         (acceptance_root / "dataset-metadata.json").read_text(encoding="utf-8")
@@ -224,47 +273,96 @@ def verify_staged_inputs(
         ][fold].get("model_sha256"):
             raise RuntimeError(f"staged accepted checkpoint mismatch: {fold}")
 
-    launcher_path = cloud_candidate_root / "cloud_candidate_launcher_terminal.json"
-    report_path = cloud_candidate_root / "candidate_report.json"
-    candidate_path = cloud_candidate_root / "submission.csv"
-    launcher = json.loads(launcher_path.read_text(encoding="utf-8"))
-    report = json.loads(report_path.read_text(encoding="utf-8"))
-    coverage = report.get("whole_movie_coverage", [])
+    materialization_candidates = []
+    for path in processed_root.rglob("materialization_result.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (
+            payload.get("run_id")
+            == "temporal-contextual-pair-fusion-processed-acceptance-v3"
+            and payload.get("appearance_family") == APPEARANCE_FAMILY
+        ):
+            materialization_candidates.append((path, payload))
+    if len(materialization_candidates) != 1:
+        raise RuntimeError("processed Kaggle materialization evidence is ambiguous")
+    materialization_path, materialization = materialization_candidates[0]
+    candidate_path = materialization_path.with_name("processed_candidate.csv")
+    processed_launcher_candidates = []
+    for path in processed_root.rglob("processed_launcher_terminal.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (
+            payload.get("run_id")
+            == "temporal-contextual-pair-fusion-processed-acceptance-v3"
+        ):
+            processed_launcher_candidates.append((path, payload))
+    if len(processed_launcher_candidates) != 1:
+        raise RuntimeError("processed Kaggle launcher evidence is ambiguous")
+    processed_launcher_path, processed_launcher = processed_launcher_candidates[0]
+    datasets = materialization.get("datasets", {})
     if not (
-        launcher.get("status") == "completed"
-        and launcher.get("run_id") == RUN_ID
-        and launcher.get("gpu_count") == 2
-        and launcher.get("acceptance_evidence_sha256") == sha256_file(acceptance_path)
-        and launcher.get("candidate_report_sha256") == sha256_file(report_path)
-        and launcher.get("candidate_submission_sha256") == sha256_file(candidate_path)
-        and launcher.get("ready_for_submission_upload") is True
-        and launcher.get("public_leaderboard_used_for_selection") is False
-        and launcher.get("competition_submission_performed") is False
-        and report.get("status") == "completed"
-        and report.get("candidate_family") == CANDIDATE_FAMILY
-        and report.get("appearance_family") == APPEARANCE_FAMILY
-        and report.get("gpu_count") == 2
-        and report.get("candidate_submission_sha256") == sha256_file(candidate_path)
-        and report.get("candidate_submission_sha256")
-        != report.get("base_submission_sha256")
-        and int(report.get("total_changed_edges", 0)) > 0
-        and report.get("nodes_preserved_exactly") is True
-        and isinstance(coverage, list)
-        and len(coverage) > 0
-        and len(coverage) == len(set(coverage))
-        and report.get("public_leaderboard_used_for_selection") is False
-        and report.get("competition_submission_performed") is False
+        candidate_path.is_file()
+        and processed_launcher.get("schema_version") == 1
+        and processed_launcher.get("run_id")
+        == "temporal-contextual-pair-fusion-processed-acceptance-v3"
+        and processed_launcher.get("status") == "completed"
+        and processed_launcher.get("declared_budget_seconds") == 21_600
+        and processed_launcher.get("materializer_hard_stop_seconds") == 19_800
+        and processed_launcher.get("gpu_count_required") == 2
+        and processed_launcher.get("whole_movie_sharding_required") is True
+        and processed_launcher.get("materialization_result_exists") is True
+        and processed_launcher.get("processed_candidate_exists") is True
+        and processed_launcher.get("result_sha256")
+        == sha256_file(materialization_path)
+        and processed_launcher.get("candidate_sha256") == sha256_file(candidate_path)
+        and processed_launcher.get("processed_ground_truth_read") is False
+        and processed_launcher.get("exact_processed_scoring_performed") is False
+        and processed_launcher.get("public_leaderboard_used_for_selection") is False
+        and processed_launcher.get("competition_submission_performed") is False
+        and processed_launcher.get("authorized_for_submission") is False
+        and materialization.get("schema_version") == 1
+        and materialization.get("status") == "completed"
+        and materialization.get("evaluation_kind")
+        == "predeclared_processed_candidate_materialization"
+        and materialization.get("candidate_family") == CANDIDATE_FAMILY
+        and materialization.get("appearance_family") == APPEARANCE_FAMILY
+        and materialization.get("gpu_count") == 2
+        and materialization.get("whole_movie_sharding") is True
+        and materialization.get("processed_candidate_sha256")
+        == sha256_file(candidate_path)
+        and int(materialization.get("total_changed_edges", 0)) > 0
+        and isinstance(datasets, dict)
+        and set(datasets) == EXPECTED_PROCESSED_STEMS
+        and materialization.get("ground_truth_read") is False
+        and materialization.get("hyperparameter_selection_performed") is False
+        and materialization.get("exact_processed_scoring_performed") is False
+        and materialization.get("public_leaderboard_used_for_selection") is False
+        and materialization.get("competition_submission_performed") is False
+        and materialization.get("authorized_for_submission") is False
+        and acceptance.get("processed_candidate_sha256")
+        == sha256_file(candidate_path)
+        and acceptance.get("materialization_result_sha256")
+        == sha256_file(materialization_path)
     ):
-        raise RuntimeError("cloud candidate benchmark evidence is invalid")
+        raise RuntimeError("processed Kaggle benchmark evidence is invalid")
+    for fold in FOLDS:
+        if materialization.get("appearance_models", {}).get(fold, {}).get(
+            "model_sha256"
+        ) != training["folds"][fold].get("model_sha256"):
+            raise RuntimeError(f"processed checkpoint mismatch: {fold}")
     return {
-        "appearance_manifest": appearance_manifest_path,
         "appearance_files": appearance_files,
         "training_terminal": training_terminal_path,
+        "transfer_launcher": transfer_launcher_path,
         "acceptance_manifest": acceptance_manifest_path,
         "acceptance_evidence": acceptance_path,
-        "cloud_launcher": launcher_path,
-        "candidate_report": report_path,
-        "candidate": candidate_path,
+        "processed_launcher": processed_launcher_path,
+        "materialization_result": materialization_path,
+        "processed_candidate": candidate_path,
     }
 
 
@@ -272,13 +370,13 @@ def main(
     *,
     appearance_root: Path,
     acceptance_root: Path,
-    cloud_candidate_root: Path,
+    processed_root: Path,
     runtime_root: Path,
     output: Path,
 ) -> None:
     code, _metadata = notebook_policy()
     staged = verify_staged_inputs(
-        appearance_root, acceptance_root, cloud_candidate_root
+        appearance_root, acceptance_root, processed_root
     )
     runtime_root = checked_path(runtime_root, "runtime")
     subprocess.run(
@@ -315,12 +413,12 @@ def main(
             "inputs",
             [
                 METADATA,
-                staged["appearance_manifest"],
+                staged["transfer_launcher"],
                 staged["acceptance_manifest"],
                 staged["training_terminal"],
                 staged["acceptance_evidence"],
             ],
-            "Only the exact private runtime, cloud checkpoint, exact acceptance, support, base, Trackastra, and competition sources are attached.",
+            "Only the exact runtime, Kaggle transfer output, private exact acceptance, support, base, Trackastra, and competition sources are attached.",
         ),
         check(
             "single_batch",
@@ -351,18 +449,18 @@ def main(
         ),
         check(
             "output_location",
-            [NOTEBOOK, METADATA, staged["cloud_launcher"]],
+            [NOTEBOOK, METADATA, staged["processed_launcher"]],
             "The notebook writes submission.csv and evidence below /kaggle/working and contains no upload command.",
         ),
         check(
             "dense_memory",
-            [staged["cloud_launcher"], staged["candidate_report"]],
-            "The exact two-GPU whole-movie recipe completed on the cloud benchmark under the frozen hard stop before Kaggle launch.",
+            [staged["processed_launcher"], staged["materialization_result"]],
+            "The exact two-GPU whole-movie materializer completed on Kaggle under its frozen hard stop before final test inference.",
         ),
         check(
             "dataset_coverage",
-            [staged["candidate_report"], staged["candidate"]],
-            "The cloud benchmark covers every test movie once, preserves nodes, changes edges, and produces a non-replica CSV.",
+            [staged["materialization_result"], staged["processed_candidate"]],
+            "The Kaggle benchmark covers all four predeclared complete movies, changes edges, and is hash-bound to exact accepted scoring.",
         ),
         check(
             "non_replica_provenance",
@@ -375,8 +473,8 @@ def main(
         ),
         check(
             "quota_policy",
-            [COMPETITION_CONFIG, NOTEBOOK, staged["cloud_launcher"]],
-            "The final launch still requires the live account-wide guard and exactly two GPUs; cloud elapsed evidence supports a measured declared-runtime amendment.",
+            [COMPETITION_CONFIG, NOTEBOOK, staged["processed_launcher"]],
+            "The final launch still requires the live account-wide reserve guard and exactly two Kaggle GPUs.",
         ),
     ]
     if "torch.cuda.device_count() != 2" not in code:
@@ -393,14 +491,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--appearance-root", type=Path, required=True)
     parser.add_argument("--acceptance-root", type=Path, required=True)
-    parser.add_argument("--cloud-candidate-root", type=Path, required=True)
+    parser.add_argument("--processed-root", type=Path, required=True)
     parser.add_argument("--runtime-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     args = parser.parse_args()
     main(
         appearance_root=args.appearance_root,
         acceptance_root=args.acceptance_root,
-        cloud_candidate_root=args.cloud_candidate_root,
+        processed_root=args.processed_root,
         runtime_root=args.runtime_root,
         output=args.output,
     )

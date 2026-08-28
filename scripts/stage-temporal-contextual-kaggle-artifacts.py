@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Stage accepted contextual-v3 cloud artifacts as two private Kaggle datasets."""
+"""Stage exact contextual-v3 acceptance as one private Kaggle dataset."""
 
 from __future__ import annotations
 
@@ -15,9 +15,6 @@ TRANSFER_RUN_ID = "temporal-contextual-pair-fusion-v3"
 EXACT_RUN_ID = "trackastra-dual-fold-processed-exact-v1"
 APPEARANCE_FAMILY = "temporal_contextual_pair_fusion_v3"
 CANDIDATE_FAMILY = "trackastra_contextual_pair_fusion_blend"
-APPEARANCE_DATASET_ID = (
-    "indarkarhana/biohub-temporal-contextual-transfer-output-v3"
-)
 ACCEPTANCE_DATASET_ID = (
     "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3"
 )
@@ -80,11 +77,75 @@ def file_manifest(root: Path) -> dict[str, dict[str, Any]]:
 
 
 def validate_appearance(appearance_root: Path) -> dict:
-    terminal_path = appearance_root / "training_terminal.json"
-    launcher_path = appearance_root / "cloud_launcher_terminal.json"
+    terminal_candidates = []
+    for path in appearance_root.rglob("training_terminal.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if (
+            payload.get("run_id") == TRANSFER_RUN_ID
+            and payload.get("appearance_family") == APPEARANCE_FAMILY
+        ):
+            terminal_candidates.append(path)
+    direct_terminal = appearance_root / "training_terminal.json"
+    if direct_terminal.is_file() and direct_terminal not in terminal_candidates:
+        terminal_candidates.append(direct_terminal)
+    if len(terminal_candidates) != 1:
+        raise RuntimeError("contextual-v3 transfer terminal is ambiguous")
+    terminal_path = terminal_candidates[0]
+    training_root = terminal_path.parent
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
-    launcher = json.loads(launcher_path.read_text(encoding="utf-8"))
+    launcher_candidates = []
+    launcher_paths = {
+        *appearance_root.rglob("launcher_terminal.json"),
+        *appearance_root.rglob("cloud_launcher_terminal.json"),
+        training_root.parent / "launcher_terminal.json",
+        training_root.parent / "cloud_launcher_terminal.json",
+    }
+    for path in launcher_paths:
+        if not path.is_file():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if payload.get("run_id") == TRANSFER_RUN_ID:
+            launcher_candidates.append((path, payload))
+    launcher_candidates = list(
+        {path.resolve(): (path, payload) for path, payload in launcher_candidates}.values()
+    )
+    if len(launcher_candidates) != 1:
+        raise RuntimeError("contextual-v3 transfer launcher is ambiguous")
+    _launcher_path, launcher = launcher_candidates[0]
     folds = terminal.get("folds", {})
+    kaggle_launcher = bool("gpu_count_required" in launcher)
+    launcher_valid = bool(
+        launcher.get("schema_version") == 1
+        and launcher.get("status") == "completed"
+        and launcher.get("run_id") == TRANSFER_RUN_ID
+        and launcher.get("training_terminal_sha256") == sha256_file(terminal_path)
+        and launcher.get("public_predictions_copied") is False
+        and launcher.get("public_leaderboard_used_for_selection") is False
+        and launcher.get("submission_created") is False
+        and (
+            (
+                kaggle_launcher
+                and launcher.get("gpu_count_required") == 2
+                and launcher.get("training_terminal_exists") is True
+                and launcher.get("declared_budget_seconds") == 39_600
+                and launcher.get("trainer_max_wall_seconds") == 36_000
+                and launcher.get("trainer_hard_stop_seconds") == 37_800
+            )
+            or (
+                not kaggle_launcher
+                and launcher.get("gpu_count") == 2
+                and launcher.get("strict_checkpoint_loaded") is True
+                and launcher.get("authorized_for_calibration") is True
+                and launcher.get("authorized_for_submission") is False
+            )
+        )
+    )
     if not (
         terminal.get("schema_version") == 1
         and terminal.get("status") == "completed"
@@ -98,21 +159,11 @@ def validate_appearance(appearance_root: Path) -> dict:
         and terminal.get("public_predictions_copied") is False
         and terminal.get("public_leaderboard_used_for_selection") is False
         and terminal.get("submission_created") is False
-        and launcher.get("schema_version") == 1
-        and launcher.get("status") == "completed"
-        and launcher.get("run_id") == TRANSFER_RUN_ID
-        and launcher.get("gpu_count") == 2
-        and launcher.get("training_terminal_sha256") == sha256_file(terminal_path)
-        and launcher.get("strict_checkpoint_loaded") is True
-        and launcher.get("authorized_for_calibration") is True
-        and launcher.get("authorized_for_submission") is False
-        and launcher.get("public_predictions_copied") is False
-        and launcher.get("public_leaderboard_used_for_selection") is False
-        and launcher.get("submission_created") is False
+        and launcher_valid
     ):
         raise RuntimeError("contextual-v3 appearance artifact is invalid")
     for fold in FOLDS:
-        model = appearance_root / fold / "appearance_model.pt"
+        model = training_root / fold / "appearance_model.pt"
         if not model.is_file() or sha256_file(model) != folds[fold].get(
             "model_sha256"
         ):
@@ -161,10 +212,6 @@ def stage_artifacts(
     appearance_root = require_directory(appearance_root, "appearance")
     acceptance_evidence = require_file(acceptance_evidence, "exact acceptance")
     staging_root = staging_root.expanduser().resolve()
-    appearance_target = require_new_directory(
-        staging_root / "biohub-temporal-contextual-transfer-output-v3",
-        "appearance dataset",
-    )
     acceptance_target = require_new_directory(
         staging_root / "biohub-temporal-contextual-exact-acceptance-v3",
         "acceptance dataset",
@@ -172,33 +219,6 @@ def stage_artifacts(
     appearance = validate_appearance(appearance_root)
     acceptance = json.loads(acceptance_evidence.read_text(encoding="utf-8"))
     validate_acceptance(acceptance, appearance)
-
-    shutil.copytree(appearance_root, appearance_target)
-    copied_files = file_manifest(appearance_target)
-    atomic_json(
-        appearance_target / "ARTIFACT_MANIFEST.json",
-        {
-            "schema_version": 1,
-            "artifact_kind": "contextual_v3_cloud_transfer_output",
-            "run_id": TRANSFER_RUN_ID,
-            "appearance_family": APPEARANCE_FAMILY,
-            "source_training_terminal_sha256": sha256_file(
-                appearance_root / "training_terminal.json"
-            ),
-            "files": copied_files,
-            "public_leaderboard_used_for_selection": False,
-            "submission_created": False,
-        },
-    )
-    atomic_json(
-        appearance_target / "dataset-metadata.json",
-        {
-            "title": "Biohub Temporal Contextual Transfer Output v3",
-            "id": APPEARANCE_DATASET_ID,
-            "licenses": [{"name": "BSD-3-Clause"}],
-            "isPrivate": True,
-        },
-    )
 
     acceptance_target.mkdir(parents=True)
     copied_acceptance = acceptance_target / ACCEPTANCE_FILENAME
@@ -233,9 +253,8 @@ def stage_artifacts(
     return {
         "schema_version": 1,
         "status": "staged",
-        "appearance_dataset": str(appearance_target),
-        "appearance_dataset_id": APPEARANCE_DATASET_ID,
-        "appearance_file_count": len(copied_files),
+        "appearance_source_kind": "verified_kaggle_or_cloud_transfer_output",
+        "appearance_dataset_staged": False,
         "acceptance_dataset": str(acceptance_target),
         "acceptance_dataset_id": ACCEPTANCE_DATASET_ID,
         "acceptance_evidence_sha256": sha256_file(copied_acceptance),

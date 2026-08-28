@@ -4,6 +4,12 @@ Status: final two-GPU candidate notebook staged and tested; intentionally not
 pushed, run, or submitted because exact processed acceptance does not yet
 exist.
 
+Kaggle-only amendment (2026-08-28): the candidate now consumes the accepted
+checkpoints directly from the private
+`indarkarhana/biohub-temporal-contextual-transfer-v3` kernel output. The
+redundant cloud-checkpoint dataset is no longer attached. Only the exact
+acceptance JSON is staged as a private dataset after the processed CPU gate.
+
 This is a gated inference artifact, not a public-notebook replica. It retains
 the strong frozen detector nodes but replaces association decisions with the
 project-authored contextual v3 model only after three independent clean gates:
@@ -74,14 +80,18 @@ explicit runtime failure.
 - Kernel:
   `indarkarhana/biohub-temporal-contextual-submission-candidate-v3`
 - Notebook SHA-256:
-  `e21119833e11fe514caf355dc46e57e8448f0fcd4a1fb4b47f7607e25959813c`
+  `5dad76f56003be6f84e381dbf1a735cb2e091dcedf8f238edb184fd0091c03af`
 - Metadata SHA-256:
-  `3c232d084b6a35e7524621a2baf4c5f3d9f0397378c8b22e3edb4021feb95d8a`
+  `429ddae35e0633069a5ac44151cd6a1e4782ccd130b1f315d448eb43be8276fe`
+- Transfer source: private Kaggle kernel
+  `indarkarhana/biohub-temporal-contextual-transfer-v3`
+- Private acceptance dataset:
+  `indarkarhana/biohub-temporal-contextual-exact-acceptance-v3`
 
-Execution belongs on the user-provided two-GPU cloud unless a fresh Kaggle
-quota guard proves the full declared window still leaves at least eight Kaggle
-GPU hours. On 2026-08-27, the user explicitly authorized uploading the first
-candidate that passes every frozen gate. Producing an unaccepted CSV still
-does not authorize an upload; once the hash-bound exact acceptance reports
-`accepted`, the separate CLI upload should proceed automatically and does not
-require a GPU.
+The active execution route is Kaggle only. Every GPU launch still needs exactly
+two GPUs and a fresh quota guard proving its declared worst case leaves at
+least eight Kaggle GPU hours. On 2026-08-27, the user explicitly authorized
+uploading the first candidate that passes every frozen gate. Producing an
+unaccepted CSV still does not authorize an upload; once the hash-bound exact
+acceptance reports `accepted`, the separate CLI upload should proceed
+automatically and does not require a GPU.

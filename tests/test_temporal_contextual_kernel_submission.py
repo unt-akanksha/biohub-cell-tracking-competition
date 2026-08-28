@@ -37,7 +37,7 @@ def test_submission_command_targets_exact_code_kernel_version() -> None:
     assert "--file" not in command
 
 
-def test_kernel_metadata_requires_cloud_output_dataset(tmp_path: Path) -> None:
+def test_kernel_metadata_requires_kaggle_transfer_kernel(tmp_path: Path) -> None:
     metadata = tmp_path / "kernel-metadata.json"
     write_json(
         metadata,
@@ -55,8 +55,8 @@ def test_kernel_metadata_requires_cloud_output_dataset(tmp_path: Path) -> None:
     )
     submit.validate_kernel_metadata(metadata)
     payload = json.loads(metadata.read_text(encoding="utf-8"))
-    payload["dataset_sources"].remove(
-        "indarkarhana/biohub-temporal-contextual-transfer-output-v3"
+    payload["kernel_sources"].remove(
+        "indarkarhana/biohub-temporal-contextual-transfer-v3"
     )
     write_json(metadata, payload)
     with pytest.raises(RuntimeError, match="metadata"):

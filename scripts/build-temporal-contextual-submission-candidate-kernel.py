@@ -421,6 +421,8 @@ def main() -> None:
                 "# Accepted contextual v3 submission candidate\n\n"
                 "Exactly two T4 GPUs balance complete movies using contextual pair and "
                 "patch workload. Hash-bound exact processed acceptance is mandatory. "
+                "The accepted contextual checkpoints are consumed directly from the "
+                "two-GPU Kaggle transfer kernel output. "
                 "The notebook reserves two hours for finalization, refuses an edge-identical "
                 "public replica, writes a local CSV, and contains no upload command.\n"
             ),
@@ -446,13 +448,13 @@ def main() -> None:
         "keywords": ["gpu", "cell-tracking", "submission-candidate", "non-replica"],
         "dataset_sources": [
             "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
-            "indarkarhana/biohub-temporal-contextual-transfer-output-v3",
             "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],
         "kernel_sources": [
             "indarkarhana/biohub-clean-0-927-reproduction-v1",
             "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
+            "indarkarhana/biohub-temporal-contextual-transfer-v3",
         ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],

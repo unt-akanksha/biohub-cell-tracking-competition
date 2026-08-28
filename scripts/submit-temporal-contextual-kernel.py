@@ -24,13 +24,13 @@ EXPECTED_BASE_SHA256 = (
 )
 EXPECTED_DATASET_SOURCES = [
     "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
-    "indarkarhana/biohub-temporal-contextual-transfer-output-v3",
     "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
     "pilkwang/biohub-tracking-support-pack-50ep-v1",
 ]
 EXPECTED_KERNEL_SOURCES = [
     "indarkarhana/biohub-clean-0-927-reproduction-v1",
     "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
+    "indarkarhana/biohub-temporal-contextual-transfer-v3",
 ]
 DAILY_SUBMISSION_LIMIT = 5
 AUTHORIZATION_SCOPE = (

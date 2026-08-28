@@ -2,6 +2,12 @@
 
 Date: 2026-08-27
 
+Kaggle-only amendment (2026-08-28): the user directed all current GPU work to
+Kaggle. The cloud commands below are retained as tested fallback documentation
+but are inactive. Section 5's cloud checkpoint dataset and cloud benchmark
+instructions are superseded by the direct Kaggle transfer-kernel topology
+recorded in `temporal-contextual-kaggle-only-topology-v1.md`.
+
 Status: downstream two-GPU workflow staged and tested. It must run sequentially
 after the active ZebraHub pretraining and frozen third-embryo acceptance pass.
 No command below uploads a competition submission.

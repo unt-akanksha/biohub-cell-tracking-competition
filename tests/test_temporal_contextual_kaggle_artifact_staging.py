@@ -46,18 +46,19 @@ def fixture(tmp_path: Path) -> tuple[Path, Path]:
     }
     write_json(appearance / "training_terminal.json", terminal)
     write_json(
-        appearance / "cloud_launcher_terminal.json",
+        appearance / "launcher_terminal.json",
         {
             "schema_version": 1,
             "status": "completed",
             "run_id": stage.TRANSFER_RUN_ID,
-            "gpu_count": 2,
+            "gpu_count_required": 2,
+            "training_terminal_exists": True,
+            "declared_budget_seconds": 39_600,
+            "trainer_max_wall_seconds": 36_000,
+            "trainer_hard_stop_seconds": 37_800,
             "training_terminal_sha256": stage.sha256_file(
                 appearance / "training_terminal.json"
             ),
-            "strict_checkpoint_loaded": True,
-            "authorized_for_calibration": True,
-            "authorized_for_submission": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
             "submission_created": False,
@@ -98,28 +99,22 @@ def fixture(tmp_path: Path) -> tuple[Path, Path]:
     return appearance, acceptance
 
 
-def test_artifact_staging_is_private_hash_bound_and_write_free(tmp_path: Path) -> None:
+def test_acceptance_staging_is_private_hash_bound_and_write_free(tmp_path: Path) -> None:
     appearance, acceptance = fixture(tmp_path)
     result = stage.stage_artifacts(
         appearance_root=appearance,
         acceptance_evidence=acceptance,
         staging_root=tmp_path / "staging",
     )
-    appearance_target = Path(result["appearance_dataset"])
     acceptance_target = Path(result["acceptance_dataset"])
-    appearance_metadata = json.loads(
-        (appearance_target / "dataset-metadata.json").read_text(encoding="utf-8")
-    )
     acceptance_metadata = json.loads(
         (acceptance_target / "dataset-metadata.json").read_text(encoding="utf-8")
     )
-    assert appearance_metadata["id"] == stage.APPEARANCE_DATASET_ID
     assert acceptance_metadata["id"] == stage.ACCEPTANCE_DATASET_ID
-    assert appearance_metadata["isPrivate"] is True
     assert acceptance_metadata["isPrivate"] is True
+    assert result["appearance_dataset_staged"] is False
     assert result["kaggle_write_performed"] is False
     assert result["competition_submission_performed"] is False
-    assert (appearance_target / "target_44b6" / "appearance_model.pt").is_file()
     assert (acceptance_target / stage.ACCEPTANCE_FILENAME).is_file()
 
 
@@ -138,7 +133,7 @@ def test_artifact_staging_rejects_mutated_accepted_model(tmp_path: Path) -> None
 
 def test_artifact_staging_refuses_existing_target(tmp_path: Path) -> None:
     appearance, acceptance = fixture(tmp_path)
-    target = tmp_path / "staging" / "biohub-temporal-contextual-transfer-output-v3"
+    target = tmp_path / "staging" / "biohub-temporal-contextual-exact-acceptance-v3"
     target.mkdir(parents=True)
     with pytest.raises(FileExistsError, match="already exists"):
         stage.stage_artifacts(
