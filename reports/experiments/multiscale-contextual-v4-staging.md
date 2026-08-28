@@ -30,6 +30,14 @@ Primary references:
   <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/730160>
 - ASCENT open-access paper:
   <https://openaccess.thecvf.com/content/ICCV2025/html/Han_ASCENT_Annotation-free_Self-supervised_Contrastive_Embeddings_for_3D_Neuron_Tracking_in_ICCV_2025_paper.html>
+- CELLECT (Nature Methods, 2025), whose adjacent-frame 3D embeddings, division
+  head, physical-scale concerns, and recommended motion/global-optimization
+  extensions independently support the combined v3/v4 design:
+  <https://www.nature.com/articles/s41592-025-02886-x>
+- HOCT (July 2026), whose edge-centric geometric context supports comparing
+  candidate links; its public checkpoints remain excluded after their clean
+  Biohub acceptance regression:
+  <https://arxiv.org/abs/2607.11754>
 
 ## Architecture
 

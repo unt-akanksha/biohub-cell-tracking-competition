@@ -406,3 +406,31 @@ delay an accepted v3 submission. It becomes eligible only after v3 passes and a
 live guard shows another run will leave at least eight Kaggle GPU hours. Full
 implementation details are in
 `reports/experiments/multiscale-contextual-v4-staging.md`.
+
+## Post-pretraining primary-source refresh
+
+After v3 passed both fixed ZSNS005 partitions, a final primary-source scan
+checked whether a newer architecture justified changing the frozen acceptance
+candidate. CELLECT (Nature Methods, 2025) learns 3D cell representations with
+two adjacent frames, a 3D U-Net, a latent embedding, and a division-probability
+head; its discussion identifies motion priors, global optimization, longer
+temporal context, adaptive physical scale, and difficult axial resolution as
+the main extensions. V3 already uses three temporal frames, a 256-dimensional
+physical 3D representation, explicit division supervision, label-free global
+shift and reliability evidence, reciprocal candidate ranking, and downstream
+global lineage optimization. Source:
+<https://www.nature.com/articles/s41592-025-02886-x>.
+
+The July 2026 HOCT paper remains the most directly relevant association paper:
+its edge tokens attend to other edges with a 3D line-to-line geometric bias and
+a parental softmax. That result supports comparing competing candidate links,
+but does not overturn this project's clean evidence: the hash-pinned public
+HOCT backbones regressed the untouched Biohub acceptance set, while v3's
+project-authored, memory-bounded outgoing/incoming edge-set context passed both
+external selection and audit partitions. Source:
+<https://arxiv.org/abs/2607.11754>.
+
+Decision: do not alter the frozen v3 acceptance recipe after seeing its external
+gains. Keep the 46.4M-parameter multiscale v4 as the separately gated capacity
+ablation. No CELLECT or HOCT code, weights, constants, predictions, or public
+leaderboard feedback enter either model family.
