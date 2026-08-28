@@ -1,0 +1,198 @@
+{
+  "checks": [
+    {
+      "detail": "Notebook code compiles, remote-redownloaded runtime v3 verifies, and the focused frozen-acceptance suite passes.",
+      "evidence": [
+        {
+          "path": "scripts/build-zebrahub-contextual-acceptance-preflight.py",
+          "sha256": "022c632e88676e11dbc8ba3696b4b94d75d5dddb90d1e0fdc266b09305faea3c"
+        },
+        {
+          "path": "scripts/build-zebrahub-contextual-acceptance-kernel.py",
+          "sha256": "cfd737f78a34701c95785575cae0f83a000e2bc0f676fe54be7761c0cb82649d"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-acceptance-evaluation-v1/biohub-zebrahub-contextual-acceptance-evaluation-v1.ipynb",
+          "sha256": "41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/evaluate_zebrahub_contextual_acceptance.py",
+          "sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_acceptance.py",
+          "sha256": "f6c5586e8d09f2c5b06b77f6f720e0dfee8545dbf1d09c4fb807d3848aa5e82e"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_acceptance_evaluation.py",
+          "sha256": "74c15aee56b03ba8f201acac77ff3f83c596bc458a87c7f7a8655aa6bd4c9057"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_acceptance_kernel_builder.py",
+          "sha256": "21071642faf774ac887a9b54d539204acc5ed8221ebe975999d43d393ff6d3cd"
+        },
+        {
+          "path": "tests/test_zebrahub_contextual_acceptance_runtime_builder.py",
+          "sha256": "5f0ebe2732632abddce162b8c2b90ccdd432db9b953db4b4939d26cd62d85c5d"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Only the exact repaired runtime v3, unopened ZSNS001 v1, and completed pretraining kernel v2 are attached; competition input and internet are absent.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-acceptance-evaluation-v1/kernel-metadata.json",
+          "sha256": "691e8fc2c4d1e7ea27df2a2dc483d1159237714c38c3555b6ef0c913b68d8a0e"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/SOURCE_MANIFEST.json",
+          "sha256": "6aefc98b953a15b853731bc970a9734ddcab08a51938bcc9769f29fa6bba1f29"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-v1-version1/DATASET_MANIFEST.json",
+          "sha256": "cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/pretraining_terminal.json",
+          "sha256": "bbe504907186af058d14f1287492b64e9b83b8c890cb620519ce1536265a618f"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/verify_runtime.py",
+          "sha256": "b20878eb50f6bfdbd621e5de2308da203ad93c13637761c54220f5a8a3082296"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/verify_zebrahub_contextual_acceptance.py",
+          "sha256": "c069008a159e3b45a8f07b0a698b6aaa9787a82f16577a9dee4fddf84efb80fe"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The production evaluator has finite synthetic-shard coverage tests for exact seeded-control versus checkpoint scoring and immutable inventory gates.",
+      "evidence": [
+        {
+          "path": "tests/test_zebrahub_contextual_acceptance_evaluation.py",
+          "sha256": "74c15aee56b03ba8f201acac77ff3f83c596bc458a87c7f7a8655aa6bd4c9057"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/evaluate_zebrahub_contextual_acceptance.py",
+          "sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/contextual_pair_fusion.py",
+          "sha256": "ec3f0e503af039afd879c757a80d805362c36bd66aff44bd588d12c3f5012e7f"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "This is a frozen evaluation-only run; it performs no optimizer step and cannot alter checkpoints.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "Both hash-bound 20,747,761-parameter v3 checkpoints strict-load locally and match the independently verified parent terminal.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/target_44b6/pretrained_model.pt",
+          "sha256": "c817a4ab00fd1318c086d4b5619ba7a8d861fd2ef721492be091c9b3c03a9e14"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/target_6bba/pretrained_model.pt",
+          "sha256": "633f9600b53e345d412053ea925fd5b37ea0447e9f77aa89ea568562cbde9014"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/pretraining_terminal.json",
+          "sha256": "bbe504907186af058d14f1287492b64e9b83b8c890cb620519ce1536265a618f"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/evaluate_zebrahub_contextual_acceptance.py",
+          "sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "The notebook writes only fold and aggregate acceptance terminals below /kaggle/working and contains no submission command.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-acceptance-evaluation-v1/biohub-zebrahub-contextual-acceptance-evaluation-v1.ipynb",
+          "sha256": "41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-acceptance-evaluation-v1/kernel-metadata.json",
+          "sha256": "691e8fc2c4d1e7ea27df2a2dc483d1159237714c38c3555b6ef0c913b68d8a0e"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "All 16 frozen, hash-bound ZSNS001 shards are present and remain marked unopened before this one-shot evaluation.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-v1-version1/DATASET_MANIFEST.json",
+          "sha256": "cbbf670dde160e5a927ed84bb9e2a7313abe4506f4798f6afa00680fc8e7c6d0"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-v1-version1/acceptance-inventory.json",
+          "sha256": "d056645c0becf31655a9719faf5d46671ffcc8087e248a76a7adc20d9ce9de2d"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/evaluate_zebrahub_contextual_acceptance.py",
+          "sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "The model and evaluator are project-authored; public code, predictions, leaderboard selection, and metric hacks are excluded.",
+      "evidence": [
+        {
+          "path": "reports/experiments/zebrahub-contextual-acceptance-evaluation-v1-staging.md",
+          "sha256": "eaadf8e4c2b8851e720e8442bcabf760af2d54104c2fd30950626c5a02c83d07"
+        },
+        {
+          "path": "reports/experiments/zebrahub-contextual-pretrain-v1-mp-repair-result.json",
+          "sha256": "fcb4f2c93def282bbefc2c72bfc269594b2826ff17df8cac6e9154196c414d43"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-acceptance-runtime-v1-version3/evaluate_zebrahub_contextual_acceptance.py",
+          "sha256": "c1ce5bf1f10ba8edc29e0419e80779c6ab9a108a2c224f95b2152c8f6ed46ef2"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    },
+    {
+      "detail": "The registered one-hour ceiling and live guard must leave at least eight Kaggle GPU hours; exactly two visible GPUs are required.",
+      "evidence": [
+        {
+          "path": "config/competition.json",
+          "sha256": "ab721793727702577fe75c1103fbe3de011fad67470c26b91cdcfa181007a4b1"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-contextual-acceptance-evaluation-v1/biohub-zebrahub-contextual-acceptance-evaluation-v1.ipynb",
+          "sha256": "41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874"
+        },
+        {
+          "path": "reports/experiments/zebrahub-contextual-acceptance-evaluation-v1-staging.md",
+          "sha256": "eaadf8e4c2b8851e720e8442bcabf760af2d54104c2fd30950626c5a02c83d07"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-28T02:37:00.971618Z",
+  "report_sha256": "4f1b996911aaca4933316dbddff164f8e2ed3b45bbccc538417e16a476102e6d",
+  "run_id": "zebrahub-contextual-acceptance-evaluation-v1",
+  "schema_version": 1
+}
