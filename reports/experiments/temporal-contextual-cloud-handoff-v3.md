@@ -273,6 +273,49 @@ acceptance-evidence dataset.
 
 ## 5. Two-GPU whole-movie final candidate
 
+Before the Kaggle code notebook is published, stage the cloud checkpoints and
+accepted exact evidence as separate private datasets:
+
+```bash
+python scripts/stage-temporal-contextual-kaggle-artifacts.py \
+  --appearance-root "$BIOHUB_RUN/appearance" \
+  --acceptance-evidence /workspace/evidence/temporal-contextual-pair-fusion-v3-exact-acceptance.json \
+  --staging-root /workspace/kaggle-artifacts
+```
+
+The stager refuses any non-accepted evidence or checkpoint-hash mismatch and
+performs no Kaggle write itself. The final notebook now consumes
+`indarkarhana/biohub-temporal-contextual-transfer-output-v3` as a private
+dataset instead of incorrectly expecting the cloud transfer to exist as a
+Kaggle kernel output. Stager SHA-256:
+`2659eec86a02e0882fe40053107a53e75db9e2b5ee10f22584a0c1804c7199d9`;
+test SHA-256:
+`ceeb17f113ce13fd0929f2efe3e7f5a626b9cf06fea2662308a8b21c8ce9f4b3`.
+
+Benchmark and verify the exact final recipe on the two-GPU cloud host first:
+
+```bash
+python scripts/run-temporal-contextual-cloud-candidate.py \
+  --runtime-root "$BIOHUB_RUNTIME" \
+  --competition-dir "$BIOHUB_COMPETITION" \
+  --trackastra-root "$BIOHUB_TRACKASTRA" \
+  --appearance-root "$BIOHUB_RUN/appearance" \
+  --acceptance-evidence /workspace/evidence/temporal-contextual-pair-fusion-v3-exact-acceptance.json \
+  --base-submission /workspace/test_control/submission.csv \
+  --base-graph-root /workspace/test_control/raw_graphs \
+  --output-dir "$BIOHUB_RUN/final"
+```
+
+The runner re-verifies exact acceptance, both checkpoint families, the frozen
+base CSV and raw-graph tree, exactly two GPUs, whole-movie coverage, unchanged
+nodes, changed edges, and the final CSV hash. Only then does it write
+`ready_for_submission_upload: true`; it contains no upload command. Runner
+SHA-256:
+`d694543cc26073126fd5f9fcc01d0a5da8f814a83765b0deec0f3d2993053145`;
+test SHA-256:
+`42dc744914cd805d455f0bab60de5cbc8027c6659e88d1a83466c72710b98564`.
+The combined final-inference and artifact-transport suite passes 19 tests.
+
 Use the staged notebook
 `indarkarhana/biohub-temporal-contextual-submission-candidate-v3`, or run:
 

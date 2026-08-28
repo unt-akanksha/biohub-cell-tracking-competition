@@ -41,12 +41,12 @@ def test_candidate_kernel_is_accepted_two_gpu_whole_movie_only() -> None:
     assert metadata["machine_shape"] == "NvidiaTeslaT4"
     assert metadata["dataset_sources"] == [
         "indarkarhana/biohub-temporal-contextual-transfer-runtime-v1",
+        "indarkarhana/biohub-temporal-contextual-transfer-output-v3",
         "indarkarhana/biohub-temporal-contextual-exact-acceptance-v3",
         "pilkwang/biohub-tracking-support-pack-50ep-v1",
     ]
     assert metadata["kernel_sources"] == [
         "indarkarhana/biohub-clean-0-927-reproduction-v1",
-        "indarkarhana/biohub-temporal-contextual-transfer-v3",
         "indarkarhana/biohub-trackastra-dual-fold-synthetic-v1",
     ]
     assert metadata["competition_sources"] == [
