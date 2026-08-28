@@ -2,7 +2,7 @@
   "schema_version": 1,
   "run_id": "temporal-multiscale-contextual-pair-fusion-v4",
   "parent": "temporal-contextual-pair-fusion-v3",
-  "status": "staged_not_registered_not_launched",
+  "status": "preflight_passed_conditional_autolaunch_armed",
   "hypothesis": "A prediction-preserving 46.4M-parameter axial multiscale residual expansion learns complementary 3D morphology beyond accepted contextual v3 while retaining its motion and candidate-set evidence.",
   "required_visible_gpu_count": 2,
   "internet_required_during_training": false,
@@ -46,7 +46,7 @@
   },
   "pretraining_execution": {
     "run_id": "zebrahub-multiscale-contextual-pretrain-v1",
-    "status": "staged_not_launched",
+    "status": "preflight_passed_waiting_for_v3_submission",
     "required_v3_pretraining_run": "zebrahub-contextual-pretrain-v1",
     "required_v3_acceptance_run": "zebrahub-contextual-acceptance-evaluation-v1",
     "initialization_policy": "strict accepted v3 warm start plus zero-initialized multiscale residual outputs",
@@ -69,7 +69,7 @@
     "runtime_manifest_sha256": "ac1c32a70f3dcc699806d18bde487d5d9154ba6774f06c7a812773c0e0efb8b3",
     "runtime_remote_redownload_verified": true,
     "kernel_notebook_sha256": "c15f7e1d9080067bec78e7567b1aba8c95132b135854cedd56951954083ed4ec",
-    "kernel_metadata_sha256": "dfb9857ae52874f80bc8138d1a7afd724992df3b2865681428098ccfe6306fdd",
+    "kernel_metadata_sha256": "d7edfb27e13d11c7cc3d9e85d3683417193e6acafc4ed3c0eb13362ef39504c6",
     "competition_source_attached": false,
     "internet_enabled": false,
     "submission_command_included": false
@@ -94,7 +94,7 @@
     "orchestrator_hard_stop_seconds": 37800,
     "notebook_watchdog_seconds": 39600,
     "kernel_notebook_sha256": "fd749af69a332f06c012983dd8cb588e4363a7e3d3e9d07103ca6f544e14d71c",
-    "kernel_metadata_sha256": "5b327b04b58ee8f013679548e811fafb349b4e62ff600b265bb56a9e9ee28e01",
+    "kernel_metadata_sha256": "ec785539b7006808266cc2e81ee2017da5ab77dd1974d93dabb63195dbe36e83",
     "runtime_dataset": "indarkarhana/biohub-temporal-multiscale-contextual-runtime-v4",
     "runtime_dataset_version": 3,
     "excluded_runtime_dataset_versions": [1, 2],
@@ -113,9 +113,12 @@
     "processed_acceptance_remains_unopened_until_weights_frozen": true,
     "leaderboard_selection_forbidden": true,
     "future_submission_requires_exactly_two_gpus": true,
-    "future_submission_requires_whole_movie_sharding": true,
+    "future_submission_requires_transition_partitioned_two_gpu_inference": true,
     "future_submission_internet_enabled": false,
-    "accepted_v3_submission_cannot_be_delayed_by_v4": true
+    "accepted_v3_submission_cannot_be_delayed_by_v4": true,
+    "v4_launch_requires_completed_v3_submission_receipt": true,
+    "quota_reserve_hours_after_v3_submission": 0.0,
+    "all_available_gpu_quota_authorized_by_user": true
   },
   "source": {
     "multiscale_model_sha256": "7e82379df055d0fc1934b68bf3ffdb76e27f6734f4d4f1b3c20780e8e73a4c36",

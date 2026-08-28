@@ -1,0 +1,157 @@
+{
+  "checks": [
+    {
+      "detail": "The deterministic notebook compiles and the multiscale architecture, trainer, runtime, and kernel suites pass.",
+      "evidence": [
+        {
+          "path": "scripts/build-zebrahub-multiscale-contextual-pretrain-preflight.py",
+          "sha256": "4e405c8d87b24124aecd0fb3b4b5afe3e4307597d55e28e4a4f6c95d328cdb1f"
+        },
+        {
+          "path": "scripts/build-zebrahub-multiscale-contextual-pretrain-kernel.py",
+          "sha256": "17a458ff43c696dbc2f3c6e60fd8a259e1478baf9e09bcee5fede336586dbb49"
+        },
+        {
+          "path": "kaggle/biohub-zebrahub-multiscale-pretrain-v1/biohub-zebrahub-multiscale-pretrain-v1.ipynb",
+          "sha256": "c15f7e1d9080067bec78e7567b1aba8c95132b135854cedd56951954083ed4ec"
+        },
+        {
+          "path": "tests/test_multiscale_contextual_pair_fusion.py",
+          "sha256": "2cadc201ef324e8760bb0fa53c088930c2d6338894ea47812eb3cc164238e5b4"
+        },
+        {
+          "path": "tests/test_zebrahub_multiscale_contextual_pretrain.py",
+          "sha256": "17e594184b7d0942040798aecd85702e42c6bf59ef6fddede89853b66ab90b1d"
+        },
+        {
+          "path": "tests/test_multiscale_contextual_trainer.py",
+          "sha256": "c54dbdbeee6d3e969ca10344f64b2232ab68af84520255250b61727d6fd1bcb4"
+        },
+        {
+          "path": "tests/test_temporal_patch_runtime_builder.py",
+          "sha256": "0399f866b080e2897a85c0e721d569b39a9dda164722f4d349e4bb326871e14c"
+        },
+        {
+          "path": "tests/test_zebrahub_multiscale_contextual_pretrain_kernel_builder.py",
+          "sha256": "880e7ffe5a27a92ff19144e381d8dd8ba6741da444f3f49665ba5b0c4cf1a78d"
+        },
+        {
+          "path": "tests/test_temporal_multiscale_contextual_transfer_kernel_builder.py",
+          "sha256": "2696bf2556f99a2ef4ad264be8d8eb40923e4390133026dc2d50bcfee9e38df1"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Only verified private runtime v3, ZebraHub shards v4, accepted contextual-v3 weights, and ZSNS001 acceptance are attached; competition data is absent.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-multiscale-pretrain-v1/kernel-metadata.json",
+          "sha256": "d7edfb27e13d11c7cc3d9e85d3683417193e6acafc4ed3c0eb13362ef39504c6"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-multiscale-contextual-runtime-v4-version3/SOURCE_MANIFEST.json",
+          "sha256": "ac1c32a70f3dcc699806d18bde487d5d9154ba6774f06c7a812773c0e0efb8b3"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/DATASET_MANIFEST.json",
+          "sha256": "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "The 46,386,607-parameter project-authored residual model has a finite forward/backward test and starts from strict accepted-v3 weights.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-multiscale-contextual-runtime-v4-version3/multiscale_contextual_pair_fusion.py",
+          "sha256": "7e82379df055d0fc1934b68bf3ffdb76e27f6734f4d4f1b3c20780e8e73a4c36"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-multiscale-contextual-runtime-v4-version3/train_zebrahub_multiscale_contextual_pretrain.py",
+          "sha256": "e1341a2d98759e2aecf322ed8a1f28f8670ef4ed7e5d553305b7eaec3df92b07"
+        }
+      ],
+      "name": "model_step",
+      "status": "passed"
+    },
+    {
+      "detail": "Both 20,747,761-parameter parent checkpoints strict-load and match the passing untouched-ZSNS001 acceptance hashes.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/pretraining_terminal.json",
+          "sha256": "bbe504907186af058d14f1287492b64e9b83b8c890cb620519ce1536265a618f"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zsns001-contextual-gate-v1-version1-20260828/zebrahub_contextual_acceptance_v1/acceptance_terminal.json",
+          "sha256": "2c886d45849330c30c5dc084aafeb1bff0436ce80794e56420b92e7273bf5da9"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/target_44b6/pretrained_model.pt",
+          "sha256": "c817a4ab00fd1318c086d4b5619ba7a8d861fd2ef721492be091c9b3c03a9e14"
+        },
+        {
+          "path": ".biohub/cache/kernel-outputs/zebrahub-contextual-pretrain-v1-mp-repair-version2-20260827/zebrahub_contextual_pretrain_v1/target_6bba/pretrained_model.pt",
+          "sha256": "633f9600b53e345d412053ea925fd5b37ea0447e9f77aa89ea568562cbde9014"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "All 64 ZSNS004 training and 16 disjoint ZSNS005 validation shards verify without competition data.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/train-inventory.json",
+          "sha256": "09ef1301b0017bfefe87365f2a6fc1b42c0d1ec132430934f19a6e6a66344b6d"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-zebrahub-contextual-shards-v1-version4/validation-inventory.json",
+          "sha256": "59ba128c79260c18df92627bf0e368ef6be59e74068eb36cdabfde465edaf11b"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    },
+    {
+      "detail": "The axial multiscale branch is project-authored; public code/predictions, metric hacks, and leaderboard selection remain excluded.",
+      "evidence": [
+        {
+          "path": "config/experiments/temporal-multiscale-contextual-pair-fusion-v4.json",
+          "sha256": "80e6ba02361a0b456d2344bfe645b5ec78f79f6fab093c4f16851e2f250c2b97"
+        },
+        {
+          "path": "reports/experiments/biohub-technique-scan-2026-08-27.md",
+          "sha256": "c46d98d9b5f148bfe0199a98fd0f434d88bac9a2eb3d3345a0a9ab968afb6a46"
+        },
+        {
+          "path": ".biohub/cache/dataset-redownloads/biohub-temporal-multiscale-contextual-runtime-v4-version3/multiscale_contextual_pair_fusion.py",
+          "sha256": "7e82379df055d0fc1934b68bf3ffdb76e27f6734f4d4f1b3c20780e8e73a4c36"
+        }
+      ],
+      "name": "non_replica_provenance",
+      "status": "passed"
+    },
+    {
+      "detail": "The stage requires exactly two T4 GPUs and a 24,000-second ceiling; post-v3 orchestration may use all then-available quota with zero reserve.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-zebrahub-multiscale-pretrain-v1/biohub-zebrahub-multiscale-pretrain-v1.ipynb",
+          "sha256": "c15f7e1d9080067bec78e7567b1aba8c95132b135854cedd56951954083ed4ec"
+        },
+        {
+          "path": "config/experiments/temporal-multiscale-contextual-pair-fusion-v4.json",
+          "sha256": "80e6ba02361a0b456d2344bfe645b5ec78f79f6fab093c4f16851e2f250c2b97"
+        }
+      ],
+      "name": "quota_policy",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-08-28T15:57:30.231868Z",
+  "report_sha256": "7fa1125de6e258780bd8e7321f8a5bfa153d644b35fad6f25f3bd784007e0403",
+  "run_id": "zebrahub-multiscale-contextual-pretrain-v1",
+  "schema_version": 1
+}
