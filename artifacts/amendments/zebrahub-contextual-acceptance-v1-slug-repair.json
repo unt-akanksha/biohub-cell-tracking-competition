@@ -1,0 +1,16 @@
+{
+  "kernel_slug_repair": {
+    "failed_authorization_id": "auth-f33bfa51aa7542e6833b5b617526fe81",
+    "failure_stage": "Kaggle SaveKernel before version creation",
+    "gpu_run_started": false,
+    "kernel_builder_sha256": "008b528ebf0befc4a70700e79486def7a2e0a19f809bbe6ad41604cd6826446c",
+    "kernel_metadata_sha256": "f7a2915c445cfa58e5f2e1361e0b33a40f328bfe5e0dc2702ca802781f8ea094",
+    "new_remote_kernel": "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+    "new_slug_and_title_characters": 41,
+    "notebook_sha256": "41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874",
+    "old_remote_kernel": "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
+    "old_slug_and_title_characters": 51,
+    "preflight_report_sha256": "5beaf4dc3b420d7e658984cf507fea3dab2054bd6c41bd0b072fcd0441d26d2f",
+    "scientific_recipe_changed": false
+  }
+}

@@ -44,7 +44,7 @@ def test_transfer_kernel_is_two_gpu_gated_training_only() -> None:
     assert metadata["kernel_sources"] == [
         "josefreitasalvesneto/biohub-synthetic-dataset",
         "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
-        "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
+        "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
     ]
     assert metadata["competition_sources"] == [
         "biohub-cell-tracking-during-development"

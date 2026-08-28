@@ -1,0 +1,11 @@
+{
+  "acceptance_kernel_source_repair": {
+    "kernel_builder_sha256": "4b4df0c5deae0c7a2ee412ddd57985129645b48851fe2471a3e563d9d2c43bda",
+    "kernel_builder_test_sha256": "0efb1a0de946f6f264a2f5c7b0f9878a6eadd45c2717d149b48e6e7f364b4697",
+    "kernel_metadata_sha256": "bbfbc009c9ffc9a18330f8556d88c7cea04542824550cf1a9c96922871f5f322",
+    "new_source": "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+    "notebook_sha256": "7ca20f9097d14dba745a3eb0aededc561e691e904cb85274d91219a282c4ee61",
+    "old_source": "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
+    "scientific_recipe_changed": false
+  }
+}

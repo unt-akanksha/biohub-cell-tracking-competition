@@ -492,7 +492,7 @@ def main() -> None:
         "kernel_sources": [
             "josefreitasalvesneto/biohub-synthetic-dataset",
             "indarkarhana/biohub-zebrahub-contextual-pretrain-v1",
-            "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
+            "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
         ],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "model_sources": [],

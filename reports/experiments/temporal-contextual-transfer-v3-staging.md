@@ -71,7 +71,7 @@ both checkpoints, and rejects any competition artifact in the training output.
 - Notebook SHA-256:
   `7ca20f9097d14dba745a3eb0aededc561e691e904cb85274d91219a282c4ee61`
 - Kernel metadata SHA-256:
-  `0d2afe024afb1da581ba2b4860188b48c5617ceda3aa49ff55875ff30b3fb5c6`
+  `bbfbc009c9ffc9a18330f8556d88c7cea04542824550cf1a9c96922871f5f322`
 
 The runtime version-4 re-download reproduced its exact manifest and all 36
 content hashes after materializing the packaged Trackastra source directory.
@@ -80,3 +80,8 @@ contextual logits are differentiably promoted to the FP32 sparse output dtype
 before index scatter. No recipe, split, seed, gate, or selection policy was
 changed. No Kaggle GPU, leaderboard result, or competition submission was used
 to stage this transfer lane.
+
+The acceptance kernel input now resolves through the shortened remote slug
+`indarkarhana/biohub-zebrahub-contextual-acceptance-v1`. This is a metadata-only
+repair for Kaggle's identifier boundary; the transfer notebook remains byte
+identical.

@@ -47,7 +47,7 @@ hyperparameter selection and cannot be reused for tuning.
 - Notebook SHA-256:
   `41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874`
 - Kernel metadata SHA-256:
-  `691e8fc2c4d1e7ea27df2a2dc483d1159237714c38c3555b6ef0c913b68d8a0e`
+  `f7a2915c445cfa58e5f2e1361e0b33a40f328bfe5e0dc2702ca802781f8ea094`
 
 The first relative-path dataset publication command failed locally before
 creation because of a Kaggle CLI temporary-path bug. The absolute-path retry
@@ -63,3 +63,10 @@ dtype-safe.
 
 No GPU run, competition submission, public prediction, or leaderboard result
 was used while staging this gate.
+
+The first guarded kernel-creation request was rejected by Kaggle before a
+version existed because the provisional remote slug and title were each 51
+characters. Both now use the 41-character
+`biohub-zebrahub-contextual-acceptance-v1`; the scientific run ID, notebook
+bytes, runtime, inputs, gates, and budget are unchanged. The downstream
+transfer source was rebound to that shortened remote slug.

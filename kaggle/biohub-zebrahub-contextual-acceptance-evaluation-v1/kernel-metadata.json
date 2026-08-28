@@ -1,6 +1,6 @@
 {
-  "id": "indarkarhana/biohub-zebrahub-contextual-acceptance-evaluation-v1",
-  "title": "Biohub ZebraHub Contextual Acceptance Evaluation v1",
+  "id": "indarkarhana/biohub-zebrahub-contextual-acceptance-v1",
+  "title": "Biohub ZebraHub Contextual Acceptance v1",
   "code_file": "biohub-zebrahub-contextual-acceptance-evaluation-v1.ipynb",
   "language": "python",
   "kernel_type": "notebook",
