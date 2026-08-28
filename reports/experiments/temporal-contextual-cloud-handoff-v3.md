@@ -14,6 +14,11 @@ chain, launches the frozen transfer recipe, strict-loads both output
 checkpoints, and writes `cloud_launcher_terminal.json`. It cannot authorize or
 create a competition submission.
 
+The repository closure now binds all `27` Python files under
+`research/temporal_contrastive`, including the isolated future-division
+prototype, at tree SHA-256
+`9c1db520a098d70c746de2afbb4e1037796731cee9366c5aa0bd4d5f16d2b9c2`.
+
 ## Immutable assets
 
 - ZebraHub pretraining run: `zebrahub-contextual-pretrain-v1`
@@ -73,10 +78,11 @@ python scripts/run-temporal-contextual-cloud-transfer.py \
 ```
 
 Runner SHA-256:
-`bea7fc02aa010e0be2c66ada498d189836e7b09aee3a3eee3eacaf6270aafcc7`.
+`758fd46dc59ba8f0ef11f10b2b2167ce42ac76d62ab1e0b191be8be5ebee4ee8`.
 Its test SHA-256 is
-`b19e83d1a0430359f3f632ca986a8fd74d812f0000b6a83608c901c7a7c01694`;
-all three focused fail-closed tests pass locally without GPU use.
+`ba7215a51c369bb836b43dc06a90ade6e6517f41571e1d3d661f91b70e406b17`;
+all three focused fail-closed tests pass locally without GPU use, and the
+20-test combined cloud/context/division/acceptance regression set passes.
 
 Use the staged private notebook
 `indarkarhana/biohub-temporal-contextual-transfer-v3`, or run its exact command:
@@ -124,6 +130,28 @@ regression worse than `0.01`.
 
 ## 2. Clean reserved-movie calibration
 
+Preferred automated cloud command after the transfer runner completes:
+
+```bash
+python scripts/run-temporal-contextual-cloud-calibration.py \
+  --runtime-root "$BIOHUB_RUNTIME" \
+  --competition-dir "$BIOHUB_COMPETITION" \
+  --trackastra-root "$BIOHUB_TRACKASTRA" \
+  --appearance-root "$BIOHUB_RUN/appearance" \
+  --output-dir "$BIOHUB_RUN/calibration"
+```
+
+The runner re-verifies the runtime, both strict appearance checkpoints, the
+Trackastra control, and the transfer launcher's exact source-tree binding. It
+requires exactly two visible GPUs and independently enforces each fold's
+`0.001` pooled gain and `-0.002` worst-movie floor before it writes
+`cloud_calibration_launcher_terminal.json`; it has no processed-acceptance or
+submission command. Runner SHA-256:
+`c4e7b578378005a5aa5fe0473765c12df45c6a03a1ce5f0b0e7c2129004a6edc`.
+Its test SHA-256 is
+`e0ae687cb334285069b6238bf2d629c3ed91398da1b2ab2089e287e8edbf480b`;
+all four focused tests and the 24-test combined regression set pass.
+
 ```bash
 python "$BIOHUB_RUNTIME/calibrate_dual_fold_blend.py" \
   --orchestrate \
@@ -147,6 +175,28 @@ must remain unopened.
 ## 3. One-shot processed materialization
 
 Run exactly once after calibration freezes all weights:
+
+```bash
+python scripts/run-temporal-contextual-cloud-processed.py \
+  --runtime-root "$BIOHUB_RUNTIME" \
+  --competition-dir "$BIOHUB_COMPETITION" \
+  --trackastra-root "$BIOHUB_TRACKASTRA" \
+  --appearance-root "$BIOHUB_RUN/appearance" \
+  --calibration-root "$BIOHUB_RUN/calibration" \
+  --processed-control-csv "$BIOHUB_PROCESSED_CONTROL" \
+  --raw-graph-root "$BIOHUB_PROCESSED_RAW" \
+  --output-dir "$BIOHUB_RUN/processed"
+```
+
+This preferred cloud runner verifies the full transfer-to-calibration hash
+chain, both frozen input artifact hashes, exactly two visible GPUs, all four
+predeclared movies, changed edges, and the absence of ground-truth access,
+selection, exact scoring, and submission. It only authorizes the pinned local
+CPU gate. Runner SHA-256:
+`83682e930b09aeaf9531d54ce1c30bfbb3bb7a78dbd1d5ef335b25b9d5c2f23f`.
+Its test SHA-256 is
+`21051992d4fae5ef37bf3dc68f5506e1bc511d3adfae1fb85fb4eae00cdaa54e`;
+all five focused tests and the 29-test combined regression set pass.
 
 ```bash
 export BIOHUB_PROCESSED_CONTROL=/workspace/processed_validation/processed_validation.csv

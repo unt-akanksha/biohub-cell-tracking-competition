@@ -20,7 +20,7 @@ def test_cloud_transfer_binds_repository_sources_and_frozen_recipe() -> None:
     assert {
         key: value for key, value in observed.items() if key in cloud.SOURCE_HASHES
     } == cloud.SOURCE_HASHES
-    assert observed["temporal_source_file_count"] == "26"
+    assert observed["temporal_source_file_count"] == "27"
     assert observed["temporal_source_tree_sha256"] == (
         cloud.EXPECTED_TEMPORAL_SOURCE_TREE_SHA256
     )
