@@ -1,0 +1,164 @@
+{
+  "base_submission_sha256": "33c179b0449b9cdd186f06a653cddc8cf12359f008982f6713cdf30784a52e6a",
+  "cases": {
+    "44b6_1x__6bba_1x": {
+      "current_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8144829548502653,
+          "movie_weight": 51988246528.0,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0003701918814352,
+        "projected_true_loads": [
+          32012536807.58006,
+          32024387588.810368
+        ],
+        "work_plan_sha256": "e6f146eda99fd937b60f4070ca3cdd3c900dda68b4a3525d8b4d64957be16e18"
+      },
+      "encoder_counts": {
+        "44b6": 1,
+        "6bba": 1
+      },
+      "mac_adjusted_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8137543592579455,
+          "movie_weight": 52102485250.88766,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0003701918814352,
+        "projected_true_loads": [
+          32012536807.58006,
+          32024387588.810368
+        ],
+        "work_plan_sha256": "64d6e4867d25326f47888019a8896b876d1826d7863322d43ad1689f1afedf37"
+      }
+    },
+    "44b6_1x__6bba_2x": {
+      "current_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8160212603011517,
+          "movie_weight": 52856700928.0,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0038080335424848,
+        "projected_true_loads": [
+          32619226783.064777,
+          32495482894.224327
+        ],
+        "work_plan_sha256": "d297c588352685ff22ffcca7eaff4a5d5c831cc838239b1437ced91aa66a1198"
+      },
+      "encoder_counts": {
+        "44b6": 1,
+        "6bba": 2
+      },
+      "mac_adjusted_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8154983699224271,
+          "movie_weight": 53085178373.775314,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0038080335424848,
+        "projected_true_loads": [
+          32619226783.064777,
+          32495482894.224327
+        ],
+        "work_plan_sha256": "b8fb6832aeab89b6b66beb8d0eca56de54c5bde62c3801a426c3f8f2074dbe5f"
+      }
+    },
+    "44b6_2x__6bba_1x": {
+      "current_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8074275525735187,
+          "movie_weight": 51988246528.0,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.006966703416458,
+        "projected_true_loads": [
+          32446931974.06465,
+          32222447737.32638
+        ],
+        "work_plan_sha256": "c11efb3e318b6378563a4e842296616f9a2481c6f360cde489e30c6b6f2855a2"
+      },
+      "encoder_counts": {
+        "44b6": 2,
+        "6bba": 1
+      },
+      "mac_adjusted_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8058114318142263,
+          "movie_weight": 52102485250.88766,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0037065679453179,
+        "projected_true_loads": [
+          32394225762.570488,
+          32274597773.017
+        ],
+        "work_plan_sha256": "473239f5134f036b3e40e0ac1cf598779c4f66cf4b683304fe272486db7b14a5"
+      }
+    },
+    "44b6_2x__6bba_2x": {
+      "current_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8090546635664061,
+          "movie_weight": 52856700928.0,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0010252834933089,
+        "projected_true_loads": [
+          32891066161.9851,
+          32857378034.652763
+        ],
+        "work_plan_sha256": "84dd106082352ac9f4751c6be455c65485c3b07e6bd3fe87b9d9ac63eb8bd960"
+      },
+      "encoder_counts": {
+        "44b6": 2,
+        "6bba": 2
+      },
+      "mac_adjusted_scheduler": {
+        "dominant_split": {
+          "movie_fraction": 0.8076677732931525,
+          "movie_weight": 53085178373.775314,
+          "stem": "6bba_05db0fb1"
+        },
+        "partition_kind": "dominant_movie_transition_split_v1",
+        "projected_true_load_ratio": 1.0010252834933089,
+        "projected_true_loads": [
+          32891066161.9851,
+          32857378034.652763
+        ],
+        "work_plan_sha256": "2ae6ac6c744408f4272274ff3abe357a2c6678fa6b29649d85d80523eb50da7c"
+      }
+    }
+  },
+  "competition_submission_performed": false,
+  "current_appearance_node_cost": 12288.0,
+  "current_scheduler_worst_projected_load_ratio": 1.006966703416458,
+  "gpu_used": false,
+  "mac_adjusted_appearance_node_cost": 13904.395088612084,
+  "mac_adjusted_scheduler_worst_projected_load_ratio": 1.0038080335424848,
+  "macs_per_node": {
+    "v3": 3315712192,
+    "v4": 3751869492
+  },
+  "maximum_accepted_projected_load_ratio": 1.01,
+  "movies": 4,
+  "parameters_per_fold": {
+    "v3": 20747761,
+    "v4": 46386607
+  },
+  "public_leaderboard_used_for_selection": false,
+  "run_id": "temporal-multiscale-runtime-profile-v1",
+  "scheduler_decision": "retain_current_transition_plan_no_runtime_mutation",
+  "schema_version": 1,
+  "status": "profiled",
+  "v4_to_v3_macs_ratio": 1.131542569060228,
+  "v4_to_v3_parameter_ratio": 2.235740376997788
+}

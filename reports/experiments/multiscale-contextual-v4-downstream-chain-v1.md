@@ -87,3 +87,25 @@ any final-stage terminal existed.
 - All three v4 kernel slugs are below Kaggle's 50-character limit.
 - Python compilation and `git diff --check` passed. Ruff was unavailable in the
   local environment and therefore was not run.
+
+## Final-runtime compute profile
+
+The frozen clean-base submission inventory was profiled across all four
+possible reciprocal calibration outcomes (one or two appearance encoders for
+each embryo prefix). Conv/Linear multiply-accumulates were counted on the exact
+17x17x17 physical patch used at inference:
+
+- contextual v3: 3.315712192 GMAC per node;
+- multiscale v4: 3.751869492 GMAC per node;
+- v4/v3 compute ratio: 1.131542569;
+- v4/v3 parameter ratio: 2.235740377.
+
+Thus v4 supplies 2.24x parameter capacity for only about 1.13x per-node MACs.
+Using the measured v4 cost to evaluate the already-published scheduler, the
+worst two-GPU projected load ratio is 1.006967x across all four possible future
+blend outcomes. A MAC-adjusted scheduler would improve that only to 1.003808x,
+below the predeclared 1.01x mutation threshold. The frozen production runtime
+is therefore retained rather than versioned for a negligible scheduling
+change. Evidence is stored in
+`artifacts/profiles/temporal-multiscale-runtime-v1.json`; profiling used CPU,
+read no leaderboard, and performed no submission.
