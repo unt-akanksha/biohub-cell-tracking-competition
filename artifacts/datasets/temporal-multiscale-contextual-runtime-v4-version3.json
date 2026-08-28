@@ -16,7 +16,7 @@
   "required_visible_gpu_count": 2,
   "internet_enabled": false,
   "submission_command_included": false,
-  "source_experiment_sha256": "022cd4853bf6f3df9b1fa459d8cc076b28a2c4e0d6380beb5953e33248b16812",
+  "source_experiment_sha256": "80e6ba02361a0b456d2344bfe645b5ec78f79f6fab093c4f16851e2f250c2b97",
   "packaged_experiment_sha256": "3c9a4750d53d9037e700fbdec0653e129d96cb40037b0b9d4e1a6350f812fef3",
   "dataset_metadata_sha256": "a10a507e61ba492c19a0a9fd9239a8f1f211343ecff077ebdb72d26f607c84b1",
   "runtime_builder_sha256": "a687cba7c350c29c88e6541b1816bd3440bcd528a1f3e008762f07c114a3dfc0",

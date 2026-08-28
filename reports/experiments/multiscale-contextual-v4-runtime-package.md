@@ -42,7 +42,7 @@ ZSNS001 acceptance gate and cannot delay an accepted v3 submission.
 - Packaged experiment SHA-256:
   `3c9a4750d53d9037e700fbdec0653e129d96cb40037b0b9d4e1a6350f812fef3`
 - Source experiment SHA-256:
-  `022cd4853bf6f3df9b1fa459d8cc076b28a2c4e0d6380beb5953e33248b16812`
+  `80e6ba02361a0b456d2344bfe645b5ec78f79f6fab093c4f16851e2f250c2b97`
 - Runtime builder SHA-256:
   `a687cba7c350c29c88e6541b1816bd3440bcd528a1f3e008762f07c114a3dfc0`
 - Runtime builder test SHA-256:
