@@ -47,7 +47,7 @@ hyperparameter selection and cannot be reused for tuning.
 - Notebook SHA-256:
   `41835ade5603bb7f64c3703d2eb5568198b3d4ce26e43bef13c708b68a3bc874`
 - Kernel metadata SHA-256:
-  `f7a2915c445cfa58e5f2e1361e0b33a40f328bfe5e0dc2702ca802781f8ea094`
+  `9067bd49ad56d7b68512b3d26d0618c5ea3d76444d5a6799b912c8b79c188ff6`
 
 The first relative-path dataset publication command failed locally before
 creation because of a Kaggle CLI temporary-path bug. The absolute-path retry
