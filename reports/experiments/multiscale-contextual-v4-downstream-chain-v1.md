@@ -109,3 +109,29 @@ is therefore retained rather than versioned for a negligible scheduling
 change. Evidence is stored in
 `artifacts/profiles/temporal-multiscale-runtime-v1.json`; profiling used CPU,
 read no leaderboard, and performed no submission.
+
+## Training-memory profile
+
+The v4 training path was also profiled before its queued launch. This audit
+does not treat the pretraining patch chunk of 32 as the activation batch:
+autograd retains every chunk graph until the complete shard loss is
+backpropagated. It therefore covers the largest observed ZebraHub shard (64
+source plus 96 target nodes) and the larger Biohub transfer cap (48 source plus
+128 target nodes). The contextual head was measured with all 6,144 transfer
+pairs eligible, conservatively exceeding the 3,551-edge maximum in the 80
+hash-bound external shards.
+
+The estimate uses CPU fp32 logical saved-tensor bytes even though Kaggle trains
+under fp16 autocast, excludes parameter storages from the activation count,
+then adds fp32 model, EMA, gradients, both Adam moments, a 1.25x activation and
+workspace multiplier, and a fixed 2 GiB allowance. Against a deliberately
+reduced 12 GiB T4 training budget:
+
+- largest observed external-pretraining shard: 7.3854 GiB projected;
+- declared maximum Biohub transfer transition: 7.8056 GiB projected;
+- remaining transfer headroom: 4.1947 GiB.
+
+Both cases pass, so the published v4 training configuration is retained and no
+queued controller is restarted. Evidence is stored in
+`artifacts/profiles/temporal-multiscale-training-memory-v1.json`. The profiler
+used no GPU, read no leaderboard, and performed no submission.

@@ -1,0 +1,80 @@
+{
+  "cases": {
+    "biohub_transfer_declared_cap": {
+      "activation_workspace_multiplier": 1.25,
+      "conservative_t4_budget_bytes": 12884901888,
+      "fixed_safety_allowance_bytes": 2147483648,
+      "fp32_logical_saved_activation_bytes": 4244793552,
+      "headroom_bytes": 4503694160,
+      "node_count": 176,
+      "persistent_model_optimizer_ema_bytes": 927732140,
+      "projected_training_bytes": 8381207728,
+      "projected_training_gib": 7.805607959628105,
+      "within_conservative_t4_budget": true
+    },
+    "zebrahub_pretraining_observed_max": {
+      "activation_workspace_multiplier": 1.25,
+      "conservative_t4_budget_bytes": 12884901888,
+      "fixed_safety_allowance_bytes": 2147483648,
+      "fp32_logical_saved_activation_bytes": 3883851024,
+      "headroom_bytes": 4954872320,
+      "node_count": 160,
+      "persistent_model_optimizer_ema_bytes": 927732140,
+      "projected_training_bytes": 7930029568,
+      "projected_training_gib": 7.385415554046631,
+      "within_conservative_t4_budget": true
+    }
+  },
+  "competition_submission_performed": false,
+  "decision": "retain_published_v4_training_configuration",
+  "external_inventory": {
+    "dataset_manifest_sha256": "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf",
+    "max_candidate_edges": 3551,
+    "max_nodes": 160,
+    "max_source_nodes": 64,
+    "max_target_nodes": 96,
+    "shards": 80
+  },
+  "gpu_used": false,
+  "kaggle_training_dtype": "cuda autocast float16",
+  "measurements": {
+    "v3": {
+      "node_saved_tensors_fp32": {
+        "logical_bytes": 19443096,
+        "saved_tensor_count": 81,
+        "unique_storage_bytes": 17680024
+      },
+      "parameter_bytes_fp32": 82991044,
+      "parameter_count": 20747761
+    },
+    "v4": {
+      "dense_context_objective_saved_tensors_fp32": {
+        "candidate_edges": 6144,
+        "logical_bytes": 274425744,
+        "saved_tensor_count": 107,
+        "source_count": 48,
+        "target_count": 128,
+        "unique_storage_bytes": 216221392
+      },
+      "node_saved_tensors_fp32": {
+        "logical_bytes": 22558908,
+        "saved_tensor_count": 184,
+        "unique_storage_bytes": 20461220
+      },
+      "parameter_bytes_fp32": 185546428,
+      "parameter_count": 46386607
+    }
+  },
+  "method": "CPU fp32 autograd saved-tensor logical bytes, parameter storages excluded; full fp32 model+EMA+gradient+Adam states, 1.25x activation workspace multiplier, and 2 GiB fixed safety allowance",
+  "passed": true,
+  "public_leaderboard_used_for_selection": false,
+  "run_id": "temporal-multiscale-training-memory-profile-v1",
+  "schema_version": 1,
+  "status": "profiled",
+  "transfer_caps": {
+    "dense_candidate_edges": 6144,
+    "max_nodes": 176,
+    "max_sources": 48,
+    "max_targets": 128
+  }
+}
