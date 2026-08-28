@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 from typing import Any
@@ -129,3 +130,22 @@ def verify_output(root: Path, *, strict_checkpoint: bool = True) -> dict[str, An
         "competition_submission_performed": False,
     }
 
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--skip-strict-checkpoint", action="store_true")
+    args = parser.parse_args()
+    print(
+        json.dumps(
+            verify_output(
+                args.root, strict_checkpoint=not args.skip_strict_checkpoint
+            ),
+            indent=2,
+            sort_keys=True,
+        )
+    )
+
+
+if __name__ == "__main__":
+    main()
