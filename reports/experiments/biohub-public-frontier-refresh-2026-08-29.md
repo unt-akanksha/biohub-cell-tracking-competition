@@ -36,6 +36,25 @@ highest-value lane: recover complete division events without introducing
 false forks. One additional true division can move the composite much more
 than a small generic edge-linking adjustment.
 
+An oracle feasibility audit of the 0.940 kernel's raw prediction GEFFs adds a
+more specific diagnosis. All five annotated division triplets have the parent
+and both daughters detected within 7 µm. Four triplets are fully matched within
+3 µm; the remaining event has only its parent within 3 µm and daughters about
+4.7–5.0 µm from truth. Every raw graph already connects exactly one correct
+daughter. In all five cases the omitted daughter is the nearest next-frame
+detection to the parent after excluding the existing child. Three omitted
+daughters are parent-free; two require replacing an incoming edge. Adding the
+five known missing edges as an oracle changes raw edge TP/FN by `+5/-5` and
+raw division TP/FN from `0/5` to `5/0` without adding an oracle FP.
+
+This result is feasibility evidence only: truth identified the missing
+daughters, so it cannot authorize a distance threshold or a submission. It
+does establish that a learned division-parent gate plus constrained
+nearest-second-daughter selection has enough candidate recall to close the
+target gap. The reproducible audit implementation is
+`research/division_recovery_feasibility.py`; its ignored run artifact is
+`.biohub/cache/analysis/division-recovery-0940.json`.
+
 ## Rules and discussion evidence
 
 - External public data and models are allowed when competitors can obtain them
