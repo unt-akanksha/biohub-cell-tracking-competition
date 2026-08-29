@@ -196,14 +196,24 @@ def score_records(
         candidates = batch["candidate_mask"].cpu().numpy()
         positives = batch["positive_mask"].cpu().numpy()
         division_targets = batch["division_target"].cpu().numpy() > 0.5
+        source_coordinates = batch["source_coords_um"].cpu().numpy()
+        target_coordinates = batch["target_coords_um"].cpu().numpy()
         for source_row in range(len(divisions)):
             candidate_rows = np.flatnonzero(candidates[source_row])
             if len(candidate_rows) < 2:
                 continue
-            ranked = candidate_rows[
+            ranked_by_model = candidate_rows[
                 np.argsort(logits[source_row, candidate_rows], kind="stable")[::-1]
             ]
-            top_two = ranked[:2]
+            existing_child = int(ranked_by_model[0])
+            remaining = candidate_rows[candidate_rows != existing_child]
+            distances = np.linalg.norm(
+                target_coordinates[remaining] - source_coordinates[source_row],
+                axis=1,
+            )
+            second_child = int(
+                remaining[np.lexsort((remaining, distances))[0]]
+            )
             positive = positives[source_row]
             rows.append(
                 {
@@ -211,14 +221,23 @@ def score_records(
                     "csv_timepoint": int(record.csv_timepoint),
                     "source_row": int(source_row),
                     "division_logit": float(divisions[source_row]),
-                    "top_pair_logit": float(logits[source_row, top_two[0]]),
-                    "second_pair_logit": float(logits[source_row, top_two[1]]),
+                    "existing_pair_logit": float(
+                        logits[source_row, existing_child]
+                    ),
+                    "second_pair_logit": float(logits[source_row, second_child]),
+                    "second_parent_distance_um": float(
+                        np.linalg.norm(
+                            target_coordinates[second_child]
+                            - source_coordinates[source_row]
+                        )
+                    ),
                     "is_division": bool(division_targets[source_row]),
-                    "second_is_positive": bool(positive[top_two[1]]),
+                    "existing_is_positive": bool(positive[existing_child]),
+                    "second_is_positive": bool(positive[second_child]),
                     "top_two_are_daughters": bool(
                         division_targets[source_row]
-                        and positive[top_two[0]]
-                        and positive[top_two[1]]
+                        and positive[existing_child]
+                        and positive[second_child]
                     ),
                 }
             )
