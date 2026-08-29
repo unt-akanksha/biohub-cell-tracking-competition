@@ -61,6 +61,9 @@ def sha256_file(path: Path) -> str:
 def recovery_metrics(rows: list[dict[str, Any]], threshold: float) -> dict[str, Any]:
     decisions = [row for row in rows if float(row["division_logit"]) >= threshold]
     truth_events = sum(bool(row["is_division"]) for row in rows)
+    event_tp = sum(bool(row["is_division"]) for row in decisions)
+    event_fp = len(decisions) - event_tp
+    event_fn = truth_events - event_tp
     edge_tp = sum(bool(row["second_is_positive"]) for row in decisions)
     edge_fp = len(decisions) - edge_tp
     edge_fn = truth_events - edge_tp
@@ -74,11 +77,17 @@ def recovery_metrics(rows: list[dict[str, Any]], threshold: float) -> dict[str, 
 
     edge_jaccard = jaccard(edge_tp, edge_fp, edge_fn)
     division_jaccard = jaccard(division_tp, division_fp, division_fn)
+    event_jaccard = jaccard(event_tp, event_fp, event_fn)
     return {
         "threshold": float(threshold),
         "rows": len(rows),
         "truth_events": truth_events,
         "decisions": len(decisions),
+        "event_tp": event_tp,
+        "event_fp": event_fp,
+        "event_fn": event_fn,
+        "event_precision": event_tp / len(decisions) if decisions else 1.0,
+        "event_jaccard": event_jaccard,
         "edge_tp": edge_tp,
         "edge_fp": edge_fp,
         "edge_fn": edge_fn,

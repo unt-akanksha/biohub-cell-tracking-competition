@@ -41,6 +41,8 @@ def test_recovery_metrics_penalize_a_wrong_second_daughter() -> None:
 
     assert metrics["edge_tp"] == 1
     assert metrics["edge_fp"] == 1
+    assert metrics["event_tp"] == 1
+    assert metrics["event_fp"] == 1
     assert metrics["division_tp"] == 1
     assert metrics["division_fp"] == 1
     assert metrics["recovery_composite"] < 1.1
