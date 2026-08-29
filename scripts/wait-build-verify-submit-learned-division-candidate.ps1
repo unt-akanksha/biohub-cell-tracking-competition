@@ -128,6 +128,11 @@ try {
     $poll = 0
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
         $poll += 1
+        if (Test-Path -LiteralPath $policyPath -PathType Leaf) {
+            $policyDownloaded = $true
+            Write-ControllerLog "policy_discovered_locally poll=$poll"
+            break
+        }
         try {
             Grant-TemporarySshKey
             & ssh -i $privateKey -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 $remoteHost "test -f '$remotePolicy'"
