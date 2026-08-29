@@ -309,8 +309,8 @@ def augment_patches(
 def balanced_rows(
     targets: torch.Tensor, batch_size: int, generator: torch.Generator
 ) -> torch.Tensor:
-    positive = torch.flatnonzero(targets > 0.5)
-    negative = torch.flatnonzero(targets < 0.5)
+    positive = torch.nonzero(targets > 0.5, as_tuple=False).flatten()
+    negative = torch.nonzero(targets < 0.5, as_tuple=False).flatten()
     positive_count = max(1, batch_size // 3)
     negative_count = batch_size - positive_count
     selected_positive = positive[

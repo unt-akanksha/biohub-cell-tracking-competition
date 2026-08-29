@@ -44,6 +44,17 @@ def test_focused_gate_requires_ap_and_jaccard_gain_without_precision_recall_loss
     assert focused.focused_selection_gate(baseline, precision_regression)["passed"] is False
 
 
+def test_balanced_rows_contains_both_classes() -> None:
+    targets = torch.tensor([1.0, 1.0, 0.0, 0.0, 0.0])
+    generator = torch.Generator().manual_seed(12)
+
+    rows = focused.balanced_rows(targets, 9, generator)
+
+    assert rows.shape == (9,)
+    assert int((targets[rows] > 0.5).sum()) == 3
+    assert int((targets[rows] < 0.5).sum()) == 6
+
+
 def test_rejected_v4_is_accepted_only_as_prediction_preserving_bootstrap(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
