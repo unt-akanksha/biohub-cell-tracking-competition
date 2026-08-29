@@ -79,7 +79,11 @@ def verify_runtime(root: Path) -> dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--verify-only", action="store_true")
     args = parser.parse_args()
+    if args.verify_only:
+        print(json.dumps(verify_runtime(args.output_root), indent=2, sort_keys=True))
+        return
     if args.output_root.exists():
         raise FileExistsError(args.output_root)
     args.output_root.mkdir(parents=True)

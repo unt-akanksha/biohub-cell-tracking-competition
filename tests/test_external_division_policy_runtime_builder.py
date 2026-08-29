@@ -27,3 +27,15 @@ def test_packages_hash_bound_calibrator_without_submission_code(tmp_path: Path) 
         path.read_text(encoding="utf-8") for path in output.glob("*.py")
     )
     assert "kaggle competitions submit" not in source
+
+    previous = sys.argv
+    try:
+        sys.argv = [
+            str(BUILDER),
+            "--output-root",
+            str(output),
+            "--verify-only",
+        ]
+        module["main"]()
+    finally:
+        sys.argv = previous

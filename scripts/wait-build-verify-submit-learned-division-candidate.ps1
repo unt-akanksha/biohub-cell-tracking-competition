@@ -63,6 +63,21 @@ function Write-ControllerTerminal([string]$Status, [hashtable]$Evidence) {
     Move-Item -LiteralPath $temporary -Destination $terminalPath -Force
 }
 
+function Invoke-NativeOutput([scriptblock]$Command) {
+    $previousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $lines = & $Command 2>&1
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    [pscustomobject]@{
+        ExitCode = $exitCode
+        Output = ($lines -join "`n")
+    }
+}
+
 function Assert-LocalContract {
     if ($PollSeconds -lt 60) {
         throw 'PollSeconds must be at least 60'
@@ -90,14 +105,17 @@ function Assert-LocalContract {
 }
 
 function Grant-TemporarySshKey {
-    $grantOutput = (& aws ec2-instance-connect send-ssh-public-key `
-        --profile $awsProfile `
-        --region $awsRegion `
-        --instance-id $instanceId `
-        --availability-zone $availabilityZone `
-        --instance-os-user ubuntu `
-        --ssh-public-key "file://$publicKey" 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0 -or $grantOutput -notmatch '(?i)success') {
+    $native = Invoke-NativeOutput {
+        & aws ec2-instance-connect send-ssh-public-key `
+            --profile $awsProfile `
+            --region $awsRegion `
+            --instance-id $instanceId `
+            --availability-zone $availabilityZone `
+            --instance-os-user ubuntu `
+            --ssh-public-key "file://$publicKey"
+    }
+    $grantOutput = $native.Output
+    if ($native.ExitCode -ne 0 -or $grantOutput -notmatch '(?i)success') {
         throw "EC2 Instance Connect key injection failed: $grantOutput"
     }
 }
@@ -135,14 +153,14 @@ try {
         }
         try {
             Grant-TemporarySshKey
-            & ssh -i $privateKey -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 $remoteHost "test -f '$remotePolicy'"
-            if ($LASTEXITCODE -eq 0) {
+            $native = Invoke-NativeOutput { & ssh -i $privateKey -o BatchMode=yes -o StrictHostKeyChecking=accept-new -o ConnectTimeout=20 $remoteHost "test -f '$remotePolicy'" }
+            if ($native.ExitCode -eq 0) {
                 if (Test-Path -LiteralPath $policyPath) {
                     throw "Refusing to overwrite downloaded policy: $policyPath"
                 }
-                & scp -i $privateKey -o BatchMode=yes -o StrictHostKeyChecking=accept-new "$remoteHost`:$remotePolicy" $policyPath
-                if ($LASTEXITCODE -ne 0) {
-                    throw 'Antelume policy download failed'
+                $native = Invoke-NativeOutput { & scp -i $privateKey -o BatchMode=yes -o StrictHostKeyChecking=accept-new "$remoteHost`:$remotePolicy" $policyPath }
+                if ($native.ExitCode -ne 0) {
+                    throw "Antelume policy download failed: $($native.Output)"
                 }
                 $policyDownloaded = $true
                 Write-ControllerLog "policy_downloaded poll=$poll"
@@ -171,34 +189,40 @@ try {
     if (Test-Path -LiteralPath $runtimeRoot) {
         throw "Refusing to reuse learned-division runtime staging: $runtimeRoot"
     }
-    $runtimeOutput = (& $evaluationPython $runtimeBuilder --policy $policyPath --output-root $runtimeRoot 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $runtimeBuilder --policy $policyPath --output-root $runtimeRoot }
+    $runtimeOutput = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "Learned-division runtime build failed: $runtimeOutput"
     }
     Write-ControllerLog "runtime_built output=$runtimeOutput"
 
-    $datasetList = (& kaggle datasets list --mine -s biohub-learned-division-recovery-runtime-v1 --format json 2>&1) -join "`n"
+    $native = Invoke-NativeOutput { & kaggle datasets list --mine -s biohub-learned-division-recovery-runtime-v1 --format json }
+    $datasetList = $native.Output
     if ($datasetList -match [regex]::Escape($runtimeRef)) {
-        $datasetOutput = (& kaggle datasets version -p $runtimeRoot -m 'Frozen external division recovery policy v1' 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m 'Frozen external division recovery policy v1' }
+        $datasetOutput = $native.Output
         $datasetOperation = 'versioned'
     } else {
-        $datasetOutput = (& kaggle datasets create -p $runtimeRoot 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets create -p $runtimeRoot }
+        $datasetOutput = $native.Output
         $datasetOperation = 'created'
-        if ($LASTEXITCODE -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
-            $datasetOutput = (& kaggle datasets version -p $runtimeRoot -m 'Frozen external division recovery policy v1' 2>&1) -join "`n"
+        if ($native.ExitCode -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
+            $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m 'Frozen external division recovery policy v1' }
+            $datasetOutput = $native.Output
             $datasetOperation = 'versioned_after_create_conflict'
         }
     }
-    if ($LASTEXITCODE -ne 0) {
+    if ($native.ExitCode -ne 0) {
         throw "Learned-division runtime upload failed: $datasetOutput"
     }
     Write-ControllerLog "runtime_uploaded operation=$datasetOperation output=$datasetOutput"
 
     $datasetReady = $false
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
-        $datasetStatus = (& kaggle datasets status $runtimeRef --format json 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets status $runtimeRef --format json }
+        $datasetStatus = $native.Output
         Write-ControllerLog "runtime_status output=$datasetStatus"
-        if ($LASTEXITCODE -eq 0 -and $datasetStatus -match '(?i)ready|complete') {
+        if ($native.ExitCode -eq 0 -and $datasetStatus -match '(?i)ready|complete') {
             $datasetReady = $true
             break
         }
@@ -217,19 +241,25 @@ try {
     ) {
         throw "Refusing to overwrite candidate kernel directory: $candidateDir"
     }
-    $buildOutput = (& $evaluationPython $candidateBuilder --runtime-root $runtimeRoot 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $candidateBuilder --runtime-root $runtimeRoot }
+    $buildOutput = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "Candidate kernel build failed: $buildOutput"
     }
     Write-ControllerLog "candidate_built output=$buildOutput"
 
-    $pushOutput = (& kaggle kernels push -p $candidateDir 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0 -or $pushOutput -notmatch '(?i)successfully pushed') {
+    $native = Invoke-NativeOutput { & kaggle kernels push -p $candidateDir }
+    $pushOutput = $native.Output
+    if ($native.ExitCode -ne 0 -or $pushOutput -notmatch '(?i)successfully pushed') {
         throw "Candidate kernel push failed: $pushOutput"
     }
     Write-ControllerLog "candidate_pushed output=$pushOutput"
     Start-Sleep -Seconds 10
-    $stateText = (& $evaluationPython $kernelStateScript --kernel-slug $kernelRef 2>&1) -join "`n"
+    $native = Invoke-NativeOutput { & $evaluationPython $kernelStateScript --kernel-slug $kernelRef }
+    $stateText = $native.Output
+    if ($native.ExitCode -ne 0) {
+        throw "Candidate kernel state lookup failed: $stateText"
+    }
     $state = $stateText | ConvertFrom-Json
     $kernelVersion = [int]$state.current_version_number
     if (
@@ -251,7 +281,8 @@ try {
     $candidatePoll = 0
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
         $candidatePoll += 1
-        $statusOutput = (& kaggle kernels status $kernelRef 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle kernels status $kernelRef }
+        $statusOutput = $native.Output
         Write-ControllerLog "candidate_status poll=$candidatePoll version=$kernelVersion output=$statusOutput"
         if ($statusOutput -match 'COMPLETE') {
             $candidateComplete = $true
@@ -271,14 +302,17 @@ try {
         throw "Refusing to reuse candidate output directory: $downloadRoot"
     }
     New-Item -ItemType Directory -Path $downloadRoot | Out-Null
-    $downloadOutput = (& kaggle kernels output $kernelRef -p $downloadRoot --force 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & kaggle kernels output $kernelRef -p $downloadRoot --force }
+    $downloadOutput = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "Candidate output download failed: $downloadOutput"
     }
     Write-ControllerLog "candidate_downloaded output=$downloadOutput"
 
-    & $evaluationPython $candidateVerifier --output-root $downloadRoot --baseline-validator $baselineValidator --report $promotionPath 1> (Join-Path $automationDir 'learned-division-candidate-promotion.stdout.log') 2> $promotionError
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $candidateVerifier --output-root $downloadRoot --baseline-validator $baselineValidator --report $promotionPath }
+    $native.Output | Set-Content -LiteralPath (Join-Path $automationDir 'learned-division-candidate-promotion.stdout.log') -Encoding UTF8
+    if ($native.ExitCode -ne 0) {
+        $native.Output | Set-Content -LiteralPath $promotionError -Encoding UTF8
         Write-ControllerTerminal 'candidate_rejected' @{
             kernel_version = $kernelVersion
             download_root = $downloadRoot
@@ -294,8 +328,9 @@ try {
         throw 'Candidate promotion report is invalid'
     }
 
-    $submitOutput = (& $evaluationPython $candidateSubmitter --promotion $promotionPath --receipt $receiptPath --kernel-ref $kernelRef --kernel-version $kernelVersion --execute 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $candidateSubmitter --promotion $promotionPath --receipt $receiptPath --kernel-ref $kernelRef --kernel-version $kernelVersion --execute }
+    $submitOutput = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "Promoted candidate submission failed: $submitOutput"
     }
     $receipt = Get-Content -Raw -LiteralPath $receiptPath | ConvertFrom-Json

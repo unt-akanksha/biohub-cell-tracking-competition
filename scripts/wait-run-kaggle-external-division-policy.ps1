@@ -53,6 +53,21 @@ function Write-PolicyTerminal([string]$Status, [hashtable]$Evidence) {
     Move-Item -LiteralPath $temporary -Destination $terminalPath -Force
 }
 
+function Invoke-NativeOutput([scriptblock]$Command) {
+    $previousPreference = $ErrorActionPreference
+    try {
+        $ErrorActionPreference = 'Continue'
+        $lines = & $Command 2>&1
+        $exitCode = $LASTEXITCODE
+    } finally {
+        $ErrorActionPreference = $previousPreference
+    }
+    [pscustomobject]@{
+        ExitCode = $exitCode
+        Output = ($lines -join "`n")
+    }
+}
+
 function Assert-LocalContract {
     if ($PollSeconds -lt 60) {
         throw 'PollSeconds must be at least 60'
@@ -87,42 +102,58 @@ if ($ValidateOnly) {
     exit 0
 }
 if (Test-Path -LiteralPath $terminalPath) {
-    throw "Refusing to reuse Kaggle fallback terminal: $terminalPath"
+    $priorTerminal = Get-Content -Raw -LiteralPath $terminalPath | ConvertFrom-Json
+    if ($priorTerminal.status -ne 'failed') {
+        throw "Refusing to reuse non-failed Kaggle fallback terminal: $terminalPath"
+    }
+    Write-PolicyLog 'restarting_after_failed_terminal'
 }
 
 try {
     $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)
     if (Test-Path -LiteralPath $runtimeRoot) {
-        throw "Refusing to reuse external policy runtime staging: $runtimeRoot"
+        $native = Invoke-NativeOutput { & $evaluationPython $runtimeBuilder --output-root $runtimeRoot --verify-only }
+        $runtimeOutput = $native.Output
+        if ($native.ExitCode -ne 0) {
+            throw "Existing external policy runtime is invalid: $runtimeOutput"
+        }
+        Write-PolicyLog "runtime_reverified output=$runtimeOutput"
+    } else {
+        $native = Invoke-NativeOutput { & $evaluationPython $runtimeBuilder --output-root $runtimeRoot }
+        $runtimeOutput = $native.Output
+        if ($native.ExitCode -ne 0) {
+            throw "External policy runtime build failed: $runtimeOutput"
+        }
+        Write-PolicyLog "runtime_built output=$runtimeOutput"
     }
-    $runtimeOutput = (& $evaluationPython $runtimeBuilder --output-root $runtimeRoot 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
-        throw "External policy runtime build failed: $runtimeOutput"
-    }
-    Write-PolicyLog "runtime_built output=$runtimeOutput"
 
-    $datasetList = (& kaggle datasets list --mine -s biohub-external-division-policy-runtime-v1 --format json 2>&1) -join "`n"
+    $native = Invoke-NativeOutput { & kaggle datasets list --mine -s biohub-external-division-policy-runtime-v1 --format json }
+    $datasetList = $native.Output
     if ($datasetList -match [regex]::Escape($runtimeRef)) {
-        $datasetOutput = (& kaggle datasets version -p $runtimeRoot -m 'External division policy calibration runtime v1' 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m 'External division policy calibration runtime v1' }
+        $datasetOutput = $native.Output
         $datasetOperation = 'versioned'
     } else {
-        $datasetOutput = (& kaggle datasets create -p $runtimeRoot 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets create -p $runtimeRoot }
+        $datasetOutput = $native.Output
         $datasetOperation = 'created'
-        if ($LASTEXITCODE -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
-            $datasetOutput = (& kaggle datasets version -p $runtimeRoot -m 'External division policy calibration runtime v1' 2>&1) -join "`n"
+        if ($native.ExitCode -ne 0 -and $datasetOutput -match '(?i)already exists|conflict') {
+            $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m 'External division policy calibration runtime v1' }
+            $datasetOutput = $native.Output
             $datasetOperation = 'versioned_after_create_conflict'
         }
     }
-    if ($LASTEXITCODE -ne 0) {
+    if ($native.ExitCode -ne 0) {
         throw "External policy runtime upload failed: $datasetOutput"
     }
     Write-PolicyLog "runtime_uploaded operation=$datasetOperation output=$datasetOutput"
 
     $datasetReady = $false
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
-        $datasetStatus = (& kaggle datasets status $runtimeRef --format json 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle datasets status $runtimeRef --format json }
+        $datasetStatus = $native.Output
         Write-PolicyLog "runtime_status output=$datasetStatus"
-        if ($LASTEXITCODE -eq 0 -and $datasetStatus -match '(?i)ready|complete') {
+        if ($native.ExitCode -eq 0 -and $datasetStatus -match '(?i)ready|complete') {
             $datasetReady = $true
             break
         }
@@ -162,19 +193,25 @@ try {
     ) {
         throw "Refusing to overwrite external policy kernel: $kernelDir"
     }
-    $kernelBuild = (& $evaluationPython $kernelBuilder --runtime-root $runtimeRoot 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $kernelBuilder --runtime-root $runtimeRoot }
+    $kernelBuild = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "External policy kernel build failed: $kernelBuild"
     }
     Write-PolicyLog "kernel_built output=$kernelBuild"
 
-    $pushOutput = (& kaggle kernels push -p $kernelDir 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0 -or $pushOutput -notmatch '(?i)successfully pushed') {
+    $native = Invoke-NativeOutput { & kaggle kernels push -p $kernelDir }
+    $pushOutput = $native.Output
+    if ($native.ExitCode -ne 0 -or $pushOutput -notmatch '(?i)successfully pushed') {
         throw "External policy kernel push failed: $pushOutput"
     }
     Write-PolicyLog "kernel_pushed output=$pushOutput"
     Start-Sleep -Seconds 10
-    $stateText = (& $evaluationPython $kernelStateScript --kernel-slug $kernelRef 2>&1) -join "`n"
+    $native = Invoke-NativeOutput { & $evaluationPython $kernelStateScript --kernel-slug $kernelRef }
+    $stateText = $native.Output
+    if ($native.ExitCode -ne 0) {
+        throw "External policy kernel state lookup failed: $stateText"
+    }
     $state = $stateText | ConvertFrom-Json
     $kernelVersion = [int]$state.current_version_number
     if (
@@ -196,7 +233,8 @@ try {
     $kernelPoll = 0
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
         $kernelPoll += 1
-        $statusOutput = (& kaggle kernels status $kernelRef 2>&1) -join "`n"
+        $native = Invoke-NativeOutput { & kaggle kernels status $kernelRef }
+        $statusOutput = $native.Output
         Write-PolicyLog "kernel_status poll=$kernelPoll version=$kernelVersion output=$statusOutput"
         if ($statusOutput -match 'COMPLETE') {
             $complete = $true
@@ -216,14 +254,17 @@ try {
         throw "Refusing to reuse external policy output root: $downloadRoot"
     }
     New-Item -ItemType Directory -Path $downloadRoot | Out-Null
-    $downloadOutput = (& kaggle kernels output $kernelRef -p $downloadRoot --force 2>&1) -join "`n"
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & kaggle kernels output $kernelRef -p $downloadRoot --force }
+    $downloadOutput = $native.Output
+    if ($native.ExitCode -ne 0) {
         throw "External policy output download failed: $downloadOutput"
     }
     Write-PolicyLog "output_downloaded output=$downloadOutput"
 
-    & $evaluationPython $outputVerifier --output-root $downloadRoot --report $verificationPath --publish-policy $publishedPolicy 1> (Join-Path $automationDir 'kaggle-external-division-policy-verification.stdout.log') 2> $verificationError
-    if ($LASTEXITCODE -ne 0) {
+    $native = Invoke-NativeOutput { & $evaluationPython $outputVerifier --output-root $downloadRoot --report $verificationPath --publish-policy $publishedPolicy }
+    $native.Output | Set-Content -LiteralPath (Join-Path $automationDir 'kaggle-external-division-policy-verification.stdout.log') -Encoding UTF8
+    if ($native.ExitCode -ne 0) {
+        $native.Output | Set-Content -LiteralPath $verificationError -Encoding UTF8
         throw "External policy output verification failed; see $verificationError"
     }
     $verification = Get-Content -Raw -LiteralPath $verificationPath | ConvertFrom-Json
