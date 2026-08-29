@@ -47,7 +47,6 @@ def test_built_localization_kernel_metadata_is_exact() -> None:
         "indarkarhana/biohub-division-localization-shards-v1",
     ]
     assert metadata["kernel_sources"] == [
-        "indarkarhana/biohub-temporal-multiscale-transfer-v4"
+        "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
     ]
     assert len(notebook["cells"]) == 5
-

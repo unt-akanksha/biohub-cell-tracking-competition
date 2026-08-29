@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 import torch
 
+import research.temporal_contrastive.train_dual_fold_division_localization as trainer
 from research.temporal_contrastive.train_dual_fold_division_localization import (
     AUDIT_TIMEPOINTS,
     EVALUATION_SHIFTS,
@@ -74,3 +76,60 @@ def test_event_patch_loader_rejects_shards_without_divisions(tmp_path: Path) -> 
     with pytest.raises(ValueError, match="no complete division"):
         load_division_event_patches(path, torch.device("cpu"))
 
+
+def test_v4_parent_is_the_accepted_external_pretraining_checkpoint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    fold = "target_44b6"
+    worker = {
+        "status": "completed",
+        "run_id": trainer.PARENT_RUN_ID,
+        "appearance_family": trainer.PARENT_FAMILY,
+        "fold": fold,
+        "parameter_count": trainer.PARENT_PARAMETER_COUNT,
+        "best_step": 500,
+        "selection_gate_passed": True,
+        "audit_gate_passed": True,
+        "model_sha256": "modelhash",
+        "competition_data_read": False,
+        "public_code_copied": False,
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+    }
+    aggregate = {
+        "schema_version": 1,
+        "status": "completed",
+        "run_id": trainer.PARENT_RUN_ID,
+        "appearance_family": trainer.PARENT_FAMILY,
+        "gpu_count": 2,
+        "both_folds_improved": True,
+        "folds": {fold: worker},
+        "competition_data_read": False,
+        "public_code_copied": False,
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+    }
+    fold_root = tmp_path / fold
+    fold_root.mkdir()
+    (tmp_path / trainer.PARENT_AGGREGATE_NAME).write_text(json.dumps(aggregate))
+    (fold_root / "worker_terminal.json").write_text(json.dumps(worker))
+    (fold_root / trainer.PARENT_MODEL_NAME).write_bytes(b"checkpoint")
+    monkeypatch.setattr(
+        trainer,
+        "sha256_file",
+        lambda path: (
+            "modelhash" if path.name == trainer.PARENT_MODEL_NAME else "workerhash"
+        ),
+    )
+    monkeypatch.setattr(trainer.torch, "load", lambda *args, **kwargs: {})
+    monkeypatch.setattr(
+        trainer, "load_multiscale_v4_warm_start", lambda model, state: ("head.weight",)
+    )
+
+    evidence = trainer.load_v4_parent(torch.nn.Identity(), tmp_path, fold)
+
+    assert evidence["run_id"] == "zebrahub-multiscale-contextual-pretrain-v1"
+    assert evidence["parent_stage"] == "external_pretraining"
+    assert evidence["model_sha256"] == "modelhash"

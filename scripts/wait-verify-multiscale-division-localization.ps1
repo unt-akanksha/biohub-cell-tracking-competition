@@ -6,16 +6,16 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $automationDir = Join-Path $projectRoot '.biohub/automation'
-$launchTerminal = Join-Path $automationDir 'multiscale-division-localization-launch.json'
-$logPath = Join-Path $automationDir 'multiscale-division-localization-verification.log'
-$terminalPath = Join-Path $automationDir 'multiscale-division-localization-verification.json'
-$verificationOutput = Join-Path $automationDir 'multiscale-division-localization-verification.stdout.json'
-$verificationError = Join-Path $automationDir 'multiscale-division-localization-verification.stderr.log'
-$downloadRoot = Join-Path $projectRoot '.biohub/cache/kernel-outputs/multiscale-division-localization-v1-autochain'
+$launchTerminal = Join-Path $automationDir 'multiscale-division-localization-direct-launch.json'
+$logPath = Join-Path $automationDir 'multiscale-division-localization-direct-verification.log'
+$terminalPath = Join-Path $automationDir 'multiscale-division-localization-direct-verification.json'
+$verificationOutput = Join-Path $automationDir 'multiscale-division-localization-direct-verification.stdout.json'
+$verificationError = Join-Path $automationDir 'multiscale-division-localization-direct-verification.stderr.log'
+$downloadRoot = Join-Path $projectRoot '.biohub/cache/kernel-outputs/multiscale-division-localization-v1-direct'
 $kernelRef = 'indarkarhana/biohub-multiscale-division-localization-v1'
 $verifier = Join-Path $projectRoot 'research/temporal_contrastive/verify_division_localization_training_output.py'
 $evaluationPython = Join-Path $projectRoot '.biohub/evaluation-venv/Scripts/python.exe'
-$expectedVerifierSha256 = 'dcfcb8081e2c9436a34ae00c215d00c125f3d230411044d67b731e69b043d555'
+$expectedVerifierSha256 = '6d3d527cffb6693db7ea5f9af429a1685d5d85e8db7c212a04e40c73af4a138c'
 
 New-Item -ItemType Directory -Force -Path $automationDir | Out-Null
 
@@ -55,7 +55,7 @@ try {
     if ($ValidateOnly) {
         [pscustomobject]@{
             status = 'validated'
-            stage = 'multiscale_division_localization_verification'
+            stage = 'multiscale_division_localization_direct_verification'
         } | ConvertTo-Json
         exit 0
     }
@@ -146,4 +146,3 @@ try {
     }
     throw
 }
-

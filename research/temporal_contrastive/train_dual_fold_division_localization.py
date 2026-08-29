@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Train two v4-derived localization models on exactly two isolated GPUs."""
+"""Train two externally pretrained v4 localizers on two isolated GPUs."""
 
 from __future__ import annotations
 
@@ -44,9 +44,11 @@ except ModuleNotFoundError:
 
 
 RUN_ID = "multiscale-division-localization-v1"
-PARENT_RUN_ID = "temporal-multiscale-contextual-pair-fusion-v4"
+PARENT_RUN_ID = "zebrahub-multiscale-contextual-pretrain-v1"
 PARENT_FAMILY = "temporal_multiscale_contextual_pair_fusion_v4"
 PARENT_PARAMETER_COUNT = 46_386_607
+PARENT_AGGREGATE_NAME = "pretraining_terminal.json"
+PARENT_MODEL_NAME = "pretrained_model.pt"
 FOLDS = ("target_44b6", "target_6bba")
 SEED_OFFSETS = {"target_44b6": 0, "target_6bba": 10_003}
 SELECTION_TIMEPOINTS = (156, 157, 158, 159, 456, 457, 458, 459)
@@ -196,11 +198,13 @@ def preload_event_patches(
 def load_v4_parent(
     model: MultiscaleDivisionLocalizationModel, root: Path, fold: str
 ) -> dict[str, Any]:
-    aggregate_path = root / "training_terminal.json"
+    aggregate_path = root / PARENT_AGGREGATE_NAME
     worker_path = root / fold / "worker_terminal.json"
-    model_path = root / fold / "appearance_model.pt"
+    model_path = root / fold / PARENT_MODEL_NAME
     if not all(path.is_file() for path in (aggregate_path, worker_path, model_path)):
-        raise FileNotFoundError(f"v4 transfer evidence is incomplete for {fold}")
+        raise FileNotFoundError(
+            f"external v4 pretraining evidence is incomplete for {fold}"
+        )
     aggregate = json.loads(aggregate_path.read_text(encoding="utf-8"))
     worker = json.loads(worker_path.read_text(encoding="utf-8"))
     model_hash = sha256_file(model_path)
@@ -210,8 +214,9 @@ def load_v4_parent(
         and aggregate.get("run_id") == PARENT_RUN_ID
         and aggregate.get("appearance_family") == PARENT_FAMILY
         and aggregate.get("gpu_count") == 2
-        and aggregate.get("both_folds_trained") is True
         and aggregate.get("both_folds_improved") is True
+        and aggregate.get("competition_data_read") is False
+        and aggregate.get("public_code_copied") is False
         and aggregate.get("public_predictions_copied") is False
         and aggregate.get("public_leaderboard_used_for_selection") is False
         and aggregate.get("submission_created") is False
@@ -221,12 +226,17 @@ def load_v4_parent(
         and worker.get("appearance_family") == PARENT_FAMILY
         and worker.get("fold") == fold
         and worker.get("parameter_count") == PARENT_PARAMETER_COUNT
+        and int(worker.get("best_step", 0)) > 0
+        and worker.get("selection_gate_passed") is True
+        and worker.get("audit_gate_passed") is True
         and worker.get("model_sha256") == model_hash
+        and worker.get("competition_data_read") is False
+        and worker.get("public_code_copied") is False
         and worker.get("public_predictions_copied") is False
         and worker.get("public_leaderboard_used_for_selection") is False
         and worker.get("submission_created") is False
     ):
-        raise ValueError(f"v4 transfer evidence is ineligible for {fold}")
+        raise ValueError(f"external v4 pretraining evidence is ineligible for {fold}")
     state = torch.load(model_path, map_location="cpu", weights_only=True)
     missing = load_multiscale_v4_warm_start(model, state)
     return {
@@ -236,6 +246,7 @@ def load_v4_parent(
         "model_sha256": model_hash,
         "worker_terminal_sha256": sha256_file(worker_path),
         "new_parameter_keys": len(missing),
+        "parent_stage": "external_pretraining",
         "association_predictions_numerically_preserved": True,
     }
 
@@ -702,4 +713,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

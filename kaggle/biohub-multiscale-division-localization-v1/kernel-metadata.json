@@ -20,7 +20,7 @@
     "indarkarhana/biohub-division-localization-shards-v1"
   ],
   "kernel_sources": [
-    "indarkarhana/biohub-temporal-multiscale-transfer-v4"
+    "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
   ],
   "competition_sources": [],
   "model_sources": [],

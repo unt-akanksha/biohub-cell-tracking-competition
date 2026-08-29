@@ -38,4 +38,4 @@ def test_localization_verification_controller_validates_without_polling() -> Non
     output = validate("wait-verify-multiscale-division-localization.ps1")
 
     assert '"status":  "validated"' in output
-    assert "multiscale_division_localization_verification" in output
+    assert "multiscale_division_localization_direct_verification" in output

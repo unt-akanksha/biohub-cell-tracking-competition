@@ -7,20 +7,20 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $automationDir = Join-Path $projectRoot '.biohub/automation'
-$parentTerminal = Join-Path $automationDir 'temporal-multiscale-submission.json'
-$logPath = Join-Path $automationDir 'multiscale-division-localization-launch.log'
-$terminalPath = Join-Path $automationDir 'multiscale-division-localization-launch.json'
+$parentTerminal = Join-Path $automationDir 'zebrahub-multiscale-pretrain-recovery.json'
+$logPath = Join-Path $automationDir 'multiscale-division-localization-direct-launch.log'
+$terminalPath = Join-Path $automationDir 'multiscale-division-localization-direct-launch.json'
 $kernelDir = Join-Path $projectRoot 'kaggle/biohub-multiscale-division-localization-v1'
 $metadataPath = Join-Path $kernelDir 'kernel-metadata.json'
 $notebookPath = Join-Path $kernelDir 'biohub-multiscale-division-localization-v1.ipynb'
 $kernelStateScript = Join-Path $projectRoot 'scripts/get-kaggle-kernel-state.py'
 $kernelRef = 'indarkarhana/biohub-multiscale-division-localization-v1'
-$parentRef = 'indarkarhana/biohub-temporal-multiscale-transfer-v4'
+$parentRef = 'indarkarhana/biohub-zebrahub-multiscale-pretrain-v1'
 $runtimeRef = 'indarkarhana/biohub-division-localization-runtime-v1'
 $trainDataRef = 'indarkarhana/biohub-zebrahub-contextual-shards-v1'
 $localizationDataRef = 'indarkarhana/biohub-division-localization-shards-v1'
-$expectedMetadataSha256 = 'd8618610e8abd84fbb5eb396da805e987a11912311329347a6c91bb7c6db6d07'
-$expectedNotebookSha256 = 'bb57cb73d0701ca2b8486b501523b5e2eb9d9e092d1679a78e752b8b5dc16817'
+$expectedMetadataSha256 = '43f7bf864c9d9c6e8d995d19c49aa15a70bb2c25d03fc25c6ffee8245acc5e3b'
+$expectedNotebookSha256 = 'df0438658addd82f81422efd7a56cbc8f248b451ca7214990ffaa27c83c65738'
 $expectedStateScriptSha256 = 'ad4f9621122edbf4801ce350db2b8723d70964cb1258c19685f13ef5cdb60d60'
 
 New-Item -ItemType Directory -Force -Path $automationDir | Out-Null
@@ -90,7 +90,7 @@ try {
     if ($ValidateOnly) {
         [pscustomobject]@{
             status = 'validated'
-            stage = 'multiscale_division_localization_launch'
+            stage = 'multiscale_division_localization_direct_launch'
             expected_gpu_count = 2
             quota_reserve_hours = 0.0
         } | ConvertTo-Json
@@ -102,22 +102,23 @@ try {
     $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)
     while (-not (Test-Path -LiteralPath $parentTerminal -PathType Leaf)) {
         if ([DateTimeOffset]::UtcNow -ge $deadline) {
-            throw 'Timed out waiting for the verified v4 submission terminal'
+            throw 'Timed out waiting for verified external v4 pretraining'
         }
         Start-Sleep -Seconds 60
     }
     $parent = Get-Content -Raw -LiteralPath $parentTerminal | ConvertFrom-Json
     if (
-        $parent.status -ne 'submitted' -or
-        $parent.run_id -ne 'temporal-multiscale-contextual-pair-fusion-candidate-v4' -or
-        $parent.kernel_ref -ne 'indarkarhana/biohub-multiscale-submission-candidate-v4' -or
+        $parent.status -ne 'verified' -or
+        $parent.run_id -ne 'zebrahub-multiscale-contextual-pretrain-v1-recovery' -or
+        $parent.kernel_ref -ne $parentRef -or
         $parent.public_leaderboard_used_for_selection -ne $false -or
-        $parent.competition_submission_performed -ne $true
+        $parent.downstream_kernel_launched -ne $false -or
+        $parent.submission_created -ne $false
     ) {
-        throw 'Verified v4 submission terminal is invalid'
+        throw 'Verified external v4 pretraining terminal is invalid'
     }
     foreach ($dataset in @(
-        @{ Ref = $runtimeRef; Version = 1 },
+        @{ Ref = $runtimeRef; Version = 2 },
         @{ Ref = $localizationDataRef; Version = 1 }
     )) {
         $statusText = (& kaggle datasets status $dataset.Ref --format json 2>&1) -join "`n"
@@ -163,6 +164,7 @@ try {
                 kernel_version = $version
                 quota_before_hours = $remaining
                 parent_receipt_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $parentTerminal).Hash.ToLowerInvariant()
+                parent_kernel_version = [int]$parent.kernel_version
                 push_output = $pushOutput
             }
             Write-ChainLog "localization_launched version=$version"
@@ -183,4 +185,3 @@ try {
     }
     throw
 }
-

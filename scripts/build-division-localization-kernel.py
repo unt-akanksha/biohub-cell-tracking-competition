@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 KERNEL_ID = "biohub-multiscale-division-localization-v1"
 TARGET = ROOT / "kaggle" / KERNEL_ID
 NOTEBOOK = TARGET / f"{KERNEL_ID}.ipynb"
-RUNTIME_MANIFEST_SHA256 = "10a5c1bc27a9cabbae0f018c05f43165b6d93008abaa864fbbc5f11101090caa"
+RUNTIME_MANIFEST_SHA256 = "528354993b3b64729158d2d64d256243797bb58785b304af42cee908cf0b0e90"
 TRAIN_DATASET_MANIFEST_SHA256 = "b35738f215413f1ece403ba5c0601adea82e2540c65f37e6465de0d0755cb7bf"
 LOCALIZATION_DATASET_MANIFEST_SHA256 = "e1f6eb8c6148c092f72e5eddc81d75f17b16b6f37ad61e35a9d6e652bfb81336"
 
@@ -121,23 +121,24 @@ localization_dataset = unique_parent(
 )
 
 v4_matches = []
-for path in INPUT.rglob("training_terminal.json"):
+for path in INPUT.rglob("pretraining_terminal.json"):
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         continue
     if (
-        payload.get("run_id") == "temporal-multiscale-contextual-pair-fusion-v4"
+        payload.get("run_id") == "zebrahub-multiscale-contextual-pretrain-v1"
         and payload.get("status") == "completed"
         and payload.get("appearance_family")
             == "temporal_multiscale_contextual_pair_fusion_v4"
         and payload.get("gpu_count") == 2
         and payload.get("both_folds_improved") is True
+        and payload.get("competition_data_read") is False
         and payload.get("submission_created") is False
     ):
         v4_matches.append(path.parent)
 if len(v4_matches) != 1:
-    raise RuntimeError(f"Expected one accepted v4 transfer output, saw {{v4_matches}}")
+    raise RuntimeError(f"Expected one accepted external v4 pretraining output, saw {{v4_matches}}")
 v4_root = v4_matches[0]
 
 def materialize_split(source: Path, name: str, target: Path) -> None:
@@ -271,7 +272,7 @@ def main() -> None:
             "indarkarhana/biohub-division-localization-shards-v1",
         ],
         "kernel_sources": [
-            "indarkarhana/biohub-temporal-multiscale-transfer-v4"
+            "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
         ],
         "competition_sources": [],
         "model_sources": [],
@@ -289,4 +290,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

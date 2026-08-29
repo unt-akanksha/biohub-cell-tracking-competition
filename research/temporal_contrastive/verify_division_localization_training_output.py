@@ -91,10 +91,11 @@ def verify_output(root: Path, *, strict_checkpoint: bool = True) -> dict[str, An
             and worker.get("public_leaderboard_used_for_selection") is False
             and worker.get("submission_created") is False
             and initialization.get("run_id")
-            == "temporal-multiscale-contextual-pair-fusion-v4"
+            == "zebrahub-multiscale-contextual-pretrain-v1"
             and initialization.get("appearance_family")
             == "temporal_multiscale_contextual_pair_fusion_v4"
             and initialization.get("fold") == fold
+            and initialization.get("parent_stage") == "external_pretraining"
             and initialization.get("association_predictions_numerically_preserved") is True
             and config.get("audit_inventory_read") is False
         ):
