@@ -14,6 +14,12 @@ import shutil
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "kaggle/biohub-clean-0927-repro-v1"
 SOURCE_NOTEBOOK = SOURCE_DIR / "biohub-0-927-lb.ipynb"
+SOURCE_NOTEBOOK_SHA256 = (
+    "19d4c0f525be6325689af7bc37180098e5d19556d53636ed042e819b7fdeea24"
+)
+SOURCE_METADATA_SHA256 = (
+    "37931e6f60a7987e0a0a48f2312f047ddf874a5e7ae2937801a1f3d0f7195266"
+)
 TARGET_ID = "biohub-ema-learned-division-candidate-v1"
 TARGET_DIR = ROOT / "kaggle" / TARGET_ID
 TARGET_NOTEBOOK = TARGET_DIR / f"{TARGET_ID}.ipynb"
@@ -366,6 +372,8 @@ print(_ldr_json.dumps(_evidence, indent=2, sort_keys=True))
 
 
 def transform_notebook(runtime_root: Path) -> dict:
+    if sha256_file(SOURCE_NOTEBOOK) != SOURCE_NOTEBOOK_SHA256:
+        raise RuntimeError("Attributed public-control notebook changed")
     runtime_builder = runpy.run_path(
         str(ROOT / "scripts/build-learned-division-recovery-runtime.py")
     )
@@ -509,6 +517,9 @@ def main() -> None:
     parser.add_argument("--runtime-root", type=Path, required=True)
     parser.add_argument("--replace", action="store_true")
     args = parser.parse_args()
+    source_metadata_path = SOURCE_DIR / "kernel-metadata.json"
+    if sha256_file(source_metadata_path) != SOURCE_METADATA_SHA256:
+        raise RuntimeError("Attributed public-control metadata changed")
     if TARGET_DIR.exists():
         if not any(TARGET_DIR.iterdir()):
             TARGET_DIR.rmdir()
@@ -522,9 +533,7 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")),
         encoding="ascii",
     )
-    base_metadata = json.loads(
-        (SOURCE_DIR / "kernel-metadata.json").read_text(encoding="utf-8")
-    )
+    base_metadata = json.loads(source_metadata_path.read_text(encoding="utf-8"))
     metadata = {
         **base_metadata,
         "id": f"indarkarhana/{TARGET_ID}",

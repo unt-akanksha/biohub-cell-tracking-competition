@@ -58,6 +58,9 @@ def test_candidate_is_attributed_two_gpu_and_uses_learned_division_gate(
 ) -> None:
     runtime = make_runtime(tmp_path)
     module = runpy.run_path(str(SUBMISSION_BUILDER))
+    assert module["sha256_file"](module["SOURCE_NOTEBOOK"]) == module[
+        "SOURCE_NOTEBOOK_SHA256"
+    ]
     notebook = module["transform_notebook"](runtime)
     source = "\n".join(
         "".join(cell.get("source", [])) for cell in notebook["cells"]

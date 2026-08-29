@@ -32,6 +32,9 @@ KNOWN_PUBLIC_SUBMISSION_SHA256 = {
 }
 MINIMUM_PROXY_GAIN = 0.005
 MAXIMUM_ADJUSTED_EDGE_REGRESSION = 0.001
+PUBLIC_CONTROL_VALIDATOR_SHA256 = (
+    "4dbf2079c1efc1108370f33104a6e80882a851d45dbfaa0540d40e88e4941f4b"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -154,7 +157,15 @@ def _assert_close(label: str, observed: Any, expected: float) -> None:
 def verify_candidate(
     output_root: Path,
     baseline_validator: Path,
+    *,
+    expected_baseline_sha256: str | None = None,
 ) -> dict[str, Any]:
+    baseline_sha256 = sha256_file(baseline_validator)
+    if (
+        expected_baseline_sha256 is not None
+        and baseline_sha256 != expected_baseline_sha256
+    ):
+        raise RuntimeError("public-control validator artifact changed")
     terminal_path = unique_file(output_root, "watchdog-terminal.json")
     evidence_path = unique_file(output_root, "candidate_evidence.json")
     submission_path = unique_file(output_root, "submission.csv")
@@ -292,6 +303,7 @@ def verify_candidate(
         "learned_reassignments": learned_reassignments,
         "learned_node_or_coordinate_changes": learned_node_changes,
         "public_control": baseline,
+        "public_control_validator_sha256": baseline_sha256,
         "candidate_validator": candidate_validator,
         "proxy_gain": proxy_gain,
         "adjusted_edge_delta": adjusted_edge_delta,
@@ -307,7 +319,11 @@ def main() -> None:
     parser.add_argument("--baseline-validator", type=Path, required=True)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
-    result = verify_candidate(args.output_root, args.baseline_validator)
+    result = verify_candidate(
+        args.output_root,
+        args.baseline_validator,
+        expected_baseline_sha256=PUBLIC_CONTROL_VALIDATOR_SHA256,
+    )
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.report is not None:
         args.report.parent.mkdir(parents=True, exist_ok=True)
