@@ -141,3 +141,22 @@ validator artifact (`4dbf2079...e4941f4b`). It requires all of the following:
 Only a hash-bound output passing every condition is submitted. An exactly-once
 receipt is written before the external submit command, preventing a controller
 restart from producing a duplicate submission.
+
+## Contextual-v3 division-head control
+
+While v4 was training, the two verified contextual-v3 folds were evaluated as
+a diagnostic-only control with the same nearest-second-child policy. The
+threshold selected on the external ZSNS005 selection windows made `2/2`
+correct decisions. Applied unchanged to the disjoint audit windows, it made
+`2/4` correct decisions (`0.50` precision, `2` division TP). This is positive
+separability evidence, but the precision is below the v4 authorization gate and
+the v3 audit had already been opened by its original training run. It cannot
+authorize competition evaluation or submission.
+
+The result strengthens the rationale for the v4 objective: useful division
+signal already exists in the smaller model, while false-positive suppression
+is the remaining bottleneck. The immutable diagnostic artifact is
+`.biohub/staging/contextual-v3-division-recovery-diagnostic-v1.json` with
+SHA-256 `a149ed7d6d3849bc2cb88159c5e4592d0466287b476e6b1029fb7aad69a32b51`.
+The run also exposed and repaired a missing SciPy dependency in the isolated
+Antelume Biohub environment before the v4 policy calibration needs it.
