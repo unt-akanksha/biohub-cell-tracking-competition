@@ -108,3 +108,36 @@ No candidate is authorized for submission merely because training completes.
 It must preserve the clean public control's edge quality, improve the frozen
 complete-movie composite, remain non-identical to every audited public output,
 finish inside the notebook limit, and pass strict output verification.
+
+## Frozen `0.945` promotion path
+
+The first submission candidate is now specified as the attributed clean public
+control plus an independently reproduced four-frame velocity EMA and the
+project-authored external division gate. The public safe-division heuristic is
+disabled. The learned stage may add only the nearest parent-free second
+daughter after an existing child; it cannot reassign an edge or modify a node
+or coordinate. Every model checkpoint, policy, runtime source, public-control
+notebook, and validator control is SHA-256 bound.
+
+Policy calibration has two equivalent execution routes. Antelume uses one A10G
+in the isolated `/home/ubuntu/biohub*` workspace. A Kaggle fallback attaches
+only the private source runtime, the external ZebraHub shards, and the verified
+v4 pretraining output; it attaches no competition source and has no submission
+path. Both routes freeze the threshold on ZSNS005 selection windows and open
+the disjoint audit windows once.
+
+The external promotion gate compares the candidate with the exact public 0.940
+validator artifact (`4dbf2079...e4941f4b`). It requires all of the following:
+
+- candidate output SHA-256 differs from all three audited public submissions;
+- at least one learned edge is added, with zero reassignments and zero
+  node/coordinate changes;
+- complete-movie proxy gain is at least `+0.005` over the public control's
+  `0.932168` proxy;
+- adjusted edge Jaccard regresses by no more than `0.001`;
+- division TP and division Jaccard both improve;
+- the two-T4 notebook completes before the 3,000-second watchdog boundary.
+
+Only a hash-bound output passing every condition is submitted. An exactly-once
+receipt is written before the external submit command, preventing a controller
+restart from producing a duplicate submission.
