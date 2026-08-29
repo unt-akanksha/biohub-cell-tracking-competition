@@ -510,9 +510,12 @@ def main() -> None:
     parser.add_argument("--replace", action="store_true")
     args = parser.parse_args()
     if TARGET_DIR.exists():
-        if not args.replace:
+        if not any(TARGET_DIR.iterdir()):
+            TARGET_DIR.rmdir()
+        elif not args.replace:
             raise FileExistsError(TARGET_DIR)
-        shutil.rmtree(TARGET_DIR)
+        else:
+            shutil.rmtree(TARGET_DIR)
     TARGET_DIR.mkdir(parents=True)
     notebook = transform_notebook(args.runtime_root)
     TARGET_NOTEBOOK.write_text(

@@ -118,3 +118,22 @@ def test_candidate_metadata_attaches_private_runtime_and_v4_pretraining(
     assert metadata["kernel_sources"] == [
         "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
     ]
+
+
+def test_main_reuses_only_an_empty_generated_target(tmp_path: Path) -> None:
+    runtime = make_runtime(tmp_path)
+    module = runpy.run_path(str(SUBMISSION_BUILDER))
+    target = tmp_path / "candidate"
+    target.mkdir()
+    target_notebook = target / "candidate.ipynb"
+    main_globals = module["main"].__globals__
+    main_globals["TARGET_DIR"] = target
+    main_globals["TARGET_NOTEBOOK"] = target_notebook
+    previous = sys.argv
+    try:
+        sys.argv = [str(SUBMISSION_BUILDER), "--runtime-root", str(runtime)]
+        module["main"]()
+    finally:
+        sys.argv = previous
+
+    assert target_notebook.is_file()

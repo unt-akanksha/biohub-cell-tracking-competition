@@ -206,7 +206,10 @@ try {
         throw 'Timed out waiting for learned-division runtime readiness'
     }
 
-    if (Test-Path -LiteralPath $candidateDir) {
+    if (
+        (Test-Path -LiteralPath $candidateDir) -and
+        @(Get-ChildItem -LiteralPath $candidateDir -Force).Count -gt 0
+    ) {
         throw "Refusing to overwrite candidate kernel directory: $candidateDir"
     }
     $buildOutput = (& $evaluationPython $candidateBuilder --runtime-root $runtimeRoot 2>&1) -join "`n"
