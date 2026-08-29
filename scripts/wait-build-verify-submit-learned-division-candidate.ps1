@@ -24,6 +24,7 @@ $promotionPath = Join-Path $automationDir 'learned-division-candidate-promotion.
 $promotionError = Join-Path $automationDir 'learned-division-candidate-promotion.stderr.log'
 $receiptPath = Join-Path $automationDir 'learned-division-candidate-submission-receipt.json'
 $runtimeRef = 'indarkarhana/biohub-learned-division-recovery-runtime-v1'
+$modelRef = 'indarkarhana/biohub-focused-division-gate-v1'
 $kernelRef = 'indarkarhana/biohub-ema-learned-division-candidate-v1'
 $competition = 'biohub-cell-tracking-during-development'
 $awsProfile = '148971207977_InventoryOptimization-EC2-Access'
@@ -48,6 +49,7 @@ function Write-ControllerTerminal([string]$Status, [hashtable]$Evidence) {
         status = $Status
         target_public_score = 0.945
         runtime_ref = $runtimeRef
+        model_ref = $modelRef
         kernel_ref = $kernelRef
         competition = $competition
         public_control = 'grafael/biohub-ct-0940-ema'
@@ -128,6 +130,7 @@ if ($ValidateOnly) {
         run_id = 'learned-division-candidate-autonomous-chain-v1'
         target_public_score = 0.945
         runtime_ref = $runtimeRef
+        model_ref = $modelRef
         kernel_ref = $kernelRef
         candidate_submission_requires_promotion_gate = $true
     } | ConvertTo-Json
@@ -235,6 +238,13 @@ try {
         throw 'Timed out waiting for learned-division runtime readiness'
     }
 
+    $native = Invoke-NativeOutput { & kaggle datasets status $modelRef --format json }
+    $modelStatus = $native.Output
+    if ($native.ExitCode -ne 0 -or $modelStatus -notmatch '(?i)ready|complete') {
+        throw "Focused division model dataset is not ready: $modelStatus"
+    }
+    Write-ControllerLog "model_status output=$modelStatus"
+
     if (
         (Test-Path -LiteralPath $candidateDir) -and
         @(Get-ChildItem -LiteralPath $candidateDir -Force).Count -gt 0
@@ -271,7 +281,7 @@ try {
         $state.enable_internet -ne $false -or
         $state.machine_shape -eq 'NvidiaTeslaTpuV3' -or
         $state.dataset_sources -notcontains $runtimeRef -or
-        $state.kernel_sources -notcontains 'indarkarhana/biohub-zebrahub-multiscale-pretrain-v1' -or
+        $state.dataset_sources -notcontains $modelRef -or
         $state.competition_sources -notcontains $competition
     ) {
         throw "Candidate remote kernel state is invalid: $stateText"

@@ -24,7 +24,7 @@ TARGET_ID = "biohub-ema-learned-division-candidate-v1"
 TARGET_DIR = ROOT / "kaggle" / TARGET_ID
 TARGET_NOTEBOOK = TARGET_DIR / f"{TARGET_ID}.ipynb"
 RUNTIME_REF = "indarkarhana/biohub-learned-division-recovery-runtime-v1"
-PRETRAIN_REF = "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
+MODEL_REF = "indarkarhana/biohub-focused-division-gate-v1"
 
 
 def sha256_file(path: Path) -> str:
@@ -70,16 +70,18 @@ lineage reproduced by `indarkarhana/biohub-clean-0-927-reproduction-v1`.
 The running velocity EMA is independently reproduced from the documented idea
 in `grafael/biohub-ct-0940-ema`.
 
-The division stage is project-authored. Two 46.4M-parameter folds were trained
-only on external ZebraHub data. A division-logit threshold was frozen on
-ZSNS005 selection windows and opened once on disjoint ZSNS005 audit windows.
+The division stage is project-authored. Two 46.4M-parameter morphology gates
+were trained only on external ZebraHub data on Antelume. They use a rejected
+association experiment only as a prediction-preserving v3 initialization; its
+association result is not promoted. A division-logit threshold was frozen on
+new ZSNS005 selection windows and opened once on disjoint ZSNS005 audit windows.
 The public rule-based safe-division adder is disabled. The learned gate may add
 only the nearest parent-free second daughter inside a bounded physical
 neighborhood; it cannot change nodes, coordinates, or existing edges.
 """
 
 
-MODEL_SETUP_TEMPLATE = r'''# Strictly load the external learned-division runtime and two v4 folds.
+MODEL_SETUP_TEMPLATE = r'''# Strictly load the external learned-division runtime and two focused folds.
 import hashlib as _ldr_hashlib
 import json as _ldr_json
 import math as _ldr_math
@@ -118,6 +120,9 @@ _ldr_threshold = float(_ldr_policy_payload["frozen_division_logit_threshold"])
 if not (
     _ldr_policy_payload.get("status") == "accepted"
     and _ldr_policy_payload.get("run_id") == "external-division-recovery-policy-v1"
+    and _ldr_policy_payload.get("model_training_run_id") == "focused-division-gate-v1"
+    and _ldr_policy_payload.get("focused_division_family")
+    == "temporal_multiscale_focused_division_gate_v1"
     and _ldr_policy_payload.get("audit_opened_after_threshold_freeze") is True
     and _ldr_policy_payload.get("competition_data_read") is False
     and _ldr_policy_payload.get("public_leaderboard_used_for_selection") is False
@@ -148,33 +153,41 @@ _gpu_names = [
 if len(_gpu_names) != 2 or any("T4" not in name for name in _gpu_names):
     raise RuntimeError(f"Exactly two T4 GPUs are required, saw {_gpu_names}")
 
-_pretrain_matches = []
-for _path in INPUT_ROOT.rglob("pretraining_terminal.json"):
+_gate_matches = []
+for _path in INPUT_ROOT.rglob("focused_division_gate_terminal.json"):
     try:
         _payload = _ldr_json.loads(_path.read_text(encoding="utf-8"))
     except Exception:
         continue
     if (
-        _payload.get("status") == "completed"
-        and _payload.get("run_id") == "zebrahub-multiscale-contextual-pretrain-v1"
+        _payload.get("status") == "accepted"
+        and _payload.get("run_id") == "focused-division-gate-v1"
+        and _payload.get("family") == "temporal_multiscale_focused_division_gate_v1"
         and _payload.get("appearance_family")
         == "temporal_multiscale_contextual_pair_fusion_v4"
-        and _payload.get("gpu_count") == 2
-        and _payload.get("both_folds_improved") is True
+        and _payload.get("execution_gpu_count") == 1
+        and _payload.get("both_folds_selected") is True
+        and _payload.get("audit_opened") is True
+        and _payload.get("audit_opened_after_threshold_freeze") is True
+        and _payload.get("authorized_for_competition_graph_evaluation") is True
+        and _payload.get("authorized_for_submission") is False
+        and _payload.get("model_sha256") == _ldr_policy_payload.get("model_sha256")
         and _payload.get("competition_data_read") is False
+        and _payload.get("public_code_copied") is False
+        and _payload.get("public_predictions_copied") is False
         and _payload.get("public_leaderboard_used_for_selection") is False
         and _payload.get("submission_created") is False
     ):
-        _pretrain_matches.append(_path.parent)
-if len(_pretrain_matches) != 1:
-    raise RuntimeError(f"Expected one verified v4 pretraining root, saw {_pretrain_matches}")
-_ldr_pretrain = _pretrain_matches[0]
+        _gate_matches.append(_path.parent)
+if len(_gate_matches) != 1:
+    raise RuntimeError(f"Expected one verified focused division root, saw {_gate_matches}")
+_ldr_gate_root = _gate_matches[0]
 _LDR_MODELS = []
 for _gpu_index, _fold in enumerate(("target_44b6", "target_6bba")):
-    _checkpoint = _ldr_pretrain / _fold / "pretrained_model.pt"
+    _checkpoint = _ldr_gate_root / _fold / "division_model.pt"
     _expected_hash = _ldr_policy_payload["model_sha256"][_fold]
     if _ldr_sha256(_checkpoint) != _expected_hash:
-        raise RuntimeError(f"V4 checkpoint changed for {_fold}")
+        raise RuntimeError(f"Focused division checkpoint changed for {_fold}")
     _device = _ldr_torch.device(f"cuda:{_gpu_index}")
     _model = _LDRModel().to(_device)
     _model.load_state_dict(
@@ -193,7 +206,7 @@ _LDR_POLICY = _DivisionRecoveryPolicy(
 )
 print({
     "learned_division_runtime": str(_ldr_runtime),
-    "pretraining_root": str(_ldr_pretrain),
+    "focused_division_root": str(_ldr_gate_root),
     "division_logit_threshold": _ldr_threshold,
     "gpu_names": _gpu_names,
 })
@@ -544,8 +557,12 @@ def main() -> None:
         "enable_tpu": False,
         "enable_internet": False,
         "keywords": ["gpu", "cell-tracking", "learned-division", "non-replica"],
-        "dataset_sources": [*base_metadata["dataset_sources"], RUNTIME_REF],
-        "kernel_sources": [PRETRAIN_REF],
+        "dataset_sources": [
+            *base_metadata["dataset_sources"],
+            RUNTIME_REF,
+            MODEL_REF,
+        ],
+        "kernel_sources": [],
         "competition_sources": ["biohub-cell-tracking-during-development"],
         "machine_shape": "NvidiaTeslaT4",
     }

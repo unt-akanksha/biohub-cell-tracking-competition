@@ -17,4 +17,5 @@ def test_controller_has_external_policy_promotion_and_single_submit_gates() -> N
     assert "candidate_rejected" in source
     assert "Refusing to risk a duplicate submission" in source
     assert "target_public_score = 0.945" in source
+    assert "indarkarhana/biohub-focused-division-gate-v1" in source
     assert source.count("competitions submit") == 0

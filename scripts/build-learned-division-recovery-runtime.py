@@ -44,8 +44,11 @@ def validate_policy(path: Path) -> dict[str, Any]:
         policy.get("schema_version") == 1
         and policy.get("status") == "accepted"
         and policy.get("run_id") == "external-division-recovery-policy-v1"
+        and policy.get("model_training_run_id") == "focused-division-gate-v1"
         and policy.get("appearance_family")
         == "temporal_multiscale_contextual_pair_fusion_v4"
+        and policy.get("focused_division_family")
+        == "temporal_multiscale_focused_division_gate_v1"
         and math.isfinite(threshold)
         and set(models) == {"target_44b6", "target_6bba"}
         and all(

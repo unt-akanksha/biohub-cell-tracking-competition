@@ -20,7 +20,9 @@ def make_runtime(tmp_path: Path) -> Path:
                 "schema_version": 1,
                 "status": "accepted",
                 "run_id": "external-division-recovery-policy-v1",
+                "model_training_run_id": "focused-division-gate-v1",
                 "appearance_family": "temporal_multiscale_contextual_pair_fusion_v4",
+                "focused_division_family": "temporal_multiscale_focused_division_gate_v1",
                 "model_sha256": {
                     "target_44b6": "a" * 64,
                     "target_6bba": "b" * 64,
@@ -89,7 +91,7 @@ def test_candidate_is_attributed_two_gpu_and_uses_learned_division_gate(
             ast.parse("".join(cell.get("source", [])))
 
 
-def test_candidate_metadata_attaches_private_runtime_and_v4_pretraining(
+def test_candidate_metadata_attaches_private_runtime_and_focused_gate(
     tmp_path: Path,
 ) -> None:
     runtime = make_runtime(tmp_path)
@@ -115,12 +117,11 @@ def test_candidate_metadata_attaches_private_runtime_and_v4_pretraining(
     assert metadata["machine_shape"] == "NvidiaTeslaT4"
     assert metadata["enable_tpu"] is False
     assert metadata["enable_internet"] is False
-    assert metadata["dataset_sources"][-1] == (
-        "indarkarhana/biohub-learned-division-recovery-runtime-v1"
-    )
-    assert metadata["kernel_sources"] == [
-        "indarkarhana/biohub-zebrahub-multiscale-pretrain-v1"
+    assert metadata["dataset_sources"][-2:] == [
+        "indarkarhana/biohub-learned-division-recovery-runtime-v1",
+        "indarkarhana/biohub-focused-division-gate-v1",
     ]
+    assert metadata["kernel_sources"] == []
 
 
 def test_main_reuses_only_an_empty_generated_target(tmp_path: Path) -> None:

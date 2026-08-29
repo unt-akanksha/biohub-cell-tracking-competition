@@ -16,7 +16,9 @@ def accepted_policy(path: Path) -> None:
                 "schema_version": 1,
                 "status": "accepted",
                 "run_id": "external-division-recovery-policy-v1",
+                "model_training_run_id": "focused-division-gate-v1",
                 "appearance_family": "temporal_multiscale_contextual_pair_fusion_v4",
+                "focused_division_family": "temporal_multiscale_focused_division_gate_v1",
                 "model_sha256": {
                     "target_44b6": "a" * 64,
                     "target_6bba": "b" * 64,
