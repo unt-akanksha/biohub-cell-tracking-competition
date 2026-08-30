@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Stage the synthetic-gated temporal localization runtime as a private dataset."""
+"""Stage the dual-domain-gated temporal localization runtime as a private dataset."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATASET_ID = "indarkarhana/biohub-temporal-localization-consensus-v1"
 RUN_ID = "competition-temporal-localization-consensus-dataset-v1"
 POLICY_RUN_ID = "competition-temporal-localization-consensus-policy-v1"
-TRAINING_RUN_ID = "synthetic256-temporal-node-localizer-v1"
+TRAINING_RUN_ID = "synthetic256-real-replay-temporal-node-localizer-v2"
 DEVELOPMENT_RUN_ID = "temporal-node-localizer-real-development-v1"
 EXPECTED_PARAMETER_COUNT = 71_249_805
 MANIFEST_NAME = "TEMPORAL_LOCALIZATION_CONSENSUS_MANIFEST.json"
@@ -62,12 +62,18 @@ def accepted_members(results_root: Path) -> list[dict[str, Any]]:
             and terminal.get("audit_gate_passed") is True
             and terminal.get("division_critical_selection_gate_passed") is True
             and terminal.get("division_critical_audit_gate_passed") is True
+            and terminal.get("real_selection_gate_passed") is True
+            and terminal.get("real_audit_gate_passed") is True
+            and terminal.get("real_division_critical_selection_gate_passed") is True
+            and terminal.get("real_division_critical_audit_gate_passed") is True
             and terminal.get("serialized_checkpoint_selection_gate_passed") is True
             and terminal.get("checkpoint_frozen_before_audit") is True
             and terminal.get("audit_opened") is True
             and checkpoint.is_file()
             and terminal.get("model_sha256") == sha256_file(checkpoint)
-            and terminal.get("competition_data_read") is False
+            and terminal.get("real_replay_probability") == 0.25
+            and terminal.get("competition_train_data_read") is True
+            and terminal.get("competition_test_data_read") is False
             and terminal.get("public_code_copied") is False
             and terminal.get("public_predictions_copied") is False
             and terminal.get("public_leaderboard_used_for_selection") is False
@@ -87,6 +93,14 @@ def accepted_members(results_root: Path) -> list[dict[str, Any]]:
                 "audit": terminal["final_audit"],
                 "audit_division_critical": terminal[
                     "final_audit_division_critical"
+                ],
+                "real_selection": terminal["best_real_selection"],
+                "real_selection_division_critical": terminal[
+                    "best_real_selection_division_critical"
+                ],
+                "real_audit": terminal["final_real_audit"],
+                "real_audit_division_critical": terminal[
+                    "final_real_audit_division_critical"
                 ],
             }
         )
@@ -177,11 +191,16 @@ def verify_dataset(root: Path) -> dict[str, Any]:
             and row.get("audit_gate_passed") is True
             and row.get("division_critical_selection_gate_passed") is True
             and row.get("division_critical_audit_gate_passed") is True
+            and row.get("real_selection_gate_passed") is True
+            and row.get("real_audit_gate_passed") is True
+            and row.get("real_division_critical_selection_gate_passed") is True
+            and row.get("real_division_critical_audit_gate_passed") is True
             and row.get("serialized_checkpoint_selection_gate_passed") is True
             and row.get("model_sha256") == sha256_file(root / row["path"])
             for row in members
         )
-        and policy.get("ensemble_policy") == "equal_mean_all_synthetic_eligible_members"
+        and policy.get("ensemble_policy") == "equal_mean_all_dual_domain_eligible_members"
+        and policy.get("real_replay_probability") == 0.25
         and policy.get("minimum_members") == 3
         and policy.get("blend") == 0.75
         and policy.get("minimum_correction_um") == 2.0
@@ -194,6 +213,10 @@ def verify_dataset(root: Path) -> dict[str, Any]:
         and policy.get("minimum_forced_division_critical_fraction") == 0.25
         and policy.get("division_critical_selection_gate_required") is True
         and policy.get("division_critical_audit_gate_required") is True
+        and policy.get("real_selection_gate_required") is True
+        and policy.get("real_audit_gate_required") is True
+        and policy.get("real_division_critical_selection_gate_required") is True
+        and policy.get("real_division_critical_audit_gate_required") is True
         and policy.get("node_count_preserving") is True
         and policy.get("topology_preserving") is True
         and policy.get("exact_two_t4_required") is True
@@ -242,10 +265,26 @@ def stage_dataset(results_root: Path, output_root: Path) -> dict[str, Any]:
                 "audit_division_critical_mean_residual_um": member[
                     "audit_division_critical"
                 ]["mean_residual_um"],
+                "real_selection_mean_residual_um": member["real_selection"][
+                    "mean_residual_um"
+                ],
+                "real_selection_division_critical_mean_residual_um": member[
+                    "real_selection_division_critical"
+                ]["mean_residual_um"],
+                "real_audit_mean_residual_um": member["real_audit"][
+                    "mean_residual_um"
+                ],
+                "real_audit_division_critical_mean_residual_um": member[
+                    "real_audit_division_critical"
+                ]["mean_residual_um"],
                 "selection_gate_passed": True,
                 "audit_gate_passed": True,
                 "division_critical_selection_gate_passed": True,
                 "division_critical_audit_gate_passed": True,
+                "real_selection_gate_passed": True,
+                "real_audit_gate_passed": True,
+                "real_division_critical_selection_gate_passed": True,
+                "real_division_critical_audit_gate_passed": True,
                 "serialized_checkpoint_selection_gate_passed": True,
             }
         )
@@ -262,7 +301,8 @@ def stage_dataset(results_root: Path, output_root: Path) -> dict[str, Any]:
             "run_id": POLICY_RUN_ID,
             "localization_member_count": len(member_records),
             "localization_members": member_records,
-            "ensemble_policy": "equal_mean_all_synthetic_eligible_members",
+            "ensemble_policy": "equal_mean_all_dual_domain_eligible_members",
+            "real_replay_probability": 0.25,
             "minimum_members": 3,
             "blend": 0.75,
             "minimum_correction_um": 2.0,
@@ -275,6 +315,10 @@ def stage_dataset(results_root: Path, output_root: Path) -> dict[str, Any]:
             "minimum_forced_division_critical_fraction": 0.25,
             "division_critical_selection_gate_required": True,
             "division_critical_audit_gate_required": True,
+            "real_selection_gate_required": True,
+            "real_audit_gate_required": True,
+            "real_division_critical_selection_gate_required": True,
+            "real_division_critical_audit_gate_required": True,
             "node_count_preserving": True,
             "topology_preserving": True,
             "exact_two_t4_required": True,

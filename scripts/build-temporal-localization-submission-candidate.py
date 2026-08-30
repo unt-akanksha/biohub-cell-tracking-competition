@@ -29,11 +29,13 @@ reconstruction retain their original public attribution. No public prediction
 is copied. The additional coordinate stage is project-authored and cannot add
 or remove nodes or alter lineage edges.
 
-Every attached 71.25M-parameter temporal ConvNeXt3D/axial member passed an
-independent Synthetic256 selection gate and a sealed synthetic audit. Ensemble
-membership contains all synthetic-eligible members and was frozen before the
-already-opened real development probe. The real probe supplied one transfer
-gate only; it did not search thresholds, weights, or member subsets. At
+Every attached 71.25M-parameter temporal ConvNeXt3D/axial member trained on
+Synthetic256 plus a fixed 25% train-only real-image replay stream. Each member
+passed independent global and division-critical gates on both domains, followed
+by sealed audits on both domains. Ensemble membership contains every dual-domain
+eligible member and was frozen before the already-opened real development probe.
+The real probe supplied one transfer gate only; it did not search thresholds,
+weights, or member subsets. At
 inference, at least three members must agree in direction and within 1.5 um,
 predict low uncertainty, and classify the current coordinate as outside the
 5 um safe radius. A global 10% move-fraction gate fails closed. The notebook
@@ -95,10 +97,15 @@ if not (
         and row.get("audit_gate_passed") is True
         and row.get("division_critical_selection_gate_passed") is True
         and row.get("division_critical_audit_gate_passed") is True
+        and row.get("real_selection_gate_passed") is True
+        and row.get("real_audit_gate_passed") is True
+        and row.get("real_division_critical_selection_gate_passed") is True
+        and row.get("real_division_critical_audit_gate_passed") is True
         and row.get("serialized_checkpoint_selection_gate_passed") is True
         for row in _TLC_MEMBERS
     )
-    and _TLC_POLICY.get("ensemble_policy") == "equal_mean_all_synthetic_eligible_members"
+    and _TLC_POLICY.get("ensemble_policy") == "equal_mean_all_dual_domain_eligible_members"
+    and float(_TLC_POLICY.get("real_replay_probability")) == 0.25
     and _TLC_POLICY.get("minimum_members") == 3
     and float(_TLC_POLICY.get("blend")) == 0.75
     and float(_TLC_POLICY.get("minimum_correction_um")) == 2.0
@@ -111,6 +118,10 @@ if not (
     and float(_TLC_POLICY.get("minimum_forced_division_critical_fraction")) == 0.25
     and _TLC_POLICY.get("division_critical_selection_gate_required") is True
     and _TLC_POLICY.get("division_critical_audit_gate_required") is True
+    and _TLC_POLICY.get("real_selection_gate_required") is True
+    and _TLC_POLICY.get("real_audit_gate_required") is True
+    and _TLC_POLICY.get("real_division_critical_selection_gate_required") is True
+    and _TLC_POLICY.get("real_division_critical_audit_gate_required") is True
     and _TLC_POLICY.get("node_count_preserving") is True
     and _TLC_POLICY.get("topology_preserving") is True
     and _TLC_POLICY.get("exact_two_t4_required") is True
@@ -133,15 +144,21 @@ for _member in _TLC_MEMBERS:
     _terminal = _tlc_json.loads((_TLC_ROOT / _member["terminal_path"]).read_text(encoding="utf-8"))
     if not (
         _terminal.get("status") == "completed"
-        and _terminal.get("run_id") == "synthetic256-temporal-node-localizer-v1"
+        and _terminal.get("run_id") == "synthetic256-real-replay-temporal-node-localizer-v2"
         and _terminal.get("model_sha256") == _member["model_sha256"]
         and _terminal.get("checkpoint_frozen_before_audit") is True
         and _terminal.get("selection_gate_passed") is True
         and _terminal.get("audit_gate_passed") is True
         and _terminal.get("division_critical_selection_gate_passed") is True
         and _terminal.get("division_critical_audit_gate_passed") is True
+        and _terminal.get("real_selection_gate_passed") is True
+        and _terminal.get("real_audit_gate_passed") is True
+        and _terminal.get("real_division_critical_selection_gate_passed") is True
+        and _terminal.get("real_division_critical_audit_gate_passed") is True
         and _terminal.get("serialized_checkpoint_selection_gate_passed") is True
-        and _terminal.get("competition_data_read") is False
+        and float(_terminal.get("real_replay_probability")) == 0.25
+        and _terminal.get("competition_train_data_read") is True
+        and _terminal.get("competition_test_data_read") is False
         and _terminal.get("public_leaderboard_used_for_selection") is False
     ):
         raise RuntimeError("Temporal-localization member terminal changed")

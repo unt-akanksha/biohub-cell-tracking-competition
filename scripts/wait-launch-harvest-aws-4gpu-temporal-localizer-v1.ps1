@@ -24,6 +24,9 @@ $sourceMetadataPath = Join-Path $syntheticRoot "metadata.json"
 $expectedSourceManifestSha256 = "e8b5376b2ac6fdd55bd6e45d1b07b401339d375b211b6f67be93fb0de4d8ce14"
 $expectedSourceMetadataSha256 = "328b9bb2545309e545cf68663ef985034ec68c36c0b709408a0f91801fedf89e"
 $archivePath = Join-Path $stateRoot "biohub-synthetic256-temporal-localizer-v1.tar.gz"
+$realShardRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-real-localization-shards-v1"
+$realShardManifestPath = Join-Path $realShardRoot "real_localization_shard_manifest.json"
+$realArchivePath = Join-Path $stateRoot "biohub-real-localization-shards-v1.tar.gz"
 $developmentArchivePath = Join-Path $stateRoot "biohub-temporal-localizer-development-v1.tar.gz"
 $developmentStage = Join-Path $stateRoot "development-stage"
 $probeRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-division-probe-frames-v1"
@@ -34,7 +37,7 @@ $renderedRunner = Join-Path $stateRoot "run-aws-4gpu-temporal-localizer-v1.sh"
 $launchTerminal = Join-Path $stateRoot "launch-terminal.json"
 $harvestTerminal = Join-Path $stateRoot "harvest-terminal.json"
 $logPath = Join-Path $stateRoot "controller.log"
-$localResult = Join-Path $stateRoot "biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz"
+$localResult = Join-Path $stateRoot "biohub-synthetic256-real-replay-temporal-node-localizer-v2-results.tar.gz"
 $requiredCode = @(
     (Join-Path $RepositoryRoot "research/synthetic_pretrain/data.py"),
     (Join-Path $RepositoryRoot "research/temporal_contrastive/patch_model.py"),
@@ -96,7 +99,7 @@ foreach ($required in @($runnerTemplate) + $requiredCode) {
         throw "AWS temporal-localizer deployment input is missing: $required"
     }
 }
-foreach ($requiredDirectory in @($probeRoot, $controlRoot, $truthRoot)) {
+foreach ($requiredDirectory in @($realShardRoot, $probeRoot, $controlRoot, $truthRoot)) {
     if (-not (Test-Path -LiteralPath $requiredDirectory -PathType Container)) {
         throw "Temporal-localizer development input is missing: $requiredDirectory"
     }
@@ -150,6 +153,40 @@ if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf)) {
     }
     finally { Pop-Location }
 }
+$realShardManifest = Get-Content -Raw -LiteralPath $realShardManifestPath | ConvertFrom-Json
+if (
+    $realShardManifest.status -ne "complete" -or
+    $realShardManifest.run_id -ne "competition-real-localization-shards-v1" -or
+    [int]$realShardManifest.summary.shards -ne 177 -or
+    [int]$realShardManifest.summary.by_role.optimization.shards -ne 146 -or
+    [int]$realShardManifest.summary.by_role.selection.shards -ne 17 -or
+    [int]$realShardManifest.summary.by_role.sealed_audit.shards -ne 14 -or
+    (($realShardManifest.excluded_final_probe_stems -join ",") -ne "44b6_12dfb391,44b6_267148e4,6bba_062c8d37,6bba_07e24132") -or
+    $realShardManifest.competition_train_data_read -ne $true -or
+    $realShardManifest.competition_test_data_read -ne $false -or
+    $realShardManifest.public_leaderboard_used_for_selection -ne $false -or
+    $realShardManifest.authorized_for_submission -ne $false
+) {
+    throw "Real localization shard manifest changed from the train-only replay contract"
+}
+foreach ($row in @($realShardManifest.files)) {
+    $realShardPath = Join-Path $realShardRoot ([string]$row.path)
+    if (
+        -not (Test-Path -LiteralPath $realShardPath -PathType Leaf) -or
+        [int64]$row.bytes -ne (Get-Item -LiteralPath $realShardPath).Length -or
+        ([string]$row.sha256).ToLowerInvariant() -ne (Get-FileHash -Algorithm SHA256 -LiteralPath $realShardPath).Hash.ToLowerInvariant()
+    ) {
+        throw "Real localization shard changed: $realShardPath"
+    }
+}
+if (-not (Test-Path -LiteralPath $realArchivePath -PathType Leaf)) {
+    Push-Location -LiteralPath $realShardRoot
+    try {
+        & tar -czf $realArchivePath .
+        if ($LASTEXITCODE -ne 0) { throw "Real localization replay archive creation failed" }
+    }
+    finally { Pop-Location }
+}
 $probeManifest = Get-Content -Raw -LiteralPath (Join-Path $probeRoot "probe_cache_manifest.json") | ConvertFrom-Json
 if (
     $probeManifest.status -ne "complete" -or
@@ -176,13 +213,19 @@ if (-not (Test-Path -LiteralPath $developmentArchivePath -PathType Leaf)) {
     finally { Pop-Location }
 }
 $archiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
+$realArchiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $realArchivePath).Hash.ToLowerInvariant()
+$realShardManifestSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $realShardManifestPath).Hash.ToLowerInvariant()
 $developmentArchiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $developmentArchivePath).Hash.ToLowerInvariant()
 $runnerText = (Get-Content -Raw -LiteralPath $runnerTemplate).Replace(
     "__SYNTHETIC256_ARCHIVE_SHA256__", $archiveSha256
 ).Replace(
+    "__REAL_LOCALIZATION_ARCHIVE_SHA256__", $realArchiveSha256
+).Replace(
+    "__REAL_LOCALIZATION_MANIFEST_SHA256__", $realShardManifestSha256
+).Replace(
     "__DEVELOPMENT_ARCHIVE_SHA256__", $developmentArchiveSha256
 )
-if ($runnerText -match "__(SYNTHETIC256|DEVELOPMENT)_ARCHIVE_SHA256__") {
+if ($runnerText -match "__(SYNTHETIC256|REAL_LOCALIZATION|DEVELOPMENT)_(ARCHIVE|MANIFEST)_SHA256__") {
     throw "Temporal-localizer runner hash binding failed"
 }
 Set-Content -LiteralPath $renderedRunner -Encoding utf8 -Value $runnerText
@@ -203,7 +246,12 @@ if ($ValidateOnly) {
         planned_gpu_count = 4
         planned_model_count = 4
         parameters_per_model = 71249805
-        steps_per_model = 20000
+        steps_per_model = 40000
+        validation_every_steps = 2000
+        real_replay_probability = 0.25
+        real_optimization_shards = 146
+        real_selection_shards = 17
+        real_sealed_audit_shards = 14
         division_critical_examples_per_batch = 4
         division_critical_selection_examples = 512
         division_critical_audit_examples = 512
@@ -218,6 +266,9 @@ if ($ValidateOnly) {
         trainer_sha256 = $trainerSha256
         archive_sha256 = $archiveSha256
         archive_bytes = (Get-Item -LiteralPath $archivePath).Length
+        real_shard_manifest_sha256 = $realShardManifestSha256
+        real_archive_sha256 = $realArchiveSha256
+        real_archive_bytes = (Get-Item -LiteralPath $realArchivePath).Length
         development_archive_sha256 = $developmentArchiveSha256
         development_archive_bytes = (Get-Item -LiteralPath $developmentArchivePath).Length
     } | ConvertTo-Json
@@ -310,6 +361,9 @@ try {
         $archivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic256-temporal-localizer-v1.tar.gz"
     ))
     Invoke-Checked "scp" ($sshBase + @(
+        $realArchivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-real-localization-shards-v1.tar.gz"
+    ))
+    Invoke-Checked "scp" ($sshBase + @(
         $developmentArchivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz"
     ))
     $remoteCommand = "chmod +x /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh && bash -n /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh && nohup bash /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh >/home/ubuntu/biohub-temporal-localizer-v1-controller.log 2>&1 < /dev/null & echo TEMPORAL_LOCALIZER_PID=`$!"
@@ -324,7 +378,12 @@ try {
         gpu_count = 4
         model_count = 4
         parameters_per_model = 71249805
-        steps_per_model = 20000
+        steps_per_model = 40000
+        validation_every_steps = 2000
+        real_replay_probability = 0.25
+        real_optimization_shards = 146
+        real_selection_shards = 17
+        real_sealed_audit_shards = 14
         division_critical_examples_per_batch = 4
         division_critical_selection_examples = 512
         division_critical_audit_examples = 512
@@ -338,13 +397,15 @@ try {
         rendered_runner_sha256 = $renderedRunnerSha256
         trainer_sha256 = $trainerSha256
         synthetic_archive_sha256 = $archiveSha256
+        real_shard_manifest_sha256 = $realShardManifestSha256
+        real_archive_sha256 = $realArchiveSha256
         development_archive_sha256 = $developmentArchiveSha256
         development_probe_runs_only_after_member_audits = $true
         auto_stop_after_harvest_window = $true
         authorized_for_submission = $false
     }
 
-    $remoteChecksum = "/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz.sha256"
+    $remoteChecksum = "/home/ubuntu/biohub-synthetic256-real-replay-temporal-node-localizer-v2-results.tar.gz.sha256"
     $resultReady = $false
     for ($poll = 1; $poll -le 480; $poll++) {
         $savedPreference = $ErrorActionPreference
@@ -357,7 +418,7 @@ try {
     }
     if (-not $resultReady) { throw "Timed out waiting for the four-GPU temporal-localizer result" }
     Invoke-Checked "scp" ($sshBase + @(
-        "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz",
+        "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic256-real-replay-temporal-node-localizer-v2-results.tar.gz",
         $localResult
     ))
     $checksumText = (& ssh @sshBase "${RemoteUser}@${remoteHost}" "cat $remoteChecksum") -join "`n"

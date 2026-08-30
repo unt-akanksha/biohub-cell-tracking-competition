@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-"""Train independently gated temporal node localizers on Synthetic256 CC0.
+"""Train synthetic-plus-real independently gated temporal node localizers.
 
-The split is immutable: sequences 0--11 optimize weights, 12--13 rank
-checkpoints, and 14--15 remain sealed until a checkpoint has been selected and
-serialized.  No competition labels, predictions, leaderboard scores, or public
-notebook code participate in this stage.
+Synthetic256 sequences 0--239 optimize, 240--247 select, and 248--255 remain
+sealed. Train-only Biohub triplets use independent optimization, selection, and
+sealed-audit roles while the four frozen development movies remain excluded.
+No competition test data, public predictions, leaderboard scores, or public
+notebook code participate in training or model selection.
 """
 
 from __future__ import annotations
@@ -41,7 +42,7 @@ from research.temporal_localization.model import (
 )
 
 
-RUN_ID = "synthetic256-temporal-node-localizer-v1"
+RUN_ID = "synthetic256-real-replay-temporal-node-localizer-v2"
 TRAIN_INDICES = tuple(range(240))
 SELECTION_INDICES = tuple(range(240, 248))
 AUDIT_INDICES = tuple(range(248, 256))
@@ -51,6 +52,7 @@ DEFAULT_SEEDS = (41_021, 41_029, 41_039, 41_047)
 @dataclass(frozen=True)
 class SequenceState:
     index: int
+    source: str
     sample: SequenceSample
     eligible_rows: np.ndarray
     division_critical_rows: np.ndarray
@@ -102,16 +104,22 @@ def discover_sequence_paths(root: Path) -> list[Path]:
     return paths
 
 
-def build_sequence_state(index: int, sample: SequenceSample) -> SequenceState:
+def build_sequence_state(
+    index: int,
+    sample: SequenceSample,
+    *,
+    source: str = "synthetic",
+    require_division_critical: bool = True,
+) -> SequenceState:
     node_count = len(sample.nodes)
     predecessor = np.full(node_count, -1, dtype=np.int64)
     successor_lists: list[list[int]] = [[] for _ in range(node_count)]
-    for source, target in sample.edges.tolist():
-        source, target = int(source), int(target)
-        if predecessor[target] >= 0 and predecessor[target] != source:
-            raise ValueError("synthetic lineage has multiple parents")
-        predecessor[target] = source
-        successor_lists[source].append(target)
+    for edge_source, target in sample.edges.tolist():
+        edge_source, target = int(edge_source), int(target)
+        if predecessor[target] >= 0 and predecessor[target] != edge_source:
+            raise ValueError("localization lineage has multiple parents")
+        predecessor[target] = edge_source
+        successor_lists[edge_source].append(target)
     times = sample.nodes[:, 0].astype(np.int64)
     eligible = np.flatnonzero((times >= 1) & (times < sample.volumes.shape[0] - 1)).astype(np.int64)
     if not len(eligible):
@@ -123,10 +131,11 @@ def build_sequence_state(index: int, sample: SequenceSample) -> SequenceState:
             division_critical[parent] = True
             division_critical[children] = True
     division_critical_rows = eligible[division_critical[eligible]]
-    if not len(division_critical_rows):
+    if require_division_critical and not len(division_critical_rows):
         raise ValueError(f"sequence {index} has no interior division-critical nodes")
     return SequenceState(
         index,
+        source,
         sample,
         eligible,
         division_critical_rows,
@@ -136,7 +145,91 @@ def build_sequence_state(index: int, sample: SequenceSample) -> SequenceState:
 
 
 def load_states(paths: list[Path], indices: Iterable[int]) -> list[SequenceState]:
-    return [build_sequence_state(index, corrected_sequence_sample(paths[index])) for index in indices]
+    return [
+        build_sequence_state(
+            index,
+            corrected_sequence_sample(paths[index]),
+            source="synthetic",
+            require_division_critical=True,
+        )
+        for index in indices
+    ]
+
+
+def verify_real_shards(root: Path, expected_manifest_sha256: str) -> dict[str, Any]:
+    manifest_path = root / "real_localization_shard_manifest.json"
+    if sha256_file(manifest_path) != expected_manifest_sha256.lower():
+        raise ValueError("real localization shard manifest hash changed")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    files = manifest.get("files")
+    by_role = manifest.get("summary", {}).get("by_role", {})
+    if not (
+        manifest.get("schema_version") == 1
+        and manifest.get("status") == "complete"
+        and manifest.get("run_id") == "competition-real-localization-shards-v1"
+        and manifest.get("competition_train_data_read") is True
+        and manifest.get("competition_test_data_read") is False
+        and manifest.get("public_leaderboard_used_for_selection") is False
+        and manifest.get("submission_created") is False
+        and manifest.get("authorized_for_submission") is False
+        and manifest.get("excluded_final_probe_stems")
+        == ["44b6_12dfb391", "44b6_267148e4", "6bba_062c8d37", "6bba_07e24132"]
+        and isinstance(files, list)
+        and len(files) == 177
+        and by_role.get("optimization", {}).get("shards") == 146
+        and by_role.get("selection", {}).get("shards") == 17
+        and by_role.get("sealed_audit", {}).get("shards") == 14
+    ):
+        raise ValueError("real localization shard inventory is ineligible")
+    for row in files:
+        path = root / row["path"]
+        if (
+            row.get("role") not in {"optimization", "selection", "sealed_audit"}
+            or not path.is_file()
+            or path.stat().st_size != int(row["bytes"])
+        ):
+            raise ValueError(f"real localization shard changed: {path}")
+        # Sealed-audit shard contents remain unopened until a serialized
+        # checkpoint has passed every synthetic and real selection gate.
+        if row["role"] != "sealed_audit" and sha256_file(path) != row["sha256"]:
+            raise ValueError(f"real localization shard changed: {path}")
+    return manifest
+
+
+def real_paths_by_role(root: Path, manifest: dict[str, Any]) -> dict[str, list[Path]]:
+    result = {role: [] for role in ("optimization", "selection", "sealed_audit")}
+    for row in manifest["files"]:
+        result[row["role"]].append(root / row["path"])
+    return result
+
+
+def verify_real_role_hashes(
+    root: Path, manifest: dict[str, Any], *, role: str
+) -> None:
+    rows = [row for row in manifest["files"] if row["role"] == role]
+    if not rows:
+        raise ValueError(f"real localization manifest has no {role} shards")
+    for row in rows:
+        path = root / row["path"]
+        if sha256_file(path) != row["sha256"]:
+            raise ValueError(f"real localization shard changed: {path}")
+
+
+def load_real_states(
+    paths: list[Path],
+    *,
+    starting_index: int,
+    require_division_critical: bool,
+) -> list[SequenceState]:
+    return [
+        build_sequence_state(
+            starting_index + offset,
+            corrected_sequence_sample(path),
+            source="real",
+            require_division_critical=require_division_critical,
+        )
+        for offset, path in enumerate(paths)
+    ]
 
 
 def random_jitter_um(rng: np.random.Generator, count: int, *, maximum_um: float = 10.0) -> np.ndarray:
@@ -370,6 +463,48 @@ def stratified_improvement_gate(
     }
 
 
+def dual_domain_improvement_gate(
+    synthetic_baseline_global: dict[str, Any],
+    synthetic_candidate_global: dict[str, Any],
+    synthetic_baseline_division: dict[str, Any],
+    synthetic_candidate_division: dict[str, Any],
+    real_baseline_global: dict[str, Any],
+    real_candidate_global: dict[str, Any],
+    real_baseline_division: dict[str, Any],
+    real_candidate_division: dict[str, Any],
+) -> dict[str, Any]:
+    synthetic = stratified_improvement_gate(
+        synthetic_baseline_global,
+        synthetic_candidate_global,
+        synthetic_baseline_division,
+        synthetic_candidate_division,
+    )
+    real = stratified_improvement_gate(
+        real_baseline_global,
+        real_candidate_global,
+        real_baseline_division,
+        real_candidate_division,
+    )
+    return {
+        "passed": bool(synthetic["passed"] and real["passed"]),
+        "synthetic": synthetic,
+        "real": real,
+        "real_domain_gate_required": True,
+    }
+
+
+def relative_residual_sum(
+    pairs: Iterable[tuple[dict[str, Any], dict[str, Any]]],
+) -> float:
+    return float(
+        sum(
+            float(candidate["mean_residual_um"])
+            / float(baseline["mean_residual_um"])
+            for baseline, candidate in pairs
+        )
+    )
+
+
 def update_ema(model: torch.nn.Module, ema: torch.nn.Module, *, decay: float) -> None:
     with torch.no_grad():
         for ema_value, value in zip(ema.state_dict().values(), model.state_dict().values(), strict=True):
@@ -379,11 +514,34 @@ def update_ema(model: torch.nn.Module, ema: torch.nn.Module, *, decay: float) ->
                 ema_value.copy_(value)
 
 
+def normalized_state_weights(
+    states: list[SequenceState], *, division_critical: bool = False
+) -> np.ndarray:
+    if not states:
+        raise ValueError("localization sampling requires at least one state")
+    counts = np.asarray(
+        [
+            len(state.division_critical_rows)
+            if division_critical
+            else len(state.eligible_rows)
+            for state in states
+        ],
+        dtype=np.float64,
+    )
+    if np.any(counts <= 0):
+        raise ValueError("localization sampling state has no eligible rows")
+    return counts / counts.sum()
+
+
 def train_member(
     args: argparse.Namespace,
     paths: list[Path],
     train_states: list[SequenceState],
     selection_states: list[SequenceState],
+    real_train_states: list[SequenceState],
+    real_selection_states: list[SequenceState],
+    real_audit_paths: list[Path],
+    real_shard_manifest: dict[str, Any],
     *,
     member_index: int,
     seed: int,
@@ -411,6 +569,21 @@ def train_member(
     )
     baseline_selection = baseline_metrics(selection_examples)
     baseline_selection_division = baseline_metrics(selection_division_examples)
+    real_selection_examples = fixed_examples(
+        real_selection_states,
+        seed=151_000 + member_index,
+        count=args.real_validation_examples,
+    )
+    real_selection_division_examples = fixed_examples(
+        real_selection_states,
+        seed=161_000 + member_index,
+        count=args.real_division_validation_examples,
+        division_critical_only=True,
+    )
+    baseline_real_selection = baseline_metrics(real_selection_examples)
+    baseline_real_selection_division = baseline_metrics(
+        real_selection_division_examples
+    )
 
     model = TemporalNodeLocalizationModel().to(device)
     if parameter_count(model) != EXPECTED_PARAMETER_COUNT:
@@ -418,8 +591,20 @@ def train_member(
     ema = copy.deepcopy(model).requires_grad_(False).eval()
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
     scaler = torch.amp.GradScaler("cuda")
-    weights = np.asarray([len(state.eligible_rows) for state in train_states], dtype=np.float64)
-    weights /= weights.sum()
+    synthetic_weights = normalized_state_weights(train_states)
+    synthetic_critical_states = [
+        state for state in train_states if len(state.division_critical_rows)
+    ]
+    synthetic_critical_weights = normalized_state_weights(
+        synthetic_critical_states, division_critical=True
+    )
+    real_weights = normalized_state_weights(real_train_states)
+    real_critical_states = [
+        state for state in real_train_states if len(state.division_critical_rows)
+    ]
+    real_critical_weights = normalized_state_weights(
+        real_critical_states, division_critical=True
+    )
     history: list[dict[str, Any]] = []
     best_step = 0
     best_metrics = evaluate(
@@ -433,6 +618,20 @@ def train_member(
         ema,
         selection_states,
         selection_division_examples,
+        device,
+        batch_size=args.validation_batch_size,
+    )
+    best_real_metrics = evaluate(
+        ema,
+        real_selection_states,
+        real_selection_examples,
+        device,
+        batch_size=args.validation_batch_size,
+    )
+    best_real_division_metrics = evaluate(
+        ema,
+        real_selection_states,
+        real_selection_division_examples,
         device,
         batch_size=args.validation_batch_size,
     )
@@ -456,6 +655,23 @@ def train_member(
             "selection_division_critical_inventory_sha256": (
                 selection_division_examples.inventory_sha256
             ),
+            "real_selection_inventory_sha256": (
+                real_selection_examples.inventory_sha256
+            ),
+            "real_selection_division_critical_inventory_sha256": (
+                real_selection_division_examples.inventory_sha256
+            ),
+            "real_replay_probability": args.real_replay_probability,
+            "real_optimization_shards": len(real_train_states),
+            "real_selection_shards": len(real_selection_states),
+            "real_audit_shards_declared_but_unopened": len(real_audit_paths),
+            "real_shard_inventory_sha256": args.real_shard_manifest_sha256,
+            "real_source_inventory_sha256": real_shard_manifest[
+                "inventory_sha256"
+            ],
+            "real_frame_cache_manifest_sha256": real_shard_manifest[
+                "frame_cache_manifest_sha256"
+            ],
             "division_critical_training_rows": int(
                 sum(len(state.division_critical_rows) for state in train_states)
             ),
@@ -466,7 +682,8 @@ def train_member(
                 paths[index].name: sha256_file(paths[index])
                 for index in (*TRAIN_INDICES, *SELECTION_INDICES)
             },
-            "competition_data_read": False,
+            "competition_train_data_read": True,
+            "competition_test_data_read": False,
             "public_code_copied": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
@@ -479,24 +696,60 @@ def train_member(
         if time.monotonic() - started >= args.member_max_wall_seconds - args.finalization_reserve_seconds:
             break
         completed_step = step
-        state = train_states[int(rng.choice(len(train_states), p=weights))]
+        use_real = bool(rng.random() < args.real_replay_probability)
+        if use_real:
+            global_states = real_train_states
+            global_weights = real_weights
+            critical_states = real_critical_states
+            critical_weights = real_critical_weights
+            batch_source = "real"
+        else:
+            global_states = train_states
+            global_weights = synthetic_weights
+            critical_states = synthetic_critical_states
+            critical_weights = synthetic_critical_weights
+            batch_source = "synthetic"
         global_count = args.batch_size - args.division_critical_per_batch
-        rows = np.concatenate(
-            (
-                rng.choice(
-                    state.eligible_rows, size=global_count, replace=True
-                ).astype(np.int64),
-                rng.choice(
-                    state.division_critical_rows,
-                    size=args.division_critical_per_batch,
-                    replace=True,
-                ).astype(np.int64),
-            )
+        global_state = global_states[
+            int(rng.choice(len(global_states), p=global_weights))
+        ]
+        critical_state = critical_states[
+            int(rng.choice(len(critical_states), p=critical_weights))
+        ]
+        global_rows = rng.choice(
+            global_state.eligible_rows, size=global_count, replace=True
+        ).astype(np.int64)
+        critical_rows = rng.choice(
+            critical_state.division_critical_rows,
+            size=args.division_critical_per_batch,
+            replace=True,
+        ).astype(np.int64)
+        global_jitter = random_jitter_um(rng, global_count)
+        critical_jitter = random_jitter_um(
+            rng, args.division_critical_per_batch
         )
-        rng.shuffle(rows)
-        jitter = random_jitter_um(rng, args.batch_size)
-        patches, graph, target = make_patches(
-            state, rows, jitter, device, augment=True, generator=generator
+        global_batch = make_patches(
+            global_state,
+            global_rows,
+            global_jitter,
+            device,
+            augment=True,
+            generator=generator,
+        )
+        critical_batch = make_patches(
+            critical_state,
+            critical_rows,
+            critical_jitter,
+            device,
+            augment=True,
+            generator=generator,
+        )
+        permutation = torch.randperm(args.batch_size, generator=generator, device=device)
+        patches, graph, target = (
+            torch.cat((global_value, critical_value), dim=0)[permutation]
+            for global_value, critical_value in zip(
+                global_batch, critical_batch, strict=True
+            )
         )
         optimizer.zero_grad(set_to_none=True)
         with torch.autocast(device_type="cuda", dtype=torch.float16):
@@ -526,6 +779,7 @@ def train_member(
                         "loss": float(loss.detach().cpu()),
                         **{key: float(value.cpu()) for key, value in components.items()},
                         "learning_rate": learning_rate,
+                        "batch_source": batch_source,
                     },
                     sort_keys=True,
                 ),
@@ -542,22 +796,44 @@ def train_member(
                 device,
                 batch_size=args.validation_batch_size,
             )
-            gate = stratified_improvement_gate(
+            real_metrics = evaluate(
+                ema,
+                real_selection_states,
+                real_selection_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            real_division_metrics = evaluate(
+                ema,
+                real_selection_states,
+                real_selection_division_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            gate = dual_domain_improvement_gate(
                 baseline_selection,
                 metrics,
                 baseline_selection_division,
                 division_metrics,
+                baseline_real_selection,
+                real_metrics,
+                baseline_real_selection_division,
+                real_division_metrics,
             )
-            relative_residual = (
-                float(metrics["mean_residual_um"])
-                / float(baseline_selection["mean_residual_um"])
-                + float(division_metrics["mean_residual_um"])
-                / float(baseline_selection_division["mean_residual_um"])
+            relative_residual = relative_residual_sum(
+                (
+                    (baseline_selection, metrics),
+                    (baseline_selection_division, division_metrics),
+                    (baseline_real_selection, real_metrics),
+                    (baseline_real_selection_division, real_division_metrics),
+                )
             )
             row = {
                 "step": step,
-                "global_metrics": metrics,
-                "division_critical_metrics": division_metrics,
+                "synthetic_global_metrics": metrics,
+                "synthetic_division_critical_metrics": division_metrics,
+                "real_global_metrics": real_metrics,
+                "real_division_critical_metrics": real_division_metrics,
                 "relative_residual_sum": relative_residual,
                 "gate": gate,
             }
@@ -567,16 +843,22 @@ def train_member(
                 best_step = step
                 best_metrics = metrics
                 best_division_metrics = division_metrics
+                best_real_metrics = real_metrics
+                best_real_division_metrics = real_division_metrics
                 best_relative_residual = relative_residual
                 best_state = state_dict_half(ema)
             model.train()
 
     atomic_json(output_dir / "selection_history.json", {"rows": history})
-    selection_gate = stratified_improvement_gate(
+    selection_gate = dual_domain_improvement_gate(
         baseline_selection,
         best_metrics,
         baseline_selection_division,
         best_division_metrics,
+        baseline_real_selection,
+        best_real_metrics,
+        baseline_real_selection_division,
+        best_real_division_metrics,
     )
     terminal: dict[str, Any] = {
         "schema_version": 1,
@@ -589,18 +871,31 @@ def train_member(
         "elapsed_seconds": time.monotonic() - started,
         "completed_step": completed_step,
         "best_step": best_step,
+        "real_replay_probability": args.real_replay_probability,
+        "real_shard_manifest_sha256": args.real_shard_manifest_sha256.lower(),
         "baseline_selection": baseline_selection,
         "best_selection": best_metrics,
         "baseline_selection_division_critical": baseline_selection_division,
         "best_selection_division_critical": best_division_metrics,
+        "baseline_real_selection": baseline_real_selection,
+        "best_real_selection": best_real_metrics,
+        "baseline_real_selection_division_critical": (
+            baseline_real_selection_division
+        ),
+        "best_real_selection_division_critical": best_real_division_metrics,
         "selection_gate": selection_gate,
         "selection_gate_passed": bool(selection_gate["passed"]),
         "division_critical_selection_gate_passed": bool(
-            selection_gate["division_critical"]["passed"]
+            selection_gate["synthetic"]["division_critical"]["passed"]
+        ),
+        "real_selection_gate_passed": bool(selection_gate["real"]["passed"]),
+        "real_division_critical_selection_gate_passed": bool(
+            selection_gate["real"]["division_critical"]["passed"]
         ),
         "checkpoint_frozen_before_audit": False,
         "audit_opened": False,
-        "competition_data_read": False,
+        "competition_train_data_read": True,
+        "competition_test_data_read": False,
         "public_code_copied": False,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
@@ -630,11 +925,29 @@ def train_member(
             device,
             batch_size=args.validation_batch_size,
         )
-        serialized_selection_gate = stratified_improvement_gate(
+        serialized_real_selection = evaluate(
+            ema,
+            real_selection_states,
+            real_selection_examples,
+            device,
+            batch_size=args.validation_batch_size,
+        )
+        serialized_real_selection_division = evaluate(
+            ema,
+            real_selection_states,
+            real_selection_division_examples,
+            device,
+            batch_size=args.validation_batch_size,
+        )
+        serialized_selection_gate = dual_domain_improvement_gate(
             baseline_selection,
             serialized_selection,
             baseline_selection_division,
             serialized_selection_division,
+            baseline_real_selection,
+            serialized_real_selection,
+            baseline_real_selection_division,
+            serialized_real_selection_division,
         )
         terminal.update(
             {
@@ -646,6 +959,10 @@ def train_member(
                 "serialized_checkpoint_selection_division_critical": (
                     serialized_selection_division
                 ),
+                "serialized_checkpoint_real_selection": serialized_real_selection,
+                "serialized_checkpoint_real_selection_division_critical": (
+                    serialized_real_selection_division
+                ),
                 "serialized_checkpoint_selection_gate": serialized_selection_gate,
                 "serialized_checkpoint_selection_gate_passed": bool(
                     serialized_selection_gate["passed"]
@@ -655,12 +972,28 @@ def train_member(
         if serialized_selection_gate["passed"]:
             terminal["best_selection"] = serialized_selection
             terminal["best_selection_division_critical"] = serialized_selection_division
+            terminal["best_real_selection"] = serialized_real_selection
+            terminal["best_real_selection_division_critical"] = (
+                serialized_real_selection_division
+            )
             terminal["selection_gate"] = serialized_selection_gate
             terminal["selection_gate_passed"] = True
             terminal["division_critical_selection_gate_passed"] = True
+            terminal["real_selection_gate_passed"] = True
+            terminal["real_division_critical_selection_gate_passed"] = True
             # Audit data is opened only after the exact serialized checkpoint
-            # has been hashed and re-passed both frozen selection strata.
+            # has been hashed and re-passed all synthetic and real selection strata.
             audit_states = load_states(paths, AUDIT_INDICES)
+            verify_real_role_hashes(
+                args.real_shard_root,
+                real_shard_manifest,
+                role="sealed_audit",
+            )
+            real_audit_states = load_real_states(
+                real_audit_paths,
+                starting_index=30_000,
+                require_division_critical=True,
+            )
             audit_examples = fixed_examples(
                 audit_states,
                 seed=191_000 + member_index,
@@ -672,8 +1005,23 @@ def train_member(
                 count=args.division_audit_examples,
                 division_critical_only=True,
             )
+            real_audit_examples = fixed_examples(
+                real_audit_states,
+                seed=251_000 + member_index,
+                count=args.real_audit_examples,
+            )
+            real_audit_division_examples = fixed_examples(
+                real_audit_states,
+                seed=281_000 + member_index,
+                count=args.real_division_audit_examples,
+                division_critical_only=True,
+            )
             baseline_audit = baseline_metrics(audit_examples)
             baseline_audit_division = baseline_metrics(audit_division_examples)
+            baseline_real_audit = baseline_metrics(real_audit_examples)
+            baseline_real_audit_division = baseline_metrics(
+                real_audit_division_examples
+            )
             final_audit = evaluate(
                 ema,
                 audit_states,
@@ -688,11 +1036,29 @@ def train_member(
                 device,
                 batch_size=args.validation_batch_size,
             )
-            audit_gate = stratified_improvement_gate(
+            final_real_audit = evaluate(
+                ema,
+                real_audit_states,
+                real_audit_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            final_real_audit_division = evaluate(
+                ema,
+                real_audit_states,
+                real_audit_division_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            audit_gate = dual_domain_improvement_gate(
                 baseline_audit,
                 final_audit,
                 baseline_audit_division,
                 final_audit_division,
+                baseline_real_audit,
+                final_real_audit,
+                baseline_real_audit_division,
+                final_real_audit_division,
             )
             terminal.update(
                 {
@@ -706,14 +1072,35 @@ def train_member(
                         paths[index].name: sha256_file(paths[index])
                         for index in AUDIT_INDICES
                     },
+                    "real_audit_inventory_sha256": (
+                        real_audit_examples.inventory_sha256
+                    ),
+                    "real_audit_division_critical_inventory_sha256": (
+                        real_audit_division_examples.inventory_sha256
+                    ),
+                    "real_audit_source_files": {
+                        path.name: sha256_file(path) for path in real_audit_paths
+                    },
                     "baseline_audit": baseline_audit,
                     "final_audit": final_audit,
                     "baseline_audit_division_critical": baseline_audit_division,
                     "final_audit_division_critical": final_audit_division,
+                    "baseline_real_audit": baseline_real_audit,
+                    "final_real_audit": final_real_audit,
+                    "baseline_real_audit_division_critical": (
+                        baseline_real_audit_division
+                    ),
+                    "final_real_audit_division_critical": (
+                        final_real_audit_division
+                    ),
                     "audit_gate": audit_gate,
                     "audit_gate_passed": bool(audit_gate["passed"]),
                     "division_critical_audit_gate_passed": bool(
-                        audit_gate["division_critical"]["passed"]
+                        audit_gate["synthetic"]["division_critical"]["passed"]
+                    ),
+                    "real_audit_gate_passed": bool(audit_gate["real"]["passed"]),
+                    "real_division_critical_audit_gate_passed": bool(
+                        audit_gate["real"]["division_critical"]["passed"]
                     ),
                 }
             )
@@ -732,9 +1119,24 @@ def run(args: argparse.Namespace) -> None:
     if args.required_gpu_name not in gpu_name:
         raise RuntimeError(f"required AWS GPU {args.required_gpu_name!r}, saw {gpu_name!r}")
     paths = discover_sequence_paths(args.synthetic_root)
+    real_shard_manifest = verify_real_shards(
+        args.real_shard_root,
+        args.real_shard_manifest_sha256,
+    )
+    real_paths = real_paths_by_role(args.real_shard_root, real_shard_manifest)
     # Audit sequences are deliberately not loaded here.
     train_states = load_states(paths, TRAIN_INDICES)
     selection_states = load_states(paths, SELECTION_INDICES)
+    real_train_states = load_real_states(
+        real_paths["optimization"],
+        starting_index=10_000,
+        require_division_critical=False,
+    )
+    real_selection_states = load_real_states(
+        real_paths["selection"],
+        starting_index=20_000,
+        require_division_critical=True,
+    )
     terminals: list[dict[str, Any]] = []
     for member_index, seed in enumerate(args.seeds):
         if time.monotonic() - started >= args.total_max_wall_seconds - args.finalization_reserve_seconds:
@@ -745,6 +1147,10 @@ def run(args: argparse.Namespace) -> None:
                 paths,
                 train_states,
                 selection_states,
+                real_train_states,
+                real_selection_states,
+                real_paths["sealed_audit"],
+                real_shard_manifest,
                 member_index=member_index,
                 seed=seed,
                 device=device,
@@ -765,7 +1171,10 @@ def run(args: argparse.Namespace) -> None:
         "members": terminals,
         "elapsed_seconds": time.monotonic() - started,
         "ensemble_policy": "equal mean offsets only after every included member independently passes selection and sealed audit; no subset or weight search",
-        "competition_data_read": False,
+        "real_replay_probability": args.real_replay_probability,
+        "real_shard_manifest_sha256": args.real_shard_manifest_sha256.lower(),
+        "competition_train_data_read": True,
+        "competition_test_data_read": False,
         "public_code_copied": False,
         "public_predictions_copied": False,
         "public_leaderboard_used_for_selection": False,
@@ -774,12 +1183,16 @@ def run(args: argparse.Namespace) -> None:
     atomic_json(args.output_dir / "training_terminal.json", terminal)
     print(json.dumps(terminal, indent=2, sort_keys=True), flush=True)
     if not completed:
-        raise RuntimeError("no temporal localization member passed both synthetic gates")
+        raise RuntimeError(
+            "no temporal localization member passed all synthetic and real gates"
+        )
 
 
 def parser() -> argparse.ArgumentParser:
     result = argparse.ArgumentParser(description=__doc__)
     result.add_argument("--synthetic-root", type=Path, required=True)
+    result.add_argument("--real-shard-root", type=Path, required=True)
+    result.add_argument("--real-shard-manifest-sha256", required=True)
     result.add_argument("--output-dir", type=Path, required=True)
     result.add_argument("--seeds", type=int, nargs="+", default=list(DEFAULT_SEEDS))
     result.add_argument("--steps", type=int, default=20_000)
@@ -788,6 +1201,11 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--audit-examples", type=int, default=1_024)
     result.add_argument("--division-validation-examples", type=int, default=512)
     result.add_argument("--division-audit-examples", type=int, default=512)
+    result.add_argument("--real-validation-examples", type=int, default=512)
+    result.add_argument("--real-audit-examples", type=int, default=512)
+    result.add_argument("--real-division-validation-examples", type=int, default=256)
+    result.add_argument("--real-division-audit-examples", type=int, default=256)
+    result.add_argument("--real-replay-probability", type=float, default=0.25)
     result.add_argument("--division-critical-per-batch", type=int, default=4)
     result.add_argument("--validation-batch-size", type=int, default=24)
     result.add_argument("--validation-every", type=int, default=1_000)
@@ -812,6 +1230,10 @@ def main() -> None:
         args.audit_examples,
         args.division_validation_examples,
         args.division_audit_examples,
+        args.real_validation_examples,
+        args.real_audit_examples,
+        args.real_division_validation_examples,
+        args.real_division_audit_examples,
         args.division_critical_per_batch,
         args.validation_batch_size,
         args.validation_every,
@@ -822,6 +1244,7 @@ def main() -> None:
     )
     if (
         min(counts) <= 0
+        or not 0.0 < args.real_replay_probability < 1.0
         or args.division_critical_per_batch >= args.batch_size
         or len(set(args.seeds)) != len(args.seeds)
     ):

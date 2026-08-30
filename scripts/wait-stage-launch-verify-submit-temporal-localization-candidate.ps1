@@ -23,9 +23,9 @@ $runtimeRef = "indarkarhana/biohub-temporal-localization-consensus-v1"
 $kernelRef = "indarkarhana/biohub-ema-temporal-localization-v1"
 $stateRoot = Join-Path $RepositoryRoot ".biohub/cache/aws-4gpu-temporal-localizer-v1"
 $harvestTerminal = Join-Path $stateRoot "harvest-terminal.json"
-$archivePath = Join-Path $stateRoot "biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz"
+$archivePath = Join-Path $stateRoot "biohub-synthetic256-real-replay-temporal-node-localizer-v2-results.tar.gz"
 $extractRoot = Join-Path $stateRoot "harvested-results"
-$resultsRoot = Join-Path $extractRoot "synthetic256-temporal-node-localizer-v1"
+$resultsRoot = Join-Path $extractRoot "synthetic256-real-replay-temporal-node-localizer-v2"
 $runtimeRoot = Join-Path $RepositoryRoot ".biohub/cache/runtime-datasets/biohub-temporal-localization-consensus-v1"
 $runtimeManifest = Join-Path $runtimeRoot "TEMPORAL_LOCALIZATION_CONSENSUS_MANIFEST.json"
 $candidateDir = Join-Path $RepositoryRoot "kaggle/biohub-ema-temporal-localization-v1"
@@ -93,7 +93,7 @@ function Assert-SafeArchive([string]$Path) {
         if (
             $entry.StartsWith("/") -or [IO.Path]::IsPathRooted($entry) -or
             $segments -contains ".." -or $segments.Count -lt 1 -or
-            $segments[0] -ne "synthetic256-temporal-node-localizer-v1"
+            $segments[0] -ne "synthetic256-real-replay-temporal-node-localizer-v2"
         ) {
             throw "Unsafe path in harvested archive: $rawEntry"
         }

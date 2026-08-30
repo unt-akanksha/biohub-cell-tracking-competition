@@ -252,3 +252,55 @@ minority failure mode; coordinate localization is the new primary branch.
   downstream controller remains unable to launch Kaggle or submit unless the
   complete synthetic, serialized-checkpoint, real-development, and external
   promotion gates all pass.
+
+## 2026-08-30 - Synthetic256 plus train-only real localization replay v2
+
+The synthetic-only localizer was not launched. Before allocating AWS GPUs, the
+training contract was expanded with fixed, competition-train-only image replay
+so every large member must learn and improve on the real microscopy domain as
+well as the synthetic generator.
+
+- The source inventory is SHA-256
+  `55159ef0636d49fcc31eea6d5fe9c327be59c2813d6d0083d6cdfabc9f6112e1`:
+  115 movies, 177 center-frame triplets, 525 required image frames, and 1,622
+  annotated center nodes. It contains 146 optimization, 17 selection, and 14
+  sealed-audit triplets.
+- Every source path is under competition `train/`. The four previously opened
+  development probes (`44b6_12dfb391`, `44b6_267148e4`, `6bba_062c8d37`, and
+  `6bba_07e24132`) are excluded. Competition test data and leaderboard values
+  are not read.
+- Geometry was checked before scale-up on 46 annotated nodes: all labels were
+  in image bounds, mean truth-voxel frame percentile was 0.984356, and the
+  minimum was 0.975874. An executable native-to-pooled triplet passed through
+  `corrected_sequence_sample` and `build_sequence_state` with shape
+  `3 x 64 x 64 x 64`, eight graph nodes, two center nodes, and one
+  division-critical center node.
+- The resumable frame cache reached 495 of 755 required metadata/chunk objects
+  (1,513,104,515 bytes) before Kaggle returned a persistent HTTP 429. Fetching
+  is now gate-first after cooldown, paced at five seconds per new request, and
+  uses a bounded 120--300 second rate-limit backoff. Existing hashes are reused.
+- Training run ID is
+  `synthetic256-real-replay-temporal-node-localizer-v2`. Each step draws from
+  real triplets with fixed probability 0.25 and otherwise from Synthetic256;
+  global and forced division-critical examples are sampled within the selected
+  domain. Non-division real movies contribute to the global pool while the
+  division pool remains strictly event-positive.
+- Checkpoint promotion requires improvements in four strata: synthetic global,
+  synthetic division-critical, real global, and real division-critical. The
+  exact serialized FP16 checkpoint must re-pass all four before either sealed
+  synthetic or sealed real audit features are loaded. Candidate packaging,
+  runtime verification, and notebook startup independently recheck these gates.
+- The scheduled AWS job is four independent 71,249,805-parameter
+  ConvNeXt3D/axial members, one per A10G on a single `g5.12xlarge`, 40,000 steps
+  per member (160,000 aggregate model-steps), fixed equal-mean ensemble, and no
+  member-subset or weight search. Validation runs every 2,000 steps; the
+  per-member wall cap remains 10.5 hours so outputs are finalized safely.
+- A bounded overnight orchestrator waits out the Kaggle throttle, completes and
+  hashes the real replay shards, then hands off to the AWS credential-event
+  controller. The AWS profile still returned `ExpiredToken` at 2026-08-30
+  06:15 CDT, so no EC2 instance had been allocated at that point. Kaggle GPU
+  quota remains untouched.
+- Focused regression evidence before arming: 16 trainer/replay tests, 20
+  candidate/runtime tests, and 16 AWS/controller tests passed in their
+  respective suites. The experiment remains unauthorized for submission until
+  every scientific and external candidate gate passes.

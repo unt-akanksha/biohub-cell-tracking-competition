@@ -81,10 +81,15 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
             and row.get("audit_gate_passed") is True
             and row.get("division_critical_selection_gate_passed") is True
             and row.get("division_critical_audit_gate_passed") is True
+            and row.get("real_selection_gate_passed") is True
+            and row.get("real_audit_gate_passed") is True
+            and row.get("real_division_critical_selection_gate_passed") is True
+            and row.get("real_division_critical_audit_gate_passed") is True
             and row.get("serialized_checkpoint_selection_gate_passed") is True
             for row in members
         )
-        and policy.get("ensemble_policy") == "equal_mean_all_synthetic_eligible_members"
+        and policy.get("ensemble_policy") == "equal_mean_all_dual_domain_eligible_members"
+        and policy.get("real_replay_probability") == 0.25
         and policy.get("minimum_members") == 3
         and policy.get("blend") == 0.75
         and policy.get("minimum_correction_um") == 2.0
@@ -97,6 +102,10 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         and policy.get("minimum_forced_division_critical_fraction") == 0.25
         and policy.get("division_critical_selection_gate_required") is True
         and policy.get("division_critical_audit_gate_required") is True
+        and policy.get("real_selection_gate_required") is True
+        and policy.get("real_audit_gate_required") is True
+        and policy.get("real_division_critical_selection_gate_required") is True
+        and policy.get("real_division_critical_audit_gate_required") is True
         and policy.get("node_count_preserving") is True
         and policy.get("topology_preserving") is True
         and policy.get("exact_two_t4_required") is True

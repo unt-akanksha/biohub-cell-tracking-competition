@@ -30,13 +30,17 @@ def result_fixture(root: Path, members: int = 3) -> Path:
         terminal = {
             "schema_version": 1,
             "status": "completed",
-            "run_id": "synthetic256-temporal-node-localizer-v1",
+            "run_id": "synthetic256-real-replay-temporal-node-localizer-v2",
             "parameter_count": 71_249_805,
             "seed": 41021 + index,
             "selection_gate_passed": True,
             "audit_gate_passed": True,
             "division_critical_selection_gate_passed": True,
             "division_critical_audit_gate_passed": True,
+            "real_selection_gate_passed": True,
+            "real_audit_gate_passed": True,
+            "real_division_critical_selection_gate_passed": True,
+            "real_division_critical_audit_gate_passed": True,
             "serialized_checkpoint_selection_gate_passed": True,
             "checkpoint_frozen_before_audit": True,
             "audit_opened": True,
@@ -49,7 +53,17 @@ def result_fixture(root: Path, members: int = 3) -> Path:
             "final_audit_division_critical": {
                 "mean_residual_um": 1.2 + index / 10
             },
-            "competition_data_read": False,
+            "best_real_selection": {"mean_residual_um": 1.05 + index / 10},
+            "best_real_selection_division_critical": {
+                "mean_residual_um": 1.0 + index / 10
+            },
+            "final_real_audit": {"mean_residual_um": 1.25 + index / 10},
+            "final_real_audit_division_critical": {
+                "mean_residual_um": 1.15 + index / 10
+            },
+            "real_replay_probability": 0.25,
+            "competition_train_data_read": True,
+            "competition_test_data_read": False,
             "public_code_copied": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
@@ -63,7 +77,7 @@ def result_fixture(root: Path, members: int = 3) -> Path:
             "schema_version": 1,
             "status": "development_passed",
             "run_id": "temporal-node-localizer-real-development-v1",
-            "training_run_id": "synthetic256-temporal-node-localizer-v1",
+            "training_run_id": "synthetic256-real-replay-temporal-node-localizer-v2",
             "members": accepted,
             "gate": {
                 "passed": True,
@@ -90,10 +104,12 @@ def test_stage_and_verify_three_independently_strong_members(tmp_path: Path) -> 
     assert result["status"] == "verified"
     assert result["localization_member_count"] == 3
     policy = json.loads((output / "temporal-localization-consensus-policy.json").read_text())
-    assert policy["ensemble_policy"] == "equal_mean_all_synthetic_eligible_members"
+    assert policy["ensemble_policy"] == "equal_mean_all_dual_domain_eligible_members"
+    assert policy["real_replay_probability"] == 0.25
     assert policy["maximum_move_fraction"] == 0.1
     assert policy["minimum_forced_division_critical_fraction"] == 0.25
     assert policy["division_critical_selection_gate_required"] is True
+    assert policy["real_division_critical_audit_gate_required"] is True
     assert policy["authorized_for_submission"] is False
 
 

@@ -9,10 +9,12 @@ from research.temporal_localization.train_synthetic_localizer import (
     TRAIN_INDICES,
     baseline_metrics,
     build_sequence_state,
+    dual_domain_improvement_gate,
     fixed_examples,
     graph_motion_features,
     improvement_gate,
     random_jitter_um,
+    relative_residual_sum,
     stratified_improvement_gate,
 )
 
@@ -72,6 +74,7 @@ def test_jitter_is_bounded_and_fixed_inventory_is_repeatable() -> None:
 
 def test_graph_features_encode_available_parent_child_context() -> None:
     state = fixture_state()
+    assert state.source == "synthetic"
     rows = np.asarray([1, 2], dtype=np.int64)
     proposals = state.sample.nodes[rows, 1:4].copy()
     features = graph_motion_features(state, rows, proposals)
@@ -98,3 +101,36 @@ def test_gate_requires_large_mean_gain_and_axis_safety() -> None:
     assert improvement_gate(baseline, weak)["passed"] is False
     assert stratified_improvement_gate(baseline, strong, baseline, strong)["passed"] is True
     assert stratified_improvement_gate(baseline, strong, baseline, weak)["passed"] is False
+    dual = dual_domain_improvement_gate(
+        baseline,
+        strong,
+        baseline,
+        strong,
+        baseline,
+        strong,
+        baseline,
+        weak,
+    )
+    assert dual["passed"] is False
+    assert dual["synthetic"]["passed"] is True
+    assert dual["real"]["passed"] is False
+    assert relative_residual_sum(((baseline, strong), (baseline, weak))) > 0.0
+
+
+def test_real_nondivision_shard_is_valid_for_global_replay() -> None:
+    sample = fixture_state().sample
+    state = build_sequence_state(
+        10_000,
+        SequenceSample(
+            volumes=sample.volumes,
+            nodes=sample.nodes,
+            edges=np.asarray([[0, 1]], dtype=np.int64),
+            divisions=np.empty(0, dtype=np.int64),
+            voxel_um=sample.voxel_um,
+        ),
+        source="real",
+        require_division_critical=False,
+    )
+    assert state.source == "real"
+    assert len(state.eligible_rows) > 0
+    assert len(state.division_critical_rows) == 0

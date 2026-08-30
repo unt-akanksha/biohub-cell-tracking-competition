@@ -192,10 +192,16 @@ def load_members(results_root: Path) -> list[tuple[TemporalNodeLocalizationModel
             and terminal.get("audit_gate_passed") is True
             and terminal.get("division_critical_selection_gate_passed") is True
             and terminal.get("division_critical_audit_gate_passed") is True
+            and terminal.get("real_selection_gate_passed") is True
+            and terminal.get("real_audit_gate_passed") is True
+            and terminal.get("real_division_critical_selection_gate_passed") is True
+            and terminal.get("real_division_critical_audit_gate_passed") is True
             and terminal.get("serialized_checkpoint_selection_gate_passed") is True
             and terminal.get("checkpoint_frozen_before_audit") is True
             and terminal.get("model_sha256") == sha256_file(checkpoint)
-            and terminal.get("competition_data_read") is False
+            and terminal.get("real_replay_probability") == 0.25
+            and terminal.get("competition_train_data_read") is True
+            and terminal.get("competition_test_data_read") is False
             and terminal.get("public_code_copied") is False
             and terminal.get("public_predictions_copied") is False
             and terminal.get("public_leaderboard_used_for_selection") is False

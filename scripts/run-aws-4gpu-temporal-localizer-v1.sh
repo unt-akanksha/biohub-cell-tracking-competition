@@ -4,11 +4,15 @@ set -euo pipefail
 workspace=/home/ubuntu/biohub
 data_archive=/home/ubuntu/biohub-synthetic256-temporal-localizer-v1.tar.gz
 data_parent=/home/ubuntu/biohub-synthetic256-temporal-localizer-v1
+real_archive=/home/ubuntu/biohub-real-localization-shards-v1.tar.gz
+real_root=/home/ubuntu/biohub-real-localization-shards-v1
 development_archive=/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz
 development_root=/home/ubuntu/biohub-temporal-localizer-development-v1
-output_root=/home/ubuntu/biohub-results/synthetic256-temporal-node-localizer-v1
-result_archive=/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz
+output_root=/home/ubuntu/biohub-results/synthetic256-real-replay-temporal-node-localizer-v2
+result_archive=/home/ubuntu/biohub-synthetic256-real-replay-temporal-node-localizer-v2-results.tar.gz
 archive_sha256=__SYNTHETIC256_ARCHIVE_SHA256__
+real_archive_sha256=__REAL_LOCALIZATION_ARCHIVE_SHA256__
+real_manifest_sha256=__REAL_LOCALIZATION_MANIFEST_SHA256__
 development_archive_sha256=__DEVELOPMENT_ARCHIVE_SHA256__
 seeds=(41021 41029 41039 41047)
 
@@ -18,6 +22,7 @@ if ! flock -n 9; then
   exit 2
 fi
 echo "$archive_sha256  $data_archive" | sha256sum -c -
+echo "$real_archive_sha256  $real_archive" | sha256sum -c -
 echo "$development_archive_sha256  $development_archive" | sha256sum -c -
 for required in \
   "$workspace/research/synthetic_pretrain/data.py" \
@@ -30,10 +35,12 @@ for required in \
   test -f "$required"
 done
 test ! -e "$data_parent"
+test ! -e "$real_root"
 test ! -e "$development_root"
 test ! -e "$output_root"
-mkdir -p "$data_parent" "$development_root" "$output_root" /home/ubuntu/biohub-results
+mkdir -p "$data_parent" "$real_root" "$development_root" "$output_root" /home/ubuntu/biohub-results
 tar -xzf "$data_archive" -C "$data_parent"
+tar -xzf "$real_archive" -C "$real_root"
 tar -xzf "$development_archive" -C "$development_root"
 
 python_bin=""
@@ -110,17 +117,24 @@ for gpu_index in 0 1 2 3; do
   CUDA_VISIBLE_DEVICES="$gpu_index" "$python_bin" \
     research/temporal_localization/train_synthetic_localizer.py \
     --synthetic-root "$data_parent" \
+    --real-shard-root "$real_root" \
+    --real-shard-manifest-sha256 "$real_manifest_sha256" \
     --output-dir "$member_root" \
     --seeds "${seeds[$gpu_index]}" \
-    --steps 20000 \
+    --steps 40000 \
     --batch-size 16 \
     --validation-examples 1024 \
     --audit-examples 1024 \
     --division-validation-examples 512 \
     --division-audit-examples 512 \
+    --real-validation-examples 512 \
+    --real-audit-examples 512 \
+    --real-division-validation-examples 256 \
+    --real-division-audit-examples 256 \
+    --real-replay-probability 0.25 \
     --division-critical-per-batch 4 \
     --validation-batch-size 24 \
-    --validation-every 1000 \
+    --validation-every 2000 \
     --log-every 100 \
     --learning-rate 2e-4 \
     --minimum-learning-rate 2e-6 \
@@ -159,10 +173,10 @@ development_status=$?
 set -e
 printf '%s\n' "$development_status" >"$output_root/real-development-probe.exit-code"
 cd /home/ubuntu/biohub-results
-find synthetic256-temporal-node-localizer-v1 -type f ! -name SHA256SUMS -print0 \
+find synthetic256-real-replay-temporal-node-localizer-v2 -type f ! -name SHA256SUMS -print0 \
   | sort -z | xargs -0 sha256sum >"$output_root/SHA256SUMS"
 tar -czf "$result_archive" -C /home/ubuntu/biohub-results \
-  synthetic256-temporal-node-localizer-v1
+  synthetic256-real-replay-temporal-node-localizer-v2
 sha256sum "$result_archive" >"$result_archive.sha256"
 
 # Bound idle cost if the local harvest controller disappears overnight. The
