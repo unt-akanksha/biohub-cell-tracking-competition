@@ -94,11 +94,17 @@ try {
         "scripts/run-antelume-real-division-seed-probe-after-ensemble-v1.sh",
         "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/scripts/run-antelume-real-division-seed-probe-after-ensemble-v1.sh"
     ))
+    Invoke-External "scp" ($scpBase + @(
+        "scripts/wait-package-antelume-seed-probe-harvest-v1.sh",
+        "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/scripts/wait-package-antelume-seed-probe-harvest-v1.sh"
+    ))
 
     $remoteCommand = @'
 cd /home/ubuntu/biohub
 chmod +x scripts/run-antelume-real-division-seed-probe-after-ensemble-v1.sh
+chmod +x scripts/wait-package-antelume-seed-probe-harvest-v1.sh
 bash -n scripts/run-antelume-real-division-seed-probe-after-ensemble-v1.sh
+bash -n scripts/wait-package-antelume-seed-probe-harvest-v1.sh
 /home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/score_real_division_seed_ensemble_probe.py
 /home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/overnight_seed_policy.py
 test ! -e /home/ubuntu/biohub-results/competition-real-division-seed-ensemble-probe-v1

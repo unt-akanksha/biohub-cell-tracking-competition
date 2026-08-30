@@ -15,6 +15,7 @@ def test_deploy_controller_waits_for_credentials_and_is_scope_bound() -> None:
     assert "send-ssh-public-key" in source
     assert "score_real_division_seed_ensemble_probe.py" in source
     assert "overnight_seed_policy.py" in source
+    assert "wait-package-antelume-seed-probe-harvest-v1.sh" in source
     assert "/home/ubuntu/biohub-results/competition-real-division-seed-ensemble-probe-v1" in source
     assert "/home/ubuntu/antelume" not in source
     assert "kaggle competitions submit" not in source
