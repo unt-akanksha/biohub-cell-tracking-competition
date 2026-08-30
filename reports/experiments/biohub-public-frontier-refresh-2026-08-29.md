@@ -543,3 +543,24 @@ control submitted on 2026-08-26 is complete but currently has no displayed
 score. There were zero UTC-day submissions before the ranked-consensus
 controller started. The controller therefore has quota headroom but still
 requires all local promotion gates before it can submit.
+
+## Exact development-baseline binding
+
+The archived ranked-consensus development result was independently replayed
+against each complete cached clean-frontier graph set. The `0.937` base and
+`0.938` harmonic states were rejected because the proposed recovery edge was
+already present. The path previously labeled as processed public control was
+also rejected: it already contains `44b6_267148e4/646->840`, so it is a later
+graph state and cannot serve as the pre-addition baseline. Only the exact
+`0.940` EMA graph set reproduced the archived result: three selected edges,
+three true recoveries, zero false recoveries, pooled edge Jaccard
+`0.9196804037 -> 0.9209419680`, and division Jaccard `0 -> 0.6`.
+
+The new baseline verifier binds the tree SHA-256 for all four EMA predictions
+and all four truth graphs, both original probe hashes, the evaluator source,
+the archived evidence, and the byte-exact replay. It also requires substantive
+equality between the archived and replayed JSON while allowing only the two
+new probe-hash fields added by the current evaluator. The verified descriptor
+is submission-ineligible and records the rejected ambiguous cache explicitly.
+Three focused tests cover the complete contract, graph drift, and substantive
+evidence drift.
