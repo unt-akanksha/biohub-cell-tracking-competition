@@ -60,3 +60,21 @@ def test_individual_gate_requires_every_component_to_be_strong() -> None:
     assert MODULE["individual_admitted"](pooled, embryos, frozen)
     embryos["6bba"]["average_precision"] = 0.39
     assert not MODULE["individual_admitted"](pooled, embryos, frozen)
+
+
+def test_stronger_individual_can_progress_without_ensemble_gain() -> None:
+    reference = MODULE["REFERENCE_SELECTION_AP"]
+    required_gain = MODULE["MINIMUM_INDIVIDUAL_AP_GAIN"]
+    candidate = {
+        "status": "admitted",
+        "selection": {
+            "average_precision": reference + required_gain + 1e-6,
+        },
+    }
+
+    assert MODULE["stronger_than_reference"](candidate)
+    candidate["selection"]["average_precision"] = reference + required_gain - 1e-6
+    assert not MODULE["stronger_than_reference"](candidate)
+    candidate["status"] = "rejected"
+    candidate["selection"]["average_precision"] = reference + 1.0
+    assert not MODULE["stronger_than_reference"](candidate)

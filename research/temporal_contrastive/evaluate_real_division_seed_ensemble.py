@@ -40,6 +40,11 @@ MANIFEST_SHA256 = "943717472518b917175312bd4ada9e12660d31d3ebf0bf7afd5672ab40442
 FOLDS = ("target_44b6", "target_6bba")
 MINIMUM_POOLED_AP = 0.55
 MINIMUM_EMBRYO_AP = 0.40
+REFERENCE_MODEL_SHA256 = (
+    "4f2d0d4b6db1851543fd0652c7d5d245fad91f3c8a37ea1054501fee357042dc"
+)
+REFERENCE_SELECTION_AP = 0.5659425288793085
+MINIMUM_INDIVIDUAL_AP_GAIN = 0.01
 MINIMUM_ENSEMBLE_AP_GAIN = 0.01
 MINIMUM_ENSEMBLE_EMBRYO_AP = 0.45
 
@@ -129,6 +134,14 @@ def individual_admitted(
         and frozen is not None
         and int(frozen["fp"]) == 0
         and int(frozen["tp"]) >= 2
+    )
+
+
+def stronger_than_reference(candidate: dict[str, Any]) -> bool:
+    return bool(
+        candidate.get("status") == "admitted"
+        and float(candidate["selection"]["average_precision"])
+        >= REFERENCE_SELECTION_AP + MINIMUM_INDIVIDUAL_AP_GAIN
     )
 
 
@@ -258,8 +271,31 @@ def main() -> None:
             del model, raw_scores
             torch.cuda.empty_cache()
 
+    stronger_individuals = [
+        {
+            "seed": int(row["seed"]),
+            "fold": str(row["fold"]),
+            "model_sha256": str(row["model_sha256"]),
+            "selection_average_precision": float(
+                row["selection"]["average_precision"]
+            ),
+            "selection_gain_vs_reference": float(
+                row["selection"]["average_precision"]
+            )
+            - REFERENCE_SELECTION_AP,
+        }
+        for row in candidates
+        if stronger_than_reference(row)
+    ]
+    stronger_individuals.sort(
+        key=lambda row: (
+            -float(row["selection_average_precision"]),
+            int(row["seed"]),
+            str(row["fold"]),
+        )
+    )
     ensemble = None
-    eligible = False
+    ensemble_eligible = False
     if len(admitted_scores) >= 2:
         scores = torch.stack(admitted_scores).mean(dim=0)
         pooled = threshold_metrics(selection_targets, scores)
@@ -273,7 +309,7 @@ def main() -> None:
             for row in candidates
             if row.get("status") == "admitted"
         )
-        eligible = bool(
+        ensemble_eligible = bool(
             float(pooled["average_precision"])
             >= best_individual_ap + MINIMUM_ENSEMBLE_AP_GAIN
             and all(
@@ -301,11 +337,16 @@ def main() -> None:
             "absolute_threshold_authorized": False,
         }
 
+    development_eligible = bool(stronger_individuals or ensemble_eligible)
+    if ensemble_eligible:
+        status = "ensemble_eligible_for_development_probe"
+    elif stronger_individuals:
+        status = "stronger_individuals_eligible_for_development_probe"
+    else:
+        status = "rejected_at_selection"
     payload = {
         "schema_version": 1,
-        "status": (
-            "eligible_for_development_probe" if eligible else "rejected_at_selection"
-        ),
+        "status": status,
         "run_id": RUN_ID,
         "gpu_name": gpu_name,
         "sweep_terminal_sha256": sha256_file(sweep_terminal_path),
@@ -318,6 +359,9 @@ def main() -> None:
             "minimum_pooled_average_precision": MINIMUM_POOLED_AP,
             "minimum_each_embryo_average_precision": MINIMUM_EMBRYO_AP,
             "minimum_zero_false_positive_true_positives": 2,
+            "reference_model_sha256": REFERENCE_MODEL_SHA256,
+            "reference_selection_average_precision": REFERENCE_SELECTION_AP,
+            "minimum_gain_vs_reference_for_development_probe": MINIMUM_INDIVIDUAL_AP_GAIN,
         },
         "ensemble_admission": {
             "minimum_average_precision_gain_vs_best_individual": MINIMUM_ENSEMBLE_AP_GAIN,
@@ -326,7 +370,9 @@ def main() -> None:
             "equal_rank_policy_precommitted": True,
         },
         "candidates": candidates,
+        "stronger_individuals": stronger_individuals,
         "ensemble": ensemble,
+        "ensemble_eligible_for_development_probe": ensemble_eligible,
         "competition_train_data_read": True,
         "competition_test_data_read": False,
         "final_probe_opened": False,
@@ -335,11 +381,11 @@ def main() -> None:
         "public_leaderboard_used_for_selection": False,
         "submission_created": False,
         "authorized_for_submission": False,
-        "authorized_for_development_probe": eligible,
+        "authorized_for_development_probe": development_eligible,
     }
     atomic_json(args.output, payload)
     print(json.dumps(payload, indent=2, sort_keys=True), flush=True)
-    if not eligible:
+    if not development_eligible:
         raise SystemExit(2)
 
 
