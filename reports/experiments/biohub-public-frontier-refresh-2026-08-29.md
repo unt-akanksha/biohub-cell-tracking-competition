@@ -590,3 +590,30 @@ kernel version. The launch layer itself cannot submit. A scientific rejection
 therefore creates neither a dataset nor a kernel, while a technically complete
 but weak notebook is still stopped by the proxy and true-division promotion
 gates before the exactly-once submitter can run.
+
+## Candidate-aligned relational division lane
+
+The v2 hard-negative experiment was not repeated: its two 46.4M deep models
+had already been rejected at selection. Instead, a new local simulator uses
+all 199 hash-verified official train GEFFs to formulate the exact additive
+decision made at inference. A positive example retains one true daughter and
+proposes the other; hard negatives pair the same parent/retained-daughter
+context with nearby non-child proposals. Parent, retained-child, and proposed-
+child centers share the same `t-1,t,t+1` temporal window, and the downstream
+model contract is invariant to daughter order. The deployed geometry rule is
+still frozen at `>=3`; a broader distance-valid curriculum is retained for
+representation learning and each row records whether it is inference-
+eligible.
+
+The deterministic movie-disjoint inventory contains 3,013 relational pairs
+from 146 non-probe movies: 134 true division pairs and 2,879 candidate-specific
+hard negatives. Of these, 55 positives and 165 negatives satisfy the final
+geometry gate. Inference-eligible negatives are priority-retained before
+broader curriculum negatives, preventing the rare 44b6 cases from being
+silently removed by the per-movie cap. Optimization, selection, and sealed
+audit roles each contain both classes for both embryos; the four complete-
+movie final probes remain excluded. Inventory SHA-256 is
+`94150632f5a80b2ef48a39743a425cbe1b8e57b1c131c19ef0bde3d97d1c783e`.
+Five focused tests cover positive/distractor construction, distance rejection,
+disjoint role allocation, negative-only role supplementation, and eligible-
+negative retention.
