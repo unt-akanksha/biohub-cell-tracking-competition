@@ -37,6 +37,9 @@ RUN_ID = "competition-real-division-seed-ensemble-v1"
 SWEEP_RUN_ID = "competition-real-division-seed-sweep-v1"
 TRAIN_RUN_ID = "competition-real-division-gate-v1"
 MANIFEST_SHA256 = "943717472518b917175312bd4ada9e12660d31d3ebf0bf7afd5672ab40442e1e"
+TRAINING_SOURCE_SHA256 = (
+    "491d0f095e7c4faa356c266fbbb5bc753ed278d6bdbae1d971bfa73c84da5538"
+)
 FOLDS = ("target_44b6", "target_6bba")
 MINIMUM_POOLED_AP = 0.55
 MINIMUM_EMBRYO_AP = 0.40
@@ -226,6 +229,9 @@ def main() -> None:
     sweep_terminal_path = args.sweep_root / "seed_sweep_terminal.json"
     seeds = validate_sweep_terminal(json.loads(sweep_terminal_path.read_text()))
     validate_reference_terminal(json.loads(args.reference_terminal.read_text()))
+    training_source = Path(__file__).with_name("train_real_division_gate.py")
+    if sha256_file(training_source) != TRAINING_SOURCE_SHA256:
+        raise ValueError("overnight training source changed")
     manifest_path = args.data_root / "real_division_patch_manifest.json"
     if sha256_file(manifest_path) != MANIFEST_SHA256:
         raise ValueError("real-division manifest changed")
@@ -383,6 +389,8 @@ def main() -> None:
         "run_id": RUN_ID,
         "gpu_name": gpu_name,
         "sweep_terminal_sha256": sha256_file(sweep_terminal_path),
+        "training_source_sha256": TRAINING_SOURCE_SHA256,
+        "evaluation_source_sha256": sha256_file(Path(__file__)),
         "reference_terminal_sha256": sha256_file(args.reference_terminal),
         "manifest_sha256": MANIFEST_SHA256,
         "candidate_model_count": sum(
