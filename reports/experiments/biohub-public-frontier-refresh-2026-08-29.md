@@ -430,6 +430,15 @@ Launch and admission code are committed as `4cbc0f0`, `aa74973`, and
 are both active; the observed throughput projects completion near 06:00-07:00
 America/Chicago.
 
+The first durable worker checkpoint, seed `205043` / `target_44b6`, completed
+all 50,000 steps in 1,708.51 seconds and retained step 12,000. It improved its
+initial AP from `0.243307` to `0.468185` and recovered 4 of 31 positives before
+the first false positive, but it remains below the `0.55` independent-member
+floor and is therefore rejected from the ensemble. Checkpoint SHA-256 is
+`3c8dd8c2dc7d989abbdc7b995a52c1c00bed86afd7f04b8d74b3e965474c4371`.
+The paired `target_6bba` worker continues; no probe or submission evidence has
+been opened by this sweep.
+
 The current primary-method refresh supports this conservative admission
 policy. The official Trackastra project remains the strongest directly
 relevant general-purpose learned linker and now advertises an optional
