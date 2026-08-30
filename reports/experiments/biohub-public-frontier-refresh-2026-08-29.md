@@ -276,3 +276,54 @@ calibration does not. The next lane must precommit a movie/frame-scale-robust
 decision rule using selection data only and validate it with grouped held-out
 evidence. The opened complete-movie probe will not be presented as untouched
 evidence for that new policy.
+
+## Hard-negative expansion outcome
+
+The next CPU extractor expanded the real-domain inventory to 2,768 rows in
+306 hash-verified shards: 146 division positives, 2,622 controls, and 160
+explicit no-division frames. The 67,056,711-byte archive SHA-256 is
+`b148a16eef851380c82185b70209e581ac3f7f6c2c2a22362747a0b6d144a605`;
+the manifest SHA-256 is
+`bfa974f7c5cfa7b2271b7f65128ac9896d458b3e1af150efb238cc5937a4d251`.
+The audit role remained sealed while two independently initialized 46.4M
+models trained for 4,000 steps each on the Antelume A10G.
+
+The expanded deep run was rejected at selection: target-fold APs were
+`0.40855` and `0.47263`, below the pooled and per-embryo gates. An
+embryo-specific calibration did not rescue the `6bba` fold. The audit was
+therefore never opened for either deep policy. A separate morphology-v2 run
+passed selection (`AP=0.699484`, 5 TP before the first FP), then failed its
+single audit opening (`AP=0.404859`) and selected zero events after the same
+absolute-scale shift. These outcomes strengthen the conclusion that adding
+hard negatives alone does not solve probability calibration across movies.
+
+## Scale-invariant ranked consensus
+
+A threshold-free rule was evaluated as a development experiment on the four
+complete-movie public-control graphs. Candidates first pass the fixed
+biological geometry floor of `3.0`. Within each movie, the eligible parent
+ranked first by the independently trained Antelume deep gate must be the same
+parent ranked first by the independently trained CPU morphology ensemble. At
+most one parent-free edge may be added. No probability or logit threshold,
+leaderboard result, node change, coordinate change, or edge reassignment is
+used.
+
+The two voters are individually useful on the complete-movie probe: deep AP is
+`0.632479` with safe-event frame ranks `1/26`, `1/2`, and `3/84`; morphology
+AP is `1.0`, with all three safe positives ranked above every control. Their
+rank agreement recovered all three safe missing divisions with `3 TP / 0 FP`.
+Adjusted edge Jaccard improved from `0.919680404` to `0.920941968`; division
+Jaccard improved from `0.0` to `0.6`. The development artifact is
+`.biohub/results/competition-ranked-consensus-division-development-v1.json`.
+
+This result authorizes one full candidate evaluation, not direct submission.
+The private runtime dataset binds both model hashes, every project source file,
+the development evidence, and the exact scikit-learn 1.9 CPython 3.12 wheel.
+Dataset manifest SHA-256 is
+`6e4803ba11cda000c0facf691f86ac2f1c98e9aa8fe9e4aacc720f0c44163aca`.
+The attributed EMA candidate is Kaggle kernel
+`indarkarhana/biohub-ema-ranked-consensus-candidate-v1`, version 1. It uses two
+T4 GPUs, has internet disabled, and contains no competition submission call.
+Promotion still requires successful completion, a distinct output hash, no
+graph mutations beyond the agreed edges, preserved edge quality, improved
+division quality, and a clean runtime receipt.
