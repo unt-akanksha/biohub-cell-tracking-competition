@@ -4,9 +4,12 @@ import numpy as np
 import pytest
 
 from research.score_competition_division_probe import (
+    BIOLOGICAL_GEOMETRY_MINIMUM,
     average_precision,
+    decision_metrics,
     geometry_division_score,
     ranking_metrics,
+    validate_real_training_terminal,
 )
 
 
@@ -50,3 +53,63 @@ def test_geometry_score_rewards_balanced_opposed_branches() -> None:
     }
 
     assert geometry_division_score(balanced) > geometry_division_score(ordinary)
+
+
+def test_conjunctive_policy_requires_model_and_biological_geometry() -> None:
+    rows = [
+        {
+            "stem": "a",
+            "timepoint": 3,
+            "parent_id": 1,
+            "safe_recovery_positive": True,
+            "ensemble_logit": 2.0,
+            "geometry_division_score": 4.0,
+        },
+        {
+            "stem": "a",
+            "timepoint": 3,
+            "parent_id": 2,
+            "safe_recovery_positive": False,
+            "ensemble_logit": 3.0,
+            "geometry_division_score": 1.0,
+        },
+    ]
+
+    metrics = decision_metrics(
+        rows,
+        model_threshold=1.5,
+        geometry_minimum=BIOLOGICAL_GEOMETRY_MINIMUM,
+    )
+
+    assert metrics["tp"] == 1
+    assert metrics["fp"] == 0
+    assert metrics["precision"] == 1.0
+
+
+def test_real_training_terminal_binds_frozen_models_and_threshold() -> None:
+    hashes = ["a" * 64, "b" * 64]
+    terminal = {
+        "schema_version": 1,
+        "status": "accepted_at_selection",
+        "run_id": "competition-real-division-gate-v1",
+        "selection_gate_passed": True,
+        "final_probe_opened": False,
+        "checkpoint_frozen_before_final_probe": True,
+        "competition_train_data_read": True,
+        "competition_test_data_read": False,
+        "public_code_copied": False,
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+        "authorized_for_final_probe": True,
+        "frozen_division_logit_threshold": 1.25,
+        "folds": {
+            "target_44b6": {"model_sha256": hashes[0]},
+            "target_6bba": {"model_sha256": hashes[1]},
+        },
+    }
+
+    assert validate_real_training_terminal(terminal, hashes) == 1.25
+    terminal["final_probe_opened"] = True
+    with pytest.raises(ValueError):
+        validate_real_training_terminal(terminal, hashes)

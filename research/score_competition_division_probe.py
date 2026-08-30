@@ -32,6 +32,7 @@ from research.temporal_contrastive.train_focused_division_gate import division_l
 
 RUN_ID = "competition-train-focused-division-transfer-probe-v1"
 VOXEL_SIZE_ZYX_UM = (1.625, 0.40625, 0.40625)
+BIOLOGICAL_GEOMETRY_MINIMUM = 3.0
 
 
 def sha256_file(path: Path) -> str:
@@ -171,6 +172,80 @@ def ranking_metrics(rows: list[dict[str, Any]], score_key: str) -> dict[str, Any
     }
 
 
+def decision_metrics(
+    rows: list[dict[str, Any]],
+    *,
+    model_threshold: float,
+    geometry_minimum: float | None,
+) -> dict[str, Any]:
+    selected = [
+        row
+        for row in rows
+        if float(row["ensemble_logit"]) >= model_threshold
+        and (
+            geometry_minimum is None
+            or float(row["geometry_division_score"]) >= geometry_minimum
+        )
+    ]
+    tp = sum(bool(row["safe_recovery_positive"]) for row in selected)
+    fp = len(selected) - tp
+    positives = sum(bool(row["safe_recovery_positive"]) for row in rows)
+    fn = positives - tp
+    return {
+        "model_threshold": model_threshold,
+        "geometry_minimum": geometry_minimum,
+        "selected": len(selected),
+        "tp": tp,
+        "fp": fp,
+        "fn": fn,
+        "precision": float(tp / len(selected)) if selected else 0.0,
+        "recall": float(tp / positives),
+        "jaccard": float(tp / (tp + fp + fn)) if tp + fp + fn else 0.0,
+        "selected_rows": [
+            {
+                "stem": row["stem"],
+                "timepoint": row["timepoint"],
+                "parent_id": row["parent_id"],
+                "safe_recovery_positive": row["safe_recovery_positive"],
+                "ensemble_logit": row["ensemble_logit"],
+                "geometry_division_score": row["geometry_division_score"],
+            }
+            for row in selected
+        ],
+    }
+
+
+def validate_real_training_terminal(
+    terminal: dict[str, Any], model_hashes: list[str]
+) -> float:
+    folds = terminal.get("folds", {})
+    expected_hashes = [
+        folds.get(fold, {}).get("model_sha256")
+        for fold in ("target_44b6", "target_6bba")
+    ]
+    threshold = terminal.get("frozen_division_logit_threshold")
+    if not (
+        terminal.get("schema_version") == 1
+        and terminal.get("status") == "accepted_at_selection"
+        and terminal.get("run_id") == "competition-real-division-gate-v1"
+        and terminal.get("selection_gate_passed") is True
+        and terminal.get("final_probe_opened") is False
+        and terminal.get("checkpoint_frozen_before_final_probe") is True
+        and terminal.get("competition_train_data_read") is True
+        and terminal.get("competition_test_data_read") is False
+        and terminal.get("public_code_copied") is False
+        and terminal.get("public_predictions_copied") is False
+        and terminal.get("public_leaderboard_used_for_selection") is False
+        and terminal.get("submission_created") is False
+        and terminal.get("authorized_for_final_probe") is True
+        and isinstance(threshold, (int, float))
+        and np.isfinite(threshold)
+        and expected_hashes == model_hashes
+    ):
+        raise ValueError("real division training terminal is ineligible")
+    return float(threshold)
+
+
 @torch.inference_mode()
 def score_patches(
     models: list[torch.nn.Module],
@@ -295,6 +370,7 @@ def main() -> None:
     parser.add_argument("--cache-root", type=Path, required=True)
     parser.add_argument("--model-path", type=Path, action="append", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--training-terminal", type=Path)
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--required-gpu-name", default="A10G")
     args = parser.parse_args()
@@ -332,6 +408,42 @@ def main() -> None:
             "geometry_division_score",
         )
     }
+    policy_evaluation = None
+    authorized_for_competition_graph_evaluation = False
+    if args.training_terminal is not None:
+        terminal = json.loads(args.training_terminal.read_text(encoding="utf-8"))
+        model_threshold = validate_real_training_terminal(terminal, model_hashes)
+        threshold_only = decision_metrics(
+            rows, model_threshold=model_threshold, geometry_minimum=None
+        )
+        conjunctive = decision_metrics(
+            rows,
+            model_threshold=model_threshold,
+            geometry_minimum=BIOLOGICAL_GEOMETRY_MINIMUM,
+        )
+        authorized_for_competition_graph_evaluation = bool(
+            conjunctive["tp"] >= 2
+            and conjunctive["precision"] >= 0.75
+            and conjunctive["jaccard"] > 0.0
+        )
+        policy_evaluation = {
+            "status": (
+                "accepted" if authorized_for_competition_graph_evaluation else "rejected"
+            ),
+            "training_terminal_sha256": sha256_file(args.training_terminal),
+            "model_threshold_frozen_before_probe": model_threshold,
+            "biological_geometry_minimum": BIOLOGICAL_GEOMETRY_MINIMUM,
+            "geometry_policy": (
+                "fixed branch symmetry score requires balanced opposing daughters "
+                "with low midpoint drift"
+            ),
+            "threshold_only": threshold_only,
+            "conjunctive": conjunctive,
+            "authorized_for_competition_graph_evaluation": (
+                authorized_for_competition_graph_evaluation
+            ),
+            "authorized_for_submission": False,
+        }
     result = {
         "schema_version": 1,
         "status": "diagnostic_complete",
@@ -339,12 +451,16 @@ def main() -> None:
         "gpu_name": gpu_name,
         "model_sha256": model_hashes,
         "metrics": metrics,
+        "policy_evaluation": policy_evaluation,
         "rows": rows,
         "competition_train_data_read": True,
         "competition_test_data_read": False,
         "public_leaderboard_used_for_selection": False,
         "threshold_selected": False,
         "submission_created": False,
+        "authorized_for_competition_graph_evaluation": (
+            authorized_for_competition_graph_evaluation
+        ),
         "authorized_for_submission": False,
     }
     atomic_json(args.output, result)
