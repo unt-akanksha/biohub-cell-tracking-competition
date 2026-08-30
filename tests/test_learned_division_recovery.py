@@ -91,3 +91,43 @@ def test_recovery_never_steals_a_child_with_an_existing_parent() -> None:
 
     assert output == edges
     assert stats["added_edges"] == 0
+
+
+def test_biological_geometry_gate_rejects_same_direction_branch() -> None:
+    nodes = dict([node(1, 0, 0.0), node(2, 1, 2.0), node(3, 1, 3.0)])
+    edges = [{"source_id": 1, "target_id": 2}]
+
+    output, stats = apply_learned_division_recovery(
+        nodes,
+        edges,
+        {1: 5.0},
+        DivisionRecoveryPolicy(
+            division_logit_threshold=1.0,
+            biological_geometry_minimum=3.0,
+        ),
+    )
+
+    assert output == edges
+    assert stats["geometry_rejected"] == 1
+    assert stats["added_edges"] == 0
+
+
+def test_biological_geometry_gate_accepts_balanced_opposing_branch() -> None:
+    nodes = dict([node(1, 0, 10.0), node(2, 1, 20.0), node(3, 1, 0.0)])
+    edges = [{"source_id": 1, "target_id": 2}]
+
+    output, stats = apply_learned_division_recovery(
+        nodes,
+        edges,
+        {1: 5.0},
+        DivisionRecoveryPolicy(
+            division_logit_threshold=1.0,
+            biological_geometry_minimum=3.0,
+            maximum_added_node_fraction=0.01,
+        ),
+    )
+
+    assert output[-1]["source_id"] == 1
+    assert output[-1]["target_id"] == 3
+    assert output[-1]["biological_geometry_score"] > 3.0
+    assert stats["geometry_rejected"] == 0
