@@ -25,7 +25,11 @@ $priorDeployTerminal = Join-Path $RepositoryRoot ".biohub/cache/antelume-relatio
 $archivePath = Join-Path $RepositoryRoot ".biohub/cache/graph-context-relational-v1/biohub_graph_context_relational_patches_v1.tar.gz"
 $manifestPath = Join-Path $RepositoryRoot ".biohub/cache/graph-context-relational-v1/biohub_graph_context_relational_patches_v1/graph_context_relational_patch_manifest.json"
 $model = Join-Path $RepositoryRoot "research/temporal_contrastive/graph_context_division_model.py"
+$inference = Join-Path $RepositoryRoot "research/temporal_contrastive/graph_context_division_inference.py"
+$probeScorer = Join-Path $RepositoryRoot "research/temporal_contrastive/score_graph_context_division_development_probe.py"
 $trainer = Join-Path $RepositoryRoot "research/temporal_contrastive/train_graph_context_division_sweep.py"
+$developmentInventory = Join-Path $RepositoryRoot ".biohub/results/competition-graph-context-development-inventory-v1.json"
+$developmentInventorySha256 = "c8883e77abcf76c5a837c5fd0b21afdfefb2e51cb8e550e3a81f69d70562f311"
 $runnerTemplate = Join-Path $RepositoryRoot "scripts/run-antelume-graph-context-division-sweep-v1.sh"
 $renderedRunner = Join-Path $stateRoot "run-antelume-graph-context-division-sweep-v1.sh"
 $terminalPath = Join-Path $stateRoot "deployment-terminal.json"
@@ -64,7 +68,7 @@ function Invoke-Checked([string]$Program, [string[]]$Arguments) {
 }
 
 New-Item -ItemType Directory -Path $stateRoot -Force | Out-Null
-foreach ($required in @($archivePath, $manifestPath, $model, $trainer, $runnerTemplate)) {
+foreach ($required in @($archivePath, $manifestPath, $model, $inference, $probeScorer, $trainer, $developmentInventory, $runnerTemplate)) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
         throw "Graph-context deployment input is missing: $required"
     }
@@ -74,6 +78,9 @@ if ((Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvar
 }
 if ((Get-FileHash -Algorithm SHA256 -LiteralPath $manifestPath).Hash.ToLowerInvariant() -ne $manifestSha256) {
     throw "Graph-context manifest changed"
+}
+if ((Get-FileHash -Algorithm SHA256 -LiteralPath $developmentInventory).Hash.ToLowerInvariant() -ne $developmentInventorySha256) {
+    throw "Graph-context development inventory changed"
 }
 $manifest = Get-Content -Raw -LiteralPath $manifestPath | ConvertFrom-Json
 if (
@@ -99,7 +106,7 @@ if ($runnerText -match "__GRAPH_CONTEXT_(ARCHIVE|MANIFEST)_SHA256__") {
     throw "Graph-context runner hash binding failed"
 }
 Set-Content -LiteralPath $renderedRunner -Encoding utf8 -Value $runnerText
-& python -m py_compile $model $trainer
+& python -m py_compile $model $inference $probeScorer $trainer
 if ($LASTEXITCODE -ne 0) { throw "Graph-context Python validation failed" }
 Push-Location -LiteralPath $RepositoryRoot
 try {
@@ -160,17 +167,19 @@ try {
 
     $scpBase = @("-i", $SshKey, "-o", "StrictHostKeyChecking=no")
     Publish-Key
-    Invoke-Checked "scp" ($scpBase + @($model, $trainer, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/research/temporal_contrastive/"))
+    Invoke-Checked "scp" ($scpBase + @($model, $inference, $probeScorer, $trainer, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/research/temporal_contrastive/"))
     Publish-Key
     Invoke-Checked "scp" ($scpBase + @($renderedRunner, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/scripts/run-antelume-graph-context-division-sweep-v1.sh"))
     Publish-Key
     Invoke-Checked "scp" ($scpBase + @($archivePath, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub-graph-context-relational-patches-v1.tar.gz"))
     Publish-Key
+    Invoke-Checked "scp" ($scpBase + @($developmentInventory, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub-graph-context-development-inventory-v1.json"))
+    Publish-Key
     $remoteCommand = @'
 cd /home/ubuntu/biohub
 chmod +x scripts/run-antelume-graph-context-division-sweep-v1.sh
 bash -n scripts/run-antelume-graph-context-division-sweep-v1.sh
-/home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/graph_context_division_model.py research/temporal_contrastive/train_graph_context_division_sweep.py
+/home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/graph_context_division_model.py research/temporal_contrastive/graph_context_division_inference.py research/temporal_contrastive/score_graph_context_division_development_probe.py research/temporal_contrastive/train_graph_context_division_sweep.py
 test ! -e /home/ubuntu/biohub-results/competition-graph-context-division-sweep-v1
 nohup bash scripts/run-antelume-graph-context-division-sweep-v1.sh >/home/ubuntu/biohub-logs/graph-context-division-sweep-controller-v1.log 2>&1 < /dev/null &
 echo GRAPH_CONTEXT_CONTROLLER_PID=$!
@@ -189,6 +198,7 @@ echo GRAPH_CONTEXT_CONTROLLER_PID=$!
         waits_for_gpu_idle = $true
         ensemble_members_precommitted_before_audit = $true
         model_subset_searched_on_audit = $false
+        development_probe_runs_only_after_audit_acceptance = $true
         final_probe_opened = $false
         remote_mutation_performed = $true
         authorized_for_submission = $false

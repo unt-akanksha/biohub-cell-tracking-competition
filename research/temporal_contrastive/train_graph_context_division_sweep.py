@@ -680,7 +680,7 @@ def main() -> None:
     }
     atomic_json(args.output_root / "graph_context_division_sweep_terminal.json", aggregate)
     print(json.dumps(aggregate, indent=2, sort_keys=True), flush=True)
-    if not independently_strong:
+    if not policy_audit_passed:
         raise SystemExit(2)
 
 

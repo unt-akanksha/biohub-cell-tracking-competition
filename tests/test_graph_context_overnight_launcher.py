@@ -14,6 +14,9 @@ def test_remote_runner_is_large_sequential_and_antelume_bound() -> None:
     assert source.count('--initial-model "$initial_') == 2
     assert "graph_context_division_model.py" in source
     assert "train_graph_context_division_sweep.py" in source
+    assert "score_graph_context_division_development_probe.py" in source
+    assert "biohub-graph-context-development-inventory-v1.json" in source
+    assert 'if test "$status" -eq 0' in source
     assert "prior_terminal=" in source
     assert 'while ! test -f "$prior_terminal"' in source
     assert "while nvidia-smi" in source
@@ -36,6 +39,7 @@ def test_controller_waits_for_relational_deploy_and_credentials() -> None:
     assert "steps_per_model = 20000" in source
     assert "ensemble_members_precommitted_before_audit = $true" in source
     assert "model_subset_searched_on_audit = $false" in source
+    assert "development_probe_runs_only_after_audit_acceptance = $true" in source
     assert "competition_submission_performed = $false" in source
     assert "kaggle competitions submit" not in source
 

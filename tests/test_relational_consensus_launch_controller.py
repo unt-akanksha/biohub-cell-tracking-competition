@@ -35,7 +35,7 @@ def test_launch_publishes_private_runtime_and_hands_off_exact_version() -> None:
     assert '"-CandidateKernelRef", $kernelRef' in source
     assert '"-VerifierScript", $verifier' in source
     assert '"-SubmitterScript", $submitter' in source
-    assert '"-StatePrefix", "relational-consensus-candidate"' in source
+    assert '"-StatePrefix", $StatePrefix' in source
     assert ") + $promotionArguments" in source
     assert "-ArgumentList $promotionProcessArguments" in source
     assert "kaggle competitions submit" not in source

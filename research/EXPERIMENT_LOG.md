@@ -102,8 +102,37 @@ https://arxiv.org/abs/2405.15700
 - Selection and audit gates match the relational experiment. Ensemble members
   are frozen before audit, every deployment member must pass independently, and
   deployment uses ranks rather than an absolute threshold.
-- Deployment controller PID at start: 344. It is waiting on the relational
-  deployment event and refreshed AWS credentials.
+- Deployment controller PID after development-scorer wiring: 30028. It waits on
+  the relational deployment event and refreshed AWS credentials.
+- Harvest controller PID: 43984. It opens one authenticated transfer only after
+  deployment and verifies the complete hash-bound archive before extraction.
+- Frozen development inventory: 225 rows, 9 inference-eligible candidates, 3
+  positives, and 9,666 valid context tokens; SHA-256
+  `c8883e77abcf76c5a837c5fd0b21afdfefb2e51cb8e550e3a81f69d70562f311`.
+- Development/runtime controller PID after tested runtime-packaging refresh:
+  48016.
+
+### Candidate chain
+
+- A remote exit code of zero now requires the precommitted deployment policy to
+  pass sealed audit. An independently strong member alone is insufficient.
+- Frozen development acceptance requires the graph-context and independent
+  morphology rankings to select exactly the same three events, all three true
+  positives and zero false positives, with no regression from the pinned EMA
+  development baseline.
+- A positive development terminal packages a private, hash-bound runtime. It
+  still has no submission authority.
+- The candidate notebook requires exactly two T4 GPUs, partitions independently
+  strong 74.7M members across both devices, averages member ranks without an
+  absolute threshold, and permits at most one additive edge per movie after
+  exact top-rank agreement with morphology.
+- Graph-context launch controller PID: 19764. It waits for the scientific
+  runtime event, uploads the private dataset, launches the exact private kernel
+  version, and hands it to the external promotion controller.
+- The external promotion gate remains: proxy gain at least 0.005, increased
+  division true positives and Jaccard, adjusted-edge regression at most 0.001,
+  no public-output hash match, and exact additive/no-reassignment invariants.
+- Relevant graph/relational controller and candidate tests: 31 passed.
 
 This model is an experiment, not a candidate. It has no submission authority
 until it passes movie-disjoint selection, sealed audit, frozen development, and
