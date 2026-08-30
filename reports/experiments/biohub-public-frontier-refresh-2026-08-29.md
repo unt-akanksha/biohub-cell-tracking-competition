@@ -667,10 +667,31 @@ CPU extractor, downloads only its tar archive, streams every shard through
 size and SHA-256 verification without extracting locally, and then waits for a
 valid AWS session. After upload it queues server-side behind the current seed
 sweep and its independently gated development probe, additionally requiring
-the A10G to have no active compute process before it starts. The local
-controller is active as process `42356`; the current AWS profile still reports
-an expired token, so no new remote mutation has yet been claimed. Twenty
+the A10G to have no active compute process before it starts. The initial local
+controller entered this boundary as process `42356`; the current AWS profile
+still reports an expired token, so no new remote mutation has yet been claimed. Twenty
 focused model, trainer, archive-verification, extractor, inventory, and
 overnight-launch tests pass, along with shell and PowerShell syntax validation.
 The run contains no competition submit command and cannot authorize a
 submission directly.
+
+The extractor completed and its 218,460,462-byte archive was verified locally
+without extraction. It contains 2,274 hash-bound shards and exactly reproduces
+the 3,013-row inventory; archive SHA-256 is
+`66a822bce0c60d06f6a2b60ada313f0d4d55062de1f84fb60bded4ae456266c2`
+and manifest SHA-256 is
+`3ba3f95f5e1cd22044c4022d94bda71280941877ec214130ab98c9e0944f5ab3`.
+Kaggle returned HTTP 429 only after writing the complete archive during the
+first controller attempt. That failure evidence was preserved, the archive
+was independently verified, and the controller was repaired with bounded 429
+backoff plus verified-download reuse. The restarted deployment controller is
+process `45960` and is waiting on AWS credentials.
+
+A separate harvest controller, process `22300`, now waits for successful
+deployment and then opens one keepalive SSH session. The remote side waits for
+the completed result archive, verifies its companion SHA-256, and streams it
+back once. The local verifier rejects links, path escapes, duplicates,
+unmanifested files, checkpoint/hash drift, incomplete eight-member terminals,
+and any evidence that opens the final probe or competition test. Thus the
+overnight run no longer depends on a valid AWS token still existing at its
+completion time.

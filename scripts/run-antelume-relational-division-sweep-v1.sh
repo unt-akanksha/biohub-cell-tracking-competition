@@ -83,7 +83,10 @@ CUDA_VISIBLE_DEVICES=0 "$python_bin" \
 status=$?
 set -e
 printf '%s\n' "$status" >"$output_root/training.exit-code"
-find "$output_root" -type f -print0 | sort -z | xargs -0 sha256sum \
+cd /home/ubuntu/biohub-results
+find competition-relational-division-sweep-v1 -type f ! -name SHA256SUMS -print0 \
+  | sort -z \
+  | xargs -0 sha256sum \
   > /home/ubuntu/biohub-relational-division-sweep-v1.SHA256SUMS.partial
 mv /home/ubuntu/biohub-relational-division-sweep-v1.SHA256SUMS.partial \
   "$output_root/SHA256SUMS"

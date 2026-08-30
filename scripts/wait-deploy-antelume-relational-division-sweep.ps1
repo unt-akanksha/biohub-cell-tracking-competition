@@ -99,12 +99,28 @@ try {
     }
     if (-not $kernelComplete) { throw "Timed out waiting for relational extraction" }
     New-Item -ItemType Directory -Path $downloadRoot -Force | Out-Null
-    Invoke-Checked "kaggle" @(
-        "kernels", "output", $kernelRef,
-        "-p", $downloadRoot,
-        "--file-pattern", "biohub_relational_division_patches_v3.tar.gz",
-        "--force"
-    )
+    $downloaded = Test-Path -LiteralPath $archivePath -PathType Leaf
+    if ($downloaded) { Append-Log "reusing_existing_relational_archive path=$archivePath" }
+    for ($retry = 1; -not $downloaded -and $retry -le 12; $retry++) {
+        $savedPreference = $ErrorActionPreference
+        $ErrorActionPreference = "Continue"
+        $downloadOutput = (& kaggle kernels output $kernelRef `
+            -p $downloadRoot `
+            --file-pattern "biohub_relational_division_patches_v3.tar.gz" `
+            --force 2>&1) -join "`n"
+        $downloadExitCode = $LASTEXITCODE
+        $ErrorActionPreference = $savedPreference
+        Append-Log "kaggle_output retry=$retry exit=$downloadExitCode output=$downloadOutput"
+        if ($downloadExitCode -eq 0) {
+            $downloaded = $true
+            break
+        }
+        if ($downloadOutput -notmatch "429|Too Many Requests") {
+            throw "Relational output download failed: $downloadOutput"
+        }
+        if ($retry -lt 12) { Start-Sleep -Seconds ([Math]::Min(300, 30 * $retry)) }
+    }
+    if (-not $downloaded) { throw "Kaggle continued throttling relational output download" }
     if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf)) {
         throw "Relational patch archive was not downloaded"
     }

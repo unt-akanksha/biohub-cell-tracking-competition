@@ -23,8 +23,10 @@ def test_local_controller_waits_for_both_extraction_and_credentials() -> None:
     text = (ROOT / "scripts/wait-deploy-antelume-relational-division-sweep.ps1").read_text()
 
     assert "kaggle kernels status" in text
-    assert "kaggle kernels output" not in text  # argument-array invocation is used
-    assert '"kernels", "output", $kernelRef' in text
+    assert "& kaggle kernels output $kernelRef" in text
+    assert "reusing_existing_relational_archive" in text
+    assert '"429|Too Many Requests"' in text
+    assert "for ($retry = 1; -not $downloaded -and $retry -le 12; $retry++)" in text
     assert "aws sts get-caller-identity" in text
     assert "ec2-instance-connect send-ssh-public-key" in text
     assert "Start-Process" not in text
