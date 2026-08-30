@@ -25,8 +25,14 @@ def test_kernel_is_private_cpu_train_only_extractor() -> None:
     assert metadata["enable_gpu"] is False
     assert metadata["enable_tpu"] is False
     assert metadata["enable_internet"] is False
+    assert metadata["dataset_sources"] == [
+        "indarkarhana/biohub-kaggle-codec-wheels-v1"
+    ]
     assert '"competition_test_data_read": False' in source
     assert "submission.csv" not in source
+    assert patches.NUMCODECS_WHEEL_SHA256 == (
+        "c3a09e22140f2c691f7df26303ff8fa2dadcf26d7d0828398c0bc09b69e5efa3"
+    )
 
 
 def test_movie_examples_use_only_division_frames() -> None:

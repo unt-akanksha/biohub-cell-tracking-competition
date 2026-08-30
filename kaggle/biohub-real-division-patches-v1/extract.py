@@ -4,9 +4,12 @@
 from __future__ import annotations
 
 import hashlib
+import importlib
 import json
 import math
 from pathlib import Path
+import subprocess
+import sys
 import tarfile
 import time
 from typing import Any
@@ -24,6 +27,13 @@ FINAL_PROBE_STEMS = {
     "6bba_062c8d37",
     "6bba_07e24132",
 }
+NUMCODECS_WHEEL = (
+    "numcodecs-0.15.1-cp312-cp312-manylinux_2_17_x86_64."
+    "manylinux2014_x86_64.whl"
+)
+NUMCODECS_WHEEL_SHA256 = (
+    "c3a09e22140f2c691f7df26303ff8fa2dadcf26d7d0828398c0bc09b69e5efa3"
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -41,6 +51,49 @@ def atomic_json(path: Path, payload: dict[str, Any]) -> None:
         json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     temporary.replace(path)
+
+
+def install_numcodecs(input_root: Path, working: Path) -> None:
+    candidates = [
+        input_root / NUMCODECS_WHEEL,
+        input_root
+        / "datasets"
+        / "indarkarhana"
+        / "biohub-kaggle-codec-wheels-v1"
+        / NUMCODECS_WHEEL,
+    ]
+    candidates.extend(input_root.glob(f"*/{NUMCODECS_WHEEL}"))
+    candidates.extend(input_root.glob(f"*/*/{NUMCODECS_WHEEL}"))
+    matches = sorted({path.resolve() for path in candidates if path.is_file()})
+    if len(matches) != 1 or sha256_file(matches[0]) != NUMCODECS_WHEEL_SHA256:
+        raise RuntimeError(
+            {
+                "eligible_numcodecs_wheels": [str(path) for path in matches],
+                "required_sha256": NUMCODECS_WHEEL_SHA256,
+            }
+        )
+    target = working / "numcodecs_site"
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "--disable-pip-version-check",
+            "--no-deps",
+            "--no-index",
+            "--target",
+            str(target),
+            str(matches[0]),
+        ],
+        check=True,
+    )
+    sys.path.insert(0, str(target))
+    importlib.invalidate_caches()
+    import numcodecs
+
+    if numcodecs.__version__ != "0.15.1":
+        raise RuntimeError(f"numcodecs version changed: {numcodecs.__version__}")
 
 
 def stratified_selection_stems(examples_by_stem: dict[str, list[dict[str, Any]]]) -> set[str]:
@@ -355,6 +408,7 @@ def main() -> None:
     started = time.monotonic()
     input_root = Path("/kaggle/input")
     working = Path("/kaggle/working")
+    install_numcodecs(input_root, working)
     train_root = discover_train_root(input_root)
     output_root = working / "biohub_real_division_patches_v1"
     output_root.mkdir(parents=True, exist_ok=False)
