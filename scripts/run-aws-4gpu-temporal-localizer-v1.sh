@@ -80,6 +80,9 @@ for gpu_index in 0 1 2 3; do
     --batch-size 16 \
     --validation-examples 1024 \
     --audit-examples 1024 \
+    --division-validation-examples 512 \
+    --division-audit-examples 512 \
+    --division-critical-per-batch 4 \
     --validation-batch-size 24 \
     --validation-every 1000 \
     --log-every 100 \

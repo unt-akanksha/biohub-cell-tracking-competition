@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-08-28T02:40:05.584509Z",
-  "discussions_audited_at": "2026-08-28T02:40:05.584509Z",
+  "audited_at": "2026-08-30T09:43:17.589808Z",
+  "discussions_audited_at": "2026-08-30T09:43:17.589808Z",
   "discussion_refs": [
     "730160",
     "734604",
@@ -14,7 +14,10 @@
     "737438",
     "737103",
     "737101",
-    "736937"
+    "736937",
+    "735531",
+    "734330",
+    "727154"
   ],
   "notebooks": [
     {
@@ -37,6 +40,38 @@
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no metric exploit: test submission generation is label-free; held-out training labels are accessed only by a post-submission validator with explicit train/test stem exclusion. Completed output has valid indegree/outdegree topology and no sentinel coordinates. The reported public score is not yet reproduced under our account.",
       "reviewed_sha256": "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1",
+      "score_reproduced": false
+    },
+    {
+      "ref": "evgendvorkin/biohub-0-931-lb",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.952 with the pinned 0.940 EMA public lineage. Its bidirectional and secondary-detection settings are a public-lineage configuration comparator, not an independent model candidate; the displayed score is not selection evidence.",
+      "reviewed_sha256": "0515d95b68b1e17f369d5239c929518ce20e6ab2d4af3661ecad1e059bf756d1",
+      "score_reproduced": false
+    },
+    {
+      "ref": "grafael/biohub-ct-0940-ema",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Manual source audit found no known exploit. This is the pinned clean public control lineage used only for attributed baseline inference and frozen validator comparison; no leaderboard value authorizes promotion.",
+      "reviewed_sha256": "3c6e691f476712d8750466a3961e88289b88c5721c7714d84c6159407dac14ba",
+      "score_reproduced": false
+    },
+    {
+      "ref": "notoverkil/biohub-base0931-edgebar040",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.954 with the 0.931 public notebook and 0.924 with the pinned 0.940 EMA lineage. The edge-threshold change is a configuration comparator, not a new model family.",
+      "reviewed_sha256": "b5c06aa91e0f24c86ab23498a5e8dccbcc3d4d317bfdedd48938f1277abb80dc",
+      "score_reproduced": false
+    },
+    {
+      "ref": "aagneye/biohub-detector3d-submission-aug-30",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "Manual notebook and embedded-source audit found no known exploit. It is an independent temporal 3D U-Net detector with four-view Y/X flip TTA, but its private fold-1 checkpoint and displayed result are unverified; detection replacement remains deprioritized because the frozen control audit found only three truly absent nearby predictions.",
+      "reviewed_sha256": "7b592d66017f4831a6dc18cdc9b4630ac6a8c240a66ce47b0b1b7fd411f15c81",
       "score_reproduced": false
     },
     {

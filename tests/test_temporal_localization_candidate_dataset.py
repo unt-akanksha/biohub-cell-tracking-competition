@@ -35,11 +35,20 @@ def result_fixture(root: Path, members: int = 3) -> Path:
             "seed": 41021 + index,
             "selection_gate_passed": True,
             "audit_gate_passed": True,
+            "division_critical_selection_gate_passed": True,
+            "division_critical_audit_gate_passed": True,
+            "serialized_checkpoint_selection_gate_passed": True,
             "checkpoint_frozen_before_audit": True,
             "audit_opened": True,
             "model_sha256": digest,
             "best_selection": {"mean_residual_um": 1.1 + index / 10},
+            "best_selection_division_critical": {
+                "mean_residual_um": 1.0 + index / 10
+            },
             "final_audit": {"mean_residual_um": 1.3 + index / 10},
+            "final_audit_division_critical": {
+                "mean_residual_um": 1.2 + index / 10
+            },
             "competition_data_read": False,
             "public_code_copied": False,
             "public_predictions_copied": False,
@@ -83,6 +92,8 @@ def test_stage_and_verify_three_independently_strong_members(tmp_path: Path) -> 
     policy = json.loads((output / "temporal-localization-consensus-policy.json").read_text())
     assert policy["ensemble_policy"] == "equal_mean_all_synthetic_eligible_members"
     assert policy["maximum_move_fraction"] == 0.1
+    assert policy["minimum_forced_division_critical_fraction"] == 0.25
+    assert policy["division_critical_selection_gate_required"] is True
     assert policy["authorized_for_submission"] is False
 
 
@@ -97,3 +108,13 @@ def test_runtime_verifier_detects_weight_tampering(tmp_path: Path) -> None:
 def test_stage_rejects_fewer_than_three_members(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="requires 3 or 4"):
         stage_dataset(result_fixture(tmp_path / "results", members=2), tmp_path / "runtime")
+
+
+def test_stage_rejects_member_without_serialized_stratum_gate(tmp_path: Path) -> None:
+    results = result_fixture(tmp_path / "results")
+    terminal_path = next(results.glob("gpu_*/member_*/worker_terminal.json"))
+    terminal = json.loads(terminal_path.read_text())
+    terminal["serialized_checkpoint_selection_gate_passed"] = False
+    write_json(terminal_path, terminal)
+    with pytest.raises(ValueError, match="accepted localization member evidence"):
+        stage_dataset(results, tmp_path / "runtime")

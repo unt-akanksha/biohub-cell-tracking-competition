@@ -157,8 +157,10 @@ minority failure mode; coordinate localization is the new primary branch.
 - Schedule: four independent seeds on four AWS A10Gs, 20,000 steps per member,
   equal-weight ensemble only if every included member independently passes the
   selection and sealed-audit gates. Audit subset/weight searches are forbidden.
-- AWS controller PID: 44716 (the initial 27152 controller was safely replaced
-  before launch to add the frozen real-domain development gate). The validated
+- AWS controller PID 44716 was safely stopped before any launch terminal or EC2
+  allocation so the division-critical and exact-serialization gates could be
+  added to the frozen contract (the initial 27152 controller had likewise been
+  replaced before launch to add the real-domain development gate). The validated
   launch target is one temporary
   `g5.12xlarge`; it harvests a SHA-256-verified result archive and auto-stops
   after harvest or after a bounded grace period. At launch time the CLI profile
@@ -188,3 +190,38 @@ minority failure mode; coordinate localization is the new primary branch.
   submission hash distinct from all audited public outputs.
 - Only that external report authorizes a single rate-limit-checked submission.
   Kaggle leaderboard values are not read for selection or promotion.
+
+### 2026-08-30 live research refresh and division-critical gate
+
+- Live snapshot `e1fb78def1c9` retrieved all competition pages, recent topics,
+  quota, and the policy-required 50 scored public notebook sources. Every rules, code-requirements,
+  evaluation, data, description, prize, and timeline fingerprint is unchanged
+  from the 2026-08-28 snapshot. Ten explicit metric-hack notebooks remain
+  excluded.
+- The newly rerun 0.931 notebook is 0.952 normalized code-line Jaccard with the
+  pinned 0.940 EMA control. The new `edgebar040` notebook is 0.954 Jaccard with
+  that 0.931 notebook. Both are public-lineage configuration variants, not new
+  architectures and not candidate outputs.
+- The independent Detector3D notebook contains a temporal 3D U-Net and four-view
+  Y/X flip TTA. Its embedded source compiles and matches no exploit signature,
+  but its private checkpoint is not reproducible. Detection replacement remains
+  lower priority because the frozen residual audit found only three misses with
+  no nearby prediction.
+- Discussion topics 737543, 737101, and 734604 converge on complete-movie
+  validation and bottleneck decomposition; they specifically report that high
+  global node recall does not guarantee division quality and that parent/daughter
+  localization near 3 um matters. This supports a model gate, not copying a
+  public threshold or prediction.
+- Synthetic16 contains 2,608 division-critical interior nodes among 18,412
+  eligible nodes, with 12.3--16.1% coverage in every sequence. The heavy trainer
+  now forces four of each 16 batch slots from parent/daughter rows and requires
+  both global and frozen division-critical selection/audit gains for every
+  deployable member.
+- The exact FP16 checkpoint is hash-frozen and must re-pass both selection strata
+  before the sealed audit files are opened. This closes pre-/post-serialization
+  evidence drift while preserving the four-seed equal-weight policy.
+- Final pre-launch regression: 28 temporal-localization tests passed. The
+  controller validation binds runner SHA-256 `d064e53905f383f7113a7dd0aa90e44ba19f15afcca0c08912b725f07265c4f2`,
+  trainer SHA-256 `84a65ec25b81a2c3d0e251e444392fdf49fc17c76b52b789d06080833a763517`,
+  Synthetic16 archive SHA-256 `6404033fa953a4ec7312cb0f54037feb9d9cb3c9cafa6ec4cad295b3f6b845b4`,
+  and real-development archive SHA-256 `863d3edcce206266bfb6ad4d78afd033b662d1c57e3b0c11a81bb4bfc84a8b26`.

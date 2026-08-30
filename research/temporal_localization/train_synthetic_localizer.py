@@ -53,6 +53,7 @@ class SequenceState:
     index: int
     sample: SequenceSample
     eligible_rows: np.ndarray
+    division_critical_rows: np.ndarray
     predecessor: np.ndarray
     successors: tuple[np.ndarray, ...]
 
@@ -116,7 +117,22 @@ def build_sequence_state(index: int, sample: SequenceSample) -> SequenceState:
     if not len(eligible):
         raise ValueError(f"sequence {index} has no interior-frame nodes")
     successors = tuple(np.asarray(rows, dtype=np.int64) for rows in successor_lists)
-    return SequenceState(index, sample, eligible, predecessor, successors)
+    division_critical = np.zeros(node_count, dtype=bool)
+    for parent, children in enumerate(successors):
+        if len(children) >= 2:
+            division_critical[parent] = True
+            division_critical[children] = True
+    division_critical_rows = eligible[division_critical[eligible]]
+    if not len(division_critical_rows):
+        raise ValueError(f"sequence {index} has no interior division-critical nodes")
+    return SequenceState(
+        index,
+        sample,
+        eligible,
+        division_critical_rows,
+        predecessor,
+        successors,
+    )
 
 
 def load_states(paths: list[Path], indices: Iterable[int]) -> list[SequenceState]:
@@ -134,7 +150,13 @@ def random_jitter_um(rng: np.random.Generator, count: int, *, maximum_um: float 
     return directions * radii
 
 
-def fixed_examples(states: list[SequenceState], *, seed: int, count: int) -> FixedExamples:
+def fixed_examples(
+    states: list[SequenceState],
+    *,
+    seed: int,
+    count: int,
+    division_critical_only: bool = False,
+) -> FixedExamples:
     if count < len(states):
         raise ValueError("fixed evaluation count must cover every sequence")
     rng = np.random.default_rng(seed)
@@ -144,12 +166,24 @@ def fixed_examples(states: list[SequenceState], *, seed: int, count: int) -> Fix
     inventory: list[dict[str, Any]] = []
     for order, state in enumerate(states):
         sequence_count = base + int(order < remainder)
-        rows = rng.choice(state.eligible_rows, size=sequence_count, replace=True).astype(np.int64)
+        inventory_rows = (
+            state.division_critical_rows
+            if division_critical_only
+            else state.eligible_rows
+        )
+        if not len(inventory_rows):
+            raise ValueError(f"sequence {state.index} has no rows for the requested stratum")
+        rows = rng.choice(inventory_rows, size=sequence_count, replace=True).astype(np.int64)
         jitter = random_jitter_um(rng, sequence_count)
         rows_by_sequence[state.index] = rows
         jitter_by_sequence[state.index] = jitter
         inventory.append(
-            {"sequence": state.index, "rows": rows.tolist(), "jitter_um": jitter.tolist()}
+            {
+                "sequence": state.index,
+                "stratum": "division_critical" if division_critical_only else "global",
+                "rows": rows.tolist(),
+                "jitter_um": jitter.tolist(),
+            }
         )
     digest = hashlib.sha256(
         json.dumps(inventory, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -318,6 +352,24 @@ def improvement_gate(baseline: dict[str, Any], candidate: dict[str, Any]) -> dic
     }
 
 
+def stratified_improvement_gate(
+    baseline_global: dict[str, Any],
+    candidate_global: dict[str, Any],
+    baseline_division_critical: dict[str, Any],
+    candidate_division_critical: dict[str, Any],
+) -> dict[str, Any]:
+    global_gate = improvement_gate(baseline_global, candidate_global)
+    division_gate = improvement_gate(
+        baseline_division_critical, candidate_division_critical
+    )
+    return {
+        "passed": bool(global_gate["passed"] and division_gate["passed"]),
+        "global": global_gate,
+        "division_critical": division_gate,
+        "division_critical_gate_required": True,
+    }
+
+
 def update_ema(model: torch.nn.Module, ema: torch.nn.Module, *, decay: float) -> None:
     with torch.no_grad():
         for ema_value, value in zip(ema.state_dict().values(), model.state_dict().values(), strict=True):
@@ -346,8 +398,19 @@ def train_member(
     generator = torch.Generator(device=device).manual_seed(seed + 700_001)
     output_dir = args.output_dir / f"member_{member_index:02d}_seed_{seed}"
     output_dir.mkdir(parents=True, exist_ok=True)
-    selection_examples = fixed_examples(selection_states, seed=91_000 + member_index, count=args.validation_examples)
+    selection_examples = fixed_examples(
+        selection_states,
+        seed=91_000 + member_index,
+        count=args.validation_examples,
+    )
+    selection_division_examples = fixed_examples(
+        selection_states,
+        seed=121_000 + member_index,
+        count=args.division_validation_examples,
+        division_critical_only=True,
+    )
     baseline_selection = baseline_metrics(selection_examples)
+    baseline_selection_division = baseline_metrics(selection_division_examples)
 
     model = TemporalNodeLocalizationModel().to(device)
     if parameter_count(model) != EXPECTED_PARAMETER_COUNT:
@@ -359,7 +422,21 @@ def train_member(
     weights /= weights.sum()
     history: list[dict[str, Any]] = []
     best_step = 0
-    best_metrics = evaluate(ema, selection_states, selection_examples, device, batch_size=args.validation_batch_size)
+    best_metrics = evaluate(
+        ema,
+        selection_states,
+        selection_examples,
+        device,
+        batch_size=args.validation_batch_size,
+    )
+    best_division_metrics = evaluate(
+        ema,
+        selection_states,
+        selection_division_examples,
+        device,
+        batch_size=args.validation_batch_size,
+    )
+    best_relative_residual = math.inf
     best_state: dict[str, torch.Tensor] | None = None
     completed_step = 0
 
@@ -376,6 +453,15 @@ def train_member(
             "selection_sequences": list(SELECTION_INDICES),
             "audit_sequences_declared_but_unopened": list(AUDIT_INDICES),
             "selection_inventory_sha256": selection_examples.inventory_sha256,
+            "selection_division_critical_inventory_sha256": (
+                selection_division_examples.inventory_sha256
+            ),
+            "division_critical_training_rows": int(
+                sum(len(state.division_critical_rows) for state in train_states)
+            ),
+            "division_critical_per_batch": args.division_critical_per_batch,
+            "division_critical_selection_gate_required": True,
+            "division_critical_audit_gate_required": True,
             "optimization_source_files": {
                 paths[index].name: sha256_file(paths[index])
                 for index in (*TRAIN_INDICES, *SELECTION_INDICES)
@@ -394,7 +480,20 @@ def train_member(
             break
         completed_step = step
         state = train_states[int(rng.choice(len(train_states), p=weights))]
-        rows = rng.choice(state.eligible_rows, size=args.batch_size, replace=True).astype(np.int64)
+        global_count = args.batch_size - args.division_critical_per_batch
+        rows = np.concatenate(
+            (
+                rng.choice(
+                    state.eligible_rows, size=global_count, replace=True
+                ).astype(np.int64),
+                rng.choice(
+                    state.division_critical_rows,
+                    size=args.division_critical_per_batch,
+                    replace=True,
+                ).astype(np.int64),
+            )
+        )
+        rng.shuffle(rows)
         jitter = random_jitter_um(rng, args.batch_size)
         patches, graph, target = make_patches(
             state, rows, jitter, device, augment=True, generator=generator
@@ -436,18 +535,49 @@ def train_member(
             metrics = evaluate(
                 ema, selection_states, selection_examples, device, batch_size=args.validation_batch_size
             )
-            gate = improvement_gate(baseline_selection, metrics)
-            row = {"step": step, "metrics": metrics, "gate": gate}
+            division_metrics = evaluate(
+                ema,
+                selection_states,
+                selection_division_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            gate = stratified_improvement_gate(
+                baseline_selection,
+                metrics,
+                baseline_selection_division,
+                division_metrics,
+            )
+            relative_residual = (
+                float(metrics["mean_residual_um"])
+                / float(baseline_selection["mean_residual_um"])
+                + float(division_metrics["mean_residual_um"])
+                / float(baseline_selection_division["mean_residual_um"])
+            )
+            row = {
+                "step": step,
+                "global_metrics": metrics,
+                "division_critical_metrics": division_metrics,
+                "relative_residual_sum": relative_residual,
+                "gate": gate,
+            }
             history.append(row)
             atomic_json(output_dir / "selection_latest.json", row)
-            if gate["passed"] and float(metrics["mean_residual_um"]) < float(best_metrics["mean_residual_um"]):
+            if gate["passed"] and relative_residual < best_relative_residual:
                 best_step = step
                 best_metrics = metrics
+                best_division_metrics = division_metrics
+                best_relative_residual = relative_residual
                 best_state = state_dict_half(ema)
             model.train()
 
     atomic_json(output_dir / "selection_history.json", {"rows": history})
-    selection_gate = improvement_gate(baseline_selection, best_metrics)
+    selection_gate = stratified_improvement_gate(
+        baseline_selection,
+        best_metrics,
+        baseline_selection_division,
+        best_division_metrics,
+    )
     terminal: dict[str, Any] = {
         "schema_version": 1,
         "status": "rejected_at_selection",
@@ -461,8 +591,13 @@ def train_member(
         "best_step": best_step,
         "baseline_selection": baseline_selection,
         "best_selection": best_metrics,
+        "baseline_selection_division_critical": baseline_selection_division,
+        "best_selection_division_critical": best_division_metrics,
         "selection_gate": selection_gate,
         "selection_gate_passed": bool(selection_gate["passed"]),
+        "division_critical_selection_gate_passed": bool(
+            selection_gate["division_critical"]["passed"]
+        ),
         "checkpoint_frozen_before_audit": False,
         "audit_opened": False,
         "competition_data_read": False,
@@ -475,30 +610,113 @@ def train_member(
         checkpoint = output_dir / "localization_model.pt"
         torch.save(best_state, checkpoint)
         checkpoint_hash = sha256_file(checkpoint)
-        ema.load_state_dict(best_state, strict=True)
-        # The audit files are first loaded only after checkpoint selection and hashing.
-        audit_states = load_states(paths, AUDIT_INDICES)
-        audit_examples = fixed_examples(audit_states, seed=191_000 + member_index, count=args.audit_examples)
-        baseline_audit = baseline_metrics(audit_examples)
-        final_audit = evaluate(ema, audit_states, audit_examples, device, batch_size=args.validation_batch_size)
-        audit_gate = improvement_gate(baseline_audit, final_audit)
+        serialized_state = torch.load(
+            checkpoint,
+            map_location="cpu",
+            weights_only=True,
+        )
+        ema.load_state_dict(serialized_state, strict=True)
+        serialized_selection = evaluate(
+            ema,
+            selection_states,
+            selection_examples,
+            device,
+            batch_size=args.validation_batch_size,
+        )
+        serialized_selection_division = evaluate(
+            ema,
+            selection_states,
+            selection_division_examples,
+            device,
+            batch_size=args.validation_batch_size,
+        )
+        serialized_selection_gate = stratified_improvement_gate(
+            baseline_selection,
+            serialized_selection,
+            baseline_selection_division,
+            serialized_selection_division,
+        )
         terminal.update(
             {
-                "status": "completed" if audit_gate["passed"] else "rejected_at_audit",
+                "status": "rejected_after_checkpoint_serialization",
                 "model_sha256": checkpoint_hash,
                 "model_bytes": checkpoint.stat().st_size,
                 "checkpoint_frozen_before_audit": True,
-                "audit_opened": True,
-                "audit_inventory_sha256": audit_examples.inventory_sha256,
-                "audit_source_files": {
-                    paths[index].name: sha256_file(paths[index]) for index in AUDIT_INDICES
-                },
-                "baseline_audit": baseline_audit,
-                "final_audit": final_audit,
-                "audit_gate": audit_gate,
-                "audit_gate_passed": bool(audit_gate["passed"]),
+                "serialized_checkpoint_selection": serialized_selection,
+                "serialized_checkpoint_selection_division_critical": (
+                    serialized_selection_division
+                ),
+                "serialized_checkpoint_selection_gate": serialized_selection_gate,
+                "serialized_checkpoint_selection_gate_passed": bool(
+                    serialized_selection_gate["passed"]
+                ),
             }
         )
+        if serialized_selection_gate["passed"]:
+            terminal["best_selection"] = serialized_selection
+            terminal["best_selection_division_critical"] = serialized_selection_division
+            terminal["selection_gate"] = serialized_selection_gate
+            terminal["selection_gate_passed"] = True
+            terminal["division_critical_selection_gate_passed"] = True
+            # Audit data is opened only after the exact serialized checkpoint
+            # has been hashed and re-passed both frozen selection strata.
+            audit_states = load_states(paths, AUDIT_INDICES)
+            audit_examples = fixed_examples(
+                audit_states,
+                seed=191_000 + member_index,
+                count=args.audit_examples,
+            )
+            audit_division_examples = fixed_examples(
+                audit_states,
+                seed=221_000 + member_index,
+                count=args.division_audit_examples,
+                division_critical_only=True,
+            )
+            baseline_audit = baseline_metrics(audit_examples)
+            baseline_audit_division = baseline_metrics(audit_division_examples)
+            final_audit = evaluate(
+                ema,
+                audit_states,
+                audit_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            final_audit_division = evaluate(
+                ema,
+                audit_states,
+                audit_division_examples,
+                device,
+                batch_size=args.validation_batch_size,
+            )
+            audit_gate = stratified_improvement_gate(
+                baseline_audit,
+                final_audit,
+                baseline_audit_division,
+                final_audit_division,
+            )
+            terminal.update(
+                {
+                    "status": "completed" if audit_gate["passed"] else "rejected_at_audit",
+                    "audit_opened": True,
+                    "audit_inventory_sha256": audit_examples.inventory_sha256,
+                    "audit_division_critical_inventory_sha256": (
+                        audit_division_examples.inventory_sha256
+                    ),
+                    "audit_source_files": {
+                        paths[index].name: sha256_file(paths[index])
+                        for index in AUDIT_INDICES
+                    },
+                    "baseline_audit": baseline_audit,
+                    "final_audit": final_audit,
+                    "baseline_audit_division_critical": baseline_audit_division,
+                    "final_audit_division_critical": final_audit_division,
+                    "audit_gate": audit_gate,
+                    "audit_gate_passed": bool(audit_gate["passed"]),
+                    "division_critical_audit_gate_passed": bool(
+                        audit_gate["division_critical"]["passed"]
+                    ),
+                }
+            )
     atomic_json(output_dir / "worker_terminal.json", terminal)
     del model, ema, optimizer
     torch.cuda.empty_cache()
@@ -568,6 +786,9 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--batch-size", type=int, default=16)
     result.add_argument("--validation-examples", type=int, default=1_024)
     result.add_argument("--audit-examples", type=int, default=1_024)
+    result.add_argument("--division-validation-examples", type=int, default=512)
+    result.add_argument("--division-audit-examples", type=int, default=512)
+    result.add_argument("--division-critical-per-batch", type=int, default=4)
     result.add_argument("--validation-batch-size", type=int, default=24)
     result.add_argument("--validation-every", type=int, default=1_000)
     result.add_argument("--log-every", type=int, default=100)
@@ -589,6 +810,9 @@ def main() -> None:
         args.batch_size,
         args.validation_examples,
         args.audit_examples,
+        args.division_validation_examples,
+        args.division_audit_examples,
+        args.division_critical_per_batch,
         args.validation_batch_size,
         args.validation_every,
         args.log_every,
@@ -596,7 +820,11 @@ def main() -> None:
         args.total_max_wall_seconds,
         args.finalization_reserve_seconds,
     )
-    if min(counts) <= 0 or len(set(args.seeds)) != len(args.seeds):
+    if (
+        min(counts) <= 0
+        or args.division_critical_per_batch >= args.batch_size
+        or len(set(args.seeds)) != len(args.seeds)
+    ):
         raise ValueError("training counts must be positive and member seeds unique")
     run(args)
 

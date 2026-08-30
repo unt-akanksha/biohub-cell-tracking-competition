@@ -93,6 +93,9 @@ if not (
         and row.get("parameter_count") == 71_249_805
         and row.get("selection_gate_passed") is True
         and row.get("audit_gate_passed") is True
+        and row.get("division_critical_selection_gate_passed") is True
+        and row.get("division_critical_audit_gate_passed") is True
+        and row.get("serialized_checkpoint_selection_gate_passed") is True
         for row in _TLC_MEMBERS
     )
     and _TLC_POLICY.get("ensemble_policy") == "equal_mean_all_synthetic_eligible_members"
@@ -105,6 +108,9 @@ if not (
     and float(_TLC_POLICY.get("maximum_safe_probability")) == 0.35
     and float(_TLC_POLICY.get("minimum_direction_cosine")) == 0.8
     and float(_TLC_POLICY.get("maximum_move_fraction")) == 0.1
+    and float(_TLC_POLICY.get("minimum_forced_division_critical_fraction")) == 0.25
+    and _TLC_POLICY.get("division_critical_selection_gate_required") is True
+    and _TLC_POLICY.get("division_critical_audit_gate_required") is True
     and _TLC_POLICY.get("node_count_preserving") is True
     and _TLC_POLICY.get("topology_preserving") is True
     and _TLC_POLICY.get("exact_two_t4_required") is True
@@ -132,6 +138,9 @@ for _member in _TLC_MEMBERS:
         and _terminal.get("checkpoint_frozen_before_audit") is True
         and _terminal.get("selection_gate_passed") is True
         and _terminal.get("audit_gate_passed") is True
+        and _terminal.get("division_critical_selection_gate_passed") is True
+        and _terminal.get("division_critical_audit_gate_passed") is True
+        and _terminal.get("serialized_checkpoint_selection_gate_passed") is True
         and _terminal.get("competition_data_read") is False
         and _terminal.get("public_leaderboard_used_for_selection") is False
     ):

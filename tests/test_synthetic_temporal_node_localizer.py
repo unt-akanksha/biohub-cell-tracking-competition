@@ -13,6 +13,7 @@ from research.temporal_localization.train_synthetic_localizer import (
     graph_motion_features,
     improvement_gate,
     random_jitter_um,
+    stratified_improvement_gate,
 )
 
 
@@ -24,14 +25,15 @@ def fixture_state(index: int = 0):
             [2, 3, 4, 3, 1],
             [2, 5, 5, 5, 2],
             [3, 3, 5, 3, 1],
+            [3, 5, 6, 5, 2],
         ],
         dtype=np.float32,
     )
     sample = SequenceSample(
         volumes=volumes,
         nodes=nodes,
-        edges=np.asarray([[0, 1], [1, 3]], dtype=np.int64),
-        divisions=np.empty((0,), dtype=np.int64),
+        edges=np.asarray([[0, 1], [1, 3], [1, 4]], dtype=np.int64),
+        divisions=np.asarray([1], dtype=np.int64),
         voxel_um=POOLED_VOXEL_UM.copy(),
     )
     return build_sequence_state(index, sample)
@@ -52,6 +54,17 @@ def test_jitter_is_bounded_and_fixed_inventory_is_repeatable() -> None:
     second = fixed_examples(states, seed=9, count=10)
     assert first.inventory_sha256 == second.inventory_sha256
     assert first.count == 10
+    critical = fixed_examples(
+        states,
+        seed=10,
+        count=10,
+        division_critical_only=True,
+    )
+    assert critical.count == 10
+    for state in states:
+        assert set(critical.rows_by_sequence[state.index]) <= set(
+            state.division_critical_rows
+        )
 
 
 def test_graph_features_encode_available_parent_child_context() -> None:
@@ -80,3 +93,5 @@ def test_gate_requires_large_mean_gain_and_axis_safety() -> None:
     assert improvement_gate(baseline, strong)["passed"] is True
     weak = {**strong, "mean_residual_um": baseline["mean_residual_um"] * 0.9}
     assert improvement_gate(baseline, weak)["passed"] is False
+    assert stratified_improvement_gate(baseline, strong, baseline, strong)["passed"] is True
+    assert stratified_improvement_gate(baseline, strong, baseline, weak)["passed"] is False

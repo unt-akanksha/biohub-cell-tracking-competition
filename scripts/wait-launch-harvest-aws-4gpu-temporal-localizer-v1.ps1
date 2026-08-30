@@ -149,6 +149,8 @@ if ($runnerText -match "__(SYNTHETIC16|DEVELOPMENT)_ARCHIVE_SHA256__") {
     throw "Temporal-localizer runner hash binding failed"
 }
 Set-Content -LiteralPath $renderedRunner -Encoding utf8 -Value $runnerText
+$renderedRunnerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $renderedRunner).Hash.ToLowerInvariant()
+$trainerSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $requiredCode[7]).Hash.ToLowerInvariant()
 & python -m py_compile @requiredCode
 if ($LASTEXITCODE -ne 0) { throw "Temporal-localizer Python validation failed" }
 Push-Location -LiteralPath $RepositoryRoot
@@ -165,6 +167,12 @@ if ($ValidateOnly) {
         planned_model_count = 4
         parameters_per_model = 71249805
         steps_per_model = 20000
+        division_critical_examples_per_batch = 4
+        division_critical_selection_examples = 512
+        division_critical_audit_examples = 512
+        serialized_checkpoint_selection_gate_required = $true
+        rendered_runner_sha256 = $renderedRunnerSha256
+        trainer_sha256 = $trainerSha256
         archive_sha256 = $archiveSha256
         archive_bytes = (Get-Item -LiteralPath $archivePath).Length
         development_archive_sha256 = $developmentArchiveSha256
@@ -274,6 +282,12 @@ try {
         model_count = 4
         parameters_per_model = 71249805
         steps_per_model = 20000
+        division_critical_examples_per_batch = 4
+        division_critical_selection_examples = 512
+        division_critical_audit_examples = 512
+        serialized_checkpoint_selection_gate_required = $true
+        rendered_runner_sha256 = $renderedRunnerSha256
+        trainer_sha256 = $trainerSha256
         synthetic_archive_sha256 = $archiveSha256
         development_archive_sha256 = $developmentArchiveSha256
         development_probe_runs_only_after_member_audits = $true

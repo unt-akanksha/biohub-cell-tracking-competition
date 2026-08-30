@@ -60,6 +60,9 @@ def accepted_members(results_root: Path) -> list[dict[str, Any]]:
             and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
             and terminal.get("selection_gate_passed") is True
             and terminal.get("audit_gate_passed") is True
+            and terminal.get("division_critical_selection_gate_passed") is True
+            and terminal.get("division_critical_audit_gate_passed") is True
+            and terminal.get("serialized_checkpoint_selection_gate_passed") is True
             and terminal.get("checkpoint_frozen_before_audit") is True
             and terminal.get("audit_opened") is True
             and checkpoint.is_file()
@@ -78,7 +81,13 @@ def accepted_members(results_root: Path) -> list[dict[str, Any]]:
                 "seed": int(terminal["seed"]),
                 "model_sha256": terminal["model_sha256"],
                 "selection": terminal["best_selection"],
+                "selection_division_critical": terminal[
+                    "best_selection_division_critical"
+                ],
                 "audit": terminal["final_audit"],
+                "audit_division_critical": terminal[
+                    "final_audit_division_critical"
+                ],
             }
         )
     if not 3 <= len(records) <= 4:
@@ -166,6 +175,9 @@ def verify_dataset(root: Path) -> dict[str, Any]:
             row.get("parameter_count") == EXPECTED_PARAMETER_COUNT
             and row.get("selection_gate_passed") is True
             and row.get("audit_gate_passed") is True
+            and row.get("division_critical_selection_gate_passed") is True
+            and row.get("division_critical_audit_gate_passed") is True
+            and row.get("serialized_checkpoint_selection_gate_passed") is True
             and row.get("model_sha256") == sha256_file(root / row["path"])
             for row in members
         )
@@ -179,6 +191,9 @@ def verify_dataset(root: Path) -> dict[str, Any]:
         and policy.get("maximum_safe_probability") == 0.35
         and policy.get("minimum_direction_cosine") == 0.8
         and policy.get("maximum_move_fraction") == 0.1
+        and policy.get("minimum_forced_division_critical_fraction") == 0.25
+        and policy.get("division_critical_selection_gate_required") is True
+        and policy.get("division_critical_audit_gate_required") is True
         and policy.get("node_count_preserving") is True
         and policy.get("topology_preserving") is True
         and policy.get("exact_two_t4_required") is True
@@ -220,9 +235,18 @@ def stage_dataset(results_root: Path, output_root: Path) -> dict[str, Any]:
                 "model_sha256": member["model_sha256"],
                 "parameter_count": EXPECTED_PARAMETER_COUNT,
                 "selection_mean_residual_um": member["selection"]["mean_residual_um"],
+                "selection_division_critical_mean_residual_um": member[
+                    "selection_division_critical"
+                ]["mean_residual_um"],
                 "audit_mean_residual_um": member["audit"]["mean_residual_um"],
+                "audit_division_critical_mean_residual_um": member[
+                    "audit_division_critical"
+                ]["mean_residual_um"],
                 "selection_gate_passed": True,
                 "audit_gate_passed": True,
+                "division_critical_selection_gate_passed": True,
+                "division_critical_audit_gate_passed": True,
+                "serialized_checkpoint_selection_gate_passed": True,
             }
         )
     for name, source in copies.items():
@@ -248,6 +272,9 @@ def stage_dataset(results_root: Path, output_root: Path) -> dict[str, Any]:
             "maximum_safe_probability": 0.35,
             "minimum_direction_cosine": 0.8,
             "maximum_move_fraction": 0.1,
+            "minimum_forced_division_critical_fraction": 0.25,
+            "division_critical_selection_gate_required": True,
+            "division_critical_audit_gate_required": True,
             "node_count_preserving": True,
             "topology_preserving": True,
             "exact_two_t4_required": True,
