@@ -9,11 +9,12 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from biohub_tracker.graphs import GraphData, GraphNode
+if TYPE_CHECKING:
+    from biohub_tracker.graphs import GraphData
 
 
 NATIVE_VOXEL_UM = np.asarray((1.625, 0.40625, 0.40625), dtype=np.float32)
@@ -161,6 +162,8 @@ def apply_physical_coordinate_offsets(
     spatial_shape_zyx: tuple[int, int, int] | None = None,
 ) -> GraphData:
     """Apply selected physical offsets while copying graph identity/topology."""
+
+    from biohub_tracker.graphs import GraphData, GraphNode
 
     scale = np.asarray(voxel_size_zyx_um, dtype=np.float32)
     if scale.shape != (3,) or not np.isfinite(scale).all() or np.any(scale <= 0):
