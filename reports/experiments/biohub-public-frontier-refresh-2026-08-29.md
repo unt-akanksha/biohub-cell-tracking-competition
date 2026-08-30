@@ -327,3 +327,24 @@ T4 GPUs, has internet disabled, and contains no competition submission call.
 Promotion still requires successful completion, a distinct output hash, no
 graph mutations beyond the agreed edges, preserved edge quality, improved
 division quality, and a clean runtime receipt.
+
+## Large pretrained voter admission
+
+An independently pretrained 87,640,009-parameter Swin3D-B was admitted to a
+standalone ranker experiment on Antelume. The first run exposed a strict
+parameter-routing defect: torchvision's final transformer stage is
+`features.6`, while the precommitted prefix named `features.7`. Only the
+1,025-parameter replacement head trained. Its nested tuning AP was `0.206288`
+and its one-shot audit AP was `0.153803` (`44b6=0.768333`, `6bba=0.125109`).
+The checkpoint SHA-256 is
+`2690f0c68db2a3013503edbbb8acbdf503ca5d3b3a48bcfec8f306e5785098c1`.
+It is rejected permanently and cannot vote in any ensemble.
+
+The corrected v2 experiment has a hard parameter contract: 87,640,009 total
+parameters and exactly 25,357,761 trainable parameters from the final Swin
+stage, terminal normalization, and head. To avoid reusing the audit opened by
+v1, v2 reads only the upstream optimization role and freezes a new disjoint
+train/tuning/audit partition by complete movie. The upstream selection movies
+are not read. The nested audit remains acceptance-only, the decision rule is
+ranking-only, and a pooled AP below `0.55`, either embryo AP below `0.40`, or
+tuning AP below `0.60` rejects the voter.
