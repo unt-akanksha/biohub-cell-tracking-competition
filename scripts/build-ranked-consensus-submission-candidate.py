@@ -456,11 +456,24 @@ print(_rcd_json.dumps(_evidence, indent=2, sort_keys=True))
 '''
 
 
-def transform_notebook(consensus_root: Path) -> dict:
+def transform_notebook(
+    consensus_root: Path,
+    *,
+    dataset_builder_path: Path | None = None,
+    watchdog_run_id: str = "ema-ranked-consensus-candidate-v1",
+    keep_base_safe_divisions: bool = False,
+    attribution: str = ATTRIBUTION,
+    model_setup_template: str = MODEL_SETUP_TEMPLATE,
+    ranked_helpers: str = RANKED_HELPERS,
+    candidate_evidence: str = CANDIDATE_EVIDENCE,
+) -> dict:
     if sha256_file(SOURCE_NOTEBOOK) != SOURCE_NOTEBOOK_SHA256:
         raise RuntimeError("Attributed public-control notebook changed")
     dataset_builder = runpy.run_path(
-        str(ROOT / "scripts/build-ranked-consensus-division-dataset.py")
+        str(
+            dataset_builder_path
+            or ROOT / "scripts/build-ranked-consensus-division-dataset.py"
+        )
     )
     verified = dataset_builder["verify_dataset"](consensus_root)
     notebook = json.loads(SOURCE_NOTEBOOK.read_text(encoding="ascii"))
@@ -469,7 +482,7 @@ def transform_notebook(consensus_root: Path) -> dict:
     watchdog = replace_exact(
         watchdog,
         "_BIOHUB_RUN_ID = 'public-0927-clean-repro-v2'",
-        "_BIOHUB_RUN_ID = 'ema-ranked-consensus-candidate-v1'",
+        f"_BIOHUB_RUN_ID = {watchdog_run_id!r}",
     )
     notebook["cells"][0]["source"] = watchdog.splitlines(keepends=True)
 
@@ -484,7 +497,7 @@ def transform_notebook(consensus_root: Path) -> dict:
         'os.environ["BIOHUB_DET_THRESHOLD"] = "0.96875"',
         'os.environ["BIOHUB_DET_THRESHOLD"] = "0.96875"\n'
         'os.environ["BIOHUB_MOTION_RELINK_VELOCITY_WEIGHT"] = "1.0"\n'
-        'os.environ["BIOHUB_OUTPUT_SAFE_DIVISIONS"] = "0"',
+        f'os.environ["BIOHUB_OUTPUT_SAFE_DIVISIONS"] = "{int(keep_base_safe_divisions)}"',
     )
     notebook["cells"][config_index]["source"] = config.splitlines(keepends=True)
 
@@ -504,7 +517,7 @@ def transform_notebook(consensus_root: Path) -> dict:
         guard,
         '    "BIOHUB_DUAL_SEED_MIN_CANDIDATE_RETENTION": "0.90",',
         '    "BIOHUB_DUAL_SEED_MIN_CANDIDATE_RETENTION": "0.90",\n'
-        '    "BIOHUB_OUTPUT_SAFE_DIVISIONS": "0",',
+        f'    "BIOHUB_OUTPUT_SAFE_DIVISIONS": "{int(keep_base_safe_divisions)}",',
     )
     guard = guard.replace(
         "Single model-level change: harmonic mutual-support association fusion",
@@ -559,7 +572,7 @@ def transform_notebook(consensus_root: Path) -> dict:
     post = replace_exact(
         post,
         "def filter_output_graph(\n",
-        RANKED_HELPERS + "def filter_output_graph(\n",
+        ranked_helpers + "def filter_output_graph(\n",
     )
     post = replace_exact(
         post,
@@ -575,11 +588,11 @@ def transform_notebook(consensus_root: Path) -> dict:
         if "Fail fast instead of silently running volumetric inference on CPU"
         in "".join(cell.get("source", []))
     )
-    setup = MODEL_SETUP_TEMPLATE.replace(
+    setup = model_setup_template.replace(
         "__MANIFEST_SHA256__", str(verified["manifest_sha256"])
     )
     notebook["cells"][inference_index + 1 : inference_index + 1] = [
-        markdown_cell(ATTRIBUTION),
+        markdown_cell(attribution),
         code_cell(setup),
     ]
     terminal_index = next(
@@ -588,7 +601,7 @@ def transform_notebook(consensus_root: Path) -> dict:
         if '_biohub_write_terminal("completed")'
         in "".join(cell.get("source", []))
     )
-    notebook["cells"][terminal_index:terminal_index] = [code_cell(CANDIDATE_EVIDENCE)]
+    notebook["cells"][terminal_index:terminal_index] = [code_cell(candidate_evidence)]
     for cell in notebook["cells"]:
         if cell.get("cell_type") == "code":
             cell["execution_count"] = None
