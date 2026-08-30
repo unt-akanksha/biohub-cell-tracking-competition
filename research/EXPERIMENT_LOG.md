@@ -376,3 +376,11 @@ well as the synthetic generator.
   dataset and archive-stem paths verified from its 119-file remote inventory.
   Dataset and kernel remain CPU-only, offline, train-only, and unable to
   submit; prior failed versions consumed neither Kaggle nor AWS GPU time.
+- The downstream candidate handoff was hardened before any AWS harvest. The
+  obsolete eight-hour Kaggle reserve was changed to zero to reflect the later
+  authorization to use all available quota; the 39,600-second dual-T4 runtime
+  requirement itself remains enforced. Kaggle's private-kernel API returns 403
+  for a not-yet-created slug, so authenticated owner-scoped exact listing now
+  proves absence without guessing a version, while post-push state verification
+  uses bounded retries and still fails closed for a present-but-unreadable
+  kernel.

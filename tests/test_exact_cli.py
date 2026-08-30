@@ -918,6 +918,32 @@ def test_sdk_kernel_state_uses_current_version_and_absence_without_stale_reuse()
     assert current["next_kernel_ref"] == f"{slug}/3"
 
 
+def test_owned_kernel_exact_listing_proves_only_exact_absence():
+    resolver = _kernel_state_namespace()["exact_owned_kernel_refs"]
+
+    class Api:
+        def kernels_list(self, **kwargs):
+            assert kwargs == {
+                "search": "target-kernel",
+                "mine": True,
+                "page_size": 100,
+            }
+            return [
+                SimpleNamespace(ref="indarkarhana/target-kernel-similar"),
+                SimpleNamespace(ref="other/target-kernel"),
+            ]
+
+    assert resolver(Api(), "indarkarhana/target-kernel") == []
+
+    class PresentApi(Api):
+        def kernels_list(self, **kwargs):
+            return [SimpleNamespace(ref="indarkarhana/target-kernel")]
+
+    assert resolver(PresentApi(), "indarkarhana/target-kernel") == [
+        "indarkarhana/target-kernel"
+    ]
+
+
 def test_wrapper_uses_sdk_ref_and_verifies_post_push_before_start_and_reconcile():
     source = Path("scripts/run-phase2-cpu-acceptance.ps1").read_text(encoding="utf-8")
     assert "scripts/get-kaggle-kernel-state.py" in source

@@ -3,7 +3,7 @@ param(
     [double]$MaximumWaitHours = 72.0,
     [int]$PollSeconds = 120,
     [int]$KernelPollSeconds = 300,
-    [double]$MinimumGpuReserveHours = 8.0,
+    [double]$MinimumGpuReserveHours = 0.0,
     [int]$DeclaredCandidateBudgetSeconds = 39600,
     [switch]$ValidateOnly
 )
@@ -305,9 +305,19 @@ try {
     }
     if (-not $launched) { throw "Timed out waiting for a Kaggle dual-T4 launch slot" }
 
-    Start-Sleep -Seconds 10
-    $native = Invoke-NativeOutput { & python $kernelStateScript --kernel-slug $kernelRef }
-    if ($native.ExitCode -ne 0) { throw "Post-launch kernel state lookup failed: $($native.Output)" }
+    $postLaunchStateReady = $false
+    for ($stateAttempt = 1; $stateAttempt -le 12; $stateAttempt++) {
+        Start-Sleep -Seconds 10
+        $native = Invoke-NativeOutput { & python $kernelStateScript --kernel-slug $kernelRef }
+        if ($native.ExitCode -eq 0) {
+            $postLaunchStateReady = $true
+            break
+        }
+        Write-ControllerLog "post_launch_state_retry attempt=$stateAttempt output=$($native.Output)"
+    }
+    if (-not $postLaunchStateReady) {
+        throw "Post-launch kernel state lookup failed after bounded retries: $($native.Output)"
+    }
     $state = $native.Output | ConvertFrom-Json
     if (
         $state.present -ne $true -or [int]$state.current_version_number -ne $expectedVersion -or

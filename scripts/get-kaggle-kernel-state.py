@@ -9,6 +9,23 @@ class KernelStateError(ValueError):
     pass
 
 
+def exact_owned_kernel_refs(api: Any, kernel_slug: str) -> list[str]:
+    """Resolve a 403 on an absent private kernel without guessing state."""
+
+    owner, slug = kernel_slug.split("/", maxsplit=1)
+    rows = api.kernels_list(search=slug, mine=True, page_size=100) or []
+    refs = sorted(
+        {
+            str(getattr(row, "ref", ""))
+            for row in rows
+            if row is not None and str(getattr(row, "ref", "")) == f"{owner}/{slug}"
+        }
+    )
+    if len(refs) > 1:  # pragma: no cover - a Kaggle owner/slug is unique
+        raise KernelStateError("owned kernel inventory returned duplicate exact refs")
+    return refs
+
+
 def kernel_state_from_sdk_response(
     kernel_slug: str, response: Any | None
 ) -> dict[str, Any]:
@@ -89,6 +106,14 @@ def inspect_owned_kernel_state(kernel_slug: str) -> dict[str, Any]:
                     getattr(exc, "response", None), "status_code", None
                 )
                 if status_code == 404:
+                    response = None
+                elif status_code == 403 and not exact_owned_kernel_refs(
+                    api, kernel_slug
+                ):
+                    # Kaggle returns 403 rather than 404 for some absent private
+                    # kernels.  An authenticated, owner-scoped exact listing is
+                    # the only accepted absence proof; a present ref still
+                    # fails closed because its version cannot be inferred.
                     response = None
                 else:
                     raise KernelStateError(

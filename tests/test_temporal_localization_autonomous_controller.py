@@ -17,7 +17,8 @@ def test_controller_is_event_driven_hash_bound_and_fail_closed() -> None:
     assert "Assert-SafeArchive" in source
     assert "result_sha256" in source
     assert "skipped_after_scientific_rejection" in source
-    assert "MinimumGpuReserveHours = 8.0" in source
+    assert "MinimumGpuReserveHours = 0.0" in source
+    assert "post_launch_state_retry" in source
     assert "DeclaredCandidateBudgetSeconds = 39600" in source
     assert "biohub-ct-0940-ema/validator_results.csv" in source
     assert "4dbf2079c1efc1108370f33104a6e80882a851d45dbfaa0540d40e88e4941f4b" in source
