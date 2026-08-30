@@ -489,6 +489,17 @@ extends the credential-refresh deploy chain to ship and hash-bind the shared
 member-policy source. None of these downstream stages will launch if the
 overnight selection evidence rejects all models.
 
+Commit `9aea19c` adds a second local event controller for evidence recovery.
+After deployment, it authenticates once and holds one SSH session while the
+remote controller waits server-side. The remote side streams a gzip archive
+containing the selection terminal, probe/controller evidence, and only the
+checkpoints named by the precommitted probe policy. Every archived file has a
+size and SHA-256 record in an internal manifest; the local verifier checks all
+records without extracting the archive and rejects duplicate or path-escaping
+members. The deploy and harvest watchers are both live. This removes repeated
+remote status polling and preserves the exact accepted artifacts even if the
+short-lived AWS session expires again after the SSH connection opens.
+
 The first durable worker checkpoint, seed `205043` / `target_44b6`, completed
 all 50,000 steps in 1,708.51 seconds and retained step 12,000. It improved its
 initial AP from `0.243307` to `0.468185` and recovered 4 of 31 positives before
