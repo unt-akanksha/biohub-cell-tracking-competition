@@ -304,3 +304,8 @@ well as the synthetic generator.
   candidate/runtime tests, and 16 AWS/controller tests passed in their
   respective suites. The experiment remains unauthorized for submission until
   every scientific and external candidate gate passes.
+- After commit `b35d30d`, overnight replay/build/AWS controller PID 20816 and
+  downstream scientific-promotion controller PID 47640 were armed. Both were
+  alive with empty error logs at startup; the first observes a 900-second
+  Kaggle cooldown before resuming, and the second can only advance after a
+  hash-verified AWS harvest terminal exists.
