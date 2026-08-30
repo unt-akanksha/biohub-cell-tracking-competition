@@ -153,6 +153,20 @@ def stronger_than_reference(candidate: dict[str, Any]) -> bool:
     )
 
 
+def register_checkpoint_owner(
+    owners: dict[str, dict[str, Any]],
+    model_sha256: str,
+    *,
+    seed: int,
+    fold: str,
+) -> dict[str, Any] | None:
+    owner = owners.get(model_sha256)
+    if owner is not None:
+        return owner
+    owners[model_sha256] = {"seed": int(seed), "fold": str(fold)}
+    return None
+
+
 def embryo_metrics(
     targets: torch.Tensor,
     scores: torch.Tensor,
@@ -276,6 +290,7 @@ def main() -> None:
     candidates: list[dict[str, Any]] = []
     admitted_scores: list[torch.Tensor] = []
     effective_seeds: set[int] = set()
+    checkpoint_owners: dict[str, dict[str, Any]] = {}
     for seed in seeds:
         run_root = args.sweep_root / f"seed-{seed}"
         terminal_path = run_root / "real_division_gate_terminal.json"
@@ -302,14 +317,37 @@ def main() -> None:
             if effective_seed in effective_seeds:
                 raise ValueError(f"duplicate effective training seed: {effective_seed}")
             effective_seeds.add(effective_seed)
+            model_sha256 = sha256_file(checkpoint)
             if not (
                 worker.get("status") == "completed"
                 and worker.get("parameter_count") == EXPECTED_PARAMETER_COUNT
                 and worker.get("trainable_parameters") == 25_178_047
                 and worker.get("final_probe_opened") is False
-                and worker.get("model_sha256") == sha256_file(checkpoint)
+                and worker.get("model_sha256") == model_sha256
             ):
                 raise ValueError(f"seed {seed} fold {fold} checkpoint is ineligible")
+            duplicate_owner = register_checkpoint_owner(
+                checkpoint_owners,
+                model_sha256,
+                seed=seed,
+                fold=fold,
+            )
+            if duplicate_owner is not None:
+                candidates.append(
+                    {
+                        "seed": seed,
+                        "effective_seed": effective_seed,
+                        "fold": fold,
+                        "status": "duplicate_checkpoint",
+                        "model_sha256": model_sha256,
+                        "training_config_sha256": sha256_file(config_path),
+                        "duplicate_of": duplicate_owner,
+                        "parameter_count": EXPECTED_PARAMETER_COUNT,
+                        "trainable_parameters": 25_178_047,
+                        "authorized_for_ensemble": False,
+                    }
+                )
+                continue
             model = MultiscaleContextualPairFusionAssociationModel().to(device)
             model.load_state_dict(
                 torch.load(checkpoint, map_location=device, weights_only=True), strict=True
@@ -333,7 +371,7 @@ def main() -> None:
                 "effective_seed": effective_seed,
                 "fold": fold,
                 "status": "admitted" if admitted else "rejected",
-                "model_sha256": sha256_file(checkpoint),
+                "model_sha256": model_sha256,
                 "training_config_sha256": sha256_file(config_path),
                 "parameter_count": EXPECTED_PARAMETER_COUNT,
                 "trainable_parameters": 25_178_047,
@@ -436,6 +474,10 @@ def main() -> None:
         "manifest_sha256": MANIFEST_SHA256,
         "candidate_model_count": sum(
             1 for row in candidates if "selection" in row
+        ),
+        "unique_checkpoint_count": len(checkpoint_owners),
+        "duplicate_checkpoint_count": sum(
+            1 for row in candidates if row.get("status") == "duplicate_checkpoint"
         ),
         "admitted_model_count": len(admitted_scores),
         "individual_admission": {

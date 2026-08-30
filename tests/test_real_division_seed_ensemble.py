@@ -143,3 +143,21 @@ def test_training_config_binds_independent_effective_seed_and_recipe() -> None:
         assert "training config" in str(error)
     else:
         raise AssertionError("reused or shifted training seed was accepted")
+
+
+def test_byte_identical_checkpoints_are_not_counted_as_diverse_members() -> None:
+    owners = {}
+    model_hash = "a" * 64
+
+    assert (
+        MODULE["register_checkpoint_owner"](
+            owners, model_hash, seed=205_043, fold="target_44b6"
+        )
+        is None
+    )
+    duplicate = MODULE["register_checkpoint_owner"](
+        owners, model_hash, seed=305_047, fold="target_44b6"
+    )
+
+    assert duplicate == {"seed": 205_043, "fold": "target_44b6"}
+    assert len(owners) == 1
