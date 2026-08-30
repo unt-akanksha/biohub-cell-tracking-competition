@@ -636,3 +636,41 @@ weight; broader curriculum negatives remain downweighted. Audit features may
 be materialized, but the extractor never scores audit labels, opens the final
 four movies, attaches test data, or includes a submission command. Five
 focused inventory-package and extractor tests pass.
+
+The corresponding heavy relational network is now implemented rather than
+being represented by a shallow geometry classifier. It applies one shared
+multiscale temporal encoder to all three centers and symmetrically fuses the
+parent embedding, daughter mean, daughter absolute difference, parent-product,
+and parent/daughter residual. The head also receives symmetric backbone logits
+and normalized geometry with explicit missingness indicators. The result has
+48,313,050 parameters: the existing 46,386,607-parameter project-authored
+backbone plus 1,926,443 relational parameters. Swapping the two daughters is
+numerically invariant, and gradients reach both the backbone and relational
+head. This is new project code; no public code, weights, predictions, or
+leaderboard result are used.
+
+The first Antelume relational schedule contains four seeds and two distinct
+backbone initializations, yielding eight independently trained 48.3M models.
+Every member receives 15,000 full-network steps with balanced sampling across
+positive/negative and inference-eligible/broad strata, coherent 3D
+augmentation, a lower backbone learning rate, EMA, and best-checkpoint
+retention. Because every step encodes parent, retained daughter, and proposed
+daughter, the schedule represents 360,000 temporal-volume optimization
+encodings. Each member must independently reach pooled eligible AP `>=0.55`,
+each-embryo AP `>=0.40`, and two true positives before the first false positive
+on movie-disjoint selection. Only frozen selection survivors can open the
+sealed audit, and an ensemble is eligible only when at least two members pass
+audit independently. Final-probe movies remain unavailable to the trainer.
+
+The deployment chain is durable and event-driven. It waits for the private
+CPU extractor, downloads only its tar archive, streams every shard through
+size and SHA-256 verification without extracting locally, and then waits for a
+valid AWS session. After upload it queues server-side behind the current seed
+sweep and its independently gated development probe, additionally requiring
+the A10G to have no active compute process before it starts. The local
+controller is active as process `42356`; the current AWS profile still reports
+an expired token, so no new remote mutation has yet been claimed. Twenty
+focused model, trainer, archive-verification, extractor, inventory, and
+overnight-launch tests pass, along with shell and PowerShell syntax validation.
+The run contains no competition submit command and cannot authorize a
+submission directly.
