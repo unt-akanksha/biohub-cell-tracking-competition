@@ -47,6 +47,7 @@ def make_source(tmp_path: Path, module: dict) -> tuple[Path, Path]:
         "submission_created": False,
         "authorized_for_final_probe": True,
         "frozen_division_logit_threshold": 1.25,
+        "ensemble_weights": {"target_44b6": 0.0, "target_6bba": 1.0},
         "threshold_selection": {"tp": 4, "fp": 0},
         "folds": folds,
     }
@@ -57,6 +58,7 @@ def make_source(tmp_path: Path, module: dict) -> tuple[Path, Path]:
         "status": "diagnostic_complete",
         "run_id": "competition-train-focused-division-transfer-probe-v1",
         "model_sha256": [hashes[fold] for fold in ("target_44b6", "target_6bba")],
+        "ensemble_weights": {"target_44b6": 0.0, "target_6bba": 1.0},
         "competition_train_data_read": True,
         "competition_test_data_read": False,
         "public_leaderboard_used_for_selection": False,
@@ -70,6 +72,10 @@ def make_source(tmp_path: Path, module: dict) -> tuple[Path, Path]:
             "status": "accepted",
             "training_terminal_sha256": module["sha256_file"](terminal_path),
             "model_threshold_frozen_before_probe": 1.25,
+            "ensemble_weights_frozen_before_probe": {
+                "target_44b6": 0.0,
+                "target_6bba": 1.0,
+            },
             "biological_geometry_minimum": 3.0,
             "conjunctive": {
                 "tp": 3,
@@ -116,6 +122,7 @@ def test_builder_stages_only_accepted_hash_bound_real_gate(tmp_path: Path) -> No
     assert verified["authorized_for_submission"] is False
     assert metadata["id"] == "indarkarhana/biohub-real-division-gate-v1"
     assert policy["biological_geometry_minimum"] == 3.0
+    assert policy["ensemble_weights"] == {"target_44b6": 0.0, "target_6bba": 1.0}
     assert policy["public_leaderboard_used_for_selection"] is False
 
 

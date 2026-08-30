@@ -39,6 +39,7 @@ def validate_source(source_root: Path, probe_path: Path) -> dict[str, Any]:
     folds = terminal.get("folds", {})
     model_hashes = {fold: folds.get(fold, {}).get("model_sha256") for fold in FOLDS}
     threshold = terminal.get("frozen_division_logit_threshold")
+    ensemble_weights = terminal.get("ensemble_weights", {})
     policy = probe.get("policy_evaluation", {})
     conjunctive = policy.get("conjunctive", {})
     if not (
@@ -58,12 +59,28 @@ def validate_source(source_root: Path, probe_path: Path) -> dict[str, Any]:
         and terminal.get("authorized_for_final_probe") is True
         and isinstance(threshold, (int, float))
         and math.isfinite(float(threshold))
+        and isinstance(ensemble_weights, dict)
+        and set(ensemble_weights) == set(FOLDS)
+        and all(
+            isinstance(ensemble_weights[fold], (int, float))
+            and not isinstance(ensemble_weights[fold], bool)
+            and math.isfinite(float(ensemble_weights[fold]))
+            and float(ensemble_weights[fold]) >= 0.0
+            for fold in FOLDS
+        )
+        and math.isclose(
+            sum(float(ensemble_weights[fold]) for fold in FOLDS),
+            1.0,
+            rel_tol=0.0,
+            abs_tol=1e-12,
+        )
         and set(folds) == set(FOLDS)
         and len(set(model_hashes.values())) == 2
         and probe.get("schema_version") == 1
         and probe.get("status") == "diagnostic_complete"
         and probe.get("run_id") == PROBE_RUN_ID
         and probe.get("model_sha256") == [model_hashes[fold] for fold in FOLDS]
+        and probe.get("ensemble_weights") == ensemble_weights
         and probe.get("competition_train_data_read") is True
         and probe.get("competition_test_data_read") is False
         and probe.get("public_leaderboard_used_for_selection") is False
@@ -77,6 +94,7 @@ def validate_source(source_root: Path, probe_path: Path) -> dict[str, Any]:
         and policy.get("training_terminal_sha256") == sha256_file(terminal_path)
         and float(policy.get("model_threshold_frozen_before_probe", math.nan))
         == float(threshold)
+        and policy.get("ensemble_weights_frozen_before_probe") == ensemble_weights
         and float(policy.get("biological_geometry_minimum", math.nan)) == 3.0
         and policy.get("authorized_for_competition_graph_evaluation") is True
         and policy.get("authorized_for_submission") is False
@@ -102,6 +120,9 @@ def validate_source(source_root: Path, probe_path: Path) -> dict[str, Any]:
         "terminal": terminal,
         "probe": probe,
         "model_hashes": model_hashes,
+        "ensemble_weights": {
+            fold: float(ensemble_weights[fold]) for fold in FOLDS
+        },
         "threshold": float(threshold),
         "geometry_minimum": 3.0,
     }
@@ -118,7 +139,8 @@ def build_policy(evidence: dict[str, Any], probe_sha256: str) -> dict[str, Any]:
         "appearance_family": terminal["appearance_family"],
         "focused_division_family": terminal["family"],
         "model_sha256": evidence["model_hashes"],
-        "ensemble": "mean of two independently initialized real-domain division gates",
+        "ensemble": "frozen high-precision weighted blend of independent real-domain gates",
+        "ensemble_weights": evidence["ensemble_weights"],
         "frozen_division_logit_threshold": evidence["threshold"],
         "biological_geometry_minimum": evidence["geometry_minimum"],
         "selection": terminal["threshold_selection"],

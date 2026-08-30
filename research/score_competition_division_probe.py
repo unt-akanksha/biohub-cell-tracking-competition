@@ -33,6 +33,7 @@ from research.temporal_contrastive.train_focused_division_gate import division_l
 RUN_ID = "competition-train-focused-division-transfer-probe-v1"
 VOXEL_SIZE_ZYX_UM = (1.625, 0.40625, 0.40625)
 BIOLOGICAL_GEOMETRY_MINIMUM = 3.0
+MODEL_FOLDS = ("target_44b6", "target_6bba")
 
 
 def sha256_file(path: Path) -> str:
@@ -217,13 +218,31 @@ def decision_metrics(
 
 def validate_real_training_terminal(
     terminal: dict[str, Any], model_hashes: list[str]
-) -> float:
+) -> tuple[float, dict[str, float]]:
     folds = terminal.get("folds", {})
     expected_hashes = [
         folds.get(fold, {}).get("model_sha256")
-        for fold in ("target_44b6", "target_6bba")
+        for fold in MODEL_FOLDS
     ]
     threshold = terminal.get("frozen_division_logit_threshold")
+    raw_weights = terminal.get("ensemble_weights", {})
+    weights_are_valid = bool(
+        isinstance(raw_weights, dict)
+        and set(raw_weights) == set(MODEL_FOLDS)
+        and all(
+            isinstance(raw_weights[fold], (int, float))
+            and not isinstance(raw_weights[fold], bool)
+            and np.isfinite(raw_weights[fold])
+            and float(raw_weights[fold]) >= 0.0
+            for fold in MODEL_FOLDS
+        )
+        and np.isclose(
+            sum(float(raw_weights[fold]) for fold in MODEL_FOLDS),
+            1.0,
+            rtol=0.0,
+            atol=1e-12,
+        )
+    )
     if not (
         terminal.get("schema_version") == 1
         and terminal.get("status") == "accepted_at_selection"
@@ -239,11 +258,15 @@ def validate_real_training_terminal(
         and terminal.get("submission_created") is False
         and terminal.get("authorized_for_final_probe") is True
         and isinstance(threshold, (int, float))
+        and not isinstance(threshold, bool)
         and np.isfinite(threshold)
         and expected_hashes == model_hashes
+        and weights_are_valid
     ):
         raise ValueError("real division training terminal is ineligible")
-    return float(threshold)
+    return float(threshold), {
+        fold: float(raw_weights[fold]) for fold in MODEL_FOLDS
+    }
 
 
 @torch.inference_mode()
@@ -293,9 +316,18 @@ def build_rows(
     cache_root: Path,
     models: list[torch.nn.Module],
     *,
+    model_weights: list[float],
     device: torch.device,
     batch_size: int,
 ) -> list[dict[str, Any]]:
+    weights = np.asarray(model_weights, dtype=np.float64)
+    if not (
+        weights.shape == (len(models),)
+        and np.all(np.isfinite(weights))
+        and np.all(weights >= 0.0)
+        and np.isclose(weights.sum(), 1.0, rtol=0.0, atol=1e-12)
+    ):
+        raise ValueError("model weights must be finite, nonnegative, and sum to one")
     rows: list[dict[str, Any]] = []
     for movie in inventory["movies"]:
         stem = str(movie["stem"])
@@ -324,7 +356,9 @@ def build_rows(
             fold_scores = score_patches(
                 models, patches, device=device, batch_size=batch_size
             )
-            ensemble = np.mean(np.stack(fold_scores), axis=0)
+            ensemble = np.sum(
+                weights[:, np.newaxis] * np.stack(fold_scores), axis=0
+            )
             for index, candidate in enumerate(candidates):
                 row = {
                         "stem": stem,
@@ -392,10 +426,19 @@ def main() -> None:
     verify_cache(args.cache_root, manifest)
     device = torch.device("cuda:0")
     models, model_hashes = load_models(args.model_path, device)
+    terminal = None
+    model_threshold = None
+    ensemble_weights = {fold: 0.5 for fold in MODEL_FOLDS}
+    if args.training_terminal is not None:
+        terminal = json.loads(args.training_terminal.read_text(encoding="utf-8"))
+        model_threshold, ensemble_weights = validate_real_training_terminal(
+            terminal, model_hashes
+        )
     rows = build_rows(
         inventory,
         args.cache_root,
         models,
+        model_weights=[ensemble_weights[fold] for fold in MODEL_FOLDS],
         device=device,
         batch_size=args.batch_size,
     )
@@ -411,8 +454,7 @@ def main() -> None:
     policy_evaluation = None
     authorized_for_competition_graph_evaluation = False
     if args.training_terminal is not None:
-        terminal = json.loads(args.training_terminal.read_text(encoding="utf-8"))
-        model_threshold = validate_real_training_terminal(terminal, model_hashes)
+        assert terminal is not None and model_threshold is not None
         threshold_only = decision_metrics(
             rows, model_threshold=model_threshold, geometry_minimum=None
         )
@@ -432,6 +474,7 @@ def main() -> None:
             ),
             "training_terminal_sha256": sha256_file(args.training_terminal),
             "model_threshold_frozen_before_probe": model_threshold,
+            "ensemble_weights_frozen_before_probe": ensemble_weights,
             "biological_geometry_minimum": BIOLOGICAL_GEOMETRY_MINIMUM,
             "geometry_policy": (
                 "fixed branch symmetry score requires balanced opposing daughters "
@@ -450,6 +493,7 @@ def main() -> None:
         "run_id": RUN_ID,
         "gpu_name": gpu_name,
         "model_sha256": model_hashes,
+        "ensemble_weights": ensemble_weights,
         "metrics": metrics,
         "policy_evaluation": policy_evaluation,
         "rows": rows,

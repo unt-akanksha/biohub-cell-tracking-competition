@@ -103,13 +103,48 @@ def test_real_training_terminal_binds_frozen_models_and_threshold() -> None:
         "submission_created": False,
         "authorized_for_final_probe": True,
         "frozen_division_logit_threshold": 1.25,
+        "ensemble_weights": {
+            "target_44b6": 0.0,
+            "target_6bba": 1.0,
+        },
         "folds": {
             "target_44b6": {"model_sha256": hashes[0]},
             "target_6bba": {"model_sha256": hashes[1]},
         },
     }
 
-    assert validate_real_training_terminal(terminal, hashes) == 1.25
+    assert validate_real_training_terminal(terminal, hashes) == (
+        1.25,
+        {"target_44b6": 0.0, "target_6bba": 1.0},
+    )
     terminal["final_probe_opened"] = True
+    with pytest.raises(ValueError):
+        validate_real_training_terminal(terminal, hashes)
+
+
+def test_real_training_terminal_rejects_unfrozen_ensemble_weights() -> None:
+    hashes = ["a" * 64, "b" * 64]
+    terminal = {
+        "schema_version": 1,
+        "status": "accepted_at_selection",
+        "run_id": "competition-real-division-gate-v1",
+        "selection_gate_passed": True,
+        "final_probe_opened": False,
+        "checkpoint_frozen_before_final_probe": True,
+        "competition_train_data_read": True,
+        "competition_test_data_read": False,
+        "public_code_copied": False,
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+        "authorized_for_final_probe": True,
+        "frozen_division_logit_threshold": 1.25,
+        "ensemble_weights": {"target_44b6": 0.6, "target_6bba": 0.6},
+        "folds": {
+            "target_44b6": {"model_sha256": hashes[0]},
+            "target_6bba": {"model_sha256": hashes[1]},
+        },
+    }
+
     with pytest.raises(ValueError):
         validate_real_training_terminal(terminal, hashes)
