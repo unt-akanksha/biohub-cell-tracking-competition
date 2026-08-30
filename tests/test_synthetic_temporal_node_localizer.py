@@ -40,6 +40,9 @@ def fixture_state(index: int = 0):
 
 
 def test_splits_are_disjoint_and_audit_is_last() -> None:
+    assert len(TRAIN_INDICES) == 240
+    assert len(SELECTION_INDICES) == 8
+    assert len(AUDIT_INDICES) == 8
     assert set(TRAIN_INDICES).isdisjoint(SELECTION_INDICES)
     assert set(TRAIN_INDICES).isdisjoint(AUDIT_INDICES)
     assert set(SELECTION_INDICES).isdisjoint(AUDIT_INDICES)
@@ -49,7 +52,7 @@ def test_splits_are_disjoint_and_audit_is_last() -> None:
 def test_jitter_is_bounded_and_fixed_inventory_is_repeatable() -> None:
     jitter = random_jitter_um(np.random.default_rng(7), 1_000)
     assert np.linalg.norm(jitter, axis=1).max() <= 10.0 + 1e-5
-    states = [fixture_state(12), fixture_state(13)]
+    states = [fixture_state(240), fixture_state(241)]
     first = fixed_examples(states, seed=9, count=10)
     second = fixed_examples(states, seed=9, count=10)
     assert first.inventory_sha256 == second.inventory_sha256
@@ -81,7 +84,7 @@ def test_graph_features_encode_available_parent_child_context() -> None:
 
 
 def test_gate_requires_large_mean_gain_and_axis_safety() -> None:
-    examples = fixed_examples([fixture_state(12), fixture_state(13)], seed=11, count=20)
+    examples = fixed_examples([fixture_state(240), fixture_state(241)], seed=11, count=20)
     baseline = baseline_metrics(examples)
     strong = {
         **baseline,

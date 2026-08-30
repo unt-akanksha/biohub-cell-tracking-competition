@@ -18,8 +18,12 @@ if ($PollSeconds -lt 15 -or $MaximumCredentialPolls -lt 1) {
 }
 Set-Location -LiteralPath $RepositoryRoot
 $stateRoot = Join-Path $RepositoryRoot ".biohub/cache/aws-4gpu-temporal-localizer-v1"
-$syntheticRoot = Join-Path $RepositoryRoot ".biohub/cache/public-research-20260830/synthetic16"
-$archivePath = Join-Path $stateRoot "biohub-synthetic16-temporal-localizer-v1.tar.gz"
+$syntheticRoot = Join-Path $RepositoryRoot ".biohub/cache/public-research-20260830/synthetic256/biohub_synthetic"
+$sourceManifestPath = Join-Path $syntheticRoot "manifest.json"
+$sourceMetadataPath = Join-Path $syntheticRoot "metadata.json"
+$expectedSourceManifestSha256 = "e8b5376b2ac6fdd55bd6e45d1b07b401339d375b211b6f67be93fb0de4d8ce14"
+$expectedSourceMetadataSha256 = "328b9bb2545309e545cf68663ef985034ec68c36c0b709408a0f91801fedf89e"
+$archivePath = Join-Path $stateRoot "biohub-synthetic256-temporal-localizer-v1.tar.gz"
 $developmentArchivePath = Join-Path $stateRoot "biohub-temporal-localizer-development-v1.tar.gz"
 $developmentStage = Join-Path $stateRoot "development-stage"
 $probeRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-division-probe-frames-v1"
@@ -30,7 +34,7 @@ $renderedRunner = Join-Path $stateRoot "run-aws-4gpu-temporal-localizer-v1.sh"
 $launchTerminal = Join-Path $stateRoot "launch-terminal.json"
 $harvestTerminal = Join-Path $stateRoot "harvest-terminal.json"
 $logPath = Join-Path $stateRoot "controller.log"
-$localResult = Join-Path $stateRoot "biohub-synthetic16-temporal-node-localizer-v1-results.tar.gz"
+$localResult = Join-Path $stateRoot "biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz"
 $requiredCode = @(
     (Join-Path $RepositoryRoot "research/synthetic_pretrain/data.py"),
     (Join-Path $RepositoryRoot "research/temporal_contrastive/patch_model.py"),
@@ -97,19 +101,52 @@ foreach ($requiredDirectory in @($probeRoot, $controlRoot, $truthRoot)) {
         throw "Temporal-localizer development input is missing: $requiredDirectory"
     }
 }
-$sequenceFiles = @(0..15 | ForEach-Object {
+$sequenceFiles = @(0..255 | ForEach-Object {
     Join-Path $syntheticRoot ("sequences/seq_{0:D4}.npz" -f $_)
 })
 foreach ($sequence in $sequenceFiles) {
     if (-not (Test-Path -LiteralPath $sequence -PathType Leaf)) {
-        throw "Synthetic16 source is incomplete: $sequence"
+        throw "Synthetic256 source is incomplete: $sequence"
+    }
+}
+$sourceManifestSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourceManifestPath).Hash.ToLowerInvariant()
+$sourceMetadataSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $sourceMetadataPath).Hash.ToLowerInvariant()
+if (
+    $sourceManifestSha256 -ne $expectedSourceManifestSha256 -or
+    $sourceMetadataSha256 -ne $expectedSourceMetadataSha256
+) {
+    throw "Synthetic256 source manifest or metadata changed from the audited CC0 output"
+}
+$sourceManifest = Get-Content -Raw -LiteralPath $sourceManifestPath | ConvertFrom-Json
+$sourceMetadata = Get-Content -Raw -LiteralPath $sourceMetadataPath | ConvertFrom-Json
+if (
+    [int]$sourceMetadata.n_sequences -ne 2174 -or
+    [int64]$sourceMetadata.total_nodes -ne 4056226 -or
+    [int64]$sourceMetadata.total_divisions -ne 165267 -or
+    [int]$sourceMetadata.seq_len -ne 6
+) {
+    throw "Synthetic256 audited source inventory changed"
+}
+$manifestByFile = @{}
+foreach ($row in @($sourceManifest.sequences)) {
+    $manifestByFile[[string]$row.file] = $row
+}
+for ($index = 0; $index -lt 256; $index++) {
+    $relative = "sequences/seq_{0:D4}.npz" -f $index
+    $sequence = Join-Path $syntheticRoot $relative
+    $record = $manifestByFile[$relative]
+    if (
+        $null -eq $record -or [int]$record.T -ne 6 -or
+        [int64]$record.bytes -ne (Get-Item -LiteralPath $sequence).Length
+    ) {
+        throw "Synthetic256 file does not match the audited byte inventory: $relative"
     }
 }
 if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf)) {
     Push-Location -LiteralPath $syntheticRoot
     try {
-        & tar -czf $archivePath README.md source_metadata.json source_manifest_full.json sequences
-        if ($LASTEXITCODE -ne 0) { throw "Synthetic16 archive creation failed" }
+        & tar -czf $archivePath manifest.json metadata.json sequences
+        if ($LASTEXITCODE -ne 0) { throw "Synthetic256 archive creation failed" }
     }
     finally { Pop-Location }
 }
@@ -141,11 +178,11 @@ if (-not (Test-Path -LiteralPath $developmentArchivePath -PathType Leaf)) {
 $archiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
 $developmentArchiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $developmentArchivePath).Hash.ToLowerInvariant()
 $runnerText = (Get-Content -Raw -LiteralPath $runnerTemplate).Replace(
-    "__SYNTHETIC16_ARCHIVE_SHA256__", $archiveSha256
+    "__SYNTHETIC256_ARCHIVE_SHA256__", $archiveSha256
 ).Replace(
     "__DEVELOPMENT_ARCHIVE_SHA256__", $developmentArchiveSha256
 )
-if ($runnerText -match "__(SYNTHETIC16|DEVELOPMENT)_ARCHIVE_SHA256__") {
+if ($runnerText -match "__(SYNTHETIC256|DEVELOPMENT)_ARCHIVE_SHA256__") {
     throw "Temporal-localizer runner hash binding failed"
 }
 Set-Content -LiteralPath $renderedRunner -Encoding utf8 -Value $runnerText
@@ -171,6 +208,12 @@ if ($ValidateOnly) {
         division_critical_selection_examples = 512
         division_critical_audit_examples = 512
         serialized_checkpoint_selection_gate_required = $true
+        synthetic_sequence_count = 256
+        synthetic_train_sequence_count = 240
+        synthetic_selection_sequence_count = 8
+        synthetic_sealed_audit_sequence_count = 8
+        source_manifest_sha256 = $sourceManifestSha256
+        source_metadata_sha256 = $sourceMetadataSha256
         rendered_runner_sha256 = $renderedRunnerSha256
         trainer_sha256 = $trainerSha256
         archive_sha256 = $archiveSha256
@@ -264,7 +307,7 @@ try {
         $renderedRunner, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh"
     ))
     Invoke-Checked "scp" ($sshBase + @(
-        $archivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic16-temporal-localizer-v1.tar.gz"
+        $archivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic256-temporal-localizer-v1.tar.gz"
     ))
     Invoke-Checked "scp" ($sshBase + @(
         $developmentArchivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz"
@@ -286,6 +329,12 @@ try {
         division_critical_selection_examples = 512
         division_critical_audit_examples = 512
         serialized_checkpoint_selection_gate_required = $true
+        synthetic_sequence_count = 256
+        synthetic_train_sequence_count = 240
+        synthetic_selection_sequence_count = 8
+        synthetic_sealed_audit_sequence_count = 8
+        source_manifest_sha256 = $sourceManifestSha256
+        source_metadata_sha256 = $sourceMetadataSha256
         rendered_runner_sha256 = $renderedRunnerSha256
         trainer_sha256 = $trainerSha256
         synthetic_archive_sha256 = $archiveSha256
@@ -295,7 +344,7 @@ try {
         authorized_for_submission = $false
     }
 
-    $remoteChecksum = "/home/ubuntu/biohub-synthetic16-temporal-node-localizer-v1-results.tar.gz.sha256"
+    $remoteChecksum = "/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz.sha256"
     $resultReady = $false
     for ($poll = 1; $poll -le 480; $poll++) {
         $savedPreference = $ErrorActionPreference
@@ -308,7 +357,7 @@ try {
     }
     if (-not $resultReady) { throw "Timed out waiting for the four-GPU temporal-localizer result" }
     Invoke-Checked "scp" ($sshBase + @(
-        "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic16-temporal-node-localizer-v1-results.tar.gz",
+        "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz",
         $localResult
     ))
     $checksumText = (& ssh @sshBase "${RemoteUser}@${remoteHost}" "cat $remoteChecksum") -join "`n"

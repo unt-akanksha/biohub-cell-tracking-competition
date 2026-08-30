@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Train independently gated temporal node localizers on Synthetic16 CC0.
+"""Train independently gated temporal node localizers on Synthetic256 CC0.
 
 The split is immutable: sequences 0--11 optimize weights, 12--13 rank
 checkpoints, and 14--15 remain sealed until a checkpoint has been selected and
@@ -41,10 +41,10 @@ from research.temporal_localization.model import (
 )
 
 
-RUN_ID = "synthetic16-temporal-node-localizer-v1"
-TRAIN_INDICES = tuple(range(12))
-SELECTION_INDICES = (12, 13)
-AUDIT_INDICES = (14, 15)
+RUN_ID = "synthetic256-temporal-node-localizer-v1"
+TRAIN_INDICES = tuple(range(240))
+SELECTION_INDICES = tuple(range(240, 248))
+AUDIT_INDICES = tuple(range(248, 256))
 DEFAULT_SEEDS = (41_021, 41_029, 41_039, 41_047)
 
 
@@ -92,13 +92,13 @@ def state_dict_half(model: torch.nn.Module) -> dict[str, torch.Tensor]:
 
 
 def discover_sequence_paths(root: Path) -> list[Path]:
-    paths = [root / "sequences" / f"seq_{index:04d}.npz" for index in range(16)]
+    paths = [root / "sequences" / f"seq_{index:04d}.npz" for index in range(256)]
     missing = [str(path) for path in paths if not path.is_file()]
     if missing:
-        raise FileNotFoundError(f"Synthetic16 sequence inventory is incomplete: {missing}")
+        raise FileNotFoundError(f"Synthetic256 sequence inventory is incomplete: {missing}")
     extras = sorted((root / "sequences").glob("seq_*.npz"))
     if extras != paths:
-        raise ValueError("Synthetic16 sequence inventory changed from the frozen 16 files")
+        raise ValueError("Synthetic256 sequence inventory changed from the frozen 256 files")
     return paths
 
 

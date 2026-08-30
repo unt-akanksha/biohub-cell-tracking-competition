@@ -2,13 +2,13 @@
 set -euo pipefail
 
 workspace=/home/ubuntu/biohub
-data_archive=/home/ubuntu/biohub-synthetic16-temporal-localizer-v1.tar.gz
-data_parent=/home/ubuntu/biohub-synthetic16-temporal-localizer-v1
+data_archive=/home/ubuntu/biohub-synthetic256-temporal-localizer-v1.tar.gz
+data_parent=/home/ubuntu/biohub-synthetic256-temporal-localizer-v1
 development_archive=/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz
 development_root=/home/ubuntu/biohub-temporal-localizer-development-v1
-output_root=/home/ubuntu/biohub-results/synthetic16-temporal-node-localizer-v1
-result_archive=/home/ubuntu/biohub-synthetic16-temporal-node-localizer-v1-results.tar.gz
-archive_sha256=__SYNTHETIC16_ARCHIVE_SHA256__
+output_root=/home/ubuntu/biohub-results/synthetic256-temporal-node-localizer-v1
+result_archive=/home/ubuntu/biohub-synthetic256-temporal-node-localizer-v1-results.tar.gz
+archive_sha256=__SYNTHETIC256_ARCHIVE_SHA256__
 development_archive_sha256=__DEVELOPMENT_ARCHIVE_SHA256__
 seeds=(41021 41029 41039 41047)
 
@@ -159,10 +159,10 @@ development_status=$?
 set -e
 printf '%s\n' "$development_status" >"$output_root/real-development-probe.exit-code"
 cd /home/ubuntu/biohub-results
-find synthetic16-temporal-node-localizer-v1 -type f ! -name SHA256SUMS -print0 \
+find synthetic256-temporal-node-localizer-v1 -type f ! -name SHA256SUMS -print0 \
   | sort -z | xargs -0 sha256sum >"$output_root/SHA256SUMS"
 tar -czf "$result_archive" -C /home/ubuntu/biohub-results \
-  synthetic16-temporal-node-localizer-v1
+  synthetic256-temporal-node-localizer-v1
 sha256sum "$result_archive" >"$result_archive.sha256"
 
 # Bound idle cost if the local harvest controller disappears overnight. The

@@ -30,7 +30,7 @@ def result_fixture(root: Path, members: int = 3) -> Path:
         terminal = {
             "schema_version": 1,
             "status": "completed",
-            "run_id": "synthetic16-temporal-node-localizer-v1",
+            "run_id": "synthetic256-temporal-node-localizer-v1",
             "parameter_count": 71_249_805,
             "seed": 41021 + index,
             "selection_gate_passed": True,
@@ -63,7 +63,7 @@ def result_fixture(root: Path, members: int = 3) -> Path:
             "schema_version": 1,
             "status": "development_passed",
             "run_id": "temporal-node-localizer-real-development-v1",
-            "training_run_id": "synthetic16-temporal-node-localizer-v1",
+            "training_run_id": "synthetic256-temporal-node-localizer-v1",
             "members": accepted,
             "gate": {
                 "passed": True,

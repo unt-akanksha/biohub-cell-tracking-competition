@@ -151,9 +151,10 @@ minority failure mode; coordinate localization is the new primary branch.
   frozen graph-motion features, 71,249,805 parameters per member.
 - Mechanical scope: bounded coordinate offsets only. Node IDs, counts, times,
   and lineage edges are immutable.
-- Data: the CC0 Synthetic16 subset, 27,696 labeled nodes in 16 six-frame
-  sequences. Sequences 0–11 train, 12–13 select checkpoints, and 14–15 remain
-  unopened until each checkpoint is serialized and hash-frozen.
+- Data: a provenance-bound CC0 Synthetic256 subset with 480,273 labeled nodes
+  in 256 six-frame sequences. Sequences 0–239 train, 240–247 select
+  checkpoints, and 248–255 remain unopened until each checkpoint is serialized
+  and hash-frozen.
 - Schedule: four independent seeds on four AWS A10Gs, 20,000 steps per member,
   equal-weight ensemble only if every included member independently passes the
   selection and sealed-audit gates. Audit subset/weight searches are forbidden.
@@ -212,8 +213,9 @@ minority failure mode; coordinate localization is the new primary branch.
   global node recall does not guarantee division quality and that parent/daughter
   localization near 3 um matters. This supports a model gate, not copying a
   public threshold or prediction.
-- Synthetic16 contains 2,608 division-critical interior nodes among 18,412
-  eligible nodes, with 12.3--16.1% coverage in every sequence. The heavy trainer
+- Synthetic256 contains 45,211 division-critical interior nodes among 319,623
+  eligible nodes; every sequence contributes at least 76 division-critical
+  rows. The heavy trainer
   now forces four of each 16 batch slots from parent/daughter rows and requires
   both global and frozen division-critical selection/audit gains for every
   deployable member.
@@ -221,18 +223,25 @@ minority failure mode; coordinate localization is the new primary branch.
   before the sealed audit files are opened. This closes pre-/post-serialization
   evidence drift while preserving the four-seed equal-weight policy.
 - Final pre-launch regression: 31 temporal-localization tests passed. The
-  controller validation binds runner SHA-256 `2ef7582d27baae1698f57d2d566982c363a7d02d582ff5bd1f4112146073a53b`,
-  trainer SHA-256 `84a65ec25b81a2c3d0e251e444392fdf49fc17c76b52b789d06080833a763517`,
-  Synthetic16 archive SHA-256 `6404033fa953a4ec7312cb0f54037feb9d9cb3c9cafa6ec4cad295b3f6b845b4`,
+  controller validation binds runner SHA-256 `02b98e20e0e23b1fd87f4c06a1b6769184d825e0d468b2c4aed32878f23e4ae8`,
+  trainer SHA-256 `41d8ca55448aa2b6387ddf41693f722ac68d84b458f39fe60c62b952bca16be7`,
+  Synthetic256 archive SHA-256 `d8eca77fcaabaad185bfeaa20351a5afec1f2597106822525ade35b40d43a095`,
   and real-development archive SHA-256 `863d3edcce206266bfb6ad4d78afd033b662d1c57e3b0c11a81bb4bfc84a8b26`.
 - Controller PID 46440 was stopped before launch while both terminal records
   were absent so the CUDA-environment bootstrap could be hardened. Dependency
   installation now detects whether user-site packages are visible instead of
   unconditionally using `pip --user`, verifies imports after installation, and
   records Python, package, CUDA, cuDNN, and all four GPU identities in the
-  harvested runtime environment manifest. The independent candidate
-  promotion/submission controller remains PID 2852.
+  harvested runtime environment manifest. Controller PID 40268 and downstream
+  PID 2852 were subsequently stopped before either terminal existed so the
+  evidence contract could expand from 16 to 256 source sequences.
 - Executable CPU smoke evidence used a real division-critical row from sealed-
-  selection sequence 12: physical patch shape 1x3x17x17x17, graph shape 1x12,
+  selection sequence 240: physical patch shape 1x3x17x17x17, graph shape 1x12,
   71,249,805 parameters, finite outputs, and two independent reloads of the
   142,589,136-byte FP16 checkpoint produced bit-exact outputs.
+- The enlarged shard was downloaded file-by-file from the audited CC0 kernel.
+  Current full-manifest SHA-256 `e8b5376b2ac6fdd55bd6e45d1b07b401339d375b211b6f67be93fb0de4d8ce14`,
+  metadata SHA-256 `328b9bb2545309e545cf68663ef985034ec68c36c0b709408a0f91801fedf89e`,
+  and overlapping sequence 0000 all exactly match the prior source audit. The
+  launcher additionally checks every selected file against the audited byte
+  inventory before creating the 753,671,907-byte deployment archive.

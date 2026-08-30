@@ -39,7 +39,14 @@ def test_controller_is_hash_bound_single_instance_and_non_submitting() -> None:
     text = CONTROLLER.read_text(encoding="utf-8")
     assert 'InstanceType = "g5.12xlarge"' in text
     assert '"--count", "1"' in text
-    assert "__SYNTHETIC16_ARCHIVE_SHA256__" in text
+    assert "__SYNTHETIC256_ARCHIVE_SHA256__" in text
+    assert "0..255" in text
+    assert "synthetic256/biohub_synthetic" in text
+    assert 'expectedSourceManifestSha256 = "e8b5376b2ac6fdd55bd6e45d1b07b401339d375b211b6f67be93fb0de4d8ce14"' in text
+    assert 'expectedSourceMetadataSha256 = "328b9bb2545309e545cf68663ef985034ec68c36c0b709408a0f91801fedf89e"' in text
+    assert "synthetic_train_sequence_count = 240" in text
+    assert "synthetic_selection_sequence_count = 8" in text
+    assert "synthetic_sealed_audit_sequence_count = 8" in text
     assert "__DEVELOPMENT_ARCHIVE_SHA256__" in text
     assert "parameters_per_model = 71249805" in text
     assert "division_critical_examples_per_batch = 4" in text

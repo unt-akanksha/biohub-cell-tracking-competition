@@ -30,7 +30,7 @@ is copied. The additional coordinate stage is project-authored and cannot add
 or remove nodes or alter lineage edges.
 
 Every attached 71.25M-parameter temporal ConvNeXt3D/axial member passed an
-independent Synthetic16 selection gate and a sealed synthetic audit. Ensemble
+independent Synthetic256 selection gate and a sealed synthetic audit. Ensemble
 membership contains all synthetic-eligible members and was frozen before the
 already-opened real development probe. The real probe supplied one transfer
 gate only; it did not search thresholds, weights, or member subsets. At
@@ -133,7 +133,7 @@ for _member in _TLC_MEMBERS:
     _terminal = _tlc_json.loads((_TLC_ROOT / _member["terminal_path"]).read_text(encoding="utf-8"))
     if not (
         _terminal.get("status") == "completed"
-        and _terminal.get("run_id") == "synthetic16-temporal-node-localizer-v1"
+        and _terminal.get("run_id") == "synthetic256-temporal-node-localizer-v1"
         and _terminal.get("model_sha256") == _member["model_sha256"]
         and _terminal.get("checkpoint_frozen_before_audit") is True
         and _terminal.get("selection_gate_passed") is True
