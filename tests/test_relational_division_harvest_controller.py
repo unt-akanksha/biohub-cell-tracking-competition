@@ -26,6 +26,13 @@ def build_harvest(path: Path, *, unbound: bool = False) -> None:
         "planned_model_count": 8,
         "completed_model_count": 8,
         "steps_per_model": 15_000,
+        "ensemble_members_precommitted_before_audit": True,
+        "precommitted_members": ["seed-1-init-1"],
+        "policy_audit_passed": True,
+        "deployment_policy": "strongest_selection_individual",
+        "deployment_members": ["seed-1-init-1"],
+        "absolute_threshold_used_for_deployment": False,
+        "model_subset_searched_on_audit": False,
         "selection_accepted_members": ["seed-1-init-1"],
         "independently_strong_members": ["seed-1-init-1"],
         "ensemble_eligible": False,
@@ -39,11 +46,28 @@ def build_harvest(path: Path, *, unbound: bool = False) -> None:
     }
     files = {
         f"{verifier.ROOT}/training.exit-code": b"0\n",
+        f"{verifier.ROOT}/development-probe.exit-code": b"0\n",
         f"{verifier.ROOT}/training.log": b"completed\n",
         f"{verifier.ROOT}/models/relational_division_sweep_terminal.json": (
             json.dumps(aggregate).encode()
         ),
     }
+    files[f"{verifier.ROOT}/relational_development_probe.json"] = json.dumps(
+        {
+            "schema_version": 1,
+            "status": "development_probe_complete",
+            "run_id": "competition-relational-division-development-probe-v1",
+            "selection_policy": "strongest_selection_individual",
+            "member_count": 1,
+            "absolute_threshold_used": False,
+            "weights_searched_on_probe": False,
+            "model_subset_searched_on_probe": False,
+            "competition_test_data_read": False,
+            "public_leaderboard_used_for_selection": False,
+            "submission_created": False,
+            "authorized_for_submission": False,
+        }
+    ).encode()
     sums = "".join(
         f"{hashlib.sha256(value).hexdigest()}  {name}\n"
         for name, value in sorted(files.items())
@@ -88,6 +112,7 @@ def test_harvest_verifier_recovers_terminal_evidence(tmp_path: Path) -> None:
     assert result["training_exit_code"] == 0
     assert result["completed_model_count"] == 8
     assert result["independently_strong_members"] == ["seed-1-init-1"]
+    assert result["development_probe_present"] is True
 
 
 def test_harvest_verifier_rejects_unbound_file(tmp_path: Path) -> None:
@@ -96,3 +121,15 @@ def test_harvest_verifier_rejects_unbound_file(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="unbound"):
         verifier.verify_archive(archive)
+
+
+def test_verified_harvest_extracts_only_manifest_bound_files(tmp_path: Path) -> None:
+    archive = tmp_path / "results.tar.gz"
+    destination = tmp_path / "extracted"
+    build_harvest(archive)
+
+    result = verifier.extract_verified_archive(archive, destination)
+
+    assert result["extracted_to"] == str(destination.resolve())
+    assert (destination / verifier.ROOT / "training.exit-code").read_text() == "0\n"
+    assert not (destination / verifier.ROOT / "unbound.txt").exists()

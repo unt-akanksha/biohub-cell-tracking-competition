@@ -695,3 +695,41 @@ unmanifested files, checkpoint/hash drift, incomplete eight-member terminals,
 and any evidence that opens the final probe or competition test. Thus the
 overnight run no longer depends on a valid AWS token still existing at its
 completion time.
+
+The relational selection policy was tightened before deployment. All eight
+members are still trained and admitted independently, but the equal-rank
+ensemble membership is now frozen on the movie-disjoint selection split before
+the audit is opened. It is selected only with at least `0.01` AP gain over the
+strongest admitted member and per-embryo AP at least `0.45`; otherwise the
+single strongest selection member is precommitted. Audit cannot search member
+subsets. An ensemble can progress only if every frozen component passes audit
+independently and the frozen ensemble itself passes the audit gate.
+
+Candidate-aligned inference now reconstructs the exact training tuple from a
+graph candidate: parent, retained daughter, proposed daughter, the shared
+`t-1,t,t+1` temporal window, and the same nine geometry values including
+predecessor velocity missingness. Member logits are converted to per-movie
+ranks before averaging, so deployment transfers no absolute threshold. Four
+focused inference tests cover geometry order, missing velocity, scale-free
+ranking, and three-center/three-frame sampling.
+
+The exact EMA development candidate inventory is also bound. The four full EMA
+graphs contain 16,009 candidate parents across all timepoints, whereas the
+pre-existing train-only development probe scopes 225 rows around known event
+frames. All 225 scoped keys are present byte-exactly in the EMA graphs. Nine
+rows meet the frozen inference geometry rule and all three safe recoveries are
+retained. Enriched inventory SHA-256 is
+`be8ff10d3355e2918a3480cb30a4de57c39a94edbb854aba5c9447da02ab30ce`.
+This distinction prevents the small development probe from being mistaken for
+the hidden-test candidate distribution.
+
+The restarted AWS deployment watcher is process `39772`. It uploads the
+relational inference and probe sources with the trainer, and the remote runner
+opens the enriched development probe only when the frozen audit policy exits
+successfully. The streamed result verifier now binds that probe terminal as
+well as all checkpoints. A third local controller, process `32100`, safely
+extracts the verified harvest and evaluates relational/morphology top-rank
+agreement against the exact EMA graphs and truth. Promotion requires exactly
+three selected true recoveries, zero false recoveries, and no regression from
+the frozen ranked-consensus edge/division result. This controller cannot
+package or submit a competition entry.

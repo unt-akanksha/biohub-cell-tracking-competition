@@ -27,6 +27,9 @@ $logPath = Join-Path $stateRoot "deployment.log"
 $verifier = Join-Path $RepositoryRoot "scripts/verify-relational-division-patch-archive.py"
 $trainer = Join-Path $RepositoryRoot "research/temporal_contrastive/train_relational_division_sweep.py"
 $model = Join-Path $RepositoryRoot "research/temporal_contrastive/relational_division_model.py"
+$inference = Join-Path $RepositoryRoot "research/temporal_contrastive/relational_division_inference.py"
+$probeScorer = Join-Path $RepositoryRoot "research/temporal_contrastive/score_relational_division_development_probe.py"
+$developmentInventory = Join-Path $RepositoryRoot ".biohub/results/competition-relational-division-development-inventory-v1.json"
 $runnerTemplate = Join-Path $RepositoryRoot "scripts/run-antelume-relational-division-sweep-v1.sh"
 $renderedRunner = Join-Path $stateRoot "run-antelume-relational-division-sweep-v1.sh"
 
@@ -66,12 +69,12 @@ function Invoke-Checked([string]$Program, [string[]]$Arguments) {
 
 New-Item -ItemType Directory -Path $stateRoot -Force | Out-Null
 if ($ValidateOnly) {
-    foreach ($path in @($verifier, $trainer, $model, $runnerTemplate)) {
+    foreach ($path in @($verifier, $trainer, $model, $inference, $probeScorer, $developmentInventory, $runnerTemplate)) {
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
             throw "Relational deployment input is missing: $path"
         }
     }
-    & python -m py_compile $verifier $trainer $model
+    & python -m py_compile $verifier $trainer $model $inference $probeScorer
     if ($LASTEXITCODE -ne 0) { throw "Relational Python validation failed" }
     Push-Location -LiteralPath $RepositoryRoot
     try {
@@ -150,17 +153,19 @@ try {
 
     $scpBase = @("-i", $SshKey, "-o", "StrictHostKeyChecking=no")
     Publish-Key
-    Invoke-Checked "scp" ($scpBase + @($trainer, $model, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/research/temporal_contrastive/"))
+    Invoke-Checked "scp" ($scpBase + @($trainer, $model, $inference, $probeScorer, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/research/temporal_contrastive/"))
     Publish-Key
     Invoke-Checked "scp" ($scpBase + @($renderedRunner, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub/scripts/run-antelume-relational-division-sweep-v1.sh"))
     Publish-Key
     Invoke-Checked "scp" ($scpBase + @($archivePath, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub-relational-division-patches-v3.tar.gz"))
     Publish-Key
+    Invoke-Checked "scp" ($scpBase + @($developmentInventory, "${RemoteUser}@${RemoteHost}:/home/ubuntu/biohub-relational-development-inventory-v1.json"))
+    Publish-Key
     $remoteCommand = @'
 cd /home/ubuntu/biohub
 chmod +x scripts/run-antelume-relational-division-sweep-v1.sh
 bash -n scripts/run-antelume-relational-division-sweep-v1.sh
-/home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/relational_division_model.py research/temporal_contrastive/train_relational_division_sweep.py
+/home/ubuntu/venv/bin/python -m py_compile research/temporal_contrastive/relational_division_model.py research/temporal_contrastive/relational_division_inference.py research/temporal_contrastive/train_relational_division_sweep.py research/temporal_contrastive/score_relational_division_development_probe.py
 test ! -e /home/ubuntu/biohub-results/competition-relational-division-sweep-v1
 nohup bash scripts/run-antelume-relational-division-sweep-v1.sh >/home/ubuntu/biohub-logs/relational-division-sweep-controller-v1.log 2>&1 < /dev/null &
 echo RELATIONAL_CONTROLLER_PID=$!
@@ -178,6 +183,7 @@ echo RELATIONAL_CONTROLLER_PID=$!
         waits_for_current_probe_chain = $true
         audit_opened_during_training = $false
         final_probe_opened = $false
+        development_probe_runs_only_after_audit_acceptance = $true
         authorized_for_submission = $false
     }
 }

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import pytest
 import torch
 
 from research.temporal_contrastive.train_relational_division_sweep import (
     augment_relational_batch,
     balanced_rows,
+    calibration_free_equal_rank_ensemble,
     eligible_metrics,
     passes_selection_gate,
 )
@@ -57,3 +59,19 @@ def test_eligible_metrics_and_gate_ignore_ineligible_hard_negatives() -> None:
     assert metrics["average_precision"] == 1.0
     assert metrics["true_positives_before_first_false_positive"] == 4
     assert passes_selection_gate(metrics) is True
+
+
+def test_equal_rank_ensemble_is_calibration_free_and_aligned() -> None:
+    first = torch.tensor([100.0, 10.0, -30.0])
+    second = torch.tensor([0.51, 0.99, 0.01])
+
+    scores = calibration_free_equal_rank_ensemble([first, second])
+
+    assert torch.equal(scores, torch.tensor([0.75, 0.75, 0.0]))
+
+
+def test_equal_rank_ensemble_rejects_unaligned_members() -> None:
+    with pytest.raises(ValueError, match="aligned"):
+        calibration_free_equal_rank_ensemble(
+            [torch.zeros(2), torch.zeros(3)]
+        )

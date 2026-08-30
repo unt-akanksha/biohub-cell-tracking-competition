@@ -257,6 +257,30 @@ def passes_selection_gate(metrics: dict[str, Any]) -> bool:
     )
 
 
+def calibration_free_equal_rank_ensemble(
+    member_scores: list[torch.Tensor],
+) -> torch.Tensor:
+    if not member_scores:
+        raise ValueError("relational rank ensemble requires at least one member")
+    shape = member_scores[0].shape
+    if any(scores.shape != shape or scores.ndim != 1 for scores in member_scores):
+        raise ValueError("relational rank ensemble scores must be aligned vectors")
+    ranks = []
+    for scores in member_scores:
+        if not torch.isfinite(scores).all():
+            raise ValueError("relational rank ensemble scores must be finite")
+        order = torch.argsort(scores, descending=True, stable=True)
+        percentiles = (
+            torch.ones(1, dtype=torch.float64)
+            if len(scores) == 1
+            else torch.linspace(1.0, 0.0, len(scores), dtype=torch.float64)
+        )
+        member_ranks = torch.empty(len(scores), dtype=torch.float64)
+        member_ranks[order] = percentiles
+        ranks.append(member_ranks)
+    return torch.stack(ranks).mean(dim=0).float()
+
+
 def balanced_rows(
     targets: torch.Tensor,
     eligible: torch.Tensor,
@@ -537,7 +561,62 @@ def main() -> None:
             name = f"seed-{seed}-init-{initial_index + 1}"
             terminals.append(train_member(member_name=name, seed=seed + 10_003 * initial_index, initial_model_path=initial_model, train_data=train_data, selection_data=selection_data, output_root=args.output_root, args=args, device=device))
     accepted = [row for row in terminals if row["selection_gate_passed"]]
+    selection_scores_by_member: dict[str, torch.Tensor] = {}
+    for row in accepted:
+        model = RelationalDivisionModel().to(device)
+        checkpoint = args.output_root / row["member"] / "relational_model.pt"
+        model.load_state_dict(
+            torch.load(checkpoint, map_location=device, weights_only=True), strict=True
+        )
+        selection_scores_by_member[row["member"]] = predict(
+            model,
+            selection_data[0],
+            selection_data[1],
+            batch_size=args.validation_batch_size,
+            device=device,
+        )
+        del model
+        torch.cuda.empty_cache()
+    strongest_selection_member = (
+        max(accepted, key=lambda row: selection_utility(row["selection"]))
+        if accepted
+        else None
+    )
+    selection_ensemble = None
+    if len(accepted) >= 2:
+        ensemble_scores = calibration_free_equal_rank_ensemble(
+            [selection_scores_by_member[row["member"]] for row in accepted]
+        )
+        selection_ensemble = eligible_metrics(
+            selection_data[2], ensemble_scores, selection_data[4], selection_data[5]
+        )
+    ensemble_selected = bool(
+        selection_ensemble is not None
+        and strongest_selection_member is not None
+        and selection_ensemble["average_precision"]
+        >= strongest_selection_member["selection"]["average_precision"] + 0.01
+        and selection_ensemble["true_positives_before_first_false_positive"] >= 2
+        and all(
+            row["average_precision"] >= 0.45
+            for row in selection_ensemble["by_embryo"].values()
+        )
+    )
+    precommitted_policy = (
+        "equal_rank_selection_admitted_ensemble"
+        if ensemble_selected
+        else ("strongest_selection_individual" if strongest_selection_member else None)
+    )
+    precommitted_members = (
+        [row["member"] for row in accepted]
+        if ensemble_selected
+        else (
+            [strongest_selection_member["member"]]
+            if strongest_selection_member is not None
+            else []
+        )
+    )
     audit_results = []
+    audit_scores_by_member: dict[str, torch.Tensor] = {}
     if accepted:
         audit_data = load_role(args.data_root, manifest, "audit")
         audit_patches, audit_geometry, audit_targets, _, audit_eligible, audit_inventory = audit_data
@@ -546,6 +625,7 @@ def main() -> None:
             checkpoint = args.output_root / row["member"] / "relational_model.pt"
             model.load_state_dict(torch.load(checkpoint, map_location=device, weights_only=True), strict=True)
             scores = predict(model, audit_patches, audit_geometry, batch_size=args.validation_batch_size, device=device)
+            audit_scores_by_member[row["member"]] = scores
             metrics = eligible_metrics(audit_targets, scores, audit_eligible, audit_inventory)
             decisions = threshold_decisions(audit_targets[audit_eligible], scores[audit_eligible], row["selection_frozen_threshold"]["threshold"])
             passed = bool(passes_selection_gate(metrics) and decisions["tp"] >= 2 and decisions["precision"] >= 0.80)
@@ -555,6 +635,23 @@ def main() -> None:
             del model
             torch.cuda.empty_cache()
     independently_strong = [row for row in audit_results if row["audit_gate_passed"]]
+    independently_strong_names = {row["member"] for row in independently_strong}
+    audit_ensemble = None
+    if ensemble_selected:
+        audit_ensemble_scores = calibration_free_equal_rank_ensemble(
+            [audit_scores_by_member[name] for name in precommitted_members]
+        )
+        audit_ensemble = eligible_metrics(
+            audit_data[2], audit_ensemble_scores, audit_data[4], audit_data[5]
+        )
+    policy_audit_passed = bool(
+        precommitted_policy is not None
+        and set(precommitted_members) <= independently_strong_names
+        and (
+            precommitted_policy == "strongest_selection_individual"
+            or (audit_ensemble is not None and passes_selection_gate(audit_ensemble))
+        )
+    )
     aggregate = {
         "schema_version": 1,
         "status": "completed",
@@ -568,10 +665,21 @@ def main() -> None:
         "completed_model_count": len(terminals),
         "steps_per_model": args.steps,
         "selection_accepted_members": [row["member"] for row in accepted],
+        "selection_ensemble": selection_ensemble,
+        "ensemble_selection_minimum_gain": 0.01,
+        "ensemble_members_precommitted_before_audit": True,
+        "precommitted_policy": precommitted_policy,
+        "precommitted_members": precommitted_members,
         "audit_opened": bool(accepted),
         "audit_results": audit_results,
-        "independently_strong_members": [row["member"] for row in independently_strong],
-        "ensemble_eligible": len(independently_strong) >= 2,
+        "audit_ensemble": audit_ensemble,
+        "independently_strong_members": sorted(independently_strong_names),
+        "policy_audit_passed": policy_audit_passed,
+        "deployment_policy": precommitted_policy if policy_audit_passed else None,
+        "deployment_members": precommitted_members if policy_audit_passed else [],
+        "ensemble_eligible": bool(policy_audit_passed and ensemble_selected),
+        "absolute_threshold_used_for_deployment": False,
+        "model_subset_searched_on_audit": False,
         "final_probe_opened": False,
         "competition_train_data_read": True,
         "competition_test_data_read": False,

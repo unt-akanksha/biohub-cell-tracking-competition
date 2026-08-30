@@ -14,6 +14,9 @@ def test_remote_runner_is_large_gated_and_bound_to_antelume() -> None:
     assert text.count('--initial-model "$initial_') == 2
     assert "A10G" in text
     assert "current_probe_terminal" in text
+    assert "score_relational_division_development_probe.py" in text
+    assert 'if test "$status" -eq 0' in text
+    assert "biohub-relational-development-inventory-v1.json" in text
     assert "while nvidia-smi" in text
     assert "__RELATIONAL_ARCHIVE_SHA256__" in text
     assert "kaggle competitions submit" not in text
@@ -31,4 +34,5 @@ def test_local_controller_waits_for_both_extraction_and_credentials() -> None:
     assert "ec2-instance-connect send-ssh-public-key" in text
     assert "Start-Process" not in text
     assert "nohup bash scripts/run-antelume-relational-division-sweep-v1.sh" in text
+    assert "development_probe_runs_only_after_audit_acceptance = $true" in text
     assert "competition_submission_performed = $false" in text
