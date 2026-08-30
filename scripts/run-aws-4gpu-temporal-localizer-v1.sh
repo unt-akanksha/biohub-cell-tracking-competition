@@ -138,6 +138,7 @@ for gpu_index in 0 1 2 3; do
     --log-every 100 \
     --learning-rate 2e-4 \
     --minimum-learning-rate 2e-6 \
+    --warmup-steps 1000 \
     --weight-decay 0.03 \
     --ema-decay 0.997 \
     --member-max-wall-seconds 37800 \

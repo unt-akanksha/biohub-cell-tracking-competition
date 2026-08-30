@@ -16,6 +16,7 @@ def test_runner_uses_four_independent_large_members_and_auto_stops() -> None:
     assert "CUDA_VISIBLE_DEVICES=\"$gpu_index\"" in text
     assert "--steps 40000" in text
     assert "--validation-every 2000" in text
+    assert "--warmup-steps 1000" in text
     assert "--real-shard-root \"$real_root\"" in text
     assert "--real-shard-manifest-sha256 \"$real_manifest_sha256\"" in text
     assert "--real-replay-probability 0.25" in text

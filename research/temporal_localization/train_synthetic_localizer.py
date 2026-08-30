@@ -601,6 +601,29 @@ def normalized_state_weights(
     return counts / counts.sum()
 
 
+def scheduled_learning_rate(
+    step: int,
+    *,
+    total_steps: int,
+    warmup_steps: int,
+    maximum: float,
+    minimum: float,
+) -> float:
+    if not (
+        0 <= step <= total_steps
+        and 0 < warmup_steps < total_steps
+        and 0.0 < minimum < maximum
+    ):
+        raise ValueError("learning-rate schedule parameters are invalid")
+    if step <= warmup_steps:
+        fraction = step / warmup_steps
+        return minimum + (maximum - minimum) * fraction
+    progress = (step - warmup_steps) / (total_steps - warmup_steps)
+    return minimum + 0.5 * (maximum - minimum) * (
+        1.0 + math.cos(math.pi * progress)
+    )
+
+
 def train_member(
     args: argparse.Namespace,
     paths: list[Path],
@@ -657,7 +680,11 @@ def train_member(
     if parameter_count(model) != EXPECTED_PARAMETER_COUNT:
         raise RuntimeError("temporal localizer parameter inventory changed")
     ema = copy.deepcopy(model).requires_grad_(False).eval()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=args.minimum_learning_rate,
+        weight_decay=args.weight_decay,
+    )
     scaler = torch.amp.GradScaler("cuda")
     synthetic_weights = normalized_state_weights(train_states)
     synthetic_critical_states = [
@@ -731,6 +758,7 @@ def train_member(
             ),
             "real_replay_probability": args.real_replay_probability,
             "spatial_reflection_probability_per_axis": 0.5,
+            "learning_rate_warmup_steps": args.warmup_steps,
             "real_optimization_shards": len(real_train_states),
             "real_selection_shards": len(real_selection_states),
             "real_audit_shards_declared_but_unopened": len(real_audit_paths),
@@ -771,6 +799,15 @@ def train_member(
         if time.monotonic() - started >= args.member_max_wall_seconds - args.finalization_reserve_seconds:
             break
         completed_step = step
+        learning_rate = scheduled_learning_rate(
+            step,
+            total_steps=args.steps,
+            warmup_steps=args.warmup_steps,
+            maximum=args.learning_rate,
+            minimum=args.minimum_learning_rate,
+        )
+        for group in optimizer.param_groups:
+            group["lr"] = learning_rate
         use_real = bool(rng.random() < args.real_replay_probability)
         if use_real:
             global_states = real_train_states
@@ -838,12 +875,6 @@ def train_member(
         scaler.step(optimizer)
         scaler.update()
         update_ema(model, ema, decay=args.ema_decay)
-        progress = step / args.steps
-        learning_rate = args.minimum_learning_rate + 0.5 * (
-            args.learning_rate - args.minimum_learning_rate
-        ) * (1.0 + math.cos(math.pi * progress))
-        for group in optimizer.param_groups:
-            group["lr"] = learning_rate
         if step == 1 or step % args.log_every == 0:
             print(
                 json.dumps(
@@ -1287,6 +1318,7 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--log-every", type=int, default=100)
     result.add_argument("--learning-rate", type=float, default=2e-4)
     result.add_argument("--minimum-learning-rate", type=float, default=2e-6)
+    result.add_argument("--warmup-steps", type=int, default=1_000)
     result.add_argument("--weight-decay", type=float, default=0.03)
     result.add_argument("--ema-decay", type=float, default=0.997)
     result.add_argument("--member-max-wall-seconds", type=int, default=10_800)
@@ -1313,6 +1345,7 @@ def main() -> None:
         args.validation_batch_size,
         args.validation_every,
         args.log_every,
+        args.warmup_steps,
         args.member_max_wall_seconds,
         args.total_max_wall_seconds,
         args.finalization_reserve_seconds,
@@ -1320,6 +1353,8 @@ def main() -> None:
     if (
         min(counts) <= 0
         or not 0.0 < args.real_replay_probability < 1.0
+        or args.warmup_steps >= args.steps
+        or not 0.0 < args.minimum_learning_rate < args.learning_rate
         or args.division_critical_per_batch >= args.batch_size
         or len(set(args.seeds)) != len(args.seeds)
     ):

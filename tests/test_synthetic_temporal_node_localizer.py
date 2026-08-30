@@ -18,6 +18,7 @@ from research.temporal_localization.train_synthetic_localizer import (
     random_jitter_um,
     random_reflection_augmentation,
     relative_residual_sum,
+    scheduled_learning_rate,
     stratified_improvement_gate,
 )
 
@@ -214,3 +215,21 @@ def test_real_event_shard_retains_parent_and_boundary_daughters() -> None:
     assert graph.shape == (2, 12)
     assert target.shape == (2, 3)
     assert torch.isfinite(patches).all()
+
+
+def test_learning_rate_warms_then_cosine_decays() -> None:
+    values = [
+        scheduled_learning_rate(
+            step,
+            total_steps=40_000,
+            warmup_steps=1_000,
+            maximum=2e-4,
+            minimum=2e-6,
+        )
+        for step in (0, 500, 1_000, 20_500, 40_000)
+    ]
+    assert values[0] == 2e-6
+    assert values[1] == 1.01e-4
+    assert values[2] == 2e-4
+    assert values[2] > values[3] > values[4]
+    assert values[4] == 2e-6

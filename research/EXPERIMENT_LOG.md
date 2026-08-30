@@ -333,3 +333,7 @@ well as the synthetic generator.
   future image channel; ordinary real sampling remains interior-only. Thus the
   real selection and sealed-audit division gates cover both parent and daughter
   localization rather than silently testing parents alone.
+- The 40,000-step scratch schedule now warms linearly from `2e-6` to `2e-4`
+  over 1,000 steps before cosine decay back to `2e-6`. Learning rate is applied
+  before each optimizer update, avoiding the prior full-rate first step on an
+  untrained 71.25M-parameter network.
