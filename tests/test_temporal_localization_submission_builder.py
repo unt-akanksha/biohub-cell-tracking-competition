@@ -35,8 +35,8 @@ def test_notebook_is_dual_t4_coordinate_only_and_non_submitting(tmp_path: Path) 
     assert '"localization_edge_changes": 0' in text
     assert "localization_rounded_coordinate_changes" in text
     assert '"BIOHUB_OUTPUT_SAFE_DIVISIONS"] = "1"' in text
-    assert '"declared_budget_seconds": 42000' in text
-    assert "Timer(40800, _biohub_budget_expired)" in text
+    assert '"declared_budget_seconds": 39600' in text
+    assert "Timer(38400, _biohub_budget_expired)" in text
     assert '"competition_submission_performed": False' in text
     assert "kaggle competitions submit" not in text
     assert '"public_predictions_copied": False' in text

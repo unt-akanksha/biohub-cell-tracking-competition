@@ -74,7 +74,7 @@ def output_fixture(tmp_path: Path, runtime: Path) -> tuple[Path, Path]:
                 "status": "completed",
                 "submission_exists": True,
                 "submission_sha256": submission_hash,
-                "declared_budget_seconds": 42000,
+                "declared_budget_seconds": 39600,
                 "safety_margin_seconds": 1200,
                 "elapsed_seconds": 1000,
             }

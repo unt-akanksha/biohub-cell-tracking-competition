@@ -159,9 +159,9 @@ def verify_candidate(
         and terminal.get("status") == "completed"
         and terminal.get("submission_exists") is True
         and terminal.get("submission_sha256") == submission_sha256
-        and terminal.get("declared_budget_seconds") == 42_000
+        and terminal.get("declared_budget_seconds") == 39_600
         and terminal.get("safety_margin_seconds") == 1_200
-        and float(terminal.get("elapsed_seconds", math.inf)) < 42_000.0
+        and float(terminal.get("elapsed_seconds", math.inf)) < 39_600.0
     ):
         raise RuntimeError("temporal localization watchdog terminal is invalid")
     if not (
