@@ -177,3 +177,28 @@ def test_real_nondivision_shard_is_valid_for_global_replay() -> None:
     assert state.source == "real"
     assert len(state.eligible_rows) > 0
     assert len(state.division_critical_rows) == 0
+
+
+def test_real_event_shard_retains_parent_and_boundary_daughters() -> None:
+    volumes = np.zeros((3, 8, 8, 8), dtype=np.uint16)
+    nodes = np.asarray(
+        [
+            [0, 3, 3, 3, 10],
+            [1, 3, 4, 3, 20],
+            [2, 3, 5, 3, 30],
+            [2, 5, 5, 5, 31],
+        ],
+        dtype=np.float32,
+    )
+    sample = SequenceSample(
+        volumes=volumes,
+        nodes=nodes,
+        edges=np.asarray([[0, 1], [1, 2], [1, 3]], dtype=np.int64),
+        divisions=np.asarray([1], dtype=np.int64),
+        voxel_um=POOLED_VOXEL_UM.copy(),
+    )
+    real = build_sequence_state(10_001, sample, source="real")
+    synthetic = build_sequence_state(1, sample, source="synthetic")
+    assert real.eligible_rows.tolist() == [1]
+    assert real.division_critical_rows.tolist() == [1, 2, 3]
+    assert synthetic.division_critical_rows.tolist() == [1]

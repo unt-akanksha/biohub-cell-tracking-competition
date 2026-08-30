@@ -322,3 +322,9 @@ well as the synthetic generator.
   together. This expands orientation coverage without changing temporal order,
   physical scale, lineage flags, density, or boundary distance; deterministic
   tests verify both reproducibility and vector-sign consistency.
+- Real division event shards contain the dividing parent at their center and
+  both daughters in the final local frame. The real rare-event sampler now
+  retains all three rows and boundary-clamps only the daughter's unavailable
+  future image channel; ordinary real sampling remains interior-only. Thus the
+  real selection and sealed-audit division gates cover both parent and daughter
+  localization rather than silently testing parents alone.

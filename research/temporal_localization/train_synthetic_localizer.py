@@ -111,6 +111,8 @@ def build_sequence_state(
     source: str = "synthetic",
     require_division_critical: bool = True,
 ) -> SequenceState:
+    if source not in {"synthetic", "real"}:
+        raise ValueError(f"unknown localization source: {source}")
     node_count = len(sample.nodes)
     predecessor = np.full(node_count, -1, dtype=np.int64)
     successor_lists: list[list[int]] = [[] for _ in range(node_count)]
@@ -130,7 +132,18 @@ def build_sequence_state(
         if len(children) >= 2:
             division_critical[parent] = True
             division_critical[children] = True
-    division_critical_rows = eligible[division_critical[eligible]]
+    division_eligible = eligible
+    if source == "real":
+        # A real event shard is centered on the dividing parent and contains
+        # its daughters in the final local frame.  Retain those daughters for
+        # the rare-event stratum; make_patches boundary-clamps only their
+        # unavailable future channel.  Global sampling remains interior-only.
+        division_eligible = np.flatnonzero(
+            (times >= 1) & (times < sample.volumes.shape[0])
+        ).astype(np.int64)
+    division_critical_rows = division_eligible[
+        division_critical[division_eligible]
+    ]
     if require_division_critical and not len(division_critical_rows):
         raise ValueError(f"sequence {index} has no interior division-critical nodes")
     return SequenceState(
@@ -383,8 +396,13 @@ def make_patches(
     patches = torch.empty((len(rows), 3, *PATCH_SHAPE), dtype=torch.float32, device=device)
     for timepoint in np.unique(times).tolist():
         selected = np.flatnonzero(times == timepoint)
+        context_indices = np.clip(
+            [timepoint - 1, timepoint, timepoint + 1],
+            0,
+            state.sample.volumes.shape[0] - 1,
+        )
         context = torch.as_tensor(
-            state.sample.volumes[[timepoint - 1, timepoint, timepoint + 1]],
+            state.sample.volumes[context_indices],
             dtype=torch.float32,
             device=device,
         )
@@ -725,6 +743,12 @@ def train_member(
             ],
             "division_critical_training_rows": int(
                 sum(len(state.division_critical_rows) for state in train_states)
+            ),
+            "real_division_critical_training_rows": int(
+                sum(
+                    len(state.division_critical_rows)
+                    for state in real_train_states
+                )
             ),
             "division_critical_per_batch": args.division_critical_per_batch,
             "division_critical_selection_gate_required": True,
