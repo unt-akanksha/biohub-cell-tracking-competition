@@ -1,0 +1,22 @@
+{
+  "id": "indarkarhana/biohub-relational-division-patches-v3",
+  "title": "Biohub Relational Division Patches v3",
+  "code_file": "extract.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": false,
+  "enable_tpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "indarkarhana/biohub-kaggle-codec-wheels-v1",
+    "indarkarhana/biohub-real-division-extractor-runtime-v1",
+    "indarkarhana/biohub-relational-division-inventory-v3"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "biohub-cell-tracking-during-development"
+  ],
+  "model_sources": []
+}

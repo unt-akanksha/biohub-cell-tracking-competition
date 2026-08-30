@@ -617,3 +617,22 @@ movie final probes remain excluded. Inventory SHA-256 is
 Five focused tests cover positive/distractor construction, distance rejection,
 disjoint role allocation, negative-only role supplementation, and eligible-
 negative retention.
+
+The inventory is now published as private dataset
+`indarkarhana/biohub-relational-division-inventory-v3`, version 1. Its internal
+manifest SHA-256 is
+`c5f093601d74201739e003f95eb56511b33df472d4e5683f7354584bd086ee23`,
+and Kaggle reports the dataset `ready`. The first Windows upload attempt failed
+before creation because the CLI encoded a relative directory into its temporary
+upload filename; running the same create operation from inside the staging
+directory avoided that client bug without changing any bytes.
+
+A CPU-only, offline v3 extractor consumes that exact private manifest and the
+official competition train source. For each relational row it samples the same
+three frames at the parent, retained-daughter, and proposed-daughter centers,
+producing `(N, 3 centers, 3 temporal channels, 17, 17, 17)` patches plus nine
+physical geometry features. Inference-eligible negatives receive full label
+weight; broader curriculum negatives remain downweighted. Audit features may
+be materialized, but the extractor never scores audit labels, opens the final
+four movies, attaches test data, or includes a submission command. Five
+focused inventory-package and extractor tests pass.
