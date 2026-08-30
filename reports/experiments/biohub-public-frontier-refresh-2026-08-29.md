@@ -470,6 +470,25 @@ and will copy and launch the controller exactly once when credentials become
 valid. It is restricted to `/home/ubuntu/biohub*` and includes no Kaggle
 submission command.
 
+The post-selection implementation is now end-to-end rather than probe-only.
+Commit `557e2a2` centralizes the immutable member policy and adds a runtime
+packager that hash-binds the selection terminal, member-policy source, one
+probe opening, graph-development evidence, morphology voter, and every unique
+deep checkpoint. Its policy requires the clean base safe-divider to remain
+enabled and permits the learned stage to make additive edge edits only. Commit
+`2fc8b2f` adds the offline two-T4 Kaggle notebook builder and external
+promotion verifier for that runtime. The notebook averages calibration-free
+within-movie ranks across all admitted deep members, then requires agreement
+with morphology; it does not average weak or duplicate models. Commit
+`16c9cd1` adds the exactly-once submitter and durable candidate controller.
+That controller can submit only after the actual full notebook improves the
+frozen validator proxy by at least `0.005`, increases true divisions and
+division Jaccard, respects the edge-regression limit, preserves the base rule,
+and differs from every audited public submission hash. Commit `7119a4b`
+extends the credential-refresh deploy chain to ship and hash-bind the shared
+member-policy source. None of these downstream stages will launch if the
+overnight selection evidence rejects all models.
+
 The first durable worker checkpoint, seed `205043` / `target_44b6`, completed
 all 50,000 steps in 1,708.51 seconds and retained step 12,000. It improved its
 initial AP from `0.243307` to `0.468185` and recovered 4 of 31 positives before
