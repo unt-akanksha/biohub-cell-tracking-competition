@@ -12,7 +12,7 @@ EXPORTER = ROOT / "research/export_competition_real_localization_labels.py"
 BUILDER = ROOT / "scripts/build-real-localization-replay-cache-kernel.py"
 VALIDATOR = ROOT / "scripts/validate-real-localization-shard-cache.py"
 CONTROLLER = ROOT / "scripts/wait-harvest-kaggle-real-localization-replay-cache.ps1"
-DATASET_REF = "indarkarhana/biohub-real-localization-labels-v1"
+DATASET_REF = "indarkarhana/biohub-real-localization-labels-v2"
 
 
 def test_label_exporter_is_train_only_and_hash_bound() -> None:

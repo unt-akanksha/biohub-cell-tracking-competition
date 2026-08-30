@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 KERNEL_ID = "biohub-real-localization-replay-cache-v1"
 KERNEL_REF = f"indarkarhana/{KERNEL_ID}"
-DATASET_REF = "indarkarhana/biohub-real-localization-labels-v1"
+DATASET_REF = "indarkarhana/biohub-real-localization-labels-v2"
 ARCHIVE_NAME = "biohub_real_localization_labels_v1.tar.gz"
 EXPECTED_INVENTORY_SHA256 = (
     "55159ef0636d49fcc31eea6d5fe9c327be59c2813d6d0083d6cdfabc9f6112e1"
@@ -30,7 +30,6 @@ def code_cell(source: str) -> dict:
 
 def kernel_source(
     *,
-    archive_sha256: str,
     labels_manifest_sha256: str,
     support_wheel_name: str,
     support_wheel_sha256: str,
@@ -40,14 +39,12 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-import tarfile
 import time
 
 import numpy as np
 
 RUN_ID = "competition-real-localization-shards-v1"
 LABEL_RUN_ID = "competition-real-localization-labels-v1"
-EXPECTED_ARCHIVE_SHA256 = "{archive_sha256}"
 EXPECTED_LABELS_MANIFEST_SHA256 = "{labels_manifest_sha256}"
 SUPPORT_WHEEL_NAME = "{support_wheel_name}"
 EXPECTED_SUPPORT_WHEEL_SHA256 = "{support_wheel_sha256}"
@@ -59,6 +56,7 @@ STARTED = time.monotonic()
 INPUT_ROOT = Path("/kaggle/input")
 WORKING = Path("/kaggle/working")
 OUTPUT_ROOT = WORKING / "competition_real_localization_shards_v1"
+DATASET_ROOT = INPUT_ROOT / "biohub-real-localization-labels-v2"
 
 
 def sha256_file(path):
@@ -75,34 +73,23 @@ def atomic_json(path, payload):
     temporary.replace(path)
 
 
-support_wheels = sorted(INPUT_ROOT.glob(f"*/{{SUPPORT_WHEEL_NAME}}"))
-if len(support_wheels) != 1 or sha256_file(support_wheels[0]) != EXPECTED_SUPPORT_WHEEL_SHA256:
-    raise RuntimeError({{"eligible_support_wheels": [str(path) for path in support_wheels]}})
+label_root = DATASET_ROOT / "biohub_real_localization_labels_v1"
+labels_manifest_path = label_root / "labels_manifest.json"
+if not labels_manifest_path.is_file() or sha256_file(labels_manifest_path) != EXPECTED_LABELS_MANIFEST_SHA256:
+    raise RuntimeError({{"eligible_label_manifest": str(labels_manifest_path)}})
+inventory_path = label_root / "inventory.json"
+support_wheel = DATASET_ROOT / SUPPORT_WHEEL_NAME
+if not support_wheel.is_file() or sha256_file(support_wheel) != EXPECTED_SUPPORT_WHEEL_SHA256:
+    raise RuntimeError({{"eligible_support_wheel": str(support_wheel)}})
 site_root = WORKING / "offline_site"
 subprocess.run([
     sys.executable, "-m", "pip", "install", "--no-index", "--no-deps",
-    "--target", str(site_root), str(support_wheels[0]),
+    "--target", str(site_root), str(support_wheel),
 ], check=True)
 sys.path.insert(0, str(site_root))
 from numcodecs import Blosc
 
 
-archives = sorted(INPUT_ROOT.glob("*/{ARCHIVE_NAME}"))
-if len(archives) != 1 or sha256_file(archives[0]) != EXPECTED_ARCHIVE_SHA256:
-    raise RuntimeError({{"eligible_label_archives": [str(path) for path in archives]}})
-label_root = WORKING / "real_localization_labels_v1"
-label_root.mkdir()
-with tarfile.open(archives[0], "r:gz") as archive:
-    members = archive.getmembers()
-    if any(
-        member.name.startswith(("/", "\\\\"))
-        or ".." in Path(member.name).parts
-        for member in members
-    ):
-        raise RuntimeError("unsafe label archive member")
-    archive.extractall(label_root)
-labels_manifest_path = label_root / "labels_manifest.json"
-inventory_path = label_root / "inventory.json"
 if (
     sha256_file(labels_manifest_path) != EXPECTED_LABELS_MANIFEST_SHA256
     or sha256_file(inventory_path) != EXPECTED_INVENTORY_SHA256
@@ -448,7 +435,6 @@ def main() -> None:
         "cells": [
             code_cell(
                 kernel_source(
-                    archive_sha256=str(archive["sha256"]),
                     labels_manifest_sha256=str(
                         upload_manifest["labels_manifest_sha256"]
                     ),

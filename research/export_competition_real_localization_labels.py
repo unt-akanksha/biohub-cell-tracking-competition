@@ -28,7 +28,7 @@ INVENTORY_RUN_ID = "competition-real-localization-inventory-v1"
 EXPECTED_INVENTORY_SHA256 = (
     "55159ef0636d49fcc31eea6d5fe9c327be59c2813d6d0083d6cdfabc9f6112e1"
 )
-DATASET_ID = "indarkarhana/biohub-real-localization-labels-v1"
+DATASET_ID = "indarkarhana/biohub-real-localization-labels-v2"
 ARCHIVE_NAME = "biohub_real_localization_labels_v1.tar.gz"
 FINAL_PROBE_STEMS = {
     "44b6_12dfb391",
@@ -181,7 +181,7 @@ def main() -> None:
             archive.add(staging_root / "labels", arcname="labels", recursive=True)
 
     metadata = {
-        "title": "Biohub Real Localization Labels v1",
+        "title": "Biohub Real Localization Labels v2",
         "id": DATASET_ID,
         "licenses": [{"name": "other"}],
         "isPrivate": True,

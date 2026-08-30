@@ -4,7 +4,7 @@
     "biohub-cell-tracking-during-development"
   ],
   "dataset_sources": [
-    "indarkarhana/biohub-real-localization-labels-v1"
+    "indarkarhana/biohub-real-localization-labels-v2"
   ],
   "enable_gpu": false,
   "enable_internet": false,

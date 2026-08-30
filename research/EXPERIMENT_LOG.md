@@ -367,3 +367,12 @@ well as the synthetic generator.
   exact Zarr-v3 bytes+Blosc-Zstd/bitshuffle metadata contract, and decodes each
   chunk directly. The decoder was checked byte-for-byte against local Zarr on
   a real cached competition frame before the version-2 launch.
+- Kernel version 2 also failed closed in 10 seconds before reading a frame:
+  Kaggle retained the original version of the already-attached v1 label
+  dataset, so the new support wheel was not present in that run. Kaggle also
+  expands uploaded tar archives under their archive-stem directory. To remove
+  both ambiguities, version 3 attaches a newly created private dataset slug,
+  `biohub-real-localization-labels-v2` version 1, and uses the exact mounted
+  dataset and archive-stem paths verified from its 119-file remote inventory.
+  Dataset and kernel remain CPU-only, offline, train-only, and unable to
+  submit; prior failed versions consumed neither Kaggle nor AWS GPU time.
