@@ -320,7 +320,7 @@ This result authorizes one full candidate evaluation, not direct submission.
 The private runtime dataset binds both model hashes, every project source file,
 the development evidence, and the exact scikit-learn 1.9 CPython 3.12 wheel.
 Dataset manifest SHA-256 is
-`6e4803ba11cda000c0facf691f86ac2f1c98e9aa8fe9e4aacc720f0c44163aca`.
+`c837f9ba77303dc3393b9d2dd1e531b9f147718721d9bf011e977448fbb80888`.
 The attributed EMA candidate is Kaggle kernel
 `indarkarhana/biohub-ema-ranked-consensus-candidate-v1`, version 1. It uses two
 T4 GPUs, has internet disabled, and contains no competition submission call.
@@ -364,8 +364,23 @@ Candidate kernel version 1 failed after the dual-T4 base inference completed
 in 9.33 minutes. The error was isolated to the inserted setup cell:
 `INPUT_ROOT` was referenced before the base notebook defined it. No ranked
 post-processing, evidence file, CSV promotion, or competition submission ran.
-Version 2 replaces that implicit dependency with an explicit immutable
-`Path("/kaggle/input")` root; the model, policy, and decision rule are unchanged.
+Version 2 replaced that implicit dependency with an explicit immutable
+`Path("/kaggle/input")` root, then exposed an incomplete private runtime
+package after the same 9.35-minute base inference. The multiscale scorer
+imported `contextual_pair_fusion`, which was not included, and stopped in its
+setup cell before either voter loaded. Again, no graph edit, evidence file,
+CSV promotion, or competition submission ran.
+
+The runtime package now includes the complete transitive source closure:
+`contextual_pair_fusion.py`, `pair_fusion.py`, and `transition_context.py` in
+addition to the already packaged project modules. A strict isolated import
+loaded the exact 46,386,607-parameter deep model and both morphology
+estimators. The final package was then rebuilt from a pristine directory and
+published with directory uploads disabled, so no generated `__pycache__`
+artifact is attached. Its 14-file manifest SHA-256 is
+`c837f9ba77303dc3393b9d2dd1e531b9f147718721d9bf011e977448fbb80888`.
+The model, policy, and decision rule remain unchanged for the next candidate
+run.
 
 ## Late frontier and account refresh
 

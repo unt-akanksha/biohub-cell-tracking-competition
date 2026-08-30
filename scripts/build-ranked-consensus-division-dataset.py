@@ -28,7 +28,12 @@ RUNTIME_FILES = {
     "learned_division_recovery.py": ROOT / "research/learned_division_recovery.py",
     "multiscale_contextual_pair_fusion.py": ROOT
     / "research/temporal_contrastive/multiscale_contextual_pair_fusion.py",
+    "contextual_pair_fusion.py": ROOT
+    / "research/temporal_contrastive/contextual_pair_fusion.py",
+    "pair_fusion.py": ROOT / "research/temporal_contrastive/pair_fusion.py",
     "patch_model.py": ROOT / "research/temporal_contrastive/patch_model.py",
+    "transition_context.py": ROOT
+    / "research/temporal_contrastive/transition_context.py",
     "handcrafted_division.py": ROOT / "research/train_handcrafted_division_gate.py",
 }
 

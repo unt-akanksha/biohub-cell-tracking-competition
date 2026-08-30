@@ -13,7 +13,10 @@ def test_builder_declares_only_project_runtime_and_no_submission_command() -> No
     assert set(module["RUNTIME_FILES"]) == {
         "learned_division_recovery.py",
         "multiscale_contextual_pair_fusion.py",
+        "contextual_pair_fusion.py",
+        "pair_fusion.py",
         "patch_model.py",
+        "transition_context.py",
         "handcrafted_division.py",
     }
     for path in module["RUNTIME_FILES"].values():
