@@ -38,7 +38,7 @@ def validate_promotion(path: Path) -> tuple[dict[str, Any], Path]:
         and int(promotion.get("localization_rounded_coordinate_changes", 0)) > 0
         and int(promotion.get("localization_node_count_changes", -1)) == 0
         and int(promotion.get("localization_edge_changes", -1)) == 0
-        and float(promotion.get("proxy_gain", 0.0)) >= 0.001
+        and float(promotion.get("proxy_gain", 0.0)) >= 0.005
         and float(promotion.get("adjusted_edge_delta", -1.0)) >= -0.001
         and int(promotion.get("missed_gt_node_gain", 0)) > 0
         and int(promotion.get("spurious_pred_node_delta", 1)) <= 0
@@ -62,7 +62,7 @@ def main() -> None:
     parser.add_argument(
         "--message",
         default=(
-            "Clean temporal localization consensus; synthetic sealed audit "
+            "Clean temporal localization consensus; dual-domain sealed audits "
             "plus frozen real-transfer gate"
         ),
     )

@@ -43,7 +43,7 @@ def test_temporal_submitter_accepts_only_external_promotion(tmp_path: Path) -> N
         "localization_rounded_coordinate_changes": 9,
         "localization_node_count_changes": 0,
         "localization_edge_changes": 0,
-        "proxy_gain": 0.0015,
+        "proxy_gain": 0.006,
         "adjusted_edge_delta": -0.0005,
         "missed_gt_node_gain": 2,
         "spurious_pred_node_delta": 0,
@@ -58,7 +58,7 @@ def test_temporal_submitter_accepts_only_external_promotion(tmp_path: Path) -> N
 
     path.write_text(json.dumps(promotion), encoding="utf-8")
     observed, observed_submission = SUBMITTER["validate_promotion"](path)
-    assert observed["proxy_gain"] == 0.0015
+    assert observed["proxy_gain"] == 0.006
     assert observed_submission == submission.resolve()
 
     promotion["missed_gt_node_gain"] = 0

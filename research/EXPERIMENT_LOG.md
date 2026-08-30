@@ -185,7 +185,7 @@ minority failure mode; coordinate localization is the new primary branch.
 - The Kaggle watchdog is capped at a 39,600-second declared budget with a
   38,400-second hard stop. With 19.14 GPU hours currently remaining, the launch
   gate reserves at least 8.0 hours even if the full declared budget is consumed.
-- External promotion requires proxy gain at least 0.001, fewer missed ground-
+- External promotion requires proxy gain at least 0.005, fewer missed ground-
   truth nodes, no per-movie miss regression, no spurious-node increase, division
   Jaccard non-regression, adjusted-edge regression no worse than 0.001, and a
   submission hash distinct from all audited public outputs.

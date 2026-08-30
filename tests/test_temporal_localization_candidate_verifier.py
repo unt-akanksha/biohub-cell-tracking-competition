@@ -16,6 +16,10 @@ VERIFIER = runpy.run_path(str(ROOT / "scripts/verify-temporal-localization-submi
 verify_candidate = VERIFIER["verify_candidate"]
 
 
+def test_target_aligned_proxy_gain_is_five_millipoints() -> None:
+    assert VERIFIER["MINIMUM_PROXY_GAIN"] == 0.005
+
+
 def write_csv(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as stream:
