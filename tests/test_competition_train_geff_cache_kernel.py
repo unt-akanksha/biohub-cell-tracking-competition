@@ -20,7 +20,8 @@ def test_kernel_is_private_cpu_train_only_packager() -> None:
     assert metadata["competition_sources"] == [
         "biohub-cell-tracking-during-development"
     ]
-    assert "rglob('train')" in source
+    assert "/competitions/biohub-cell-tracking-during-development/train" in source
+    assert "input_root.rglob" not in source
     assert "competition_test_data_read': False" in source
     assert "submission_created': False" in source
     assert "submission.csv" not in source
