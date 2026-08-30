@@ -215,3 +215,13 @@ controls. A deterministic division-stratified split holds out 5 of 24 usable
 19 and 96 respectively for optimization. The image extractor is a private,
 CPU-only Kaggle job; model training and scoring remain assigned exclusively to
 the Antelume A10G.
+
+The private extractor completed as Kaggle kernel version 3 in 57.35 seconds
+on CPU (`gpu_used=false`). It produced 146 hash-verified NPZ shards with 1,393
+rows: 115 positives plus 1,039 PU controls for optimization and 31 positives
+plus 208 controls for movie-disjoint selection. The 34,245,696-byte archive
+SHA-256 is `46db151310808fa455e63a4c8791f14121125ba6bda0d46b5aa2b1d7913990e0`;
+the manifest SHA-256 is
+`943717472518b917175312bd4ada9e12660d31d3ebf0bf7afd5672ab40442e1e`.
+Every shard size and digest was rechecked after download. No final-probe image
+was included.
