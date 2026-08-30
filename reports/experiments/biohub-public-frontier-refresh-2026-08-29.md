@@ -348,3 +348,14 @@ train/tuning/audit partition by complete movie. The upstream selection movies
 are not read. The nested audit remains acceptance-only, the decision rule is
 ranking-only, and a pooled AP below `0.55`, either embryo AP below `0.40`, or
 tuning AP below `0.60` rejects the voter.
+
+The corrected v2 run trained all 25,357,761 intended parameters for 1,500
+steps on the Antelume A10G. Tuning AP improved from `0.116867` to `0.368906`;
+the fresh nested audit reached `0.490096` (`44b6=0.95`, `6bba=0.469257`).
+This is materially better than head-only v1 but below both the `0.60` tuning
+and `0.55` pooled-audit gates. Checkpoint SHA-256 is
+`06ccb6d00e5e66276092304635e752a4388b3a6ee432c1ddc7ebeff589cf2369`.
+V2 is rejected and is not attached to the current candidate. The result also
+confirms that network size alone is insufficient: the smaller project deep
+gate remains the stronger transferable ranker on the relevant complete-movie
+probe.
