@@ -18,6 +18,7 @@ $promotionPath = Join-Path $automationDir "ranked-consensus-candidate-promotion-
 $receiptPath = Join-Path $automationDir 'ranked-consensus-candidate-submission-receipt.json'
 $terminalPath = Join-Path $automationDir "ranked-consensus-candidate-controller-version$KernelVersion.json"
 $logPath = Join-Path $automationDir "ranked-consensus-candidate-controller-version$KernelVersion.log"
+$requiredOutputPattern = '^(candidate_evidence\.json|run_stats\.csv|submission\.csv|validator_results\.csv|watchdog-terminal\.json)$'
 
 function Write-ControllerLog([string]$Message) {
     Add-Content -LiteralPath $logPath -Encoding UTF8 -Value (
@@ -111,7 +112,14 @@ try {
     }
 
     New-Item -ItemType Directory -Path $downloadRoot | Out-Null
-    $native = Invoke-NativeOutput { & kaggle kernels output $kernelRef -p $downloadRoot --force }
+    $versionedKernelRef = "$kernelRef/$KernelVersion"
+    $native = Invoke-NativeOutput {
+        & kaggle kernels output $versionedKernelRef `
+            -p $downloadRoot `
+            --force `
+            --file-pattern $requiredOutputPattern `
+            --page-size 200
+    }
     if ($native.ExitCode -ne 0) {
         throw "Candidate output download failed: $($native.Output)"
     }

@@ -16,3 +16,13 @@ def test_controller_waits_for_promotion_and_submits_once() -> None:
     assert "--execute" in source
     assert "Refusing to reuse controller state" in source
     assert "Start-Sleep -Seconds $PollSeconds" in source
+    assert '$versionedKernelRef = "$kernelRef/$KernelVersion"' in source
+    assert "--file-pattern $requiredOutputPattern" in source
+    for required in (
+        "candidate_evidence\\.json",
+        "run_stats\\.csv",
+        "submission\\.csv",
+        "validator_results\\.csv",
+        "watchdog-terminal\\.json",
+    ):
+        assert required in source
