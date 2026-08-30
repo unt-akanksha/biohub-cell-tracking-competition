@@ -248,7 +248,10 @@ if ($ValidateOnly) {
         parameters_per_model = 71249805
         steps_per_model = 40000
         validation_every_steps = 2000
+        learning_rate_warmup_steps = 1000
         real_replay_probability = 0.25
+        spatial_reflection_probability_per_axis = 0.5
+        real_division_boundary_daughters_included = $true
         real_optimization_shards = 146
         real_selection_shards = 17
         real_sealed_audit_shards = 14
@@ -380,7 +383,10 @@ try {
         parameters_per_model = 71249805
         steps_per_model = 40000
         validation_every_steps = 2000
+        learning_rate_warmup_steps = 1000
         real_replay_probability = 0.25
+        spatial_reflection_probability_per_axis = 0.5
+        real_division_boundary_daughters_included = $true
         real_optimization_shards = 146
         real_selection_shards = 17
         real_sealed_audit_shards = 14

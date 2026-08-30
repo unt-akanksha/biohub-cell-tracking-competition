@@ -19,5 +19,8 @@ def test_overnight_orchestrator_is_bounded_resumable_and_non_submitting() -> Non
     assert "planned_model_count = 4" in source
     assert "steps_per_model = 40000" in source
     assert "real_replay_probability = 0.25" in source
+    assert "learning_rate_warmup_steps = 1000" in source
+    assert "spatial_reflection_probability_per_axis = 0.5" in source
+    assert "real_division_boundary_daughters_included = $true" in source
     assert "competition_submission_performed = $false" in source
     assert "competitions submit" not in source

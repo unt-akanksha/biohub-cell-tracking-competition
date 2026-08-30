@@ -107,7 +107,10 @@ try {
         planned_model_count = 4
         parameters_per_model = 71249805
         steps_per_model = 40000
+        learning_rate_warmup_steps = 1000
         real_replay_probability = 0.25
+        spatial_reflection_probability_per_axis = 0.5
+        real_division_boundary_daughters_included = $true
     }
     & powershell -NoProfile -ExecutionPolicy Bypass -File $launcher
     if ($LASTEXITCODE -ne 0) {

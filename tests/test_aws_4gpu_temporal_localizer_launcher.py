@@ -57,6 +57,9 @@ def test_controller_is_hash_bound_single_instance_and_non_submitting() -> None:
     assert "synthetic_selection_sequence_count = 8" in text
     assert "synthetic_sealed_audit_sequence_count = 8" in text
     assert "real_replay_probability = 0.25" in text
+    assert "learning_rate_warmup_steps = 1000" in text
+    assert "spatial_reflection_probability_per_axis = 0.5" in text
+    assert "real_division_boundary_daughters_included = $true" in text
     assert "real_optimization_shards = 146" in text
     assert "real_selection_shards = 17" in text
     assert "real_sealed_audit_shards = 14" in text
