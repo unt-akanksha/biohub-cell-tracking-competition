@@ -77,20 +77,115 @@ def stratified_selection_stems(examples_by_stem: dict[str, list[dict[str, Any]]]
     return selected
 
 
-def read_geff(path: Path) -> tuple[dict[int, tuple[float, ...]], list[tuple[int, int]]]:
-    import zarr
+def _zarr_dtype(name: str) -> np.dtype:
+    values = {
+        "uint16": np.dtype("<u2"),
+        "uint64": np.dtype("<u8"),
+        "int64": np.dtype("<i8"),
+        "float32": np.dtype("<f4"),
+        "float64": np.dtype("<f8"),
+    }
+    if name not in values:
+        raise ValueError(f"unsupported Zarr v3 data type: {name}")
+    return values[name]
 
-    group = zarr.open_group(str(path), mode="r")
-    node_ids = np.asarray(group["nodes/ids"][:], dtype=np.int64)
-    times = np.asarray(group["nodes/props/t/values"][:], dtype=np.int64)
+
+def _decode_v3_chunk(encoded: bytes, metadata: dict[str, Any]) -> bytes:
+    decoded: bytes | bytearray | memoryview = encoded
+    for codec in reversed(metadata["codecs"]):
+        name = codec["name"]
+        if name == "bytes":
+            if codec.get("configuration", {}).get("endian") != "little":
+                raise ValueError("only little-endian Zarr byte arrays are supported")
+            continue
+        try:
+            import numcodecs
+        except ModuleNotFoundError as error:
+            raise RuntimeError(
+                f"Kaggle CPU image codec unavailable while decoding {name}"
+            ) from error
+        configuration = codec.get("configuration", {})
+        if name == "zstd":
+            decoded = numcodecs.Zstd().decode(decoded)
+        elif name == "blosc":
+            shuffle = {
+                "noshuffle": numcodecs.Blosc.NOSHUFFLE,
+                "shuffle": numcodecs.Blosc.SHUFFLE,
+                "bitshuffle": numcodecs.Blosc.BITSHUFFLE,
+            }[configuration["shuffle"]]
+            decoded = numcodecs.Blosc(
+                cname=configuration["cname"],
+                clevel=int(configuration["clevel"]),
+                shuffle=shuffle,
+                blocksize=int(configuration.get("blocksize", 0)),
+            ).decode(decoded)
+        else:
+            raise ValueError(f"unsupported Zarr v3 codec: {name}")
+    return bytes(decoded)
+
+
+def read_v3_array(path: Path) -> np.ndarray:
+    metadata = json.loads((path / "zarr.json").read_text(encoding="utf-8"))
+    shape = tuple(int(value) for value in metadata["shape"])
+    chunks = tuple(
+        int(value)
+        for value in metadata["chunk_grid"]["configuration"]["chunk_shape"]
+    )
+    if not (
+        metadata.get("zarr_format") == 3
+        and metadata.get("node_type") == "array"
+        and chunks == shape
+        and metadata["chunk_key_encoding"]["configuration"]["separator"] == "/"
+    ):
+        raise ValueError(f"unsupported one-chunk Zarr v3 array: {path}")
+    chunk_path = path.joinpath("c", *("0" for _ in shape))
+    decoded = _decode_v3_chunk(chunk_path.read_bytes(), metadata)
+    result = np.frombuffer(decoded, dtype=_zarr_dtype(metadata["data_type"]))
+    if result.size != int(np.prod(shape)):
+        raise ValueError(f"Zarr v3 decoded size changed: {path}")
+    return result.reshape(shape).copy()
+
+
+def read_v3_frame(path: Path, timepoint: int) -> np.ndarray:
+    metadata = json.loads((path / "zarr.json").read_text(encoding="utf-8"))
+    shape = tuple(int(value) for value in metadata["shape"])
+    chunks = tuple(
+        int(value)
+        for value in metadata["chunk_grid"]["configuration"]["chunk_shape"]
+    )
+    if not (
+        metadata.get("zarr_format") == 3
+        and metadata.get("node_type") == "array"
+        and len(shape) == 4
+        and chunks == (1, *shape[1:])
+        and 0 <= timepoint < shape[0]
+        and metadata["chunk_key_encoding"]["configuration"]["separator"] == "/"
+    ):
+        raise ValueError(f"unsupported frame-chunked Zarr v3 array: {path}")
+    chunk_path = path / "c" / str(timepoint) / "0" / "0" / "0"
+    decoded = _decode_v3_chunk(chunk_path.read_bytes(), metadata)
+    result = np.frombuffer(decoded, dtype=_zarr_dtype(metadata["data_type"]))
+    if result.size != int(np.prod(shape[1:])):
+        raise ValueError(f"Zarr v3 decoded frame size changed: {path}/{timepoint}")
+    return result.reshape(shape[1:]).copy()
+
+
+def read_geff(path: Path) -> tuple[dict[int, tuple[float, ...]], list[tuple[int, int]]]:
+    node_ids = np.asarray(read_v3_array(path / "nodes/ids"), dtype=np.int64)
+    times = np.asarray(read_v3_array(path / "nodes/props/t/values"), dtype=np.int64)
     coordinates = np.stack(
         [
-            np.asarray(group[f"nodes/props/{axis}/values"][:], dtype=np.float64)
+            np.asarray(
+                read_v3_array(path / f"nodes/props/{axis}/values"),
+                dtype=np.float64,
+            )
             for axis in ("z", "y", "x")
         ],
         axis=1,
     )
-    edge_ids = np.asarray(group["edges/ids"][:], dtype=np.int64).reshape(-1, 2)
+    edge_ids = np.asarray(read_v3_array(path / "edges/ids"), dtype=np.int64).reshape(
+        -1, 2
+    )
     if len(node_ids) != len(times) or coordinates.shape != (len(node_ids), 3):
         raise ValueError(f"GEFF node arrays disagree: {path.name}")
     nodes = {
@@ -255,8 +350,6 @@ def write_shard(
 
 
 def main() -> None:
-    import zarr
-
     if torch.cuda.is_available():
         raise RuntimeError("real division patch extraction must use Kaggle CPU only")
     started = time.monotonic()
@@ -294,17 +387,21 @@ def main() -> None:
             continue
         examples = examples_by_stem[stem]
         role = "selection" if stem in selection_stems else "optimization"
-        image = None
         movie_records = []
         for timepoint in sorted({row["timepoint"] for row in examples}):
             selected = [row for row in examples if row["timepoint"] == timepoint]
-            if image is None:
-                image = zarr.open_group(str(train_root / f"{stem}.zarr"), mode="r")["0"]
+            image_path = train_root / f"{stem}.zarr" / "0"
+            image_metadata = json.loads(
+                (image_path / "zarr.json").read_text(encoding="utf-8")
+            )
+            frame_count = int(image_metadata["shape"][0])
             frame_indices = [
-                min(max(timepoint + offset, 0), int(image.shape[0]) - 1)
+                min(max(timepoint + offset, 0), frame_count - 1)
                 for offset in (-1, 0, 1)
             ]
-            context = np.stack([np.asarray(image[index]) for index in frame_indices])
+            context = np.stack(
+                [read_v3_frame(image_path, index) for index in frame_indices]
+            )
             centers = np.asarray(
                 [row["center_zyx_voxel"] for row in selected], dtype=np.float32
             )

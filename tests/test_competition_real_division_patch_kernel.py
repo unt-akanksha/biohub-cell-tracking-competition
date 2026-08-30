@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import numcodecs
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,3 +78,70 @@ def test_patch_selection_split_is_division_stratified() -> None:
 
     assert sum(stem.startswith("44b6_") for stem in selected) == 2
     assert sum(stem.startswith("6bba_") for stem in selected) == 2
+
+
+def test_minimal_zarr_v3_reader_supports_geff_zstd(tmp_path: Path) -> None:
+    array = np.asarray([[1, 2], [3, 4]], dtype="<u8")
+    root = tmp_path / "array"
+    (root / "c" / "0").mkdir(parents=True)
+    (root / "zarr.json").write_text(
+        json.dumps(
+            {
+                "zarr_format": 3,
+                "node_type": "array",
+                "shape": [2, 2],
+                "data_type": "uint64",
+                "chunk_grid": {
+                    "configuration": {"chunk_shape": [2, 2]},
+                },
+                "chunk_key_encoding": {"configuration": {"separator": "/"}},
+                "codecs": [
+                    {"name": "bytes", "configuration": {"endian": "little"}},
+                    {"name": "zstd", "configuration": {"level": 0}},
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "c" / "0" / "0").write_bytes(numcodecs.Zstd().encode(array.tobytes()))
+    np.testing.assert_array_equal(patches.read_v3_array(root), array)
+
+
+def test_minimal_zarr_v3_reader_supports_frame_blosc(tmp_path: Path) -> None:
+    frame = np.arange(24, dtype="<u2").reshape(2, 3, 4)
+    root = tmp_path / "image"
+    chunk = root / "c" / "1" / "0" / "0"
+    chunk.mkdir(parents=True)
+    (root / "zarr.json").write_text(
+        json.dumps(
+            {
+                "zarr_format": 3,
+                "node_type": "array",
+                "shape": [2, 2, 3, 4],
+                "data_type": "uint16",
+                "chunk_grid": {
+                    "configuration": {"chunk_shape": [1, 2, 3, 4]},
+                },
+                "chunk_key_encoding": {"configuration": {"separator": "/"}},
+                "codecs": [
+                    {"name": "bytes", "configuration": {"endian": "little"}},
+                    {
+                        "name": "blosc",
+                        "configuration": {
+                            "typesize": 2,
+                            "cname": "zstd",
+                            "clevel": 1,
+                            "shuffle": "bitshuffle",
+                            "blocksize": 0,
+                        },
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    encoded = numcodecs.Blosc(
+        cname="zstd", clevel=1, shuffle=numcodecs.Blosc.BITSHUFFLE
+    ).encode(frame.tobytes())
+    (chunk / "0").write_bytes(encoded)
+    np.testing.assert_array_equal(patches.read_v3_frame(root, 1), frame)
