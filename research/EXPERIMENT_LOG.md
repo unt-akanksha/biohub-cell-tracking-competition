@@ -157,9 +157,16 @@ minority failure mode; coordinate localization is the new primary branch.
 - Schedule: four independent seeds on four AWS A10Gs, 20,000 steps per member,
   equal-weight ensemble only if every included member independently passes the
   selection and sealed-audit gates. Audit subset/weight searches are forbidden.
-- AWS controller PID: 27152. The validated launch target is one temporary
+- AWS controller PID: 44716 (the initial 27152 controller was safely replaced
+  before launch to add the frozen real-domain development gate). The validated
+  launch target is one temporary
   `g5.12xlarge`; it harvests a SHA-256-verified result archive and auto-stops
   after harvest or after a bounded grace period. At launch time the CLI profile
   still returned `ExpiredToken`, so the controller is credential-event-driven.
+- After every member's synthetic checkpoint is selected and sealed-audited, the
+  precommitted consensus is evaluated on five cached center frames from the
+  already-opened four-movie real probe. It requires an added match, lower mean
+  matched distance, no per-movie match regression, and the global move-fraction
+  gate. This is development evidence only and supplies no submission authority.
 - This stage reads no competition images, labels, predictions, or leaderboard
   values and cannot create a submission.
