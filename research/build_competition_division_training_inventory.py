@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 import sys
 from typing import Any
@@ -107,9 +108,34 @@ def movie_examples(
     return rows
 
 
-def selection_role(stem: str) -> str:
-    bucket = int(hashlib.sha256(stem.encode("utf-8")).hexdigest()[:8], 16) % 5
-    return "selection" if bucket == 0 else "optimization"
+def stratified_selection_stems(movies: list[dict[str, Any]]) -> set[str]:
+    selected: set[str] = set()
+    for embryo in ("44b6", "6bba"):
+        eligible = [
+            movie
+            for movie in movies
+            if movie["embryo"] == embryo
+            and movie["role"] != "final_probe"
+            and movie["summary"]["division_positives"] > 0
+        ]
+        target = int(
+            math.ceil(
+                sum(movie["summary"]["division_positives"] for movie in eligible)
+                * 0.20
+            )
+        )
+        accumulated = 0
+        for movie in sorted(
+            eligible,
+            key=lambda row: hashlib.sha256(row["stem"].encode("utf-8")).hexdigest(),
+        ):
+            selected.add(movie["stem"])
+            accumulated += int(movie["summary"]["division_positives"])
+            if accumulated >= target:
+                break
+        if accumulated < target:
+            raise RuntimeError(f"division-stratified selection failed for {embryo}")
+    return selected
 
 
 def main() -> None:
@@ -124,7 +150,7 @@ def main() -> None:
     for index, stem in enumerate(stems, start=1):
         nodes, edges = graph_plain(args.cache_root / "train" / f"{stem}.geff")
         examples = movie_examples(nodes, edges)
-        role = "final_probe" if stem in FINAL_PROBE_STEMS else selection_role(stem)
+        role = "final_probe" if stem in FINAL_PROBE_STEMS else "unassigned"
         event_timepoints = sorted(
             {row["timepoint"] for row in examples if row["division_target"]}
         )
@@ -154,6 +180,12 @@ def main() -> None:
         )
         if index % 25 == 0:
             print(f"read {index}/{len(stems)} train GEFFs", flush=True)
+    selection_stems = stratified_selection_stems(movies)
+    for movie in movies:
+        if movie["role"] == "unassigned":
+            movie["role"] = (
+                "selection" if movie["stem"] in selection_stems else "optimization"
+            )
     usable = [movie for movie in movies if movie["role"] != "final_probe"]
     counts: dict[str, dict[str, dict[str, int]]] = {}
     for embryo in ("44b6", "6bba"):
@@ -188,8 +220,9 @@ def main() -> None:
         "status": "complete",
         "run_id": RUN_ID,
         "split_policy": (
-            "final four complete movies excluded; remaining movies split by "
-            "sha256(stem) modulo five independently within each embryo"
+            "final four complete movies excluded; division-positive movies "
+            "ordered by sha256(stem) independently within each embryo until "
+            "at least 20 percent of division positives enter selection"
         ),
         "movies": movies,
         "summary": {

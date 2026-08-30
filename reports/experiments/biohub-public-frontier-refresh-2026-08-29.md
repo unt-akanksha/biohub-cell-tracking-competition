@@ -205,3 +205,13 @@ parents from the same frames, split optimization/selection deterministically
 within each source embryo, and run all model optimization on the Antelume A10G.
 This supersedes the rejected external-only policy while preserving the
 non-replica and no-metric-hack constraints.
+
+The annotation inventory is now complete. Across all 199 official train
+movies it finds 151 two-daughter parents; the four final-probe movies contain
+five and remain excluded. The reciprocal training pool therefore contains
+146 positive division events and 1,247 same-frame annotated one-child PU
+controls. A deterministic division-stratified split holds out 5 of 24 usable
+`44b6` events and 26 of 122 usable `6bba` events for model selection, leaving
+19 and 96 respectively for optimization. The image extractor is a private,
+CPU-only Kaggle job; model training and scoring remain assigned exclusively to
+the Antelume A10G.
