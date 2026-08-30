@@ -386,10 +386,29 @@ Kernel version 3 was pushed after the pristine private dataset reported
 `ready`, its published inventory exposed exactly the 14 manifest files, all 25
 notebook code cells compiled, and the focused promotion suite passed 13 tests.
 It retains the Biohub competition source, the four required private inputs,
-GPU execution, and disabled internet. An exactly-once controller is monitoring
-that version and may submit it only after the completed output passes the
-distinct-hash, graph-integrity, runtime, validator-regression, division-gain,
-and daily-quota gates.
+GPU execution, and disabled internet. Version 3 completed successfully in
+2,097.53 seconds. On the hidden test graphs it scored 41 geometry-eligible
+parents, found one deep/morphology rank agreement, and added exactly one edge
+without a reassignment, node change, or coordinate change. Submission SHA-256
+is `5d57a87a4c3869afd874bc49a289a74a46329f5cba4dab21b1c0ffc5b25250f6`.
+
+The external promotion gate rejected that output. On the four held-out
+validation movies, the rank rule added one edge to `44b6_12dfb391` but recovered
+no true division. Adjusted edge Jaccard improved by `0.000516`, while removing
+the clean control's safe-division behavior reduced division Jaccard to zero and
+made total proxy gain `-0.013770`. The full policy therefore fails both the
+required positive division gain and the `0.005` proxy-gain floor. No promotion
+report or submission receipt was written and no competition submission ran.
+
+The first controller download attempted to mirror the notebook's temporary
+scikit-learn installation and hit a Windows path error after the important
+artifacts had downloaded. The five required evidence files were then fetched
+directly with a version-pinned filename pattern, and the verifier independently
+reproduced the same model-policy rejection. The controller is repaired in
+commit `e633024` to request only those five files in future runs. Version 3 is
+retired; enabling the clean base safe-divider alone would restore the control
+but the observed rank addition supplies only `+0.000516`, still below the
+promotion floor, so an unchanged rerun is not justified.
 
 ## Overnight strong-member ensemble program
 
