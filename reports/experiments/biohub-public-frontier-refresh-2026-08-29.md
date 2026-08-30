@@ -366,3 +366,20 @@ in 9.33 minutes. The error was isolated to the inserted setup cell:
 post-processing, evidence file, CSV promotion, or competition submission ran.
 Version 2 replaces that implicit dependency with an explicit immutable
 `Path("/kaggle/input")` root; the model, policy, and decision rule are unchanged.
+
+## Late frontier and account refresh
+
+A fresh score-descending Kaggle kernel inventory on 2026-08-29 remains headed
+by notebooks explicitly titled as metric hacks; these are excluded. The most
+recent clean-looking public notebooks inspected claim `0.928`, `0.935`, and
+`0.937`. Their code remains in the same dual-seed harmonic-fusion family and
+uses hand-set safe-division, gap, and short-track heuristics. None supplies a
+clean, independently gated component above the already reproduced `0.940` EMA
+control, so none is copied into the project candidate.
+
+The account submission inventory was also refreshed. The last visible scored
+project submissions remain in the `0.912`-`0.913` range; the attributed clean
+control submitted on 2026-08-26 is complete but currently has no displayed
+score. There were zero UTC-day submissions before the ranked-consensus
+controller started. The controller therefore has quota headroom but still
+requires all local promotion gates before it can submit.
