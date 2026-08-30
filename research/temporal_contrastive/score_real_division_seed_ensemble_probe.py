@@ -294,6 +294,15 @@ def main() -> None:
         raise RuntimeError(f"required GPU {args.required_gpu_name!r}, saw {gpu_name!r}")
 
     terminal = json.loads(args.ensemble_terminal.read_text(encoding="utf-8"))
+    evaluator_source = Path(__file__).with_name(
+        "evaluate_real_division_seed_ensemble.py"
+    )
+    sweep_terminal = args.sweep_root / "seed_sweep_terminal.json"
+    if not (
+        terminal.get("evaluation_source_sha256") == sha256_file(evaluator_source)
+        and terminal.get("sweep_terminal_sha256") == sha256_file(sweep_terminal)
+    ):
+        raise ValueError("overnight selection evidence or evaluator changed")
     policy, members = select_precommitted_members(terminal)
     paths = resolve_member_paths(members, args.sweep_root)
     inventory = json.loads(args.inventory.read_text(encoding="utf-8"))
