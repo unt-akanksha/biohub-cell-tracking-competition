@@ -111,6 +111,10 @@ def validate_sources(
         and probe.get("run_id") == PROBE_RUN_ID
         and probe.get("selection_terminal_sha256")
         == sha256_file(ensemble_terminal_path)
+        and probe.get("member_policy_source_sha256")
+        == sha256_file(
+            ROOT / "research/temporal_contrastive/overnight_seed_policy.py"
+        )
         and probe.get("selection_policy") == policy_name
         and probe.get("member_count") == len(members)
         and probe.get("members") == expected_probe_members

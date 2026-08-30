@@ -86,6 +86,9 @@ def build_sources(tmp_path: Path) -> dict[str, Path]:
             "status": "development_probe_complete",
             "run_id": MODULE["PROBE_RUN_ID"],
             "selection_terminal_sha256": sha256(selection),
+            "member_policy_source_sha256": sha256(
+                ROOT / "research/temporal_contrastive/overnight_seed_policy.py"
+            ),
             "selection_policy": "strongest_individual_rank",
             "member_count": 1,
             "members": [

@@ -193,6 +193,7 @@ def main() -> None:
     evaluator_source = Path(__file__).with_name(
         "evaluate_real_division_seed_ensemble.py"
     )
+    member_policy_source = Path(__file__).with_name("overnight_seed_policy.py")
     sweep_terminal = args.sweep_root / "seed_sweep_terminal.json"
     if not (
         terminal.get("evaluation_source_sha256") == sha256_file(evaluator_source)
@@ -222,6 +223,7 @@ def main() -> None:
         "run_id": RUN_ID,
         "gpu_name": gpu_name,
         "selection_terminal_sha256": sha256_file(args.ensemble_terminal),
+        "member_policy_source_sha256": sha256_file(member_policy_source),
         "selection_policy": policy,
         "member_count": len(members),
         "members": [

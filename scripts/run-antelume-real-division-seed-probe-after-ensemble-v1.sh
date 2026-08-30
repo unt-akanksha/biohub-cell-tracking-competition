@@ -15,6 +15,7 @@ maximum_polls=720
 test ! -e "$output_root"
 for required in \
   "$workspace/research/temporal_contrastive/score_real_division_seed_ensemble_probe.py" \
+  "$workspace/research/temporal_contrastive/overnight_seed_policy.py" \
   "$workspace/research/temporal_contrastive/evaluate_real_division_seed_ensemble.py" \
   "$probe_inventory" \
   "$probe_root/probe_cache_manifest.json" \

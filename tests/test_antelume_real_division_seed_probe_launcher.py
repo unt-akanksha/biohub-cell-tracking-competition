@@ -12,6 +12,7 @@ def test_probe_launcher_waits_for_selection_and_never_submits() -> None:
     assert "authorized_for_development_probe" in source
     assert "skipped_after_selection_rejection" in source
     assert "score_real_division_seed_ensemble_probe.py" in source
+    assert "overnight_seed_policy.py" in source
     assert "competition_test_data_read\": False" in source
     assert "submission_created\": False" in source
     assert "kaggle competitions submit" not in source
