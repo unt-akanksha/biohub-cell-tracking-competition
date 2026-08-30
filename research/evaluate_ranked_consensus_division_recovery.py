@@ -88,6 +88,25 @@ def confusion_dict(values: tuple[int, int, int]) -> dict[str, Any]:
     }
 
 
+def eligible_deep_probe(payload: dict[str, Any]) -> bool:
+    legacy = payload.get("run_id") == "competition-train-focused-division-transfer-probe-v1"
+    overnight = bool(
+        payload.get("run_id") == "competition-real-division-seed-ensemble-probe-v1"
+        and payload.get("status") == "development_probe_complete"
+        and payload.get("authorized_for_ranked_consensus_development_evaluation") is True
+        and payload.get("absolute_threshold_used") is False
+        and payload.get("weights_searched_on_probe") is False
+        and payload.get("model_subset_searched_on_probe") is False
+    )
+    return bool(
+        (legacy or overnight)
+        and payload.get("competition_test_data_read") is False
+        and payload.get("public_leaderboard_used_for_selection") is False
+        and payload.get("submission_created") is False
+        and payload.get("authorized_for_submission") is False
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--deep-probe", type=Path, required=True)
@@ -99,8 +118,7 @@ def main() -> None:
     deep = json.loads(args.deep_probe.read_text(encoding="utf-8"))
     morphology = json.loads(args.morphology_probe.read_text(encoding="utf-8"))
     if not (
-        deep.get("run_id") == "competition-train-focused-division-transfer-probe-v1"
-        and deep.get("competition_test_data_read") is False
+        eligible_deep_probe(deep)
         and morphology.get("run_id") == "competition-real-handcrafted-division-probe-v1"
         and morphology.get("competition_test_data_read") is False
     ):
