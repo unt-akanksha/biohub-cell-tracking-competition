@@ -41,6 +41,11 @@ TRAINING_SOURCE_SHA256 = (
     "491d0f095e7c4faa356c266fbbb5bc753ed278d6bdbae1d971bfa73c84da5538"
 )
 FOLDS = ("target_44b6", "target_6bba")
+SEED_OFFSETS = {"target_44b6": 0, "target_6bba": 10_003}
+INITIAL_MODEL_SHA256 = {
+    "target_44b6": "ad369d5c122a13a8763a92a94ac3e67548cd19628b0e3500fc8db5cae1201133",
+    "target_6bba": "cf2ba21a8b696216e4ae4bc59a2531c44f0ca47fc1d090d3fffc441f71607b75",
+}
 MINIMUM_POOLED_AP = 0.55
 MINIMUM_EMBRYO_AP = 0.40
 REFERENCE_MODEL_SHA256 = (
@@ -202,6 +207,33 @@ def validate_reference_terminal(payload: dict[str, Any]) -> None:
         raise ValueError("frozen reference voter terminal changed")
 
 
+def validate_training_config(payload: dict[str, Any], seed: int, fold: str) -> int:
+    effective_seed = int(seed) + SEED_OFFSETS[fold]
+    if not (
+        payload.get("schema_version") == 1
+        and payload.get("run_id") == TRAIN_RUN_ID
+        and payload.get("family")
+        == "competition_real_temporal_multiscale_division_gate_v1"
+        and payload.get("fold") == fold
+        and payload.get("seed") == effective_seed
+        and payload.get("train_mode") == "focused"
+        and payload.get("steps") == 50_000
+        and payload.get("batch_size") == 48
+        and float(payload.get("learning_rate", -1.0)) == 2e-5
+        and float(payload.get("minimum_learning_rate", -1.0)) == 2e-7
+        and float(payload.get("weight_decay", -1.0)) == 1e-4
+        and float(payload.get("ema_decay", -1.0)) == 0.995
+        and payload.get("initial_model_sha256") == INITIAL_MODEL_SHA256[fold]
+        and payload.get("trainable_parameters") == 25_178_047
+        and payload.get("frozen_parameters") == 21_208_560
+        and payload.get("competition_test_data_read") is False
+        and payload.get("final_probe_opened") is False
+        and payload.get("submission_created") is False
+    ):
+        raise ValueError(f"seed {seed} fold {fold} training config changed")
+    return effective_seed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path, required=True)
@@ -243,6 +275,7 @@ def main() -> None:
 
     candidates: list[dict[str, Any]] = []
     admitted_scores: list[torch.Tensor] = []
+    effective_seeds: set[int] = set()
     for seed in seeds:
         run_root = args.sweep_root / f"seed-{seed}"
         terminal_path = run_root / "real_division_gate_terminal.json"
@@ -263,6 +296,12 @@ def main() -> None:
         for fold in FOLDS:
             worker = terminal.get("folds", {}).get(fold, {})
             checkpoint = run_root / fold / "division_model.pt"
+            config_path = run_root / fold / "training_config.json"
+            config = json.loads(config_path.read_text())
+            effective_seed = validate_training_config(config, seed, fold)
+            if effective_seed in effective_seeds:
+                raise ValueError(f"duplicate effective training seed: {effective_seed}")
+            effective_seeds.add(effective_seed)
             if not (
                 worker.get("status") == "completed"
                 and worker.get("parameter_count") == EXPECTED_PARAMETER_COUNT
@@ -291,9 +330,11 @@ def main() -> None:
             rank_scores = movie_rank_percentiles(raw_scores, selection_inventory)
             row = {
                 "seed": seed,
+                "effective_seed": effective_seed,
                 "fold": fold,
                 "status": "admitted" if admitted else "rejected",
                 "model_sha256": sha256_file(checkpoint),
+                "training_config_sha256": sha256_file(config_path),
                 "parameter_count": EXPECTED_PARAMETER_COUNT,
                 "trainable_parameters": 25_178_047,
                 "selection": pooled,

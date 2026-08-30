@@ -109,3 +109,37 @@ def test_reference_voter_is_hash_and_metric_bound() -> None:
         assert "reference voter" in str(error)
     else:
         raise AssertionError("changed reference checkpoint was accepted")
+
+
+def test_training_config_binds_independent_effective_seed_and_recipe() -> None:
+    seed = 205_043
+    fold = "target_6bba"
+    payload = {
+        "schema_version": 1,
+        "run_id": MODULE["TRAIN_RUN_ID"],
+        "family": "competition_real_temporal_multiscale_division_gate_v1",
+        "fold": fold,
+        "seed": seed + MODULE["SEED_OFFSETS"][fold],
+        "train_mode": "focused",
+        "steps": 50_000,
+        "batch_size": 48,
+        "learning_rate": 2e-5,
+        "minimum_learning_rate": 2e-7,
+        "weight_decay": 1e-4,
+        "ema_decay": 0.995,
+        "initial_model_sha256": MODULE["INITIAL_MODEL_SHA256"][fold],
+        "trainable_parameters": 25_178_047,
+        "frozen_parameters": 21_208_560,
+        "competition_test_data_read": False,
+        "final_probe_opened": False,
+        "submission_created": False,
+    }
+
+    assert MODULE["validate_training_config"](payload, seed, fold) == 215_046
+    payload["seed"] += 1
+    try:
+        MODULE["validate_training_config"](payload, seed, fold)
+    except ValueError as error:
+        assert "training config" in str(error)
+    else:
+        raise AssertionError("reused or shifted training seed was accepted")
