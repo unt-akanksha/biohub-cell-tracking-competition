@@ -14,6 +14,7 @@ from research.temporal_localization.train_synthetic_localizer import (
     fixed_examples,
     graph_motion_features,
     improvement_gate,
+    make_patches,
     random_jitter_um,
     random_reflection_augmentation,
     relative_residual_sum,
@@ -202,3 +203,14 @@ def test_real_event_shard_retains_parent_and_boundary_daughters() -> None:
     assert real.eligible_rows.tolist() == [1]
     assert real.division_critical_rows.tolist() == [1, 2, 3]
     assert synthetic.division_critical_rows.tolist() == [1]
+    patches, graph, target = make_patches(
+        real,
+        np.asarray([2, 3], dtype=np.int64),
+        np.zeros((2, 3), dtype=np.float32),
+        torch.device("cpu"),
+        augment=False,
+    )
+    assert patches.shape == (2, 3, 17, 17, 17)
+    assert graph.shape == (2, 12)
+    assert target.shape == (2, 3)
+    assert torch.isfinite(patches).all()

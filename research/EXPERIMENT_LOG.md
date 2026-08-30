@@ -309,6 +309,11 @@ well as the synthetic generator.
   alive with empty error logs at startup; the first observes a 900-second
   Kaggle cooldown before resuming, and the second can only advance after a
   hash-verified AWS harvest terminal exists.
+- After the cache audit proved 495/755 objects intact and the prior HTTP 429
+  window had aged by more than 20 minutes, sleeping PID 20816 was safely
+  replaced before any network or AWS child existed by PID 48740 with 120
+  seconds of remaining cooldown. The five-second request pace and bounded
+  retry policy are unchanged.
 - A pre-launch feature audit found and removed a synthetic shortcut: target
   proposals were jittered while truth parent/child coordinates stayed fixed,
   allowing relative graph vectors to encode the correction directly. Training
