@@ -236,3 +236,85 @@ def apply_learned_division_recovery(
         "node_or_coordinate_changes": 0,
     }
     return output, stats
+
+
+def apply_ranked_consensus_division_recovery(
+    nodes_by_id: Mapping[int, Mapping[str, Any]],
+    edges: Sequence[Mapping[str, Any]],
+    deep_scores: Mapping[int, float],
+    morphology_scores: Mapping[int, float],
+    *,
+    biological_geometry_minimum: float = 3.0,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Add at most one edge when two scale-invariant rankings agree."""
+    if not math.isfinite(biological_geometry_minimum) or biological_geometry_minimum < 0:
+        raise ValueError("ranked consensus geometry minimum must be finite and nonnegative")
+    candidates = discover_division_recovery_candidates(nodes_by_id, edges)
+    eligible = [
+        candidate
+        for candidate in candidates
+        if candidate.biological_geometry_score >= biological_geometry_minimum
+        and candidate.parent_id in deep_scores
+        and candidate.parent_id in morphology_scores
+    ]
+    for candidate in eligible:
+        if not (
+            math.isfinite(float(deep_scores[candidate.parent_id]))
+            and math.isfinite(float(morphology_scores[candidate.parent_id]))
+        ):
+            raise ValueError("ranked consensus scores must be finite")
+    selected: DivisionRecoveryCandidate | None = None
+    if eligible:
+        deep_top = max(
+            eligible,
+            key=lambda candidate: (
+                float(deep_scores[candidate.parent_id]),
+                -candidate.parent_distance_um,
+                -candidate.sister_distance_um,
+                -candidate.parent_id,
+            ),
+        )
+        morphology_top = max(
+            eligible,
+            key=lambda candidate: (
+                float(morphology_scores[candidate.parent_id]),
+                -candidate.parent_distance_um,
+                -candidate.sister_distance_um,
+                -candidate.parent_id,
+            ),
+        )
+        if deep_top.parent_id == morphology_top.parent_id:
+            selected = deep_top
+    output = [dict(edge) for edge in edges]
+    if selected is not None:
+        pair = (selected.parent_id, selected.second_child_id)
+        existing_pairs = {
+            (int(edge["source_id"]), int(edge["target_id"])) for edge in output
+        }
+        if pair in existing_pairs:
+            raise RuntimeError("ranked consensus selected an existing edge")
+        output.append(
+            {
+                "source_id": selected.parent_id,
+                "target_id": selected.second_child_id,
+                "distance_um": selected.parent_distance_um,
+                "deep_division_score": float(deep_scores[selected.parent_id]),
+                "morphology_division_score": float(
+                    morphology_scores[selected.parent_id]
+                ),
+                "biological_geometry_score": selected.biological_geometry_score,
+                "ranked_consensus_division_recovery": True,
+            }
+        )
+    return output, {
+        "geometric_candidates": len(candidates),
+        "geometry_eligible_candidates": len(eligible),
+        "candidate_parents_scored": len(set(deep_scores) & set(morphology_scores)),
+        "ranking_agreed": selected is not None,
+        "added_edges": int(selected is not None),
+        "maximum_additions": 1,
+        "biological_geometry_minimum": biological_geometry_minimum,
+        "absolute_threshold_used": False,
+        "reassignment_performed": 0,
+        "node_or_coordinate_changes": 0,
+    }

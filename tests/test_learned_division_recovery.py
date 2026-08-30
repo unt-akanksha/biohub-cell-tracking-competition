@@ -3,6 +3,7 @@ from __future__ import annotations
 from research.learned_division_recovery import (
     DivisionRecoveryPolicy,
     apply_learned_division_recovery,
+    apply_ranked_consensus_division_recovery,
     discover_division_recovery_candidates,
 )
 
@@ -131,3 +132,44 @@ def test_biological_geometry_gate_accepts_balanced_opposing_branch() -> None:
     assert output[-1]["target_id"] == 3
     assert output[-1]["biological_geometry_score"] > 3.0
     assert stats["geometry_rejected"] == 0
+
+
+def test_ranked_consensus_adds_one_edge_only_when_rankings_agree() -> None:
+    nodes = dict(
+        [
+            node(1, 0, 10.0),
+            node(2, 1, 20.0),
+            node(3, 1, 0.0),
+            node(10, 0, 100.0),
+            node(11, 1, 110.0),
+            node(12, 1, 90.0),
+        ]
+    )
+    edges = [
+        {"source_id": 1, "target_id": 2},
+        {"source_id": 10, "target_id": 11},
+    ]
+
+    output, stats = apply_ranked_consensus_division_recovery(
+        nodes,
+        edges,
+        deep_scores={1: -20.0, 10: -21.0},
+        morphology_scores={1: 0.2, 10: 0.1},
+    )
+
+    assert [(row["source_id"], row["target_id"]) for row in output] == [
+        (1, 2),
+        (10, 11),
+        (1, 3),
+    ]
+    assert stats["added_edges"] == 1
+    assert stats["absolute_threshold_used"] is False
+
+    unchanged, rejected = apply_ranked_consensus_division_recovery(
+        nodes,
+        edges,
+        deep_scores={1: -20.0, 10: -21.0},
+        morphology_scores={1: 0.1, 10: 0.2},
+    )
+    assert unchanged == edges
+    assert rejected["ranking_agreed"] is False
