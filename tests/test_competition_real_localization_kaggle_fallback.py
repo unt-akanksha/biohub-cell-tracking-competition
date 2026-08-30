@@ -40,6 +40,10 @@ def test_kernel_builder_emits_private_cpu_train_only_notebook(tmp_path: Path) ->
                     "sha256": "a" * 64,
                 },
                 "labels_manifest_sha256": "b" * 64,
+                "support_wheel": {
+                    "path": "numcodecs-0.16.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+                    "sha256": "c" * 64,
+                },
                 "competition_test_data_read": False,
                 "authorized_for_submission": False,
             }
@@ -79,6 +83,10 @@ def test_kernel_builder_emits_private_cpu_train_only_notebook(tmp_path: Path) ->
     assert '"submission_created": False' in source
     assert '"authorized_for_submission": False' in source
     assert "submission.csv" not in source
+    assert '"pip", "install", "--no-index", "--no-deps"' in source
+    assert "from numcodecs import Blosc" in source
+    assert "import zarr" not in source
+    assert "competition Zarr contract" in source
     compile(source, metadata["code_file"], "exec")
 
 

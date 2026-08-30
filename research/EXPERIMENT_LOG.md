@@ -357,3 +357,13 @@ well as the synthetic generator.
   check at the same handoff still returned `ExpiredToken`; therefore no AWS
   instance or GPU had been allocated, and the existing credential-event wait
   remains the launch boundary.
+- CPU cache kernel version 1 failed closed after 9 seconds because the base
+  image did not contain `zarr`; it read no competition frame and consumed no
+  GPU. Version 2 removes that undeclared dependency. The private label dataset
+  now also carries the exact 8,846,228-byte CPython-3.12 manylinux `numcodecs`
+  wheel (SHA-256
+  `44869ef564a50aa545215c6a0d42ba5bbc34e9715523fb2336ada3d1fb2b331d`).
+  The notebook installs it offline with `--no-index --no-deps`, validates the
+  exact Zarr-v3 bytes+Blosc-Zstd/bitshuffle metadata contract, and decodes each
+  chunk directly. The decoder was checked byte-for-byte against local Zarr on
+  a real cached competition frame before the version-2 launch.

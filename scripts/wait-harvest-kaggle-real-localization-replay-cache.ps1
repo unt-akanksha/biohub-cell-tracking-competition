@@ -20,8 +20,8 @@ $canonicalRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-real-local
 $canonicalManifest = Join-Path $canonicalRoot "real_localization_shard_manifest.json"
 $validator = Join-Path $RepositoryRoot "scripts/validate-real-localization-shard-cache.py"
 $launcher = Join-Path $RepositoryRoot "scripts/wait-launch-harvest-aws-4gpu-temporal-localizer-v1.ps1"
-$terminalPath = Join-Path $stateRoot "kaggle-replay-fallback-terminal.json"
-$logPath = Join-Path $stateRoot "kaggle-replay-fallback.log"
+$terminalPath = Join-Path $stateRoot "kaggle-replay-fallback-v$ExpectedKernelVersion-terminal.json"
+$logPath = Join-Path $stateRoot "kaggle-replay-fallback-v$ExpectedKernelVersion.log"
 $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)
 $versionedKernelRef = "$KernelRef/$ExpectedKernelVersion"
 

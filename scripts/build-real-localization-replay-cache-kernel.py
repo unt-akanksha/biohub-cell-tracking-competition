@@ -28,20 +28,29 @@ def code_cell(source: str) -> dict:
     }
 
 
-def kernel_source(*, archive_sha256: str, labels_manifest_sha256: str) -> str:
+def kernel_source(
+    *,
+    archive_sha256: str,
+    labels_manifest_sha256: str,
+    support_wheel_name: str,
+    support_wheel_sha256: str,
+) -> str:
     return f'''import hashlib
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tarfile
 import time
 
 import numpy as np
-import zarr
 
 RUN_ID = "competition-real-localization-shards-v1"
 LABEL_RUN_ID = "competition-real-localization-labels-v1"
 EXPECTED_ARCHIVE_SHA256 = "{archive_sha256}"
 EXPECTED_LABELS_MANIFEST_SHA256 = "{labels_manifest_sha256}"
+SUPPORT_WHEEL_NAME = "{support_wheel_name}"
+EXPECTED_SUPPORT_WHEEL_SHA256 = "{support_wheel_sha256}"
 EXPECTED_INVENTORY_SHA256 = "{EXPECTED_INVENTORY_SHA256}"
 FINAL_PROBE_STEMS = {{
     "44b6_12dfb391", "44b6_267148e4", "6bba_062c8d37", "6bba_07e24132"
@@ -64,6 +73,18 @@ def atomic_json(path, payload):
     temporary = path.with_suffix(path.suffix + ".partial")
     temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\\n")
     temporary.replace(path)
+
+
+support_wheels = sorted(INPUT_ROOT.glob(f"*/{{SUPPORT_WHEEL_NAME}}"))
+if len(support_wheels) != 1 or sha256_file(support_wheels[0]) != EXPECTED_SUPPORT_WHEEL_SHA256:
+    raise RuntimeError({{"eligible_support_wheels": [str(path) for path in support_wheels]}})
+site_root = WORKING / "offline_site"
+subprocess.run([
+    sys.executable, "-m", "pip", "install", "--no-index", "--no-deps",
+    "--target", str(site_root), str(support_wheels[0]),
+], check=True)
+sys.path.insert(0, str(site_root))
+from numcodecs import Blosc
 
 
 archives = sorted(INPUT_ROOT.glob("*/{ARCHIVE_NAME}"))
@@ -132,6 +153,42 @@ train_root = train_roots[0]
 if train_root.name != "train" or "test" in train_root.as_posix().lower():
     raise RuntimeError("competition train root boundary failed")
 
+
+def open_frame(movie_root, frame):
+    metadata = json.loads((movie_root / "0" / "zarr.json").read_text())
+    expected_codecs = [
+        {{"name": "bytes", "configuration": {{"endian": "little"}}}},
+        {{
+            "name": "blosc",
+            "configuration": {{
+                "typesize": 2,
+                "cname": "zstd",
+                "clevel": 1,
+                "shuffle": "bitshuffle",
+                "blocksize": 0,
+            }},
+        }},
+    ]
+    if not (
+        metadata.get("zarr_format") == 3
+        and metadata.get("node_type") == "array"
+        and metadata.get("shape", [])[1:] == [64, 256, 256]
+        and metadata.get("data_type") == "uint16"
+        and metadata.get("chunk_grid", {{}}).get("configuration", {{}}).get("chunk_shape")
+        == [1, 64, 256, 256]
+        and metadata.get("chunk_key_encoding", {{}}).get("configuration", {{}}).get("separator") == "/"
+        and metadata.get("codecs") == expected_codecs
+        and 0 <= int(frame) < int(metadata["shape"][0])
+    ):
+        raise RuntimeError(f"unsupported competition Zarr contract: {{movie_root.name}}")
+    chunk_path = movie_root / "0" / "c" / str(int(frame)) / "0" / "0" / "0"
+    codec = Blosc(cname="zstd", clevel=1, shuffle=Blosc.BITSHUFFLE, blocksize=0)
+    decoded = codec.decode(chunk_path.read_bytes())
+    expected_bytes = 1 * 64 * 256 * 256 * np.dtype("<u2").itemsize
+    if len(decoded) != expected_bytes:
+        raise RuntimeError(f"decoded chunk size changed: {{movie_root.name}} t={{frame}}")
+    return np.frombuffer(decoded, dtype="<u2").reshape(1, 64, 256, 256)[0]
+
 OUTPUT_ROOT.mkdir()
 records = []
 frame_records = []
@@ -143,12 +200,10 @@ for movie_index, movie in enumerate(movies, start=1):
         times = data["times"].astype(np.int32, copy=False)
         coords = data["coords_voxel"].astype(np.float32, copy=False)
         edges_by_id = data["edges"].astype(np.int64, copy=False).reshape(-1, 2)
-    array = zarr.open_array(train_root / f"{{stem}}.zarr" / "0", mode="r")
-    if tuple(array.shape[1:]) != (64, 256, 256):
-        raise RuntimeError(f"unexpected image shape: {{stem}} {{array.shape}}")
+    movie_root = train_root / f"{{stem}}.zarr"
     frames = {{}}
     for frame in movie["required_frames"]:
-        volume = np.asarray(array[int(frame)])
+        volume = open_frame(movie_root, int(frame))
         if volume.shape != (64, 256, 256):
             raise RuntimeError(f"unexpected frame shape: {{stem}} t={{frame}}")
         frames[int(frame)] = volume
@@ -320,11 +375,13 @@ def main() -> None:
     parser.add_argument(
         "--output-root", type=Path, default=ROOT / "kaggle" / KERNEL_ID
     )
+    parser.add_argument("--replace", action="store_true")
     args = parser.parse_args()
 
     upload_manifest_path = args.label_upload_root / "upload_manifest.json"
     upload_manifest = json.loads(upload_manifest_path.read_text(encoding="utf-8"))
     archive = upload_manifest.get("archive", {})
+    support_wheel = upload_manifest.get("support_wheel", {})
     if not (
         upload_manifest.get("status") == "complete"
         and upload_manifest.get("dataset_id") == DATASET_REF
@@ -334,11 +391,18 @@ def main() -> None:
         and archive.get("path") == ARCHIVE_NAME
         and len(str(archive.get("sha256", ""))) == 64
         and len(str(upload_manifest.get("labels_manifest_sha256", ""))) == 64
+        and str(support_wheel.get("path", "")).startswith("numcodecs-")
+        and str(support_wheel.get("path", "")).endswith(".whl")
+        and len(str(support_wheel.get("sha256", ""))) == 64
     ):
         raise ValueError("label upload manifest is ineligible")
     if args.output_root.exists():
-        raise FileExistsError(f"kernel output root exists: {args.output_root}")
-    args.output_root.mkdir(parents=True)
+        expected = {"kernel-metadata.json", f"{KERNEL_ID}.ipynb"}
+        actual = {path.name for path in args.output_root.iterdir()}
+        if not args.replace or actual != expected:
+            raise FileExistsError(f"kernel output root is not safely replaceable: {args.output_root}")
+    else:
+        args.output_root.mkdir(parents=True)
 
     metadata = {
         "id": KERNEL_REF,
@@ -388,6 +452,8 @@ def main() -> None:
                     labels_manifest_sha256=str(
                         upload_manifest["labels_manifest_sha256"]
                     ),
+                    support_wheel_name=str(support_wheel["path"]),
+                    support_wheel_sha256=str(support_wheel["sha256"]),
                 )
             )
         ],

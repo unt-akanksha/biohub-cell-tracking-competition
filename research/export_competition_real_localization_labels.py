@@ -7,6 +7,8 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
+import shutil
 import sys
 import tarfile
 import tempfile
@@ -146,6 +148,7 @@ def main() -> None:
     parser.add_argument("--inventory", type=Path, required=True)
     parser.add_argument("--geff-cache-root", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
+    parser.add_argument("--support-wheel", type=Path, required=True)
     args = parser.parse_args()
 
     inventory = validate_inventory(args.inventory)
@@ -154,6 +157,14 @@ def main() -> None:
     validate_geff_cache(args.geff_cache_root, geff_manifest)
     if args.output_root.exists():
         raise FileExistsError(f"label upload root exists: {args.output_root}")
+    if not (
+        args.support_wheel.is_file()
+        and re.fullmatch(
+            r"numcodecs-[^-]+-cp312-[^-]+-manylinux[^/]+\.whl",
+            args.support_wheel.name,
+        )
+    ):
+        raise ValueError("expected an exact Linux CPython 3.12 numcodecs wheel")
     args.output_root.mkdir(parents=True)
 
     with tempfile.TemporaryDirectory(dir=args.output_root.parent) as temporary:
@@ -176,6 +187,8 @@ def main() -> None:
         "isPrivate": True,
     }
     atomic_json(args.output_root / "dataset-metadata.json", metadata)
+    wheel_path = args.output_root / args.support_wheel.name
+    shutil.copy2(args.support_wheel, wheel_path)
     upload_manifest = {
         "schema_version": 1,
         "status": "complete",
@@ -187,6 +200,12 @@ def main() -> None:
             "sha256": sha256_file(archive_path),
         },
         "labels_manifest_sha256": labels_manifest_sha256,
+        "support_wheel": {
+            "path": wheel_path.name,
+            "bytes": wheel_path.stat().st_size,
+            "sha256": sha256_file(wheel_path),
+            "purpose": "offline Blosc-Zstd decoding of competition Zarr v3 chunks",
+        },
         "inventory_sha256": EXPECTED_INVENTORY_SHA256,
         "competition_train_data_read": True,
         "competition_test_data_read": False,
