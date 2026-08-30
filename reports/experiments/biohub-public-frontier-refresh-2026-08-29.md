@@ -243,3 +243,36 @@ policy. Its unusually clean ranking is retained only as an independent
 diagnostic or conservative vote for the Antelume model; the held-out result is
 not used to lower its threshold. Model SHA-256 is
 `dc21d9ba50e5fbeb339ecea5ab2842afab4bd7c82c35d40c227ce95ff3be8dc6`.
+
+## Real-domain Antelume gate outcome
+
+The first real-domain run trained only the classification heads for 2,000
+steps per fold on the Antelume A10G. It did not produce a two-fold blend that
+met the frozen zero-false-positive selection gate and was rejected without
+opening the final probe. A subsequent focused run unfroze 25,178,047
+division-relevant parameters, kept 21,208,560 association parameters frozen,
+and trained each independently initialized fold for 3,000 steps on the same
+movie-disjoint split.
+
+The focused run improved selection AP to `0.565943`. Its precommitted blend
+selected only the `target_6bba` fold (`target_44b6=0.0`, `target_6bba=1.0`) and
+froze logit threshold `1.4140625`; this recovered 9 of 31 selection positives
+with zero false positives. Both checkpoints and their blend weights were
+SHA-256 bound before opening the final probe. The scorer was repaired before
+that opening so it used the frozen weighted blend rather than an accidental
+two-fold mean.
+
+The one-time probe ran on an NVIDIA A10G. The frozen model ranked the three
+safe complete-movie recoveries `1/26`, `1/2`, and `3/84` within their event
+frames and achieved `AP=0.632479`. Absolute logits shifted below the frozen
+threshold (`1.091797`, `1.202148`, and `0.439453`), so both threshold-only and
+the biological-geometry conjunction selected zero rows. The policy therefore
+failed its precommitted graph-evaluation gate and is rejected: no model dataset,
+candidate attachment, or submission is authorized from this run.
+
+The consistent pattern across the independent CPU morphology control and the
+Antelume deep gate is useful but narrow: division ranking transfers, absolute
+calibration does not. The next lane must precommit a movie/frame-scale-robust
+decision rule using selection data only and validate it with grouped held-out
+evidence. The opened complete-movie probe will not be presented as untouched
+evidence for that new policy.
