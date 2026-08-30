@@ -411,6 +411,9 @@ Admission is deliberately stricter than simply averaging every run. Each
 network is scored independently on the movie-disjoint selection split and is
 rejected unless pooled AP is at least `0.55`, AP is at least `0.40` for each
 embryo, and it recovers at least two positives before the first false positive.
+Unique effective seeds and exact training configurations are verified for all
+workers, and byte-identical output checkpoints are deduplicated before scoring
+so repeated initializations cannot masquerade as ensemble diversity.
 Only the surviving models enter one precommitted equal-weight average of their
 within-movie percentile ranks. No ensemble-weight search is allowed. That
 ensemble is eligible for a later development probe only if it improves AP by
