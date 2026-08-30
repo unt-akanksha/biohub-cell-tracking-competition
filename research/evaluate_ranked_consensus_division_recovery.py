@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -22,6 +23,14 @@ from research.trackastra_graph.train_biohub_graph_transformer import (
 
 RUN_ID = "competition-ranked-consensus-division-development-v1"
 GEOMETRY_MINIMUM = 3.0
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def row_key(row: dict[str, Any]) -> tuple[str, int, int]:
@@ -208,6 +217,8 @@ def main() -> None:
         "schema_version": 1,
         "status": "development_positive" if authorized else "development_rejected",
         "run_id": RUN_ID,
+        "deep_probe_sha256": sha256_file(args.deep_probe),
+        "morphology_probe_sha256": sha256_file(args.morphology_probe),
         "policy": (
             "per movie, require geometry >=3 and identical top parent under the "
             "deep and independent morphology rankings; add at most one parent-free edge"
