@@ -449,6 +449,26 @@ Launch and admission code are committed as `4cbc0f0`, `aa74973`, and
 are both active; the observed throughput projects completion near 06:00-07:00
 America/Chicago.
 
+A second dependent controller is prepared for the post-selection boundary.
+It opens the train-only development probe only when the selection terminal
+authorizes either the full admitted equal-rank ensemble or the single strongest
+predeclared individual. It cannot search weights, subsets, or thresholds on
+that probe, and a selection rejection writes a skip terminal without reading
+any probe frame. The downstream graph evaluator now accepts this hash-bound
+probe format and starts from the complete base graph, preserving the clean
+control's existing safe divisions while evaluating only additive recoveries.
+Fourteen focused tests pass across selection, deduplication, calibration-free
+ranking, probe routing, and graph-policy eligibility. The scorer and remote
+controller are committed in `0ee9d7c` and `20d0ff6`.
+
+The most recent AWS control-plane session expired before that second controller
+could be copied to the instance; this does not affect the already running
+training or admission processes. A hidden local deploy-on-refresh controller,
+committed as `0287326`, now checks for a valid session at 60-second intervals
+and will copy and launch the controller exactly once when credentials become
+valid. It is restricted to `/home/ubuntu/biohub*` and includes no Kaggle
+submission command.
+
 The first durable worker checkpoint, seed `205043` / `target_44b6`, completed
 all 50,000 steps in 1,708.51 seconds and retained step 12,000. It improved its
 initial AP from `0.243307` to `0.468185` and recovered 4 of 31 positives before
