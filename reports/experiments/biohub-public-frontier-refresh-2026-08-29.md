@@ -160,3 +160,48 @@ is the remaining bottleneck. The immutable diagnostic artifact is
 SHA-256 `a149ed7d6d3849bc2cb88159c5e4592d0466287b476e6b1029fb7aad69a32b51`.
 The run also exposed and repaired a missing SciPy dependency in the isolated
 Antelume Biohub environment before the v4 policy calibration needs it.
+
+## V4 and focused-division outcome
+
+The two-T4 v4 pretraining notebook completed 4,000 optimizer steps in both
+folds, but its frozen association gate correctly rejected both checkpoints:
+each best checkpoint remained at step zero and numerically identical to the
+contextual-v3 initialization. The recovered 46,386,607-parameter checkpoints
+were therefore allowed only as prediction-preserving initialization for a
+division-specific experiment; they were never promoted as association models.
+
+Two focused Antelume A10G runs optimized 25,178,047 division-relevant
+parameters while freezing 21,208,560 association parameters. Independent
+`target_44b6` checkpoints improved external ZSNS005 selection AP from
+`0.173924` to `0.277423` and `0.219762`. Their frozen ensemble selected four
+of five true events at `0.80` precision on selection. On the disjoint audit,
+however, the same threshold selected seven events with only one true event
+(`0.142857` precision). Event classification itself failed; the result was not
+a second-daughter ranking artifact. The focused external gate is rejected and
+no model dataset, candidate, or submission was created.
+
+## Real-domain division probe and next lane
+
+The clean 0.940 prediction graphs contain 225 constrained geometric recovery
+candidates in the five annotated division frames. Exactly three are
+parent-free recoveries that require only one added edge. A train-only probe
+cache now contains the 15 context frames (`t-1,t,t+1`) needed to score all 225
+candidates; its 23 Kaggle members total 66,682,915 bytes and every member is
+SHA-256 recorded. It reads no competition test file and is diagnostic-only.
+
+The probe also records inference-available branch geometry: existing- and
+second-child displacement, daughter opposition, step balance, midpoint drift,
+and constant-velocity midpoint error. A fixed biological symmetry score ranks
+the three safe positives `2/26`, `1/2`, and `4/84` within their respective
+event frames. This is useful complementary evidence, but not precise enough by
+itself to authorize recovery.
+
+The next training lane replaces external-only calibration with legitimate
+competition-train supervision. A private CPU-only Kaggle packager is staging
+all 199 train GEFF annotations; GPU, TPU, internet, inference, and submission
+are disabled. The resulting reciprocal inventory will exclude the four final
+probe movies, train on real two-daughter parents plus annotated one-child
+parents from the same frames, split optimization/selection deterministically
+within each source embryo, and run all model optimization on the Antelume A10G.
+This supersedes the rejected external-only policy while preserving the
+non-replica and no-metric-hack constraints.
