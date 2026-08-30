@@ -422,6 +422,24 @@ Launch and admission code are committed as `4cbc0f0` and `aa74973`. The remote
 training process and its dependent admission controller are both active; the
 observed throughput projects completion near 06:00-07:00 America/Chicago.
 
+The current primary-method refresh supports this conservative admission
+policy. The official Trackastra project remains the strongest directly
+relevant general-purpose learned linker and now advertises an optional
+SAM2-feature variant, but that released feature path is described for 2D data;
+it is not silently treated as a validated 3D zebrafish model here. The 2025
+ICCV study *How To Make Your Cell Tracker Say “I dunno!”* reports that learned
+trackers, including transformer trackers, can be overconfident under temporal
+and domain ambiguity and that calibrated uncertainty is useful. Its cheapest
+calibration method needs representative ground truth. That evidence argues
+against transferring an absolute validation threshold to hidden embryos and
+supports the current within-movie rank plus independent-consensus policy.
+
+Primary sources:
+
+- [Trackastra official repository](https://github.com/weigertlab/trackastra)
+- [Trackastra paper](https://arxiv.org/abs/2405.15700)
+- [ICCV 2025 uncertainty-aware cell tracking paper](https://openaccess.thecvf.com/content/ICCV2025/html/Paul_How_To_Make_Your_Cell_Tracker_Say_I_dunno_ICCV_2025_paper.html)
+
 ## Late frontier and account refresh
 
 A fresh score-descending Kaggle kernel inventory on 2026-08-29 remains headed
