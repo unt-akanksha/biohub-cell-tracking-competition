@@ -457,6 +457,10 @@ def main() -> None:
         "competition_test_data_read": False,
         "public_leaderboard_used_for_selection": False,
         "threshold_selected": False,
+        "final_probe_opened": args.training_terminal is not None,
+        "final_probe_opened_after_training_threshold_freeze": (
+            args.training_terminal is not None
+        ),
         "submission_created": False,
         "authorized_for_competition_graph_evaluation": (
             authorized_for_competition_graph_evaluation
