@@ -669,9 +669,9 @@ valid AWS session. After upload it queues server-side behind the current seed
 sweep and its independently gated development probe, additionally requiring
 the A10G to have no active compute process before it starts. The initial local
 controller entered this boundary as process `42356`; the current AWS profile
-still reports an expired token, so no new remote mutation has yet been claimed. Twenty
-focused model, trainer, archive-verification, extractor, inventory, and
-overnight-launch tests pass, along with shell and PowerShell syntax validation.
+still reports an expired token, so no new remote mutation has yet been claimed.
+Twenty-four focused model, trainer, archive-verification, extractor, inventory,
+overnight-launch, and harvest tests pass, along with shell and PowerShell syntax validation.
 The run contains no competition submit command and cannot authorize a
 submission directly.
 
