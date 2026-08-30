@@ -225,3 +225,8 @@ minority failure mode; coordinate localization is the new primary branch.
   trainer SHA-256 `84a65ec25b81a2c3d0e251e444392fdf49fc17c76b52b789d06080833a763517`,
   Synthetic16 archive SHA-256 `6404033fa953a4ec7312cb0f54037feb9d9cb3c9cafa6ec4cad295b3f6b845b4`,
   and real-development archive SHA-256 `863d3edcce206266bfb6ad4d78afd033b662d1c57e3b0c11a81bb4bfc84a8b26`.
+- Hidden AWS launch/harvest controller PID: 46440, started at
+  2026-08-30T04:49:47-05:00. No launch or harvest terminal existed at startup,
+  so this is the sole armed four-GPU allocation path. It waits for valid AWS
+  credentials, launches once, harvests once, and requests instance shutdown.
+  The independent candidate promotion/submission controller remains PID 2852.
