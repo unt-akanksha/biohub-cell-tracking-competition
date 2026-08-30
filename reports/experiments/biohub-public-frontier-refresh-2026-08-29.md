@@ -225,3 +225,21 @@ the manifest SHA-256 is
 `943717472518b917175312bd4ada9e12660d31d3ebf0bf7afd5672ab40442e1e`.
 Every shard size and digest was rechecked after download. No final-probe image
 was included.
+
+## Independent CPU morphology control
+
+A project-authored 132-feature temporal morphology control was trained on the
+same movie-disjoint inventory without GPU use. Five-fold grouped optimization
+selected a histogram-gradient model and an extra-trees model; their best
+individual out-of-fold AP was `0.632866`. The frozen ensemble achieved
+selection AP `0.688111` and recovered 8 of 31 positives before the first false
+positive, freezing probability threshold `0.8992587384`.
+
+On the complete-movie probe, all three safe recoveries ranked first within
+their frames and occupied the top three scores across all 225 candidates
+(`AP=1.0`). Absolute probabilities shifted downward, however, so the frozen
+threshold made zero decisions. The CPU gate is rejected as a standalone
+policy. Its unusually clean ranking is retained only as an independent
+diagnostic or conservative vote for the Antelume model; the held-out result is
+not used to lower its threshold. Model SHA-256 is
+`dc21d9ba50e5fbeb339ecea5ab2842afab4bd7c82c35d40c227ce95ff3be8dc6`.
