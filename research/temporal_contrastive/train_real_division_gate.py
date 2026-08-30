@@ -541,6 +541,9 @@ def main() -> None:
         "target_44b6": args.target_44b6_initial_model,
         "target_6bba": args.target_6bba_initial_model,
     }
+    initial_hashes = {fold: sha256_file(path) for fold, path in initial_models.items()}
+    if len(set(initial_hashes.values())) != len(initial_hashes):
+        raise ValueError("real division models require independent initial checkpoints")
     started = time.monotonic()
     terminals = {
         fold: train_fold(
@@ -620,7 +623,8 @@ def main() -> None:
         "folds": terminals,
         "ensemble_selection": ensemble_metrics,
         "selection_by_embryo": selection_by_embryo,
-        "frozen_division_logit_threshold": frozen,
+        "frozen_division_logit_threshold": frozen["threshold"],
+        "threshold_selection": frozen,
         "selection_gate_passed": accepted,
         "final_probe_opened": False,
         "checkpoint_frozen_before_final_probe": True,
