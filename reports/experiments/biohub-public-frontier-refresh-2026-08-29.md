@@ -577,3 +577,16 @@ Only a positive result can invoke the strong-member runtime packager with the
 pinned CPython 3.12 scikit-learn wheel. This stage includes no dataset upload,
 Kaggle kernel launch, or competition submission command. Eight focused tests
 pass across harvest verification/extraction and strong-member packaging.
+
+The final launch boundary is also event-driven. If and only if the local
+post-harvest terminal says `runtime_packaged`, the launch controller verifies
+the runtime-manifest hash, creates or versions the private v2 dataset, waits
+for Kaggle processing, builds the attributed additive candidate, and requires
+private/offline GPU metadata plus the notebook's exact two-T4 runtime guard.
+It resolves the next owned kernel version before pushing, validates that exact
+version and its attached competition/runtime sources after launch, then starts
+the existing external verifier/submitter with the same runtime manifest and
+kernel version. The launch layer itself cannot submit. A scientific rejection
+therefore creates neither a dataset nor a kernel, while a technically complete
+but weak notebook is still stopped by the proxy and true-division promotion
+gates before the exactly-once submitter can run.
