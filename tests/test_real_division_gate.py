@@ -4,6 +4,7 @@ import torch
 
 from research.temporal_contrastive.train_real_division_gate import (
     balanced_rows,
+    select_model_blend,
     select_frozen_threshold,
     selection_utility,
     threshold_metrics,
@@ -83,3 +84,15 @@ def test_pu_weight_reduces_negative_loss_contribution() -> None:
     weighted = weighted_focal_loss(logits, targets, torch.tensor([1.0, 0.25]))
     unweighted = weighted_focal_loss(logits, targets, torch.ones(2))
     assert weighted < unweighted
+
+
+def test_blend_can_select_one_stronger_independent_fold() -> None:
+    targets = torch.tensor([1.0, 1.0, 0.0, 0.0])
+    weak = torch.tensor([0.1, 0.0, 0.9, 0.8])
+    strong = torch.tensor([0.9, 0.8, 0.2, 0.1])
+
+    selected = select_model_blend([weak, strong], targets)
+
+    assert selected["weights"] == {"target_44b6": 0.0, "target_6bba": 1.0}
+    assert selected["frozen_threshold"]["tp"] == 2
+    assert selected["frozen_threshold"]["fp"] == 0

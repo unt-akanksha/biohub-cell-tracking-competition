@@ -260,6 +260,59 @@ def select_frozen_threshold(labels: torch.Tensor, scores: torch.Tensor) -> dict[
     }
 
 
+def select_model_blend(
+    fold_logits: list[torch.Tensor], targets: torch.Tensor
+) -> dict[str, Any]:
+    if len(fold_logits) != 2 or any(logits.shape != targets.shape for logits in fold_logits):
+        raise ValueError("real division blend requires two aligned fold predictions")
+    rows = []
+    for first_weight in (0.0, 0.25, 0.50, 0.75, 1.0):
+        scores = first_weight * fold_logits[0] + (1.0 - first_weight) * fold_logits[1]
+        metrics = threshold_metrics(targets, scores)
+        try:
+            frozen = select_frozen_threshold(targets, scores)
+        except RuntimeError:
+            frozen = None
+        rows.append(
+            {
+                "weights": {
+                    "target_44b6": first_weight,
+                    "target_6bba": 1.0 - first_weight,
+                },
+                "scores": scores,
+                "metrics": metrics,
+                "frozen_threshold": frozen,
+            }
+        )
+    selected = max(
+        rows,
+        key=lambda row: (
+            row["frozen_threshold"] is not None,
+            (
+                float(row["frozen_threshold"]["recall"])
+                if row["frozen_threshold"] is not None
+                else 0.0
+            ),
+            *selection_utility(row["metrics"]),
+            -abs(float(row["weights"]["target_44b6"]) - 0.5),
+        ),
+    )
+    return {
+        "weights": selected["weights"],
+        "scores": selected["scores"],
+        "metrics": selected["metrics"],
+        "frozen_threshold": selected["frozen_threshold"],
+        "grid": [
+            {
+                "weights": row["weights"],
+                "metrics": row["metrics"],
+                "frozen_threshold": row["frozen_threshold"],
+            }
+            for row in rows
+        ],
+    }
+
+
 def balanced_rows(
     targets: torch.Tensor, batch_size: int, generator: torch.Generator
 ) -> torch.Tensor:
@@ -572,14 +625,14 @@ def main() -> None:
             strict=True,
         )
         models.append(model.requires_grad_(False).eval())
-    ensemble_logits = torch.stack(
-        [
-            predict(model, selection_patches, batch_size=args.validation_batch_size)
-            for model in models
-        ]
-    ).mean(dim=0)
-    frozen = select_frozen_threshold(selection_targets, ensemble_logits)
-    ensemble_metrics = threshold_metrics(selection_targets, ensemble_logits)
+    fold_logits = [
+        predict(model, selection_patches, batch_size=args.validation_batch_size)
+        for model in models
+    ]
+    blend = select_model_blend(fold_logits, selection_targets)
+    ensemble_logits = blend["scores"]
+    frozen = blend["frozen_threshold"]
+    ensemble_metrics = blend["metrics"]
     selection_by_embryo = {}
     for embryo in ("44b6", "6bba"):
         indices = torch.as_tensor(
@@ -594,7 +647,8 @@ def main() -> None:
             selection_targets[indices], ensemble_logits[indices]
         )
     accepted = bool(
-        frozen["fp"] == 0
+        frozen is not None
+        and frozen["fp"] == 0
         and frozen["tp"] >= 2
         and ensemble_metrics["average_precision"] >= 0.50
         and all(
@@ -622,8 +676,12 @@ def main() -> None:
         "manifest_sha256": sha256_file(manifest_path),
         "folds": terminals,
         "ensemble_selection": ensemble_metrics,
+        "ensemble_weights": blend["weights"],
+        "ensemble_weight_grid": blend["grid"],
         "selection_by_embryo": selection_by_embryo,
-        "frozen_division_logit_threshold": frozen["threshold"],
+        "frozen_division_logit_threshold": (
+            frozen["threshold"] if frozen is not None else None
+        ),
         "threshold_selection": frozen,
         "selection_gate_passed": accepted,
         "final_probe_opened": False,
