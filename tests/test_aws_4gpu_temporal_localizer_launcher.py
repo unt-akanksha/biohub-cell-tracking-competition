@@ -15,8 +15,11 @@ def test_runner_uses_four_independent_large_members_and_auto_stops() -> None:
     assert "CUDA_VISIBLE_DEVICES=\"$gpu_index\"" in text
     assert "--steps 20000" in text
     assert "--required-gpu-name A10G" in text
+    assert "score_real_development_probe.py" in text
+    assert "real-development-probe.json" in text
     assert "sudo shutdown -h now" in text
-    assert "competition" not in text.lower()
+    assert "kaggle" not in text.lower()
+    assert "submit" not in text.lower()
 
 
 def test_controller_is_hash_bound_single_instance_and_non_submitting() -> None:
@@ -24,7 +27,9 @@ def test_controller_is_hash_bound_single_instance_and_non_submitting() -> None:
     assert 'InstanceType = "g5.12xlarge"' in text
     assert '"--count", "1"' in text
     assert "__SYNTHETIC16_ARCHIVE_SHA256__" in text
+    assert "__DEVELOPMENT_ARCHIVE_SHA256__" in text
     assert "parameters_per_model = 71249805" in text
+    assert "development_probe_runs_only_after_member_audits = $true" in text
     assert "competition_submission_performed = $false" in text
     assert "authorized_for_submission = $false" in text
     assert "/home/ubuntu/antelume" not in text

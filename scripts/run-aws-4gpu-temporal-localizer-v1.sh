@@ -4,9 +4,12 @@ set -euo pipefail
 workspace=/home/ubuntu/biohub
 data_archive=/home/ubuntu/biohub-synthetic16-temporal-localizer-v1.tar.gz
 data_parent=/home/ubuntu/biohub-synthetic16-temporal-localizer-v1
+development_archive=/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz
+development_root=/home/ubuntu/biohub-temporal-localizer-development-v1
 output_root=/home/ubuntu/biohub-results/synthetic16-temporal-node-localizer-v1
 result_archive=/home/ubuntu/biohub-synthetic16-temporal-node-localizer-v1-results.tar.gz
 archive_sha256=__SYNTHETIC16_ARCHIVE_SHA256__
+development_archive_sha256=__DEVELOPMENT_ARCHIVE_SHA256__
 seeds=(41021 41029 41039 41047)
 
 exec 9>/home/ubuntu/biohub-temporal-localizer-v1.lock
@@ -15,17 +18,23 @@ if ! flock -n 9; then
   exit 2
 fi
 echo "$archive_sha256  $data_archive" | sha256sum -c -
+echo "$development_archive_sha256  $development_archive" | sha256sum -c -
 for required in \
   "$workspace/research/synthetic_pretrain/data.py" \
   "$workspace/research/temporal_contrastive/patch_model.py" \
+  "$workspace/research/temporal_localization/consensus.py" \
+  "$workspace/research/temporal_localization/inference.py" \
   "$workspace/research/temporal_localization/model.py" \
+  "$workspace/research/temporal_localization/score_real_development_probe.py" \
   "$workspace/research/temporal_localization/train_synthetic_localizer.py"; do
   test -f "$required"
 done
 test ! -e "$data_parent"
+test ! -e "$development_root"
 test ! -e "$output_root"
-mkdir -p "$data_parent" "$output_root" /home/ubuntu/biohub-results
+mkdir -p "$data_parent" "$development_root" "$output_root" /home/ubuntu/biohub-results
 tar -xzf "$data_archive" -C "$data_parent"
+tar -xzf "$development_archive" -C "$development_root"
 
 python_bin=""
 for candidate in \
@@ -42,6 +51,9 @@ if test -z "$python_bin"; then
   echo "No CUDA-enabled AWS Python environment was found" >&2
   exit 3
 fi
+if ! "$python_bin" -c 'import scipy, tracksdata, zarr' >/dev/null 2>&1; then
+  "$python_bin" -m pip install --user 'zarr<4' scipy tracksdata
+fi
 gpu_count=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l)
 test "$gpu_count" -eq 4
 nvidia-smi --query-gpu=name --format=csv,noheader | grep -vi A10G && exit 4 || true
@@ -49,7 +61,10 @@ cd "$workspace"
 "$python_bin" -m py_compile \
   research/synthetic_pretrain/data.py \
   research/temporal_contrastive/patch_model.py \
+  research/temporal_localization/consensus.py \
+  research/temporal_localization/inference.py \
   research/temporal_localization/model.py \
+  research/temporal_localization/score_real_development_probe.py \
   research/temporal_localization/train_synthetic_localizer.py
 
 pids=()
@@ -90,6 +105,20 @@ for gpu_index in 0 1 2 3; do
   fi
 done
 printf '%s\n' "$failed" >"$output_root/aggregate.exit-code"
+development_status=5
+set +e
+CUDA_VISIBLE_DEVICES=0,1,2,3 "$python_bin" \
+  research/temporal_localization/score_real_development_probe.py \
+  --probe-root "$development_root/probe" \
+  --control-root "$development_root/control" \
+  --truth-root "$development_root/truth" \
+  --results-root "$output_root" \
+  --output "$output_root/real-development-probe.json" \
+  --batch-size 16 \
+  >"$output_root/real-development-probe.log" 2>&1
+development_status=$?
+set -e
+printf '%s\n' "$development_status" >"$output_root/real-development-probe.exit-code"
 cd /home/ubuntu/biohub-results
 find synthetic16-temporal-node-localizer-v1 -type f ! -name SHA256SUMS -print0 \
   | sort -z | xargs -0 sha256sum >"$output_root/SHA256SUMS"

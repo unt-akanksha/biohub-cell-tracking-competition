@@ -20,6 +20,11 @@ Set-Location -LiteralPath $RepositoryRoot
 $stateRoot = Join-Path $RepositoryRoot ".biohub/cache/aws-4gpu-temporal-localizer-v1"
 $syntheticRoot = Join-Path $RepositoryRoot ".biohub/cache/public-research-20260830/synthetic16"
 $archivePath = Join-Path $stateRoot "biohub-synthetic16-temporal-localizer-v1.tar.gz"
+$developmentArchivePath = Join-Path $stateRoot "biohub-temporal-localizer-development-v1.tar.gz"
+$developmentStage = Join-Path $stateRoot "development-stage"
+$probeRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-division-probe-frames-v1"
+$controlRoot = Join-Path $RepositoryRoot ".biohub/cache/public-frontier-outputs-20260829/biohub-ct-0940-ema/tracking_repo/predictions/unknown/unet_transformer_val/split_0"
+$truthRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-truth/public-node-acceptance-v1"
 $runnerTemplate = Join-Path $RepositoryRoot "scripts/run-aws-4gpu-temporal-localizer-v1.sh"
 $renderedRunner = Join-Path $stateRoot "run-aws-4gpu-temporal-localizer-v1.sh"
 $launchTerminal = Join-Path $stateRoot "launch-terminal.json"
@@ -30,7 +35,10 @@ $requiredCode = @(
     (Join-Path $RepositoryRoot "research/synthetic_pretrain/data.py"),
     (Join-Path $RepositoryRoot "research/temporal_contrastive/patch_model.py"),
     (Join-Path $RepositoryRoot "research/temporal_localization/__init__.py"),
+    (Join-Path $RepositoryRoot "research/temporal_localization/consensus.py"),
+    (Join-Path $RepositoryRoot "research/temporal_localization/inference.py"),
     (Join-Path $RepositoryRoot "research/temporal_localization/model.py"),
+    (Join-Path $RepositoryRoot "research/temporal_localization/score_real_development_probe.py"),
     (Join-Path $RepositoryRoot "research/temporal_localization/train_synthetic_localizer.py")
 )
 
@@ -84,6 +92,11 @@ foreach ($required in @($runnerTemplate) + $requiredCode) {
         throw "AWS temporal-localizer deployment input is missing: $required"
     }
 }
+foreach ($requiredDirectory in @($probeRoot, $controlRoot, $truthRoot)) {
+    if (-not (Test-Path -LiteralPath $requiredDirectory -PathType Container)) {
+        throw "Temporal-localizer development input is missing: $requiredDirectory"
+    }
+}
 $sequenceFiles = @(0..15 | ForEach-Object {
     Join-Path $syntheticRoot ("sequences/seq_{0:D4}.npz" -f $_)
 })
@@ -100,11 +113,39 @@ if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf)) {
     }
     finally { Pop-Location }
 }
+$probeManifest = Get-Content -Raw -LiteralPath (Join-Path $probeRoot "probe_cache_manifest.json") | ConvertFrom-Json
+if (
+    $probeManifest.status -ne "complete" -or
+    $probeManifest.run_id -ne "competition-division-probe-frame-cache-v1" -or
+    [int]$probeManifest.summary.files -ne 23 -or
+    [int]$probeManifest.summary.frames -ne 15 -or
+    [int]$probeManifest.summary.movies -ne 4 -or
+    [int64]$probeManifest.summary.bytes -ne 66682915 -or
+    $probeManifest.competition_test_data_read -ne $false -or
+    $probeManifest.public_leaderboard_used_for_selection -ne $false
+) {
+    throw "Temporal-localizer real development manifest changed"
+}
+if (-not (Test-Path -LiteralPath $developmentArchivePath -PathType Leaf)) {
+    New-Item -ItemType Directory -Path $developmentStage -Force | Out-Null
+    Copy-Item -LiteralPath $probeRoot -Destination (Join-Path $developmentStage "probe") -Recurse
+    Copy-Item -LiteralPath $controlRoot -Destination (Join-Path $developmentStage "control") -Recurse
+    Copy-Item -LiteralPath $truthRoot -Destination (Join-Path $developmentStage "truth") -Recurse
+    Push-Location -LiteralPath $developmentStage
+    try {
+        & tar -czf $developmentArchivePath probe control truth
+        if ($LASTEXITCODE -ne 0) { throw "Temporal-localizer development archive creation failed" }
+    }
+    finally { Pop-Location }
+}
 $archiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
+$developmentArchiveSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $developmentArchivePath).Hash.ToLowerInvariant()
 $runnerText = (Get-Content -Raw -LiteralPath $runnerTemplate).Replace(
     "__SYNTHETIC16_ARCHIVE_SHA256__", $archiveSha256
+).Replace(
+    "__DEVELOPMENT_ARCHIVE_SHA256__", $developmentArchiveSha256
 )
-if ($runnerText -match "__SYNTHETIC16_ARCHIVE_SHA256__") {
+if ($runnerText -match "__(SYNTHETIC16|DEVELOPMENT)_ARCHIVE_SHA256__") {
     throw "Temporal-localizer runner hash binding failed"
 }
 Set-Content -LiteralPath $renderedRunner -Encoding utf8 -Value $runnerText
@@ -126,6 +167,8 @@ if ($ValidateOnly) {
         steps_per_model = 20000
         archive_sha256 = $archiveSha256
         archive_bytes = (Get-Item -LiteralPath $archivePath).Length
+        development_archive_sha256 = $developmentArchiveSha256
+        development_archive_bytes = (Get-Item -LiteralPath $developmentArchivePath).Length
     } | ConvertTo-Json
     exit 0
 }
@@ -205,7 +248,8 @@ try {
         $requiredCode[1], "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub/research/temporal_contrastive/patch_model.py"
     ))
     Invoke-Checked "scp" ($sshBase + @(
-        $requiredCode[2], $requiredCode[3], $requiredCode[4],
+        $requiredCode[2], $requiredCode[3], $requiredCode[4], $requiredCode[5],
+        $requiredCode[6], $requiredCode[7],
         "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub/research/temporal_localization/"
     ))
     Invoke-Checked "scp" ($sshBase + @(
@@ -213,6 +257,9 @@ try {
     ))
     Invoke-Checked "scp" ($sshBase + @(
         $archivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-synthetic16-temporal-localizer-v1.tar.gz"
+    ))
+    Invoke-Checked "scp" ($sshBase + @(
+        $developmentArchivePath, "${RemoteUser}@${remoteHost}:/home/ubuntu/biohub-temporal-localizer-development-v1.tar.gz"
     ))
     $remoteCommand = "chmod +x /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh && bash -n /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh && nohup bash /home/ubuntu/biohub/scripts/run-aws-4gpu-temporal-localizer-v1.sh >/home/ubuntu/biohub-temporal-localizer-v1-controller.log 2>&1 < /dev/null & echo TEMPORAL_LOCALIZER_PID=`$!"
     Invoke-Checked "ssh" ($sshBase + @("${RemoteUser}@${remoteHost}", $remoteCommand))
@@ -228,6 +275,8 @@ try {
         parameters_per_model = 71249805
         steps_per_model = 20000
         synthetic_archive_sha256 = $archiveSha256
+        development_archive_sha256 = $developmentArchiveSha256
+        development_probe_runs_only_after_member_audits = $true
         auto_stop_after_harvest_window = $true
         authorized_for_submission = $false
     }
