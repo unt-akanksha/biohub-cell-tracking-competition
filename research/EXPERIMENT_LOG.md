@@ -309,3 +309,11 @@ well as the synthetic generator.
   alive with empty error logs at startup; the first observes a 900-second
   Kaggle cooldown before resuming, and the second can only advance after a
   hash-verified AWS harvest terminal exists.
+- A pre-launch feature audit found and removed a synthetic shortcut: target
+  proposals were jittered while truth parent/child coordinates stayed fixed,
+  allowing relative graph vectors to encode the correction directly. Training
+  now co-translates local lineage and same-frame context with the proposal, so
+  motion/density features are invariant to injected target jitter and image
+  appearance must explain the offset. A deterministic invariance regression
+  covers all graph features except the intentionally position-dependent image
+  boundary feature.

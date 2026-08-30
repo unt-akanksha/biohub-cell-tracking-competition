@@ -86,6 +86,23 @@ def test_graph_features_encode_available_parent_child_context() -> None:
     assert np.isfinite(features).all()
 
 
+def test_training_graph_motion_does_not_leak_target_jitter() -> None:
+    state = fixture_state()
+    rows = np.asarray([1], dtype=np.int64)
+    centered = state.sample.nodes[rows, 1:4].copy()
+    displaced = centered + np.asarray([[1.0, -2.0, 3.0]], dtype=np.float32)
+    centered_features = graph_motion_features(state, rows, centered)
+    displaced_features = graph_motion_features(state, rows, displaced)
+    # Motion, lineage, density, and time features are translation invariant.
+    # Only the explicit image-boundary feature may respond to displacement.
+    np.testing.assert_allclose(
+        centered_features[:, :11],
+        displaced_features[:, :11],
+        rtol=0.0,
+        atol=1e-7,
+    )
+
+
 def test_gate_requires_large_mean_gain_and_axis_safety() -> None:
     examples = fixed_examples([fixture_state(240), fixture_state(241)], seed=11, count=20)
     baseline = baseline_metrics(examples)

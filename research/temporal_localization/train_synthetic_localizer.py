@@ -289,7 +289,15 @@ def graph_motion_features(
     rows: np.ndarray,
     proposals_zyx_voxel: np.ndarray,
 ) -> np.ndarray:
-    """Return bounded motion/context features available in an inferred graph."""
+    """Return motion context without leaking the injected target jitter.
+
+    Training crops are displaced from a truth node to create a localization
+    target.  If its truth parent/children were left fixed, their relative
+    vectors would reveal that displacement directly.  Co-translating the local
+    context preserves the underlying motion and forces appearance to explain
+    the correction, matching the correlated coordinate errors expected from an
+    inferred trajectory.
+    """
 
     rows = np.asarray(rows, dtype=np.int64)
     proposals = np.asarray(proposals_zyx_voxel, dtype=np.float32)
@@ -300,20 +308,27 @@ def graph_motion_features(
     scale = np.asarray(POOLED_VOXEL_UM, dtype=np.float32)
     output = np.zeros((len(rows), 12), dtype=np.float32)
     for batch_row, (node_row, proposal) in enumerate(zip(rows.tolist(), proposals, strict=True)):
+        translation = proposal - coords[node_row]
         parent = int(state.predecessor[node_row])
         children = state.successors[node_row]
         if parent >= 0:
-            output[batch_row, 0:3] = (proposal - coords[parent]) * scale / 10.0
+            parent_coordinate = coords[parent] + translation
+            output[batch_row, 0:3] = (
+                proposal - parent_coordinate
+            ) * scale / 10.0
             output[batch_row, 6] = 1.0
         if len(children):
-            child_center = coords[children].mean(axis=0)
+            child_center = (coords[children] + translation[None]).mean(axis=0)
             output[batch_row, 3:6] = (child_center - proposal) * scale / 10.0
             output[batch_row, 7] = 1.0
         output[batch_row, 8] = min(len(children), 2) / 2.0
         same_frame = np.flatnonzero(times == times[node_row])
         same_frame = same_frame[same_frame != node_row]
         if len(same_frame):
-            distances = np.linalg.norm((coords[same_frame] - proposal[None]) * scale[None], axis=1)
+            translated_same_frame = coords[same_frame] + translation[None]
+            distances = np.linalg.norm(
+                (translated_same_frame - proposal[None]) * scale[None], axis=1
+            )
             output[batch_row, 9] = min(float(distances.min()) / 20.0, 2.0)
         output[batch_row, 10] = float(times[node_row]) / max(state.sample.volumes.shape[0] - 1, 1)
         boundary_um = np.minimum(proposal, np.asarray(state.sample.volumes.shape[1:]) - 1 - proposal) * scale
