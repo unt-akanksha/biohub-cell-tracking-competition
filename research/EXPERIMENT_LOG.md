@@ -220,13 +220,19 @@ minority failure mode; coordinate localization is the new primary branch.
 - The exact FP16 checkpoint is hash-frozen and must re-pass both selection strata
   before the sealed audit files are opened. This closes pre-/post-serialization
   evidence drift while preserving the four-seed equal-weight policy.
-- Final pre-launch regression: 28 temporal-localization tests passed. The
-  controller validation binds runner SHA-256 `d064e53905f383f7113a7dd0aa90e44ba19f15afcca0c08912b725f07265c4f2`,
+- Final pre-launch regression: 31 temporal-localization tests passed. The
+  controller validation binds runner SHA-256 `2ef7582d27baae1698f57d2d566982c363a7d02d582ff5bd1f4112146073a53b`,
   trainer SHA-256 `84a65ec25b81a2c3d0e251e444392fdf49fc17c76b52b789d06080833a763517`,
   Synthetic16 archive SHA-256 `6404033fa953a4ec7312cb0f54037feb9d9cb3c9cafa6ec4cad295b3f6b845b4`,
   and real-development archive SHA-256 `863d3edcce206266bfb6ad4d78afd033b662d1c57e3b0c11a81bb4bfc84a8b26`.
-- Hidden AWS launch/harvest controller PID: 46440, started at
-  2026-08-30T04:49:47-05:00. No launch or harvest terminal existed at startup,
-  so this is the sole armed four-GPU allocation path. It waits for valid AWS
-  credentials, launches once, harvests once, and requests instance shutdown.
-  The independent candidate promotion/submission controller remains PID 2852.
+- Controller PID 46440 was stopped before launch while both terminal records
+  were absent so the CUDA-environment bootstrap could be hardened. Dependency
+  installation now detects whether user-site packages are visible instead of
+  unconditionally using `pip --user`, verifies imports after installation, and
+  records Python, package, CUDA, cuDNN, and all four GPU identities in the
+  harvested runtime environment manifest. The independent candidate
+  promotion/submission controller remains PID 2852.
+- Executable CPU smoke evidence used a real division-critical row from sealed-
+  selection sequence 12: physical patch shape 1x3x17x17x17, graph shape 1x12,
+  71,249,805 parameters, finite outputs, and two independent reloads of the
+  142,589,136-byte FP16 checkpoint produced bit-exact outputs.

@@ -19,6 +19,11 @@ def test_runner_uses_four_independent_large_members_and_auto_stops() -> None:
     assert "--division-validation-examples 512" in text
     assert "--division-audit-examples 512" in text
     assert "--required-gpu-name A10G" in text
+    assert "site.ENABLE_USER_SITE" in text
+    assert "--disable-pip-version-check --no-input" in text
+    assert '"$python_bin" -c \'import scipy, tracksdata, zarr\'' in text
+    assert '"$output_root/runtime-environment.json"' in text
+    assert '"gpu_names"' in text
     assert "score_real_development_probe.py" in text
     assert "real-development-probe.json" in text
     assert "sudo shutdown -h now" in text

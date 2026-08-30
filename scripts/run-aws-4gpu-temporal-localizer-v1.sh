@@ -52,11 +52,47 @@ if test -z "$python_bin"; then
   exit 3
 fi
 if ! "$python_bin" -c 'import scipy, tracksdata, zarr' >/dev/null 2>&1; then
-  "$python_bin" -m pip install --user 'zarr<4' scipy tracksdata
+  pip_scope=()
+  if "$python_bin" -c 'import site; assert site.ENABLE_USER_SITE' >/dev/null 2>&1; then
+    pip_scope=(--user)
+  fi
+  "$python_bin" -m pip install --disable-pip-version-check --no-input \
+    "${pip_scope[@]}" 'zarr<4' scipy tracksdata
 fi
+"$python_bin" -c 'import scipy, tracksdata, zarr'
 gpu_count=$(nvidia-smi --query-gpu=name --format=csv,noheader | wc -l)
 test "$gpu_count" -eq 4
 nvidia-smi --query-gpu=name --format=csv,noheader | grep -vi A10G && exit 4 || true
+"$python_bin" - "$output_root/runtime-environment.json" <<'PY'
+import importlib.metadata
+import json
+import platform
+import sys
+from pathlib import Path
+
+import torch
+
+payload = {
+    "schema_version": 1,
+    "python": platform.python_version(),
+    "python_executable": sys.executable,
+    "packages": {
+        name: importlib.metadata.version(name)
+        for name in ("numpy", "scipy", "torch", "tracksdata", "zarr")
+    },
+    "cuda_version": torch.version.cuda,
+    "cudnn_version": torch.backends.cudnn.version(),
+    "gpu_count": torch.cuda.device_count(),
+    "gpu_names": [
+        torch.cuda.get_device_name(index)
+        for index in range(torch.cuda.device_count())
+    ],
+}
+Path(sys.argv[1]).write_text(
+    json.dumps(payload, indent=2, sort_keys=True) + "\n",
+    encoding="utf-8",
+)
+PY
 cd "$workspace"
 "$python_bin" -m py_compile \
   research/synthetic_pretrain/data.py \
