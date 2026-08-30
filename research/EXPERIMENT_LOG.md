@@ -137,3 +137,29 @@ https://arxiv.org/abs/2405.15700
 This model is an experiment, not a candidate. It has no submission authority
 until it passes movie-disjoint selection, sealed audit, frozen development, and
 the external candidate promotion gate.
+
+## 2026-08-30 — topology-preserving temporal localization
+
+The frozen four-movie control audit contains 2,357 annotated nodes and 2,284
+matches (0.969028 recall). Of the 73 misses, 68 already have a prediction within
+5–12 µm, two are one-to-one crowding conflicts, and only three lack a nearby
+prediction. The median/p90 nearest-prediction distances among misses are
+6.563/9.283 µm. Detection replacement and node addition therefore target the
+minority failure mode; coordinate localization is the new primary branch.
+
+- Model: project-authored temporal ConvNeXt3D plus axial morphology and 12
+  frozen graph-motion features, 71,249,805 parameters per member.
+- Mechanical scope: bounded coordinate offsets only. Node IDs, counts, times,
+  and lineage edges are immutable.
+- Data: the CC0 Synthetic16 subset, 27,696 labeled nodes in 16 six-frame
+  sequences. Sequences 0–11 train, 12–13 select checkpoints, and 14–15 remain
+  unopened until each checkpoint is serialized and hash-frozen.
+- Schedule: four independent seeds on four AWS A10Gs, 20,000 steps per member,
+  equal-weight ensemble only if every included member independently passes the
+  selection and sealed-audit gates. Audit subset/weight searches are forbidden.
+- AWS controller PID: 27152. The validated launch target is one temporary
+  `g5.12xlarge`; it harvests a SHA-256-verified result archive and auto-stops
+  after harvest or after a bounded grace period. At launch time the CLI profile
+  still returned `ExpiredToken`, so the controller is credential-event-driven.
+- This stage reads no competition images, labels, predictions, or leaderboard
+  values and cannot create a submission.
