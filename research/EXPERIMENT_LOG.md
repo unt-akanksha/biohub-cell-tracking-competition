@@ -337,3 +337,23 @@ well as the synthetic generator.
   over 1,000 steps before cosine decay back to `2e-6`. Learning rate is applied
   before each optimizer update, avoiding the prior full-rate first step on an
   untrained 71.25M-parameter network.
+- Because hundreds of competition-file API requests remained rate limited, a
+  second, CPU-only materialization path was added without changing the replay
+  inventory or scientific split. A private 866,075-byte train-label bundle
+  (`biohub-real-localization-labels-v1`, version 1) is bound to archive SHA-256
+  `94bee4145a11d4da8bc958833b3afbf2f3986464428f201de640b62c477d8353`
+  and label-manifest SHA-256
+  `8384d402874f47bfc4288f8df028310e0cf6dfd30958999679d369770b68c872`.
+  It contains only graph labels for the same 115 train movies; the frozen four
+  development probes remain excluded.
+- Private Kaggle kernel `biohub-real-localization-replay-cache-v1`, version 1,
+  was launched with CPU only, GPU/TPU/internet disabled, and only the label
+  dataset plus official competition input attached. It resolves exactly one
+  `train/` root, reads the same 525 frames, emits the same 177 pooled replay
+  shards, records per-frame content digests, and cannot submit. A background
+  harvest controller will validate every output hash and atomically prefer the
+  first complete replay path before handing off to the existing AWS launcher.
+- The Kaggle label dataset was ready before the kernel launch. A fresh AWS STS
+  check at the same handoff still returned `ExpiredToken`; therefore no AWS
+  instance or GPU had been allocated, and the existing credential-event wait
+  remains the launch boundary.
