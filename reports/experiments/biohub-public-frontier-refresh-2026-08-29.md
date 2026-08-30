@@ -415,12 +415,17 @@ Only the surviving models enter one precommitted equal-weight average of their
 within-movie percentile ranks. No ensemble-weight search is allowed. That
 ensemble is eligible for a later development probe only if it improves AP by
 at least `0.01` over the strongest admitted individual and keeps each-embryo AP
-at or above `0.45`. The overnight evaluator reads no final probe, competition
-test input, leaderboard result, public prediction, or submission path.
+at or above `0.45`. Independently, a single admitted network may progress even
+if the ensemble does not, but only if its AP exceeds the frozen current voter's
+`0.565942529` by at least `0.01`; this prevents an averaging failure from
+hiding a genuinely stronger component. The overnight evaluator reads no final
+probe, competition test input, leaderboard result, public prediction, or
+submission path.
 
-Launch and admission code are committed as `4cbc0f0` and `aa74973`. The remote
-training process and its dependent admission controller are both active; the
-observed throughput projects completion near 06:00-07:00 America/Chicago.
+Launch and admission code are committed as `4cbc0f0`, `aa74973`, and
+`5ddff9c`. The remote training process and its dependent admission controller
+are both active; the observed throughput projects completion near 06:00-07:00
+America/Chicago.
 
 The current primary-method refresh supports this conservative admission
 policy. The official Trackastra project remains the strongest directly
