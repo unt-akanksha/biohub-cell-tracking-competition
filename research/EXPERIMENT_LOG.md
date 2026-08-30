@@ -56,3 +56,55 @@ metric-hack selection.
 
 No public leaderboard result is used as training, member selection, ensemble
 selection, or acceptance evidence in this schedule.
+
+## 2026-08-30 — graph-context model family
+
+Motivation: additional capacity without the correct inductive bias was not
+sufficient. The rejected Kinetics-pretrained Swin3D-B ranker had 87,640,009
+parameters but only 0.4901 sealed-audit AP and zero recall at zero false
+positives. A domain-trained patch voter reached 0.6325 AP on the final frozen
+probe, but its selection-frozen absolute threshold selected no events. The next
+experiment therefore adopts Trackastra's applicable principle: score a candidate
+with the surrounding spatiotemporal detection set, not only isolated crops.
+
+Primary design reference:
+https://arxiv.org/abs/2405.15700
+
+### Leakage-safe data enrichment
+
+- Input: the exact relational v3 archive, SHA-256
+  `66a822bce0c60d06f6a2b60ada313f0d4d55062de1f84fb60bded4ae456266c2`.
+- GEFF access is restricted to five node arrays: ID, time, z, y, and x. No edge
+  array is opened, so audit division labels cannot enter the context features.
+- Each candidate has 43 tokens: parent, two symmetrically typed daughters, and
+  up to eight nearest detections at each of five relative timepoints.
+- Exact daughter swapping and arbitrary context-token permutation leave model
+  output unchanged.
+- Output reproduces all 3,013 examples, 134 positives, 2,879 negatives, 55
+  inference-eligible positives, and 165 inference-eligible negatives across 146
+  movies and 2,274 shards.
+- Valid context tokens: 48,307.
+- Manifest SHA-256:
+  `2e5c4c46b11ff1480194c29e88c0e16b0ebf2f0fd65b2fc29548d26fee599bd9`.
+- Deterministic archive SHA-256:
+  `efa3b5af80c75b2bc091ecda1e86064660dcfffe197e2a4950a12981248b0c3e`.
+
+### Model and run schedule
+
+- Model: the 46,386,607-parameter microscopy backbone plus an eight-layer,
+  512-dimensional, eight-head detection-set transformer and rank head.
+- Total parameters per model: 74,732,308; graph-context/rank parameters:
+  28,345,701.
+- Schedule: four seeds crossed with two distinct initial backbones, 8 models,
+  20,000 full-network steps each (160,000 model-steps).
+- Execution is chained after the 48.3M relational sweep terminal and an idle-A10G
+  check. It cannot contend with the earlier sweep.
+- Selection and audit gates match the relational experiment. Ensemble members
+  are frozen before audit, every deployment member must pass independently, and
+  deployment uses ranks rather than an absolute threshold.
+- Deployment controller PID at start: 344. It is waiting on the relational
+  deployment event and refreshed AWS credentials.
+
+This model is an experiment, not a candidate. It has no submission authority
+until it passes movie-disjoint selection, sealed audit, frozen development, and
+the external candidate promotion gate.
