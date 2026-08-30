@@ -14,8 +14,16 @@ from typing import Any
 RUN_ID = "competition-real-division-seed-probe-harvest-v1"
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
 def verify_harvest(path: Path) -> dict[str, Any]:
-    archive_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+    archive_sha256 = sha256_file(path)
     with tarfile.open(path, mode="r:gz") as archive:
         members = archive.getmembers()
         names = [member.name for member in members]
@@ -25,6 +33,8 @@ def verify_harvest(path: Path) -> dict[str, Any]:
             pure = PurePosixPath(name)
             if pure.is_absolute() or ".." in pure.parts:
                 raise ValueError(f"unsafe harvest path: {name}")
+        if any(not member.isreg() for member in members):
+            raise ValueError("harvest archive contains a non-regular member")
         manifest_stream = archive.extractfile("HARVEST_MANIFEST.json")
         if manifest_stream is None:
             raise ValueError("harvest manifest is unreadable")
@@ -50,10 +60,14 @@ def verify_harvest(path: Path) -> dict[str, Any]:
             stream = archive.extractfile(record["path"])
             if stream is None:
                 raise ValueError(f"harvest member is unreadable: {record['path']}")
-            payload = stream.read()
+            digest = hashlib.sha256()
+            observed_bytes = 0
+            for block in iter(lambda: stream.read(1024 * 1024), b""):
+                observed_bytes += len(block)
+                digest.update(block)
             if (
-                len(payload) != int(record["bytes"])
-                or hashlib.sha256(payload).hexdigest() != record["sha256"]
+                observed_bytes != int(record["bytes"])
+                or digest.hexdigest() != record["sha256"]
             ):
                 raise ValueError(f"harvest member changed: {record['path']}")
     return {
@@ -71,12 +85,36 @@ def verify_harvest(path: Path) -> dict[str, Any]:
     }
 
 
+def extract_verified_harvest(path: Path, destination: Path) -> dict[str, Any]:
+    """Verify first, then extract regular members without tar path handling."""
+
+    verified = verify_harvest(path)
+    destination.mkdir(parents=True, exist_ok=False)
+    with tarfile.open(path, mode="r:gz") as archive:
+        for member in archive.getmembers():
+            source = archive.extractfile(member)
+            if source is None:
+                raise ValueError(f"harvest member is unreadable: {member.name}")
+            target = destination.joinpath(*PurePosixPath(member.name).parts)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open("xb") as stream:
+                for block in iter(lambda: source.read(1024 * 1024), b""):
+                    stream.write(block)
+    verified["extracted_to"] = str(destination.resolve())
+    return verified
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--extract-to", type=Path)
     args = parser.parse_args()
-    result = verify_harvest(args.archive)
+    result = (
+        extract_verified_harvest(args.archive, args.extract_to)
+        if args.extract_to is not None
+        else verify_harvest(args.archive)
+    )
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.report is not None:
         args.report.parent.mkdir(parents=True, exist_ok=True)

@@ -15,6 +15,7 @@ VERIFIER = ROOT / "scripts/verify-antelume-seed-probe-harvest.py"
 MODULE = runpy.run_path(str(VERIFIER))
 REMOTE = ROOT / "scripts/wait-package-antelume-seed-probe-harvest-v1.sh"
 LOCAL = ROOT / "scripts/wait-harvest-antelume-seed-probe.ps1"
+POST_HARVEST = ROOT / "scripts/wait-package-strong-member-consensus-runtime.ps1"
 
 
 def make_archive(path: Path, *, tamper: bool = False) -> None:
@@ -59,6 +60,33 @@ def test_harvest_verifier_checks_every_member_without_extracting(tmp_path: Path)
     assert result["file_count"] == 1
 
 
+def test_harvest_extractor_writes_only_after_full_verification(tmp_path: Path) -> None:
+    archive = tmp_path / "harvest.tar.gz"
+    destination = tmp_path / "extracted"
+    make_archive(archive)
+
+    result = MODULE["extract_verified_harvest"](archive, destination)
+
+    assert result["status"] == "verified"
+    assert (destination / "ensemble/seed_ensemble_terminal.json").read_bytes() == (
+        b"selection-evidence"
+    )
+    assert (destination / "HARVEST_MANIFEST.json").is_file()
+
+
+def test_harvest_extractor_does_not_create_destination_for_tampered_archive(
+    tmp_path: Path,
+) -> None:
+    archive = tmp_path / "harvest.tar.gz"
+    destination = tmp_path / "extracted"
+    make_archive(archive, tamper=True)
+
+    with pytest.raises(ValueError, match="changed"):
+        MODULE["extract_verified_harvest"](archive, destination)
+
+    assert not destination.exists()
+
+
 def test_harvest_verifier_rejects_tampered_stream(tmp_path: Path) -> None:
     archive = tmp_path / "harvest.tar.gz"
     make_archive(archive, tamper=True)
@@ -77,3 +105,17 @@ def test_remote_and_local_harvest_controllers_are_submission_free() -> None:
     assert "Start-Process -FilePath ssh.exe" in local
     assert "verify-antelume-seed-probe-harvest.py" in local
     assert "kaggle competitions submit" not in remote + local
+
+
+def test_post_harvest_controller_is_evidence_gated_and_submission_free() -> None:
+    controller = POST_HARVEST.read_text(encoding="utf-8")
+
+    assert 'probe_controller_status -ne "completed"' in controller
+    assert "verify-ranked-consensus-development-baseline.py" in controller
+    assert "evaluate_ranked_consensus_division_recovery.py" in controller
+    assert "build-strong-member-consensus-division-dataset.py" in controller
+    assert 'status = "development_rejected"' in controller
+    assert 'status = "runtime_packaged"' in controller
+    assert "kaggle datasets" not in controller
+    assert "kaggle kernels" not in controller
+    assert "kaggle competitions submit" not in controller

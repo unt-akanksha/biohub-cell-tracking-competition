@@ -564,3 +564,16 @@ new probe-hash fields added by the current evaluator. The verified descriptor
 is submission-ineligible and records the rejected ambiguous cache explicitly.
 Three focused tests cover the complete contract, graph drift, and substantive
 evidence drift.
+
+The verified harvest now feeds a third durable event controller. It first
+re-verifies the complete streamed archive and manually extracts only regular,
+hash-matched members into a new archive-hash-named directory; neither tar path
+resolution nor unverified bytes can write to disk. Archive and checkpoint
+hashes are streamed in fixed-size blocks so a 16-member harvest does not need
+multi-gigabyte host memory. A rejected overnight selection stops at a local
+skip terminal. A completed selection must pass the exact EMA baseline
+contract, then receives one additive ranked-consensus development evaluation.
+Only a positive result can invoke the strong-member runtime packager with the
+pinned CPython 3.12 scikit-learn wheel. This stage includes no dataset upload,
+Kaggle kernel launch, or competition submission command. Eight focused tests
+pass across harvest verification/extraction and strong-member packaging.
