@@ -41,8 +41,15 @@ function Invoke-External([string]$Program, [string[]]$Arguments) {
 Set-Location -LiteralPath $RepositoryRoot
 $credentialReady = $false
 for ($poll = 1; $poll -le $MaximumPolls; $poll++) {
-    & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion *> $null
-    if ($LASTEXITCODE -eq 0) {
+    # Windows PowerShell promotes native stderr to a terminating error when the
+    # script-wide preference is Stop. An expired token is expected while this
+    # controller waits, so sample the native exit code under Continue.
+    $savedErrorPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+    & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion 2> $null | Out-Null
+    $stsExitCode = $LASTEXITCODE
+    $ErrorActionPreference = $savedErrorPreference
+    if ($stsExitCode -eq 0) {
         $credentialReady = $true
         break
     }

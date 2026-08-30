@@ -9,6 +9,8 @@ def test_deploy_controller_waits_for_credentials_and_is_scope_bound() -> None:
     source = CONTROLLER.read_text(encoding="utf-8")
 
     assert "aws sts get-caller-identity" in source
+    assert '$ErrorActionPreference = "Continue"' in source
+    assert "$stsExitCode = $LASTEXITCODE" in source
     assert "Start-Sleep -Seconds $PollSeconds" in source
     assert "send-ssh-public-key" in source
     assert "score_real_division_seed_ensemble_probe.py" in source
