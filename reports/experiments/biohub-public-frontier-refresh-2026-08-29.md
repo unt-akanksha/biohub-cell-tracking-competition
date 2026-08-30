@@ -464,7 +464,8 @@ controller are committed in `0ee9d7c` and `20d0ff6`.
 The most recent AWS control-plane session expired before that second controller
 could be copied to the instance; this does not affect the already running
 training or admission processes. A hidden local deploy-on-refresh controller,
-committed as `0287326`, now checks for a valid session at 60-second intervals
+committed as `0287326` and repaired for expected expired-token stderr in
+`d95ecaa`, now checks for a valid session at 60-second intervals
 and will copy and launch the controller exactly once when credentials become
 valid. It is restricted to `/home/ubuntu/biohub*` and includes no Kaggle
 submission command.
