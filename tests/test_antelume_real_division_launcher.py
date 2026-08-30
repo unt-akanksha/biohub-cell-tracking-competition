@@ -5,6 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/run-antelume-real-division-gate-head-v1.sh"
+FOCUSED_SCRIPT = ROOT / "scripts/run-antelume-real-division-gate-focused-v1.sh"
 
 
 def test_launcher_is_hash_bound_antelume_only_and_fail_closed() -> None:
@@ -27,4 +28,16 @@ def test_launcher_never_touches_unrelated_antelume_workspace() -> None:
 
     assert "/home/ubuntu/antelume" not in source
     assert "/home/ubuntu/biohub" in source
+    assert "rm -rf" not in source
+
+
+def test_focused_launcher_is_bound_to_rejected_head_checkpoints() -> None:
+    source = FOCUSED_SCRIPT.read_text(encoding="utf-8")
+
+    assert "--train-mode focused" in source
+    assert "--steps 3000" in source
+    assert "ad369d5c122a13a8763a92a94ac3e67548cd19628b0e3500fc8db5cae1201133" in source
+    assert "cf2ba21a8b696216e4ae4bc59a2531c44f0ca47fc1d090d3fffc441f71607b75" in source
+    assert "A10G" in source
+    assert "kaggle" not in source.lower()
     assert "rm -rf" not in source
