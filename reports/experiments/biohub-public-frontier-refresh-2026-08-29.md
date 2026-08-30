@@ -382,6 +382,46 @@ artifact is attached. Its 14-file manifest SHA-256 is
 The model, policy, and decision rule remain unchanged for the next candidate
 run.
 
+Kernel version 3 was pushed after the pristine private dataset reported
+`ready`, its published inventory exposed exactly the 14 manifest files, all 25
+notebook code cells compiled, and the focused promotion suite passed 13 tests.
+It retains the Biohub competition source, the four required private inputs,
+GPU execution, and disabled internet. An exactly-once controller is monitoring
+that version and may submit it only after the completed output passes the
+distinct-hash, graph-integrity, runtime, validator-regression, division-gain,
+and daily-quota gates.
+
+## Overnight strong-member ensemble program
+
+The refreshed AWS inventory contains one available GPU host: the Antelume
+`g5.xlarge` with one NVIDIA A10G (23 GB). No other running EC2 instance in the
+account has a GPU instance type. A hash-checked overnight run is therefore
+scheduled sequentially on that A10G rather than falsely claiming multi-host
+parallelism.
+
+The run trains eight new seeds from each of the two independent real-domain
+initializations: 16 networks total, each with 46,386,607 parameters and
+25,178,047 trainable parameters. Every network receives 50,000 optimizer steps
+with EMA and best-checkpoint retention, so the longer budget cannot overwrite
+an earlier stronger checkpoint. The first worker started successfully with
+the A10G at 96-97% utilization. The frozen data-manifest and initialization
+hashes were reverified before training.
+
+Admission is deliberately stricter than simply averaging every run. Each
+network is scored independently on the movie-disjoint selection split and is
+rejected unless pooled AP is at least `0.55`, AP is at least `0.40` for each
+embryo, and it recovers at least two positives before the first false positive.
+Only the surviving models enter one precommitted equal-weight average of their
+within-movie percentile ranks. No ensemble-weight search is allowed. That
+ensemble is eligible for a later development probe only if it improves AP by
+at least `0.01` over the strongest admitted individual and keeps each-embryo AP
+at or above `0.45`. The overnight evaluator reads no final probe, competition
+test input, leaderboard result, public prediction, or submission path.
+
+Launch and admission code are committed as `4cbc0f0` and `aa74973`. The remote
+training process and its dependent admission controller are both active; the
+observed throughput projects completion near 06:00-07:00 America/Chicago.
+
 ## Late frontier and account refresh
 
 A fresh score-descending Kaggle kernel inventory on 2026-08-29 remains headed
