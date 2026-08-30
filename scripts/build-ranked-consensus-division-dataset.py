@@ -19,6 +19,11 @@ POLICY_RUN_ID = "competition-ranked-consensus-division-policy-v1"
 DEEP_RUN_ID = "competition-real-division-gate-v1"
 MORPHOLOGY_RUN_ID = "competition-real-handcrafted-division-gate-v1"
 DEVELOPMENT_RUN_ID = "competition-ranked-consensus-division-development-v1"
+SKLEARN_VERSION = "1.9.0"
+SKLEARN_WHEEL_NAME = (
+    "scikit_learn-1.9.0-cp312-cp312-manylinux_2_27_x86_64."
+    "manylinux_2_28_x86_64.whl"
+)
 RUNTIME_FILES = {
     "learned_division_recovery.py": ROOT / "research/learned_division_recovery.py",
     "multiscale_contextual_pair_fusion.py": ROOT
@@ -116,6 +121,7 @@ def verify_dataset(root: Path) -> dict[str, Any]:
         "morphology_training_terminal.json",
         "development_evidence.json",
         "ranked-consensus-policy.json",
+        SKLEARN_WHEEL_NAME,
     }
     if not (
         manifest.get("schema_version") == 1
@@ -142,6 +148,9 @@ def verify_dataset(root: Path) -> dict[str, Any]:
         == sha256_file(root / "deep_division_model.pt")
         and policy.get("morphology_model_sha256")
         == sha256_file(root / "morphology_division_model.joblib")
+        and policy.get("sklearn_version") == SKLEARN_VERSION
+        and policy.get("sklearn_wheel_sha256")
+        == sha256_file(root / SKLEARN_WHEEL_NAME)
     ):
         raise ValueError("ranked consensus policy changed")
     return {
@@ -158,8 +167,11 @@ def main() -> None:
     parser.add_argument("--deep-root", type=Path, required=True)
     parser.add_argument("--morphology-root", type=Path, required=True)
     parser.add_argument("--development-evidence", type=Path, required=True)
+    parser.add_argument("--sklearn-wheel", type=Path, required=True)
     parser.add_argument("--output-root", type=Path, required=True)
     args = parser.parse_args()
+    if args.sklearn_wheel.name != SKLEARN_WHEEL_NAME:
+        raise ValueError("ranked consensus requires the pinned CPython 3.12 wheel")
     evidence = validate_sources(
         args.deep_root, args.morphology_root, args.development_evidence
     )
@@ -171,6 +183,7 @@ def main() -> None:
         "morphology_division_model.joblib": evidence["morphology_model_path"],
         "morphology_training_terminal.json": evidence["morphology_terminal_path"],
         "development_evidence.json": args.development_evidence,
+        SKLEARN_WHEEL_NAME: args.sklearn_wheel,
     }
     for name, source in copies.items():
         shutil.copy2(source, args.output_root / name)
@@ -182,6 +195,8 @@ def main() -> None:
             "run_id": POLICY_RUN_ID,
             "deep_model_sha256": evidence["deep_model_sha256"],
             "morphology_model_sha256": evidence["morphology_model_sha256"],
+            "sklearn_version": SKLEARN_VERSION,
+            "sklearn_wheel_sha256": sha256_file(args.sklearn_wheel),
             "biological_geometry_minimum": 3.0,
             "maximum_added_edges_per_movie": 1,
             "selection_rule": (
