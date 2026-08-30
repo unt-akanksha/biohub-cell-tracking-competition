@@ -11,6 +11,7 @@ def test_controller_waits_for_promotion_and_submits_once() -> None:
     assert "verify-ranked-consensus-submission-candidate.py" in source
     assert "submit-ranked-consensus-candidate.py" in source
     assert "ranked-consensus-candidate-submission-receipt.json" in source
+    assert 'candidate-controller-version$KernelVersion.json' in source
     assert "competition_submission_performed = $true" in source
     assert "--execute" in source
     assert "Refusing to reuse controller state" in source

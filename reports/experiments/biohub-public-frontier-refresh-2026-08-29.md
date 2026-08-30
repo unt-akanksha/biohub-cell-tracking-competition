@@ -359,3 +359,10 @@ V2 is rejected and is not attached to the current candidate. The result also
 confirms that network size alone is insufficient: the smaller project deep
 gate remains the stronger transferable ranker on the relevant complete-movie
 probe.
+
+Candidate kernel version 1 failed after the dual-T4 base inference completed
+in 9.33 minutes. The error was isolated to the inserted setup cell:
+`INPUT_ROOT` was referenced before the base notebook defined it. No ranked
+post-processing, evidence file, CSV promotion, or competition submission ran.
+Version 2 replaces that implicit dependency with an explicit immutable
+`Path("/kaggle/input")` root; the model, policy, and decision rule are unchanged.

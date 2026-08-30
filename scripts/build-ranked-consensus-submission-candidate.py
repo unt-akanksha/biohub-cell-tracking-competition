@@ -87,6 +87,7 @@ import subprocess as _rcd_subprocess
 import sys as _rcd_sys
 
 _RCD_MANIFEST_SHA256 = "__MANIFEST_SHA256__"
+_RCD_INPUT_ROOT = Path("/kaggle/input")
 
 def _rcd_sha256(path):
     digest = _rcd_hashlib.sha256()
@@ -96,7 +97,7 @@ def _rcd_sha256(path):
     return digest.hexdigest()
 
 _rcd_matches = []
-for _path in INPUT_ROOT.rglob("RANKED_CONSENSUS_MANIFEST.json"):
+for _path in _RCD_INPUT_ROOT.rglob("RANKED_CONSENSUS_MANIFEST.json"):
     if _rcd_sha256(_path) != _RCD_MANIFEST_SHA256:
         continue
     _payload = _rcd_json.loads(_path.read_text(encoding="utf-8"))

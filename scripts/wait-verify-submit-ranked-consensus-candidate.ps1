@@ -14,10 +14,10 @@ $verifier = Join-Path $PSScriptRoot 'verify-ranked-consensus-submission-candidat
 $submitter = Join-Path $PSScriptRoot 'submit-ranked-consensus-candidate.py'
 $evaluationPython = Join-Path $projectRoot '.biohub/evaluation-venv/Scripts/python.exe'
 $downloadRoot = Join-Path $projectRoot ".biohub/cache/kernel-outputs/biohub-ema-ranked-consensus-candidate-v1-version$KernelVersion-20260829"
-$promotionPath = Join-Path $automationDir 'ranked-consensus-candidate-promotion.json'
+$promotionPath = Join-Path $automationDir "ranked-consensus-candidate-promotion-version$KernelVersion.json"
 $receiptPath = Join-Path $automationDir 'ranked-consensus-candidate-submission-receipt.json'
-$terminalPath = Join-Path $automationDir 'ranked-consensus-candidate-controller.json'
-$logPath = Join-Path $automationDir 'ranked-consensus-candidate-controller.log'
+$terminalPath = Join-Path $automationDir "ranked-consensus-candidate-controller-version$KernelVersion.json"
+$logPath = Join-Path $automationDir "ranked-consensus-candidate-controller-version$KernelVersion.log"
 
 function Write-ControllerLog([string]$Message) {
     Add-Content -LiteralPath $logPath -Encoding UTF8 -Value (

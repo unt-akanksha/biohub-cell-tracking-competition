@@ -20,6 +20,7 @@ def test_builder_uses_one_project_runtime_and_scale_invariant_policy() -> None:
     assert "Exactly two T4 GPUs are required" in setup
     assert "_RCDDeepModel" in setup
     assert "_RCD_MORPH_PAYLOAD" in setup
+    assert '_RCD_INPUT_ROOT = Path("/kaggle/input")' in setup
     assert "predict_proba" in helpers
     assert "apply_ranked_consensus" in helpers
     ast.parse(setup.replace("__MANIFEST_SHA256__", "0" * 64))
