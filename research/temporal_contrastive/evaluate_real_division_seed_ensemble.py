@@ -175,11 +175,43 @@ def validate_sweep_terminal(payload: dict[str, Any]) -> list[int]:
     return [int(seed) for seed in seeds]
 
 
+def validate_reference_terminal(payload: dict[str, Any]) -> None:
+    selection = payload.get("ensemble_selection", {})
+    selected_fold = payload.get("folds", {}).get("target_6bba", {})
+    if not (
+        payload.get("schema_version") == 1
+        and payload.get("status") == "accepted_at_selection"
+        and payload.get("run_id") == TRAIN_RUN_ID
+        and payload.get("selection_gate_passed") is True
+        and payload.get("ensemble_weights")
+        == {"target_44b6": 0.0, "target_6bba": 1.0}
+        and abs(
+            float(selection.get("average_precision", -1.0))
+            - REFERENCE_SELECTION_AP
+        )
+        <= 1e-12
+        and selected_fold.get("model_sha256") == REFERENCE_MODEL_SHA256
+        and payload.get("competition_test_data_read") is False
+        and payload.get("final_probe_opened") is False
+        and payload.get("public_leaderboard_used_for_selection") is False
+        and payload.get("submission_created") is False
+    ):
+        raise ValueError("frozen reference voter terminal changed")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--sweep-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--reference-terminal",
+        type=Path,
+        default=Path(
+            "/home/ubuntu/biohub-results/competition-real-division-gate-focused-v1/"
+            "real_division_gate_terminal.json"
+        ),
+    )
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--required-gpu-name", default="A10G")
     args = parser.parse_args()
@@ -193,6 +225,7 @@ def main() -> None:
 
     sweep_terminal_path = args.sweep_root / "seed_sweep_terminal.json"
     seeds = validate_sweep_terminal(json.loads(sweep_terminal_path.read_text()))
+    validate_reference_terminal(json.loads(args.reference_terminal.read_text()))
     manifest_path = args.data_root / "real_division_patch_manifest.json"
     if sha256_file(manifest_path) != MANIFEST_SHA256:
         raise ValueError("real-division manifest changed")
@@ -350,6 +383,7 @@ def main() -> None:
         "run_id": RUN_ID,
         "gpu_name": gpu_name,
         "sweep_terminal_sha256": sha256_file(sweep_terminal_path),
+        "reference_terminal_sha256": sha256_file(args.reference_terminal),
         "manifest_sha256": MANIFEST_SHA256,
         "candidate_model_count": sum(
             1 for row in candidates if "selection" in row

@@ -78,3 +78,34 @@ def test_stronger_individual_can_progress_without_ensemble_gain() -> None:
     candidate["status"] = "rejected"
     candidate["selection"]["average_precision"] = reference + 1.0
     assert not MODULE["stronger_than_reference"](candidate)
+
+
+def test_reference_voter_is_hash_and_metric_bound() -> None:
+    payload = {
+        "schema_version": 1,
+        "status": "accepted_at_selection",
+        "run_id": MODULE["TRAIN_RUN_ID"],
+        "selection_gate_passed": True,
+        "ensemble_weights": {"target_44b6": 0.0, "target_6bba": 1.0},
+        "ensemble_selection": {
+            "average_precision": MODULE["REFERENCE_SELECTION_AP"],
+        },
+        "folds": {
+            "target_6bba": {
+                "model_sha256": MODULE["REFERENCE_MODEL_SHA256"],
+            },
+        },
+        "competition_test_data_read": False,
+        "final_probe_opened": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+    }
+
+    MODULE["validate_reference_terminal"](payload)
+    payload["folds"]["target_6bba"]["model_sha256"] = "0" * 64
+    try:
+        MODULE["validate_reference_terminal"](payload)
+    except ValueError as error:
+        assert "reference voter" in str(error)
+    else:
+        raise AssertionError("changed reference checkpoint was accepted")
