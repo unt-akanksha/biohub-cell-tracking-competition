@@ -245,3 +245,10 @@ minority failure mode; coordinate localization is the new primary branch.
   and overlapping sequence 0000 all exactly match the prior source audit. The
   launcher additionally checks every selected file against the audited byte
   inventory before creating the 753,671,907-byte deployment archive.
+- Synthetic256 AWS launch/harvest controller PID 7612 and downstream candidate
+  controller PID 48392 were armed after commit `f392008`. Both started with no
+  launch, harvest, or candidate terminal present. The AWS controller waits for
+  the credential event, allocates at most one four-A10G instance, and the
+  downstream controller remains unable to launch Kaggle or submit unless the
+  complete synthetic, serialized-checkpoint, real-development, and external
+  promotion gates all pass.
