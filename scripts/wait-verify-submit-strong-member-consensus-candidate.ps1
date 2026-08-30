@@ -4,22 +4,27 @@ param(
     [double]$MaximumWaitHours = 2.0,
     [int]$PollSeconds = 300,
     [int]$KernelVersion = 1,
+    [string]$CandidateKernelRef = 'indarkarhana/biohub-ema-strong-member-candidate-v2',
+    [string]$VerifierScript = 'verify-strong-member-consensus-submission-candidate.py',
+    [string]$SubmitterScript = 'submit-strong-member-consensus-candidate.py',
+    [string]$StatePrefix = 'strong-member-candidate',
+    [string]$ControllerRunId = 'strong-member-candidate-controller-v2',
     [switch]$ValidateOnly
 )
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $automationDir = Join-Path $projectRoot '.biohub/automation'
-$kernelRef = 'indarkarhana/biohub-ema-strong-member-candidate-v2'
+$kernelRef = $CandidateKernelRef
 $baselineValidator = Join-Path $projectRoot '.biohub/cache/public-frontier-outputs-20260829/biohub-ct-0940-ema/validator_results.csv'
-$verifier = Join-Path $PSScriptRoot 'verify-strong-member-consensus-submission-candidate.py'
-$submitter = Join-Path $PSScriptRoot 'submit-strong-member-consensus-candidate.py'
+$verifier = if ([IO.Path]::IsPathRooted($VerifierScript)) { $VerifierScript } else { Join-Path $PSScriptRoot $VerifierScript }
+$submitter = if ([IO.Path]::IsPathRooted($SubmitterScript)) { $SubmitterScript } else { Join-Path $PSScriptRoot $SubmitterScript }
 $evaluationPython = Join-Path $projectRoot '.biohub/evaluation-venv/Scripts/python.exe'
-$downloadRoot = Join-Path $projectRoot ".biohub/cache/kernel-outputs/biohub-ema-strong-member-candidate-v2-version$KernelVersion-20260830"
-$promotionPath = Join-Path $automationDir "strong-member-candidate-promotion-version$KernelVersion.json"
-$receiptPath = Join-Path $automationDir 'strong-member-candidate-submission-receipt.json'
-$terminalPath = Join-Path $automationDir "strong-member-candidate-controller-version$KernelVersion.json"
-$logPath = Join-Path $automationDir "strong-member-candidate-controller-version$KernelVersion.log"
+$downloadRoot = Join-Path $projectRoot ".biohub/cache/kernel-outputs/$StatePrefix-version$KernelVersion-20260830"
+$promotionPath = Join-Path $automationDir "$StatePrefix-promotion-version$KernelVersion.json"
+$receiptPath = Join-Path $automationDir "$StatePrefix-submission-receipt.json"
+$terminalPath = Join-Path $automationDir "$StatePrefix-controller-version$KernelVersion.json"
+$logPath = Join-Path $automationDir "$StatePrefix-controller-version$KernelVersion.log"
 $requiredOutputPattern = '^(candidate_evidence\.json|run_stats\.csv|submission\.csv|validator_results\.csv|watchdog-terminal\.json)$'
 
 function Write-ControllerLog([string]$Message) {
@@ -31,7 +36,7 @@ function Write-ControllerLog([string]$Message) {
 function Write-ControllerTerminal([string]$Status, [hashtable]$Evidence) {
     $payload = @{
         schema_version = 1
-        run_id = 'strong-member-candidate-controller-v2'
+        run_id = $ControllerRunId
         status = $Status
         kernel_ref = $kernelRef
         kernel_version = $KernelVersion
@@ -80,7 +85,7 @@ if (-not (Get-Command kaggle -ErrorAction SilentlyContinue)) {
 if ($ValidateOnly) {
     @{
         status = 'valid'
-        run_id = 'strong-member-candidate-controller-v2'
+        run_id = $ControllerRunId
         kernel_ref = $kernelRef
         kernel_version = $KernelVersion
         runtime_manifest_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $RuntimeManifest).Hash.ToLowerInvariant()
@@ -112,7 +117,7 @@ try {
         Start-Sleep -Seconds $PollSeconds
     }
     if (-not $complete) {
-        throw 'Timed out waiting for strong-member candidate completion'
+        throw "Timed out waiting for candidate completion: $kernelRef"
     }
 
     New-Item -ItemType Directory -Path $downloadRoot | Out-Null

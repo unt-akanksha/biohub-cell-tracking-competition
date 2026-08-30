@@ -17,11 +17,15 @@ $developmentPath = Join-Path $stateRoot "relational-development-evidence.json"
 $logPath = Join-Path $stateRoot "development.log"
 $verifier = Join-Path $RepositoryRoot "scripts/verify-antelume-relational-division-harvest.py"
 $evaluator = Join-Path $RepositoryRoot "research/evaluate_relational_division_development.py"
+$runtimeBuilder = Join-Path $RepositoryRoot "scripts/build-relational-consensus-division-dataset.py"
 $evaluationPython = Join-Path $RepositoryRoot ".biohub/evaluation-venv/Scripts/python.exe"
-$morphologyProbe = Join-Path $RepositoryRoot ".biohub/results/competition-real-handcrafted-division-gate-v1/handcrafted_division_probe.json"
+$morphologyRoot = Join-Path $RepositoryRoot ".biohub/results/competition-real-handcrafted-division-gate-v1"
+$morphologyProbe = Join-Path $morphologyRoot "handcrafted_division_probe.json"
 $predictionRoot = Join-Path $RepositoryRoot ".biohub/cache/public-frontier-outputs-20260829/biohub-ct-0940-ema/tracking_repo/predictions/unknown/unet_transformer_val/split_0"
 $truthRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-truth/public-node-acceptance-v1"
 $baselinePath = Join-Path $RepositoryRoot ".biohub/results/competition-ranked-consensus-development-baseline-v1.json"
+$sklearnWheel = Join-Path $RepositoryRoot ".biohub/cache/sklearn-1.9.0-cp312-linux/scikit_learn-1.9.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+$runtimeRoot = Join-Path $stateRoot "relational-consensus-division-v1"
 
 function Write-Terminal([hashtable]$Payload) {
     $Payload["schema_version"] = 1
@@ -46,10 +50,10 @@ function Invoke-Logged([string]$Program, [string[]]$Arguments) {
 
 New-Item -ItemType Directory -Path $stateRoot -Force | Out-Null
 if ($ValidateOnly) {
-    foreach ($path in @($verifier, $evaluator, $evaluationPython, $morphologyProbe, $predictionRoot, $truthRoot, $baselinePath)) {
+    foreach ($path in @($verifier, $evaluator, $runtimeBuilder, $evaluationPython, $morphologyRoot, $morphologyProbe, $predictionRoot, $truthRoot, $baselinePath, $sklearnWheel)) {
         if (-not (Test-Path -LiteralPath $path)) { throw "Relational development input is missing: $path" }
     }
-    & python -m py_compile $verifier $evaluator
+    & python -m py_compile $verifier $evaluator $runtimeBuilder
     if ($LASTEXITCODE -ne 0) { throw "Relational development source validation failed" }
     @{ status = "validated"; stage = "relational_division_development" } | ConvertTo-Json
     exit 0
@@ -110,8 +114,19 @@ try {
         }
         exit 0
     }
+    $runtimeStatus = Invoke-Logged "python" @(
+        $runtimeBuilder,
+        "--results-root", (Join-Path $resultRoot "models"),
+        "--probe", $probePath,
+        "--morphology-root", $morphologyRoot,
+        "--development-evidence", $developmentPath,
+        "--sklearn-wheel", $sklearnWheel,
+        "--output-root", $runtimeRoot
+    )
+    if ($runtimeStatus -ne 0) { throw "Relational consensus runtime packaging failed" }
+    $runtimeManifest = Join-Path $runtimeRoot "RELATIONAL_CONSENSUS_MANIFEST.json"
     Write-Terminal @{
-        status = "development_positive"
+        status = "runtime_packaged"
         development_evidence = $developmentPath
         development_evidence_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $developmentPath).Hash.ToLowerInvariant()
         relational_probe = $probePath
@@ -121,11 +136,15 @@ try {
         selected = [int]$development.selected
         true_positives = [int]$development.tp
         false_positives = [int]$development.fp
+        runtime_root = $runtimeRoot
+        runtime_manifest = $runtimeManifest
+        runtime_manifest_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeManifest).Hash.ToLowerInvariant()
+        runtime_created = $true
         authorized_for_full_candidate_evaluation = $true
         authorized_for_submission = $false
     }
 }
 catch {
-    Write-Terminal @{ status = "failed"; error = $_.Exception.Message; authorized_for_full_candidate_evaluation = $false; authorized_for_submission = $false }
+    Write-Terminal @{ status = "failed"; error = $_.Exception.Message; runtime_created = $false; authorized_for_full_candidate_evaluation = $false; authorized_for_submission = $false }
     throw
 }
