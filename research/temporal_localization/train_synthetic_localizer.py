@@ -336,6 +336,37 @@ def graph_motion_features(
     return np.clip(output, -3.0, 3.0)
 
 
+def random_reflection_augmentation(
+    patches: torch.Tensor,
+    graph: torch.Tensor,
+    target: torch.Tensor,
+    *,
+    generator: torch.Generator,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Reflect appearance and all physical vector targets consistently."""
+
+    if (
+        patches.ndim != 5
+        or graph.shape != (len(patches), 12)
+        or target.shape != (len(patches), 3)
+        or patches.device != graph.device
+        or patches.device != target.device
+    ):
+        raise ValueError("reflection augmentation inventories do not align")
+    for axis in range(3):
+        reflected = torch.rand(
+            len(patches), generator=generator, device=patches.device
+        ) < 0.5
+        if bool(reflected.any()):
+            patches[reflected] = torch.flip(
+                patches[reflected], dims=(axis + 2,)
+            )
+            graph[reflected, axis] *= -1.0
+            graph[reflected, axis + 3] *= -1.0
+            target[reflected, axis] *= -1.0
+    return patches, graph, target
+
+
 def make_patches(
     state: SequenceState,
     rows: np.ndarray,
@@ -365,6 +396,8 @@ def make_patches(
             half_extent_zyx_um=HALF_EXTENT_UM,
             chunk_size=len(selected),
         )
+    graph_tensor = torch.as_tensor(graph, dtype=torch.float32, device=device)
+    target_tensor = torch.as_tensor(-jitter_um, dtype=torch.float32, device=device)
     if augment:
         if generator is None:
             raise ValueError("augmentation requires a deterministic generator")
@@ -375,11 +408,13 @@ def make_patches(
             patches.shape, generator=generator, device=device, dtype=patches.dtype
         )
         patches = (patches * gain + noise).clamp(-6.0, 6.0)
-    return (
-        patches,
-        torch.as_tensor(graph, dtype=torch.float32, device=device),
-        torch.as_tensor(-jitter_um, dtype=torch.float32, device=device),
-    )
+        patches, graph_tensor, target_tensor = random_reflection_augmentation(
+            patches,
+            graph_tensor,
+            target_tensor,
+            generator=generator,
+        )
+    return patches, graph_tensor, target_tensor
 
 
 def baseline_metrics(examples: FixedExamples) -> dict[str, Any]:
@@ -677,6 +712,7 @@ def train_member(
                 real_selection_division_examples.inventory_sha256
             ),
             "real_replay_probability": args.real_replay_probability,
+            "spatial_reflection_probability_per_axis": 0.5,
             "real_optimization_shards": len(real_train_states),
             "real_selection_shards": len(real_selection_states),
             "real_audit_shards_declared_but_unopened": len(real_audit_paths),

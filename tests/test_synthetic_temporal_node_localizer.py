@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+import torch
 
 from research.synthetic_pretrain.data import POOLED_VOXEL_UM, SequenceSample
 from research.temporal_localization.train_synthetic_localizer import (
@@ -14,6 +15,7 @@ from research.temporal_localization.train_synthetic_localizer import (
     graph_motion_features,
     improvement_gate,
     random_jitter_um,
+    random_reflection_augmentation,
     relative_residual_sum,
     stratified_improvement_gate,
 )
@@ -101,6 +103,30 @@ def test_training_graph_motion_does_not_leak_target_jitter() -> None:
         rtol=0.0,
         atol=1e-7,
     )
+
+
+def test_reflection_augmentation_is_deterministic_and_vector_consistent() -> None:
+    patches = torch.arange(4 * 3 * 3 * 3 * 3, dtype=torch.float32).reshape(
+        4, 3, 3, 3, 3
+    )
+    graph = torch.arange(4 * 12, dtype=torch.float32).reshape(4, 12) + 1.0
+    target = torch.arange(4 * 3, dtype=torch.float32).reshape(4, 3) + 1.0
+    first = random_reflection_augmentation(
+        patches.clone(),
+        graph.clone(),
+        target.clone(),
+        generator=torch.Generator().manual_seed(71),
+    )
+    second = random_reflection_augmentation(
+        patches.clone(),
+        graph.clone(),
+        target.clone(),
+        generator=torch.Generator().manual_seed(71),
+    )
+    assert all(torch.equal(left, right) for left, right in zip(first, second, strict=True))
+    np.testing.assert_allclose(first[1][:, :6].abs(), graph[:, :6].abs())
+    np.testing.assert_allclose(first[1][:, 6:], graph[:, 6:])
+    np.testing.assert_allclose(first[2].abs(), target.abs())
 
 
 def test_gate_requires_large_mean_gain_and_axis_safety() -> None:

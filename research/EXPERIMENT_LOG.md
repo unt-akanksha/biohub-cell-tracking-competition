@@ -317,3 +317,8 @@ well as the synthetic generator.
   appearance must explain the offset. A deterministic invariance regression
   covers all graph features except the intentionally position-dependent image
   boundary feature.
+- Training now also applies independent 50% reflections on each physical axis,
+  with the image crop, offset target, parent vector, and child vector reflected
+  together. This expands orientation coverage without changing temporal order,
+  physical scale, lineage flags, density, or boundary distance; deterministic
+  tests verify both reproducibility and vector-sign consistency.
