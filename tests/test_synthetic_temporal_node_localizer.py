@@ -4,6 +4,8 @@ import numpy as np
 import torch
 
 from research.synthetic_pretrain.data import POOLED_VOXEL_UM, SequenceSample
+from research.temporal_localization import model as localization_model
+from research.temporal_localization.model import localization_loss
 from research.temporal_localization.train_synthetic_localizer import (
     AUDIT_INDICES,
     SELECTION_INDICES,
@@ -233,3 +235,33 @@ def test_learning_rate_warms_then_cosine_decays() -> None:
     assert values[2] == 2e-4
     assert values[2] > values[3] > values[4]
     assert values[4] == 2e-6
+
+
+def test_probability_calibration_runs_outside_autocast(monkeypatch) -> None:
+    original = localization_model.F.binary_cross_entropy
+
+    def checked_binary_cross_entropy(predicted, target):
+        assert torch.is_autocast_enabled("cpu") is False
+        assert predicted.dtype == torch.float32
+        assert target.dtype == torch.float32
+        return original(predicted, target)
+
+    monkeypatch.setattr(
+        localization_model.F,
+        "binary_cross_entropy",
+        checked_binary_cross_entropy,
+    )
+    predicted = torch.zeros((2, 3), requires_grad=True)
+    log_variance = torch.zeros((2, 3), requires_grad=True)
+    safe_probability = torch.full((2,), 0.5, requires_grad=True)
+    target = torch.ones((2, 3))
+    with torch.autocast(device_type="cpu", dtype=torch.bfloat16):
+        loss, components = localization_loss(
+            predicted,
+            log_variance,
+            safe_probability,
+            target,
+        )
+    loss.backward()
+    assert torch.isfinite(loss)
+    assert torch.isfinite(components["calibration"])

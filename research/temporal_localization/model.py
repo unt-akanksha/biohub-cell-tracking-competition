@@ -242,7 +242,14 @@ def localization_loss(
     robust = F.smooth_l1_loss(predicted_offsets_um, target_offsets_um, beta=0.5)
     heteroscedastic = 0.5 * (torch.exp(-log_variance) * residual.square() + log_variance).mean()
     safe_target = (torch.linalg.vector_norm(target_offsets_um, dim=1) <= safe_radius_um).float()
-    calibration = F.binary_cross_entropy(safe_probability, safe_target)
+    # Probability-form BCE is deliberately blocked by CUDA autocast. Keep the
+    # public model contract probability-based for inference and compute this
+    # small calibration term explicitly in FP32 outside the surrounding AMP
+    # region used by training.
+    with torch.autocast(device_type=safe_probability.device.type, enabled=False):
+        calibration = F.binary_cross_entropy(
+            safe_probability.float(), safe_target.float()
+        )
     total = robust + 0.1 * heteroscedastic + 0.05 * calibration
     return total, {
         "robust": robust.detach(),

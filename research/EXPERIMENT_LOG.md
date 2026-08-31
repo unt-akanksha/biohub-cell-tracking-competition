@@ -408,3 +408,10 @@ well as the synthetic generator.
   equal-member consensus or any scientific gate. The instance is explicitly
   preserved after completion, and a hash-bound background harvest hands the
   result to the existing candidate gate and submission controller.
+- The first one-A10G launch failed closed before step 1 for all four seeds:
+  PyTorch 2.5 rejects probability-form `binary_cross_entropy` inside CUDA
+  autocast. The generated result archive was only 40,026 bytes and contained
+  no model; the downstream controller was stopped before consuming it. The
+  calibration term now exits the surrounding AMP region and computes BCE in
+  FP32 while retaining the probability-valued inference interface. A CPU
+  autocast regression asserts both properties before the clean relaunch.
