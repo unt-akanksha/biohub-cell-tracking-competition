@@ -486,3 +486,14 @@ well as the synthetic generator.
   further `0.176745` microns (`5.11%` of the current residual). This is promising
   early evidence but not an accepted checkpoint, so training continues and no
   audit or candidate has opened.
+- A second system transient, `rsna-dump.service`, later started an unrelated
+  RSNA prediction-dump process on the leased A10G. It was stopped and
+  runtime-masked without deleting files. Commit `0d28a33` replaces the static
+  lease restorer with a bounded dynamic guard: while either Biohub job remains
+  alive it detects running system services whose exact names match
+  `rsna-*.service`, stops and runtime-masks only those units, records every
+  affected name, and releases all recorded masks after both jobs. The deployed
+  script hash is
+  `cedabdf329f9ce7fa368b5051950e25371f7c903c5300e8653b78aba52ded66d`;
+  guard PID 16882 is live, the localizer is again the sole GPU process, and the
+  graph-context recovery remains queued behind it.
