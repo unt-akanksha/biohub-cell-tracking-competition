@@ -15,7 +15,8 @@ def test_runner_trains_four_large_members_sequentially_on_one_a10g() -> None:
     assert "for gpu_index in 0 1 2 3" in text
     assert "CUDA_VISIBLE_DEVICES=0" in text
     assert "--steps 40000" in text
-    assert "--member-max-wall-seconds 11700" in text
+    assert "--member-max-wall-seconds 16500" in text
+    assert "--total-max-wall-seconds 17400" in text
     assert "--real-replay-probability 0.25" in text
     assert "score_real_development_probe.py" in text
     assert "sudo shutdown" not in text

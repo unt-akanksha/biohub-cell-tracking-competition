@@ -401,7 +401,7 @@ well as the synthetic generator.
   evaluation and are not promoted by inspection.
 - The running instance has one idle 23,028 MiB NVIDIA A10G, not four GPUs. The
   unchanged four-seed, 40,000-step, 71,249,805-parameter localizer schedule is
-  therefore deployed sequentially, with a 11,700-second member training cap
+  therefore deployed sequentially, with a 16,500-second member training cap
   and best-checkpoint retention. Development inference now deterministically
   maps accepted members round-robin over any positive visible CUDA count, so
   all four checkpoints can be scored on the one A10G without changing the
@@ -415,3 +415,11 @@ well as the synthetic generator.
   calibration term now exits the surrounding AMP region and computes BCE in
   FP32 while retaining the probability-valued inference interface. A CPU
   autocast regression asserts both properties before the clean relaunch.
+- A separately launched RSNA knee-model process was found sharing the A10G
+  during initial throughput calibration; it consumed about 5 GiB and compute.
+  The user had explicitly authorized clearing RSNA work, so that process alone
+  was stopped without deleting its files. On the uncontended A10G, a measured
+  100-step interval took 80 seconds (about 4,500 steps/hour). The final bounded
+  schedule therefore retains all four seeds and raises the per-member cap to
+  16,500 seconds with a 900-second finalization reserve: about 18,000--19,000
+  realized steps per member and roughly 19 aggregate GPU-hours by morning.

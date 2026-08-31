@@ -135,9 +135,9 @@ for gpu_index in 0 1 2 3; do
     --warmup-steps 1000 \
     --weight-decay 0.03 \
     --ema-decay 0.997 \
-    --member-max-wall-seconds 11700 \
-    --total-max-wall-seconds 12600 \
-    --finalization-reserve-seconds 600 \
+    --member-max-wall-seconds 16500 \
+    --total-max-wall-seconds 17400 \
+    --finalization-reserve-seconds 900 \
     --required-gpu-name A10G \
     >"$member_root/training.log" 2>&1 || status=$?
   printf '%s\n' "$status" >"$member_root/training.exit-code"
