@@ -550,3 +550,12 @@ well as the synthetic generator.
   localizer envelope for a notebook that must run both independently promoted
   stages. All 13 composition builder, verifier, controller, and submitter tests
   passed after the change.
+- An audit of live autonomous processes found one legacy
+  `wait-build-verify-submit-learned-division-candidate.ps1` controller still
+  polling after roughly 33 hours. Its required
+  `/home/ubuntu/biohub-results/division-policy-v1/policy.json` is absent from
+  the active Antelume volume, its embedded remote address is obsolete, and it
+  had produced no policy, runtime, candidate, promotion, or submission receipt.
+  PID 16300 was therefore retired to prevent an unverifiable older lane from
+  later consuming a Kaggle run or submission slot. No remote process, GPU job,
+  AWS service, file, or RSNA workload was changed.
