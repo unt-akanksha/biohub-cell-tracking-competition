@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-08-30T09:43:17.589808Z",
-  "discussions_audited_at": "2026-08-30T09:43:17.589808Z",
+  "audited_at": "2026-08-31T19:33:11.2820431Z",
+  "discussions_audited_at": "2026-08-31T19:33:11.2820431Z",
   "discussion_refs": [
     "730160",
     "734604",
@@ -56,6 +56,38 @@
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no known exploit. This is the pinned clean public control lineage used only for attributed baseline inference and frozen validator comparison; no leaderboard value authorizes promotion.",
       "reviewed_sha256": "3c6e691f476712d8750466a3961e88289b88c5721c7714d84c6159407dac14ba",
+      "score_reproduced": false
+    },
+    {
+      "ref": "shienzhang/biohub-c33-ema-velocity-094plus",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.935 with the pinned 0.940 EMA public lineage and 0.965-0.967 with the C34/C35 notebooks. Its EMA-velocity and public dual-seed configuration changes are public-lineage comparators, not an independent model candidate; the displayed result is not selection evidence.",
+      "reviewed_sha256": "608017f9d7ebe847b927759ac3cb718f34cd36e6160f988443a58df87acb0154",
+      "score_reproduced": false
+    },
+    {
+      "ref": "tangai1/biohub-c34-linking-cleanroom-20260831",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.928 with the pinned 0.940 EMA public lineage and 0.996 with C35. The differences are public-lineage configuration and guard changes, not a distinct learned architecture; the displayed result is not selection evidence.",
+      "reviewed_sha256": "84b152ae203bae01fc5a9f8ca28deccc20640554e3f50ff1514702a8bb67c5f8",
+      "score_reproduced": false
+    },
+    {
+      "ref": "tangai1/biohub-c35-fallback-detection-cleanroom-20260831",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.927 with the pinned 0.940 EMA public lineage and 0.996 with C34. The source differs from C34 by only a small set of configuration, label, and guard lines and contains no new detector architecture; the displayed result is not selection evidence.",
+      "reviewed_sha256": "8a04b3c967ea68e91abb56b5718567d29621a8fc6b4412f673a9fe86dd62d86f",
+      "score_reproduced": false
+    },
+    {
+      "ref": "sleepymegacat/the-metric-decides-your-architecture-8-measured",
+      "classification": "reported_post_patch",
+      "disposition": "analysis_only_not_candidate",
+      "evidence": "Manual source audit found no enabled submission exploit. Only its measured geometry, sparsity, duplicate, and embryo-split observations are admissible research inputs; metric edge cases, count bonuses, and any leaderboard-oriented construction are explicitly excluded from candidate design and selection.",
+      "reviewed_sha256": "8b45385b5794e65fb478f20a7475c99077bdc039080881e411821541660857a8",
       "score_reproduced": false
     },
     {

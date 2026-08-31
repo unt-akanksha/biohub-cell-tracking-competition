@@ -434,3 +434,19 @@ well as the synthetic generator.
   Detached lease-restorer PID 11654 removes both runtime masks after
   `run.complete`, or after a bounded 21-hour lease, without starting either
   RSNA service.
+- The 2026-08-31 authenticated public-source refresh classified C33, C34, and
+  C35 as comparators rather than independent model candidates. Their normalized
+  code-line overlap with the pinned public 0.940 EMA notebook is
+  `0.935484`, `0.928000`, and `0.926716`; C34 and C35 overlap each other at
+  `0.995869` and differ only in a small set of labels, scalar settings, and
+  guards. None contributes a new detector or linker architecture, so none is
+  copied into the active candidate.
+- The same refresh retained only non-exploit geometry findings from the public
+  metric-analysis notebook: sparse labels, costly duplicates, micron-scale
+  localization sensitivity, and embryo-disjoint evaluation. Metric edge cases,
+  count bonuses, fabricated nodes, and fake division constructions remain
+  excluded from training, selection, and submission. Recent discussions
+  reinforce component-wise learned improvement—detection, linking, then
+  division—and report that crowded-frame divisions are not solved reliably by
+  standalone hand rules. Full evidence is recorded in
+  `research/PUBLIC_NOTEBOOK_AUDIT_2026-08-31.md`.
