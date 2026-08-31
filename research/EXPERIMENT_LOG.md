@@ -559,3 +559,17 @@ well as the synthetic generator.
   PID 16300 was therefore retired to prevent an unverifiable older lane from
   later consuming a Kaggle run or submission slot. No remote process, GPU job,
   AWS service, file, or RSNA workload was changed.
+- The shared Antelume boundary was strengthened with a Biohub-only yield guard.
+  It classifies GPU clients by exact process ID, working directory, and one of
+  the two approved Biohub trainer entry points. If any other GPU client appears,
+  it sends `SIGSTOP` only to those verified Biohub trainer PIDs, records the
+  exact PIDs it paused, and sends `SIGCONT` only after the unrelated client has
+  released the GPU and each recorded PID has been reverified as Biohub. It has
+  no service-management commands and never signals, restarts, masks, or deletes
+  the unrelated workload; external process details are not persisted. The two
+  safety tests
+  plus the existing passive-observer test pass. The deployed script SHA-256 is
+  `5d5f00dfc8c5db385bcd65737500ed6ee2a9438b1624a55d821e1b076a280097`;
+  guard PID `23076` is live. Its initial state is `biohub-allowed` because the
+  read-only GPU inventory contained only temporal-localizer PID `11505` using
+  3,234 MiB and no unrelated GPU client at the observation time.
