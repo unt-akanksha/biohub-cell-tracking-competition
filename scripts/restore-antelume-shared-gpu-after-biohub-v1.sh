@@ -15,5 +15,6 @@ for _poll in $(seq 1 1500); do
   sleep 60
 done
 systemctl --user unmask bigmembers.service plw7.service
+sudo -n systemctl unmask rsna-plw.service
 printf '%s\n' "shared GPU service masks released" \
   > /home/ubuntu/biohub-graph-context-recovery-v1/gpu-lease-restored

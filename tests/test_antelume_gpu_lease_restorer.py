@@ -15,5 +15,6 @@ def test_restorer_holds_masks_through_localizer_and_graph_recovery() -> None:
     assert "train_synthetic_localizer.py" in source
     assert "train_graph_context_division_sweep.py" in source
     assert "systemctl --user unmask bigmembers.service plw7.service" in source
+    assert "sudo -n systemctl unmask rsna-plw.service" in source
     assert "systemctl --user start" not in source
     assert "rm " not in source
