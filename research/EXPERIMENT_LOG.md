@@ -497,3 +497,13 @@ well as the synthetic generator.
   `cedabdf329f9ce7fa368b5051950e25371f7c903c5300e8653b78aba52ded66d`;
   guard PID 16882 is live, the localizer is again the sole GPU process, and the
   graph-context recovery remains queued behind it.
+- The user then clarified that RSNA is intentionally sharing the Antelume
+  instance and must not be disrupted. That instruction supersedes the earlier
+  cleanup authorization. Guard PID 16882 was terminated, all two user-level and
+  two system-level runtime masks were removed, and the RSNA prediction process
+  resumed alongside Biohub. Commit `f352962` converts the deployed helper into
+  a passive observer with no `systemctl`, stop, mask, unmask, start, or delete
+  capability. Its deployed SHA-256 is
+  `b88745324dec860cc22c40ba361f4241cffe24466acf810b67280ce13323186d`.
+  From this point Biohub may share available capacity or wait for idle capacity,
+  but it must never manage an RSNA process or service.
