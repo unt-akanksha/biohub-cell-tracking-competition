@@ -431,3 +431,6 @@ well as the synthetic generator.
   Biohub runner PID 11391 passed its first optimizer step with the A10G as its
   sole workload; hash-bound harvest PID 49508 and gated candidate/submission
   PID 41512 remain event-driven rather than polling the GPU run externally.
+  Detached lease-restorer PID 11654 removes both runtime masks after
+  `run.complete`, or after a bounded 21-hour lease, without starting either
+  RSNA service.
