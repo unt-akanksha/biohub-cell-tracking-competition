@@ -153,7 +153,7 @@ def _composition_fixture(tmp_path: Path) -> tuple[Path, Path, Path, Path, Path, 
                 "status": "completed",
                 "submission_exists": True,
                 "submission_sha256": submission_hash,
-                "declared_budget_seconds": 39_600,
+                "declared_budget_seconds": 43_200,
                 "safety_margin_seconds": 1_200,
                 "elapsed_seconds": 1_000,
             }

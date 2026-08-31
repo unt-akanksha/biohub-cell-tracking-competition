@@ -154,5 +154,6 @@ def test_full_notebook_transform_binds_both_runtime_manifests(tmp_path: Path) ->
     assert text.index("_apply_graph_context_consensus") < text.index(
         "_apply_temporal_localization"
     )
-    assert '"declared_budget_seconds": 39600' in text
+    assert '"declared_budget_seconds": 43200' in text
+    assert "Timer(42000, _biohub_budget_expired)" in text
     assert "kaggle competitions submit" not in text

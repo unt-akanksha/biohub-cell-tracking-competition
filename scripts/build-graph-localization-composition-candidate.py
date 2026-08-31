@@ -176,13 +176,13 @@ def _extend_watchdog(notebook: dict) -> None:
     watchdog = "".join(notebook["cells"][0]["source"])
     replacements = {
         "# Biohub quota watchdog: 3600 s declared budget, 600 s safety margin.":
-            "# Biohub quota watchdog: 39600 s declared budget, 1200 s safety margin.",
-        '"declared_budget_seconds": 3600,': '"declared_budget_seconds": 39600,',
+            "# Biohub quota watchdog: 43200 s declared budget, 1200 s safety margin.",
+        '"declared_budget_seconds": 3600,': '"declared_budget_seconds": 43200,',
         '"safety_margin_seconds": 600,': '"safety_margin_seconds": 1200,',
         "_BIOHUB_TIMER = _biohub_threading.Timer(3000, _biohub_budget_expired)":
-            "_BIOHUB_TIMER = _biohub_threading.Timer(38400, _biohub_budget_expired)",
+            "_BIOHUB_TIMER = _biohub_threading.Timer(42000, _biohub_budget_expired)",
         'print("Biohub watchdog armed: hard stop after 3000 seconds.")':
-            'print("Biohub watchdog armed: hard stop after 38400 seconds.")',
+            'print("Biohub watchdog armed: hard stop after 42000 seconds.")',
     }
     for old, new in replacements.items():
         if watchdog.count(old) != 1:
