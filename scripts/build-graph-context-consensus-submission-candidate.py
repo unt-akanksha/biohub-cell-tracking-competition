@@ -15,7 +15,7 @@ COMMON = runpy.run_path(str(ROOT / "scripts/build-ranked-consensus-submission-ca
 STRONG = runpy.run_path(str(ROOT / "scripts/build-strong-member-consensus-submission-candidate.py"))
 RELATIONAL = runpy.run_path(str(ROOT / "scripts/build-relational-consensus-submission-candidate.py"))
 DATASET_BUILDER = ROOT / "scripts/build-graph-context-consensus-division-dataset.py"
-SOURCE_DIR = ROOT / "kaggle/biohub-ct-0940-ema"
+SOURCE_DIR = COMMON["SOURCE_DIR"]
 SOURCE_METADATA_SHA256 = COMMON["SOURCE_METADATA_SHA256"]
 TARGET_ID = "biohub-ema-graph-context-consensus-v1"
 TARGET_DIR = ROOT / "kaggle" / TARGET_ID
@@ -266,6 +266,8 @@ def main() -> None:
     parser.add_argument("--replace", action="store_true")
     args = parser.parse_args()
     source_metadata_path = SOURCE_DIR / "kernel-metadata.json"
+    if not source_metadata_path.is_file():
+        raise FileNotFoundError(source_metadata_path)
     if COMMON["sha256_file"](source_metadata_path) != SOURCE_METADATA_SHA256:
         raise RuntimeError("Attributed public-control metadata changed")
     if TARGET_DIR.exists():

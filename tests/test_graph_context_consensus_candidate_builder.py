@@ -13,6 +13,10 @@ SPEC.loader.exec_module(module)
 
 
 def test_candidate_is_project_authored_contextual_and_dual_gpu() -> None:
+    assert module.SOURCE_DIR == module.COMMON["SOURCE_DIR"]
+    source_metadata = module.SOURCE_DIR / "kernel-metadata.json"
+    assert source_metadata.is_file()
+    assert module.COMMON["sha256_file"](source_metadata) == module.SOURCE_METADATA_SHA256
     assert "project-authored" in module.ATTRIBUTION
     assert "No public prediction" in module.ATTRIBUTION
     assert "74.7M-parameter" in module.ATTRIBUTION
