@@ -531,3 +531,14 @@ well as the synthetic generator.
   both; the same fixture rejects a composition that merely ties the stronger
   graph component. The broader graph, localization, and composition regression
   selection passed 41 tests before these two end-to-end additions.
+- At step 4,000, temporal-localizer seed 41021 remained just below the frozen
+  four-stratum selection gate but improved monotonically on the only failing
+  stratum. Real division-critical mean-residual gain rose from `15.6876%` at
+  step 2,000 to `17.2199%`; mean residual fell from `3.455568` to `3.392767`
+  microns. The unchanged 20% boundary is approximately `3.278823` microns, so
+  the remaining gap narrowed from `0.176745` to `0.113944` microns. Synthetic
+  global (`39.09%`), synthetic division-critical (`32.43%`), and real global
+  (`24.82%`) all passed, every real-division axis remained non-regressive, p90
+  improved by `0.407516` microns, and within-5-micron recall improved by
+  `0.117188`. No checkpoint or audit is admitted yet because the aggregate gate
+  is still false; the precommitted schedule continues unchanged.
