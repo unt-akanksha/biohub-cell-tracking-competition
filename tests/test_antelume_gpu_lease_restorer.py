@@ -15,6 +15,12 @@ def test_restorer_holds_masks_through_localizer_and_graph_recovery() -> None:
     assert "train_synthetic_localizer.py" in source
     assert "train_graph_context_division_sweep.py" in source
     assert "systemctl --user unmask bigmembers.service plw7.service" in source
-    assert "sudo -n systemctl unmask rsna-plw.service" in source
+    assert "runtime-masked-rsna-services.txt" in source
+    assert "rsna-plw.service rsna-dump.service" in source
+    assert "^rsna-[A-Za-z0-9_.@-]+\\.service$" in source
+    assert 'sudo -n systemctl stop "$unit"' in source
+    assert 'sudo -n systemctl mask --runtime --force "$unit"' in source
+    assert 'sudo -n systemctl unmask "$unit"' in source
+    assert "sleep 15" in source
     assert "systemctl --user start" not in source
     assert "rm " not in source
