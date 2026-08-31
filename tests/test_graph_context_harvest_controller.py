@@ -18,7 +18,7 @@ VERIFIER = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(VERIFIER)
 
 
-def build_harvest(path: Path, *, unbound: bool = False) -> None:
+def build_harvest(path: Path, *, unbound: bool = False, recovered: bool = False) -> None:
     aggregate = {
         "schema_version": 1,
         "status": "completed",
@@ -63,6 +63,28 @@ def build_harvest(path: Path, *, unbound: bool = False) -> None:
         f"{VERIFIER.ROOT}/models/graph_context_division_sweep_terminal.json": json.dumps(aggregate).encode(),
         f"{VERIFIER.ROOT}/graph_context_development_probe.json": json.dumps(probe).encode(),
     }
+    if recovered:
+        aggregate["resumed_completed_member_count"] = len(VERIFIER.RECOVERED_MEMBERS)
+        aggregate["resumed_completed_members"] = sorted(VERIFIER.RECOVERED_MEMBERS)
+        aggregate["partial_checkpoint_resumed"] = False
+        files[f"{VERIFIER.ROOT}/models/graph_context_division_sweep_terminal.json"] = json.dumps(aggregate).encode()
+        recovery = {
+            "schema_version": 1,
+            "run_id": VERIFIER.RECOVERY_RUN_ID,
+            "status": "five_completed_members_recovered",
+            "recovered_member_count": len(VERIFIER.RECOVERED_MEMBERS),
+            "recovered_members": [
+                {"member": member, "model_sha256": "0" * 64}
+                for member in sorted(VERIFIER.RECOVERED_MEMBERS)
+            ],
+            "partial_checkpoint_resumed": False,
+            "audit_opened_before_recovery": False,
+            "trainer_sha256": VERIFIER.RECOVERY_TRAINER_SHA256,
+            "competition_test_data_read": False,
+            "public_leaderboard_used_for_selection": False,
+            "authorized_for_submission": False,
+        }
+        files[f"{VERIFIER.ROOT}/recovery-manifest.json"] = json.dumps(recovery).encode()
     files[f"{VERIFIER.ROOT}/SHA256SUMS"] = "".join(
         f"{hashlib.sha256(value).hexdigest()}  {name}\n"
         for name, value in sorted(files.items())
@@ -97,6 +119,16 @@ def test_harvest_rejects_unbound_files(tmp_path: Path) -> None:
 
     with pytest.raises(ValueError, match="unbound"):
         VERIFIER.verify_archive(archive)
+
+
+def test_harvest_binds_five_completed_recovery_members(tmp_path: Path) -> None:
+    archive = tmp_path / "recovered.tar.gz"
+    build_harvest(archive, recovered=True)
+
+    result = VERIFIER.verify_archive(archive)
+
+    assert result["resumed_completed_member_count"] == 5
+    assert result["recovery_manifest_present"] is True
 
 
 def test_harvester_uses_one_keepalive_session_and_never_submits() -> None:

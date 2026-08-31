@@ -17,6 +17,15 @@ RUN_ID = "competition-graph-context-division-sweep-v1"
 FAMILY = "temporal_multiscale_graph_context_division_v1"
 PROBE_RUN_ID = "competition-graph-context-division-development-probe-v1"
 EXPECTED_PARAMETER_COUNT = 74_732_308
+RECOVERY_RUN_ID = "competition-graph-context-division-recovery-v1"
+RECOVERY_TRAINER_SHA256 = "530504f1653451c66bf89f0098f747caa3c5aef497e3952e4fe7a3fe6aa264c4"
+RECOVERED_MEMBERS = {
+    "seed-613111-init-1",
+    "seed-613111-init-2",
+    "seed-713117-init-1",
+    "seed-713117-init-2",
+    "seed-813121-init-1",
+}
 SHA_LINE = re.compile(r"^([0-9a-f]{64})  (.+)$")
 
 
@@ -87,12 +96,19 @@ def verify_archive(path: Path) -> dict[str, Any]:
     log_name = f"{ROOT}/training.log"
     probe_name = f"{ROOT}/graph_context_development_probe.json"
     aggregate_name = f"{ROOT}/models/graph_context_division_sweep_terminal.json"
+    recovery_name = f"{ROOT}/recovery-manifest.json"
     expected = _read_hash_manifest(path, sums_name)
     if not all(name in expected for name in (exit_name, probe_exit_name, log_name)):
         raise ValueError("graph-context harvest control files are incomplete")
     observed: set[str] = set()
     captured: dict[str, bytes] = {}
-    capture_names = {exit_name, probe_exit_name, aggregate_name, probe_name}
+    capture_names = {
+        exit_name,
+        probe_exit_name,
+        aggregate_name,
+        probe_name,
+        recovery_name,
+    }
     with tarfile.open(path, mode="r|gz") as archive:
         for member in archive:
             if not _safe(member):
@@ -128,6 +144,7 @@ def verify_archive(path: Path) -> dict[str, Any]:
         json.loads(captured[aggregate_name]) if aggregate_name in captured else None
     )
     probe = json.loads(captured[probe_name]) if probe_name in captured else None
+    recovery = json.loads(captured[recovery_name]) if recovery_name in captured else None
     if aggregate is not None:
         if not (
             aggregate.get("schema_version") == 1
@@ -147,6 +164,32 @@ def verify_archive(path: Path) -> dict[str, Any]:
             and aggregate.get("authorized_for_submission") is False
         ):
             raise ValueError("graph-context aggregate terminal is ineligible")
+        resumed_count = int(aggregate.get("resumed_completed_member_count", 0))
+        resumed_members = set(aggregate.get("resumed_completed_members", []))
+        if resumed_count:
+            recovery_members = {
+                row.get("member") for row in recovery.get("recovered_members", [])
+            } if isinstance(recovery, dict) else set()
+            if not (
+                resumed_count == len(RECOVERED_MEMBERS)
+                and resumed_members == RECOVERED_MEMBERS
+                and aggregate.get("partial_checkpoint_resumed") is False
+                and recovery is not None
+                and recovery.get("schema_version") == 1
+                and recovery.get("run_id") == RECOVERY_RUN_ID
+                and recovery.get("status") == "five_completed_members_recovered"
+                and recovery.get("recovered_member_count") == len(RECOVERED_MEMBERS)
+                and recovery_members == RECOVERED_MEMBERS
+                and recovery.get("partial_checkpoint_resumed") is False
+                and recovery.get("audit_opened_before_recovery") is False
+                and recovery.get("trainer_sha256") == RECOVERY_TRAINER_SHA256
+                and recovery.get("competition_test_data_read") is False
+                and recovery.get("public_leaderboard_used_for_selection") is False
+                and recovery.get("authorized_for_submission") is False
+            ):
+                raise ValueError("graph-context recovery provenance is ineligible")
+        elif recovery is not None:
+            raise ValueError("graph-context archive has an unexpected recovery manifest")
     if exit_code in (0, 2) and aggregate is None:
         raise ValueError("completed graph-context run lacks an aggregate terminal")
     if exit_code == 0:
@@ -201,6 +244,10 @@ def verify_archive(path: Path) -> dict[str, Any]:
         "deployment_members": aggregate.get("deployment_members", []) if aggregate else [],
         "ensemble_eligible": aggregate.get("ensemble_eligible", False) if aggregate else False,
         "final_probe_opened": bool(probe is not None),
+        "resumed_completed_member_count": (
+            aggregate.get("resumed_completed_member_count", 0) if aggregate else 0
+        ),
+        "recovery_manifest_present": recovery is not None,
         "competition_test_data_read": False,
         "authorized_for_submission": False,
     }

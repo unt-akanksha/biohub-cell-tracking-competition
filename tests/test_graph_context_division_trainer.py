@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 import torch
@@ -55,6 +56,8 @@ def test_trainer_is_large_sequential_and_sealed_audit_only() -> None:
     assert 'default=20_000' in source
     assert 'len(args.initial_model) != 2 or len(seeds) != 4' in source
     assert '"planned_model_count": 8' in source
+    assert '"partial_checkpoint_resumed": False' in source
+    assert '"resumed_completed_member_count": len(resumed_members)' in source
     assert '"parameter_count": 74_732_308' not in source
     assert '"audit_opened": bool(accepted)' in source
     assert '"ensemble_members_precommitted_before_audit": True' in source
@@ -65,3 +68,115 @@ def test_trainer_is_large_sequential_and_sealed_audit_only() -> None:
     assert '"public_leaderboard_used_for_selection": False' in source
     assert '"authorized_for_submission": False' in source
     assert "kaggle competitions submit" not in source
+
+
+def _completed_terminal(member: str, seed: int, model_hash: str, initial_hash: str) -> dict:
+    selection = {
+        "average_precision": 0.90,
+        "true_positives_before_first_false_positive": 3,
+        "by_embryo": {
+            "44b6": {"average_precision": 0.80},
+            "6bba": {"average_precision": 0.85},
+        },
+    }
+    return {
+        "schema_version": 1,
+        "status": "accepted_at_selection",
+        "run_id": MODULE.RUN_ID,
+        "member": member,
+        "seed": seed,
+        "completed_steps": 20_000,
+        "best_step": 250,
+        "selection": selection,
+        "selection_frozen_threshold": {"fp": 0, "tp": 3},
+        "selection_gate_passed": True,
+        "model_sha256": model_hash,
+        "initial_backbone_sha256": initial_hash,
+        **MODULE.architecture_contract(),
+        "audit_opened": False,
+        "final_probe_opened": False,
+        "competition_test_data_read": False,
+        "public_code_copied": False,
+        "public_predictions_copied": False,
+        "public_leaderboard_used_for_selection": False,
+        "submission_created": False,
+        "authorized_for_audit": True,
+        "authorized_for_submission": False,
+    }
+
+
+def test_completed_member_resume_is_hash_bound_and_pre_audit(tmp_path: Path) -> None:
+    member = "seed-613111-init-1"
+    member_root = tmp_path / member
+    member_root.mkdir()
+    checkpoint = member_root / "graph_context_model.pt"
+    checkpoint.write_bytes(b"owned checkpoint")
+    initial = tmp_path / "initial.pt"
+    initial.write_bytes(b"owned initialization")
+    checkpoint_hash = MODULE.sha256_file(checkpoint)
+    initial_hash = MODULE.sha256_file(initial)
+    terminal = _completed_terminal(member, 613111, checkpoint_hash, initial_hash)
+    (member_root / "selection_history.json").write_text(
+        json.dumps({"rows": [{"step": 250}]}), encoding="utf-8"
+    )
+    (member_root / "worker_terminal.json").write_text(
+        json.dumps(terminal), encoding="utf-8"
+    )
+
+    resumed = MODULE.load_completed_member(
+        member_root=member_root,
+        member_name=member,
+        seed=613111,
+        initial_model_path=initial,
+        steps=20_000,
+    )
+
+    assert resumed == terminal
+
+
+def test_completed_member_resume_rejects_drift_and_opened_audit(tmp_path: Path) -> None:
+    member = "seed-613111-init-1"
+    member_root = tmp_path / member
+    member_root.mkdir()
+    checkpoint = member_root / "graph_context_model.pt"
+    checkpoint.write_bytes(b"owned checkpoint")
+    initial = tmp_path / "initial.pt"
+    initial.write_bytes(b"owned initialization")
+    terminal = _completed_terminal(
+        member, 613111, MODULE.sha256_file(checkpoint), MODULE.sha256_file(initial)
+    )
+    (member_root / "selection_history.json").write_text(
+        json.dumps({"rows": [{"step": 250}]}), encoding="utf-8"
+    )
+    (member_root / "worker_terminal.json").write_text(
+        json.dumps(terminal), encoding="utf-8"
+    )
+    checkpoint.write_bytes(b"changed checkpoint")
+
+    try:
+        MODULE.load_completed_member(
+            member_root=member_root,
+            member_name=member,
+            seed=613111,
+            initial_model_path=initial,
+            steps=20_000,
+        )
+    except ValueError as error:
+        assert "integrity checks" in str(error)
+    else:
+        raise AssertionError("checkpoint drift was accepted")
+
+    checkpoint.write_bytes(b"owned checkpoint")
+    (member_root / "audit_terminal.json").write_text("{}", encoding="utf-8")
+    try:
+        MODULE.load_completed_member(
+            member_root=member_root,
+            member_name=member,
+            seed=613111,
+            initial_model_path=initial,
+            steps=20_000,
+        )
+    except ValueError as error:
+        assert "already opened audit" in str(error)
+    else:
+        raise AssertionError("opened audit state was accepted")

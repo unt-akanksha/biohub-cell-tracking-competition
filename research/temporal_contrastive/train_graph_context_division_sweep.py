@@ -226,6 +226,64 @@ def passes_selection_gate(metrics: dict[str, Any]) -> bool:
     )
 
 
+def load_completed_member(
+    *,
+    member_root: Path,
+    member_name: str,
+    seed: int,
+    initial_model_path: Path,
+    steps: int,
+) -> dict[str, Any]:
+    """Load a complete pre-audit worker without trusting partial run state."""
+
+    terminal_path = member_root / "worker_terminal.json"
+    checkpoint = member_root / "graph_context_model.pt"
+    history_path = member_root / "selection_history.json"
+    if not (terminal_path.is_file() and checkpoint.is_file() and history_path.is_file()):
+        raise ValueError(f"resumed graph-context member is incomplete: {member_root}")
+    if (member_root / "audit_terminal.json").exists():
+        raise ValueError(f"resumed graph-context member already opened audit: {member_root}")
+    terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+    history = json.loads(history_path.read_text(encoding="utf-8"))
+    architecture = architecture_contract()
+    selection = terminal.get("selection")
+    frozen = terminal.get("selection_frozen_threshold")
+    passed = terminal.get("selection_gate_passed") is True
+    expected_status = "accepted_at_selection" if passed else "rejected_at_selection"
+    if not (
+        terminal.get("schema_version") == 1
+        and terminal.get("status") == expected_status
+        and terminal.get("run_id") == RUN_ID
+        and terminal.get("member") == member_name
+        and terminal.get("seed") == seed
+        and terminal.get("completed_steps") == steps
+        and terminal.get("best_step") in {
+            row.get("step") for row in history.get("rows", []) if isinstance(row, dict)
+        }
+        and terminal.get("model_sha256") == sha256_file(checkpoint)
+        and terminal.get("initial_backbone_sha256") == sha256_file(initial_model_path)
+        and all(terminal.get(key) == value for key, value in architecture.items())
+        and terminal.get("audit_opened") is False
+        and terminal.get("final_probe_opened") is False
+        and terminal.get("competition_test_data_read") is False
+        and terminal.get("public_code_copied") is False
+        and terminal.get("public_predictions_copied") is False
+        and terminal.get("public_leaderboard_used_for_selection") is False
+        and terminal.get("submission_created") is False
+        and terminal.get("authorized_for_audit") is passed
+        and terminal.get("authorized_for_submission") is False
+        and isinstance(selection, dict)
+    ):
+        raise ValueError(f"resumed graph-context member failed integrity checks: {member_root}")
+    selection_passed = passes_selection_gate(selection)
+    frozen_passed = bool(
+        isinstance(frozen, dict) and frozen.get("fp") == 0 and frozen.get("tp", 0) >= 2
+    )
+    if passed != (selection_passed and frozen_passed):
+        raise ValueError(f"resumed graph-context gate changed: {member_root}")
+    return terminal
+
+
 def balanced_rows(
     targets: torch.Tensor,
     eligible: torch.Tensor,
@@ -488,6 +546,11 @@ def main() -> None:
     parser.add_argument("--ema-decay", type=float, default=0.995)
     parser.add_argument("--gradient-clip", type=float, default=2.0)
     parser.add_argument("--required-gpu-name", default="A10G")
+    parser.add_argument(
+        "--resume-completed",
+        action="store_true",
+        help="reuse only hash-verified, pre-audit worker terminals in an existing output root",
+    )
     args = parser.parse_args()
     seeds = [int(value) for value in args.seeds.split(",") if value.strip()]
     if len(args.initial_model) != 2 or len(seeds) != 4:
@@ -521,24 +584,40 @@ def main() -> None:
     }
     if optimization_stems & selection_stems or (optimization_stems | selection_stems) & audit_stems:
         raise RuntimeError("graph-context optimization, selection, and audit movies overlap")
-    args.output_root.mkdir(parents=True, exist_ok=False)
+    args.output_root.mkdir(parents=True, exist_ok=args.resume_completed)
     device = torch.device("cuda:0")
     started = time.monotonic()
     terminals = []
+    resumed_members: list[str] = []
     for seed in seeds:
         for initial_index, initial_model in enumerate(args.initial_model):
-            terminals.append(
-                train_member(
-                    member_name=f"seed-{seed}-init-{initial_index + 1}",
-                    seed=seed + 10_003 * initial_index,
-                    initial_model_path=initial_model,
-                    train_data=optimization,
-                    selection_data=selection,
-                    output_root=args.output_root,
-                    args=args,
-                    device=device,
+            member_name = f"seed-{seed}-init-{initial_index + 1}"
+            member_seed = seed + 10_003 * initial_index
+            member_root = args.output_root / member_name
+            if args.resume_completed and member_root.exists():
+                resumed_members.append(member_name)
+                terminals.append(
+                    load_completed_member(
+                        member_root=member_root,
+                        member_name=member_name,
+                        seed=member_seed,
+                        initial_model_path=initial_model,
+                        steps=args.steps,
+                    )
                 )
-            )
+            else:
+                terminals.append(
+                    train_member(
+                        member_name=member_name,
+                        seed=member_seed,
+                        initial_model_path=initial_model,
+                        train_data=optimization,
+                        selection_data=selection,
+                        output_root=args.output_root,
+                        args=args,
+                        device=device,
+                    )
+                )
     accepted = [row for row in terminals if row["selection_gate_passed"]]
     selection_scores: dict[str, torch.Tensor] = {}
     for row in accepted:
@@ -652,6 +731,9 @@ def main() -> None:
         "elapsed_seconds": time.monotonic() - started,
         "planned_model_count": 8,
         "completed_model_count": len(terminals),
+        "resumed_completed_member_count": len(resumed_members),
+        "resumed_completed_members": resumed_members,
+        "partial_checkpoint_resumed": False,
         "steps_per_model": args.steps,
         "selection_accepted_members": [row["member"] for row in accepted],
         "selection_ensemble": selection_ensemble,

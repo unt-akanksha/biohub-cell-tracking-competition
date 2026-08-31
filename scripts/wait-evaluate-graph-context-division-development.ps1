@@ -2,6 +2,10 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [int]$PollSeconds = 60,
     [int]$MaximumPolls = 1440,
+    [string]$HarvestRootRelative = ".biohub/cache/antelume-graph-context-division-harvest-v1",
+    [string]$StateRootRelative = ".biohub/cache/graph-context-division-development-v1",
+    [string]$ArchiveFileName = "graph-context-division-results.tar.gz",
+    [string]$ControllerRunId = "graph-context-division-development-controller-v1",
     [switch]$ValidateOnly
 )
 
@@ -10,9 +14,9 @@ if ($PollSeconds -lt 15 -or $MaximumPolls -lt 1) {
     throw "Invalid graph-context development wait bounds"
 }
 Set-Location -LiteralPath $RepositoryRoot
-$harvestRoot = Join-Path $RepositoryRoot ".biohub/cache/antelume-graph-context-division-harvest-v1"
+$harvestRoot = Join-Path $RepositoryRoot $HarvestRootRelative
 $harvestTerminal = Join-Path $harvestRoot "harvest-terminal.json"
-$stateRoot = Join-Path $RepositoryRoot ".biohub/cache/graph-context-division-development-v1"
+$stateRoot = Join-Path $RepositoryRoot $StateRootRelative
 $terminalPath = Join-Path $stateRoot "development-terminal.json"
 $verificationPath = Join-Path $stateRoot "harvest-verification.json"
 $developmentPath = Join-Path $stateRoot "graph-context-development-evidence.json"
@@ -31,7 +35,7 @@ $runtimeRoot = Join-Path $stateRoot "graph-context-consensus-division-v1"
 
 function Write-Terminal([hashtable]$Payload) {
     $Payload["schema_version"] = 1
-    $Payload["run_id"] = "graph-context-division-development-controller-v1"
+    $Payload["run_id"] = $ControllerRunId
     $Payload["competition_test_data_read"] = $false
     $Payload["public_leaderboard_used_for_selection"] = $false
     $Payload["competition_submission_performed"] = $false
@@ -86,7 +90,7 @@ try {
         }
         exit 0
     }
-    $archivePath = Join-Path $harvestRoot "graph-context-division-results.tar.gz"
+    $archivePath = Join-Path $harvestRoot $ArchiveFileName
     if (-not (Test-Path -LiteralPath $archivePath -PathType Leaf)) {
         throw "Verified graph-context harvest archive is missing"
     }
