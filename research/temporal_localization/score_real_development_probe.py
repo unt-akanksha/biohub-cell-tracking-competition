@@ -176,11 +176,22 @@ def development_gate(movies: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def member_device_index(member_index: int, gpu_count: int) -> int:
+    """Assign accepted members deterministically across the visible GPUs."""
+
+    if gpu_count < 1:
+        raise RuntimeError("real development probe requires at least one CUDA GPU")
+    if member_index < 0:
+        raise ValueError("member index must be non-negative")
+    return member_index % gpu_count
+
+
 def load_members(results_root: Path) -> list[tuple[TemporalNodeLocalizationModel, torch.device, dict[str, Any]]]:
     terminals = sorted(results_root.glob("gpu_*/member_*/worker_terminal.json"))
     accepted: list[tuple[TemporalNodeLocalizationModel, torch.device, dict[str, Any]]] = []
-    if torch.cuda.device_count() != 4:
-        raise RuntimeError(f"real development probe requires four AWS GPUs, saw {torch.cuda.device_count()}")
+    gpu_count = torch.cuda.device_count()
+    if gpu_count < 1:
+        raise RuntimeError("real development probe requires at least one CUDA GPU")
     for terminal_path in terminals:
         terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
         checkpoint = terminal_path.parent / "localization_model.pt"
@@ -208,7 +219,7 @@ def load_members(results_root: Path) -> list[tuple[TemporalNodeLocalizationModel
             and terminal.get("submission_created") is False
         ):
             continue
-        device = torch.device(f"cuda:{len(accepted)}")
+        device = torch.device(f"cuda:{member_device_index(len(accepted), gpu_count)}")
         model = TemporalNodeLocalizationModel().to(device)
         model.load_state_dict(torch.load(checkpoint, map_location="cpu", weights_only=True), strict=True)
         model.eval().requires_grad_(False)
@@ -280,6 +291,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             {"seed": terminal["seed"], "model_sha256": terminal["model_sha256"]}
             for _model, _device, terminal in members
         ],
+        "inference_gpu_count": torch.cuda.device_count(),
+        "inference_device_policy": "accepted_members_round_robin_across_visible_cuda_devices",
         "movies": movie_results,
         "gate": gate,
         "acceptance_labels_already_opened": True,

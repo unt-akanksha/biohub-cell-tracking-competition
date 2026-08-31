@@ -384,3 +384,27 @@ well as the synthetic generator.
   proves absence without guessing a version, while post-push state verification
   uses bounded retries and still fails closed for a present-but-unreadable
   kernel.
+- Before the harvest terminal existed, waiting downstream controller PID 47640
+  was replaced by PID 6652 with the updated code and an explicit zero-hour
+  reserve. It remains event-driven and cannot allocate Kaggle GPU, build a
+  candidate, or submit until the AWS scientific gates and external frozen-probe
+  promotion gate pass.
+- After refreshed credentials exposed the already-running Antelume
+  `g5.xlarge`, a read-only recovery audit found that the failed four-GPU
+  temporal-localizer launcher had never allocated an instance and therefore
+  produced no resumable localization checkpoint. The Antelume volume does
+  retain eight completed 48M relational models, but their frozen deployment
+  policy failed audit, so they remain research-only. A later graph-context
+  sweep retained five completed 299,026,046-byte models and stopped during the
+  sixth member at step 18,200 without a sixth checkpoint or optimizer state;
+  the five complete models are preserved for a future precommitted diversity
+  evaluation and are not promoted by inspection.
+- The running instance has one idle 23,028 MiB NVIDIA A10G, not four GPUs. The
+  unchanged four-seed, 40,000-step, 71,249,805-parameter localizer schedule is
+  therefore deployed sequentially, with a 11,700-second member training cap
+  and best-checkpoint retention. Development inference now deterministically
+  maps accepted members round-robin over any positive visible CUDA count, so
+  all four checkpoints can be scored on the one A10G without changing the
+  equal-member consensus or any scientific gate. The instance is explicitly
+  preserved after completion, and a hash-bound background harvest hands the
+  result to the existing candidate gate and submission controller.

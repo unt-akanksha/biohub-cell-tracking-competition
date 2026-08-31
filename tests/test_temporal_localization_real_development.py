@@ -8,6 +8,7 @@ from research.temporal_localization.score_real_development_probe import (
     cached_interior_frames,
     development_gate,
     frame_match,
+    member_device_index,
     summarize_matches,
 )
 
@@ -46,3 +47,8 @@ def test_development_gate_requires_gain_without_movie_regression() -> None:
     assert gate["passed"] is True
     movies[1]["candidate"]["matched_nodes"] = 9
     assert development_gate(movies)["passed"] is False
+
+
+def test_member_devices_support_one_or_many_gpus() -> None:
+    assert [member_device_index(index, 1) for index in range(4)] == [0, 0, 0, 0]
+    assert [member_device_index(index, 4) for index in range(4)] == [0, 1, 2, 3]
