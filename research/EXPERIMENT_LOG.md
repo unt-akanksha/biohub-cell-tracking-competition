@@ -507,3 +507,18 @@ well as the synthetic generator.
   `b88745324dec860cc22c40ba361f4241cffe24466acf810b67280ce13323186d`.
   From this point Biohub may share available capacity or wait for idle capacity,
   but it must never manage an RSNA process or service.
+- Commits `9483673` and `45ba339` precommit a conditional composition of the
+  two independent candidate families. It applies graph-context division first
+  so that its frozen geometry policy sees the original EMA coordinates, then
+  applies temporal localization without permitting further topology changes.
+  The composition cannot launch until the graph and localization candidates
+  each have their own hash-bound `eligible_for_submission` report. It cannot be
+  promoted unless it retains the graph candidate's division quality, is
+  per-movie non-regressive to the localization candidate on missed and spurious
+  nodes, passes the clean public-control gate, and improves exact proxy score by
+  at least `0.001` over the stronger standalone component. No component subset,
+  threshold, blend, or leaderboard result selects the composition. The private
+  two-T4 notebook contains no submission command; only the external verifier
+  can authorize the one-shot submitter. Event-driven controller PID 23688 is
+  waiting for both standalone promotions and has no AWS, service, or RSNA
+  control surface.
