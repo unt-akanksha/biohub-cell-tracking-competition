@@ -476,3 +476,13 @@ well as the synthetic generator.
   without deleting files. Lease-restorer PID 14997 now holds all three reversible
   masks through both Biohub jobs and un-masks them afterward; it never starts an
   RSNA service.
+- The first full four-stratum localizer validation completed at step 2,000. It
+  passed synthetic global (`+33.29%` mean-residual gain), synthetic
+  division-critical (`+27.16%`), and real global (`+21.73%`) gates. Real
+  division-critical localization improved mean residual by `15.69%`, p90 by
+  `0.407156` microns, and within-5-micron recall by `0.125`, with every axis MAE
+  non-regressive; only its precommitted `20%` mean-improvement condition remains
+  unmet. Its mean residual is `3.455568` microns versus a `3.278823` gate, a
+  further `0.176745` microns (`5.11%` of the current residual). This is promising
+  early evidence but not an accepted checkpoint, so training continues and no
+  audit or candidate has opened.
