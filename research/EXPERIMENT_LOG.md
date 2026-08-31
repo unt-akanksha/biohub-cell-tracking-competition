@@ -423,3 +423,11 @@ well as the synthetic generator.
   schedule therefore retains all four seeds and raises the per-member cap to
   16,500 seconds with a 900-second finalization reserve: about 18,000--19,000
   realized steps per member and roughly 19 aggregate GPU-hours by morning.
+- The RSNA automation then relaunched as transient user services
+  `plw7.service` and `bigmembers.service`, consuming 5 and 14.5 GiB of GPU
+  memory respectively. Both service names were stopped and runtime-masked for
+  the Biohub run under the user's explicit RSNA cleanup authorization. This is
+  reversible (`systemctl --user unmask`) and deleted no RSNA files. Final
+  Biohub runner PID 11391 passed its first optimizer step with the A10G as its
+  sole workload; hash-bound harvest PID 49508 and gated candidate/submission
+  PID 41512 remain event-driven rather than polling the GPU run externally.
