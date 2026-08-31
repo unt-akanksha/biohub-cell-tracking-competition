@@ -450,3 +450,29 @@ well as the synthetic generator.
   division—and report that crowded-frame divisions are not solved reliably by
   standalone hand rules. Full evidence is recorded in
   `research/PUBLIC_NOTEBOOK_AUDIT_2026-08-31.md`.
+- The interrupted graph-context sweep contained five complete, hash-bound
+  74,732,308-parameter checkpoints, not merely logs. All five passed the
+  movie-disjoint selection gate: pooled AP ranged from `0.870487` to
+  `0.928614`, and each recovered 9--11 true positives before the first false
+  positive. Their worker terminals prove that sealed audit, final probes,
+  competition test data, and submission were never opened. The sixth worker
+  stopped at step 18,200 with no checkpoint or optimizer state and is not
+  treated as resumable evidence.
+- Commit `3e0004b` adds a fail-closed recovery mode. It admits only complete
+  workers whose checkpoint, initialization, architecture, selection history,
+  terminal, and pre-audit flags all revalidate. The five source directories are
+  hard-linked into an isolated result tree while the interrupted source tree is
+  preserved byte-for-byte. The sixth and final two members train from scratch;
+  only after all eight terminals exist may the original selection policy freeze
+  an individual or equal-rank ensemble and open sealed audit once. Recovery
+  provenance is required by the streamed archive verifier.
+- Antelume recovery runner PID 14149 is queued server-side behind the active
+  temporal localizer and an idle-A10G check. Local hash-bound harvest,
+  development, and candidate/promotion controllers are PIDs 37672, 46568, and
+  45636. None can submit without the original sealed-audit, exact development,
+  and external candidate gates.
+- A system-level transient `rsna-plw.service` relaunched the unrelated RSNA
+  process despite the two user-service masks. It was stopped and runtime-masked
+  without deleting files. Lease-restorer PID 14997 now holds all three reversible
+  masks through both Biohub jobs and un-masks them afterward; it never starts an
+  RSNA service.
