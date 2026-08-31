@@ -522,3 +522,12 @@ well as the synthetic generator.
   can authorize the one-shot submitter. Event-driven controller PID 23688 is
   waiting for both standalone promotions and has no AWS, service, or RSNA
   control surface.
+- Composition verification was strengthened in commits `0a6ed58` and
+  `099d255`. A complete synthetic runtime fixture now exercises the actual
+  attributed-notebook transformation and proves that the two distinct manifest
+  hashes are embedded with graph-before-localization ordering and no submission
+  command. A full external-verifier fixture then proves positive promotion only
+  when both standalone reports are present and the composed exact metric beats
+  both; the same fixture rejects a composition that merely ties the stronger
+  graph component. The broader graph, localization, and composition regression
+  selection passed 41 tests before these two end-to-end additions.
