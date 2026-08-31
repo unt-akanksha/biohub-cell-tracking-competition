@@ -147,7 +147,7 @@ for gpu_index in 0 1 2 3; do
 done
 printf '%s\n' "$failed" >"$output_root/aggregate.exit-code"
 
-development_status=5
+development_status=0
 CUDA_VISIBLE_DEVICES=0 "$python_bin" \
   research/temporal_localization/score_real_development_probe.py \
   --probe-root "$development_root/probe" \

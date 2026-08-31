@@ -573,3 +573,22 @@ well as the synthetic generator.
   guard PID `23076` is live. Its initial state is `biohub-allowed` because the
   read-only GPU inventory contained only temporal-localizer PID `11505` using
   3,234 MiB and no unrelated GPU client at the observation time.
+- A second authenticated 2026-08-31 top-50 source audit found no new strong,
+  independent candidate. The late Evgen `0.933` source is `0.940597` code-line
+  Jaccard with the attributed public control. Flexon and Rishabh are each about
+  `0.917` versus that control and `0.998238` with each other. They are excluded
+  as public-lineage replicas/configuration variants. Yusuke's ranker/look-ahead
+  source is more modified (`0.474286`) but retains public detector/support
+  assets; the owned graph-context lane already targets the same ambiguity with
+  broader learned context. Xiaolei's three-branch four-flip 3D U-Net is
+  independent (`0.003255`) but reports only `0.8623` on its own 24-movie
+  validation and is not individually strong enough for the intended ensemble.
+  Static scanning found no known exploit signature, but no displayed score was
+  used as selection or clean-score evidence.
+- The Antelume runner's post-training development-probe status initialized to
+  `5`, which would incorrectly record a failure when the probe command returned
+  zero. The local future-run template now initializes it to `0` and preserves
+  the actual nonzero code through the existing guarded assignment. The active
+  remote run was deliberately not modified, so its model recipe and provenance
+  remain byte-stable; candidate admission continues to use the hash-bound JSON
+  evidence rather than this diagnostic exit-code file.

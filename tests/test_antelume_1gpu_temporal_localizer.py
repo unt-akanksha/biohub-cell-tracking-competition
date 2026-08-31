@@ -19,6 +19,8 @@ def test_runner_trains_four_large_members_sequentially_on_one_a10g() -> None:
     assert "--total-max-wall-seconds 17400" in text
     assert "--real-replay-probability 0.25" in text
     assert "score_real_development_probe.py" in text
+    assert "development_status=0" in text
+    assert ">\"$output_root/real-development-probe.log\" 2>&1 || development_status=$?" in text
     assert "sudo shutdown" not in text
     assert "kaggle" not in text.lower()
     assert "submit" not in text.lower()
