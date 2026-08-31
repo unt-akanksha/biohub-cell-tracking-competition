@@ -542,3 +542,11 @@ well as the synthetic generator.
   improved by `0.407516` microns, and within-5-micron recall improved by
   `0.117188`. No checkpoint or audit is admitted yet because the aggregate gate
   is still false; the precommitted schedule continues unchanged.
+- Commit `d56822f` assigns the conditional two-component notebook the full
+  12-hour Kaggle runtime envelope (`43,200` seconds) with a 20-minute
+  (`1,200`-second) finalization margin and watchdog trigger at `42,000`
+  seconds. This changes no model, input, threshold, validation criterion, or
+  submission authorization; it only avoids inheriting the shorter standalone
+  localizer envelope for a notebook that must run both independently promoted
+  stages. All 13 composition builder, verifier, controller, and submitter tests
+  passed after the change.
