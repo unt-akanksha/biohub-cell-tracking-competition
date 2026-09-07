@@ -1068,3 +1068,42 @@ well as the synthetic generator.
   pass, then receives its own offline private two-T4 validation, runtime check,
   patched exact and per-movie gates, non-replica audit, and conditional one-shot
   submission. Its background validation and candidate controllers are active.
+- The active v1 detector reached step 2,300. At the frozen step-2,000 check it
+  still rejected cleanly: synthetic AP/recall were `0.985361/0.985526`, while
+  real positive-only recall remained `0.688312`, mean distance was `2.465151`,
+  and p90 distance was `6.0` voxels. This confirms that synthetic saturation
+  is not a reason to add only generic convolutional capacity.
+- V13 adds global context to the strongest independent detection hypothesis.
+  It is an 83,788,422-parameter blob-aware temporal ConvNeXt U-Net with two
+  pre-normalized full-field attention/MLP blocks at the `8x8x8` bottleneck.
+  The design follows the general local-plus-global multiscale finding reported
+  by SwinCell (<https://www.nature.com/articles/s42003-025-08397-x>) without
+  copying its code or weights. Training retains expanded real coverage,
+  positive-unlabeled treatment, temporal fading, local-shape margin, and seed
+  `7013267`; a 43,200-second wall guard bounds the heavier 3,000-step run.
+- Remote v13 deployment initially stopped during import-only preflight because
+  the staged global module coupled base-model and blob-module fallback imports.
+  No runner or GPU process started. The imports were separated, all hashes were
+  regenerated, the exact lock-free partial v13 directory was removed, and the
+  corrected hash-bound runner was deployed behind verified v11. It uses the
+  Biohub-only yield-compatible executable name and contains no operation on an
+  RSNA path or process.
+- V14 is a precommitted 150,773,004-parameter equal-logit/offset ensemble of
+  v11 and v13. Both members must first pass their individual sealed audits and
+  complete-movie validations. V14 then receives its own offline dual-T4
+  validation, runtime projection, patched exact and per-movie gates,
+  non-replica audit, and conditional one-shot submission.
+- Kaggle GPU launches now use an account-wide named mutex across every peak-
+  rank validation and candidate controller. Immediately before each push, the
+  controller parses live `kaggle quota --format json` and rejects the launch if
+  the reported remaining hours minus the declared 12-hour worst case would
+  fall below the eight-hour reserve. All idle validation/candidate waiters were
+  restarted with this gate; AWS harvesters and training processes were not
+  stopped. The refresh-time balance was 30.00 hours remaining.
+- A same-time authenticated public refresh found no notebook newer than the
+  already rejected metadata-only planner. External repository
+  `matt-ceran/biohub-cell-tracking` at commit `446589b7` reports a clean DoG plus
+  small positive-unlabeled CNN detector, but only `0.674186` mean local edge
+  Jaccard, no released checkpoint, failed division policies, and no repository
+  license. It supplies corroborating generic blob-detection evidence only; no
+  code, weight, prediction, constant, or score is admitted.

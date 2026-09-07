@@ -293,3 +293,25 @@ Additional references:
 - <https://www.kaggle.com/datasets/pilkwang/biohub-temporal-unet3d-seed314159-v1>
 - <https://www.kaggle.com/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1>
 - <https://www.kaggle.com/code/muelsyse111/biohub-zarr-metadata-and-memory-planner>
+
+## September 7 public-source refresh 3
+
+An authenticated `dateRun` listing at `2026-09-07T08:32:35Z` found no new
+competition notebook after the already audited metadata-only memory planner at
+`07:28:42Z`. The project submission inventory is also unchanged, so no new
+leaderboard observation enters model or threshold selection.
+
+A newly indexed external competition repository was inspected at commit
+`446589b772f4d98adecc3f6ba15434f0e0d57069`. It is methodologically useful but
+not a submission candidate: the retained detector uses fixed Difference-of-
+Gaussians proposals plus a small positive-unlabeled 3D appearance CNN and
+reports sparse-label recall `0.894906`, but mean local edge Jaccard only
+`0.674186`. Its division models fail every frozen policy guard, no released
+checkpoint is present, and the repository contains no license file. No source,
+weight, prediction, parameter, or submission artifact is copied. The generic
+DoG observation is consistent with the independently measured train-role blob
+diagnostic and does not alter any competition-selected threshold.
+
+Additional reference:
+
+- <https://github.com/matt-ceran/biohub-cell-tracking>

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -125,6 +125,22 @@ elseif ($Variant -eq "expanded-real-blob-v11") {
         output_slug = "peak-rank-expanded-real-blob-tracking-candidate-v11"
     }
 }
+elseif ($Variant -eq "expanded-real-global-v13") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-global-validation-runtime-v13"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-global-tracking-candidate-v13"
+        validation_terminal = ".biohub/automation/peak-rank-expanded-real-global-validation-controller-v13.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-global-validation-runtime-v13"
+        builder = "scripts/build-peak-rank-expanded-real-global-submission-candidate-v13.py"
+        candidate_root = "kaggle/biohub-peak-rank-expanded-real-global-tracking-candidate-v13"
+        notebook_name = "biohub-peak-rank-expanded-real-global-tracking-candidate-v13.ipynb"
+        controller_id = "peak-rank-expanded-real-global-candidate-controller-v13"
+        promotion_name = "peak-rank-expanded-real-global-candidate-promotion-v13.json"
+        receipt_name = "peak-rank-expanded-real-global-candidate-submission-receipt-v13.json"
+        expected_run_id = "peak-rank-expanded-real-global-tracking-candidate-v13"
+        output_slug = "peak-rank-expanded-real-global-tracking-candidate-v13"
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -203,6 +219,22 @@ elseif ($Variant -eq "expanded-blob-ensemble-v12") {
         receipt_name = "peak-rank-expanded-blob-ensemble-candidate-submission-receipt-v12.json"
         expected_run_id = "peak-rank-expanded-blob-ensemble-tracking-candidate-v12"
         output_slug = "peak-rank-expanded-blob-ensemble-tracking-candidate-v12"
+    }
+}
+elseif ($Variant -eq "blob-global-ensemble-v14") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-blob-global-ensemble-validation-runtime-v14"
+        kernel_ref = "indarkarhana/biohub-peak-rank-blob-global-ensemble-tracking-candidate-v14"
+        validation_terminal = ".biohub/automation/peak-rank-blob-global-ensemble-validation-controller-v14.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-blob-global-ensemble-validation-runtime-v14"
+        builder = "scripts/build-peak-rank-blob-global-ensemble-submission-candidate-v14.py"
+        candidate_root = "kaggle/biohub-peak-rank-blob-global-ensemble-tracking-candidate-v14"
+        notebook_name = "biohub-peak-rank-blob-global-ensemble-tracking-candidate-v14.ipynb"
+        controller_id = "peak-rank-blob-global-ensemble-candidate-controller-v14"
+        promotion_name = "peak-rank-blob-global-ensemble-candidate-promotion-v14.json"
+        receipt_name = "peak-rank-blob-global-ensemble-candidate-submission-receipt-v14.json"
+        expected_run_id = "peak-rank-blob-global-ensemble-tracking-candidate-v14"
+        output_slug = "peak-rank-blob-global-ensemble-tracking-candidate-v14"
     }
 }
 else {
@@ -285,6 +317,51 @@ function Invoke-NativeOutput([scriptblock]$Command) {
     [pscustomobject]@{ ExitCode = $exitCode; Output = ($lines -join "`n") }
 }
 
+$gpuReserveHours = 8.0
+$declaredWorstCaseGpuHours = 12.0
+$gpuMutex = $null
+$gpuMutexAcquired = $false
+
+function Get-KaggleGpuRemainingHours {
+    $quota = Invoke-NativeOutput { & kaggle quota --format json }
+    if ($quota.ExitCode -ne 0) { throw "Kaggle GPU quota lookup failed: $($quota.Output)" }
+    $rows = $quota.Output | ConvertFrom-Json
+    $gpu = @($rows | Where-Object { $_.resource -eq "GPU" })
+    if ($gpu.Count -ne 1) {
+        throw "Kaggle GPU quota response is invalid"
+    }
+    $match = [regex]::Match([string]$gpu[0].remaining, '^([0-9]+(?:\.[0-9]+)?)h$')
+    if (-not $match.Success) { throw "Kaggle GPU quota response is invalid" }
+    return [double]::Parse(
+        $match.Groups[1].Value, [System.Globalization.CultureInfo]::InvariantCulture
+    )
+}
+
+function Enter-KaggleGpuGate {
+    $script:gpuMutex = [System.Threading.Mutex]::new(
+        $false, "Global\BiohubKaggleGpuSessionV1"
+    )
+    while ([DateTimeOffset]::UtcNow -lt $deadline) {
+        try {
+            if ($script:gpuMutex.WaitOne(0)) {
+                $script:gpuMutexAcquired = $true
+                break
+            }
+        }
+        catch [System.Threading.AbandonedMutexException] {
+            $script:gpuMutexAcquired = $true
+            break
+        }
+        Start-Sleep -Seconds $PollSeconds
+    }
+    if (-not $script:gpuMutexAcquired) {
+        throw "Timed out waiting for the account-wide Kaggle GPU launch gate"
+    }
+    $remaining = Get-KaggleGpuRemainingHours
+    Write-Log "gpu_gate remaining_hours=$remaining declared_worst_case_hours=$declaredWorstCaseGpuHours reserve_hours=$gpuReserveHours"
+    return $remaining
+}
+
 New-Item -ItemType Directory -Path $automationRoot -Force | Out-Null
 foreach ($required in @(
     $promoter, $builder, $verifier, $exactScorer, $submitter, $kernelState,
@@ -314,11 +391,15 @@ if ($ValidateOnly) {
     if ($errors.Count -ne 0) { throw "Peak-ranking candidate controller syntax is invalid" }
     & $evaluationPython -m py_compile $promoter $builder $verifier $exactScorer $submitter $kernelState
     if ($LASTEXITCODE -ne 0) { throw "Peak-ranking candidate Python preflight failed" }
+    $validatedRemaining = Get-KaggleGpuRemainingHours
     @{
         status = "validated"
         validation_terminal = $validationTerminal
         exact_gpu_count = 2
         candidate_submission_requires_external_promotion = $true
+        remaining_gpu_hours = $validatedRemaining
+        projected_after_worst_case_gpu_hours = $validatedRemaining - $declaredWorstCaseGpuHours
+        required_reserve_gpu_hours = $gpuReserveHours
     } | ConvertTo-Json
     exit 0
 }
@@ -426,6 +507,18 @@ try {
         throw "Built candidate notebook contains a submission command"
     }
 
+    $remainingGpuHours = Enter-KaggleGpuGate
+    if ($remainingGpuHours - $declaredWorstCaseGpuHours -lt $gpuReserveHours) {
+        Write-Terminal "skipped_for_gpu_reserve" @{
+            remaining_gpu_hours = $remainingGpuHours
+            declared_worst_case_gpu_hours = $declaredWorstCaseGpuHours
+            required_reserve_gpu_hours = $gpuReserveHours
+            runtime_versioned = $true
+            kernel_launched = $false
+            competition_submission_performed = $false
+        }
+        exit 0
+    }
     $launched = $false
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
         $native = Invoke-NativeOutput { & kaggle kernels push -p $candidateRoot }
