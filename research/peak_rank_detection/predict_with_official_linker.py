@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sys
 import time
@@ -102,6 +103,7 @@ def selected_names(
     fold: int,
     worker_index: int,
     worker_count: int,
+    video_slice: slice | None = None,
 ) -> list[str]:
     if worker_count <= 0 or not 0 <= worker_index < worker_count:
         raise ValueError("invalid worker partition")
@@ -109,15 +111,43 @@ def selected_names(
     names = [str(name) for name in splits[fold]["test"]]
     if len(names) != len(set(names)):
         raise ValueError("duplicate test movie in split")
-    missing = [name for name in names if not (data_dir / name).is_dir()]
+    missing = [name for name in names if sample_path_for_name(data_dir, name) is None]
     if missing:
         raise FileNotFoundError(f"missing test movies: {missing}")
+    if video_slice is not None:
+        return names[video_slice]
     return names[worker_index::worker_count]
+
+
+def sample_path_for_name(data_dir: Path, name: str) -> Path | None:
+    for candidate in (data_dir / name, data_dir / f"{name}.zarr"):
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def parse_slice(value: str | None) -> slice | None:
+    if value is None:
+        return None
+    fields = value.split(":")
+    if not 1 <= len(fields) <= 3:
+        raise ValueError(f"invalid movie slice: {value}")
+    fields.extend([""] * (3 - len(fields)))
+    return slice(*(int(field) if field else None for field in fields))
+
+
+def resolved_worker_identity(args: argparse.Namespace) -> tuple[int, int]:
+    if args.worker_index is not None:
+        return int(args.worker_index), int(args.worker_count)
+    shard = os.environ.get("BIOHUB_GPU_SHARD", "").strip()
+    if shard:
+        index, count = shard.split("/", maxsplit=1)
+        return int(index), int(count)
+    return 0, 1
 
 
 def run(args: argparse.Namespace) -> None:
     started = time.monotonic()
-    args.output_dir.mkdir(parents=True, exist_ok=False)
     checkpoint, terminal_path, runtime_manifest = verify_runtime(args.runtime_root)
     official = import_official_predictor(args.official_predictor)
     if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
@@ -136,16 +166,28 @@ def run(args: argparse.Namespace) -> None:
         ilp_disappearance_weight=args.ilp_disappearance_weight,
         ilp_division_weight=args.ilp_division_weight,
     )
+    worker_index, worker_count = resolved_worker_identity(args)
+    output_dir = args.output_dir
+    if output_dir is None:
+        from dataspec import PREDICTIONS_PATH
+
+        output_dir = Path(PREDICTIONS_PATH) / official.USERNAME / args.method / f"split_{args.fold}"
+    if output_dir.exists():
+        raise FileExistsError(f"refusing to reuse production output: {output_dir}")
+    output_dir.mkdir(parents=True, exist_ok=False)
     names = selected_names(
         args.data_dir,
         args.splits,
         args.fold,
-        args.worker_index,
-        args.worker_count,
+        worker_index,
+        worker_count,
+        parse_slice(args.video_slice),
     )
     rows = []
     for name in names:
-        sample_path = args.data_dir / name
+        sample_path = sample_path_for_name(args.data_dir, name)
+        if sample_path is None:
+            raise FileNotFoundError(f"movie disappeared after inventory validation: {name}")
         cache = predict_movie_detection_cache(
             detector,
             sample_path,
@@ -176,7 +218,7 @@ def run(args: argparse.Namespace) -> None:
             )
             with official.suppress_output():
                 graph = solver.solve(graph)
-        output = args.output_dir / f"{name}.geff"
+        output = output_dir / f"{name}.geff"
         official.save_graph(graph, output)
         rows.append(
             {
@@ -193,15 +235,16 @@ def run(args: argparse.Namespace) -> None:
         if time.monotonic() - started > args.max_wall_seconds:
             raise TimeoutError("peak-ranking production worker exceeded its wall guard")
     atomic_json(
-        args.output_dir / "worker_manifest.json",
+        output_dir / "worker_manifest.json",
         {
             "schema_version": 1,
             "run_id": RUN_ID,
-            "worker_index": args.worker_index,
-            "worker_count": args.worker_count,
+            "worker_index": worker_index,
+            "worker_count": worker_count,
             "movies": rows,
             "checkpoint_sha256": runtime_manifest["checkpoint_sha256"],
-            "competition_train_data_read": False,
+            "input_partition": args.data_dir.name,
+            "competition_train_labels_read": False,
             "competition_test_labels_read": False,
             "public_predictions_copied": False,
             "public_leaderboard_used_for_selection": False,
@@ -216,11 +259,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--official-predictor", type=Path, required=True)
     parser.add_argument("--data-dir", type=Path, required=True)
     parser.add_argument("--splits", type=Path, required=True)
-    parser.add_argument("--fold", type=int, default=0)
+    parser.add_argument("--fold", "--split", dest="fold", type=int, default=0)
     parser.add_argument("--weights", type=Path, required=True)
-    parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--worker-index", type=int, required=True)
-    parser.add_argument("--worker-count", type=int, default=2)
+    parser.add_argument("--output-dir", type=Path)
+    parser.add_argument("--method", default="unet_transformer")
+    parser.add_argument("--slice", dest="video_slice")
+    parser.add_argument("--worker-index", type=int)
+    parser.add_argument("--worker-count", type=int, default=1)
     parser.add_argument("--peak-batch-size", type=int, default=1)
     parser.add_argument("--unet-batch-size", type=int, default=4)
     parser.add_argument("--calibration-frames", type=int, default=12)

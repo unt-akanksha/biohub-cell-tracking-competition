@@ -6,7 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from research.peak_rank_detection.predict_with_official_linker import selected_names
+from research.peak_rank_detection.predict_with_official_linker import (
+    parse_slice,
+    selected_names,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,6 +28,7 @@ def test_production_predictor_is_two_worker_label_free_and_non_submitting() -> N
         "predict_movie_detection_cache",
         "predict_video_with_external_detections",
         "torch.cuda.device_count() != 1",
+        "competition_train_labels_read",
         "competition_test_labels_read",
         "public_predictions_copied",
         "worker_manifest.json",
@@ -59,3 +63,14 @@ def test_worker_partition_rejects_missing_and_duplicates(tmp_path: Path) -> None
     splits.write_text(json.dumps([{"test": ["missing.zarr"]}]), encoding="utf-8")
     with pytest.raises(FileNotFoundError, match="missing"):
         selected_names(tmp_path, splits, 0, 0, 2)
+
+
+def test_public_notebook_slice_contract_is_supported(tmp_path: Path) -> None:
+    names = [f"movie-{index}" for index in range(6)]
+    for name in names:
+        (tmp_path / f"{name}.zarr").mkdir()
+    splits = tmp_path / "splits.json"
+    splits.write_text(json.dumps([{"test": names}]), encoding="utf-8")
+    assert selected_names(
+        tmp_path, splits, 0, 0, 1, parse_slice("1::2")
+    ) == names[1::2]

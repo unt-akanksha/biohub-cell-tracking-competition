@@ -698,3 +698,13 @@ well as the synthetic generator.
   hash and explicitly record that no train labels, test labels, public
   predictions, leaderboard selection, or submission creation occurred. Twelve
   focused production, bridge, packaging, validation, and controller tests pass.
+- The peak-ranking lane now has an end-to-end autonomous candidate path using
+  the audited 0.948 public code only as an attributed association/ILP/finishing
+  backbone; its advertised score is explicitly not treated as evidence. Both
+  test and held-out inference are replaced by the same independent detector.
+  A promoted runtime is versioned only after clean two-GPU validation, the full
+  candidate again requires two GPUs, and the external gate was frozen before
+  results at proxy gain `>=0.003`, aggregate adjusted-edge delta `>=-0.001`,
+  and worst-movie proxy delta `>=-0.005`. An exact public-output hash is
+  rejected. Only the separate one-shot submitter may cross the competition
+  boundary after all gates pass.
