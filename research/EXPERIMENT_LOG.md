@@ -977,3 +977,27 @@ well as the synthetic generator.
   averaged away. It reuses only independently clean-promoted v3/v4 checkpoints
   and must pass a distinct complete-movie, runtime, patched-score,
   non-replica, and one-shot submission chain. It adds no AWS training cost.
+- The training-only competition replay was expanded before any downstream v7
+  result was observed. The same 96 optimization movies now contribute five
+  temporally separated annotated frames each, increasing the optimization role
+  from 146 to 480 frames and 3,592 annotated cells. The frozen 17-frame
+  selection and 14-frame sealed audit roles are byte-identical, and the four
+  final probes remain excluded. The inventory SHA-256 is
+  `a80c9028b21fdba1746bc2686dc5c64f0852e7954d1e758ba1357bcca5aa0edc`.
+- The expanded-real v7 member is queued behind v4 on the shared A10G. It uses
+  the independently authored 66,977,670-parameter capacity model, conservative
+  sparse-positive loss, depth attenuation, temporal fading, seed `4709011`,
+  2,000 steps, and a 25,200-second wall guard. Deployment waits for local
+  hash-verified receipts for both the v4 archive and Kaggle CPU-expanded replay;
+  the GPU yield guard pauses only named Biohub training if an unrelated GPU
+  client appears. A distinct harvest, two-T4 clean validation, patched official
+  metric comparison, and conditional one-shot submission chain are active.
+- A second September 7 executed-output audit rejected every new public shortcut.
+  The advertised public `0.942` notebook says detector threshold `0.96` was
+  selected through leaderboard submissions and is `0.964152` line-overlap with
+  `948tta2`. The latter's downloaded four-movie validator aggregates to only
+  `0.934940` before the project's stricter exact adjustment. Greenfield's
+  structurally independent 124-movie/13-epoch run was cancelled after one
+  15-movie cross-fit direction and has no complete receipt; SAM4CellTracking
+  was cancelled during inference, emitted no submission, and consumes public
+  `.943` detector nodes. None enters model selection or the ensemble.

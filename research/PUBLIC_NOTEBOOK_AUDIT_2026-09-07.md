@@ -205,3 +205,56 @@ References:
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview/evaluation>
+
+## September 7 executed-output refresh 2
+
+The newest runnable sources still do not provide a clean candidate to copy.
+`busyaprime/biohub-0-942-lb-one-knob-past-the-public-line` explicitly reports
+choosing detector threshold `0.96` from public-leaderboard submissions, so the
+constant is excluded from training and validation selection. Its normalized
+source overlaps `redoctopusk/biohub-948tta2` at `0.964152`; both remain members
+of the same public TemporalUNet/transformer/ILP lineage. The downloadable
+`948tta2` four-movie validator rows aggregate to edge Jaccard `0.918273`,
+division Jaccard `0.166667`, and unadjusted total `0.934940`. A notebook title
+claim is therefore not independent evidence of a `0.948` model.
+
+Two low-overlap sources were checked through both source and executed output:
+
+- `rishabhr0y/biohub-greenfield-seed-a-dev32-score-v1` describes a legitimate
+  13-epoch, 124-training-movie detector with a 32-movie cross-fitted
+  development role and 39 unopened holdout movies. The public run was
+  cancelled after only the first 15-movie direction. It produced no complete
+  development receipt; its completed threshold sweep peaked at adjusted edge
+  Jaccard `0.842158` before per-movie evaluation. It is not a candidate.
+- `rishabhr0y/biohub-sam4celltracking-submission` adapts SAM2.1 Hiera-L memory
+  features for linking, but takes its nodes from a public `.943` detector
+  dataset and its run was cancelled during the fourth hidden movie with no
+  submission or validation output. The architectural idea is diverse, but the
+  release supplies neither an individually strong clean member nor a finished
+  runtime demonstration.
+
+`muhanqiu/biohub-final-submission-our-weights` remains a potentially useful
+association-TTA research lead, not a drop-in member. It uses author-finetuned
+weights and eight-view shared-node association evidence, but retains roughly
+half of the audited public stack and publishes no comparable complete-movie
+patched-score receipt.
+
+The new `mjcho2023/one-faint-cell-costs-two-errors` EDA strengthens the current
+failure hypothesis without selecting a parameter: on one deliberately hard
+movie, 67 of 1,216 matched nodes were localized onto a neighboring cell, which
+turned one detection error into an edge false negative plus false positive.
+This is consistent with prioritizing faint-cell localization and using
+continuous detector coordinates during association. It does not justify a
+movie-specific repair.
+
+The authenticated submission inventory is unchanged: the last project
+submission is the August 26 clean public-family reproduction and the best
+scored project submissions remain `0.913`. No September public output is
+submitted or promoted from this audit.
+
+Additional references:
+
+- <https://www.kaggle.com/code/busyaprime/biohub-0-942-lb-one-knob-past-the-public-line>
+- <https://www.kaggle.com/code/rishabhr0y/biohub-greenfield-seed-a-dev32-score-v1>
+- <https://www.kaggle.com/code/rishabhr0y/biohub-sam4celltracking-submission>
+- <https://www.kaggle.com/code/mjcho2023/one-faint-cell-costs-two-errors>
