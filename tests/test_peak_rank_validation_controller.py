@@ -33,6 +33,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"expanded-real-multiscale-v15", '
         '"expanded-real-safe-rank-v17", '
         '"expanded-real-balanced-v19", '
+        '"expanded-real-xl-balanced-v21", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"capacity-faint-expanded-v8", '
@@ -42,6 +43,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"multiscale-triad-v16", '
         '"multiscale-safe-pair-v18", '
         '"safe-balanced-pair-v20", '
+        '"balanced-xl-pair-v22", '
         '"logit-ensemble-v4")]' in source
     )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source
@@ -64,6 +66,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-expanded-real-safe-rank-validation-kernel-v17.py" in source
     assert "build-peak-rank-expanded-real-balanced-validation-runtime-v19.py" in source
     assert "build-peak-rank-expanded-real-balanced-validation-kernel-v19.py" in source
+    assert "build-peak-rank-expanded-real-xl-balanced-validation-runtime-v21.py" in source
+    assert "build-peak-rank-expanded-real-xl-balanced-validation-kernel-v21.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
     assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py" in source
@@ -82,6 +86,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-multiscale-safe-pair-validation-kernel-v18.py" in source
     assert "build-peak-rank-safe-balanced-pair-validation-runtime-v20.py" in source
     assert "build-peak-rank-safe-balanced-pair-validation-kernel-v20.py" in source
+    assert "build-peak-rank-balanced-xl-pair-validation-runtime-v22.py" in source
+    assert "build-peak-rank-balanced-xl-pair-validation-kernel-v22.py" in source
     assert "parameter_count = 66977670" in source
     assert "build-peak-rank-logit-ensemble-validation-runtime.py" in source
     assert "build-peak-rank-logit-ensemble-validation-kernel.py" in source
@@ -117,6 +123,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-expanded-real-blob-validation-v11"' in source
     assert 'output_slug = "peak-rank-expanded-real-global-validation-v13"' in source
     assert 'output_slug = "peak-rank-expanded-real-balanced-validation-v19"' in source
+    assert 'output_slug = "peak-rank-expanded-real-xl-balanced-validation-v21"' in source
     assert 'output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"' in source
     assert 'output_slug = "peak-rank-capacity-faint-confidence-validation-v6"' in source
     assert 'output_slug = "peak-rank-cfe-ensemble-validation-v8"' in source
@@ -124,6 +131,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-expanded-blob-ensemble-validation-v12"' in source
     assert 'output_slug = "peak-rank-blob-global-ensemble-validation-v14"' in source
     assert 'output_slug = "peak-rank-safe-balanced-pair-validation-v20"' in source
+    assert 'output_slug = "peak-rank-balanced-xl-pair-validation-v22"' in source
     assert 'output_slug = "peak-rank-logit-ensemble-validation-v4"' in source
     assert "$variantConfig.output_slug" in source
     assert (

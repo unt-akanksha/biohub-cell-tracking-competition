@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -189,6 +189,22 @@ elseif ($Variant -eq "expanded-real-balanced-v19") {
         output_slug = "peak-rank-expanded-real-balanced-tracking-candidate-v19"
     }
 }
+elseif ($Variant -eq "expanded-real-xl-balanced-v21") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-xl-balanced-validation-runtime-v21"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-xl-balanced-tracking-candidate-v21"
+        validation_terminal = ".biohub/automation/peak-rank-expanded-real-xl-balanced-validation-controller-v21.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-xl-balanced-validation-runtime-v21"
+        builder = "scripts/build-peak-rank-expanded-real-xl-balanced-submission-candidate-v21.py"
+        candidate_root = "kaggle/biohub-peak-rank-expanded-real-xl-balanced-tracking-candidate-v21"
+        notebook_name = "biohub-peak-rank-expanded-real-xl-balanced-tracking-candidate-v21.ipynb"
+        controller_id = "peak-rank-expanded-real-xl-balanced-candidate-controller-v21"
+        promotion_name = "peak-rank-expanded-real-xl-balanced-candidate-promotion-v21.json"
+        receipt_name = "peak-rank-expanded-real-xl-balanced-candidate-submission-receipt-v21.json"
+        expected_run_id = "peak-rank-expanded-real-xl-balanced-tracking-candidate-v21"
+        output_slug = "peak-rank-expanded-real-xl-balanced-tracking-candidate-v21"
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -331,6 +347,22 @@ elseif ($Variant -eq "safe-balanced-pair-v20") {
         receipt_name = "peak-rank-safe-balanced-pair-candidate-submission-receipt-v20.json"
         expected_run_id = "peak-rank-safe-balanced-pair-tracking-candidate-v20"
         output_slug = "peak-rank-safe-balanced-pair-tracking-candidate-v20"
+    }
+}
+elseif ($Variant -eq "balanced-xl-pair-v22") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-balanced-xl-pair-validation-runtime-v22"
+        kernel_ref = "indarkarhana/biohub-peak-rank-balanced-xl-pair-tracking-candidate-v22"
+        validation_terminal = ".biohub/automation/peak-rank-balanced-xl-pair-validation-controller-v22.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-balanced-xl-pair-validation-runtime-v22"
+        builder = "scripts/build-peak-rank-balanced-xl-pair-submission-candidate-v22.py"
+        candidate_root = "kaggle/biohub-peak-rank-balanced-xl-pair-tracking-candidate-v22"
+        notebook_name = "biohub-peak-rank-balanced-xl-pair-tracking-candidate-v22.ipynb"
+        controller_id = "peak-rank-balanced-xl-pair-candidate-controller-v22"
+        promotion_name = "peak-rank-balanced-xl-pair-candidate-promotion-v22.json"
+        receipt_name = "peak-rank-balanced-xl-pair-candidate-submission-receipt-v22.json"
+        expected_run_id = "peak-rank-balanced-xl-pair-tracking-candidate-v22"
+        output_slug = "peak-rank-balanced-xl-pair-tracking-candidate-v22"
     }
 }
 else {

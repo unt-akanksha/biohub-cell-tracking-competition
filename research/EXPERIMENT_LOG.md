@@ -1222,3 +1222,30 @@ well as the synthetic generator.
   The discussion inventory supplies no new released, licensed, independently
   validated model. No public weight, prediction, constant, or score enters the
   v19/v20 decision.
+- A fresh official-source check kept the roughly 1.1B-parameter FOCUS-3D
+  checkpoint excluded. Its Hugging Face repository at commit
+  `115258efcc9ee44e69db3902bce2511d0ae24e2f` is auto-gated, stores 13.4 GB,
+  and still exposes no model-card license metadata. The BSD-3-Clause source
+  license and CC-BY-4.0 paper do not establish a license for the separately
+  distributed weights, while the Kaggle mirror continues to declare `other`.
+- V21 implements the heavy-network hypothesis with owned, reproducible weights
+  instead. It scales the v19 safe-rank/multiscale/global detector from
+  83,802,246 to 129,748,646 parameters using widths
+  `(160,320,640,1280)`, retains the 5,000-step embryo-balanced optimization
+  contract, and uses independent seed `11457211`. Its 90,000-second A10G wall
+  guard and hash-pinned runner are queued behind verified v19 as remote PID
+  `214875`; it yields to every active GPU client and never addresses an RSNA
+  path or process.
+- V21's first deployment attempt failed during import-only preflight because
+  the check imported an unstaged convenience function from `model.py`. No
+  runner or GPU process started. The failed receipt was preserved, the exact
+  lock-free partial v21 staging directory was removed, and the preflight was
+  repaired to count parameters directly. The second deployment verified all
+  staged hashes and the exact `129,748,646` count before starting its waiter.
+- V22 is a precommitted 213,550,892-parameter equal-logit/offset ensemble of
+  the independently seeded v19 and v21 balanced members. Both must pass their
+  own sealed audits and clean complete-movie validations before v22 can build;
+  the pair then receives its own two-T4 runtime, patched official/per-movie,
+  non-replica, and conditional one-shot submission gates. Harvest, validation,
+  and candidate controllers for v21/v22 are active with extended queue-safe
+  wait windows.

@@ -288,6 +288,21 @@ Additional references:
 - <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run77>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion>
 
+## FOCUS-3D license recheck at 10:49 UTC
+
+The official Hugging Face API reports repository commit
+`115258efcc9ee44e69db3902bce2511d0ae24e2f`, automatic access gating, and
+13,405,740,508 stored bytes, but still provides no `license` tag or model-card
+metadata. The gated README cannot be fetched without accepting repository
+terms, and the mirrored Kaggle runtime still declares only `other`. The source
+repository remains BSD-3-Clause and the paper is CC-BY-4.0, neither of which
+implicitly licenses the separately distributed checkpoint. FOCUS-3D therefore
+remains an architectural lead rather than an eligible weight source.
+
+- <https://huggingface.co/Qinghua-thu/FOCUS-3D>
+- <https://github.com/yu-lab-vt/FOCUS-3D>
+- <https://www.biorxiv.org/content/10.64898/2026.08.25.746907v1>
+
 ## September 7 public-detector teacher screen
 
 Two CC0 Pilkwang detector checkpoints were downloaded by exact dataset file,

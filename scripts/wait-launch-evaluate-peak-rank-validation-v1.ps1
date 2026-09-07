@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -190,6 +190,22 @@ elseif ($Variant -eq "expanded-real-balanced-v19") {
         dependency_terminals = @()
     }
 }
+elseif ($Variant -eq "expanded-real-xl-balanced-v21") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-xl-balanced-validation-runtime-v21"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-xl-balanced-validation-v21"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-expanded-real-xl-balanced-v21/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-expanded-real-xl-balanced-validation-runtime-v21.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-real-xl-balanced-validation-kernel-v21.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-xl-balanced-validation-runtime-v21"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-real-xl-balanced-validation-v21"
+        notebook_name = "biohub-peak-rank-expanded-real-xl-balanced-validation-v21.ipynb"
+        controller_id = "peak-rank-expanded-real-xl-balanced-validation-controller-v21"
+        output_slug = "peak-rank-expanded-real-xl-balanced-validation-v21"
+        parameter_count = 129748646
+        dependency_terminals = @()
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -361,6 +377,25 @@ elseif ($Variant -eq "safe-balanced-pair-v20") {
         dependency_terminals = @(
             ".biohub/automation/peak-rank-expanded-real-safe-rank-validation-controller-v17.json",
             ".biohub/automation/peak-rank-expanded-real-balanced-validation-controller-v19.json"
+        )
+    }
+}
+elseif ($Variant -eq "balanced-xl-pair-v22") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-balanced-xl-pair-validation-runtime-v22"
+        kernel_ref = "indarkarhana/biohub-peak-rank-balanced-xl-pair-validation-v22"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-balanced-xl-pair-validation-runtime-v22.py"
+        kernel_builder = "scripts/build-peak-rank-balanced-xl-pair-validation-kernel-v22.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-balanced-xl-pair-validation-runtime-v22"
+        kernel_root = "kaggle/biohub-peak-rank-balanced-xl-pair-validation-v22"
+        notebook_name = "biohub-peak-rank-balanced-xl-pair-validation-v22.ipynb"
+        controller_id = "peak-rank-balanced-xl-pair-validation-controller-v22"
+        output_slug = "peak-rank-balanced-xl-pair-validation-v22"
+        parameter_count = 213550892
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-expanded-real-balanced-validation-controller-v19.json",
+            ".biohub/automation/peak-rank-expanded-real-xl-balanced-validation-controller-v21.json"
         )
     }
 }
