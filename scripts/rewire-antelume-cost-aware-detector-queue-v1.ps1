@@ -38,6 +38,14 @@ function Invoke-External([string]$Program, [string[]]$Arguments) {
     return ($output -join "`n")
 }
 
+function Invoke-RemoteScript([string]$Script) {
+    $output = $Script | & ssh.exe @sshArgs $remote "bash -s" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Remote Bash failed with exit code $LASTEXITCODE`: $output"
+    }
+    return ($output -join "`n")
+}
+
 foreach ($entry in @(
     @{ path = $v21Runner; shell_path = "scripts/run-antelume-peak-rank-expanded-real-xl-balanced-v21.sh"; sha256 = $v21RunnerSha256 },
     @{ path = $v27Runner; shell_path = "scripts/run-antelume-peak-rank-hard-mined-temporal-snr-v27.sh"; sha256 = $v27RunnerSha256 }
@@ -55,7 +63,17 @@ if ($ValidateOnly) {
     } | ConvertTo-Json
     exit 0
 }
-if (Test-Path -LiteralPath $terminalPath) { throw "Cost-aware queue repair already reached a terminal state" }
+if (Test-Path -LiteralPath $terminalPath) {
+    $priorTerminal = Get-Content -Raw -LiteralPath $terminalPath | ConvertFrom-Json
+    if ($priorTerminal.status -ne "failed") {
+        throw "Cost-aware queue repair already reached a terminal state"
+    }
+    $previousFailure = Join-Path $stateRoot "deployment-terminal.previous-failed.json"
+    if (Test-Path -LiteralPath $previousFailure) {
+        throw "A prior cost-aware retry failure is already preserved"
+    }
+    Move-Item -LiteralPath $terminalPath -Destination $previousFailure
+}
 
 $sshArgs = @(
     "-i", $SshKey,
@@ -117,7 +135,7 @@ printf 'gpu_pid=%s v4=%s v9=%s v11=%s v13=%s v15=%s v17=%s v19=%s v21=%s v23=%s 
   "$gpu_pid" "$v4" "$v9" "$v11" "$v13" "$v15" "$v17" "$v19" "$v21" "$v23" "$v27" "$graph"
 '@
     $preflight = $preflightTemplate.Replace("__V21_OLD__", $v21PreviousSha256).Replace("__V27_OLD__", $v27PreviousSha256)
-    $preflightOutput = Invoke-External "ssh.exe" ($sshArgs + @($remote, $preflight))
+    $preflightOutput = Invoke-RemoteScript $preflight
     Invoke-External "scp.exe" ($sshArgs + @($v21Runner, "${remote}:$v21Temporary")) | Out-Null
     Invoke-External "scp.exe" ($sshArgs + @($v27Runner, "${remote}:$v27Temporary")) | Out-Null
 
@@ -182,7 +200,7 @@ printf 'gpu_pid=%s new_v21=%s new_v27=%s stopped_v4=%s stopped_v9=%s stopped_v11
   "${gpu_after[0]}" "$new_v21" "$new_v27" "$stopped_v4" "$stopped_v9" "$stopped_v11" "$stopped_v13" "$stopped_v15" "$stopped_v17" "$stopped_v19" "$stopped_v21" "$stopped_v23" "$stopped_v27" "$stopped_graph"
 '@
     $rewire = $rewireTemplate.Replace("__V21_NEW__", $v21RunnerSha256).Replace("__V27_NEW__", $v27RunnerSha256)
-    $rewireOutput = Invoke-External "ssh.exe" ($sshArgs + @($remote, $rewire))
+    $rewireOutput = Invoke-RemoteScript $rewire
     $gpuMatch = [regex]::Match($rewireOutput, "gpu_pid=([0-9]+)")
     $v21Match = [regex]::Match($rewireOutput, "new_v21=([0-9]+)")
     $v27Match = [regex]::Match($rewireOutput, "new_v27=([0-9]+)")

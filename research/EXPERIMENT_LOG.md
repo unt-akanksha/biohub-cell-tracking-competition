@@ -1632,3 +1632,23 @@ well as the synthetic generator.
   remains detection-first, and V30 now fails closed if its final ranked graph
   contains a dangling or nonconsecutive edge before `submission.csv` can be
   accepted.
+- The paid Antelume queue was shortened after confirming that an always-on
+  instance is billed even while prerequisite waiters sleep. At the repair
+  boundary V3 was the sole GPU owner (PID `339342`), at step 400/2,000 after
+  1h20m, with roughly 5.5 hours remaining under its seven-hour watchdog. It
+  was not interrupted. A previously overlooked V4 process was still eligible
+  to race for V3's archive, so every unstarted superseded waiter through V23
+  was stopped after verifying that none had a training log, result tree,
+  completion marker, or archive. No RSNA or unrelated process was signalled.
+- The only automatic successors are now the two models that directly test the
+  strongest detector candidate: V21 (129.8M XL balanced, 5,000 steps, 25-hour
+  ceiling) follows V3's independently verified archive, and V27 (83.8M
+  temporal hard-mined, 6,000 steps, 24-hour ceiling) follows V21's verified
+  archive. Replacement waiters `375454/375455` preserved active GPU PID
+  `339342`. V19 and V23 remove 40 speculative ablation hours; graph-context v2
+  remains staged but its waiter was stopped, removing another approximately
+  five automatic hours until detector evidence justifies it. The automatic
+  worst case therefore falls from 101 hours to about 56 hours including the
+  active V3 run, with V31 also removed from automatic deployment. V21 and V27
+  harvest/validation/candidate controllers remain active, and V28 can still
+  form the fixed equal-logit ensemble if both members promote cleanly.
