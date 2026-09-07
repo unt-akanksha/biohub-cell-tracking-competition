@@ -32,6 +32,7 @@ SKLEARN_WHEEL_NAME = (
     "scikit_learn-1.9.0-cp312-cp312-manylinux_2_27_x86_64."
     "manylinux_2_28_x86_64.whl"
 )
+V2_POLICY_CONTRACT = "all-selection-admitted-equal-rank-ensemble-v2"
 RUNTIME_FILES = {
     "learned_division_recovery.py": ROOT / "research/learned_division_recovery.py",
     "graph_context_division_inference.py": ROOT
@@ -66,6 +67,20 @@ def sha256_file(path: Path) -> str:
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def audited_member_contract(policy: dict[str, Any], members: list[dict[str, Any]]) -> bool:
+    if policy.get("constituent_audit_gate_required", True) is True:
+        return all(row.get("audit_gate_passed") is True for row in members)
+    return bool(
+        policy.get("constituent_audit_gate_required") is False
+        and policy.get("policy_unit_audited") is True
+        and policy.get("policy_contract") == V2_POLICY_CONTRACT
+        and policy.get("graph_context_policy")
+        == "equal_rank_selection_admitted_ensemble"
+        and len(members) >= 2
+        and all(isinstance(row.get("audit_gate_passed"), bool) for row in members)
+    )
 
 
 def validate_sources(
@@ -171,9 +186,9 @@ def verify_dataset(root: Path) -> dict[str, Any]:
             row.get("model_sha256") == sha256_file(root / row["path"])
             and row.get("parameter_count") == EXPECTED_PARAMETER_COUNT
             and row.get("selection_gate_passed") is True
-            and row.get("audit_gate_passed") is True
             for row in policy.get("graph_context_members", [])
         )
+        and audited_member_contract(policy, policy.get("graph_context_members", []))
         and policy.get("morphology_model_sha256")
         == sha256_file(root / "morphology_division_model.joblib")
         and policy.get("sklearn_version") == SKLEARN_VERSION
@@ -241,7 +256,7 @@ def main() -> None:
                 "selection_average_precision": member["selection_average_precision"],
                 "audit_average_precision": member["audit_average_precision"],
                 "selection_gate_passed": True,
-                "audit_gate_passed": True,
+                "audit_gate_passed": bool(member["audit_gate_passed"]),
             }
         )
     for name, source in copies.items():
@@ -256,6 +271,13 @@ def main() -> None:
             "graph_context_policy": evidence["terminal"]["deployment_policy"],
             "graph_context_member_count": len(member_records),
             "graph_context_members": member_records,
+            "policy_contract": evidence["terminal"].get("policy_contract"),
+            "policy_unit_audited": evidence["terminal"].get(
+                "policy_unit_audited", True
+            ),
+            "constituent_audit_gate_required": evidence["terminal"].get(
+                "constituent_audit_gate_required", True
+            ),
             "morphology_model_sha256": sha256_file(evidence["morphology_model"]),
             "sklearn_version": SKLEARN_VERSION,
             "sklearn_wheel_sha256": sha256_file(args.sklearn_wheel),

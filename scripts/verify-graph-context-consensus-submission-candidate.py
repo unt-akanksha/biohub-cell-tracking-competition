@@ -21,6 +21,7 @@ POLICY_RUN_ID = "competition-graph-context-consensus-division-policy-v1"
 EXPECTED_PARAMETER_COUNT = 74_732_308
 MINIMUM_PROXY_GAIN = 0.005
 MAXIMUM_ADJUSTED_EDGE_REGRESSION = 0.001
+V2_POLICY_CONTRACT = "all-selection-admitted-equal-rank-ensemble-v2"
 PUBLIC_CONTROL_VALIDATOR_SHA256 = _BASE["PUBLIC_CONTROL_VALIDATOR_SHA256"]
 
 
@@ -53,6 +54,21 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
     policy = json.loads(policy_path.read_text(encoding="utf-8"))
     members = policy.get("graph_context_members", [])
     hashes = [row.get("model_sha256") for row in members]
+    constituent_audit_contract = bool(
+        (
+            policy.get("constituent_audit_gate_required", True) is True
+            and all(row.get("audit_gate_passed") is True for row in members)
+        )
+        or (
+            policy.get("constituent_audit_gate_required") is False
+            and policy.get("policy_unit_audited") is True
+            and policy.get("policy_contract") == V2_POLICY_CONTRACT
+            and policy.get("graph_context_policy")
+            == "equal_rank_selection_admitted_ensemble"
+            and len(members) >= 2
+            and all(isinstance(row.get("audit_gate_passed"), bool) for row in members)
+        )
+    )
     if not (
         policy.get("schema_version") == 1
         and policy.get("status") == "development_accepted"
@@ -67,9 +83,9 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
             and row.get("model_sha256") == sha256_file(root / row["path"])
             and row.get("parameter_count") == EXPECTED_PARAMETER_COUNT
             and row.get("selection_gate_passed") is True
-            and row.get("audit_gate_passed") is True
             for row in members
         )
+        and constituent_audit_contract
         and policy.get("base_safe_division_heuristic_enabled") is True
         and policy.get("external_policy_additive_only") is True
         and policy.get("maximum_added_edges_per_movie") == 1

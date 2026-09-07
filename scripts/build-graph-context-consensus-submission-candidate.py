@@ -32,9 +32,10 @@ is copied. The additive division stage is project-authored and evaluates the
 exact parent/retained-daughter/proposed-daughter tuple used during official-
 train simulation.
 
-Only 74.7M-parameter checkpoints that passed movie-disjoint selection and
-sealed audit independently are attached. Ensemble membership was frozen
-before audit. Each model combines three local image volumes with a
+Only 74.7M-parameter checkpoints that passed movie-disjoint selection are
+attached. Their immutable deployment policy passed sealed audit either as a
+precommitted ensemble unit or, under the original contract, independently.
+Ensemble membership was frozen before audit. Each model combines three local image volumes with a
 daughter-symmetric transformer over the surrounding detection set. Within-
 movie ranks are averaged without an absolute threshold, and a proposed edge
 must be the identical top geometry-eligible candidate under the graph-context
@@ -78,6 +79,19 @@ def _graph_model_setup() -> str:
     )
     for old, new in replacements:
         source = source.replace(old, new)
+    old_audit_gate = '        and row.get("audit_gate_passed") is True'
+    new_audit_gate = '''        and (
+            row.get("audit_gate_passed") is True
+            or (
+                _GCD_POLICY.get("constituent_audit_gate_required") is False
+                and _GCD_POLICY.get("policy_unit_audited") is True
+                and _GCD_POLICY.get("policy_contract")
+                == "all-selection-admitted-equal-rank-ensemble-v2"
+            )
+        )'''
+    if old_audit_gate not in source:
+        raise RuntimeError("relational member audit contract changed")
+    source = source.replace(old_audit_gate, new_audit_gate)
     old_imports = """from relational_division_inference import score_relational_candidates as _gcd_score_relational_candidates
 from relational_division_model import RelationalDivisionModel as _GCDDeepModel"""
     new_imports = """from graph_context_division_inference import member_scores as _gcd_member_scores

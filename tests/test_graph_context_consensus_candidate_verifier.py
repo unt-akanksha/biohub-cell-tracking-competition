@@ -20,12 +20,14 @@ def test_verifier_preserves_strict_external_promotion_gate() -> None:
     assert module.verify_candidate.__globals__["validate_runtime"] is module.validate_runtime
 
 
-def test_verifier_requires_hash_bound_independently_strong_runtime() -> None:
+def test_verifier_requires_hash_bound_audited_runtime_policy() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
 
     assert 'policy.get("graph_context_members", [])' in source
     assert 'row.get("selection_gate_passed") is True' in source
     assert 'row.get("audit_gate_passed") is True' in source
+    assert 'policy.get("policy_unit_audited") is True' in source
+    assert 'policy.get("constituent_audit_gate_required") is False' in source
     assert 'policy.get("exact_two_t4_required") is True' in source
     assert 'policy.get("external_policy_additive_only") is True' in source
     assert "kaggle competitions submit" not in source

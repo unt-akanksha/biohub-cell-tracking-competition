@@ -148,6 +148,7 @@ def validate_policy(results_root: Path) -> tuple[dict[str, Any], list[dict[str, 
                     worker["selection"]["average_precision"]
                 ),
                 "audit_average_precision": float(audit["metrics"]["average_precision"]),
+                "audit_gate_passed": audit.get("audit_gate_passed") is True,
             }
         )
     return terminal, records

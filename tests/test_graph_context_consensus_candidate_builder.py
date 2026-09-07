@@ -24,6 +24,8 @@ def test_candidate_is_project_authored_contextual_and_dual_gpu() -> None:
     assert 'torch.device("cuda:0")' in module.MODEL_SETUP_TEMPLATE
     assert 'torch.device("cuda:1")' in module.MODEL_SETUP_TEMPLATE
     assert "GraphContextDivisionModel" in module.MODEL_SETUP_TEMPLATE
+    assert "all-selection-admitted-equal-rank-ensemble-v2" in module.MODEL_SETUP_TEMPLATE
+    assert "constituent_audit_gate_required" in module.MODEL_SETUP_TEMPLATE
     assert "ThreadPoolExecutor" in module.RANKED_HELPERS
     assert "_GCD_MODELS_BY_DEVICE" in module.RANKED_HELPERS
 

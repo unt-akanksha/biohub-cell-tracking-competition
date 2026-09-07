@@ -1539,6 +1539,15 @@ well as the synthetic generator.
   run is eight sequential 74.7M models, 20,000 steps each, with a five-hour
   worst-case A10G budget after V27's verified harvest. Local trainer, probe,
   runner, deployment, and harvest preflights pass. AWS credentials were expired
-  at the first deployment attempt, so hidden deployment PID `5316` now waits
+  at the first deployment attempt, so hidden deployment PID `5564` now waits
   for refresh and hidden harvest PID `12444` waits for the hash-bound result;
   existing remote detector work is unaffected.
+- The v2 downstream path preserves actual per-member audit outcomes rather
+  than relabeling ensemble constituents as individually accepted. Runtime and
+  notebook verification accept a failed constituent only when the immutable
+  policy explicitly records `constituent_audit_gate_required=false`,
+  `policy_unit_audited=true`, the v2 equal-rank contract, and at least two
+  frozen members. Hidden PID `36076` will run the sealed development decision
+  and package the private runtime after harvest; PID `19128` will launch the
+  two-T4 complete-candidate evaluation and submit only if all development and
+  promotion gates pass.

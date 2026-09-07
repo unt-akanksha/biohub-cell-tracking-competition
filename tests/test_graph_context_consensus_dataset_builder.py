@@ -30,3 +30,21 @@ def test_runtime_policy_is_additive_two_gpu_and_submission_ineligible() -> None:
     assert '"model_subset_searched_on_audit": False' in source
     assert '"authorized_for_submission": False' in source
     assert "kaggle competitions submit" not in source
+
+
+def test_runtime_accepts_audited_v2_ensemble_without_relabeling_members() -> None:
+    members = [
+        {"audit_gate_passed": False},
+        {"audit_gate_passed": True},
+    ]
+    policy = {
+        "graph_context_policy": "equal_rank_selection_admitted_ensemble",
+        "policy_contract": MODULE.V2_POLICY_CONTRACT,
+        "policy_unit_audited": True,
+        "constituent_audit_gate_required": False,
+    }
+
+    assert MODULE.audited_member_contract(policy, members)
+    assert not MODULE.audited_member_contract(
+        {**policy, "policy_unit_audited": False}, members
+    )
