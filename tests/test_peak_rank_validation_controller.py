@@ -25,12 +25,19 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "torch.cuda.device_count() != 2" in source
     assert '"--devices", "0,1"' in source
     assert '"--tta-modes", "none,rot4,d4"' in source
-    assert '[ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3")]' in source
+    assert (
+        '[ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", '
+        '"logit-ensemble-v4")]' in source
+    )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source
     assert "build-peak-rank-depth-pu-validation-kernel.py" in source
     assert "build-peak-rank-capacity-pu-validation-runtime.py" in source
     assert "build-peak-rank-capacity-pu-validation-kernel.py" in source
     assert "parameter_count = 66977670" in source
+    assert "build-peak-rank-logit-ensemble-validation-runtime.py" in source
+    assert "build-peak-rank-logit-ensemble-validation-kernel.py" in source
+    assert "parameter_count = 76762956" in source
+    assert "skipped_after_member_rejection" in source
 
 
 def test_controller_validates_outputs_without_submitting() -> None:
@@ -50,6 +57,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-validation-v1"' in source
     assert 'output_slug = "peak-rank-depth-pu-validation-v2"' in source
     assert 'output_slug = "peak-rank-capacity-pu-validation-v3"' in source
+    assert 'output_slug = "peak-rank-logit-ensemble-validation-v4"' in source
     assert "$variantConfig.output_slug" in source
     assert (
         '".biohub/cache/kernel-outputs/peak-rank-validation-v1-version$expectedVersion"'

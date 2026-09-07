@@ -187,6 +187,7 @@ if not all(
     and row.get("worker_count") == 2
     and row.get("checkpoint_sha256") == _PR_MANIFEST["checkpoint_sha256"]
     and row.get("parameter_count") == _PR_MANIFEST["parameter_count"]
+    and row.get("ensemble_size") == _PR_MANIFEST["ensemble_size"]
     and row.get("peak_tta_mode") == _PR_TTA_MODE
     and row.get("peak_tta_views") == _PR_MANIFEST["selected_peak_tta_views"]
     and row.get("association", {}).get("edge_feature_tta") is True
@@ -225,6 +226,7 @@ _pr_evidence = {
     "public_predictions_copied": False,
     "checkpoint_sha256": _PR_MANIFEST["checkpoint_sha256"],
     "parameter_count": _PR_MANIFEST["parameter_count"],
+    "ensemble_size": _PR_MANIFEST["ensemble_size"],
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
     "selected_peak_tta_mode": _PR_TTA_MODE,
     "selected_peak_tta_views": _PR_MANIFEST["selected_peak_tta_views"],

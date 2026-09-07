@@ -15,6 +15,7 @@ from typing import Any, Sequence
 
 import numpy as np
 import torch
+from torch import nn
 
 try:
     from density_calibration import read_estimated_node_count, uniform_frame_indices
@@ -104,17 +105,113 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
         raise ValueError("training terminal is not an accepted clean checkpoint")
     if sha256_file(checkpoint) != terminal.get("checkpoint_sha256"):
         raise ValueError("detector checkpoint hash differs from training terminal")
+    members = terminal.get("ensemble_members")
+    if members is not None:
+        if not isinstance(members, list) or len(members) < 2:
+            raise ValueError("detector ensemble must contain at least two members")
+        filenames = []
+        member_hashes = []
+        member_parameters = 0
+        for row in members:
+            filename = row.get("checkpoint_file")
+            member_parameter_count = row.get("parameter_count")
+            if not (
+                isinstance(filename, str)
+                and Path(filename).name == filename
+                and isinstance(member_parameter_count, int)
+                and not isinstance(member_parameter_count, bool)
+                and member_parameter_count > 0
+                and isinstance(row.get("widths"), list)
+                and isinstance(row.get("depths"), list)
+            ):
+                raise ValueError("detector ensemble member contract is invalid")
+            member_path = checkpoint.parent / filename
+            if not member_path.is_file() or sha256_file(member_path) != row.get(
+                "checkpoint_sha256"
+            ):
+                raise ValueError("detector ensemble member hash differs")
+            filenames.append(filename)
+            member_hashes.append(row["checkpoint_sha256"])
+            member_parameters += member_parameter_count
+        if len(filenames) != len(set(filenames)) or len(member_hashes) != len(
+            set(member_hashes)
+        ):
+            raise ValueError("detector ensemble contains a duplicate member")
+        if member_parameters != parameter_count:
+            raise ValueError("detector ensemble parameter count differs")
     return terminal
+
+
+class PeakRankLogitEnsemble(nn.Module):
+    """Equal-logit/offset average of independently trained detectors."""
+
+    def __init__(self, members: Sequence[nn.Module]) -> None:
+        super().__init__()
+        if len(members) < 2:
+            raise ValueError("logit ensemble needs at least two members")
+        self.members = nn.ModuleList(members)
+
+    def forward(self, frames: torch.Tensor) -> dict[str, Any]:
+        aggregate: dict[str, Any] | None = None
+        for member in self.members:
+            output = member(frames)
+            if aggregate is None:
+                aggregate = {
+                    "logits": output["logits"].float(),
+                    "offsets": output["offsets"].float(),
+                    "auxiliary_logits": tuple(
+                        value.float() for value in output["auxiliary_logits"]
+                    ),
+                }
+            else:
+                aggregate["logits"] = aggregate["logits"] + output["logits"].float()
+                aggregate["offsets"] = aggregate["offsets"] + output["offsets"].float()
+                aggregate["auxiliary_logits"] = tuple(
+                    left + right.float()
+                    for left, right in zip(
+                        aggregate["auxiliary_logits"],
+                        output["auxiliary_logits"],
+                        strict=True,
+                    )
+                )
+        if aggregate is None:  # pragma: no cover - constructor excludes this state
+            raise RuntimeError("empty peak-rank ensemble")
+        scale = 1.0 / len(self.members)
+        return {
+            "logits": aggregate["logits"] * scale,
+            "offsets": aggregate["offsets"] * scale,
+            "auxiliary_logits": tuple(
+                value * scale for value in aggregate["auxiliary_logits"]
+            ),
+        }
+
+
+def _load_single_member(
+    checkpoint: Path, contract: dict[str, Any]
+) -> TemporalPeakRankDetector:
+    model = TemporalPeakRankDetector(
+        widths=contract["widths"], depths=contract["depths"]
+    )
+    state = torch.load(checkpoint, map_location="cpu", weights_only=True)
+    model.load_state_dict(state["state_dict"], strict=True)
+    if count_parameters(model) != contract["parameter_count"]:
+        raise RuntimeError("unexpected detector member parameter count")
+    return model
 
 
 def load_model(
     checkpoint: Path, terminal: dict[str, Any], device: torch.device
-) -> TemporalPeakRankDetector:
-    model = TemporalPeakRankDetector(
-        widths=terminal["widths"], depths=terminal["depths"]
-    )
-    state = torch.load(checkpoint, map_location="cpu", weights_only=True)
-    model.load_state_dict(state["state_dict"], strict=True)
+) -> nn.Module:
+    members = terminal.get("ensemble_members")
+    if members is None:
+        model: nn.Module = _load_single_member(checkpoint, terminal)
+    else:
+        model = PeakRankLogitEnsemble(
+            [
+                _load_single_member(checkpoint.parent / row["checkpoint_file"], row)
+                for row in members
+            ]
+        )
     if count_parameters(model) != terminal["parameter_count"]:
         raise RuntimeError("unexpected detector parameter count")
     return model.requires_grad_(False).eval().to(device)

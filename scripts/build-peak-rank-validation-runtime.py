@@ -138,6 +138,7 @@ def main() -> None:
             "parameter_count": EXPECTED_PARAMETER_COUNT,
             "widths": terminal_payload["widths"],
             "depths": terminal_payload["depths"],
+            "ensemble_size": 1,
             "checkpoint_sha256": report["checkpoint_sha256"],
             "training_archive_sha256": report["archive_sha256"],
             "training_run_id": terminal_payload["run_id"],

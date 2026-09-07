@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-validation-kernel.py"
 DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-validation-kernel.py"
 CAPACITY_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-capacity-pu-validation-kernel.py"
+ENSEMBLE_SCRIPT = ROOT / "scripts" / "build-peak-rank-logit-ensemble-validation-kernel.py"
 
 
 def test_builder_creates_private_two_gpu_non_submitting_kernel(tmp_path, monkeypatch) -> None:
@@ -71,3 +72,10 @@ def test_capacity_pu_kernel_wrapper_binds_larger_parameter_contract(tmp_path: Pa
         assert "__EXPECTED_PARAMETER_COUNT__" not in code
     finally:
         globals_["TARGET"], globals_["NOTEBOOK"] = original
+
+
+def test_logit_ensemble_kernel_wrapper_binds_total_parameter_contract() -> None:
+    wrapper = runpy.run_path(str(ENSEMBLE_SCRIPT), run_name="ensemble_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    assert globals_["TARGET_ID"] == "biohub-peak-rank-logit-ensemble-validation-v4"
+    assert globals_["EXPECTED_PARAMETER_COUNT"] == 76_762_956

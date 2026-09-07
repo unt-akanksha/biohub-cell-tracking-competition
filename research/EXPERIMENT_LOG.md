@@ -822,3 +822,16 @@ well as the synthetic generator.
   shared local directory. Variant-specific output slugs now prevent that
   collision. The idle v2 controller was restarted to load the fix; no training
   or unrelated workload was interrupted.
+- A fixed v1+v2 fusion path was committed before either member produced a
+  selection result. It requires both independent 38,381,478-parameter members
+  to pass their own sealed training audits and separate complete-movie clean
+  validations; otherwise the ensemble stops without opening its validation.
+  Eligible members are strict-loaded from distinct checkpoint hashes and
+  averaged at the dense-logit and subvoxel-offset level, for a total of
+  `76,762,956` learned parameters. It then receives a new 1/4/8-view selection
+  and sealed acceptance evaluation rather than inheriting either member's
+  score. The same projected-runtime and full-candidate gates apply before the
+  separately named two-GPU candidate can submit. Member identities, hashes,
+  counts, widths, depths, clean-validation hashes, and equal `0.5` weights are
+  embedded in the private runtime; public predictions and leaderboard results
+  remain outside the fusion path.

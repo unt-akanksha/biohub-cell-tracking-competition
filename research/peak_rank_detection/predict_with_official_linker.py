@@ -81,6 +81,8 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
     validation_path = runtime_root / "clean_validation.json"
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     selected_tta_mode = validation.get("selected_tta_mode")
+    ensemble_members = training.get("ensemble_members")
+    expected_ensemble_size = len(ensemble_members) if ensemble_members is not None else 1
     if not (
         manifest.get("training_audit_passed") is True
         and isinstance(manifest.get("parameter_count"), int)
@@ -89,6 +91,7 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
         and manifest.get("parameter_count", 0) > 0
         and manifest.get("widths") == training.get("widths")
         and manifest.get("depths") == training.get("depths")
+        and manifest.get("ensemble_size") == expected_ensemble_size
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
         and manifest.get("clean_validation_promotion_passed") is True
         and manifest.get("clean_validation_sha256") == sha256_file(validation_path)
@@ -404,6 +407,7 @@ def run(args: argparse.Namespace) -> None:
             "association": association_manifest,
             "checkpoint_sha256": runtime_manifest["checkpoint_sha256"],
             "parameter_count": runtime_manifest["parameter_count"],
+            "ensemble_size": runtime_manifest["ensemble_size"],
             "input_partition": args.data_dir.name,
             "competition_train_labels_read": False,
             "competition_test_labels_read": False,

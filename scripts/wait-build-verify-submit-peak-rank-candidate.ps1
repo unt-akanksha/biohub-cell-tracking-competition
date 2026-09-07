@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -45,7 +45,7 @@ elseif ($Variant -eq "depth-pu-v2") {
         output_slug = "peak-rank-depth-pu-tracking-candidate-v2"
     }
 }
-else {
+elseif ($Variant -eq "capacity-pu-v3") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-runtime-v3"
         kernel_ref = "indarkarhana/biohub-peak-rank-capacity-pu-tracking-candidate-v3"
@@ -59,6 +59,22 @@ else {
         receipt_name = "peak-rank-capacity-pu-candidate-submission-receipt-v3.json"
         expected_run_id = "peak-rank-capacity-pu-tracking-candidate-v3"
         output_slug = "peak-rank-capacity-pu-tracking-candidate-v3"
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-logit-ensemble-validation-runtime-v4"
+        kernel_ref = "indarkarhana/biohub-peak-rank-logit-ensemble-tracking-candidate-v4"
+        validation_terminal = ".biohub/automation/peak-rank-logit-ensemble-validation-controller-v4.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-logit-ensemble-validation-runtime-v4"
+        builder = "scripts/build-peak-rank-logit-ensemble-submission-candidate.py"
+        candidate_root = "kaggle/biohub-peak-rank-logit-ensemble-tracking-candidate-v4"
+        notebook_name = "biohub-peak-rank-logit-ensemble-tracking-candidate-v4.ipynb"
+        controller_id = "peak-rank-logit-ensemble-candidate-controller-v4"
+        promotion_name = "peak-rank-logit-ensemble-candidate-promotion-v4.json"
+        receipt_name = "peak-rank-logit-ensemble-candidate-submission-receipt-v4.json"
+        expected_run_id = "peak-rank-logit-ensemble-tracking-candidate-v4"
+        output_slug = "peak-rank-logit-ensemble-tracking-candidate-v4"
     }
 }
 $runtimeRef = $variantConfig.runtime_ref

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -27,6 +27,7 @@ $variantConfig = if ($Variant -eq "v1") {
         controller_id = "peak-rank-validation-controller-v1"
         output_slug = "peak-rank-validation-v1"
         parameter_count = 38381478
+        dependency_terminals = @()
     }
 }
 elseif ($Variant -eq "depth-pu-v2") {
@@ -42,9 +43,10 @@ elseif ($Variant -eq "depth-pu-v2") {
         controller_id = "peak-rank-depth-pu-validation-controller-v2"
         output_slug = "peak-rank-depth-pu-validation-v2"
         parameter_count = 38381478
+        dependency_terminals = @()
     }
 }
-else {
+elseif ($Variant -eq "capacity-pu-v3") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-runtime-v3"
         kernel_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-v3"
@@ -57,11 +59,38 @@ else {
         controller_id = "peak-rank-capacity-pu-validation-controller-v3"
         output_slug = "peak-rank-capacity-pu-validation-v3"
         parameter_count = 66977670
+        dependency_terminals = @()
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-logit-ensemble-validation-runtime-v4"
+        kernel_ref = "indarkarhana/biohub-peak-rank-logit-ensemble-validation-v4"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-logit-ensemble-validation-runtime.py"
+        kernel_builder = "scripts/build-peak-rank-logit-ensemble-validation-kernel.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-logit-ensemble-validation-runtime-v4"
+        kernel_root = "kaggle/biohub-peak-rank-logit-ensemble-validation-v4"
+        notebook_name = "biohub-peak-rank-logit-ensemble-validation-v4.ipynb"
+        controller_id = "peak-rank-logit-ensemble-validation-controller-v4"
+        output_slug = "peak-rank-logit-ensemble-validation-v4"
+        parameter_count = 76762956
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-validation-controller-v1.json",
+            ".biohub/automation/peak-rank-depth-pu-validation-controller-v2.json"
+        )
     }
 }
 $runtimeRef = $variantConfig.runtime_ref
 $kernelRef = $variantConfig.kernel_ref
-$harvestTerminal = Join-Path $RepositoryRoot $variantConfig.harvest_terminal
+$harvestTerminal = if ($null -eq $variantConfig.harvest_terminal) {
+    $null
+} else {
+    Join-Path $RepositoryRoot $variantConfig.harvest_terminal
+}
+$dependencyTerminals = @(
+    $variantConfig.dependency_terminals | ForEach-Object { Join-Path $RepositoryRoot $_ }
+)
 $runtimeBuilder = Join-Path $RepositoryRoot $variantConfig.runtime_builder
 $kernelBuilder = Join-Path $RepositoryRoot $variantConfig.kernel_builder
 $runtimeRoot = Join-Path $RepositoryRoot $variantConfig.runtime_root
@@ -129,6 +158,7 @@ if ($ValidateOnly) {
     @{
         status = "validated"
         harvest_terminal = $harvestTerminal
+        dependency_terminals = $dependencyTerminals
         expected_gpu_count = 2
         submission_performed = $false
     } | ConvertTo-Json
@@ -140,29 +170,72 @@ if (Test-Path -LiteralPath $terminalPath) {
 
 $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)
 try {
-    while (-not (Test-Path -LiteralPath $harvestTerminal -PathType Leaf)) {
-        if ([DateTimeOffset]::UtcNow -ge $deadline) {
-            throw "Timed out waiting for verified peak-ranking harvest"
+    if ($dependencyTerminals.Count -gt 0) {
+        while (@($dependencyTerminals | Where-Object { -not (Test-Path -LiteralPath $_ -PathType Leaf) }).Count -gt 0) {
+            if ([DateTimeOffset]::UtcNow -ge $deadline) {
+                throw "Timed out waiting for clean ensemble member validation"
+            }
+            Start-Sleep -Seconds $PollSeconds
         }
-        Start-Sleep -Seconds $PollSeconds
-    }
-    $harvest = Get-Content -Raw -LiteralPath $harvestTerminal | ConvertFrom-Json
-    if ($harvest.status -ne "harvest_verified") {
-        throw "Peak-ranking harvest did not verify"
-    }
-    if ($harvest.accepted_for_kaggle_validation -ne $true) {
-        Write-Terminal "skipped_after_training_rejection" @{
-            model_status = $harvest.model_status
-            selection_passed = $harvest.selection_passed
-            audit_opened = $harvest.audit_opened
-            audit_passed = $harvest.audit_passed
-            dataset_uploaded = $false
-            kernel_launched = $false
+        $dependencies = @($dependencyTerminals | ForEach-Object {
+            Get-Content -Raw -LiteralPath $_ | ConvertFrom-Json
+        })
+        $membersAccepted = @($dependencies | Where-Object {
+            $_.status -eq "completed" -and
+            $_.accepted_for_candidate_integration -eq $true -and
+            $_.promotion_passed -eq $true -and
+            $_.competition_submission_performed -eq $false
+        }).Count -eq $dependencyTerminals.Count
+        if (-not $membersAccepted) {
+            Write-Terminal "skipped_after_member_rejection" @{
+                model_status = "one_or_more_ensemble_members_rejected"
+                member_statuses = @($dependencies | ForEach-Object { $_.status })
+                selection_passed = $false
+                audit_opened = $false
+                audit_passed = $false
+                dataset_uploaded = $false
+                kernel_launched = $false
+            }
+            exit 0
         }
-        exit 0
+        $harvest = [pscustomobject]@{
+            status = "clean_members_verified"
+            accepted_for_kaggle_validation = $true
+            model_status = "fixed_equal_logit_ensemble"
+            selection_passed = $true
+            audit_opened = $true
+            audit_passed = $true
+            checkpoint_sha256 = $null
+        }
     }
-    if ($harvest.audit_passed -ne $true -or -not $harvest.checkpoint_sha256) {
+    else {
+        while (-not (Test-Path -LiteralPath $harvestTerminal -PathType Leaf)) {
+            if ([DateTimeOffset]::UtcNow -ge $deadline) {
+                throw "Timed out waiting for verified peak-ranking harvest"
+            }
+            Start-Sleep -Seconds $PollSeconds
+        }
+        $harvest = Get-Content -Raw -LiteralPath $harvestTerminal | ConvertFrom-Json
+        if ($harvest.status -ne "harvest_verified") {
+            throw "Peak-ranking harvest did not verify"
+        }
+        if ($harvest.accepted_for_kaggle_validation -ne $true) {
+            Write-Terminal "skipped_after_training_rejection" @{
+                model_status = $harvest.model_status
+                selection_passed = $harvest.selection_passed
+                audit_opened = $harvest.audit_opened
+                audit_passed = $harvest.audit_passed
+                dataset_uploaded = $false
+                kernel_launched = $false
+            }
+            exit 0
+        }
+    }
+    if ($harvest.audit_passed -ne $true) {
         throw "Peak-ranking harvest authorization is internally inconsistent"
+    }
+    if ($dependencyTerminals.Count -eq 0 -and -not $harvest.checkpoint_sha256) {
+        throw "Peak-ranking harvest is missing its checkpoint hash"
     }
     if ((Test-Path -LiteralPath $runtimeRoot) -or (Test-Path -LiteralPath $kernelRoot)) {
         throw "Refusing to overwrite an existing peak-ranking runtime or kernel"
@@ -170,6 +243,9 @@ try {
     $native = Invoke-NativeOutput { & python $runtimeBuilder }
     if ($native.ExitCode -ne 0) { throw "Runtime build failed: $($native.Output)" }
     $manifest = Get-Content -Raw -LiteralPath $runtimeManifest | ConvertFrom-Json
+    if ($dependencyTerminals.Count -gt 0) {
+        $harvest.checkpoint_sha256 = $manifest.checkpoint_sha256
+    }
     if (
         $manifest.training_audit_passed -ne $true -or
         [int64]$manifest.parameter_count -ne [int64]$variantConfig.parameter_count -or

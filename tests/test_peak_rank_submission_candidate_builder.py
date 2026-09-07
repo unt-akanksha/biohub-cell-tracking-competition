@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-submission-candidate.py"
 DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-submission-candidate.py"
 CAPACITY_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-capacity-pu-submission-candidate.py"
+ENSEMBLE_SCRIPT = ROOT / "scripts" / "build-peak-rank-logit-ensemble-submission-candidate.py"
 MODULE = runpy.run_path(str(SCRIPT))
 
 
@@ -69,3 +70,14 @@ def test_capacity_pu_candidate_has_distinct_runtime_size_and_identity() -> None:
     assert globals_["TARGET_ID"] == "biohub-peak-rank-capacity-pu-tracking-candidate-v3"
     assert "peak-rank-capacity-pu-tracking-candidate-v3" in joined
     assert "67.0M-parameter capacity-scaled" in joined
+
+
+def test_logit_ensemble_candidate_has_distinct_runtime_size_and_identity() -> None:
+    wrapper = runpy.run_path(str(ENSEMBLE_SCRIPT), run_name="ensemble_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    notebook = globals_["build_notebook"]("e" * 64)
+    joined = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
+    assert globals_["RUNTIME_REF"].endswith("logit-ensemble-validation-runtime-v4")
+    assert globals_["TARGET_ID"] == "biohub-peak-rank-logit-ensemble-tracking-candidate-v4"
+    assert "peak-rank-logit-ensemble-tracking-candidate-v4" in joined
+    assert "two-member 76.8M-parameter equal-logit" in joined
