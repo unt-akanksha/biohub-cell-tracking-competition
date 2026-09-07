@@ -4,11 +4,23 @@ import numpy as np
 
 from research.peak_rank_detection.diagnose_multiscale_blob_prior import (
     difference_of_averages,
+    embryo_from_member_name,
     peak_coordinates,
     point_distances,
     response_maps,
     standardized_response,
 )
+
+
+def test_embryo_from_member_name_accepts_only_frozen_training_embryos() -> None:
+    assert embryo_from_member_name(
+        "root/optimization/44b6_0b24845f__t0011.npz"
+    ) == "44b6"
+    assert embryo_from_member_name(
+        "root/optimization/6bba_05db0fb1__t0020.npz"
+    ) == "6bba"
+    with np.testing.assert_raises(ValueError):
+        embryo_from_member_name("root/optimization/test_deadbeef__t0001.npz")
 
 
 def test_difference_of_averages_prefers_compact_bright_center() -> None:

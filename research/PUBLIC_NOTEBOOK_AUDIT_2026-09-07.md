@@ -473,3 +473,44 @@ enters a candidate.
 - <https://github.com/lu-lab/NIS3D>
 - <https://zenodo.org/records/11456029>
 - <https://github.com/DecBayComp/deltaMic>
+
+## September 7 incremental refresh at 12:30 UTC
+
+Three notebook entries appeared above run81 in the authenticated `dateRun`
+inventory. None is an independent model. Current `biohub-harmonic-fusion` has
+raw SHA-256
+`6e1f25c4db92ca05084a3cab39ff083d10c3f43a730581c141363301c0e985bb`
+and current `biohab-lineage-forge-adaptive-tracking` has raw SHA-256
+`74c83cd0938cd17a7c93882103269ec06ea8bae492fc466ffc48ad5ed2b9f35a`.
+Their normalized source overlap is `0.996589`; apart from title text, the
+material difference is selection of `low_margin_consensus` versus `adaptive`
+secondary-link mixing. Their respective overlap with `948tta2` is `0.893394`
+and `0.892775`, and with the previously audited lineage-forge source is about
+`0.919`.
+
+The 0.934-title notebook has raw SHA-256
+`8853e3e15b730790e2c2cfd3dd9f1a5f5956ba7802809c045fa5c18b2cb56aa0`.
+It overlaps the same author's 0.931 predecessor at `0.989019` and `948tta2` at
+`0.943435`. The source changes bidirectional weight `0.30` to `0.15`, secondary
+edge weight `0.15` to `0.20`, and several gap/division constants while its
+title advertises the resulting public score.
+
+All three notebooks explicitly write
+`leaderboard_feedback_used_for_configuration=True`. Their embedded terminal
+configuration dictionaries also retain prior detector, secondary-detection,
+and bidirectional weights that contradict the active top-cell environment
+values. This prevents exact recovery of the advertised run from its own
+manifest. The newer Flexon sources add an in-notebook competition-train proxy
+sweep, but the initial configuration is itself described as a public-0.939
+base and no embedded result establishes an embryo-held-out, model-independent
+promotion. Public-score titles and the notebook-local proxy cannot override
+the patched official complete-movie gate.
+
+The sources therefore fail the no-leaderboard-selection, independent-lineage,
+and reproducibility requirements. D4 edge-feature TTA is already represented
+by the project-authored association bridge; no new source, weight, prediction,
+threshold, sweep winner, or score enters the owned detector or ensemble.
+
+- <https://www.kaggle.com/code/flexonafft/biohub-harmonic-fusion>
+- <https://www.kaggle.com/code/flexonafft/biohab-lineage-forge-adaptive-tracking>
+- <https://www.kaggle.com/code/evgendvorkin/biohub-0-934-lb-proxy-score-0-9384>

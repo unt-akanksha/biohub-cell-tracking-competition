@@ -98,6 +98,15 @@ def center_points(nodes: np.ndarray) -> np.ndarray:
     return points
 
 
+def embryo_from_member_name(name: str) -> str:
+    """Return the allowed embryo prefix from one optimization member."""
+
+    embryo = Path(name).stem.split("_", 1)[0]
+    if embryo not in {"44b6", "6bba"}:
+        raise ValueError(f"unexpected optimization embryo: {embryo}")
+    return embryo
+
+
 def response_maps(
     volumes: np.ndarray,
     scales: tuple[tuple[int, int], ...],
@@ -148,6 +157,9 @@ def evaluate_archive(
         raise ValueError("expanded replay archive hash changed")
     accumulated: dict[str, list[float]] = {}
     center_standardized: dict[str, list[float]] = {}
+    embryo_accumulated: dict[str, dict[str, list[float]]] = {}
+    embryo_center_standardized: dict[str, dict[str, list[float]]] = {}
+    embryo_crops = {"44b6": 0, "6bba": 0}
     crops = 0
     with tarfile.open(archive, mode="r") as bundle:
         members = sorted(
@@ -164,6 +176,7 @@ def evaluate_archive(
         for member in optimization:
             if "/selection/" in member.name or "/sealed_audit/" in member.name:
                 raise ValueError("diagnostic attempted to cross the optimization boundary")
+            embryo = embryo_from_member_name(member.name)
             extracted = bundle.extractfile(member)
             if extracted is None:
                 raise ValueError(f"could not read archive member: {member.name}")
@@ -174,6 +187,9 @@ def evaluate_archive(
                 predicted = peak_coordinates(response, maximum_predictions=64)
                 distances = point_distances(predicted, truth)
                 accumulated.setdefault(name, []).extend(float(x) for x in distances)
+                embryo_accumulated.setdefault(name, {}).setdefault(embryo, []).extend(
+                    float(x) for x in distances
+                )
                 if not name.startswith("equal-z:"):
                     centers = np.clip(np.rint(truth), 0, 63).astype(np.int64)
                     standardized = standardized_response(response)
@@ -183,12 +199,23 @@ def evaluate_archive(
                     center_standardized.setdefault(name, []).extend(
                         float(value) for value in center_values
                     )
+                    embryo_center_standardized.setdefault(name, {}).setdefault(
+                        embryo, []
+                    ).extend(float(value) for value in center_values)
+            embryo_crops[embryo] += 1
             crops += 1
     rows = [
         {"response": name, **summarize(distances, crops=crops)}
         for name, distances in accumulated.items()
     ]
     for row in rows:
+        row["embryos"] = {
+            embryo: summarize(
+                embryo_accumulated[row["response"]][embryo],
+                crops=embryo_crops[embryo],
+            )
+            for embryo in sorted(embryo_crops)
+        }
         values = center_standardized.get(row["response"])
         if values is None:
             continue
@@ -204,6 +231,23 @@ def evaluate_archive(
                 ),
             }
         )
+        for embryo, embryo_values in embryo_center_standardized[
+            row["response"]
+        ].items():
+            embryo_array = np.asarray(embryo_values, dtype=np.float32)
+            row["embryos"][embryo].update(
+                {
+                    "annotated_center_standardized_p10": float(
+                        np.quantile(embryo_array, 0.1)
+                    ),
+                    "annotated_center_standardized_median": float(
+                        np.median(embryo_array)
+                    ),
+                    "annotated_centers_at_or_below_background_median_fraction": float(
+                        np.mean(embryo_array <= 0.0)
+                    ),
+                }
+            )
     rows.sort(
         key=lambda row: (
             -row["top64_recall_at_2_5_voxels"],

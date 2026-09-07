@@ -1358,3 +1358,31 @@ well as the synthetic generator.
   DeltaMic is permissively inspectable under `CC BY-SA 4.0`, but is an inverse
   mesh-rendering method with no released image-detector checkpoint. None enters
   training or candidate construction.
+- The hash-locked multiscale optimization diagnostic now reports each embryo
+  separately and passes all six focused tests. Across all 480 optimization
+  crops, the best fixed two-scale response recalls `0.200422` of 474 annotated
+  44b6 points versus `0.532713` of 3,118 annotated 6bba points. For the
+  safe-negative `avg5-avg13` response, annotated-center standardized median is
+  only `4.121372` in 44b6 versus `21.836735` in 6bba, while the fraction at or
+  below the background median stays low in both (`0.018987` and `0.029506`).
+  This identifies distractor rejection and embryo balance—not wholesale
+  foreground absence—as the current training problem. It supports the already
+  precommitted v19 policy that duplicates the 150 44b6 crops to 300 against 330
+  6bba crops and applies evidence-safe negative ranking; no held-out role was
+  opened and no new parameter was selected from selection feedback.
+- The 12:30 UTC authenticated Kaggle refresh exposed three recently updated
+  notebook entries, but all remain in the same public family. Current
+  `biohub-harmonic-fusion` (SHA-256 `6e1f25c4...e985bb`) and
+  `biohab-lineage-forge-adaptive-tracking` (`74c83cd0...9f35a`) have normalized
+  source overlap `0.996589`; their substantive difference is the secondary
+  link mode (`low_margin_consensus` versus `adaptive`). They overlap `948tta2`
+  at `0.893394` and `0.892775`. The new 0.934-title notebook
+  (`8853e3e1...b56aa0`) overlaps its author's 0.931 predecessor at `0.989019`
+  and `948tta2` at `0.943435`; its visible changes are another mixture of
+  detection, edge, bidirectional, gap, and division constants. All three
+  explicitly set `leaderboard_feedback_used_for_configuration=True`, and their
+  embedded terminal configurations retain stale values that contradict their
+  live top-cell settings. They therefore fail clean-selection, independence,
+  and reproducibility gates. Their D4 edge-feature TTA concept is already
+  independently implemented in the owned association bridge; no public code,
+  weight, prediction, threshold, or score enters the candidate.
