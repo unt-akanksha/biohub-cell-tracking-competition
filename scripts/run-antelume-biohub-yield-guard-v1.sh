@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This guard owns only the two Biohub trainers named below.  It never sends a
+# This guard owns only the Biohub workloads named below.  It never sends a
 # signal to an unrelated process: another GPU client merely causes the Biohub
-# trainers to yield until that client has released the GPU.
+# workload to yield until that client has released the GPU.
 state_root=/home/ubuntu/biohub-gpu-yield-guard-v1
 paused_file="$state_root/paused-pids"
 mode_file="$state_root/mode"
@@ -47,6 +47,11 @@ is_owned_biohub_gpu_pid() {
       [[ -r "/proc/$pid/cmdline" ]] || return 1
       command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
       [[ "$command" == *"train_synthetic_real_detector.py"* ]]
+      ;;
+    /home/ubuntu/biohub-nucverse3d-compatibility-v1/*)
+      [[ -r "/proc/$pid/cmdline" ]] || return 1
+      command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
+      [[ "$command" == *"/home/ubuntu/biohub-nucverse3d-compatibility-v1/input/screen_pretrained.py"* ]]
       ;;
     /home/ubuntu/biohub)
       [[ -r "/proc/$pid/cmdline" ]] || return 1
