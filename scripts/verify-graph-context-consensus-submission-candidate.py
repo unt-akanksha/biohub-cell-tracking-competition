@@ -102,6 +102,11 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         "deep_policy": policy["graph_context_policy"],
         "deep_member_count": len(members),
         "deep_model_sha256": hashes,
+        "policy_contract": policy.get("policy_contract"),
+        "policy_unit_audited": policy.get("policy_unit_audited", True),
+        "constituent_audit_gate_required": policy.get(
+            "constituent_audit_gate_required", True
+        ),
         "morphology_model_sha256": policy["morphology_model_sha256"],
         "expected_gpu_groups": 2 if len(members) >= 2 else 1,
     }

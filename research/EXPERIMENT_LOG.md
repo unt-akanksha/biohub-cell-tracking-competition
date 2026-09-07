@@ -1548,6 +1548,23 @@ well as the synthetic generator.
   policy explicitly records `constituent_audit_gate_required=false`,
   `policy_unit_audited=true`, the v2 equal-rank contract, and at least two
   frozen members. Hidden PID `36076` will run the sealed development decision
-  and package the private runtime after harvest; PID `19128` will launch the
-  two-T4 complete-candidate evaluation and submit only if all development and
-  promotion gates pass.
+  and package the private runtime after harvest. A briefly started graph-only
+  candidate waiter (PID `19128`) was stopped before it launched or created a
+  terminal because its inherited promotion gate uses an adjusted-edge proxy,
+  not the patched official metric. The graph component may instead enter only
+  the precommitted V30 composition, whose patched official score must beat the
+  independently promoted V28 detector candidate.
+- V30 is frozen before either V28 or graph-context v2 exposes candidate
+  evidence. It composes the unchanged 213.6M V28 equal-logit detector with the
+  unchanged graph-context ensemble and independent morphology voter; there is
+  no learned fusion weight, member search, absolute division threshold, or
+  leaderboard selection. Graph models load only after production detector
+  inference, park on CPU during the two-worker held-out detector pass, and
+  return to their fixed GPU partitions for complete-movie graph scoring. This
+  avoids contaminating the detector runtime or creating a predictable VRAM
+  collision. Promotion requires V28's independent patched-official promotion,
+  graph v2's audit plus sealed-development acceptance, a new patched-official
+  complete-movie score gain of at least `1e-6` over V28, and worst-movie
+  regression no worse than `0.001`. The V30 controller retains the global
+  Kaggle GPU mutex, two-T4/no-Internet contract, 12-hour ceiling, and eight-hour
+  reserve; only the external submitter can submit after every gate passes.
