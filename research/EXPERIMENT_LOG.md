@@ -592,3 +592,42 @@ well as the synthetic generator.
   remote run was deliberately not modified, so its model recipe and provenance
   remain byte-stable; candidate admission continues to use the hash-bound JSON
   evidence rather than this diagnostic exit-code file.
+- On 2026-09-07 the refreshed Antelume volume supplied definitive temporal
+  localizer evidence. Seed `41021` completed 5,376 steps but was
+  `rejected_at_selection`: the step-4,000 checkpoint passed synthetic global,
+  synthetic division-critical, and real global gates, improving real global
+  mean residual by `24.8201%`, but real division-critical mean gain was only
+  `17.2199%` and its gate remained false. No checkpoint was frozen, no sealed
+  audit was opened, and no submission was created. The partial seed `41029`
+  reached only step 500 and is not evidence. The temporal-localization lane is
+  therefore rejected rather than rescued or weakened after seeing results.
+- Five graph-context checkpoints survived the Antelume restart and match the
+  SHA-256 values in their selection terminals. All five independently passed
+  the precommitted selection gate at exactly 20,000 steps. Their selection APs
+  are `0.928614`, `0.876737`, `0.919652`, `0.870487`, and `0.888160`; their
+  true positives before the first false positive are 10, 10, 10, 11, and 9.
+  The recovery runner hardlinks those immutable members, validates their hashes,
+  and trains only the three missing seed/initialization combinations. It was
+  launched on the idle Antelume A10G as PID `3039` under Biohub-only yield guard
+  PID `2811`. The guard's deployed SHA-256 is
+  `2a1f2a1199e5da082e7ceb7b2934e7197f7567816a269bd71834d58726bbdd6d`;
+  it reads a command line only after a GPU PID's working directory is proven to
+  be one of the owned Biohub roots and never signals an unrelated process.
+- The repaired graph pipeline is autonomous and event-driven. The stale August
+  31 SSH-failure terminals were preserved with `.failed-20260831` suffixes, and
+  new harvester, development-evaluator, and candidate-launch controllers were
+  started with PIDs `48460`, `15000`, and `37860`. They may package and launch a
+  private two-T4 Kaggle candidate only after hash verification and positive
+  complete-movie development evidence; submission still requires the separate
+  promotion verifier.
+- A 2026-09-07 authenticated source refresh found that the new advertised
+  `0.942`–`0.948` notebooks remain one public family. Pairwise normalized-code
+  overlap is `0.91`–`0.99` for the central cluster, including `0.969447`
+  between the `0.948` TTA and `0.942` one-knob notebooks and `0.988364` between
+  Rishabh's detector-fusion variants. They are excluded as replicas or
+  configuration variants. Muhan's author-finetuned edge checkpoint plus D4
+  edge TTA is more modified but still uses the public inference architecture;
+  Hengck's three-level 3D U-Net point detector is independent but only a
+  one-movie demonstration. Static scanning found no registered exploit
+  signature, which is not a reproduced score claim. No public score, output, or
+  displayed prediction is used for selection.

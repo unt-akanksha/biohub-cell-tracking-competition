@@ -25,15 +25,31 @@ is_owned_biohub_gpu_pid() {
   local pid="$1"
   local cwd command
   [[ "$pid" =~ ^[0-9]+$ ]] || return 1
-  [[ -r "/proc/$pid/cmdline" ]] || return 1
   cwd=$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)
-  command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
   case "$cwd" in
     /home/ubuntu/biohub-temporal-localizer-v2/*)
-      [[ "$command" == *"train_synthetic_localizer.py"* ]]
+      [[ -r "/proc/$pid/cmdline" ]] || return 1
+      command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
+      [[ \
+        "$command" == *"train_synthetic_localizer.py"* \
+        || "$command" == *"score_real_development_probe.py"* \
+      ]]
       ;;
     /home/ubuntu/biohub-graph-context-recovery-v1/*)
-      [[ "$command" == *"train_graph_context_division_sweep.py"* ]]
+      [[ -r "/proc/$pid/cmdline" ]] || return 1
+      command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
+      [[ \
+        "$command" == *"train_graph_context_division_sweep.py"* \
+        || "$command" == *"score_graph_context_division_development_probe.py"* \
+      ]]
+      ;;
+    /home/ubuntu/biohub)
+      [[ -r "/proc/$pid/cmdline" ]] || return 1
+      command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
+      [[ \
+        "$command" == *"/home/ubuntu/biohub-graph-context-recovery-v1/input/train_graph_context_division_sweep.py"* \
+        || "$command" == *"score_graph_context_division_development_probe.py"* \
+      ]]
       ;;
     *)
       return 1
