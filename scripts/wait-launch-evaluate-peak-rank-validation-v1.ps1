@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -129,6 +129,26 @@ elseif ($Variant -eq "capacity-faint-confidence-v6") {
         dependency_terminals = @(
             ".biohub/automation/peak-rank-capacity-pu-validation-controller-v3.json",
             ".biohub/automation/peak-rank-faint-pu-validation-controller-v4.json"
+        )
+    }
+}
+elseif ($Variant -eq "capacity-faint-expanded-v8") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-cfe-ensemble-validation-runtime-v8"
+        kernel_ref = "indarkarhana/biohub-peak-rank-cfe-ensemble-validation-v8"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-cfe-ensemble-validation-runtime-v8.py"
+        kernel_builder = "scripts/build-peak-rank-cfe-ensemble-validation-kernel-v8.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-cfe-ensemble-validation-runtime-v8"
+        kernel_root = "kaggle/biohub-peak-rank-cfe-ensemble-validation-v8"
+        notebook_name = "biohub-peak-rank-cfe-ensemble-validation-v8.ipynb"
+        controller_id = "peak-rank-cfe-ensemble-validation-controller-v8"
+        output_slug = "peak-rank-cfe-ensemble-validation-v8"
+        parameter_count = 200933010
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-capacity-pu-validation-controller-v3.json",
+            ".biohub/automation/peak-rank-faint-pu-validation-controller-v4.json",
+            ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json"
         )
     }
 }

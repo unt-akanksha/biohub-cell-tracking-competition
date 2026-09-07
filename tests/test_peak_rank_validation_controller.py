@@ -30,6 +30,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"faint-pu-v4", "expanded-real-faint-v7", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
+        '"capacity-faint-expanded-v8", '
         '"logit-ensemble-v4")]' in source
     )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source
@@ -44,6 +45,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
     assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py" in source
     assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-kernel-v6.py" in source
+    assert "build-peak-rank-cfe-ensemble-validation-runtime-v8.py" in source
+    assert "build-peak-rank-cfe-ensemble-validation-kernel-v8.py" in source
     assert "parameter_count = 66977670" in source
     assert "build-peak-rank-logit-ensemble-validation-runtime.py" in source
     assert "build-peak-rank-logit-ensemble-validation-kernel.py" in source
@@ -72,6 +75,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-expanded-real-faint-validation-v7"' in source
     assert 'output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"' in source
     assert 'output_slug = "peak-rank-capacity-faint-confidence-validation-v6"' in source
+    assert 'output_slug = "peak-rank-cfe-ensemble-validation-v8"' in source
     assert 'output_slug = "peak-rank-logit-ensemble-validation-v4"' in source
     assert "$variantConfig.output_slug" in source
     assert (

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -123,6 +123,22 @@ elseif ($Variant -eq "capacity-faint-confidence-v6") {
         receipt_name = "peak-rank-capacity-faint-confidence-candidate-submission-receipt-v6.json"
         expected_run_id = "peak-rank-capacity-faint-confidence-tracking-candidate-v6"
         output_slug = "peak-rank-capacity-faint-confidence-tracking-candidate-v6"
+    }
+}
+elseif ($Variant -eq "capacity-faint-expanded-v8") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-cfe-ensemble-validation-runtime-v8"
+        kernel_ref = "indarkarhana/biohub-peak-rank-cfe-ensemble-tracking-candidate-v8"
+        validation_terminal = ".biohub/automation/peak-rank-cfe-ensemble-validation-controller-v8.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-cfe-ensemble-validation-runtime-v8"
+        builder = "scripts/build-peak-rank-cfe-ensemble-submission-candidate-v8.py"
+        candidate_root = "kaggle/biohub-peak-rank-cfe-ensemble-tracking-candidate-v8"
+        notebook_name = "biohub-peak-rank-cfe-ensemble-tracking-candidate-v8.ipynb"
+        controller_id = "peak-rank-cfe-ensemble-candidate-controller-v8"
+        promotion_name = "peak-rank-cfe-ensemble-candidate-promotion-v8.json"
+        receipt_name = "peak-rank-cfe-ensemble-candidate-submission-receipt-v8.json"
+        expected_run_id = "peak-rank-cfe-ensemble-tracking-candidate-v8"
+        output_slug = "peak-rank-cfe-ensemble-tracking-candidate-v8"
     }
 }
 else {
