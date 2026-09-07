@@ -1214,3 +1214,11 @@ well as the synthetic generator.
   ensemble rather than allowing it to conceal a failure. Its validation and
   candidate controllers are active, but cannot build or launch until both
   member validation receipts exist and are clean.
+- The 10:45 UTC authenticated public refresh found two new notebooks, both
+  copies of the already excluded public lineage. `test-biohub-run77` is
+  byte-identical to its `biohub-run77` parent and has `0.964657` source overlap
+  with `948tta2`; `biohub-lb942-fork-verbatim` is byte-identical to the
+  previously audited `biohub-lb-942` and has `0.903958` overlap with `948tta2`.
+  The discussion inventory supplies no new released, licensed, independently
+  validated model. No public weight, prediction, constant, or score enters the
+  v19/v20 decision.

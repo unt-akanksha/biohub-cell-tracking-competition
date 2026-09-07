@@ -259,6 +259,35 @@ Additional references:
 - <https://www.kaggle.com/code/rishabhr0y/biohub-sam4celltracking-submission>
 - <https://www.kaggle.com/code/mjcho2023/one-faint-cell-costs-two-errors>
 
+## September 7 incremental refresh at 10:45 UTC
+
+Two notebooks appeared after the 09:13 UTC inventory. Neither is an
+independent solution. `mtoshidesu/test-biohub-run77` is byte-for-byte identical
+to `rogerrogerroger3r/biohub-run77` (SHA-256
+`22d75fa685be276c19dfa7796bffc9b15526e83fbe974b33e62fdb4f8645b266`)
+and overlaps `948tta2` and the one-knob `0.942` notebook at `0.964657` and
+`0.966517` normalized-code Jaccard. `sjlee101/biohub-lb942-fork-verbatim` is
+byte-for-byte identical to the previously audited
+`analyticaobscura/biohub-lb-942` (SHA-256
+`e59373ea569332e4ce34a94d8579507970345a62d38b99fe900c2c438b4220fc`)
+and overlaps `948tta2` at `0.903958`. Their titles correctly signal copies;
+neither supplies a new weight family, clean complete-movie score, or useful
+ensemble diversity.
+
+The current discussion inventory adds no stronger reproducible lead. The most
+recent active thread still attributes gains across detection, association, and
+division rather than presenting a released independently validated model. The
+FOCUS-3D discussion and sparse-label/synthetic-data threads are already covered
+above; their useful hypotheses remain subject to the project's licensing,
+embryo-held-out, and patched-metric gates.
+
+Additional references:
+
+- <https://www.kaggle.com/code/mtoshidesu/test-biohub-run77>
+- <https://www.kaggle.com/code/sjlee101/biohub-lb942-fork-verbatim>
+- <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run77>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion>
+
 ## September 7 public-detector teacher screen
 
 Two CC0 Pilkwang detector checkpoints were downloaded by exact dataset file,
