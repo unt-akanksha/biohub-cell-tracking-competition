@@ -1474,6 +1474,14 @@ well as the synthetic generator.
   44b6 points was recovered. The gate therefore remains
   `selection_passed=false`; the immutable step-3,000 gate continues, while the
   queued embryo-balanced detectors remain the justified follow-up.
+- Depth-PU v2 completed its full 3,000-step, 23,166-second run and was
+  hash-verified locally from archive SHA-256 `4ec7f060...c2209c`. Its final
+  step regressed from the step-2,000 maximum to real recall `0.590909`, mean
+  distance `3.027830`, and p90 distance `6.0`, despite synthetic mean
+  AP/recall `0.986454/0.986646`. The final terminal is therefore a clean
+  `rejected_at_selection` with audit unopened and no checkpoint authorized for
+  Kaggle validation. The verified harvest acknowledgement releases the AWS
+  queue to the embryo-balanced V19 follow-up; V2 will not be revisited.
 - An optimization-only motion-supported local-SNR diagnostic (receipt SHA-256
   `fed17e3f...955d77f`) found no new detector member worth GPU time. The best
   motion-supported response raised hard-embryo 44b6 top-64 recall only from
