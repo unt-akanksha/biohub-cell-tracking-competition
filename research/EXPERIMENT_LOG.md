@@ -1181,3 +1181,36 @@ well as the synthetic generator.
   receives its own dual-T4 runtime projection, patched official score,
   per-movie regression, non-replica, and one-shot submission gates. No Kaggle
   job or submission was launched while defining this lane.
+- The original 38,381,478-parameter v1 run completed all 3,000 steps and was
+  rejected at its frozen real-selection gate, so neither sealed audit nor
+  Kaggle validation opened. Its last checkpoint improved real positive recall
+  from `0.688312` at step 2,000 to `0.811688` at step 3,000, while mean/p90
+  localization distance improved from `2.465151/6.0` to `1.898394/5.896`.
+  This misses the predeclared `0.85` recall and `3.5`-voxel p90 requirements,
+  but the late improvement supports a longer schedule for a stronger model.
+  Per-embryo analysis exposed the dominant imbalance: 44b6 had five annotated
+  points across three selection crops and only `0.20` weighted recall, versus
+  `0.832215` recall across 149 points for 6bba. The optimization inventory is
+  correspondingly uneven at 150 versus 330 crops.
+- V19 is a predeclared 83,802,246-parameter continuation of the v17
+  evidence-filtered safe-rank architecture. It duplicates each 44b6
+  optimization crop once, changing effective optimization sampling from
+  `150:330` to `300:330`; the 17-frame selection role and 14-frame sealed audit
+  remain unchanged and are not duplicated. The independent seed is `10346297`,
+  the schedule is 5,000 steps with checks every 1,000, and the AWS wall guard
+  is 72,000 seconds. This tests the two concrete v1 findings—embryo imbalance
+  and continued late learning—without using test, leaderboard, or held-out
+  labels to tune a threshold. Its hash-bound remote runner was deployed as PID
+  `204156`; it waits for the exact v17 archive to be locally verified and for
+  all GPU clients to exit before training, and removes only the acknowledged
+  v17 result copy. Harvest, private two-T4 validation, and one-shot candidate
+  controllers are active with 240-hour wait windows.
+- V20 is precommitted before any v17 or v19 result. It equally averages dense
+  logits and offsets from the independently seeded safe-rank and balanced
+  members, totaling 167,604,492 parameters. Both members must independently
+  pass sealed training audit and clean complete-movie validation; V20 then
+  receives its own private dual-T4 runtime, patched-official/per-movie,
+  non-replica, and one-shot submission gates. A rejected member closes the
+  ensemble rather than allowing it to conceal a failure. Its validation and
+  candidate controllers are active, but cannot build or launch until both
+  member validation receipts exist and are clean.

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -173,6 +173,22 @@ elseif ($Variant -eq "expanded-real-safe-rank-v17") {
         output_slug = "peak-rank-expanded-real-safe-rank-tracking-candidate-v17"
     }
 }
+elseif ($Variant -eq "expanded-real-balanced-v19") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-balanced-validation-runtime-v19"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-balanced-tracking-candidate-v19"
+        validation_terminal = ".biohub/automation/peak-rank-expanded-real-balanced-validation-controller-v19.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-balanced-validation-runtime-v19"
+        builder = "scripts/build-peak-rank-expanded-real-balanced-submission-candidate-v19.py"
+        candidate_root = "kaggle/biohub-peak-rank-expanded-real-balanced-tracking-candidate-v19"
+        notebook_name = "biohub-peak-rank-expanded-real-balanced-tracking-candidate-v19.ipynb"
+        controller_id = "peak-rank-expanded-real-balanced-candidate-controller-v19"
+        promotion_name = "peak-rank-expanded-real-balanced-candidate-promotion-v19.json"
+        receipt_name = "peak-rank-expanded-real-balanced-candidate-submission-receipt-v19.json"
+        expected_run_id = "peak-rank-expanded-real-balanced-tracking-candidate-v19"
+        output_slug = "peak-rank-expanded-real-balanced-tracking-candidate-v19"
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -299,6 +315,22 @@ elseif ($Variant -eq "multiscale-safe-pair-v18") {
         receipt_name = "peak-rank-multiscale-safe-pair-candidate-submission-receipt-v18.json"
         expected_run_id = "peak-rank-multiscale-safe-pair-tracking-candidate-v18"
         output_slug = "peak-rank-multiscale-safe-pair-tracking-candidate-v18"
+    }
+}
+elseif ($Variant -eq "safe-balanced-pair-v20") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-safe-balanced-pair-validation-runtime-v20"
+        kernel_ref = "indarkarhana/biohub-peak-rank-safe-balanced-pair-tracking-candidate-v20"
+        validation_terminal = ".biohub/automation/peak-rank-safe-balanced-pair-validation-controller-v20.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-safe-balanced-pair-validation-runtime-v20"
+        builder = "scripts/build-peak-rank-safe-balanced-pair-submission-candidate-v20.py"
+        candidate_root = "kaggle/biohub-peak-rank-safe-balanced-pair-tracking-candidate-v20"
+        notebook_name = "biohub-peak-rank-safe-balanced-pair-tracking-candidate-v20.ipynb"
+        controller_id = "peak-rank-safe-balanced-pair-candidate-controller-v20"
+        promotion_name = "peak-rank-safe-balanced-pair-candidate-promotion-v20.json"
+        receipt_name = "peak-rank-safe-balanced-pair-candidate-submission-receipt-v20.json"
+        expected_run_id = "peak-rank-safe-balanced-pair-tracking-candidate-v20"
+        output_slug = "peak-rank-safe-balanced-pair-tracking-candidate-v20"
     }
 }
 else {
