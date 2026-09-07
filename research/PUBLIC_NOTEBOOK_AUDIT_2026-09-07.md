@@ -399,3 +399,37 @@ candidate.
 
 - <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run79>
 - <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run80>
+
+## September 7 incremental refresh at 11:59 UTC
+
+The only notebook newer than the 11:21 inventory is
+`rogerrogerroger3r/biohub-run81`, with raw SHA-256
+`6cf32a9659e3fc16053ad5ea6a929d4e04a42b583e498638e507c0d554123953`.
+Its normalized source overlaps run79 at `0.998582`, run80 at `0.995743`,
+run77 at `0.994328`, and `948tta2` at `0.968133`. A direct normalized-line
+diff against run79 contains only the detector-threshold change from `0.965`
+to `0.96`; in other words, run81 combines run79's already represented D4
+association-feature averaging with run80's leaderboard-selected threshold.
+It is another member of the same public family, not an independent model or
+validation result. No source, weight, prediction, score, or constant enters a
+project candidate.
+
+The newest discussion comments add two zebrafish trajectory links but no
+eligible detector teacher. The Keller/SSBD project exposes seven quantitative
+nuclear-position datasets and no image datasets under `CC BY-NC-SA`; that is
+incompatible with the workspace's commercial-use licensing rule and cannot
+train the image detector. The Virtual Embryo Zoo zebrafish page exposes a
+128.4 MB Ultrack-derived tracking bundle but explicitly lists no external image
+data, and neither the page nor the downloadable-data listing supplies a clear
+data license. The related preprint is `CC BY-NC 4.0`, which does not establish
+a permissive license for the separate bundle. The resource is therefore
+excluded pending an explicit compatible data license and, regardless, cannot
+serve as image-conditioned detector pretraining. The remaining refreshed
+threads reiterate sparse-label overfitting, error decomposition, short-tracklet
+inspection, and instance-segmentation/Ultrack ideas already represented in the
+research backlog; none provides released weights plus clean held-out evidence.
+
+- <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run81>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/732103>
+- <https://ssbd.riken.jp/database/project/5-Keller-FishEmbryo/>
+- <https://virtual-embryo-zoo.sf.czbiohub.org/dataset/danior>

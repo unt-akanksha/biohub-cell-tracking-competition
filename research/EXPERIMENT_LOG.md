@@ -1307,3 +1307,19 @@ well as the synthetic generator.
   Both packaged and repository import paths now bind the authoritative
   Spotiflow-bridge implementation, and a direct import regression test protects
   the worker. The expanded explicit peak-rank suite passes `206` tests.
+- The `11:59Z` public refresh found one later notebook but no independent
+  candidate. `rogerrogerroger3r/biohub-run81` has raw SHA-256
+  `6cf32a96...4123953`, overlaps run79 at `0.998582`, and differs from it only
+  by run80's public-leaderboard-selected detector threshold (`0.965` to
+  `0.96`). It therefore stacks two already audited changes from the same public
+  lineage rather than contributing a new architecture, trained member, or
+  clean validation receipt; it remains excluded.
+- Two trajectory resources mentioned in new discussion comments also fail the
+  detector-ingress gate. Keller/SSBD contains quantitative tracks but no image
+  datasets and is licensed `CC BY-NC-SA`. The Virtual Embryo Zoo zebrafish
+  download is an Ultrack-derived tracking-only bundle with no linked image data
+  and no explicit permissive dataset license; its related preprint is
+  `CC BY-NC 4.0`. No archive was downloaded, and neither resource, coordinate,
+  track, prediction, threshold, or score enters training or selection. The
+  other refreshed discussion advice repeats already represented sparse-label,
+  error-decomposition, tracklet, and instance-segmentation directions.
