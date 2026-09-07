@@ -23,7 +23,7 @@ def test_deploy_waits_for_both_verified_inputs_and_yields_gpu() -> None:
 def test_deploy_is_hash_bound_and_does_not_submit() -> None:
     source = DEPLOY.read_text(encoding="utf-8")
     assert "6eb0f506204c1f30fbee3ad9859215826a07fe7c8d78a2be868371233fbd2ebe" in source
-    assert "7f8478c770b5d08f95b310f232714e8ba35a9ca2736d648e1c830ccdba48c5af" in source
+    assert "284a9675322bb89f58813d752c337660e42bf1ad8d754f4bce8ea694c955161e" in source
     assert "competition_submission_performed" in source
     assert "authorized_for_submission" in source
     assert "kaggle competitions submit" not in source
@@ -41,7 +41,7 @@ def test_harvester_verifies_and_acknowledges_exact_archive() -> None:
 def test_verifier_freezes_expanded_capacity_contract() -> None:
     source = VERIFY.read_text(encoding="utf-8")
     assert "66_977_670" in source
-    assert "2_000" in source
+    assert "3_000" in source
     assert "4_709_011" in source
     assert "synthetic256-expanded-real-pu-faint-temporal-peak-rank-v7" in source
     assert "capacity_conservative_pu_depth_temporal_fading_expanded_real" in source

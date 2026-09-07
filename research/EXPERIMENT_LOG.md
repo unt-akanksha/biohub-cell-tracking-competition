@@ -987,7 +987,10 @@ well as the synthetic generator.
 - The expanded-real v7 member is queued behind v4 on the shared A10G. It uses
   the independently authored 66,977,670-parameter capacity model, conservative
   sparse-positive loss, depth attenuation, temporal fading, seed `4709011`,
-  2,000 steps, and a 25,200-second wall guard. Deployment waits for local
+  3,000 steps, and a 36,000-second AWS wall guard. The longer schedule was
+  frozen before deployment after v1 measured about 7.6 steps/minute; validation
+  still checkpoints at steps 1,000, 2,000, and 3,000 so an earlier generalizing
+  state can win. Deployment waits for local
   hash-verified receipts for both the v4 archive and Kaggle CPU-expanded replay;
   the GPU yield guard pauses only named Biohub training if an unrelated GPU
   client appears. A distinct harvest, two-T4 clean validation, patched official

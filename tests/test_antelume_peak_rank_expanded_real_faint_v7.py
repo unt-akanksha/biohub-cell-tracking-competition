@@ -15,9 +15,9 @@ def test_expanded_real_runner_is_sequential_and_hash_bound() -> None:
     assert 'counts == {"optimization": 480, "selection": 17, "sealed_audit": 14}' in source
     assert "--real-frequency 2" in source
     assert "--widths 128,256,512,1024" in source
-    assert "--steps 2000" in source
+    assert "--steps 3000" in source
     assert "--seed 4709011" in source
-    assert "--max-wall-seconds 25200" in source
+    assert "--max-wall-seconds 36000" in source
 
 
 def test_expanded_real_runner_cleanup_cannot_touch_rsna() -> None:

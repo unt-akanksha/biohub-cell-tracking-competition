@@ -23,7 +23,7 @@ verify.__globals__.update(
             "synthetic256-expanded-real-pu-faint-temporal-peak-rank-v7"
         ),
         "EXPECTED_PARAMETER_COUNT": 66_977_670,
-        "EXPECTED_STEPS": 2_000,
+        "EXPECTED_STEPS": 3_000,
         "EXPECTED_SEED": 4_709_011,
         "EXPECTED_WIDTHS": [128, 256, 512, 1024],
         "EXPECTED_DEPTHS": [3, 3, 9, 3],

@@ -33,7 +33,7 @@ $guard = Join-Path $RepositoryRoot "scripts/run-antelume-biohub-yield-guard-v1.s
 $expectedHashes = @{
     trainer = "6eb0f506204c1f30fbee3ad9859215826a07fe7c8d78a2be868371233fbd2ebe"
     faint_trainer = "6ef8092a89c1c01c536c690da573a10b49ce99bf83d4d3ddd69403741f808b0c"
-    runner = "7f8478c770b5d08f95b310f232714e8ba35a9ca2736d648e1c830ccdba48c5af"
+    runner = "284a9675322bb89f58813d752c337660e42bf1ad8d754f4bce8ea694c955161e"
     guard = "3ff07adde246f118581503616d43a7c5587c2033d55ff0d93dae7dee6e641728"
 }
 $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)

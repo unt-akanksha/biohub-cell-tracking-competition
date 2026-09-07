@@ -122,7 +122,7 @@ PYTHONPATH="$input_root:$workspace" CUDA_VISIBLE_DEVICES=0 "$python_bin" "$train
   --real-root "$real_root" \
   --real-manifest-sha256 "$real_manifest_sha256" \
   --output-root "$result_root" \
-  --steps 2000 \
+  --steps 3000 \
   --validation-every 1000 \
   --log-every 50 \
   --learning-rate 2e-4 \
@@ -133,7 +133,7 @@ PYTHONPATH="$input_root:$workspace" CUDA_VISIBLE_DEVICES=0 "$python_bin" "$train
   --widths 128,256,512,1024 \
   --depths 3,3,9,3 \
   --seed 4709011 \
-  --max-wall-seconds 25200 \
+  --max-wall-seconds 36000 \
   >"$run_root/training.log" 2>&1
 status=$?
 set -e
