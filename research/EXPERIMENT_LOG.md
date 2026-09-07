@@ -1323,3 +1323,38 @@ well as the synthetic generator.
   track, prediction, threshold, or score enters training or selection. The
   other refreshed discussion advice repeats already represented sparse-label,
   error-decomposition, tracklet, and instance-segmentation directions.
+- The active depth-PU v2 detector reached its first precommitted selection gate
+  at step 1,000. Synthetic performance is already strong (mean AP `0.977921`,
+  mean recall `0.977982`, worst-movie AP `0.963479`), but real positive-only
+  recall is only `0.357143`, mean distance is `4.093636` voxels, and all five
+  annotated points in the three held-out 44b6 crops are missed. The gate is a
+  clean rejection (`selection_passed=false`, composite `1.414692`), not a
+  promotion candidate. A transient synthetic batch at step 1,050 produced loss
+  `135.9` and pre-clipping gradient norm `25057`; the following real batch at
+  step 1,100 returned to loss `0.062` and gradient norm `1.21`. The trainer
+  already clips gradients to `5.0`, so the precommitted step-2,000 and
+  step-3,000 gates remain useful and the live run is not interrupted. V19's
+  balanced 44b6 sampling and safe-negative ranking remain the next independent
+  test; no hyperparameter is selected from this held-out gate.
+- An independent CellSeg3D SwinUNETR candidate was bounded on two
+  optimization-only replay crops before any GPU allocation. The MIT-licensed
+  model revision `09f946501deea177be59a7a2c4dc1c7ba36f3c94` supplied a
+  `SwinUNetR_latest.tar.gz` archive of 270,715,626 bytes with SHA-256
+  `d9729940...728f21`; the extracted checkpoint has SHA-256
+  `9f73ae3a...821cea` and strict-loads into the documented 72,762,019-parameter
+  MONAI SwinUNETR. On the 44b6 three-point crop, top-64 local-max recall is
+  `0.0` and the best connected-component recall is `0.333333`. On the 6bba
+  six-point crop, top-64 recall is `0.166667`; the best component result is
+  `0.666667` only at threshold `0.6`, while component counts vary from 527 at
+  `0.3` to 20 at `0.4`, 37 at `0.6`, and 43 at `0.7`. Pooled top-64 recall is
+  `0.111111`, and the exploratory best component setting reaches only
+  `0.444444` with unstable cross-crop behavior. This misses the detector
+  compatibility floor, so CellSeg3D receives no AWS run and no selection,
+  audit, test, or leaderboard artifact is opened.
+- NISNet3D/NIS3D and deltaMic were also screened from primary sources without
+  consuming GPU. NISNet3D's released source is `CC BY-NC-SA` and its referenced
+  data archive exposes no compatible license; the separate NIS3D software is
+  MIT but its 3.3 GB dataset record does not declare a usable data license.
+  DeltaMic is permissively inspectable under `CC BY-SA 4.0`, but is an inverse
+  mesh-rendering method with no released image-detector checkpoint. None enters
+  training or candidate construction.

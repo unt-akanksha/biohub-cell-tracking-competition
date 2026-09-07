@@ -433,3 +433,43 @@ research backlog; none provides released weights plus clean held-out evidence.
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/732103>
 - <https://ssbd.riken.jp/database/project/5-Keller-FishEmbryo/>
 - <https://virtual-embryo-zoo.sf.czbiohub.org/dataset/danior>
+
+## Independent pretrained-model screen after refresh 5
+
+CellSeg3D is a genuinely independent architecture rather than another fork of
+the public competition lineage. Its repository and Hugging Face model card are
+MIT licensed. The exact Hugging Face revision
+`09f946501deea177be59a7a2c4dc1c7ba36f3c94` was pinned, and the single
+SwinUNETR archive matched its server-side LFS SHA-256
+`d9729940e5a0ad68dc1e019bb3d5129c49234dd6ca4e65ceec85c2da0e728f21`.
+The extracted checkpoint SHA-256 is
+`9f73ae3a2b73a5b0de279175162c7935e9832deed12ddb7c338e82fb3e821cea`;
+it strict-loads into the documented 72,762,019-parameter MONAI 1.4 SwinUNETR
+configuration (`in_channels=1`, `out_channels=1`, feature size 48, v2 blocks).
+
+The model nevertheless fails a bounded detector-ingress smoke test on two
+optimization-only replay crops. Pooled top-64 local-max recall is `1/9`, and
+the best exploratory connected-component threshold reaches only `4/9`, with
+component counts changing non-monotonically between embryos and thresholds.
+No selection, sealed audit, competition test, or leaderboard artifact was
+read, and no cloud GPU time was spent. It is excluded from the submission
+ensemble because a large but domain-mismatched segmentation model would weaken
+the detector rather than diversify it.
+
+Two other recent 3D microscopy families also fail before compute allocation.
+NISNet3D combines a modified 3D U-Net, vector field, and watershed, but its
+official release is non-commercial and the associated data record supplies no
+compatible weight/data license. The separate NIS3D repository licenses its
+software under MIT, while the linked 3.3 GB dataset record still has no declared
+license. DeltaMic's source is `CC BY-SA 4.0`, but it is inverse mesh rendering
+without a released detector checkpoint and is not an inference-ready member.
+No source, weight, prediction, public score, or threshold from these methods
+enters a candidate.
+
+- <https://github.com/AdaptiveMotorControlLab/CellSeg3D>
+- <https://huggingface.co/GuignardLab/CellSeg3D>
+- <https://github.com/lu-lab/NISNet3D>
+- <https://zenodo.org/records/7065147>
+- <https://github.com/lu-lab/NIS3D>
+- <https://zenodo.org/records/11456029>
+- <https://github.com/DecBayComp/deltaMic>
