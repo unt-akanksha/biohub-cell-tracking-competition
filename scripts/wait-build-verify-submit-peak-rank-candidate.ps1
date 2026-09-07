@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "temporal-min-local-snr-v23", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "xl-temporal-snr-pair-v24", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "temporal-min-local-snr-v23", "hard-mined-temporal-snr-v27", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "xl-temporal-snr-pair-v24", "xl-hard-mined-temporal-snr-pair-v28", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -221,6 +221,22 @@ elseif ($Variant -eq "temporal-min-local-snr-v23") {
         output_slug = "peak-rank-temporal-min-local-snr-tracking-candidate-v23"
     }
 }
+elseif ($Variant -eq "hard-mined-temporal-snr-v27") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-hard-mined-temporal-snr-validation-runtime-v27"
+        kernel_ref = "indarkarhana/biohub-peak-rank-hard-mined-temporal-snr-tracking-candidate-v27"
+        validation_terminal = ".biohub/automation/peak-rank-hard-mined-temporal-snr-validation-controller-v27.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-hard-mined-temporal-snr-validation-runtime-v27"
+        builder = "scripts/build-peak-rank-hard-mined-temporal-snr-submission-candidate-v27.py"
+        candidate_root = "kaggle/biohub-peak-rank-hard-mined-temporal-snr-tracking-candidate-v27"
+        notebook_name = "biohub-peak-rank-hard-mined-temporal-snr-tracking-candidate-v27.ipynb"
+        controller_id = "peak-rank-hard-mined-temporal-snr-candidate-controller-v27"
+        promotion_name = "peak-rank-hard-mined-temporal-snr-candidate-promotion-v27.json"
+        receipt_name = "peak-rank-hard-mined-temporal-snr-candidate-submission-receipt-v27.json"
+        expected_run_id = "peak-rank-hard-mined-temporal-snr-tracking-candidate-v27"
+        output_slug = "peak-rank-hard-mined-temporal-snr-tracking-candidate-v27"
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -395,6 +411,22 @@ elseif ($Variant -eq "xl-temporal-snr-pair-v24") {
         receipt_name = "peak-rank-xl-temporal-snr-pair-candidate-submission-receipt-v24.json"
         expected_run_id = "peak-rank-xl-temporal-snr-pair-tracking-candidate-v24"
         output_slug = "peak-rank-xl-temporal-snr-pair-tracking-candidate-v24"
+    }
+}
+elseif ($Variant -eq "xl-hard-mined-temporal-snr-pair-v28") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-xl-hard-mined-temporal-snr-pair-validation-runtime-v28"
+        kernel_ref = "indarkarhana/biohub-peak-rank-xl-hard-mined-temporal-snr-pair-tracking-candidate-v28"
+        validation_terminal = ".biohub/automation/peak-rank-xl-hard-mined-temporal-snr-pair-validation-controller-v28.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-xl-hard-mined-temporal-snr-pair-validation-runtime-v28"
+        builder = "scripts/build-peak-rank-xl-hard-mined-temporal-snr-pair-submission-candidate-v28.py"
+        candidate_root = "kaggle/biohub-peak-rank-xl-hard-mined-temporal-snr-pair-tracking-candidate-v28"
+        notebook_name = "biohub-peak-rank-xl-hard-mined-temporal-snr-pair-tracking-candidate-v28.ipynb"
+        controller_id = "peak-rank-xl-hard-mined-temporal-snr-pair-candidate-controller-v28"
+        promotion_name = "peak-rank-xl-hard-mined-temporal-snr-pair-candidate-promotion-v28.json"
+        receipt_name = "peak-rank-xl-hard-mined-temporal-snr-pair-candidate-submission-receipt-v28.json"
+        expected_run_id = "peak-rank-xl-hard-mined-temporal-snr-pair-tracking-candidate-v28"
+        output_slug = "peak-rank-xl-hard-mined-temporal-snr-pair-tracking-candidate-v28"
     }
 }
 else {

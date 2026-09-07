@@ -35,6 +35,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"expanded-real-balanced-v19", '
         '"expanded-real-xl-balanced-v21", '
         '"temporal-min-local-snr-v23", '
+        '"hard-mined-temporal-snr-v27", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"capacity-faint-expanded-v8", '
@@ -46,6 +47,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"safe-balanced-pair-v20", '
         '"balanced-xl-pair-v22", '
         '"xl-temporal-snr-pair-v24", '
+        '"xl-hard-mined-temporal-snr-pair-v28", '
         '"logit-ensemble-v4")]' in source
     )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source

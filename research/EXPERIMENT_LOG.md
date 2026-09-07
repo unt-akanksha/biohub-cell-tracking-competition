@@ -1488,3 +1488,34 @@ well as the synthetic generator.
   `c5948e48...e88e7f`; the receipt (`0cd4eb73...a2cc2b`) records old PID
   `270072`, new waiting PID `310374`, and the exact scale contract. V2 remained
   the sole GPU process throughout.
+- Public-teacher distillation remains closed: the two available TemporalUNet
+  teachers were trained on all 199 competition movies, including the project's
+  held-out stems, and their prior clean screen reached only `0.564935` and
+  `0.623377` top-64 localization recall. Restricting new pseudo-label reads to
+  optimization crops would not remove label information already encoded in
+  those weights, so they are not admitted as clean promotion evidence and no
+  additional GPU run was allocated to them.
+- V27 converts the remaining real-domain failure into a precommitted,
+  optimization-only hard-example sampler. The exact V23 temporal-minimum
+  local-SNR response ranks all 480 hash-pinned optimization crops without
+  opening selection, sealed audit, test, public predictions, or leaderboard
+  data. The 50 hardest crops in each embryo have mean per-crop top-64 recall of
+  `0.0` for 44b6 and `0.020527` for 6bba. Manifest SHA-256
+  `9967efa2...dca900` balances the effective stream to `495:495`: 105/45 44b6
+  crops receive multiplicity 3/4, while 165/165 6bba crops receive
+  multiplicity 1/2. This changes training exposure, not validation membership.
+- The 83,812,614-parameter V27 member retains V23's exact architecture,
+  safe-rank loss, local-SNR bands `(3,9)/(3,11)/(5,13)`, and complete synthetic
+  supervision, with independent seed `13679443`, 6,000 steps, real frequency
+  two, and an 86,400-second wall guard. Its hash-verified Antelume waiter is PID
+  `324895`, queued only after V23's locally verified harvest. At the deployment
+  check V2 PID `189098` remained the sole GPU client; V19, V21, V23, and V27
+  were sleeping in their declared order, and no unrelated process was touched.
+- V28 is precommitted before V27 exposes any held-out result as a fixed
+  213,561,260-parameter equal-logit/offset pair of the individually gated XL
+  V21 and hard-mined V27 members. V27 standalone and V28 pair controllers may
+  package, validate, and submit only after their immutable member evidence,
+  complete-movie selection and acceptance, patched official score,
+  worst-movie non-regression, runtime, non-replica, and live Kaggle quota gates
+  pass. Their Kaggle launch paths retain the mandatory eight-hour reserve and
+  two-GPU execution contract.
