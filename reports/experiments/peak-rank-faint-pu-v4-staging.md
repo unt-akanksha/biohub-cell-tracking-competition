@@ -55,6 +55,14 @@ Eighteen focused augmentation, loss, archive, sequential-runner, harvester,
 NucVerse, and coexistence-guard tests pass. Ruff is not installed in the host
 environment; Python compilation, Bash syntax, and PowerShell validation pass.
 
+The member also has distinct runtime, private dual-T4 validation-kernel, full
+tracking-candidate, patched-official scorer, and one-shot submission controller
+identities. The two long-lived local controllers wait on the verified v4
+harvest and cannot run or submit if training, sealed audit, complete-movie
+validation, runtime projection, or exact-score promotion rejects the member.
+Sixteen focused candidate-path/controller tests and both controller preflights
+pass.
+
 ## Promotion boundary
 
 This archive can authorize only the existing private clean-validation stage.

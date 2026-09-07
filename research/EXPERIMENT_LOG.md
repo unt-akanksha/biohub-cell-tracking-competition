@@ -956,3 +956,10 @@ well as the synthetic generator.
   a new NucVerse verifier checks archive paths, every member hash, phase-access
   flags, and the optimization-before-selection boundary. Eighteen focused
   tests plus Python/Bash/PowerShell syntax validation pass.
+- V4 now has a complete autonomous promotion lane rather than ending at a
+  checkpoint archive. Distinct builders package only its verified 67.0M
+  checkpoint, create an offline private two-T4 complete-movie validation
+  kernel, and build a separately named tracking candidate. The generic
+  candidate controller still requires the exact patched scorer gain and
+  per-movie regression gates before its one permitted submission. Both v4
+  controllers pass validation-only preflight and wait on the v4 harvest.
