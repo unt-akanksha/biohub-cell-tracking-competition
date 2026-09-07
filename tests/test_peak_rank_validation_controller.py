@@ -40,3 +40,14 @@ def test_controller_validates_outputs_without_submitting() -> None:
     assert "kaggle competitions submit" not in source
     assert "api.competition_submit" not in source
     assert "authorized_for_submission = $false" in source
+
+
+def test_variants_use_distinct_download_roots() -> None:
+    source = SCRIPT.read_text(encoding="utf-8")
+    assert 'output_slug = "peak-rank-validation-v1"' in source
+    assert 'output_slug = "peak-rank-depth-pu-validation-v2"' in source
+    assert "$variantConfig.output_slug" in source
+    assert (
+        '".biohub/cache/kernel-outputs/peak-rank-validation-v1-version$expectedVersion"'
+        not in source
+    )

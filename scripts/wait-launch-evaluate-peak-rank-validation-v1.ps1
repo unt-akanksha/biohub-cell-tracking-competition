@@ -25,6 +25,7 @@ $variantConfig = if ($Variant -eq "v1") {
         kernel_root = "kaggle/biohub-peak-rank-validation-v1"
         notebook_name = "biohub-peak-rank-validation-v1.ipynb"
         controller_id = "peak-rank-validation-controller-v1"
+        output_slug = "peak-rank-validation-v1"
     }
 }
 else {
@@ -38,6 +39,7 @@ else {
         kernel_root = "kaggle/biohub-peak-rank-depth-pu-validation-v2"
         notebook_name = "biohub-peak-rank-depth-pu-validation-v2.ipynb"
         controller_id = "peak-rank-depth-pu-validation-controller-v2"
+        output_slug = "peak-rank-depth-pu-validation-v2"
     }
 }
 $runtimeRef = $variantConfig.runtime_ref
@@ -259,7 +261,7 @@ try {
         Start-Sleep -Seconds $PollSeconds
     }
     if (-not $complete) { throw "Timed out waiting for validation completion" }
-    $downloadRoot = Join-Path $RepositoryRoot ".biohub/cache/kernel-outputs/peak-rank-validation-v1-version$expectedVersion"
+    $downloadRoot = Join-Path $RepositoryRoot (".biohub/cache/kernel-outputs/" + $variantConfig.output_slug + "-version" + $expectedVersion)
     if (Test-Path -LiteralPath $downloadRoot) {
         throw "Refusing to reuse a peak-ranking validation download"
     }
