@@ -1652,3 +1652,37 @@ well as the synthetic generator.
   active V3 run, with V31 also removed from automatic deployment. V21 and V27
   harvest/validation/candidate controllers remain active, and V28 can still
   form the fixed equal-logit ensemble if both members promote cleanly.
+- A second 2026-09-07 public-source sweep audited six recently updated kernels.
+  Five advertised high-score notebooks (`biohub-942tta`, `biohub-lb-942`,
+  `biohub-harmonic-fusion`, `biohub-948-sew20`, and the 0.934/proxy-0.9384
+  notebook) attach the same three Pilkwang artifacts and share 90.0%-99.6% of
+  their non-comment, non-config source-line sets. Their differences are almost
+  entirely gap, division, short-track, secondary-seed, and DeepCenter
+  thresholds; several sources explicitly describe leaderboard or in-notebook
+  post-processing sweeps. None contains execution outputs. They are classified
+  as public harmonic-stack derivatives and provide neither a new model family
+  nor clean promotion evidence. Title scores and tuned bundles remain excluded
+  from selection.
+- `hengck23/cell-point-detector` is genuinely different but not submission
+  ready. It demonstrates a simple three-level residual 3D U-Net
+  `(64,128,256)` trained from dense Focus3D-derived centroids, with 6-second
+  single-T4 frame-volume inference. The published checkpoint/data package has
+  license `unknown`, Internet is enabled, the notebook tests only detection,
+  and it emits no submission or patched-official result. Its displayed sparse
+  node recall is approximately 0.99-1.00, but predictions are 1.05x-2.36x the
+  provided estimated node count (still up to 2.02x at threshold 0.5), so
+  precision is unproven. The accompanying linker study reports recall only,
+  excludes division, and supplies neither edge precision nor official score.
+  The discussion's proposed estimated-count density head is explicitly a
+  metric-hack lane and is rejected.
+- The clean transferable hypothesis from discussion 738217 is dense external
+  pretraining followed by a physical-coordinate residual/domain-calibration
+  head and a SuperGlue-style alternating within-frame/cross-frame linker.
+  Public ZebraHub use is allowed according to discussion 734330, but no
+  Focus3D checkpoint can enter this project until its dataset/model license and
+  train/test provenance are documented. V21/V27 already implement the safer
+  parts of that detector idea at greater capacity: temporal 3D features,
+  subvoxel offsets, positive-unlabeled handling, embryo balancing, and
+  hard-example ranking without estimated-count inference. The new lane is
+  therefore deferred until those two clean candidates expose evidence; it does
+  not justify extending the paid queue today.
