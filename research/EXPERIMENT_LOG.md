@@ -680,3 +680,13 @@ well as the synthetic generator.
   become a full tracking candidate without copying a public prediction or
   retraining/tuning the association model on leaderboard feedback. Fifteen
   focused bridge, inference, and identity-preservation tests pass.
+- The recovered eight-member graph-context sweep completed on 2026-09-07 and
+  was rejected at its sealed audit. Its equal-rank selection ensemble reached
+  AP `0.951062` with 11 true positives before the first false positive, but the
+  precommitted strongest-selection deployment member (`seed-813121-init-2`)
+  failed audit. Two different members passed audit, but selecting either after
+  observing audit labels would violate the frozen policy; consequently
+  `ensemble_eligible=false`, no final development probe was opened, and no
+  submission was authorized. The queued peak-ranking trainer then started on
+  the Antelume A10G and held about 6.9 GB at its initial data-loading phase;
+  the Biohub-only yield guard remained in `biohub-allowed` mode.
