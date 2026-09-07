@@ -70,6 +70,7 @@ SUPPORTED_MODEL_FAMILIES = {
     DEFAULT_MODEL_FAMILY,
     "blob_aware_temporal_peak_rank_v11",
     "blob_global_context_temporal_peak_rank_v13",
+    "multiscale_blob_global_context_temporal_peak_rank_v15",
 }
 
 
@@ -265,6 +266,17 @@ def _load_single_member(
             )
 
         model_class = BlobGlobalTemporalPeakRankDetector
+    elif model_family == "multiscale_blob_global_context_temporal_peak_rank_v15":
+        try:
+            from model_multiscale import (
+                MultiscaleBlobGlobalTemporalPeakRankDetector,
+            )
+        except ModuleNotFoundError:
+            from research.peak_rank_detection.model_multiscale import (
+                MultiscaleBlobGlobalTemporalPeakRankDetector,
+            )
+
+        model_class = MultiscaleBlobGlobalTemporalPeakRankDetector
     else:
         raise ValueError(f"unsupported detector model family: {model_family}")
     model = model_class(

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -142,6 +142,22 @@ elseif ($Variant -eq "expanded-real-global-v13") {
         dependency_terminals = @()
     }
 }
+elseif ($Variant -eq "expanded-real-multiscale-v15") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-multiscale-validation-runtime-v15"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-multiscale-validation-v15"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-expanded-real-multiscale-v15/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-expanded-real-multiscale-validation-runtime-v15.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-real-multiscale-validation-kernel-v15.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-multiscale-validation-runtime-v15"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-real-multiscale-validation-v15"
+        notebook_name = "biohub-peak-rank-expanded-real-multiscale-validation-v15.ipynb"
+        controller_id = "peak-rank-expanded-real-multiscale-validation-controller-v15"
+        output_slug = "peak-rank-expanded-real-multiscale-validation-v15"
+        parameter_count = 83802246
+        dependency_terminals = @()
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -255,6 +271,26 @@ elseif ($Variant -eq "blob-global-ensemble-v14") {
         dependency_terminals = @(
             ".biohub/automation/peak-rank-expanded-real-blob-validation-controller-v11.json",
             ".biohub/automation/peak-rank-expanded-real-global-validation-controller-v13.json"
+        )
+    }
+}
+elseif ($Variant -eq "multiscale-triad-v16") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-multiscale-triad-validation-runtime-v16"
+        kernel_ref = "indarkarhana/biohub-peak-rank-multiscale-triad-validation-v16"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-multiscale-triad-validation-runtime-v16.py"
+        kernel_builder = "scripts/build-peak-rank-multiscale-triad-validation-kernel-v16.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-multiscale-triad-validation-runtime-v16"
+        kernel_root = "kaggle/biohub-peak-rank-multiscale-triad-validation-v16"
+        notebook_name = "biohub-peak-rank-multiscale-triad-validation-v16.ipynb"
+        controller_id = "peak-rank-multiscale-triad-validation-controller-v16"
+        output_slug = "peak-rank-multiscale-triad-validation-v16"
+        parameter_count = 234575250
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-expanded-real-blob-validation-controller-v11.json",
+            ".biohub/automation/peak-rank-expanded-real-global-validation-controller-v13.json",
+            ".biohub/automation/peak-rank-expanded-real-multiscale-validation-controller-v15.json"
         )
     }
 }

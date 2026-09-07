@@ -315,3 +315,20 @@ diagnostic and does not alter any competition-selected threshold.
 Additional reference:
 
 - <https://github.com/matt-ceran/biohub-cell-tracking>
+
+## September 7 authenticated refresh 4
+
+An authenticated `dateRun` listing at approximately `2026-09-07T09:13Z`
+remained unchanged. The newest competition notebook was still
+`muelsyse111/biohub-zarr-metadata-and-memory-planner`, last run at `07:28:42Z`;
+all model-bearing entries in the first page were already source/output-audited
+above. No newly executed clean model, released checkpoint, complete-movie
+patched-score receipt, or distinct submission appeared. Consequently no public
+source, weight, prediction, parameter, leaderboard-selected constant, or score
+entered the project pipeline from this refresh.
+
+The next detector change instead comes from a project-authored diagnostic on
+the hash-pinned competition-train optimization role. It compared fixed generic
+scale-space responses without reading selection, sealed-audit, test, or
+leaderboard data. This is recorded in the experiment log and is not treated as
+public leaderboard evidence.

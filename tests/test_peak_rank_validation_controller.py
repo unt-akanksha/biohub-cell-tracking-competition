@@ -31,12 +31,14 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"expanded-real-local-shape-v9", '
         '"expanded-real-blob-v11", '
         '"expanded-real-global-v13", '
+        '"expanded-real-multiscale-v15", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"capacity-faint-expanded-v8", '
         '"expanded-local-shape-ensemble-v10", '
         '"expanded-blob-ensemble-v12", '
         '"blob-global-ensemble-v14", '
+        '"multiscale-triad-v16", '
         '"logit-ensemble-v4")]' in source
     )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source
@@ -53,6 +55,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-expanded-real-blob-validation-kernel-v11.py" in source
     assert "build-peak-rank-expanded-real-global-validation-runtime-v13.py" in source
     assert "build-peak-rank-expanded-real-global-validation-kernel-v13.py" in source
+    assert "build-peak-rank-expanded-real-multiscale-validation-runtime-v15.py" in source
+    assert "build-peak-rank-expanded-real-multiscale-validation-kernel-v15.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
     assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py" in source
@@ -65,6 +69,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-expanded-blob-ensemble-validation-kernel-v12.py" in source
     assert "build-peak-rank-blob-global-ensemble-validation-runtime-v14.py" in source
     assert "build-peak-rank-blob-global-ensemble-validation-kernel-v14.py" in source
+    assert "build-peak-rank-multiscale-triad-validation-runtime-v16.py" in source
+    assert "build-peak-rank-multiscale-triad-validation-kernel-v16.py" in source
     assert "parameter_count = 66977670" in source
     assert "build-peak-rank-logit-ensemble-validation-runtime.py" in source
     assert "build-peak-rank-logit-ensemble-validation-kernel.py" in source

@@ -1107,3 +1107,44 @@ well as the synthetic generator.
   Jaccard, no released checkpoint, failed division policies, and no repository
   license. It supplies corroborating generic blob-detection evidence only; no
   code, weight, prediction, constant, or score is admitted.
+- A fourth authenticated September 7 notebook refresh at approximately
+  `09:13Z` was unchanged: the newest competition notebook remained the
+  metadata-only Zarr memory planner from `07:28Z`. No new runnable model,
+  checkpoint, clean complete-movie validation, or submission artifact was
+  available, so the public audit changed no experiment or threshold.
+- The active v1 AWS run reached step 2,600 with the A10G at 100% utilization.
+  Its latest completed gate remains step 2,000: synthetic AP/recall are
+  `0.985361/0.985526`, but sparse-real positive recall is only `0.688312`
+  with mean/p90 distances `2.465151/6.0`. This gap rejects additional generic
+  convolutional depth as the sole next change and prioritizes real-domain
+  scale and false-peak handling. The read-only inspection did not signal,
+  pause, or modify any GPU client.
+- A reproducible diagnostic scanned all 480 expanded-real optimization crops
+  (3,592 annotated center-frame points) directly from the SHA-256-pinned
+  competition-train replay archive. It did not open selection, sealed audit,
+  competition test, or leaderboard artifacts. With the same top-64 local-peak
+  contract, the current `avg3-avg9` response recalled `0.438474`; the wider
+  `avg5-avg13` response reached `0.484410`, a `+0.045935` absolute gain. A
+  predeclared equal-standardized `avg5-avg13 + avg7-avg15` fusion reached
+  `0.488864`. Absolute numbers are diagnostic rather than promotion evidence,
+  but they establish useful scale complementarity on the optimization role.
+- V15 converts that training-role evidence into an independently trained
+  83,802,246-parameter detector. It retains v13's two global bottleneck blocks
+  and expanded-real/faint/local-shape contract, while its stem receives
+  current-frame and temporal-mean Difference-of-Averages channels at fixed
+  `(3,9)`, `(5,13)`, and `(7,15)` scales. The box filters are exactly separable
+  to avoid the cubic cost of 13- and 15-voxel kernels. Seed `8124071`, 3,000
+  steps, real frequency two, and a 50,400-second AWS wall guard were frozen
+  before deployment. The hash-bound remote runner is PID `180979`, waits for
+  verified v13 harvest, yields to unrelated GPU clients, and contains no RSNA
+  path or process operation.
+- V15 has an autonomous hash-verified harvest, private dual-T4 complete-movie
+  validation, patched-official metric/per-movie promotion, non-replica audit,
+  and conditional one-shot candidate chain. Kaggle launches share the existing
+  account-wide mutex and live 8-hour reserve gate. No submission has been made.
+- V16 is a precommitted 234,575,250-parameter equal-logit/offset ensemble of
+  v11, v13, and v15. It can materialize only if all three members independently
+  pass sealed training audit and separate clean complete-movie validation.
+  It then receives its own dual-T4 runtime projection, patched exact metric,
+  per-movie regression, non-replica, and one-shot submission gates; failure or
+  runtime excess of any member or the triad closes the lane.

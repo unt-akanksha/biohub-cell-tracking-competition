@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -141,6 +141,22 @@ elseif ($Variant -eq "expanded-real-global-v13") {
         output_slug = "peak-rank-expanded-real-global-tracking-candidate-v13"
     }
 }
+elseif ($Variant -eq "expanded-real-multiscale-v15") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-multiscale-validation-runtime-v15"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-multiscale-tracking-candidate-v15"
+        validation_terminal = ".biohub/automation/peak-rank-expanded-real-multiscale-validation-controller-v15.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-multiscale-validation-runtime-v15"
+        builder = "scripts/build-peak-rank-expanded-real-multiscale-submission-candidate-v15.py"
+        candidate_root = "kaggle/biohub-peak-rank-expanded-real-multiscale-tracking-candidate-v15"
+        notebook_name = "biohub-peak-rank-expanded-real-multiscale-tracking-candidate-v15.ipynb"
+        controller_id = "peak-rank-expanded-real-multiscale-candidate-controller-v15"
+        promotion_name = "peak-rank-expanded-real-multiscale-candidate-promotion-v15.json"
+        receipt_name = "peak-rank-expanded-real-multiscale-candidate-submission-receipt-v15.json"
+        expected_run_id = "peak-rank-expanded-real-multiscale-tracking-candidate-v15"
+        output_slug = "peak-rank-expanded-real-multiscale-tracking-candidate-v15"
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -235,6 +251,22 @@ elseif ($Variant -eq "blob-global-ensemble-v14") {
         receipt_name = "peak-rank-blob-global-ensemble-candidate-submission-receipt-v14.json"
         expected_run_id = "peak-rank-blob-global-ensemble-tracking-candidate-v14"
         output_slug = "peak-rank-blob-global-ensemble-tracking-candidate-v14"
+    }
+}
+elseif ($Variant -eq "multiscale-triad-v16") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-multiscale-triad-validation-runtime-v16"
+        kernel_ref = "indarkarhana/biohub-peak-rank-multiscale-triad-tracking-candidate-v16"
+        validation_terminal = ".biohub/automation/peak-rank-multiscale-triad-validation-controller-v16.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-multiscale-triad-validation-runtime-v16"
+        builder = "scripts/build-peak-rank-multiscale-triad-submission-candidate-v16.py"
+        candidate_root = "kaggle/biohub-peak-rank-multiscale-triad-tracking-candidate-v16"
+        notebook_name = "biohub-peak-rank-multiscale-triad-tracking-candidate-v16.ipynb"
+        controller_id = "peak-rank-multiscale-triad-candidate-controller-v16"
+        promotion_name = "peak-rank-multiscale-triad-candidate-promotion-v16.json"
+        receipt_name = "peak-rank-multiscale-triad-candidate-submission-receipt-v16.json"
+        expected_run_id = "peak-rank-multiscale-triad-tracking-candidate-v16"
+        output_slug = "peak-rank-multiscale-triad-tracking-candidate-v16"
     }
 }
 else {
