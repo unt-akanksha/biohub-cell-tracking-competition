@@ -1430,3 +1430,14 @@ well as the synthetic generator.
   weight. The generic ensemble packager's architecture check was also repaired
   to recognize the already declared clean descriptive architecture strings for
   v19/v21/v23 while continuing to reject strings marked public.
+- The local Kaggle launch queue contained 41 obsolete or dominated validation
+  and candidate controllers, including duplicate v2 and superseded ensemble
+  lanes. They had no terminal evidence and had not launched kernels; those
+  controller processes were stopped without changing any training artifact or
+  remote job. The live queue now retains v2, v19, v21 validation, v23
+  validation, and the v24 validation/candidate path. Single-model v21/v23 and
+  dominated v22 candidate launches are intentionally suppressed to preserve
+  quota for the stronger v24 pair. Both launch controllers now release their
+  account-wide GPU mutex and wait for quota refresh when the 12-hour declared
+  budget would cross the 8-hour reserve, instead of permanently skipping a
+  scientifically eligible candidate.

@@ -67,6 +67,8 @@ def test_controller_is_two_gpu_private_and_fail_closed() -> None:
         '"Global\\BiohubKaggleGpuSessionV1"',
         "$gpuReserveHours = 8.0",
         "$declaredWorstCaseGpuHours = 12.0",
+        "gpu_gate_waiting_for_refresh",
+        "$script:gpuMutex.ReleaseMutex()",
         'Write-Terminal "skipped_for_gpu_reserve"',
     ):
         assert required in source

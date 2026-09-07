@@ -502,24 +502,39 @@ function Enter-KaggleGpuGate {
         $false, "Global\BiohubKaggleGpuSessionV1"
     )
     while ([DateTimeOffset]::UtcNow -lt $deadline) {
+        $acquired = $false
         try {
             if ($script:gpuMutex.WaitOne(0)) {
                 $script:gpuMutexAcquired = $true
-                break
+                $acquired = $true
             }
         }
         catch [System.Threading.AbandonedMutexException] {
             $script:gpuMutexAcquired = $true
-            break
+            $acquired = $true
         }
+        if (-not $acquired) {
+            Start-Sleep -Seconds $PollSeconds
+            continue
+        }
+        try {
+            $remaining = Get-KaggleGpuRemainingHours
+        }
+        catch {
+            $script:gpuMutex.ReleaseMutex()
+            $script:gpuMutexAcquired = $false
+            throw
+        }
+        Write-Log "gpu_gate remaining_hours=$remaining declared_worst_case_hours=$declaredWorstCaseGpuHours reserve_hours=$gpuReserveHours"
+        if ($remaining - $declaredWorstCaseGpuHours -ge $gpuReserveHours) {
+            return $remaining
+        }
+        Write-Log "gpu_gate_waiting_for_refresh remaining_hours=$remaining"
+        $script:gpuMutex.ReleaseMutex()
+        $script:gpuMutexAcquired = $false
         Start-Sleep -Seconds $PollSeconds
     }
-    if (-not $script:gpuMutexAcquired) {
-        throw "Timed out waiting for the account-wide Kaggle GPU launch gate"
-    }
-    $remaining = Get-KaggleGpuRemainingHours
-    Write-Log "gpu_gate remaining_hours=$remaining declared_worst_case_hours=$declaredWorstCaseGpuHours reserve_hours=$gpuReserveHours"
-    return $remaining
+    throw "Timed out waiting for Kaggle GPU capacity above the protected reserve"
 }
 
 New-Item -ItemType Directory -Path $automationRoot -Force | Out-Null

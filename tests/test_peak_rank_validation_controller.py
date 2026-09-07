@@ -129,6 +129,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert '"Global\\BiohubKaggleGpuSessionV1"' in source
     assert "$gpuReserveHours = 8.0" in source
     assert "$declaredWorstCaseGpuHours = 12.0" in source
+    assert "gpu_gate_waiting_for_refresh" in source
+    assert "$script:gpuMutex.ReleaseMutex()" in source
     assert 'Write-Terminal "skipped_for_gpu_reserve"' in source
 
 
