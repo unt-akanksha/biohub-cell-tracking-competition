@@ -672,3 +672,11 @@ well as the synthetic generator.
   exploit signature, but that is not proof of clean evaluation. They remain
   excluded from candidate construction and no displayed score or output is
   treated as experiment evidence.
+- The peak-ranking detector now has a tested association bridge ready for a
+  positive validation result. It performs complete-movie temporal inference,
+  fixes one density threshold from organizer-provided node-count metadata,
+  substitutes only the official linker's detector callback, and restores the
+  detector's sub-voxel coordinates afterward. Thus an accepted checkpoint can
+  become a full tracking candidate without copying a public prediction or
+  retraining/tuning the association model on leaderboard feedback. Fifteen
+  focused bridge, inference, and identity-preservation tests pass.
