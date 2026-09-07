@@ -22,6 +22,7 @@ def test_verifier_requires_clean_gain_non_regression_and_non_replica() -> None:
         "worker_count",
         "clean_validation_promotion_passed",
         "eligible_for_submission",
+        "--expected-run-id",
     ):
         assert required in source
 
@@ -35,5 +36,6 @@ def test_submitter_is_one_shot_and_requires_execute() -> None:
         "submission_intent_recorded",
         "--execute",
         "kaggle\", \"competitions\", \"submit",
+        "--expected-run-id",
     ):
         assert required in source

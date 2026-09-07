@@ -2,6 +2,8 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
+    [ValidateSet("v1", "depth-pu-v2")]
+    [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
 
@@ -10,33 +12,66 @@ if ($MaximumWaitHours -le 0 -or $PollSeconds -lt 60) {
     throw "Invalid peak-ranking candidate wait bounds"
 }
 Set-Location -LiteralPath $RepositoryRoot
-$runtimeRef = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
-$kernelRef = "indarkarhana/biohub-peak-rank-tracking-candidate-v1"
 $competitionRef = "biohub-cell-tracking-during-development"
-$validationTerminal = Join-Path $RepositoryRoot ".biohub/automation/peak-rank-validation-controller-v1.json"
-$runtimeRoot = Join-Path $RepositoryRoot ".biohub/staging/biohub-peak-rank-validation-runtime-v1"
+$variantConfig = if ($Variant -eq "v1") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
+        kernel_ref = "indarkarhana/biohub-peak-rank-tracking-candidate-v1"
+        validation_terminal = ".biohub/automation/peak-rank-validation-controller-v1.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-validation-runtime-v1"
+        builder = "scripts/build-peak-rank-submission-candidate.py"
+        candidate_root = "kaggle/biohub-peak-rank-tracking-candidate-v1"
+        notebook_name = "biohub-peak-rank-tracking-candidate-v1.ipynb"
+        controller_id = "peak-rank-candidate-controller-v1"
+        promotion_name = "peak-rank-candidate-promotion-v1.json"
+        receipt_name = "peak-rank-candidate-submission-receipt-v1.json"
+        expected_run_id = "peak-rank-tracking-candidate-v1"
+        output_slug = "peak-rank-tracking-candidate-v1"
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-runtime-v2"
+        kernel_ref = "indarkarhana/biohub-peak-rank-depth-pu-tracking-candidate-v2"
+        validation_terminal = ".biohub/automation/peak-rank-depth-pu-validation-controller-v2.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-depth-pu-validation-runtime-v2"
+        builder = "scripts/build-peak-rank-depth-pu-submission-candidate.py"
+        candidate_root = "kaggle/biohub-peak-rank-depth-pu-tracking-candidate-v2"
+        notebook_name = "biohub-peak-rank-depth-pu-tracking-candidate-v2.ipynb"
+        controller_id = "peak-rank-depth-pu-candidate-controller-v2"
+        promotion_name = "peak-rank-depth-pu-candidate-promotion-v2.json"
+        receipt_name = "peak-rank-depth-pu-candidate-submission-receipt-v2.json"
+        expected_run_id = "peak-rank-depth-pu-tracking-candidate-v2"
+        output_slug = "peak-rank-depth-pu-tracking-candidate-v2"
+    }
+}
+$runtimeRef = $variantConfig.runtime_ref
+$kernelRef = $variantConfig.kernel_ref
+$validationTerminal = Join-Path $RepositoryRoot $variantConfig.validation_terminal
+$runtimeRoot = Join-Path $RepositoryRoot $variantConfig.runtime_root
 $runtimeManifest = Join-Path $runtimeRoot "SOURCE_MANIFEST.json"
 $promoter = Join-Path $RepositoryRoot "scripts/promote-peak-rank-validation-runtime.py"
-$builder = Join-Path $RepositoryRoot "scripts/build-peak-rank-submission-candidate.py"
+$builder = Join-Path $RepositoryRoot $variantConfig.builder
 $verifier = Join-Path $RepositoryRoot "scripts/verify-peak-rank-submission-candidate.py"
 $submitter = Join-Path $RepositoryRoot "scripts/submit-peak-rank-candidate.py"
 $kernelState = Join-Path $RepositoryRoot "scripts/get-kaggle-kernel-state.py"
 $evaluationPython = Join-Path $RepositoryRoot ".biohub/evaluation-venv/Scripts/python.exe"
-$candidateRoot = Join-Path $RepositoryRoot "kaggle/biohub-peak-rank-tracking-candidate-v1"
+$candidateRoot = Join-Path $RepositoryRoot $variantConfig.candidate_root
 $metadataPath = Join-Path $candidateRoot "kernel-metadata.json"
-$notebookPath = Join-Path $candidateRoot "biohub-peak-rank-tracking-candidate-v1.ipynb"
+$notebookPath = Join-Path $candidateRoot $variantConfig.notebook_name
 $baselineValidator = Join-Path $RepositoryRoot ".biohub/cache/public-frontier-outputs-20260829/biohub-ct-0940-ema/validator_results.csv"
 $automationRoot = Join-Path $RepositoryRoot ".biohub/automation"
-$terminalPath = Join-Path $automationRoot "peak-rank-candidate-controller-v1.json"
-$logPath = Join-Path $automationRoot "peak-rank-candidate-controller-v1.log"
-$promotionPath = Join-Path $automationRoot "peak-rank-candidate-promotion-v1.json"
-$receiptPath = Join-Path $automationRoot "peak-rank-candidate-submission-receipt-v1.json"
+$terminalPath = Join-Path $automationRoot ($variantConfig.controller_id + ".json")
+$logPath = Join-Path $automationRoot ($variantConfig.controller_id + ".log")
+$promotionPath = Join-Path $automationRoot $variantConfig.promotion_name
+$receiptPath = Join-Path $automationRoot $variantConfig.receipt_name
 $requiredOutputPattern = '(^|.*/)(candidate_evidence\.json|run_stats\.csv|submission\.csv|validator_results\.csv|launcher_terminal\.json|worker-[01]\.json)$'
 
 function Write-Terminal([string]$Status, [hashtable]$Evidence) {
     $payload = @{
         schema_version = 1
-        run_id = "peak-rank-candidate-controller-v1"
+        run_id = $variantConfig.controller_id
+        variant = $Variant
         status = $Status
         runtime_ref = $runtimeRef
         kernel_ref = $kernelRef
@@ -128,7 +163,9 @@ try {
     if ($validation.competition_submission_performed -ne $false) {
         throw "Peak-ranking validation crossed the submission boundary"
     }
-    $native = Invoke-NativeOutput { & $evaluationPython $promoter }
+    $native = Invoke-NativeOutput {
+        & $evaluationPython $promoter --controller $validationTerminal --runtime $runtimeRoot
+    }
     if ($native.ExitCode -ne 0) { throw "Runtime promotion binding failed: $($native.Output)" }
     $manifest = Get-Content -Raw -LiteralPath $runtimeManifest | ConvertFrom-Json
     if (
@@ -139,7 +176,7 @@ try {
     }
     $manifestHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeManifest).Hash.ToLowerInvariant()
     $native = Invoke-NativeOutput {
-        & kaggle datasets version -p $runtimeRoot -m "Clean-promoted peak-rank detector and production bridge v1"
+        & kaggle datasets version -p $runtimeRoot -m "Clean-promoted peak-rank detector and production bridge $Variant"
     }
     if ($native.ExitCode -ne 0) { throw "Promoted runtime version failed: $($native.Output)" }
     Write-Log "runtime_versioned output=$($native.Output)"
@@ -242,7 +279,7 @@ try {
         Start-Sleep -Seconds $PollSeconds
     }
     if (-not $complete) { throw "Timed out waiting for peak-ranking candidate completion" }
-    $downloadRoot = Join-Path $RepositoryRoot ".biohub/cache/kernel-outputs/peak-rank-tracking-candidate-v1-version$expectedVersion"
+    $downloadRoot = Join-Path $RepositoryRoot (".biohub/cache/kernel-outputs/" + $variantConfig.output_slug + "-version" + $expectedVersion)
     if (Test-Path -LiteralPath $downloadRoot) { throw "Refusing to reuse candidate output" }
     New-Item -ItemType Directory -Path $downloadRoot | Out-Null
     $native = Invoke-NativeOutput {
@@ -253,7 +290,7 @@ try {
     $native = Invoke-NativeOutput {
         & $evaluationPython $verifier --output-root $downloadRoot `
             --baseline-validator $baselineValidator --runtime-manifest $runtimeManifest `
-            --report $promotionPath
+            --expected-run-id $variantConfig.expected_run_id --report $promotionPath
     }
     if ($native.ExitCode -ne 0) {
         Write-Terminal "candidate_rejected" @{
@@ -271,7 +308,8 @@ try {
     }
     $native = Invoke-NativeOutput {
         & $evaluationPython $submitter --promotion $promotionPath --receipt $receiptPath `
-            --kernel-ref $kernelRef --kernel-version $expectedVersion --execute
+            --kernel-ref $kernelRef --kernel-version $expectedVersion `
+            --expected-run-id $variantConfig.expected_run_id --execute
     }
     if ($native.ExitCode -ne 0) { throw "Promoted peak-ranking submission failed: $($native.Output)" }
     $receipt = Get-Content -Raw -LiteralPath $receiptPath | ConvertFrom-Json

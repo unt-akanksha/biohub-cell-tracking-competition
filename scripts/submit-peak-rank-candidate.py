@@ -21,13 +21,13 @@ RUN_ID = "peak-rank-tracking-candidate-v1"
 DAILY_SUBMISSION_LIMIT = 5
 
 
-def validate_promotion(path: Path):
+def validate_promotion(path: Path, *, expected_run_id: str = RUN_ID):
     promotion = json.loads(path.read_text(encoding="utf-8"))
     submission = Path(str(promotion.get("submission_path", ""))).resolve()
     if not (
         promotion.get("schema_version") == 1
         and promotion.get("status") == "eligible_for_submission"
-        and promotion.get("run_id") == RUN_ID
+        and promotion.get("run_id") == expected_run_id
         and float(promotion.get("target_public_score", 0.0)) == 0.945
         and promotion.get("known_public_hash_match") is False
         and promotion.get("worker_count") == 2
@@ -53,6 +53,7 @@ def main() -> None:
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--kernel-ref", required=True)
     parser.add_argument("--kernel-version", type=int, required=True)
+    parser.add_argument("--expected-run-id", default=RUN_ID)
     parser.add_argument(
         "--message",
         default=(
@@ -63,7 +64,9 @@ def main() -> None:
     parser.add_argument("--execute", action="store_true")
     args = parser.parse_args()
     promotion_path = args.promotion.resolve()
-    promotion, submission = validate_promotion(promotion_path)
+    promotion, submission = validate_promotion(
+        promotion_path, expected_run_id=args.expected_run_id
+    )
     if args.kernel_version < 1:
         raise ValueError("kernel version must be positive")
     receipt = args.receipt.resolve()
@@ -72,7 +75,7 @@ def main() -> None:
     eligible = {
         "schema_version": 1,
         "status": "eligible",
-        "run_id": RUN_ID,
+        "run_id": args.expected_run_id,
         "competition": COMPETITION,
         "kernel_ref": args.kernel_ref,
         "kernel_version": args.kernel_version,

@@ -94,6 +94,7 @@ def verify_candidate(
     runtime_manifest: Path,
     *,
     expected_baseline_sha256: str | None = None,
+    expected_run_id: str = RUN_ID,
 ) -> dict[str, Any]:
     runtime = validate_runtime(runtime_manifest)
     baseline_sha256 = sha256_file(baseline_validator)
@@ -112,7 +113,7 @@ def verify_candidate(
     workers = [json.loads(path.read_text(encoding="utf-8")) for path in worker_paths]
     submission_sha256 = sha256_file(submission_path)
     if not (
-        terminal.get("run_id") == RUN_ID
+        terminal.get("run_id") == expected_run_id
         and terminal.get("status") == "completed"
         and terminal.get("submission_exists") is True
         and terminal.get("evidence_exists") is True
@@ -123,7 +124,7 @@ def verify_candidate(
         raise RuntimeError("peak-ranking candidate launcher terminal is invalid")
     if not (
         evidence.get("schema_version") == 1
-        and evidence.get("run_id") == RUN_ID
+        and evidence.get("run_id") == expected_run_id
         and evidence.get("status") == "completed_pending_external_promotion_gate"
         and float(evidence.get("target_public_score", 0.0)) == 0.945
         and evidence.get("source_public_lineage_attributed") is True
@@ -219,7 +220,7 @@ def verify_candidate(
     return {
         "schema_version": 1,
         "status": "eligible_for_submission",
-        "run_id": RUN_ID,
+        "run_id": expected_run_id,
         "target_public_score": 0.945,
         "source_public_kernel_ref": SOURCE_PUBLIC_KERNEL_REF,
         "source_public_notebook_sha256": SOURCE_PUBLIC_NOTEBOOK_SHA256,
@@ -252,6 +253,7 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--baseline-validator", type=Path, required=True)
     parser.add_argument("--runtime-manifest", type=Path, required=True)
+    parser.add_argument("--expected-run-id", default=RUN_ID)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
     result = verify_candidate(
@@ -259,6 +261,7 @@ def main() -> None:
         args.baseline_validator,
         args.runtime_manifest,
         expected_baseline_sha256=PUBLIC_CONTROL_VALIDATOR_SHA256,
+        expected_run_id=args.expected_run_id,
     )
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.report:

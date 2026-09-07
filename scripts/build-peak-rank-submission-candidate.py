@@ -19,6 +19,8 @@ SOURCE_METADATA_SHA256 = "13c98287dd9228c0d8f9abd764e01b3484837ddc4cc0f4dee6e30f
 SOURCE_KERNEL_REF = "redoctopusk/biohub-948tta2"
 RUNTIME_REF = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
 TARGET_ID = "biohub-peak-rank-tracking-candidate-v1"
+CANDIDATE_RUN_ID = "peak-rank-tracking-candidate-v1"
+TARGET_TITLE = "Biohub Peak Rank Tracking Candidate v1"
 TARGET = ROOT / "kaggle" / TARGET_ID
 NOTEBOOK = TARGET / f"{TARGET_ID}.ipynb"
 
@@ -313,11 +315,15 @@ def build_notebook(manifest_sha256: str) -> dict:
         '        "--official-predictor", str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
     notebook["cells"][validator_inference_index]["source"] = validator_inference.splitlines(keepends=True)
+    watchdog = WATCHDOG.replace("peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID)
+    evidence = CANDIDATE_EVIDENCE.replace(
+        "peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID
+    )
     notebook["cells"][inference_index:inference_index] = [
-        code_cell(WATCHDOG),
+        code_cell(watchdog),
         code_cell(RUNTIME_SETUP.replace("__MANIFEST_SHA256__", manifest_sha256)),
     ]
-    notebook["cells"].append(code_cell(CANDIDATE_EVIDENCE))
+    notebook["cells"].append(code_cell(evidence))
     notebook["metadata"]["codex"] = {
         "status": "candidate_requires_external_clean_promotion",
         "public_prediction_copied": False,
@@ -326,6 +332,7 @@ def build_notebook(manifest_sha256: str) -> dict:
         "source_public_notebook_sha256": SOURCE_NOTEBOOK_SHA256,
         "secondary_edge_feature_tta": True,
         "runtime_manifest_sha256": manifest_sha256,
+        "candidate_run_id": CANDIDATE_RUN_ID,
     }
     for cell in notebook["cells"]:
         if cell.get("cell_type") == "code":
@@ -355,7 +362,7 @@ def main() -> None:
     metadata = {
         **source_metadata,
         "id": f"indarkarhana/{TARGET_ID}",
-        "title": "Biohub Peak Rank Tracking Candidate v1",
+        "title": TARGET_TITLE,
         "code_file": NOTEBOOK.name,
         "is_private": True,
         "enable_gpu": True,

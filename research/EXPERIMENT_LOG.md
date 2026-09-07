@@ -780,3 +780,11 @@ well as the synthetic generator.
   are unchanged, so v2 cannot overwrite or contaminate the earlier candidate.
   This lane still creates no submission; a v2 checkpoint must first earn clean
   validation evidence before any ensemble or candidate integration.
+- A second fail-closed candidate controller is also prepared for v2. It waits
+  for that distinct clean-validation terminal, binds the selected detector TTA
+  and checkpoint into a separately named runtime and Kaggle kernel, runs the
+  same complete-movie tracking promotion gate, and submits only when the
+  non-replica/proxy/edge/worst-movie/runtime checks all pass. Builder, verifier,
+  submitter, output cache, promotion receipt, and run IDs are variant-aware;
+  the existing v1 process remains isolated. Sixty-five focused peak-rank tests
+  pass across both autonomous paths.
