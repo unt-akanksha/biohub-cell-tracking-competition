@@ -690,3 +690,11 @@ well as the synthetic generator.
   submission was authorized. The queued peak-ranking trainer then started on
   the Antelume A10G and held about 6.9 GB at its initial data-loading phase;
   the Biohub-only yield guard remained in `biohub-allowed` mode.
+- A label-free production worker is now staged for any promoted peak-ranking
+  checkpoint. Two isolated Kaggle processes partition the complete test-movie
+  inventory without overlap, each exposes exactly one GPU, generates node
+  locations with the independent detector, and routes those nodes through the
+  audited official association model and ILP. Worker manifests bind the model
+  hash and explicitly record that no train labels, test labels, public
+  predictions, leaderboard selection, or submission creation occurred. Twelve
+  focused production, bridge, packaging, validation, and controller tests pass.

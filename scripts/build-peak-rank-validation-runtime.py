@@ -28,6 +28,10 @@ SOURCES = {
     / "research"
     / "lsm_fm_detection"
     / "association_bridge.py",
+    "predict_with_official_linker.py": ROOT
+    / "research"
+    / "peak_rank_detection"
+    / "predict_with_official_linker.py",
     "evaluate_peak_rank_detector.py": ROOT
     / "research"
     / "peak_rank_detection"

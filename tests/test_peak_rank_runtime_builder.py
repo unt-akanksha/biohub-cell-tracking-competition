@@ -26,6 +26,7 @@ def test_runtime_builder_packages_inference_and_two_phase_evaluator() -> None:
         "inference.py",
         "peak_association_bridge.py",
         "lsm_association_bridge.py",
+        "predict_with_official_linker.py",
         "evaluate_peak_rank_detector.py",
         "density_calibration.py",
         "evaluate_pretrained_detector.py",
