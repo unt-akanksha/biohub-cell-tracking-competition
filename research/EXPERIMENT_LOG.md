@@ -1686,3 +1686,16 @@ well as the synthetic generator.
   hard-example ranking without estimated-count inference. The new lane is
   therefore deferred until those two clean candidates expose evidence; it does
   not justify extending the paid queue today.
+- Cost policy was tightened again after confirming the host is an on-demand
+  `g5.xlarge` in `us-east-1`: EC2 charges for every powered-on minute, not only
+  CUDA utilization. At 2026-09-07 18:21 UTC, V3 was the sole GPU process at
+  step 550/2,000, using 9,580 MiB, with 6,744 seconds elapsed and at most about
+  5.1 hours left under its 25,200-second watchdog. V21 and V27 are independent
+  experiments rather than continuation training, so automatically launching
+  their 25-hour and 24-hour watchdogs before evaluating V3 would expose up to
+  49 additional billed hours without an evidence gate. Their still-sleeping
+  remote waiters (`375454`, `375455`) were therefore stopped after exact
+  command-line verification; active V3 PID `339342`, all artifacts, and every
+  RSNA/unrelated process were left untouched. V21/V27 remain staged and can be
+  relaunched only if the harvested complete-movie V3 evidence justifies their
+  incremental cost.
