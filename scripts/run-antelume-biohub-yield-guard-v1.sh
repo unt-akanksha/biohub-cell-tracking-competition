@@ -49,6 +49,7 @@ is_owned_biohub_gpu_pid() {
       [[ \
         "$command" == *"train_synthetic_real_detector.py"* \
         || "$command" == *"train_faint_cell_pu_detector.py"* \
+        || "$command" == *"train_expanded_real_faint_detector.py"* \
       ]]
       ;;
     /home/ubuntu/biohub-nucverse3d-compatibility-v1/*)
@@ -64,6 +65,7 @@ is_owned_biohub_gpu_pid() {
         || "$command" == *"score_graph_context_division_development_probe.py"* \
         || "$command" == *"/home/ubuntu/biohub-peak-rank-detector-v1/input/train_synthetic_real_detector.py"* \
         || "$command" == *"/home/ubuntu/biohub-peak-rank-detector-v1/faint-pu-v4/input/train_faint_cell_pu_detector.py"* \
+        || "$command" == *"/home/ubuntu/biohub-peak-rank-detector-v1/expanded-real-v7/input/train_expanded_real_faint_detector.py"* \
       ]]
       ;;
     *)
