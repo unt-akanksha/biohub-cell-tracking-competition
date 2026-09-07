@@ -13,6 +13,7 @@ from typing import Any
 
 
 ROOT = PurePosixPath("synthetic256-real-positive-temporal-peak-rank-v1")
+EXPECTED_RUN_ID = "synthetic256-real-positive-temporal-peak-rank-v1"
 EXPECTED_PARAMETER_COUNT = 38_381_478
 EXPECTED_STEPS = 3_000
 EXPECTED_SEED = 1_041_729
@@ -83,8 +84,7 @@ def validate_terminal(
 ) -> bool:
     if not (
         terminal.get("schema_version") == 1
-        and terminal.get("run_id")
-        == "synthetic256-real-positive-temporal-peak-rank-v1"
+        and terminal.get("run_id") == EXPECTED_RUN_ID
         and terminal.get("completed_steps") == EXPECTED_STEPS
         and terminal.get("seed") == EXPECTED_SEED
         and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
