@@ -23,6 +23,8 @@ KNOWN_PUBLIC_SUBMISSION_SHA256 = COMMON["KNOWN_PUBLIC_SUBMISSION_SHA256"]
 PUBLIC_CONTROL_VALIDATOR_SHA256 = COMMON["PUBLIC_CONTROL_VALIDATOR_SHA256"]
 
 RUN_ID = "peak-rank-tracking-candidate-v1"
+SOURCE_PUBLIC_KERNEL_REF = "redoctopusk/biohub-948tta2"
+SOURCE_PUBLIC_NOTEBOOK_SHA256 = "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
 MINIMUM_PROXY_GAIN = 0.003
 MAXIMUM_WEIGHTED_EDGE_REGRESSION = 0.001
 MAXIMUM_MOVIE_PROXY_REGRESSION = 0.005
@@ -120,6 +122,10 @@ def verify_candidate(
         and evidence.get("status") == "completed_pending_external_promotion_gate"
         and float(evidence.get("target_public_score", 0.0)) == 0.945
         and evidence.get("source_public_lineage_attributed") is True
+        and evidence.get("source_public_kernel_ref") == SOURCE_PUBLIC_KERNEL_REF
+        and evidence.get("source_public_notebook_sha256")
+            == SOURCE_PUBLIC_NOTEBOOK_SHA256
+        and evidence.get("secondary_edge_feature_tta") is True
         and evidence.get("source_advertised_score_used_as_evidence") is False
         and evidence.get("public_predictions_copied") is False
         and evidence.get("checkpoint_sha256") == runtime["checkpoint_sha256"]
@@ -193,6 +199,9 @@ def verify_candidate(
         "status": "eligible_for_submission",
         "run_id": RUN_ID,
         "target_public_score": 0.945,
+        "source_public_kernel_ref": SOURCE_PUBLIC_KERNEL_REF,
+        "source_public_notebook_sha256": SOURCE_PUBLIC_NOTEBOOK_SHA256,
+        "secondary_edge_feature_tta": True,
         "submission": submission,
         "submission_path": str(submission_path.resolve()),
         "submission_sha256": submission_sha256,

@@ -26,6 +26,8 @@ def test_controller_is_two_gpu_private_and_fail_closed() -> None:
     for required in (
         'machine_shape -ne "NvidiaTeslaT4"',
         "device_count() != 2",
+        "SEC_EDGE_TTA_ACTIVE",
+        "redoctopusk/biohub-948tta2",
         "enable_internet -ne $false",
         'Write-Terminal "skipped_after_clean_rejection"',
         'Write-Terminal "candidate_rejected"',

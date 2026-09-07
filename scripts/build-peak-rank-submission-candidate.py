@@ -11,11 +11,12 @@ import shutil
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOT = ROOT / ".biohub" / "research" / "public-kernel-audit-20260907" / "redoctopusk-biohub-948tta"
-SOURCE_NOTEBOOK = SOURCE_ROOT / "biohub-948tta.ipynb"
+SOURCE_ROOT = ROOT / ".biohub" / "research" / "public-kernel-audit-20260907" / "redoctopusk-biohub-948tta2"
+SOURCE_NOTEBOOK = SOURCE_ROOT / "biohub-948tta2.ipynb"
 SOURCE_METADATA = SOURCE_ROOT / "kernel-metadata.json"
-SOURCE_NOTEBOOK_SHA256 = "ff8fd7db0ec0553dab196340835b3958e884f9deccb83739f527021685eda933"
-SOURCE_METADATA_SHA256 = "68af7fa9c8b95682c82521213b95d18271d4ff38fe59adf0e19bd69b413f98fa"
+SOURCE_NOTEBOOK_SHA256 = "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
+SOURCE_METADATA_SHA256 = "13c98287dd9228c0d8f9abd764e01b3484837ddc4cc0f4dee6e30f5df06086bb"
+SOURCE_KERNEL_REF = "redoctopusk/biohub-948tta2"
 RUNTIME_REF = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
 TARGET_ID = "biohub-peak-rank-tracking-candidate-v1"
 TARGET = ROOT / "kaggle" / TARGET_ID
@@ -106,8 +107,11 @@ This candidate does not copy a public prediction. Its node generator is the
 project-authored 38.4M-parameter temporal peak-ranking detector, trained on
 synthetic complete labels and positive-only real supervision. The association,
 ILP, DeepCenter, and graph-finishing code retains attribution to the audited
-RedOctopusk/Pilkwang public lineage. The notebook title's advertised `0.948`
-is not treated as reproduced evidence and does not select this candidate.
+RedOctopusk/Pilkwang public lineage. Its secondary edge-feature TTA reuses the
+detector TTA passes already computed by that lineage; it is attributed here as
+linker-side inference, not an independent model.
+The notebook title's advertised `0.948` is not treated as reproduced evidence
+and does not select this candidate.
 
 Execution requires the detector to have passed its sealed training audit and
 the separate two-GPU complete-movie clean validation. Submission remains an
@@ -200,6 +204,9 @@ _pr_evidence = {
     "status": "completed_pending_external_promotion_gate",
     "target_public_score": 0.945,
     "source_public_lineage_attributed": True,
+    "source_public_kernel_ref": "redoctopusk/biohub-948tta2",
+    "source_public_notebook_sha256": "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189",
+    "secondary_edge_feature_tta": True,
     "source_advertised_score_used_as_evidence": False,
     "public_predictions_copied": False,
     "checkpoint_sha256": _PR_MANIFEST["checkpoint_sha256"],
@@ -294,6 +301,9 @@ def build_notebook(manifest_sha256: str) -> dict:
         "status": "candidate_requires_external_clean_promotion",
         "public_prediction_copied": False,
         "target_public_score": 0.945,
+        "source_public_kernel_ref": SOURCE_KERNEL_REF,
+        "source_public_notebook_sha256": SOURCE_NOTEBOOK_SHA256,
+        "secondary_edge_feature_tta": True,
         "runtime_manifest_sha256": manifest_sha256,
     }
     for cell in notebook["cells"]:

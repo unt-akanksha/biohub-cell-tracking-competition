@@ -103,9 +103,28 @@ freely/publicly available external data and pretrained models. The final
 submission deadline is September 29, 2026. The host's patched metric remains
 the governing evaluation; no exploit behavior is used.
 
+## September 7 incremental refresh
+
+`redoctopusk/biohub-948tta2` is the only newly created frontier notebook since
+the earlier refresh. Its source SHA-256 is
+`3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189` and its
+normalized-code Jaccard overlap with `redoctopusk/biohub-948tta` is `0.994411`.
+It is therefore another public-lineage variant, not an independent model or
+ensemble member. The 16 added unique lines collect secondary-detector feature
+maps from the D4 passes that the notebook already performs and average those
+features for association. They introduce no additional detector forward pass.
+No new metric-exploit signature or test-label access appears in the diff.
+
+Because this change is association-side and compute-neutral, it is retained as
+an explicitly attributed backbone update for the project-authored peak-ranking
+detector. The public notebook's predictions and advertised score remain
+excluded, and the combined candidate still needs the frozen clean-validation
+and complete-movie promotion gates.
+
 References:
 
 - <https://www.kaggle.com/code/redoctopusk/biohub-948tta>
+- <https://www.kaggle.com/code/redoctopusk/biohub-948tta2>
 - <https://www.kaggle.com/code/muhanqiu/biohub-final-submission-our-weights>
 - <https://www.kaggle.com/code/hengck23/cell-point-detector>
 - <https://www.kaggle.com/code/anhadmahajan06/biohub-track-your-cells-development>

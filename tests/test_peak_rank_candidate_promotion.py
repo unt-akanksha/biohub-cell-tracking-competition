@@ -16,6 +16,8 @@ def test_verifier_requires_clean_gain_non_regression_and_non_replica() -> None:
         "MAXIMUM_WEIGHTED_EDGE_REGRESSION = 0.001",
         "MAXIMUM_MOVIE_PROXY_REGRESSION = 0.005",
         "KNOWN_PUBLIC_SUBMISSION_SHA256",
+        "SOURCE_PUBLIC_NOTEBOOK_SHA256",
+        "secondary_edge_feature_tta",
         "worker_count",
         "clean_validation_promotion_passed",
         "eligible_for_submission",

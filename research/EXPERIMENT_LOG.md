@@ -717,3 +717,12 @@ well as the synthetic generator.
   with the same 38,381,478-parameter model, data partitions, seed, objective,
   and frozen evaluations at steps 1,000, 2,000, and 3,000. At the observed
   throughput this fits the guard while using the A10G at 100% compute.
+- A September 7 incremental public refresh found one new frontier source,
+  `redoctopusk/biohub-948tta2`. Its normalized-code overlap with the pinned
+  `biohub-948tta` source is `0.994411`, so it is not an independent model and
+  neither its prediction nor advertised score is evidence. Its sole material
+  change averages secondary-detector association features across D4 views by
+  reusing forward passes already performed for detector TTA. Before any
+  peak-ranker selection result was observed, the full candidate builder was
+  hash-pinned to this attributed, compute-neutral linker update. The independent
+  detector and all frozen clean-validation/promotion gates remain unchanged.
