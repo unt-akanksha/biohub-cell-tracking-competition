@@ -29,6 +29,9 @@ def test_deployment_and_harvest_are_hash_bound_and_credential_tolerant() -> None
     harvest = HARVESTER.read_text(encoding="utf-8")
 
     assert "MaximumCredentialPolls = 14400" in deployment
+    assert '[string]$DirectRemoteHost = ""' in deployment
+    assert 'connection_mode = if ($publishKeyRequired)' in deployment
+    assert 'if ($publishKeyRequired) { Publish-Key }' in deployment
     assert "__GRAPH_CONTEXT_TRAINER_SHA256__" in deployment
     assert 'worst_case_gpu_hours = 5' in deployment
     assert 'constituent_audit_gate_required = $false' in deployment

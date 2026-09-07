@@ -1578,3 +1578,11 @@ well as the synthetic generator.
   reserve; only the external submitter can submit after every gate passes.
   Hidden controller PID `31084` now waits for both independent component
   terminals and will execute that path without manual intervention.
+- Antelume remained directly reachable over its private host while the local
+  AWS session was absent. V19 was confirmed active on the A10G at 9,580 MiB;
+  no RSNA process was displaced. The graph v2 deployer now supports that
+  already-authorized direct route, and the immutable graph runner was queued
+  as remote PID `354579`. It still cannot enter the GPU until V27 is complete,
+  hash-verified locally, acknowledged remotely, and the accelerator is idle.
+  This removes credential refresh from the queue's critical path without
+  relaxing sequential ownership or evidence gates.

@@ -3,6 +3,7 @@ param(
     [string]$AwsRegion = "us-east-1",
     [string]$InstanceId = "i-0d12195df0d3558f3",
     [string]$AvailabilityZone = "us-east-1b",
+    [string]$DirectRemoteHost = "",
     [string]$RemoteUser = "ubuntu",
     [string]$SshKey = "C:/Users/IndarKumar/.ssh/rsna_ec2",
     [string]$PublicKey = "C:/Users/IndarKumar/.ssh/rsna_ec2.pub",
@@ -125,51 +126,56 @@ if (Test-Path -LiteralPath $terminalPath) {
 }
 
 try {
-    $credentialReady = $false
-    for ($poll = 1; $poll -le $MaximumCredentialPolls; $poll++) {
-        $savedPreference = $ErrorActionPreference
-        $ErrorActionPreference = "Continue"
-        & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion 2> $null | Out-Null
-        $credentialStatus = $LASTEXITCODE
-        $ErrorActionPreference = $savedPreference
-        if ($credentialStatus -eq 0) {
-            $credentialReady = $true
-            break
+    $remoteHost = $DirectRemoteHost.Trim()
+    $publishKeyRequired = [string]::IsNullOrWhiteSpace($remoteHost)
+    if ($publishKeyRequired) {
+        $credentialReady = $false
+        for ($poll = 1; $poll -le $MaximumCredentialPolls; $poll++) {
+            $savedPreference = $ErrorActionPreference
+            $ErrorActionPreference = "Continue"
+            & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion 2> $null | Out-Null
+            $credentialStatus = $LASTEXITCODE
+            $ErrorActionPreference = $savedPreference
+            if ($credentialStatus -eq 0) {
+                $credentialReady = $true
+                break
+            }
+            if ($poll -lt $MaximumCredentialPolls) {
+                Start-Sleep -Seconds $CredentialPollSeconds
+            }
         }
-        if ($poll -lt $MaximumCredentialPolls) {
-            Start-Sleep -Seconds $CredentialPollSeconds
+        if (-not $credentialReady) { throw "Timed out waiting for refreshed AWS credentials" }
+        $remoteHost = (& aws ec2 describe-instances `
+            --profile $AwsProfile `
+            --region $AwsRegion `
+            --instance-ids $InstanceId `
+            --query "Reservations[0].Instances[0].PublicIpAddress" `
+            --output text).Trim()
+        if ($LASTEXITCODE -ne 0 -or -not $remoteHost -or $remoteHost -eq "None") {
+            throw "Antelume public address is unavailable"
         }
-    }
-    if (-not $credentialReady) { throw "Timed out waiting for refreshed AWS credentials" }
-    $remoteHost = (& aws ec2 describe-instances `
-        --profile $AwsProfile `
-        --region $AwsRegion `
-        --instance-ids $InstanceId `
-        --query "Reservations[0].Instances[0].PublicIpAddress" `
-        --output text).Trim()
-    if ($LASTEXITCODE -ne 0 -or -not $remoteHost -or $remoteHost -eq "None") {
-        throw "Antelume public address is unavailable"
     }
     $remote = "${RemoteUser}@${remoteHost}"
     $sshArgs = @("-i", $SshKey, "-o", "StrictHostKeyChecking=no")
-    Publish-Key
+    if ($publishKeyRequired) { Publish-Key }
     Invoke-Checked "ssh.exe" ($sshArgs + @($remote, "set -euo pipefail; test ! -e /home/ubuntu/biohub-graph-context-frozen-ensemble-v2/run.sh; test ! -e /home/ubuntu/biohub-graph-context-frozen-ensemble-v2-results.tar.gz; mkdir -p /home/ubuntu/biohub-graph-context-frozen-ensemble-v2 /home/ubuntu/biohub/research/temporal_contrastive /home/ubuntu/biohub/scripts /home/ubuntu/biohub-logs"))
     foreach ($source in @($trainer, $scorer, $model, $inference)) {
-        Publish-Key
+        if ($publishKeyRequired) { Publish-Key }
         Invoke-Checked "scp.exe" ($sshArgs + @($source, "${remote}:/home/ubuntu/biohub/research/temporal_contrastive/"))
     }
-    Publish-Key
+    if ($publishKeyRequired) { Publish-Key }
     Invoke-Checked "scp.exe" ($sshArgs + @($renderedRunner, "${remote}:/home/ubuntu/biohub-graph-context-frozen-ensemble-v2/run.sh"))
-    Publish-Key
+    if ($publishKeyRequired) { Publish-Key }
     Invoke-Checked "scp.exe" ($sshArgs + @($inventory, "${remote}:/home/ubuntu/biohub-graph-context-development-inventory-v1.json"))
-    Publish-Key
+    if ($publishKeyRequired) { Publish-Key }
     Invoke-Checked "scp.exe" ($sshArgs + @($archive, "${remote}:/home/ubuntu/biohub-graph-context-relational-patches-v1.tar.gz"))
-    Publish-Key
+    if ($publishKeyRequired) { Publish-Key }
     $launch = "set -euo pipefail; chmod +x /home/ubuntu/biohub-graph-context-frozen-ensemble-v2/run.sh; bash -n /home/ubuntu/biohub-graph-context-frozen-ensemble-v2/run.sh; nohup bash /home/ubuntu/biohub-graph-context-frozen-ensemble-v2/run.sh >/home/ubuntu/biohub-logs/graph-context-frozen-ensemble-v2.log 2>&1 < /dev/null & echo PID=`$!"
     Invoke-Checked "ssh.exe" ($sshArgs + @($remote, $launch))
     Write-Terminal @{
         status = "deployed_and_queued"
         remote_host = $remoteHost
+        connection_mode = if ($publishKeyRequired) { "aws_instance_connect" } else { "direct_private_host" }
         waits_for_v27_verified_harvest = $true
         waits_for_gpu_idle = $true
         planned_model_count = 8
