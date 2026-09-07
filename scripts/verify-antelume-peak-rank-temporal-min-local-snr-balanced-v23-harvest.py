@@ -68,7 +68,7 @@ def verify_temporal_minimum_local_snr(archive_path: Path) -> dict:
                 "duplicate_44b6_once_balance_embryo_crops"
             ),
             "temporal_reducer": "minimum",
-            "local_snr_bands": [[3, 9], [5, 13], [7, 15]],
+            "local_snr_bands": [[3, 9], [3, 11], [5, 13]],
         }
     )
     return report

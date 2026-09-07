@@ -26,7 +26,7 @@ $faintTrainer = Join-Path $RepositoryRoot "research/peak_rank_detection/train_fa
 $runner = Join-Path $RepositoryRoot "scripts/run-antelume-peak-rank-temporal-min-local-snr-balanced-v23.sh"
 $expectedHashes = @{
     trainer = "57479c473929aad7f2fdaca5c1322ea88e5f051006faf32c96d066ee4f365a79"
-    stable_model = "dc2c6ed737dfaec2a225c9242343ec76f8aec9e4e5daee2de76f8c4fae501245"
+    stable_model = "04f2c5d580279b7d035007ef0d5c422ad6ee43fec430f8f8a809d69858db172e"
     balanced_trainer = "854a305143803d2b10116f83d7cf75483d6f91f5930bda8931d95323cdffc802"
     safe_trainer = "5570ffcb9734623f28db006b5d85452cc0ff7372eee05a6a65231b0104540f93"
     safe_model = "89a31ed36d172347b1e0f4e13979bbaa60701f7a86defdc2b4140f191cbbfdd8"
@@ -36,7 +36,7 @@ $expectedHashes = @{
     local_shape_trainer = "1c3f4fd526aa2126f7b14403d91b4493efbc3dc0d48903992c84bb3aecd8654a"
     expanded_trainer = "6eb0f506204c1f30fbee3ad9859215826a07fe7c8d78a2be868371233fbd2ebe"
     faint_trainer = "6ef8092a89c1c01c536c690da573a10b49ce99bf83d4d3ddd69403741f808b0c"
-    runner = "7675d0f594fd24172d27d439576d97f46372761f4322de91396f2f05da2a4d5c"
+    runner = "c5948e48cfb0c07180cd1927eccaadc1540015a09d7d8543ec70b1f26ce88e7f"
 }
 
 function Write-Terminal([hashtable]$Payload) {
@@ -136,12 +136,13 @@ bash -n "$run_root/run.sh"
 cd "$input_root"
 PYTHONPATH="$input_root:/home/ubuntu/biohub" /home/ubuntu/venv/bin/python - <<'PY'
 import importlib.util
-from model_temporal_stable import TemporalMinimumLocalSnrSafeRankDetector
+from model_temporal_stable import LOCAL_SNR_BANDS, TemporalMinimumLocalSnrSafeRankDetector
 spec = importlib.util.spec_from_file_location('temporal_min_v23', 'train_expanded_real_faint_detector.py')
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 assert module.RUN_ID.endswith('safe-rank-peak-rank-v23')
 assert module.balanced.BALANCED_OPTIMIZATION_COUNTS == {'44b6': 300, '6bba': 330}
+assert LOCAL_SNR_BANDS == ((3, 9), (3, 11), (5, 13))
 model = TemporalMinimumLocalSnrSafeRankDetector(widths=(128, 256, 512, 1024), depths=(3, 3, 9, 3))
 assert sum(parameter.numel() for parameter in model.parameters()) == 83812614
 PY

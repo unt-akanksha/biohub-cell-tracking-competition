@@ -4,6 +4,7 @@ import torch
 from research.peak_rank_detection.diagnose_local_snr_prior import local_snr_band
 from research.peak_rank_detection.model import count_parameters
 from research.peak_rank_detection.model_temporal_stable import (
+    LOCAL_SNR_BANDS,
     MODEL_FAMILY,
     TemporalMinimumLocalSnrSafeRankDetector,
     temporal_minimum_local_snr_channels,
@@ -33,11 +34,12 @@ def test_temporal_minimum_channels_match_cpu_diagnostic_definition() -> None:
         np.stack(
             [
                 local_snr_band(stable, inner, outer)
-                for inner, outer in ((3, 9), (5, 13), (7, 15))
+                for inner, outer in LOCAL_SNR_BANDS
             ]
         )
     )
     torch.testing.assert_close(actual, expected, rtol=2e-4, atol=2e-5)
+    assert LOCAL_SNR_BANDS == ((3, 9), (3, 11), (5, 13))
 
 
 def test_temporal_stable_detector_preserves_safe_rank_contract() -> None:

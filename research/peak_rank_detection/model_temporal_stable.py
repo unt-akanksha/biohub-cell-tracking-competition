@@ -9,7 +9,7 @@ from torch import nn
 
 try:
     from model import DEFAULT_DEPTHS, DEFAULT_WIDTHS, ChannelsFirstLayerNorm
-    from model_multiscale import MULTISCALE_BANDS, separable_replicated_average
+    from model_multiscale import separable_replicated_average
     from model_safe_rank import SafeRankMultiscaleBlobGlobalDetector
 except ModuleNotFoundError:
     from research.peak_rank_detection.model import (
@@ -18,7 +18,6 @@ except ModuleNotFoundError:
         ChannelsFirstLayerNorm,
     )
     from research.peak_rank_detection.model_multiscale import (
-        MULTISCALE_BANDS,
         separable_replicated_average,
     )
     from research.peak_rank_detection.model_safe_rank import (
@@ -27,6 +26,7 @@ except ModuleNotFoundError:
 
 
 MODEL_FAMILY = "temporal_min_local_snr_safe_rank_multiscale_global_peak_rank_v23"
+LOCAL_SNR_BANDS = ((3, 9), (3, 11), (5, 13))
 
 
 def temporal_minimum_local_snr_channels(frames: torch.Tensor) -> torch.Tensor:
@@ -37,14 +37,14 @@ def temporal_minimum_local_snr_channels(frames: torch.Tensor) -> torch.Tensor:
     stable = frames.amin(dim=1)
     averages = {
         kernel: separable_replicated_average(stable, kernel)
-        for kernel in sorted({value for band in MULTISCALE_BANDS for value in band})
+        for kernel in sorted({value for band in LOCAL_SNR_BANDS for value in band})
     }
     square_averages = {
         outer: separable_replicated_average(stable.square(), outer)
-        for _, outer in MULTISCALE_BANDS
+        for _, outer in LOCAL_SNR_BANDS
     }
     channels = []
-    for inner, outer in MULTISCALE_BANDS:
+    for inner, outer in LOCAL_SNR_BANDS:
         local_variance = (
             square_averages[outer] - averages[outer].square()
         ).clamp_min(0.0)

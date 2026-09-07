@@ -28,5 +28,5 @@ def test_verifier_freezes_temporal_minimum_local_snr_contract() -> None:
     assert "12_568_331" in source
     assert "temporal_min_local_snr_safe_rank_multiscale_global_peak_rank_v23" in source
     assert '"temporal_reducer": "minimum"' in source
-    assert '"local_snr_bands": [[3, 9], [5, 13], [7, 15]]' in source
+    assert '"local_snr_bands": [[3, 9], [3, 11], [5, 13]]' in source
     assert "duplicate_44b6_once_balance_embryo_crops" in source

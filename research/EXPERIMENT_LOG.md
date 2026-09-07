@@ -1465,3 +1465,26 @@ well as the synthetic generator.
   held-out-complete-movie validation, and high-precision rare-division handling.
   Topic `739018` proposes predicted-node-count adjustment and is excluded as a
   metric-hack direction; `739915` and `739516` provide no runnable evidence.
+- Depth-PU v2 improved substantially at its precommitted step-2,000 gate but
+  still failed cleanly. Synthetic mean AP/recall/worst-movie AP reached
+  `0.984802/0.984996/0.968421`; real positive-only recall rose from the
+  step-1,000 value `0.357143` to `0.629870`, and mean distance fell from
+  `4.093636` to `2.792624` voxels. The frozen real floors remain `0.85` recall,
+  `2.25` mean distance, and `3.5` p90 distance, and only one of five held-out
+  44b6 points was recovered. The gate therefore remains
+  `selection_passed=false`; the immutable step-3,000 gate continues, while the
+  queued embryo-balanced detectors remain the justified follow-up.
+- An optimization-only motion-supported local-SNR diagnostic (receipt SHA-256
+  `fed17e3f...955d77f`) found no new detector member worth GPU time. The best
+  motion-supported response raised hard-embryo 44b6 top-64 recall only from
+  `0.236287` to `0.238397` while lowering pooled recall from `0.493318` to
+  `0.481347`; the lane is rejected before selection. The diagnostic also found
+  that staged V23 used `(3,9)/(5,13)/(7,15)` rather than the exact
+  `(3,9)/(3,11)/(5,13)` scale set that justified it. Although the staged set
+  raised pooled optimization recall to `0.506960`, it regressed 44b6 to
+  `0.229958`, violating the precommitted embryo-balanced rationale. Because V23
+  was still a dormant waiter with no training or held-out artifacts, its model
+  and runner were reproducibly repaired to hashes `04f2c5d5...db172e` and
+  `c5948e48...e88e7f`; the receipt (`0cd4eb73...a2cc2b`) records old PID
+  `270072`, new waiting PID `310374`, and the exact scale contract. V2 remained
+  the sole GPU process throughout.
