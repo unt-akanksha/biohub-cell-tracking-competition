@@ -61,10 +61,9 @@ PUBLIC_PREFIX_RECALL = {"44b6": 0.9588014981273408, "6bba": 0.9775019394879751}
 SELECTION_POOLED_MIN = 0.80
 SELECTION_WORST_MIN = 0.65
 PROMOTION_WORST_DELTA_MIN = -0.01
-TTA_CALIBRATION_STEMS = ("44b6_d29c9ab2", "6bba_09961292")
 TTA_MODE_ORDER = ("none", "zflip2", "rot4", "d4")
-TTA_POOLED_REGRESSION_MAX = 0.003
-TTA_WORST_REGRESSION_MAX = 0.01
+TTA_JACCARD_REGRESSION_MAX = 0.003
+TTA_RECALL_REGRESSION_MAX = 0.01
 DEFAULT_MODEL_FAMILY = "temporal_peak_rank_v1"
 THRESHOLD_CALIBRATION_RUN_ID = "synthetic-complete-global-peak-threshold-v1"
 THRESHOLD_POLICY = "synthetic_selection_micro_detection_jaccard"
@@ -206,6 +205,12 @@ def validate_threshold_calibration(
             and row.get("complete_synthetic_examples") == 24
             and isinstance(row.get("total_truth_nodes"), int)
             and row.get("total_truth_nodes", 0) > 0
+            and math.isfinite(float(row.get("detection_jaccard", math.nan)))
+            and 0.0 <= float(row["detection_jaccard"]) <= 1.0
+            and math.isfinite(float(row.get("recall", math.nan)))
+            and 0.0 <= float(row["recall"]) <= 1.0
+            and math.isfinite(float(row.get("precision", math.nan)))
+            and 0.0 <= float(row["precision"]) <= 1.0
         ):
             raise ValueError(f"invalid clean peak threshold for TTA mode {mode}")
     return payload
@@ -498,29 +503,30 @@ def summarize(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
 def select_tta_mode(
     summaries: dict[str, dict[str, Any]],
 ) -> tuple[str | None, dict[str, Any]]:
-    """Prefer the fewest views that stays close to the best frozen calibration result."""
+    """Freeze the cheapest near-best TTA from complete synthetic labels."""
 
     if not summaries:
         raise ValueError("TTA calibration summaries are empty")
-    best_pooled = max(float(row["annotated_node_recall"]) for row in summaries.values())
-    best_worst = max(float(row["worst_movie_recall"]) for row in summaries.values())
-    pooled_min = max(SELECTION_POOLED_MIN, best_pooled - TTA_POOLED_REGRESSION_MAX)
-    worst_min = max(SELECTION_WORST_MIN, best_worst - TTA_WORST_REGRESSION_MAX)
+    best_jaccard = max(float(row["detection_jaccard"]) for row in summaries.values())
+    best_recall = max(float(row["recall"]) for row in summaries.values())
+    jaccard_min = best_jaccard - TTA_JACCARD_REGRESSION_MAX
+    recall_min = best_recall - TTA_RECALL_REGRESSION_MAX
     eligible = [
         mode
         for mode in TTA_MODE_ORDER
         if mode in summaries
-        and float(summaries[mode]["annotated_node_recall"]) >= pooled_min
-        and float(summaries[mode]["worst_movie_recall"]) >= worst_min
+        and float(summaries[mode]["detection_jaccard"]) >= jaccard_min
+        and float(summaries[mode]["recall"]) >= recall_min
     ]
     selected = eligible[0] if eligible else None
     return selected, {
-        "policy": "fewest_views_within_frozen_recall_tolerance",
+        "policy": "fewest_views_within_synthetic_jaccard_and_recall_tolerance",
+        "source": "complete_synthetic_selection_labels_only",
         "mode_order": list(TTA_MODE_ORDER),
-        "pooled_recall_min": pooled_min,
-        "worst_movie_recall_min": worst_min,
-        "pooled_regression_max": TTA_POOLED_REGRESSION_MAX,
-        "worst_movie_regression_max": TTA_WORST_REGRESSION_MAX,
+        "detection_jaccard_min": jaccard_min,
+        "recall_min": recall_min,
+        "jaccard_regression_max": TTA_JACCARD_REGRESSION_MAX,
+        "recall_regression_max": TTA_RECALL_REGRESSION_MAX,
         "eligible_modes": eligible,
     }
 
@@ -603,49 +609,36 @@ def orchestrate(args: argparse.Namespace) -> None:
     requested_modes = tuple(
         mode.strip() for mode in args.tta_modes.split(",") if mode.strip()
     )
-    if not requested_modes or len(requested_modes) != len(set(requested_modes)):
-        raise ValueError("TTA mode inventory must be nonempty and unique")
-    if any(mode not in TTA_TRANSFORMS for mode in requested_modes):
-        raise ValueError(f"unsupported TTA mode inventory: {requested_modes}")
-    calibration_rows: dict[str, list[dict[str, Any]]] = {}
-    calibration_summaries: dict[str, dict[str, Any]] = {}
-    for mode in requested_modes:
-        rows = launch_workers(
-            args,
-            TTA_CALIBRATION_STEMS,
-            phase=f"tta-calibration-{mode}",
-            use_baseline=False,
-            tta_mode=mode,
-            peak_threshold=float(
-                threshold_calibration["thresholds"][mode]["threshold"]
-            ),
-        )
-        calibration_rows[mode] = rows
-        calibration_summaries[mode] = summarize(rows)
+    if requested_modes != TTA_MODE_ORDER:
+        raise ValueError("TTA mode inventory or cost order changed")
+    calibration_summaries = {
+        mode: {
+            key: threshold_calibration["thresholds"][mode][key]
+            for key in (
+                "threshold",
+                "tta_views",
+                "precision",
+                "recall",
+                "detection_jaccard",
+                "selected_predictions",
+                "total_truth_nodes",
+            )
+        }
+        for mode in requested_modes
+    }
     selected_mode, tta_gate = select_tta_mode(calibration_summaries)
     selection_rows: list[dict[str, Any]] = []
     if selected_mode is not None:
-        remaining = tuple(
-            stem for stem in SCREEN_STEMS if stem not in TTA_CALIBRATION_STEMS
-        )
-        selection_rows = [*calibration_rows[selected_mode]]
-        if remaining:
-            selection_rows.extend(
-                launch_workers(
-                    args,
-                    remaining,
-                    phase=f"selection-{selected_mode}",
-                    use_baseline=False,
-                    tta_mode=selected_mode,
-                    peak_threshold=float(
-                        threshold_calibration["thresholds"][selected_mode][
-                            "threshold"
-                        ]
-                    ),
-                )
+        selection_rows = launch_workers(
+            args,
+            SCREEN_STEMS,
+            phase=f"selection-{selected_mode}",
+            use_baseline=False,
+            tta_mode=selected_mode,
+            peak_threshold=float(
+                threshold_calibration["thresholds"][selected_mode]["threshold"]
             )
-        by_stem = {row["stem"]: row for row in selection_rows}
-        selection_rows = [by_stem[stem] for stem in SCREEN_STEMS]
+        )
     selection = summarize(selection_rows) if selection_rows else None
     selected = bool(
         selection is not None

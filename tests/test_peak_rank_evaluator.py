@@ -78,6 +78,10 @@ def _args(root: Path, checkpoint: Path, terminal: Path) -> Namespace:
                         "tta_views": views,
                         "complete_synthetic_examples": 24,
                         "total_truth_nodes": 100,
+                        "selected_predictions": 100,
+                        "precision": 0.9,
+                        "recall": 0.9,
+                        "detection_jaccard": 0.82,
                     }
                     for mode, views in {
                         "none": 1,
@@ -152,10 +156,7 @@ def test_selection_rejection_keeps_acceptance_closed(
     evaluation.orchestrate(args)
     result = json.loads((args.output_dir / "peak_rank_validation.json").read_text())
     assert calls == [
-        ("tta-calibration-none", False, "none"),
-        ("tta-calibration-zflip2", False, "zflip2"),
-        ("tta-calibration-rot4", False, "rot4"),
-        ("tta-calibration-d4", False, "d4"),
+        ("selection-none", False, "none"),
     ]
     assert result["selection_passed"] is False
     assert result["acceptance_opened"] is False
@@ -203,10 +204,10 @@ def test_worker_launcher_requires_exactly_two_devices(tmp_path: Path) -> None:
 
 def test_tta_selection_prefers_cheapest_nonregressing_mode() -> None:
     summaries = {
-        "none": {"annotated_node_recall": 0.966, "worst_movie_recall": 0.91},
-        "zflip2": {"annotated_node_recall": 0.967, "worst_movie_recall": 0.911},
-        "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
-        "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
+        "none": {"detection_jaccard": 0.966, "recall": 0.91},
+        "zflip2": {"detection_jaccard": 0.967, "recall": 0.911},
+        "rot4": {"detection_jaccard": 0.968, "recall": 0.912},
+        "d4": {"detection_jaccard": 0.969, "recall": 0.914},
     }
     selected, gate = evaluation.select_tta_mode(summaries)
     assert selected == "none"
@@ -215,10 +216,10 @@ def test_tta_selection_prefers_cheapest_nonregressing_mode() -> None:
 
 def test_tta_selection_rejects_fast_mode_with_recall_loss() -> None:
     summaries = {
-        "none": {"annotated_node_recall": 0.95, "worst_movie_recall": 0.89},
-        "zflip2": {"annotated_node_recall": 0.951, "worst_movie_recall": 0.891},
-        "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
-        "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
+        "none": {"detection_jaccard": 0.95, "recall": 0.89},
+        "zflip2": {"detection_jaccard": 0.951, "recall": 0.891},
+        "rot4": {"detection_jaccard": 0.968, "recall": 0.912},
+        "d4": {"detection_jaccard": 0.969, "recall": 0.914},
     }
     selected, _gate = evaluation.select_tta_mode(summaries)
     assert selected == "rot4"

@@ -1732,9 +1732,10 @@ well as the synthetic generator.
   micro detection Jaccard on all 24 fully labeled Synthetic256 selection
   frames (sequences 240-247). The checkpoint-bound artifact is produced before
   any held-out Biohub movie is opened; it reads no competition data, organizer
-  estimate, public prediction/checkpoint, or leaderboard result. Validation
-  may select only the cheapest TTA mode within its predeclared recall
-  tolerances, using that mode's already-frozen synthetic threshold. Production
+  estimate, public prediction/checkpoint, or leaderboard result. The same
+  synthetic-only artifact selects the cheapest TTA mode within `0.003` micro
+  detection Jaccard and `0.01` recall of the best mode, using that mode's
+  already-frozen threshold. Production
   no longer reads the organizer estimate at all; it records the actual number
   of image/model peaks selected by the frozen threshold.
 - The clean-threshold pass is the only Biohub successor to active V3. It reuses
@@ -1744,4 +1745,7 @@ well as the synthetic generator.
   for this calibration marker so the previous count-calibrated runtime cannot
   race into Kaggle validation. All non-V3 validation/candidate waiters were
   stopped. V3 training remains the sole paid GPU owner, and V21/V27/graph-v2
-  remain staged with no automatic launch path.
+  remain staged with no automatic launch path. This also removes the former
+  four-mode real-movie TTA sweep: Kaggle now evaluates only the clean-frozen
+  mode, but still covers every frame of all eight selection movies and, if the
+  gate passes, all four disjoint acceptance movies.
