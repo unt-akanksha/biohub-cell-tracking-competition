@@ -62,6 +62,8 @@ def main() -> None:
         and result.get("selection_passed") is True
         and result.get("acceptance_opened") is True
         and result.get("promotion_passed") is True
+        and result.get("selected_tta_mode") in {"none", "rot4", "d4"}
+        and result.get("selected_tta_views") in {1, 4, 8}
         and result.get("competition_test_data_read") is False
         and result.get("competition_submission_performed") is False
     ):
@@ -86,6 +88,8 @@ def main() -> None:
     )
     manifest["clean_validation_promotion_passed"] = True
     manifest["clean_validation_sha256"] = result_hash
+    manifest["selected_peak_tta_mode"] = result["selected_tta_mode"]
+    manifest["selected_peak_tta_views"] = result["selected_tta_views"]
     manifest["files"][destination.name] = {
         "bytes": destination.stat().st_size,
         "sha256": result_hash,
@@ -97,6 +101,7 @@ def main() -> None:
                 "runtime": str(args.runtime),
                 "checkpoint_sha256": checkpoint_hash,
                 "clean_validation_sha256": result_hash,
+                "selected_peak_tta_mode": result["selected_tta_mode"],
                 "requires_private_dataset_version": True,
             },
             sort_keys=True,

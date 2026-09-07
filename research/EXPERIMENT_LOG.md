@@ -737,3 +737,38 @@ well as the synthetic generator.
   7-hour wall guard. It starts only after the v1 archive is hash-verified and
   the shared A10G is idle; the Biohub yield guard remains authoritative if an
   unrelated workload later appears.
+- Before v1 reached its first step-1,000 selection checkpoint, the downstream
+  inference policy was made runtime-aware without changing training. Two
+  held-out calibration movies compare fixed `none`, `rot4`, and `d4` detector
+  inference (1, 4, and 8 views). The fewest-view mode is selected only when its
+  pooled recall is within `0.003` and its worst-movie recall within `0.01` of
+  the best observed mode while also clearing the original absolute selection
+  floors. The selected mode alone scores the other six selection movies and,
+  only after a pass, the four sealed acceptance movies. This reuses calibration
+  rows rather than rerunning them and records frame-normalized throughput.
+- Production now hash-binds that clean-selected TTA mode into the promoted
+  runtime and both test and validator worker commands. Each two-GPU worker
+  records per-movie frames and elapsed time, projects its full shard runtime
+  with a frozen `1.15` safety factor, and fails early above `31,500` seconds.
+  This reserves 9,900 seconds inside the notebook's 41,400-second hard stop for
+  graph finishing, validation, CSV creation, and evidence serialization. A
+  candidate cannot be externally promoted unless the recorded worker runtime,
+  projected runtime, selected mode, checkpoint, and clean-validation hashes all
+  agree. Twenty-nine focused peak-rank tests pass after this change.
+- At the same pre-selection checkpoint, the active Antelume v1 run remained
+  healthy at step 200. Training loss moved from `4.120774` at step 50 to
+  `2.496155` at step 200; the A10G process used about 6.9 GB and the v2 queue
+  remained idle after verifying every required source hash. This is training
+  telemetry only, not promotion evidence.
+- A pre-run integration audit caught that the external-node worker loaded only
+  the public primary association model even though the candidate contract
+  attributed the two-model `948tta2` linker. The worker now independently
+  loads both hash-recorded association checkpoints and fails closed unless the
+  frozen public configuration is exactly present: secondary edge weight
+  `0.20`, low-margin consensus, bidirectional weight `0.15`, edge threshold
+  `0.48`, and primary plus secondary edge-feature TTA. These models generate
+  edges only; the project detector still owns every node and subvoxel
+  coordinate. Worker manifests record both association hashes and settings,
+  and promotion requires the same evidence. Sixty-two focused peak-rank tests
+  pass after this correction; no candidate had been launched under the faulty
+  integration.

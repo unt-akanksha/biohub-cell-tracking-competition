@@ -184,6 +184,8 @@ try {
         "device_count() != 2",
         "CUDA_VISIBLE_DEVICES",
         "peak_worker_manifests",
+        "selected_peak_tta_mode",
+        "max_projected_worker_seconds",
         "SEC_EDGE_TTA_ACTIVE",
         "redoctopusk/biohub-948tta2",
         "completed_pending_external_promotion_gate"

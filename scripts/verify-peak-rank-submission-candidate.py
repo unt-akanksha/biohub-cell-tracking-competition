@@ -58,6 +58,9 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         and validation.get("selection_passed") is True
         and validation.get("acceptance_opened") is True
         and validation.get("promotion_passed") is True
+        and validation.get("selected_tta_mode") in {"none", "rot4", "d4"}
+        and manifest.get("selected_peak_tta_mode") == validation.get("selected_tta_mode")
+        and manifest.get("selected_peak_tta_views") == validation.get("selected_tta_views")
         and validation.get("competition_test_data_read") is False
         and validation.get("competition_submission_performed") is False
         and validation.get("provenance", {}).get("checkpoint_sha256")
@@ -68,6 +71,8 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         "manifest_sha256": sha256_file(runtime_manifest),
         "checkpoint_sha256": manifest["checkpoint_sha256"],
         "clean_validation_sha256": manifest["clean_validation_sha256"],
+        "selected_peak_tta_mode": manifest["selected_peak_tta_mode"],
+        "selected_peak_tta_views": manifest["selected_peak_tta_views"],
     }
 
 
@@ -126,11 +131,17 @@ def verify_candidate(
         and evidence.get("source_public_notebook_sha256")
             == SOURCE_PUBLIC_NOTEBOOK_SHA256
         and evidence.get("secondary_edge_feature_tta") is True
+        and evidence.get("dual_association_models_verified") is True
         and evidence.get("source_advertised_score_used_as_evidence") is False
         and evidence.get("public_predictions_copied") is False
         and evidence.get("checkpoint_sha256") == runtime["checkpoint_sha256"]
         and evidence.get("runtime_manifest_sha256") == runtime["manifest_sha256"]
         and evidence.get("clean_validation_sha256") == runtime["clean_validation_sha256"]
+        and evidence.get("selected_peak_tta_mode") == runtime["selected_peak_tta_mode"]
+        and evidence.get("selected_peak_tta_views") == runtime["selected_peak_tta_views"]
+        and float(evidence.get("max_worker_elapsed_seconds", math.inf)) < 31_500.0
+        and float(evidence.get("max_projected_worker_seconds", math.inf)) <= 31_500.0
+        and float(evidence.get("worker_budget_seconds", 0.0)) == 31_500.0
         and evidence.get("worker_count") == 2
         and evidence.get("competition_submission_performed") is False
         and evidence.get("authorized_for_submission") is False
@@ -144,6 +155,17 @@ def verify_candidate(
             row.get("run_id") == "peak-rank-official-linker-production-v1"
             and row.get("worker_count") == 2
             and row.get("checkpoint_sha256") == runtime["checkpoint_sha256"]
+            and row.get("peak_tta_mode") == runtime["selected_peak_tta_mode"]
+            and row.get("peak_tta_views") == runtime["selected_peak_tta_views"]
+            and row.get("association", {}).get("edge_feature_tta") is True
+            and row.get("association", {}).get("secondary_link_mode")
+                == "low_margin_consensus"
+            and float(
+                row.get("association", {}).get("bidirectional_edge_weight", math.nan)
+            ) == 0.15
+            and float(row.get("worker_elapsed_seconds", math.inf)) < 31_500.0
+            and float(row.get("projected_worker_seconds", math.inf)) <= 31_500.0
+            and float(row.get("worker_budget_seconds", 0.0)) == 31_500.0
             and row.get("input_partition") == "test"
             and row.get("competition_train_labels_read") is False
             and row.get("competition_test_labels_read") is False
@@ -202,6 +224,7 @@ def verify_candidate(
         "source_public_kernel_ref": SOURCE_PUBLIC_KERNEL_REF,
         "source_public_notebook_sha256": SOURCE_PUBLIC_NOTEBOOK_SHA256,
         "secondary_edge_feature_tta": True,
+        "dual_association_models_verified": True,
         "submission": submission,
         "submission_path": str(submission_path.resolve()),
         "submission_sha256": submission_sha256,
@@ -210,6 +233,8 @@ def verify_candidate(
         "runtime_manifest_sha256": runtime["manifest_sha256"],
         "checkpoint_sha256": runtime["checkpoint_sha256"],
         "worker_count": 2,
+        "selected_peak_tta_mode": runtime["selected_peak_tta_mode"],
+        "selected_peak_tta_views": runtime["selected_peak_tta_views"],
         "public_control": baseline,
         "public_control_validator_sha256": baseline_sha256,
         "candidate_validator": candidate,

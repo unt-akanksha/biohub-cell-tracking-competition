@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -38,6 +39,17 @@ except ModuleNotFoundError:
 
 
 RUN_ID = "peak-rank-official-linker-production-v1"
+PEAK_TTA_VIEWS = {"none": 1, "rot4": 4, "d4": 8}
+RUNTIME_PROJECTION_SAFETY_FACTOR = 1.15
+EXPECTED_ASSOCIATION_CONFIG = {
+    "secondary_edge_weight": 0.20,
+    "secondary_detection_weight": 0.80,
+    "secondary_link_mode": "low_margin_consensus",
+    "secondary_mix_temperature": 1.0,
+    "secondary_low_margin_max": 0.35,
+    "edge_candidate_threshold": 0.48,
+    "bidirectional_edge_weight": 0.15,
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -65,10 +77,17 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
             raise RuntimeError(f"peak-ranking runtime file changed: {name}")
     checkpoint = runtime_root / "peak_rank_detector.pt"
     terminal = runtime_root / "training_terminal.json"
+    validation_path = runtime_root / "clean_validation.json"
+    validation = json.loads(validation_path.read_text(encoding="utf-8"))
+    selected_tta_mode = validation.get("selected_tta_mode")
     if not (
         manifest.get("training_audit_passed") is True
         and manifest.get("parameter_count") == 38_381_478
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
+        and manifest.get("clean_validation_promotion_passed") is True
+        and manifest.get("clean_validation_sha256") == sha256_file(validation_path)
+        and manifest.get("selected_peak_tta_mode") == selected_tta_mode
+        and selected_tta_mode in PEAK_TTA_VIEWS
     ):
         raise RuntimeError("peak-ranking runtime manifest is ineligible")
     return checkpoint, terminal, manifest
@@ -95,6 +114,72 @@ def import_official_predictor(source: Path):
         if not hasattr(module, required):
             raise RuntimeError(f"official predictor lacks {required}")
     return module
+
+
+def load_attributed_association_stack(
+    official: Any, weights: Path, device: torch.device
+) -> tuple[Any, int, tuple[int, ...], dict[str, Any], dict[str, Any]]:
+    """Load both audited public association members with frozen config checks."""
+
+    primary, window_size, downsample = official.load_model(weights, device)
+    secondary_text = os.environ.get("BIOHUB_SECONDARY_WEIGHTS", "").strip()
+    if not secondary_text:
+        raise RuntimeError("audited secondary association weights are not configured")
+    secondary_path = Path(secondary_text)
+    if not secondary_path.is_file():
+        raise FileNotFoundError(secondary_path)
+    numeric_environment = {
+        "secondary_edge_weight": "BIOHUB_SECONDARY_EDGE_WEIGHT",
+        "secondary_detection_weight": "BIOHUB_SECONDARY_DETECTION_WEIGHT",
+        "secondary_mix_temperature": "BIOHUB_SECONDARY_MIX_TEMPERATURE",
+        "secondary_low_margin_max": "BIOHUB_SECONDARY_LOW_MARGIN_MAX",
+        "edge_candidate_threshold": "BIOHUB_DUAL_SEED_EDGE_THRESHOLD",
+        "bidirectional_edge_weight": "BIOHUB_BIDIRECTIONAL_EDGE_WEIGHT",
+    }
+    observed: dict[str, Any] = {
+        name: float(os.environ.get(environment, "nan"))
+        for name, environment in numeric_environment.items()
+    }
+    observed["secondary_link_mode"] = os.environ.get(
+        "BIOHUB_SECONDARY_LINK_MODE", ""
+    ).strip()
+    for name, expected in EXPECTED_ASSOCIATION_CONFIG.items():
+        actual = observed[name]
+        if isinstance(expected, float):
+            if not math.isfinite(actual) or not math.isclose(
+                actual, expected, rel_tol=0.0, abs_tol=1e-12
+            ):
+                raise ValueError(
+                    f"audited association config drift for {name}: {actual} != {expected}"
+                )
+        elif actual != expected:
+            raise ValueError(
+                f"audited association config drift for {name}: {actual!r} != {expected!r}"
+            )
+    if os.environ.get("BIOHUB_EDGE_FEATURE_TTA", "") != "1":
+        raise ValueError("audited association feature TTA is not enabled")
+    secondary, secondary_window, secondary_downsample = official.load_model(
+        secondary_path, device
+    )
+    if secondary_window != window_size or secondary_downsample != downsample:
+        raise ValueError("primary and secondary association grids differ")
+    kwargs = {
+        "secondary_model": secondary,
+        "secondary_edge_weight": observed["secondary_edge_weight"],
+        # External detections own the nodes. This remains nonzero because the
+        # audited source gates secondary feature TTA behind this setting.
+        "secondary_detection_weight": observed["secondary_detection_weight"],
+        "secondary_link_mode": observed["secondary_link_mode"],
+        "secondary_mix_temperature": observed["secondary_mix_temperature"],
+        "secondary_low_margin_max": observed["secondary_low_margin_max"],
+    }
+    manifest = {
+        **observed,
+        "primary_weights_sha256": sha256_file(weights),
+        "secondary_weights_sha256": sha256_file(secondary_path),
+        "edge_feature_tta": True,
+    }
+    return primary, window_size, downsample, kwargs, manifest
 
 
 def selected_names(
@@ -149,14 +234,26 @@ def resolved_worker_identity(args: argparse.Namespace) -> tuple[int, int]:
 def run(args: argparse.Namespace) -> None:
     started = time.monotonic()
     checkpoint, terminal_path, runtime_manifest = verify_runtime(args.runtime_root)
+    selected_tta_mode = str(runtime_manifest["selected_peak_tta_mode"])
+    if args.peak_tta_mode != selected_tta_mode:
+        raise RuntimeError(
+            f"requested peak TTA {args.peak_tta_mode} differs from clean-selected "
+            f"mode {selected_tta_mode}"
+        )
     official = import_official_predictor(args.official_predictor)
     if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
         raise RuntimeError("production worker requires exactly one visible CUDA device")
     device = torch.device("cuda:0")
     training_terminal = validate_training(checkpoint, terminal_path)
     detector = load_model(checkpoint, training_terminal, device)
-    association_model, window_size, downsample = official.load_model(
-        args.weights, device
+    (
+        association_model,
+        window_size,
+        downsample,
+        association_kwargs,
+        association_manifest,
+    ) = load_attributed_association_stack(
+        official, args.weights, device
     )
     cfg = official.PredictConfig(
         det_threshold=args.det_threshold,
@@ -166,6 +263,7 @@ def run(args: argparse.Namespace) -> None:
         ilp_disappearance_weight=args.ilp_disappearance_weight,
         ilp_division_weight=args.ilp_division_weight,
     )
+    cfg.threshold = association_manifest["edge_candidate_threshold"]
     worker_index, worker_count = resolved_worker_identity(args)
     output_dir = args.output_dir
     if output_dir is None:
@@ -183,8 +281,19 @@ def run(args: argparse.Namespace) -> None:
         worker_count,
         parse_slice(args.video_slice),
     )
-    rows = []
+    import zarr
+
+    frame_counts = {}
     for name in names:
+        path = sample_path_for_name(args.data_dir, name)
+        if path is None:
+            raise FileNotFoundError(name)
+        frame_counts[name] = int(zarr.open_group(str(path), mode="r")["0"].shape[0])
+    total_frame_count = sum(frame_counts.values())
+    rows = []
+    projected_worker_seconds = 0.0
+    for name in names:
+        movie_started = time.monotonic()
         sample_path = sample_path_for_name(args.data_dir, name)
         if sample_path is None:
             raise FileNotFoundError(f"movie disappeared after inventory validation: {name}")
@@ -194,7 +303,7 @@ def run(args: argparse.Namespace) -> None:
             device=device,
             batch_size=args.peak_batch_size,
             calibration_frames=args.calibration_frames,
-            d4_tta=not args.disable_peak_d4_tta,
+            tta_mode=args.peak_tta_mode,
         )
         coordinates, edges = predict_video_with_external_detections(
             official,
@@ -206,6 +315,7 @@ def run(args: argparse.Namespace) -> None:
             window_size=window_size,
             unet_batch_size=args.unet_batch_size,
             downsample=downsample,
+            **association_kwargs,
         )
         graph = official.build_graph(coordinates, edges)
         raw_edges = int(graph.num_edges())
@@ -220,6 +330,7 @@ def run(args: argparse.Namespace) -> None:
                 graph = solver.solve(graph)
         output = output_dir / f"{name}.geff"
         official.save_graph(graph, output)
+        movie_elapsed = time.monotonic() - movie_started
         rows.append(
             {
                 "dataset": name.removesuffix(".zarr"),
@@ -229,9 +340,43 @@ def run(args: argparse.Namespace) -> None:
                 "density_threshold": cache.threshold,
                 "estimated_node_count": cache.estimated_node_count,
                 "projected_node_count": cache.projected_node_count,
+                "frame_count": frame_counts[name],
+                "elapsed_seconds": movie_elapsed,
+                "seconds_per_frame": movie_elapsed / frame_counts[name],
+                "peak_tta_mode": selected_tta_mode,
+                "peak_tta_views": PEAK_TTA_VIEWS[selected_tta_mode],
             }
         )
         print("PEAK TRACKING MOVIE", json.dumps(rows[-1], sort_keys=True), flush=True)
+        completed_seconds = sum(float(row["elapsed_seconds"]) for row in rows)
+        completed_frames = sum(int(row["frame_count"]) for row in rows)
+        projected_worker_seconds = (
+            completed_seconds
+            * total_frame_count
+            / completed_frames
+            * RUNTIME_PROJECTION_SAFETY_FACTOR
+        )
+        print(
+            "PEAK TRACKING RUNTIME",
+            json.dumps(
+                {
+                    "completed_movies": len(rows),
+                    "worker_movies": len(names),
+                    "completed_frames": completed_frames,
+                    "worker_frames": total_frame_count,
+                    "safety_factor": RUNTIME_PROJECTION_SAFETY_FACTOR,
+                    "projected_worker_seconds": projected_worker_seconds,
+                    "worker_budget_seconds": args.max_projected_worker_seconds,
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+        if projected_worker_seconds > args.max_projected_worker_seconds:
+            raise TimeoutError(
+                "measured peak-ranking throughput cannot finish inside the frozen "
+                f"worker budget: {projected_worker_seconds:.1f}s projected"
+            )
         if time.monotonic() - started > args.max_wall_seconds:
             raise TimeoutError("peak-ranking production worker exceeded its wall guard")
     atomic_json(
@@ -242,6 +387,15 @@ def run(args: argparse.Namespace) -> None:
             "worker_index": worker_index,
             "worker_count": worker_count,
             "movies": rows,
+            "peak_tta_mode": selected_tta_mode,
+            "peak_tta_views": PEAK_TTA_VIEWS[selected_tta_mode],
+            "total_frame_count": total_frame_count,
+            "movie_compute_seconds": sum(float(row["elapsed_seconds"]) for row in rows),
+            "worker_elapsed_seconds": time.monotonic() - started,
+            "projected_worker_seconds": projected_worker_seconds,
+            "runtime_projection_safety_factor": RUNTIME_PROJECTION_SAFETY_FACTOR,
+            "worker_budget_seconds": args.max_projected_worker_seconds,
+            "association": association_manifest,
             "checkpoint_sha256": runtime_manifest["checkpoint_sha256"],
             "input_partition": args.data_dir.name,
             "competition_train_labels_read": False,
@@ -275,7 +429,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--ilp-appearance-weight", type=float, default=0.0)
     parser.add_argument("--ilp-disappearance-weight", type=float, default=2.0)
     parser.add_argument("--ilp-division-weight", type=float, default=1.2)
-    parser.add_argument("--disable-peak-d4-tta", action="store_true")
+    parser.add_argument("--peak-tta-mode", choices=tuple(PEAK_TTA_VIEWS), required=True)
+    parser.add_argument("--max-projected-worker-seconds", type=float, default=31_500.0)
     parser.add_argument("--max-wall-seconds", type=float, default=39_000.0)
     args = parser.parse_args()
     if (
@@ -283,6 +438,7 @@ def parse_args() -> argparse.Namespace:
         or args.unet_batch_size <= 0
         or args.calibration_frames <= 0
         or args.max_wall_seconds <= 0
+        or args.max_projected_worker_seconds <= 0
     ):
         parser.error("batch, calibration, and wall limits must be positive")
     return args

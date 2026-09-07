@@ -179,6 +179,7 @@ command = [
     "--devices", "0,1",
     "--batch-size", "1",
     "--calibration-frames", "12",
+    "--tta-modes", "none,rot4,d4",
     "--max-wall-seconds", "39000",
 ]
 environment = os.environ.copy()
@@ -199,7 +200,9 @@ print(json.dumps({
     "selection_passed": result["selection_passed"],
     "acceptance_opened": result["acceptance_opened"],
     "promotion_passed": result["promotion_passed"],
-    "selection_recall": result["selection"]["annotated_node_recall"],
+    "selected_tta_mode": result["selected_tta_mode"],
+    "selected_tta_views": result["selected_tta_views"],
+    "selection_recall": None if result["selection"] is None else result["selection"]["annotated_node_recall"],
     "acceptance_recall": None if result["acceptance"] is None else result["acceptance"]["annotated_node_recall"],
 }, indent=2, sort_keys=True))
 '''

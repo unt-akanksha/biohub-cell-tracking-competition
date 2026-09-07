@@ -8,6 +8,7 @@ from research.peak_rank_detection.inference import (
     normalize_triplet,
     peaks_from_prediction,
     predict_probability_and_offsets,
+    resolve_tta_mode,
 )
 
 
@@ -65,6 +66,25 @@ def test_d4_probability_is_equivariant_for_coordinate_model() -> None:
         5,
     )
     assert offsets.shape == (1, 3, 8, 8, 8)
+
+
+def test_explicit_tta_modes_have_frozen_view_counts() -> None:
+    class CountingModel(CoordinateModel):
+        def __init__(self) -> None:
+            super().__init__()
+            self.calls = 0
+
+        def forward(self, frames: torch.Tensor):
+            self.calls += 1
+            return super().forward(frames)
+
+    frames = torch.zeros(1, 3, 8, 8, 8)
+    for mode, expected in (("none", 1), ("rot4", 4), ("d4", 8)):
+        model = CountingModel()
+        predict_probability_and_offsets(model, frames, tta_mode=mode)
+        assert model.calls == expected
+    assert resolve_tta_mode(d4_tta=True) == "d4"
+    assert resolve_tta_mode(d4_tta=False) == "none"
 
 
 def test_peak_extraction_applies_learned_offset() -> None:

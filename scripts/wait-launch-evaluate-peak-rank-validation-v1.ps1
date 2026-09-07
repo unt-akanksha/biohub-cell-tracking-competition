@@ -190,6 +190,7 @@ try {
     foreach ($requiredPattern in @(
         "torch.cuda.device_count() != 2",
         '"--devices", "0,1"',
+        '"--tta-modes", "none,rot4,d4"',
         "acceptance_opened",
         "competition_submission_performed"
     )) {
@@ -268,7 +269,9 @@ try {
         download_root = $downloadRoot
         validation_result_sha256 = $resultHash
         selection_passed = $result.selection_passed
-        selection_recall = $result.selection.annotated_node_recall
+        selection_recall = if ($null -eq $result.selection) { $null } else { $result.selection.annotated_node_recall }
+        selected_tta_mode = $result.selected_tta_mode
+        selected_tta_views = $result.selected_tta_views
         acceptance_opened = $result.acceptance_opened
         acceptance_recall = if ($null -eq $result.acceptance) { $null } else { $result.acceptance.annotated_node_recall }
         promotion_passed = $result.promotion_passed

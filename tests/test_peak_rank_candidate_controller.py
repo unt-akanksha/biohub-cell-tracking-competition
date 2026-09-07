@@ -28,6 +28,8 @@ def test_controller_is_two_gpu_private_and_fail_closed() -> None:
         "device_count() != 2",
         "SEC_EDGE_TTA_ACTIVE",
         "redoctopusk/biohub-948tta2",
+        "selected_peak_tta_mode",
+        "max_projected_worker_seconds",
         "enable_internet -ne $false",
         'Write-Terminal "skipped_after_clean_rejection"',
         'Write-Terminal "candidate_rejected"',

@@ -23,11 +23,11 @@ try:
         score_graph_nodes,
         score_predictions,
     )
-    from inference import predict_frames
+    from inference import TTA_TRANSFORMS, predict_frames
     from model import TemporalPeakRankDetector, count_parameters
 except ModuleNotFoundError:
     from research.density_calibration import read_estimated_node_count, uniform_frame_indices
-    from research.peak_rank_detection.inference import predict_frames
+    from research.peak_rank_detection.inference import TTA_TRANSFORMS, predict_frames
     from research.peak_rank_detection.model import (
         TemporalPeakRankDetector,
         count_parameters,
@@ -61,6 +61,10 @@ SELECTION_POOLED_MIN = 0.80
 SELECTION_WORST_MIN = 0.65
 PROMOTION_WORST_DELTA_MIN = -0.01
 EXPECTED_PARAMETER_COUNT = 38_381_478
+TTA_CALIBRATION_STEMS = ("44b6_d29c9ab2", "6bba_09961292")
+TTA_MODE_ORDER = ("none", "rot4", "d4")
+TTA_POOLED_REGRESSION_MAX = 0.003
+TTA_WORST_REGRESSION_MAX = 0.01
 
 
 def sha256_file(path: Path) -> str:
@@ -133,13 +137,14 @@ def evaluate_worker(args: argparse.Namespace) -> None:
         if estimated is None:
             raise ValueError(f"missing organizer count estimate for {stem}")
         frame_count = int(zarr.open_group(str(sample_path), mode="r")["0"].shape[0])
+        movie_started = time.monotonic()
         predictions, observed_frames = predict_frames(
             model,
             sample_path,
             range(frame_count),
             device=device,
             batch_size=args.batch_size,
-            d4_tta=not args.disable_d4_tta,
+            tta_mode=args.tta_mode,
         )
         if observed_frames != frame_count:
             raise RuntimeError("detector inference frame count changed")
@@ -150,12 +155,18 @@ def evaluate_worker(args: argparse.Namespace) -> None:
         # Labels are first opened after the image/metadata-only threshold is fixed.
         truth = graph_points_by_frame(truth_path)
         candidate = score_predictions(predictions, truth, threshold)
+        movie_elapsed = time.monotonic() - movie_started
         row: dict[str, Any] = {
             "stem": stem,
             "estimated_node_count": estimated,
             "threshold": threshold,
             "projected_node_count": projected,
             "projected_count_ratio": projected / estimated,
+            "frame_count": frame_count,
+            "elapsed_seconds": movie_elapsed,
+            "seconds_per_frame": movie_elapsed / frame_count,
+            "tta_mode": args.tta_mode,
+            "tta_views": len(TTA_TRANSFORMS[args.tta_mode]),
             "candidate": candidate,
         }
         if args.baseline_predictions is not None:
@@ -192,6 +203,8 @@ def summarize(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
             "matched_gt_nodes": prefix_matched,
             "annotated_node_recall": prefix_matched / prefix_annotated,
         }
+    elapsed = sum(float(row.get("elapsed_seconds", 0.0)) for row in rows)
+    frame_count = sum(int(row.get("frame_count", 0)) for row in rows)
     return {
         "movies": len(rows),
         "annotated_gt_nodes": annotated,
@@ -200,8 +213,39 @@ def summarize(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "worst_movie_recall": min(
             float(row["candidate"]["annotated_node_recall"]) for row in rows
         ),
+        "inference_seconds": elapsed,
+        "frame_count": frame_count,
+        "seconds_per_frame": elapsed / frame_count if frame_count else None,
         "by_prefix": by_prefix,
         "rows": list(rows),
+    }
+
+
+def select_tta_mode(summaries: dict[str, dict[str, Any]]) -> tuple[str | None, dict[str, Any]]:
+    """Prefer the fewest views that stays close to the best frozen calibration result."""
+
+    if not summaries:
+        raise ValueError("TTA calibration summaries are empty")
+    best_pooled = max(float(row["annotated_node_recall"]) for row in summaries.values())
+    best_worst = max(float(row["worst_movie_recall"]) for row in summaries.values())
+    pooled_min = max(SELECTION_POOLED_MIN, best_pooled - TTA_POOLED_REGRESSION_MAX)
+    worst_min = max(SELECTION_WORST_MIN, best_worst - TTA_WORST_REGRESSION_MAX)
+    eligible = [
+        mode
+        for mode in TTA_MODE_ORDER
+        if mode in summaries
+        and float(summaries[mode]["annotated_node_recall"]) >= pooled_min
+        and float(summaries[mode]["worst_movie_recall"]) >= worst_min
+    ]
+    selected = eligible[0] if eligible else None
+    return selected, {
+        "policy": "fewest_views_within_frozen_recall_tolerance",
+        "mode_order": list(TTA_MODE_ORDER),
+        "pooled_recall_min": pooled_min,
+        "worst_movie_recall_min": worst_min,
+        "pooled_regression_max": TTA_POOLED_REGRESSION_MAX,
+        "worst_movie_regression_max": TTA_WORST_REGRESSION_MAX,
+        "eligible_modes": eligible,
     }
 
 
@@ -211,7 +255,10 @@ def launch_workers(
     *,
     phase: str,
     use_baseline: bool,
+    tta_mode: str,
 ) -> list[dict[str, Any]]:
+    if tta_mode not in TTA_TRANSFORMS:
+        raise ValueError(f"unsupported peak TTA mode: {tta_mode}")
     devices = [value for value in args.devices.split(",") if value]
     if len(devices) != 2:
         raise ValueError("exactly two CUDA device identifiers are required")
@@ -243,9 +290,9 @@ def launch_workers(
             str(args.max_wall_seconds),
             "--output",
             str(output),
+            "--tta-mode",
+            tta_mode,
         ]
-        if args.disable_d4_tta:
-            command.append("--disable-d4-tta")
         if use_baseline:
             command.extend(["--baseline-predictions", str(args.baseline_predictions)])
         environment = os.environ.copy()
@@ -268,12 +315,46 @@ def launch_workers(
 def orchestrate(args: argparse.Namespace) -> None:
     args.output_dir.mkdir(parents=True, exist_ok=False)
     terminal = validate_training(args.checkpoint, args.training_terminal)
-    selection_rows = launch_workers(
-        args, SCREEN_STEMS, phase="selection", use_baseline=False
+    requested_modes = tuple(
+        mode.strip() for mode in args.tta_modes.split(",") if mode.strip()
     )
-    selection = summarize(selection_rows)
+    if not requested_modes or len(requested_modes) != len(set(requested_modes)):
+        raise ValueError("TTA mode inventory must be nonempty and unique")
+    if any(mode not in TTA_TRANSFORMS for mode in requested_modes):
+        raise ValueError(f"unsupported TTA mode inventory: {requested_modes}")
+    calibration_rows: dict[str, list[dict[str, Any]]] = {}
+    calibration_summaries: dict[str, dict[str, Any]] = {}
+    for mode in requested_modes:
+        rows = launch_workers(
+            args,
+            TTA_CALIBRATION_STEMS,
+            phase=f"tta-calibration-{mode}",
+            use_baseline=False,
+            tta_mode=mode,
+        )
+        calibration_rows[mode] = rows
+        calibration_summaries[mode] = summarize(rows)
+    selected_mode, tta_gate = select_tta_mode(calibration_summaries)
+    selection_rows: list[dict[str, Any]] = []
+    if selected_mode is not None:
+        remaining = tuple(stem for stem in SCREEN_STEMS if stem not in TTA_CALIBRATION_STEMS)
+        selection_rows = [*calibration_rows[selected_mode]]
+        if remaining:
+            selection_rows.extend(
+                launch_workers(
+                    args,
+                    remaining,
+                    phase=f"selection-{selected_mode}",
+                    use_baseline=False,
+                    tta_mode=selected_mode,
+                )
+            )
+        by_stem = {row["stem"]: row for row in selection_rows}
+        selection_rows = [by_stem[stem] for stem in SCREEN_STEMS]
+    selection = summarize(selection_rows) if selection_rows else None
     selected = bool(
-        selection["annotated_node_recall"] >= SELECTION_POOLED_MIN
+        selection is not None
+        and selection["annotated_node_recall"] >= SELECTION_POOLED_MIN
         and selection["worst_movie_recall"] >= SELECTION_WORST_MIN
     )
     result: dict[str, Any] = {
@@ -282,6 +363,12 @@ def orchestrate(args: argparse.Namespace) -> None:
         "status": "completed",
         "selection": selection,
         "selection_passed": selected,
+        "selected_tta_mode": selected_mode,
+        "selected_tta_views": (
+            None if selected_mode is None else len(TTA_TRANSFORMS[selected_mode])
+        ),
+        "tta_calibration": calibration_summaries,
+        "tta_selection_gate": tta_gate,
         "selection_gate": {
             "pooled_recall_min": SELECTION_POOLED_MIN,
             "worst_movie_recall_min": SELECTION_WORST_MIN,
@@ -297,12 +384,16 @@ def orchestrate(args: argparse.Namespace) -> None:
             "training_terminal_sha256": sha256_file(args.training_terminal),
             "parameter_count": terminal["parameter_count"],
             "two_gpu_workers": True,
-            "d4_tta": not args.disable_d4_tta,
+            "selected_tta_mode": selected_mode,
         },
     }
     if selected:
         acceptance_rows = launch_workers(
-            args, ACCEPTANCE_STEMS, phase="acceptance", use_baseline=True
+            args,
+            ACCEPTANCE_STEMS,
+            phase=f"acceptance-{selected_mode}",
+            use_baseline=True,
+            tta_mode=str(selected_mode),
         )
         acceptance = summarize(acceptance_rows)
         deltas = [float(row["annotated_recall_delta"]) for row in acceptance_rows]
@@ -355,7 +446,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--calibration-frames", type=int, default=12)
     parser.add_argument("--max-wall-seconds", type=float, default=39_000.0)
     parser.add_argument("--output", type=Path)
-    parser.add_argument("--disable-d4-tta", action="store_true")
+    parser.add_argument("--tta-mode", choices=tuple(TTA_TRANSFORMS), default="d4")
+    parser.add_argument("--tta-modes", default=",".join(TTA_MODE_ORDER))
     args = parser.parse_args()
     if args.batch_size <= 0 or args.calibration_frames <= 0 or args.max_wall_seconds <= 0:
         parser.error("batch size, calibration frames, and wall limit must be positive")

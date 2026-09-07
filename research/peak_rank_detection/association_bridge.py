@@ -53,7 +53,8 @@ def predict_movie_detection_cache(
     device: Any,
     batch_size: int = 1,
     calibration_frames: int = 12,
-    d4_tta: bool = True,
+    d4_tta: bool | None = None,
+    tta_mode: str | None = None,
 ) -> ExternalDetectionCache:
     """Infer every frame and freeze one metadata-calibrated movie threshold."""
 
@@ -64,6 +65,7 @@ def predict_movie_detection_cache(
         device=device,
         batch_size=batch_size,
         d4_tta=d4_tta,
+        tta_mode=tta_mode,
     )
     if int(frame_count) != len(predictions):
         raise RuntimeError("peak-ranking inference did not cover every movie frame")
@@ -105,7 +107,8 @@ def predict_video_with_peak_rank_detections(
     detector_device: Any | None = None,
     batch_size: int = 1,
     calibration_frames: int = 12,
-    d4_tta: bool = True,
+    d4_tta: bool | None = None,
+    tta_mode: str | None = None,
     **association_kwargs: Any,
 ) -> tuple[np.ndarray, list[tuple[int, int, float, float]]]:
     """Compose the independent detector with unchanged official edge inference."""
@@ -117,6 +120,7 @@ def predict_video_with_peak_rank_detections(
         batch_size=batch_size,
         calibration_frames=calibration_frames,
         d4_tta=d4_tta,
+        tta_mode=tta_mode,
     )
     return predict_video_with_external_detections(
         predict_module,

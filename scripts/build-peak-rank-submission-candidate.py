@@ -152,11 +152,15 @@ if not (
     and _PR_VALIDATION.get("selection_passed") is True
     and _PR_VALIDATION.get("acceptance_opened") is True
     and _PR_VALIDATION.get("promotion_passed") is True
+    and _PR_VALIDATION.get("selected_tta_mode") in {"none", "rot4", "d4"}
+    and _PR_MANIFEST.get("selected_peak_tta_mode") == _PR_VALIDATION.get("selected_tta_mode")
+    and _PR_MANIFEST.get("selected_peak_tta_views") == _PR_VALIDATION.get("selected_tta_views")
     and _PR_VALIDATION.get("competition_submission_performed") is False
     and _PR_VALIDATION.get("provenance", {}).get("checkpoint_sha256")
         == _PR_MANIFEST.get("checkpoint_sha256")
 ):
     raise RuntimeError("Peak-ranking clean promotion evidence is ineligible")
+_PR_TTA_MODE = _PR_VALIDATION["selected_tta_mode"]
 if not _pr_torch.cuda.is_available() or _pr_torch.cuda.device_count() != 2:
     raise RuntimeError("Peak-ranking production requires exactly two Kaggle GPUs")
 print(_pr_json.dumps({
@@ -164,6 +168,7 @@ print(_pr_json.dumps({
     "checkpoint_sha256": _PR_MANIFEST["checkpoint_sha256"],
     "runtime_manifest_sha256": _PR_MANIFEST_SHA256,
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
+    "selected_peak_tta_mode": _PR_TTA_MODE,
     "gpu_count": _pr_torch.cuda.device_count(),
 }, indent=2, sort_keys=True))
 '''
@@ -179,6 +184,11 @@ if not all(
     row.get("run_id") == "peak-rank-official-linker-production-v1"
     and row.get("worker_count") == 2
     and row.get("checkpoint_sha256") == _PR_MANIFEST["checkpoint_sha256"]
+    and row.get("peak_tta_mode") == _PR_TTA_MODE
+    and row.get("peak_tta_views") == _PR_MANIFEST["selected_peak_tta_views"]
+    and row.get("association", {}).get("edge_feature_tta") is True
+    and row.get("association", {}).get("secondary_link_mode") == "low_margin_consensus"
+    and row.get("association", {}).get("bidirectional_edge_weight") == 0.15
     and row.get("input_partition") == "test"
     and row.get("competition_train_labels_read") is False
     and row.get("competition_test_labels_read") is False
@@ -207,10 +217,16 @@ _pr_evidence = {
     "source_public_kernel_ref": "redoctopusk/biohub-948tta2",
     "source_public_notebook_sha256": "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189",
     "secondary_edge_feature_tta": True,
+    "dual_association_models_verified": True,
     "source_advertised_score_used_as_evidence": False,
     "public_predictions_copied": False,
     "checkpoint_sha256": _PR_MANIFEST["checkpoint_sha256"],
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
+    "selected_peak_tta_mode": _PR_TTA_MODE,
+    "selected_peak_tta_views": _PR_MANIFEST["selected_peak_tta_views"],
+    "max_worker_elapsed_seconds": max(float(row["worker_elapsed_seconds"]) for row in _pr_workers),
+    "max_projected_worker_seconds": max(float(row["projected_worker_seconds"]) for row in _pr_workers),
+    "worker_budget_seconds": min(float(row["worker_budget_seconds"]) for row in _pr_workers),
     "worker_count": 2,
     "complete_test_movie_count": len(_pr_observed),
     "complete_validator_movie_count": len(validator_sample_rows),
@@ -241,6 +257,8 @@ def verify_promoted_runtime(runtime_root: Path) -> str:
         and validation.is_file()
         and manifest.get("clean_validation_sha256") == sha256_file(validation)
         and manifest.get("checkpoint_sha256") == sha256_file(runtime_root / "peak_rank_detector.pt")
+        and manifest.get("selected_peak_tta_mode") in {"none", "rot4", "d4"}
+        and manifest.get("selected_peak_tta_views") in {1, 4, 8}
     ):
         raise RuntimeError("local peak runtime is not clean-promoted")
     return sha256_file(manifest_path)
@@ -263,6 +281,8 @@ def build_notebook(manifest_sha256: str) -> dict:
         '    str(_PR_ROOT / "predict_with_official_linker.py"),\n'
         '    "--runtime-root",\n'
         '    str(_PR_ROOT),\n'
+        '    "--peak-tta-mode",\n'
+        '    _PR_TTA_MODE,\n'
         '    "--official-predictor",\n'
         '    str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
@@ -289,6 +309,7 @@ def build_notebook(manifest_sha256: str) -> dict:
         '        sys.executable, "scripts/predict_unet_transformer.py",\n',
         '        sys.executable, str(_PR_ROOT / "predict_with_official_linker.py"),\n'
         '        "--runtime-root", str(_PR_ROOT),\n'
+        '        "--peak-tta-mode", _PR_TTA_MODE,\n'
         '        "--official-predictor", str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
     notebook["cells"][validator_inference_index]["source"] = validator_inference.splitlines(keepends=True)

@@ -14,6 +14,7 @@ def test_promoter_requires_clean_hash_bound_non_submission_evidence() -> None:
         "validation_result_sha256",
         "checkpoint_sha256",
         "clean_validation_promotion_passed",
+        "selected_peak_tta_mode",
         "competition_submission_performed",
         "requires_private_dataset_version",
     ):

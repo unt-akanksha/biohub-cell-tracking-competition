@@ -63,7 +63,7 @@ def _args(root: Path, checkpoint: Path, terminal: Path) -> Namespace:
         batch_size=1,
         calibration_frames=12,
         max_wall_seconds=100.0,
-        disable_d4_tta=False,
+        tta_modes="none,rot4,d4",
     )
 
 
@@ -80,14 +80,18 @@ def test_selection_rejection_keeps_acceptance_closed(tmp_path: Path, monkeypatch
     args = _args(tmp_path, checkpoint, terminal)
     calls = []
 
-    def fake_launch(_args, stems, *, phase, use_baseline):
-        calls.append((phase, use_baseline))
+    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode):
+        calls.append((phase, use_baseline, tta_mode))
         return [_row(stem, 0.60) for stem in stems]
 
     monkeypatch.setattr(evaluation, "launch_workers", fake_launch)
     evaluation.orchestrate(args)
     result = json.loads((args.output_dir / "peak_rank_validation.json").read_text())
-    assert calls == [("selection", False)]
+    assert calls == [
+        ("tta-calibration-none", False, "none"),
+        ("tta-calibration-rot4", False, "rot4"),
+        ("tta-calibration-d4", False, "d4"),
+    ]
     assert result["selection_passed"] is False
     assert result["acceptance_opened"] is False
     assert result["promotion_passed"] is False
@@ -97,8 +101,8 @@ def test_two_phase_validation_promotes_only_clean_gain(tmp_path: Path, monkeypat
     checkpoint, terminal = _training_files(tmp_path)
     args = _args(tmp_path, checkpoint, terminal)
 
-    def fake_launch(_args, stems, *, phase, use_baseline):
-        if phase == "selection":
+    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode):
+        if phase.startswith("tta-calibration") or phase.startswith("selection"):
             return [_row(stem, 0.90) for stem in stems]
         assert use_baseline is True
         return [_row(stem, 0.98, baseline=0.97) for stem in stems]
@@ -107,6 +111,8 @@ def test_two_phase_validation_promotes_only_clean_gain(tmp_path: Path, monkeypat
     evaluation.orchestrate(args)
     result = json.loads((args.output_dir / "peak_rank_validation.json").read_text())
     assert result["selection_passed"] is True
+    assert result["selected_tta_mode"] == "none"
+    assert result["selected_tta_views"] == 1
     assert result["acceptance_opened"] is True
     assert result["promotion_passed"] is True
     assert result["competition_submission_performed"] is False
@@ -118,5 +124,30 @@ def test_worker_launcher_requires_exactly_two_devices(tmp_path: Path) -> None:
     args.devices = "0"
     with pytest.raises(ValueError, match="exactly two"):
         evaluation.launch_workers(
-            args, evaluation.SCREEN_STEMS, phase="selection", use_baseline=False
+            args,
+            evaluation.SCREEN_STEMS,
+            phase="selection",
+            use_baseline=False,
+            tta_mode="d4",
         )
+
+
+def test_tta_selection_prefers_cheapest_nonregressing_mode() -> None:
+    summaries = {
+        "none": {"annotated_node_recall": 0.966, "worst_movie_recall": 0.91},
+        "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
+        "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
+    }
+    selected, gate = evaluation.select_tta_mode(summaries)
+    assert selected == "none"
+    assert gate["eligible_modes"] == ["none", "rot4", "d4"]
+
+
+def test_tta_selection_rejects_fast_mode_with_recall_loss() -> None:
+    summaries = {
+        "none": {"annotated_node_recall": 0.95, "worst_movie_recall": 0.89},
+        "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
+        "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
+    }
+    selected, _gate = evaluation.select_tta_mode(summaries)
+    assert selected == "rot4"

@@ -11,6 +11,29 @@ import torch.nn.functional as F
 
 
 LOW_PROBABILITY_THRESHOLD = 0.01
+TTA_TRANSFORMS = {
+    "none": ((0, False),),
+    "rot4": tuple((rotation, False) for rotation in range(4)),
+    "d4": tuple(
+        (rotation, flip_x)
+        for flip_x in (False, True)
+        for rotation in range(4)
+    ),
+}
+
+
+def resolve_tta_mode(
+    *, tta_mode: str | None = None, d4_tta: bool | None = None
+) -> str:
+    """Resolve the new explicit TTA contract while retaining old call sites."""
+
+    if tta_mode is None:
+        return "d4" if d4_tta is not False else "none"
+    if tta_mode not in TTA_TRANSFORMS:
+        raise ValueError(f"unsupported peak TTA mode: {tta_mode}")
+    if d4_tta is not None and (tta_mode == "d4") != d4_tta:
+        raise ValueError("d4_tta and tta_mode disagree")
+    return tta_mode
 
 
 def normalize_triplet(frames: np.ndarray) -> np.ndarray:
@@ -52,15 +75,13 @@ def predict_probability_and_offsets(
     model: torch.nn.Module,
     frames: torch.Tensor,
     *,
-    d4_tta: bool = True,
+    d4_tta: bool | None = None,
+    tta_mode: str | None = None,
 ) -> tuple[torch.Tensor, torch.Tensor]:
     if frames.ndim != 5 or frames.shape[1] != 3:
         raise ValueError("frames must have shape (B, 3, Z, Y, X)")
-    transforms = (
-        [(rotation, flip) for flip in (False, True) for rotation in range(4)]
-        if d4_tta
-        else [(0, False)]
-    )
+    mode = resolve_tta_mode(tta_mode=tta_mode, d4_tta=d4_tta)
+    transforms = TTA_TRANSFORMS[mode]
     logits_sum = None
     offset_sum = None
     device_type = frames.device.type
@@ -114,7 +135,8 @@ def predict_frames(
     *,
     device: torch.device,
     batch_size: int = 1,
-    d4_tta: bool = True,
+    d4_tta: bool | None = None,
+    tta_mode: str | None = None,
 ):
     try:
         from evaluate_pretrained_detector import FramePeaks
@@ -149,7 +171,7 @@ def predict_frames(
         ]
         values = torch.from_numpy(np.stack(triplets)).to(device)
         probabilities, offsets = predict_probability_and_offsets(
-            model, values, d4_tta=d4_tta
+            model, values, d4_tta=d4_tta, tta_mode=tta_mode
         )
         for index, frame in enumerate(batch_frames):
             points, scores = peaks_from_prediction(

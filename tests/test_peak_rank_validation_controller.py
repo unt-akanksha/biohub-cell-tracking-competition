@@ -24,6 +24,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert '$metadata.machine_shape -ne "NvidiaTeslaT4"' in source
     assert "torch.cuda.device_count() != 2" in source
     assert '"--devices", "0,1"' in source
+    assert '"--tta-modes", "none,rot4,d4"' in source
 
 
 def test_controller_validates_outputs_without_submitting() -> None:
@@ -32,6 +33,7 @@ def test_controller_validates_outputs_without_submitting() -> None:
     assert "launcher_terminal.json" in source
     assert "validation_result_sha256" in source
     assert "accepted_for_candidate_integration" in source
+    assert "selected_tta_mode" in source
     assert "kaggle competitions submit" not in source
     assert "api.competition_submit" not in source
     assert "authorized_for_submission = $false" in source
