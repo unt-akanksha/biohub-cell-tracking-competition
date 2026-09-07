@@ -25,6 +25,7 @@ def test_runtime_builder_has_verified_private_inputs_only() -> None:
 def test_runtime_builder_packages_inference_and_two_phase_evaluator() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
     for name in (
+        "calibrate_detection_threshold.py",
         "model.py",
         "inference.py",
         "peak_association_bridge.py",
@@ -35,6 +36,7 @@ def test_runtime_builder_packages_inference_and_two_phase_evaluator() -> None:
         "evaluate_pretrained_detector.py",
         "peak_rank_detector.pt",
         "training_terminal.json",
+        "threshold_calibration.json",
     ):
         assert name in source
     assert "biohub-peak-rank-validation-runtime-v1" in source

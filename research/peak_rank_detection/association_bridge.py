@@ -2,8 +2,9 @@
 
 The detector owns node locations and confidence.  The official linker owns only
 edge inference; after linking, sub-voxel detector coordinates are restored.
-Density calibration uses organizer metadata and never reads labels or test
-answers.
+One checkpoint-bound global threshold is frozen on complete synthetic selection
+labels before competition validation.  Organizer node-count metadata is retained
+only as a diagnostic and never changes predicted nodes.
 """
 
 from __future__ import annotations
@@ -23,8 +24,6 @@ try:
         DetectorCandidate,
         ExternalDetectionCache,
         FrameDetections,
-        build_detection_cache,
-        estimated_count_for_movie,
         predict_video_with_external_detections,
     )
 except ModuleNotFoundError:
@@ -32,8 +31,6 @@ except ModuleNotFoundError:
         DetectorCandidate,
         ExternalDetectionCache,
         FrameDetections,
-        build_detection_cache,
-        estimated_count_for_movie,
         predict_video_with_external_detections,
     )
 
@@ -44,6 +41,7 @@ PEAK_RANK_CANDIDATE = DetectorCandidate(
     feature36_weight=0.0,
     refinement="centroid",
 )
+PEAK_THRESHOLD_POLICY = "synthetic_selection_micro_detection_jaccard"
 
 
 def predict_movie_detection_cache(
@@ -51,12 +49,15 @@ def predict_movie_detection_cache(
     sample_path: Path,
     *,
     device: Any,
+    peak_threshold: float,
     batch_size: int = 1,
-    calibration_frames: int = 12,
     d4_tta: bool | None = None,
     tta_mode: str | None = None,
 ) -> ExternalDetectionCache:
-    """Infer every frame and freeze one metadata-calibrated movie threshold."""
+    """Infer every frame using one clean, globally frozen score threshold."""
+
+    if not np.isfinite(peak_threshold) or not 0.0 < peak_threshold < 1.0:
+        raise ValueError("peak threshold must be finite and lie in (0, 1)")
 
     predictions, frame_count = predict_frames(
         model,
@@ -79,11 +80,17 @@ def predict_movie_detection_cache(
     )
     if tuple(row.frame for row in frames) != tuple(range(int(frame_count))):
         raise RuntimeError("peak-ranking frame ordering changed")
-    return build_detection_cache(
-        frames,
+    selected_count = sum(
+        int(np.count_nonzero(row.confidence > peak_threshold)) for row in frames
+    )
+    return ExternalDetectionCache(
         candidate=PEAK_RANK_CANDIDATE,
-        estimated_node_count=estimated_count_for_movie(sample_path),
-        calibration_frames=calibration_frames,
+        frames=frames,
+        threshold=float(peak_threshold),
+        projected_node_count=float(selected_count),
+        # Prediction generation intentionally never reads the organizer's
+        # estimated node count.  The patched scorer may consume it separately.
+        estimated_node_count=None,
     )
 
 
@@ -105,8 +112,8 @@ def predict_video_with_peak_rank_detections(
     cfg: Any,
     *,
     detector_device: Any | None = None,
+    peak_threshold: float,
     batch_size: int = 1,
-    calibration_frames: int = 12,
     d4_tta: bool | None = None,
     tta_mode: str | None = None,
     **association_kwargs: Any,
@@ -117,8 +124,8 @@ def predict_video_with_peak_rank_detections(
         detector_model,
         sample_path,
         device=device if detector_device is None else detector_device,
+        peak_threshold=peak_threshold,
         batch_size=batch_size,
-        calibration_frames=calibration_frames,
         d4_tta=d4_tta,
         tta_mode=tta_mode,
     )

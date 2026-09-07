@@ -40,6 +40,7 @@ except ModuleNotFoundError:
 
 RUN_ID = "peak-rank-official-linker-production-v1"
 PEAK_TTA_VIEWS = {"none": 1, "zflip2": 2, "rot4": 4, "d4": 8}
+PEAK_THRESHOLD_POLICY = "synthetic_selection_micro_detection_jaccard"
 RUNTIME_PROJECTION_SAFETY_FACTOR = 1.15
 EXPECTED_ASSOCIATION_CONFIG = {
     "secondary_edge_weight": 0.20,
@@ -82,6 +83,8 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
     validation_path = runtime_root / "clean_validation.json"
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     selected_tta_mode = validation.get("selected_tta_mode")
+    selected_peak_threshold = validation.get("selected_peak_threshold")
+    threshold_calibration_path = runtime_root / "threshold_calibration.json"
     ensemble_members = training.get("ensemble_members")
     expected_ensemble_size = (
         len(ensemble_members) if ensemble_members is not None else 1
@@ -112,6 +115,20 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
         and manifest.get("clean_validation_sha256") == sha256_file(validation_path)
         and manifest.get("selected_peak_tta_mode") == selected_tta_mode
         and selected_tta_mode in PEAK_TTA_VIEWS
+        and isinstance(selected_peak_threshold, (int, float))
+        and not isinstance(selected_peak_threshold, bool)
+        and 0.0 < float(selected_peak_threshold) < 1.0
+        and manifest.get("selected_peak_threshold") == selected_peak_threshold
+        and manifest.get("peak_threshold_policy") == PEAK_THRESHOLD_POLICY
+        and validation.get("threshold_policy") == PEAK_THRESHOLD_POLICY
+        and validation.get("organizer_estimated_node_count_read") is False
+        and validation.get("organizer_estimated_node_count_used_for_threshold")
+        is False
+        and threshold_calibration_path.is_file()
+        and manifest.get("threshold_calibration_sha256")
+        == sha256_file(threshold_calibration_path)
+        and validation.get("threshold_calibration_sha256")
+        == manifest.get("threshold_calibration_sha256")
     ):
         raise RuntimeError("peak-ranking runtime manifest is ineligible")
     return checkpoint, terminal, manifest
@@ -261,10 +278,20 @@ def run(args: argparse.Namespace) -> None:
     started = time.monotonic()
     checkpoint, terminal_path, runtime_manifest = verify_runtime(args.runtime_root)
     selected_tta_mode = str(runtime_manifest["selected_peak_tta_mode"])
+    selected_peak_threshold = float(runtime_manifest["selected_peak_threshold"])
     if args.peak_tta_mode != selected_tta_mode:
         raise RuntimeError(
             f"requested peak TTA {args.peak_tta_mode} differs from clean-selected "
             f"mode {selected_tta_mode}"
+        )
+    if not math.isclose(
+        args.peak_threshold,
+        selected_peak_threshold,
+        rel_tol=0.0,
+        abs_tol=1e-12,
+    ):
+        raise RuntimeError(
+            "requested peak threshold differs from clean synthetic calibration"
         )
     official = import_official_predictor(args.official_predictor)
     if not torch.cuda.is_available() or torch.cuda.device_count() != 1:
@@ -332,8 +359,8 @@ def run(args: argparse.Namespace) -> None:
             detector,
             sample_path,
             device=device,
+            peak_threshold=selected_peak_threshold,
             batch_size=args.peak_batch_size,
-            calibration_frames=args.calibration_frames,
             tta_mode=args.peak_tta_mode,
         )
         coordinates, edges = predict_video_with_external_detections(
@@ -369,7 +396,9 @@ def run(args: argparse.Namespace) -> None:
                 "raw_edges": raw_edges,
                 "ilp_edges": int(graph.num_edges()),
                 "density_threshold": cache.threshold,
-                "estimated_node_count": cache.estimated_node_count,
+                "density_threshold_policy": PEAK_THRESHOLD_POLICY,
+                "organizer_estimated_node_count_read": False,
+                "organizer_estimated_node_count_used_for_threshold": False,
                 "projected_node_count": cache.projected_node_count,
                 "frame_count": frame_counts[name],
                 "elapsed_seconds": movie_elapsed,
@@ -420,6 +449,10 @@ def run(args: argparse.Namespace) -> None:
             "movies": rows,
             "peak_tta_mode": selected_tta_mode,
             "peak_tta_views": PEAK_TTA_VIEWS[selected_tta_mode],
+            "peak_threshold": selected_peak_threshold,
+            "peak_threshold_policy": PEAK_THRESHOLD_POLICY,
+            "organizer_estimated_node_count_read": False,
+            "organizer_estimated_node_count_used_for_threshold": False,
             "total_frame_count": total_frame_count,
             "movie_compute_seconds": sum(float(row["elapsed_seconds"]) for row in rows),
             "worker_elapsed_seconds": time.monotonic() - started,
@@ -455,7 +488,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--worker-count", type=int, default=1)
     parser.add_argument("--peak-batch-size", type=int, default=1)
     parser.add_argument("--unet-batch-size", type=int, default=4)
-    parser.add_argument("--calibration-frames", type=int, default=12)
+    parser.add_argument("--peak-threshold", type=float, required=True)
     parser.add_argument("--det-threshold", type=float, default=0.965)
     parser.add_argument("--use-ilp", action="store_true")
     parser.add_argument("--ilp-edge-weight", type=float, default=-1.0)
@@ -469,11 +502,11 @@ def parse_args() -> argparse.Namespace:
     if (
         args.peak_batch_size <= 0
         or args.unet_batch_size <= 0
-        or args.calibration_frames <= 0
+        or not 0.0 < args.peak_threshold < 1.0
         or args.max_wall_seconds <= 0
         or args.max_projected_worker_seconds <= 0
     ):
-        parser.error("batch, calibration, and wall limits must be positive")
+        parser.error("batch, threshold, and wall limits must be positive")
     return args
 
 

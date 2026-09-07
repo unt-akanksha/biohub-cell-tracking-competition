@@ -1723,3 +1723,25 @@ well as the synthetic generator.
   ZebraHub detector pretrain would require a new data/validation lane. It is
   therefore not cost-justified before V3 identifies whether clean capacity
   already fixes the present detector bottleneck.
+- A pre-submission integrity audit found that the peak-rank bridge inherited
+  exact per-movie confidence-threshold matching to the organizer-provided
+  `estimated_number_of_nodes`. That behavior conflicts with the project's
+  explicit rejection of predicted-count metric optimization, even though it
+  never inserted non-image nodes. It has been removed before V3 validation.
+  The replacement freezes one global threshold per TTA mode by maximizing
+  micro detection Jaccard on all 24 fully labeled Synthetic256 selection
+  frames (sequences 240-247). The checkpoint-bound artifact is produced before
+  any held-out Biohub movie is opened; it reads no competition data, organizer
+  estimate, public prediction/checkpoint, or leaderboard result. Validation
+  may select only the cheapest TTA mode within its predeclared recall
+  tolerances, using that mode's already-frozen synthetic threshold. Production
+  no longer reads the organizer estimate at all; it records the actual number
+  of image/model peaks selected by the frozen threshold.
+- The clean-threshold pass is the only Biohub successor to active V3. It reuses
+  the accepted V3 checkpoint, evaluates 24 small `64^3` synthetic examples
+  under the four fixed TTA modes, and has a 3,600-second hard guard; no optimizer
+  step or new network training is performed. The archive harvester now waits
+  for this calibration marker so the previous count-calibrated runtime cannot
+  race into Kaggle validation. All non-V3 validation/candidate waiters were
+  stopped. V3 training remains the sole paid GPU owner, and V21/V27/graph-v2
+  remain staged with no automatic launch path.

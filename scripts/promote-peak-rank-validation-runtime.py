@@ -65,7 +65,14 @@ def main() -> None:
         and result.get("acceptance_opened") is True
         and result.get("promotion_passed") is True
         and result.get("selected_tta_mode") in {"none", "zflip2", "rot4", "d4"}
-        and result.get("selected_tta_views") in {1, 4, 8}
+        and result.get("selected_tta_views") in {1, 2, 4, 8}
+        and isinstance(result.get("selected_peak_threshold"), (int, float))
+        and not isinstance(result.get("selected_peak_threshold"), bool)
+        and 0.0 < float(result["selected_peak_threshold"]) < 1.0
+        and result.get("threshold_policy")
+        == "synthetic_selection_micro_detection_jaccard"
+        and result.get("organizer_estimated_node_count_read") is False
+        and result.get("organizer_estimated_node_count_used_for_threshold") is False
         and result.get("competition_test_data_read") is False
         and result.get("competition_submission_performed") is False
     ):
@@ -73,11 +80,21 @@ def main() -> None:
     manifest_path = args.runtime / "SOURCE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     checkpoint_hash = sha256_file(args.runtime / "peak_rank_detector.pt")
+    threshold_calibration = args.runtime / "threshold_calibration.json"
     if not (
         manifest.get("training_audit_passed") is True
         and manifest.get("checkpoint_sha256") == checkpoint_hash
         and controller.get("checkpoint_sha256") == checkpoint_hash
         and result.get("provenance", {}).get("checkpoint_sha256") == checkpoint_hash
+        and threshold_calibration.is_file()
+        and manifest.get("threshold_calibration_sha256")
+        == sha256_file(threshold_calibration)
+        and result.get("threshold_calibration_sha256")
+        == manifest.get("threshold_calibration_sha256")
+        and manifest.get("peak_threshold_policy")
+        == "synthetic_selection_micro_detection_jaccard"
+        and manifest.get("organizer_estimated_node_count_read") is False
+        and manifest.get("organizer_estimated_node_count_used_for_threshold") is False
     ):
         raise RuntimeError("clean validation is bound to another checkpoint")
     destination = args.runtime / "clean_validation.json"
@@ -92,6 +109,7 @@ def main() -> None:
     manifest["clean_validation_sha256"] = result_hash
     manifest["selected_peak_tta_mode"] = result["selected_tta_mode"]
     manifest["selected_peak_tta_views"] = result["selected_tta_views"]
+    manifest["selected_peak_threshold"] = result["selected_peak_threshold"]
     manifest["files"][destination.name] = {
         "bytes": destination.stat().st_size,
         "sha256": result_hash,
@@ -104,6 +122,7 @@ def main() -> None:
                 "checkpoint_sha256": checkpoint_hash,
                 "clean_validation_sha256": result_hash,
                 "selected_peak_tta_mode": result["selected_tta_mode"],
+                "selected_peak_threshold": result["selected_peak_threshold"],
                 "requires_private_dataset_version": True,
             },
             sort_keys=True,

@@ -175,12 +175,25 @@ if not (
     and _PR_VALIDATION.get("selected_tta_mode") in {"none", "zflip2", "rot4", "d4"}
     and _PR_MANIFEST.get("selected_peak_tta_mode") == _PR_VALIDATION.get("selected_tta_mode")
     and _PR_MANIFEST.get("selected_peak_tta_views") == _PR_VALIDATION.get("selected_tta_views")
+    and isinstance(_PR_VALIDATION.get("selected_peak_threshold"), (int, float))
+    and not isinstance(_PR_VALIDATION.get("selected_peak_threshold"), bool)
+    and 0.0 < float(_PR_VALIDATION["selected_peak_threshold"]) < 1.0
+    and _PR_MANIFEST.get("selected_peak_threshold") == _PR_VALIDATION.get("selected_peak_threshold")
+    and _PR_MANIFEST.get("peak_threshold_policy") == "synthetic_selection_micro_detection_jaccard"
+    and _PR_VALIDATION.get("threshold_policy") == _PR_MANIFEST.get("peak_threshold_policy")
+    and _PR_MANIFEST.get("organizer_estimated_node_count_read") is False
+    and _PR_VALIDATION.get("organizer_estimated_node_count_read") is False
+    and _PR_MANIFEST.get("organizer_estimated_node_count_used_for_threshold") is False
+    and _PR_VALIDATION.get("organizer_estimated_node_count_used_for_threshold") is False
+    and _PR_MANIFEST.get("threshold_calibration_sha256") == _pr_sha256(_PR_ROOT / "threshold_calibration.json")
+    and _PR_VALIDATION.get("threshold_calibration_sha256") == _PR_MANIFEST.get("threshold_calibration_sha256")
     and _PR_VALIDATION.get("competition_submission_performed") is False
     and _PR_VALIDATION.get("provenance", {}).get("checkpoint_sha256")
         == _PR_MANIFEST.get("checkpoint_sha256")
 ):
     raise RuntimeError("Peak-ranking clean promotion evidence is ineligible")
 _PR_TTA_MODE = _PR_VALIDATION["selected_tta_mode"]
+_PR_PEAK_THRESHOLD = float(_PR_VALIDATION["selected_peak_threshold"])
 if not _pr_torch.cuda.is_available() or _pr_torch.cuda.device_count() != 2:
     raise RuntimeError("Peak-ranking production requires exactly two Kaggle GPUs")
 print(_pr_json.dumps({
@@ -189,6 +202,8 @@ print(_pr_json.dumps({
     "runtime_manifest_sha256": _PR_MANIFEST_SHA256,
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
     "selected_peak_tta_mode": _PR_TTA_MODE,
+    "selected_peak_threshold": _PR_PEAK_THRESHOLD,
+    "peak_threshold_policy": _PR_MANIFEST["peak_threshold_policy"],
     "gpu_count": _pr_torch.cuda.device_count(),
 }, indent=2, sort_keys=True))
 """
@@ -208,6 +223,10 @@ if not all(
     and row.get("ensemble_size") == _PR_MANIFEST["ensemble_size"]
     and row.get("peak_tta_mode") == _PR_TTA_MODE
     and row.get("peak_tta_views") == _PR_MANIFEST["selected_peak_tta_views"]
+    and row.get("peak_threshold") == _PR_PEAK_THRESHOLD
+    and row.get("peak_threshold_policy") == _PR_MANIFEST["peak_threshold_policy"]
+    and row.get("organizer_estimated_node_count_read") is False
+    and row.get("organizer_estimated_node_count_used_for_threshold") is False
     and row.get("association", {}).get("edge_feature_tta") is True
     and row.get("association", {}).get("secondary_link_mode") == "low_margin_consensus"
     and row.get("association", {}).get("bidirectional_edge_weight") == 0.15
@@ -253,6 +272,11 @@ _pr_evidence = {
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
     "selected_peak_tta_mode": _PR_TTA_MODE,
     "selected_peak_tta_views": _PR_MANIFEST["selected_peak_tta_views"],
+    "selected_peak_threshold": _PR_PEAK_THRESHOLD,
+    "peak_threshold_policy": _PR_MANIFEST["peak_threshold_policy"],
+    "threshold_calibration_sha256": _PR_MANIFEST["threshold_calibration_sha256"],
+    "organizer_estimated_node_count_read": False,
+    "organizer_estimated_node_count_used_for_threshold": False,
     "max_worker_elapsed_seconds": max(float(row["worker_elapsed_seconds"]) for row in _pr_workers),
     "max_projected_worker_seconds": max(float(row["projected_worker_seconds"]) for row in _pr_workers),
     "worker_budget_seconds": min(float(row["worker_budget_seconds"]) for row in _pr_workers),
@@ -283,6 +307,7 @@ def verify_promoted_runtime(runtime_root: Path) -> str:
     manifest_path = runtime_root / "SOURCE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     validation = runtime_root / "clean_validation.json"
+    threshold_calibration = runtime_root / "threshold_calibration.json"
     if not (
         manifest.get("training_audit_passed") is True
         and manifest.get("clean_validation_promotion_passed") is True
@@ -291,7 +316,17 @@ def verify_promoted_runtime(runtime_root: Path) -> str:
         and manifest.get("checkpoint_sha256")
         == sha256_file(runtime_root / "peak_rank_detector.pt")
         and manifest.get("selected_peak_tta_mode") in {"none", "zflip2", "rot4", "d4"}
-        and manifest.get("selected_peak_tta_views") in {1, 4, 8}
+        and manifest.get("selected_peak_tta_views") in {1, 2, 4, 8}
+        and isinstance(manifest.get("selected_peak_threshold"), (int, float))
+        and not isinstance(manifest.get("selected_peak_threshold"), bool)
+        and 0.0 < float(manifest["selected_peak_threshold"]) < 1.0
+        and manifest.get("peak_threshold_policy")
+        == "synthetic_selection_micro_detection_jaccard"
+        and manifest.get("organizer_estimated_node_count_read") is False
+        and manifest.get("organizer_estimated_node_count_used_for_threshold") is False
+        and threshold_calibration.is_file()
+        and manifest.get("threshold_calibration_sha256")
+        == sha256_file(threshold_calibration)
     ):
         raise RuntimeError("local peak runtime is not clean-promoted")
     return sha256_file(manifest_path)
@@ -317,6 +352,8 @@ def build_notebook(manifest_sha256: str) -> dict:
         "    str(_PR_ROOT),\n"
         '    "--peak-tta-mode",\n'
         "    _PR_TTA_MODE,\n"
+        '    "--peak-threshold",\n'
+        "    str(_PR_PEAK_THRESHOLD),\n"
         '    "--official-predictor",\n'
         '    str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
@@ -347,6 +384,7 @@ def build_notebook(manifest_sha256: str) -> dict:
         '        sys.executable, str(_PR_ROOT / "predict_with_official_linker.py"),\n'
         '        "--runtime-root", str(_PR_ROOT),\n'
         '        "--peak-tta-mode", _PR_TTA_MODE,\n'
+        '        "--peak-threshold", str(_PR_PEAK_THRESHOLD),\n'
         '        "--official-predictor", str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
     notebook["cells"][validator_inference_index]["source"] = (

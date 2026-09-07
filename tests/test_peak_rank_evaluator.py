@@ -53,15 +53,52 @@ def _row(stem: str, recall: float, *, baseline: float | None = None) -> dict:
 
 
 def _args(root: Path, checkpoint: Path, terminal: Path) -> Namespace:
+    calibration = root / "threshold_calibration.json"
+    calibration.write_text(
+        json.dumps(
+            {
+                "run_id": "synthetic-complete-global-peak-threshold-v1",
+                "status": "calibrated",
+                "threshold_policy": "synthetic_selection_micro_detection_jaccard",
+                "checkpoint_sha256": hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+                "training_terminal_sha256": hashlib.sha256(terminal.read_bytes()).hexdigest(),
+                "parameter_count": 38_381_478,
+                "complete_synthetic_labels_read": True,
+                "competition_train_data_read": False,
+                "competition_test_data_read": False,
+                "organizer_estimated_node_count_read": False,
+                "organizer_estimated_node_count_used_for_threshold": False,
+                "public_predictions_read": False,
+                "public_notebook_weights_read": False,
+                "public_leaderboard_used_for_selection": False,
+                "thresholds": {
+                    mode: {
+                        "threshold": 0.5,
+                        "tta_mode": mode,
+                        "tta_views": views,
+                        "complete_synthetic_examples": 24,
+                        "total_truth_nodes": 100,
+                    }
+                    for mode, views in {
+                        "none": 1,
+                        "zflip2": 2,
+                        "rot4": 4,
+                        "d4": 8,
+                    }.items()
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
     return Namespace(
         output_dir=root / "validation",
         checkpoint=checkpoint,
         training_terminal=terminal,
+        threshold_calibration=calibration,
         baseline_predictions=root / "baseline",
         devices="0,1",
         competition_dir=root / "competition",
         batch_size=1,
-        calibration_frames=12,
         max_wall_seconds=100.0,
         tta_modes="none,zflip2,rot4,d4",
     )
@@ -75,8 +112,19 @@ def test_training_checkpoint_must_match_terminal(tmp_path: Path) -> None:
         evaluation.validate_training(checkpoint, terminal)
 
 
-def test_worker_imports_density_calibration_implementation() -> None:
-    assert callable(evaluation.density_threshold)
+def test_threshold_calibration_rejects_organizer_count_use(tmp_path: Path) -> None:
+    checkpoint, terminal = _training_files(tmp_path)
+    args = _args(tmp_path, checkpoint, terminal)
+    payload = json.loads(args.threshold_calibration.read_text(encoding="utf-8"))
+    payload["organizer_estimated_node_count_used_for_threshold"] = True
+    args.threshold_calibration.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="clean contract"):
+        evaluation.validate_threshold_calibration(
+            args.threshold_calibration,
+            checkpoint=checkpoint,
+            training_terminal=terminal,
+            parameter_count=38_381_478,
+        )
 
 
 def test_training_rejects_an_unknown_model_family(tmp_path: Path) -> None:
@@ -95,7 +143,8 @@ def test_selection_rejection_keeps_acceptance_closed(
     args = _args(tmp_path, checkpoint, terminal)
     calls = []
 
-    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode):
+    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode, peak_threshold):
+        assert peak_threshold == 0.5
         calls.append((phase, use_baseline, tta_mode))
         return [_row(stem, 0.60) for stem in stems]
 
@@ -119,7 +168,8 @@ def test_two_phase_validation_promotes_only_clean_gain(
     checkpoint, terminal = _training_files(tmp_path)
     args = _args(tmp_path, checkpoint, terminal)
 
-    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode):
+    def fake_launch(_args, stems, *, phase, use_baseline, tta_mode, peak_threshold):
+        assert peak_threshold == 0.5
         if phase.startswith("tta-calibration") or phase.startswith("selection"):
             return [_row(stem, 0.90) for stem in stems]
         assert use_baseline is True
@@ -147,6 +197,7 @@ def test_worker_launcher_requires_exactly_two_devices(tmp_path: Path) -> None:
             phase="selection",
             use_baseline=False,
             tta_mode="d4",
+            peak_threshold=0.5,
         )
 
 

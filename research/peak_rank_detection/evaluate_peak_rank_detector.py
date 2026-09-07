@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import os
 import subprocess
 import sys
@@ -14,13 +15,12 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
 from torch import nn
 
 try:
-    from density_calibration import read_estimated_node_count, uniform_frame_indices
     from evaluate_pretrained_detector import (
-        density_threshold,
         graph_points_by_frame,
         score_graph_nodes,
         score_predictions,
@@ -28,17 +28,12 @@ try:
     from inference import TTA_TRANSFORMS, predict_frames
     from model import TemporalPeakRankDetector, count_parameters
 except ModuleNotFoundError:
-    from research.density_calibration import (
-        read_estimated_node_count,
-        uniform_frame_indices,
-    )
     from research.peak_rank_detection.inference import TTA_TRANSFORMS, predict_frames
     from research.peak_rank_detection.model import (
         TemporalPeakRankDetector,
         count_parameters,
     )
     from research.spotiflow_biohub.evaluate_pretrained_detector import (
-        density_threshold,
         graph_points_by_frame,
         score_graph_nodes,
         score_predictions,
@@ -71,6 +66,8 @@ TTA_MODE_ORDER = ("none", "zflip2", "rot4", "d4")
 TTA_POOLED_REGRESSION_MAX = 0.003
 TTA_WORST_REGRESSION_MAX = 0.01
 DEFAULT_MODEL_FAMILY = "temporal_peak_rank_v1"
+THRESHOLD_CALIBRATION_RUN_ID = "synthetic-complete-global-peak-threshold-v1"
+THRESHOLD_POLICY = "synthetic_selection_micro_detection_jaccard"
 SUPPORTED_MODEL_FAMILIES = {
     DEFAULT_MODEL_FAMILY,
     "blob_aware_temporal_peak_rank_v11",
@@ -164,6 +161,54 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
         if member_parameters != parameter_count:
             raise ValueError("detector ensemble parameter count differs")
     return terminal
+
+
+def validate_threshold_calibration(
+    path: Path,
+    *,
+    checkpoint: Path,
+    training_terminal: Path,
+    parameter_count: int,
+) -> dict[str, Any]:
+    """Verify the synthetic-only threshold artifact before any real labels open."""
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    thresholds = payload.get("thresholds")
+    if not (
+        payload.get("run_id") == THRESHOLD_CALIBRATION_RUN_ID
+        and payload.get("status") == "calibrated"
+        and payload.get("threshold_policy") == THRESHOLD_POLICY
+        and payload.get("checkpoint_sha256") == sha256_file(checkpoint)
+        and payload.get("training_terminal_sha256")
+        == sha256_file(training_terminal)
+        and payload.get("parameter_count") == parameter_count
+        and payload.get("complete_synthetic_labels_read") is True
+        and payload.get("competition_train_data_read") is False
+        and payload.get("competition_test_data_read") is False
+        and payload.get("organizer_estimated_node_count_read") is False
+        and payload.get("organizer_estimated_node_count_used_for_threshold") is False
+        and payload.get("public_predictions_read") is False
+        and payload.get("public_notebook_weights_read") is False
+        and payload.get("public_leaderboard_used_for_selection") is False
+        and isinstance(thresholds, dict)
+        and set(thresholds) == set(TTA_MODE_ORDER)
+    ):
+        raise ValueError("peak threshold calibration violates the clean contract")
+    for mode in TTA_MODE_ORDER:
+        row = thresholds[mode]
+        threshold = row.get("threshold")
+        if not (
+            isinstance(threshold, (int, float))
+            and not isinstance(threshold, bool)
+            and 0.0 < float(threshold) < 1.0
+            and row.get("tta_mode") == mode
+            and row.get("tta_views") == len(TTA_TRANSFORMS[mode])
+            and row.get("complete_synthetic_examples") == 24
+            and isinstance(row.get("total_truth_nodes"), int)
+            and row.get("total_truth_nodes", 0) > 0
+        ):
+            raise ValueError(f"invalid clean peak threshold for TTA mode {mode}")
+    return payload
 
 
 class PeakRankLogitEnsemble(nn.Module):
@@ -337,6 +382,17 @@ def load_model(
 def evaluate_worker(args: argparse.Namespace) -> None:
     started = time.monotonic()
     terminal = validate_training(args.checkpoint, args.training_terminal)
+    calibration = validate_threshold_calibration(
+        args.threshold_calibration,
+        checkpoint=args.checkpoint,
+        training_terminal=args.training_terminal,
+        parameter_count=terminal["parameter_count"],
+    )
+    expected_threshold = float(calibration["thresholds"][args.tta_mode]["threshold"])
+    if not math.isclose(
+        float(args.peak_threshold), expected_threshold, rel_tol=0.0, abs_tol=1e-12
+    ):
+        raise ValueError("worker peak threshold differs from the clean calibration")
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is unavailable in detector validation worker")
     device = torch.device(args.device)
@@ -349,9 +405,6 @@ def evaluate_worker(args: argparse.Namespace) -> None:
             continue
         sample_path = args.competition_dir / "train" / f"{stem}.zarr"
         truth_path = args.competition_dir / "train" / f"{stem}.geff"
-        estimated = read_estimated_node_count(truth_path)
-        if estimated is None:
-            raise ValueError(f"missing organizer count estimate for {stem}")
         frame_count = int(zarr.open_group(str(sample_path), mode="r")["0"].shape[0])
         movie_started = time.monotonic()
         predictions, observed_frames = predict_frames(
@@ -364,22 +417,25 @@ def evaluate_worker(args: argparse.Namespace) -> None:
         )
         if observed_frames != frame_count:
             raise RuntimeError("detector inference frame count changed")
-        sampled = set(
-            uniform_frame_indices(frame_count, args.calibration_frames).tolist()
+        threshold = expected_threshold
+        projected = float(
+            sum(
+                int(np.count_nonzero(row.probabilities > threshold))
+                for row in predictions
+            )
         )
-        threshold, projected = density_threshold(
-            [row for row in predictions if row.frame in sampled], estimated, frame_count
-        )
-        # Labels are first opened after the image/metadata-only threshold is fixed.
+        # The global threshold was frozen on complete synthetic labels.  Only
+        # now are competition labels opened; organizer density is never read.
         truth = graph_points_by_frame(truth_path)
         candidate = score_predictions(predictions, truth, threshold)
         movie_elapsed = time.monotonic() - movie_started
         row: dict[str, Any] = {
             "stem": stem,
-            "estimated_node_count": estimated,
             "threshold": threshold,
+            "threshold_policy": THRESHOLD_POLICY,
+            "organizer_estimated_node_count_read": False,
+            "organizer_estimated_node_count_used_for_threshold": False,
             "projected_node_count": projected,
-            "projected_count_ratio": projected / estimated,
             "frame_count": frame_count,
             "elapsed_seconds": movie_elapsed,
             "seconds_per_frame": movie_elapsed / frame_count,
@@ -476,6 +532,7 @@ def launch_workers(
     phase: str,
     use_baseline: bool,
     tta_mode: str,
+    peak_threshold: float,
 ) -> list[dict[str, Any]]:
     if tta_mode not in TTA_TRANSFORMS:
         raise ValueError(f"unsupported peak TTA mode: {tta_mode}")
@@ -498,14 +555,16 @@ def launch_workers(
             str(args.checkpoint),
             "--training-terminal",
             str(args.training_terminal),
+            "--threshold-calibration",
+            str(args.threshold_calibration),
             "--stems",
             ",".join(chunk),
             "--device",
             "cuda:0",
             "--batch-size",
             str(args.batch_size),
-            "--calibration-frames",
-            str(args.calibration_frames),
+            "--peak-threshold",
+            repr(float(peak_threshold)),
             "--max-wall-seconds",
             str(args.max_wall_seconds),
             "--output",
@@ -535,6 +594,12 @@ def launch_workers(
 def orchestrate(args: argparse.Namespace) -> None:
     args.output_dir.mkdir(parents=True, exist_ok=False)
     terminal = validate_training(args.checkpoint, args.training_terminal)
+    threshold_calibration = validate_threshold_calibration(
+        args.threshold_calibration,
+        checkpoint=args.checkpoint,
+        training_terminal=args.training_terminal,
+        parameter_count=terminal["parameter_count"],
+    )
     requested_modes = tuple(
         mode.strip() for mode in args.tta_modes.split(",") if mode.strip()
     )
@@ -551,6 +616,9 @@ def orchestrate(args: argparse.Namespace) -> None:
             phase=f"tta-calibration-{mode}",
             use_baseline=False,
             tta_mode=mode,
+            peak_threshold=float(
+                threshold_calibration["thresholds"][mode]["threshold"]
+            ),
         )
         calibration_rows[mode] = rows
         calibration_summaries[mode] = summarize(rows)
@@ -569,6 +637,11 @@ def orchestrate(args: argparse.Namespace) -> None:
                     phase=f"selection-{selected_mode}",
                     use_baseline=False,
                     tta_mode=selected_mode,
+                    peak_threshold=float(
+                        threshold_calibration["thresholds"][selected_mode][
+                            "threshold"
+                        ]
+                    ),
                 )
             )
         by_stem = {row["stem"]: row for row in selection_rows}
@@ -589,6 +662,17 @@ def orchestrate(args: argparse.Namespace) -> None:
         "selected_tta_views": (
             None if selected_mode is None else len(TTA_TRANSFORMS[selected_mode])
         ),
+        "selected_peak_threshold": (
+            None
+            if selected_mode is None
+            else float(
+                threshold_calibration["thresholds"][selected_mode]["threshold"]
+            )
+        ),
+        "threshold_policy": THRESHOLD_POLICY,
+        "threshold_calibration_sha256": sha256_file(args.threshold_calibration),
+        "organizer_estimated_node_count_read": False,
+        "organizer_estimated_node_count_used_for_threshold": False,
         "tta_calibration": calibration_summaries,
         "tta_selection_gate": tta_gate,
         "selection_gate": {
@@ -607,6 +691,11 @@ def orchestrate(args: argparse.Namespace) -> None:
             "parameter_count": terminal["parameter_count"],
             "two_gpu_workers": True,
             "selected_tta_mode": selected_mode,
+            "threshold_calibration_sha256": sha256_file(
+                args.threshold_calibration
+            ),
+            "organizer_estimated_node_count_read": False,
+            "organizer_estimated_node_count_used_for_threshold": False,
         },
     }
     if selected:
@@ -616,6 +705,9 @@ def orchestrate(args: argparse.Namespace) -> None:
             phase=f"acceptance-{selected_mode}",
             use_baseline=True,
             tta_mode=str(selected_mode),
+            peak_threshold=float(
+                threshold_calibration["thresholds"][str(selected_mode)]["threshold"]
+            ),
         )
         acceptance = summarize(acceptance_rows)
         deltas = [float(row["annotated_recall_delta"]) for row in acceptance_rows]
@@ -663,26 +755,27 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--competition-dir", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--training-terminal", type=Path, required=True)
+    parser.add_argument("--threshold-calibration", type=Path, required=True)
     parser.add_argument("--baseline-predictions", type=Path)
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--devices", default="0,1")
     parser.add_argument("--stems", default="")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--batch-size", type=int, default=1)
-    parser.add_argument("--calibration-frames", type=int, default=12)
+    parser.add_argument("--peak-threshold", type=float)
     parser.add_argument("--max-wall-seconds", type=float, default=39_000.0)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--tta-mode", choices=tuple(TTA_TRANSFORMS), default="d4")
     parser.add_argument("--tta-modes", default=",".join(TTA_MODE_ORDER))
     args = parser.parse_args()
-    if (
-        args.batch_size <= 0
-        or args.calibration_frames <= 0
-        or args.max_wall_seconds <= 0
-    ):
-        parser.error("batch size, calibration frames, and wall limit must be positive")
+    if args.batch_size <= 0 or args.max_wall_seconds <= 0:
+        parser.error("batch size and wall limit must be positive")
     if args.worker and args.output is None:
         parser.error("workers require --output")
+    if args.worker and (
+        args.peak_threshold is None or not 0.0 < args.peak_threshold < 1.0
+    ):
+        parser.error("validation workers require a clean peak threshold")
     if not args.worker and (
         args.output_dir is None or args.baseline_predictions is None
     ):

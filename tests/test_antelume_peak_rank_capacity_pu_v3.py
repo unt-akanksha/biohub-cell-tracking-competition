@@ -15,6 +15,9 @@ ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "scripts" / "run-antelume-peak-rank-capacity-pu-v3.sh"
 VERIFIER = ROOT / "scripts" / "verify-antelume-peak-rank-capacity-pu-v3-harvest.py"
 HARVESTER = ROOT / "scripts" / "wait-harvest-antelume-peak-rank-capacity-pu-v3.ps1"
+CALIBRATOR_RUNNER = (
+    ROOT / "scripts" / "run-antelume-peak-rank-threshold-calibration-v3.sh"
+)
 SPEC = importlib.util.spec_from_file_location("capacity_pu_harvest", VERIFIER)
 MODULE = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
@@ -47,12 +50,40 @@ def make_archive(path: Path) -> None:
         "submission_created": False,
         "authorized_for_submission": False,
     }
+    terminal_bytes = json.dumps(terminal).encode()
+    calibration = {
+        "run_id": "synthetic-complete-global-peak-threshold-v1",
+        "status": "calibrated",
+        "threshold_policy": "synthetic_selection_micro_detection_jaccard",
+        "checkpoint_sha256": hashlib.sha256(checkpoint).hexdigest(),
+        "training_terminal_sha256": hashlib.sha256(terminal_bytes).hexdigest(),
+        "parameter_count": 66_977_670,
+        "selection_indices": list(range(240, 248)),
+        "complete_synthetic_labels_read": True,
+        "competition_train_data_read": False,
+        "competition_test_data_read": False,
+        "organizer_estimated_node_count_read": False,
+        "organizer_estimated_node_count_used_for_threshold": False,
+        "public_predictions_read": False,
+        "public_notebook_weights_read": False,
+        "public_leaderboard_used_for_selection": False,
+        "thresholds": {
+            mode: {
+                "threshold": 0.5,
+                "tta_mode": mode,
+                "tta_views": views,
+                "complete_synthetic_examples": 24,
+            }
+            for mode, views in {"none": 1, "zflip2": 2, "rot4": 4, "d4": 8}.items()
+        },
+    }
     files = {
-        f"{root}/terminal.json": json.dumps(terminal).encode(),
+        f"{root}/terminal.json": terminal_bytes,
         f"{root}/training.exit-code": b"0\n",
         f"{root}/training.log": b"capacity-pu training evidence\n",
         f"{root}/last_peak_rank_detector.pt": checkpoint,
         f"{root}/peak_rank_detector.pt": checkpoint,
+        f"{root}/threshold_calibration.json": json.dumps(calibration).encode(),
     }
     files[f"{root}/SHA256SUMS"] = "".join(
         f"{hashlib.sha256(payload).hexdigest()}  {name}\n"
@@ -111,4 +142,20 @@ def test_capacity_harvester_is_bounded_and_non_submitting() -> None:
     assert "ServerAliveInterval=60" in source
     assert "harvest.verified" in source
     assert "accepted_for_kaggle_validation" in source
+    assert "threshold-calibration.complete" in source
     assert "kaggle competitions submit" not in source
+
+
+def test_capacity_threshold_calibration_is_short_clean_and_archive_bound() -> None:
+    source = CALIBRATOR_RUNNER.read_text(encoding="utf-8")
+    for required in (
+        "--tta-modes none,zflip2,rot4,d4",
+        "--max-wall-seconds 3600",
+        "threshold_calibration.json",
+        "threshold-calibration.complete",
+        "CUDA_VISIBLE_DEVICES=0",
+        "SHA256SUMS",
+    ):
+        assert required in source
+    for forbidden in ("competition", "submission", "leaderboard", "/home/ubuntu/rsna"):
+        assert forbidden not in source.lower()

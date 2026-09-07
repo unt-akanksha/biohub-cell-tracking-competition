@@ -803,6 +803,9 @@ try {
         "torch.cuda.device_count() != 2",
         '"--devices", "0,1"',
         '"--tta-modes", "none,zflip2,rot4,d4"',
+        '"--threshold-calibration"',
+        "threshold_calibration_sha256",
+        "organizer_estimated_node_count_used_for_threshold",
         "acceptance_opened",
         "competition_submission_performed"
     )) {
@@ -895,6 +898,9 @@ try {
         selection_recall = if ($null -eq $result.selection) { $null } else { $result.selection.annotated_node_recall }
         selected_tta_mode = $result.selected_tta_mode
         selected_tta_views = $result.selected_tta_views
+        selected_peak_threshold = $result.selected_peak_threshold
+        threshold_calibration_sha256 = $result.threshold_calibration_sha256
+        organizer_estimated_node_count_used_for_threshold = $result.organizer_estimated_node_count_used_for_threshold
         acceptance_opened = $result.acceptance_opened
         acceptance_recall = if ($null -eq $result.acceptance) { $null } else { $result.acceptance.annotated_node_recall }
         promotion_passed = $result.promotion_passed

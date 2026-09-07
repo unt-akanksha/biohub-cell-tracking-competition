@@ -9,7 +9,7 @@ import torch
 from research.peak_rank_detection import association_bridge as bridge
 
 
-def test_peak_rank_cache_covers_movie_and_uses_metadata_density(monkeypatch) -> None:
+def test_peak_rank_cache_uses_fixed_threshold_not_metadata_density(monkeypatch) -> None:
     rows = [
         SimpleNamespace(
             frame=0,
@@ -28,14 +28,14 @@ def test_peak_rank_cache_covers_movie_and_uses_metadata_density(monkeypatch) -> 
         "predict_frames",
         lambda *_args, **_kwargs: (rows, 2),
     )
-    monkeypatch.setattr(bridge, "estimated_count_for_movie", lambda _path: 2.0)
-
     cache = bridge.predict_movie_detection_cache(
-        object(), bridge.Path("movie.zarr"), device="cuda:0", calibration_frames=2
+        object(), bridge.Path("movie.zarr"), device="cuda:0", peak_threshold=0.5
     )
 
     assert cache.candidate.name == "temporal_peak_rank_v1"
     assert cache.projected_node_count == 2.0
+    assert cache.estimated_node_count is None
+    assert cache.threshold == 0.5
     np.testing.assert_array_equal(cache.association_coords(0), [[0, 1, 2, 4]])
     np.testing.assert_allclose(
         cache.association_coords(0, mode="subvoxel"),
@@ -68,8 +68,6 @@ def test_peak_rank_composition_preserves_linker_edges_and_precision(monkeypatch)
         "predict_frames",
         lambda *_args, **_kwargs: (rows, 2),
     )
-    monkeypatch.setattr(bridge, "estimated_count_for_movie", lambda _path: 2.0)
-
     module = ModuleType("official_predict")
     module._detect_cells_pooled = lambda *_args: None
 
@@ -87,7 +85,7 @@ def test_peak_rank_composition_preserves_linker_edges_and_precision(monkeypatch)
         bridge.Path("movie.zarr"),
         "cuda:0",
         object(),
-        calibration_frames=2,
+        peak_threshold=0.5,
     )
 
     assert edges == [(0, 1, 0.7, 4.0)]

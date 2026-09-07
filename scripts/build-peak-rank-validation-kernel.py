@@ -150,7 +150,15 @@ if not torch.cuda.is_available() or torch.cuda.device_count() != 2:
     raise RuntimeError(f"exactly two CUDA GPUs required, found {torch.cuda.device_count()}")
 
 manifest = json.loads((runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
-if manifest.get("training_audit_passed") is not True or manifest.get("parameter_count") != __EXPECTED_PARAMETER_COUNT__:
+if not (
+    manifest.get("training_audit_passed") is True
+    and manifest.get("parameter_count") == __EXPECTED_PARAMETER_COUNT__
+    and manifest.get("peak_threshold_policy") == "synthetic_selection_micro_detection_jaccard"
+    and manifest.get("organizer_estimated_node_count_read") is False
+    and manifest.get("organizer_estimated_node_count_used_for_threshold") is False
+    and manifest.get("threshold_calibration_sha256")
+        == hashlib.sha256((runtime / "threshold_calibration.json").read_bytes()).hexdigest()
+):
     raise RuntimeError("runtime manifest does not contain an accepted detector")
 for name, row in manifest["files"].items():
     path = runtime / name
@@ -179,11 +187,11 @@ command = [
     "--competition-dir", str(competition),
     "--checkpoint", str(runtime / "peak_rank_detector.pt"),
     "--training-terminal", str(runtime / "training_terminal.json"),
+    "--threshold-calibration", str(runtime / "threshold_calibration.json"),
     "--baseline-predictions", str(graph_runtime / "validator_raw"),
     "--output-dir", str(output_dir),
     "--devices", "0,1",
     "--batch-size", "1",
-    "--calibration-frames", "12",
     "--tta-modes", "none,zflip2,rot4,d4",
     "--max-wall-seconds", "39000",
 ]
@@ -207,6 +215,8 @@ print(json.dumps({
     "promotion_passed": result["promotion_passed"],
     "selected_tta_mode": result["selected_tta_mode"],
     "selected_tta_views": result["selected_tta_views"],
+    "selected_peak_threshold": result["selected_peak_threshold"],
+    "threshold_policy": result["threshold_policy"],
     "selection_recall": None if result["selection"] is None else result["selection"]["annotated_node_recall"],
     "acceptance_recall": None if result["acceptance"] is None else result["acceptance"]["annotated_node_recall"],
 }, indent=2, sort_keys=True))

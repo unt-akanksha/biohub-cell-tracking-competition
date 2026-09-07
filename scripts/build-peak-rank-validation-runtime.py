@@ -23,6 +23,10 @@ DATASET_TITLE = "Biohub Peak Rank Validation Runtime v1"
 EXPECTED_PARAMETER_COUNT = 38_381_478
 ARCHITECTURE_DESCRIPTION = "independent temporal 3D ConvNeXt U-Net peak ranker"
 SOURCES = {
+    "calibrate_detection_threshold.py": ROOT
+    / "research"
+    / "peak_rank_detection"
+    / "calibrate_detection_threshold.py",
     "model.py": ROOT / "research" / "peak_rank_detection" / "model.py",
     "inference.py": ROOT / "research" / "peak_rank_detection" / "inference.py",
     "peak_association_bridge.py": ROOT
@@ -102,11 +106,52 @@ def main() -> None:
         raise ValueError("peak-ranking harvest is not eligible for Kaggle validation")
     checkpoint = archive_bytes("peak_rank_detector.pt")
     terminal = archive_bytes("terminal.json")
+    threshold_calibration = archive_bytes("threshold_calibration.json")
     terminal_payload = json.loads(terminal)
+    threshold_payload = json.loads(threshold_calibration)
     if hashlib.sha256(checkpoint).hexdigest() != report.get("checkpoint_sha256"):
         raise ValueError("harvested checkpoint no longer matches verification report")
     if terminal_payload.get("checkpoint_sha256") != report.get("checkpoint_sha256"):
         raise ValueError("harvested terminal no longer matches verification report")
+    checkpoint_hash = hashlib.sha256(checkpoint).hexdigest()
+    terminal_hash = hashlib.sha256(terminal).hexdigest()
+    thresholds = threshold_payload.get("thresholds")
+    modes = ("none", "zflip2", "rot4", "d4")
+    views = {"none": 1, "zflip2": 2, "rot4": 4, "d4": 8}
+    if not (
+        threshold_payload.get("run_id")
+        == "synthetic-complete-global-peak-threshold-v1"
+        and threshold_payload.get("status") == "calibrated"
+        and threshold_payload.get("threshold_policy")
+        == "synthetic_selection_micro_detection_jaccard"
+        and threshold_payload.get("checkpoint_sha256") == checkpoint_hash
+        and threshold_payload.get("training_terminal_sha256") == terminal_hash
+        and threshold_payload.get("parameter_count") == EXPECTED_PARAMETER_COUNT
+        and threshold_payload.get("selection_indices") == list(range(240, 248))
+        and threshold_payload.get("complete_synthetic_labels_read") is True
+        and threshold_payload.get("competition_train_data_read") is False
+        and threshold_payload.get("competition_test_data_read") is False
+        and threshold_payload.get("organizer_estimated_node_count_read") is False
+        and threshold_payload.get(
+            "organizer_estimated_node_count_used_for_threshold"
+        )
+        is False
+        and threshold_payload.get("public_predictions_read") is False
+        and threshold_payload.get("public_notebook_weights_read") is False
+        and threshold_payload.get("public_leaderboard_used_for_selection") is False
+        and isinstance(thresholds, dict)
+        and set(thresholds) == set(modes)
+        and all(
+            isinstance(thresholds[mode].get("threshold"), (int, float))
+            and not isinstance(thresholds[mode].get("threshold"), bool)
+            and 0.0 < float(thresholds[mode]["threshold"]) < 1.0
+            and thresholds[mode].get("tta_mode") == mode
+            and thresholds[mode].get("tta_views") == views[mode]
+            and thresholds[mode].get("complete_synthetic_examples") == 24
+            for mode in modes
+        )
+    ):
+        raise ValueError("harvested clean threshold calibration is ineligible")
     if target.exists():
         if not args.replace:
             raise FileExistsError(f"{target} already exists; pass --replace")
@@ -118,6 +163,7 @@ def main() -> None:
         shutil.copy2(source, target / name)
     (target / "peak_rank_detector.pt").write_bytes(checkpoint)
     (target / "training_terminal.json").write_bytes(terminal)
+    (target / "threshold_calibration.json").write_bytes(threshold_calibration)
     files = {
         path.relative_to(target).as_posix(): {
             "bytes": path.stat().st_size,
@@ -140,6 +186,14 @@ def main() -> None:
             "depths": terminal_payload["depths"],
             "ensemble_size": 1,
             "checkpoint_sha256": report["checkpoint_sha256"],
+            "threshold_calibration_sha256": hashlib.sha256(
+                threshold_calibration
+            ).hexdigest(),
+            "peak_threshold_policy": (
+                "synthetic_selection_micro_detection_jaccard"
+            ),
+            "organizer_estimated_node_count_read": False,
+            "organizer_estimated_node_count_used_for_threshold": False,
             "training_archive_sha256": report["archive_sha256"],
             "training_run_id": terminal_payload["run_id"],
             "model_family": terminal_payload.get(

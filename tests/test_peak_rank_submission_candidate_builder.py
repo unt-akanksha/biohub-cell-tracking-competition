@@ -30,6 +30,9 @@ def test_builder_is_hash_pinned_two_gpu_and_non_submitting() -> None:
         "subvoxel_association_coordinates",
         "dual_association_models_verified",
         "selected_peak_tta_mode",
+        "selected_peak_threshold",
+        "threshold_calibration_sha256",
+        "organizer_estimated_node_count_used_for_threshold",
         "max_worker_elapsed_seconds",
         "official_validator_candidate.csv",
         "pending_external_patched_official_scoring",
@@ -47,6 +50,7 @@ def test_transformation_replaces_detector_but_retains_public_linker() -> None:
     assert "scripts/predict_unet_transformer.py" in joined
     assert "--official-predictor" in joined
     assert joined.count("--peak-tta-mode") == 2
+    assert joined.count("--peak-threshold") == 2
     assert "worker_manifest.json" in joined
     assert 'association_coordinate_mode") == "subvoxel"' in joined
     assert "SEC_EDGE_TTA_ACTIVE" in joined

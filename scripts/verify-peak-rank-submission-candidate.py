@@ -50,6 +50,7 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
     manifest = json.loads(runtime_manifest.read_text(encoding="utf-8"))
     files = manifest.get("files", {})
     validation_path = root / "clean_validation.json"
+    threshold_calibration_path = root / "threshold_calibration.json"
     checkpoint = root / "peak_rank_detector.pt"
     training = json.loads((root / "training_terminal.json").read_text(encoding="utf-8"))
     parameter_count = manifest.get("parameter_count")
@@ -86,6 +87,16 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         and manifest.get("clean_validation_promotion_passed") is True
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
         and manifest.get("clean_validation_sha256") == sha256_file(validation_path)
+        and threshold_calibration_path.is_file()
+        and manifest.get("threshold_calibration_sha256")
+        == sha256_file(threshold_calibration_path)
+        and manifest.get("peak_threshold_policy")
+        == "synthetic_selection_micro_detection_jaccard"
+        and manifest.get("organizer_estimated_node_count_read") is False
+        and manifest.get("organizer_estimated_node_count_used_for_threshold") is False
+        and isinstance(manifest.get("selected_peak_threshold"), (int, float))
+        and not isinstance(manifest.get("selected_peak_threshold"), bool)
+        and 0.0 < float(manifest["selected_peak_threshold"]) < 1.0
         and "predict_with_official_linker.py" in files
         and "clean_validation.json" in files
     ):
@@ -105,6 +116,15 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         == validation.get("selected_tta_mode")
         and manifest.get("selected_peak_tta_views")
         == validation.get("selected_tta_views")
+        and manifest.get("selected_peak_threshold")
+        == validation.get("selected_peak_threshold")
+        and validation.get("threshold_policy")
+        == manifest.get("peak_threshold_policy")
+        and validation.get("threshold_calibration_sha256")
+        == manifest.get("threshold_calibration_sha256")
+        and validation.get("organizer_estimated_node_count_read") is False
+        and validation.get("organizer_estimated_node_count_used_for_threshold")
+        is False
         and validation.get("competition_test_data_read") is False
         and validation.get("competition_submission_performed") is False
         and validation.get("provenance", {}).get("checkpoint_sha256")
@@ -117,6 +137,9 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         "clean_validation_sha256": manifest["clean_validation_sha256"],
         "selected_peak_tta_mode": manifest["selected_peak_tta_mode"],
         "selected_peak_tta_views": manifest["selected_peak_tta_views"],
+        "selected_peak_threshold": manifest["selected_peak_threshold"],
+        "peak_threshold_policy": manifest["peak_threshold_policy"],
+        "threshold_calibration_sha256": manifest["threshold_calibration_sha256"],
         "parameter_count": parameter_count,
         "ensemble_size": ensemble_size,
     }
@@ -201,6 +224,14 @@ def verify_candidate(
         and evidence.get("selected_peak_tta_mode") == runtime["selected_peak_tta_mode"]
         and evidence.get("selected_peak_tta_views")
         == runtime["selected_peak_tta_views"]
+        and evidence.get("selected_peak_threshold")
+        == runtime["selected_peak_threshold"]
+        and evidence.get("peak_threshold_policy")
+        == runtime["peak_threshold_policy"]
+        and evidence.get("threshold_calibration_sha256")
+        == runtime["threshold_calibration_sha256"]
+        and evidence.get("organizer_estimated_node_count_read") is False
+        and evidence.get("organizer_estimated_node_count_used_for_threshold") is False
         and evidence.get("parameter_count") == runtime["parameter_count"]
         and evidence.get("ensemble_size") == runtime["ensemble_size"]
         and float(evidence.get("max_worker_elapsed_seconds", math.inf)) < 31_500.0
@@ -223,6 +254,10 @@ def verify_candidate(
             and row.get("ensemble_size") == runtime["ensemble_size"]
             and row.get("peak_tta_mode") == runtime["selected_peak_tta_mode"]
             and row.get("peak_tta_views") == runtime["selected_peak_tta_views"]
+            and row.get("peak_threshold") == runtime["selected_peak_threshold"]
+            and row.get("peak_threshold_policy") == runtime["peak_threshold_policy"]
+            and row.get("organizer_estimated_node_count_read") is False
+            and row.get("organizer_estimated_node_count_used_for_threshold") is False
             and row.get("association", {}).get("edge_feature_tta") is True
             and row.get("association", {}).get("secondary_link_mode")
             == "low_margin_consensus"
@@ -360,6 +395,11 @@ def verify_candidate(
         "worker_count": 2,
         "selected_peak_tta_mode": runtime["selected_peak_tta_mode"],
         "selected_peak_tta_views": runtime["selected_peak_tta_views"],
+        "selected_peak_threshold": runtime["selected_peak_threshold"],
+        "peak_threshold_policy": runtime["peak_threshold_policy"],
+        "threshold_calibration_sha256": runtime["threshold_calibration_sha256"],
+        "organizer_estimated_node_count_read": False,
+        "organizer_estimated_node_count_used_for_threshold": False,
         "public_control": baseline,
         "public_control_validator_sha256": baseline_sha256,
         "candidate_validator": candidate,

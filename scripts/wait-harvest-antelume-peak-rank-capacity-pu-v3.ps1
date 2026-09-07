@@ -21,6 +21,7 @@ $verifier = Join-Path $RepositoryRoot "scripts/verify-antelume-peak-rank-capacit
 $remoteArchive = "/home/ubuntu/biohub-peak-rank-capacity-pu-v3-results.tar.gz"
 $remoteSums = "$remoteArchive.sha256"
 $remoteAcknowledgement = "/home/ubuntu/biohub-peak-rank-detector-v1/capacity-pu-v3/harvest.verified"
+$remoteCalibrationComplete = "/home/ubuntu/biohub-peak-rank-detector-v1/capacity-pu-v3/threshold-calibration.complete"
 
 function Write-Terminal([hashtable]$Payload) {
     $Payload["schema_version"] = 1
@@ -45,7 +46,7 @@ if (Test-Path -LiteralPath $terminalPath) {
 }
 
 try {
-    $remoteCommand = "set -euo pipefail; for poll in `$(seq 1 $MaximumPolls); do if test -f '$remoteArchive' && test -f '$remoteSums'; then break; fi; sleep $PollSeconds; done; test -f '$remoteArchive'; test -f '$remoteSums'; sha256sum -c '$remoteSums' >/dev/null; cat '$remoteArchive'"
+    $remoteCommand = "set -euo pipefail; for poll in `$(seq 1 $MaximumPolls); do if test -f '$remoteCalibrationComplete' && test -f '$remoteArchive' && test -f '$remoteSums'; then break; fi; sleep $PollSeconds; done; test -f '$remoteCalibrationComplete'; test -f '$remoteArchive'; test -f '$remoteSums'; sha256sum -c '$remoteSums' >/dev/null; cat '$remoteArchive'"
     $process = Start-Process -FilePath ssh.exe -ArgumentList @(
         "-i", $SshKey,
         "-o", "BatchMode=yes",
@@ -83,6 +84,9 @@ try {
         best_step = [int]$report.best_step
         parameter_count = [int64]$report.parameter_count
         checkpoint_sha256 = $report.checkpoint_sha256
+        threshold_calibration_sha256 = $report.threshold_calibration_sha256
+        peak_threshold_policy = $report.peak_threshold_policy
+        organizer_estimated_node_count_used_for_threshold = $report.organizer_estimated_node_count_used_for_threshold
         variant = $report.variant
     }
 }

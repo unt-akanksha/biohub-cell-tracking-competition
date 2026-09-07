@@ -94,12 +94,15 @@ class ExternalDetectionCache:
     frames: tuple[FrameDetections, ...]
     threshold: float
     projected_node_count: float
-    estimated_node_count: float
+    estimated_node_count: float | None
 
     def __post_init__(self) -> None:
         if not 0.0 <= self.threshold <= 1.0:
             raise ValueError("threshold must lie in [0, 1]")
-        if not np.isfinite(self.estimated_node_count) or self.estimated_node_count <= 0:
+        if self.estimated_node_count is not None and (
+            not np.isfinite(self.estimated_node_count)
+            or self.estimated_node_count <= 0
+        ):
             raise ValueError("estimated node count must be finite and positive")
         ids = tuple(row.frame for row in self.frames)
         if ids != tuple(range(len(self.frames))):
