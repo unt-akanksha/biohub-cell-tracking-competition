@@ -514,3 +514,81 @@ threshold, sweep winner, or score enters the owned detector or ensemble.
 - <https://www.kaggle.com/code/flexonafft/biohub-harmonic-fusion>
 - <https://www.kaggle.com/code/flexonafft/biohab-lineage-forge-adaptive-tracking>
 - <https://www.kaggle.com/code/evgendvorkin/biohub-0-934-lb-proxy-score-0-9384>
+
+## September 7 ILP-semantics and discussion refresh at 13:50 UTC
+
+The newest notebook,
+`rogerrogerroger3r/biohub-the-proxy-is-inverted-the-ilp-can-t-fork`, is an
+explanatory audit rather than a candidate. Its raw notebook SHA-256 is
+`a8b20e818cfbb2fbb516c26225782a9c56dbed60bfe5e3ef09ad0b0a35bfe1de` and
+its metadata SHA-256 is
+`72ea7b78e95e007a8909f9a9e025e846098a4d8775331f5a67337d4e2037df81`.
+It contains no model, checkpoint, prediction, submission configuration, or
+clean promotion receipt.
+
+Two observations are reproducible and useful, but neither supplies a score
+setting:
+
+- The notebook's three same-lineage examples order its sparse proxy score in
+  the exact reverse of their reported public leaderboard scores as predicted
+  node count changes. Those leaderboard observations cannot be reused as
+  selection evidence, but they reinforce the existing rule that sparse proxy
+  output and node-count tuning cannot promote a candidate.
+- The vendored `tracksdata` outgoing-flow constraint makes a second daughter
+  beneficial only when its edge probability clears
+  `division_weight - appearance_weight`. With the public lineage's appearance
+  weight `0.0`, any division weight at or above `1.0` disables native ILP
+  forks because edge probabilities cannot exceed one. The active attributed
+  linker uses `1.2`, so its native ILP division channel is deliberately inert.
+
+The full production path adds two constraints omitted by the notebook's
+three-node illustration. Candidate edges are discarded below probability
+`0.48`, and every target may have only one incoming edge. The four cached raw
+control graphs confirm zero native forks in every movie; graph finishing then
+contains `103`, `81`, `5`, and `29` forks respectively, supplied by the
+post-link division channel. On one already-opened diagnostic transition, a
+CPU single-pass dual-linker probe assigned the annotated parent the top rank
+for both daughters but probabilities only `0.125664` and `0.242600`, both below
+the production candidate threshold. The executed frozen graph instead linked
+the second daughter from a competing parent at probability `0.647323`. Lowering
+only the division cost therefore cannot recover this event: it neither restores
+a pruned edge nor overrides the single-parent constraint. This opened probe is
+diagnostic only and cannot select a threshold.
+
+No `division_weight < 1` candidate is scheduled from this audit. A scientifically
+valid follow-up would have to be a separately preregistered fork-aware
+reassignment model or rule, scored on complete movies with edge-regression and
+worst-movie gates. The existing safe-division, relational, and graph-context
+experiments already show that isolated division precision does not establish
+such a promotion.
+
+The newest discussion refresh is directionally consistent with the current
+program but provides no independently validated replacement:
+
+- Topic `739731` reports that roughly two weeks of synthetic-data work did not
+  produce clear gains and mentions PolNet, DaXi, NISNet3D, deltaMic, and online
+  adaptation. NISNet/deltaMic licensing and task fit were already screened;
+  the active detector already combines synthetic complete labels with
+  competition-train positive-only replay.
+- Topic `739685` argues that point detection can lose instance appearance. The
+  active Trackastra bridge still samples image features at project-authored
+  points, so it is not coordinate-only.
+- Topics `739570` and `738276` recommend trusting held-out validation and
+  considering instance segmentation/Ultrack, while warning that sparse proxies
+  under-penalize over-detection. These support the current complete-movie gates.
+- Topic `738778` reports that the released truth is overwhelmingly linear and
+  divisions are rare, which argues for high-precision rather than high-volume
+  fork edits.
+- Topic `739018` explicitly advocates predicted-node-count adjustment. That is
+  a metric-hack direction and remains excluded. Topics `739915` and `739516`
+  expose titles only and provide no reproducible evidence.
+
+Additional references:
+
+- <https://www.kaggle.com/code/rogerrogerroger3r/biohub-the-proxy-is-inverted-the-ilp-can-t-fork>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739731>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739685>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739570>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738276>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738778>
+- <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739018>

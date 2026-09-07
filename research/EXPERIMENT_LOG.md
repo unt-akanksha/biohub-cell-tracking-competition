@@ -1441,3 +1441,27 @@ well as the synthetic generator.
   account-wide GPU mutex and wait for quota refresh when the 12-hour declared
   budget would cross the 8-hour reserve, instead of permanently skipping a
   scientifically eligible candidate.
+- The 13:50 UTC public refresh added an explanatory ILP audit, not a new
+  candidate. Source SHA-256 `a8b20e81...5bfe1de` correctly derives that, with
+  appearance cost zero, a native ILP fork needs the second-daughter edge
+  probability to clear the division cost; the inherited `1.2` cost is therefore
+  unreachable. The production trace adds two decisive facts: candidate edges
+  are first cut at `0.48`, and each daughter can have only one parent. All four
+  cached raw control graphs contain zero forks, while their postprocessed graphs
+  contain `103/81/5/29`, confirming that the current division channel is the
+  separately gated post-link rule.
+- A CPU-only probe on one already-opened validation transition found the true
+  parent's single-pass dual-linker probabilities for its two matched daughters
+  were only `0.125664` and `0.242600`; the executed frozen graph assigned the
+  second daughter to a competing parent at `0.647323`. This diagnostic cannot
+  select a threshold, but it falsifies a cheap `division_weight < 1` candidate:
+  changing that cost alone cannot restore a below-threshold edge or reassign an
+  already claimed daughter. No active detector, candidate, controller, or GPU
+  job was changed. Any future division experiment must explicitly learn or
+  validate fork-aware reassignment under complete-movie edge and worst-movie
+  gates.
+- Discussion topics `739731`, `739685`, `739570`, `738276`, and `738778`
+  reinforce synthetic-plus-real training, image-feature association,
+  held-out-complete-movie validation, and high-precision rare-division handling.
+  Topic `739018` proposes predicted-node-count adjustment and is excluded as a
+  metric-hack direction; `739915` and `739516` provide no runnable evidence.
