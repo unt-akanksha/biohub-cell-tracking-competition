@@ -36,6 +36,8 @@ def test_deployment_and_harvest_are_hash_bound_and_credential_tolerant() -> None
     assert 'worst_case_gpu_hours = 5' in deployment
     assert 'constituent_audit_gate_required = $false' in deployment
     assert "MaximumPolls = 2880" in harvest
+    assert '[string]$DirectRemoteHost = ""' in harvest
+    assert "function Ensure-Key" in harvest
     assert "harvest.verified" in harvest
     assert "verify-antelume-graph-context-frozen-ensemble-v2-harvest.py" in harvest
 

@@ -3,6 +3,7 @@ param(
     [string]$AwsRegion = "us-east-1",
     [string]$InstanceId = "i-0d12195df0d3558f3",
     [string]$AvailabilityZone = "us-east-1b",
+    [string]$DirectRemoteHost = "",
     [string]$RemoteUser = "ubuntu",
     [string]$SshKey = "C:/Users/IndarKumar/.ssh/rsna_ec2",
     [string]$PublicKey = "C:/Users/IndarKumar/.ssh/rsna_ec2.pub",
@@ -51,6 +52,11 @@ function Publish-Key {
     return $LASTEXITCODE -eq 0
 }
 
+function Ensure-Key {
+    if (-not [string]::IsNullOrWhiteSpace($DirectRemoteHost)) { return $true }
+    return Publish-Key
+}
+
 if (-not (Test-Path -LiteralPath $verifier -PathType Leaf)) {
     throw "Graph-context v2 harvest verifier is missing"
 }
@@ -76,18 +82,26 @@ try {
             $deploy = Get-Content -Raw -LiteralPath $deployTerminal | ConvertFrom-Json
             $deployed = $deploy.status -eq "deployed_and_queued"
         }
-        & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion 2> $null | Out-Null
-        $credentialsReady = $LASTEXITCODE -eq 0
+        $remoteHost = $DirectRemoteHost.Trim()
+        $credentialsReady = -not [string]::IsNullOrWhiteSpace($remoteHost)
+        if (-not $credentialsReady) {
+            & aws sts get-caller-identity --profile $AwsProfile --region $AwsRegion 2> $null | Out-Null
+            $credentialsReady = $LASTEXITCODE -eq 0
+        }
         if ($deployed -and $credentialsReady) {
-            $remoteHost = (& aws ec2 describe-instances `
-                --profile $AwsProfile `
-                --region $AwsRegion `
-                --instance-ids $InstanceId `
-                --query "Reservations[0].Instances[0].PublicIpAddress" `
-                --output text 2> $null).Trim()
-            if ($LASTEXITCODE -eq 0 -and $remoteHost -and $remoteHost -ne "None") {
+            $hostReady = $true
+            if ([string]::IsNullOrWhiteSpace($remoteHost)) {
+                $remoteHost = (& aws ec2 describe-instances `
+                    --profile $AwsProfile `
+                    --region $AwsRegion `
+                    --instance-ids $InstanceId `
+                    --query "Reservations[0].Instances[0].PublicIpAddress" `
+                    --output text 2> $null).Trim()
+                $hostReady = $LASTEXITCODE -eq 0
+            }
+            if ($hostReady -and $remoteHost -and $remoteHost -ne "None") {
                 $remote = "${RemoteUser}@${remoteHost}"
-                if (Publish-Key) {
+                if (Ensure-Key) {
                     & ssh.exe -i $SshKey -o StrictHostKeyChecking=no $remote "test -s '$remoteArchive' -a -s '$remoteSha'" 2> $null
                     $ready = $LASTEXITCODE -eq 0
                 }
@@ -101,12 +115,12 @@ try {
         throw "Timed out waiting for the graph-context v2 result archive"
     }
 
-    if (-not (Publish-Key)) { throw "Failed to publish harvest SSH key" }
+    if (-not (Ensure-Key)) { throw "Failed to publish harvest SSH key" }
     & scp.exe -i $SshKey -o StrictHostKeyChecking=no "${remote}:$remoteSha" $shaPath 2>&1 | Tee-Object -FilePath $logPath -Append
     if ($LASTEXITCODE -ne 0) { throw "Failed to copy graph-context v2 archive hash" }
     $expectedSha = ((Get-Content -Raw -LiteralPath $shaPath).Trim() -split '\s+')[0].ToLowerInvariant()
     if ($expectedSha -notmatch '^[0-9a-f]{64}$') { throw "Invalid graph-context v2 archive hash" }
-    if (-not (Publish-Key)) { throw "Failed to publish archive-copy SSH key" }
+    if (-not (Ensure-Key)) { throw "Failed to publish archive-copy SSH key" }
     & scp.exe -i $SshKey -o StrictHostKeyChecking=no "${remote}:$remoteArchive" $archivePath 2>&1 | Tee-Object -FilePath $logPath -Append
     if ($LASTEXITCODE -ne 0) { throw "Failed to copy graph-context v2 result archive" }
     $actualSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $archivePath).Hash.ToLowerInvariant()
@@ -121,7 +135,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Graph-context v2 result verification failed" }
     $verification = Get-Content -Raw -LiteralPath $verificationTerminal | ConvertFrom-Json
 
-    if (-not (Publish-Key)) { throw "Failed to publish acknowledgement SSH key" }
+    if (-not (Ensure-Key)) { throw "Failed to publish acknowledgement SSH key" }
     & ssh.exe -i $SshKey -o StrictHostKeyChecking=no $remote "printf '%s\n' '$expectedSha' > '$remoteAcknowledgement'" 2>&1 | Tee-Object -FilePath $logPath -Append
     if ($LASTEXITCODE -ne 0) { throw "Failed to acknowledge graph-context v2 harvest" }
     Write-Terminal @{

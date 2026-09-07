@@ -1586,3 +1586,16 @@ well as the synthetic generator.
   hash-verified locally, acknowledged remotely, and the accelerator is idle.
   This removes credential refresh from the queue's critical path without
   relaxing sequential ownership or evidence gates.
+- V31 is a precommitted conditional capacity test, not another speculative
+  queue member. It combines the exact V21 XL widths `(160,320,640,1280)` with
+  the exact V27 temporal-minimum local-SNR architecture and frozen
+  optimization-only hard-example sampler, yielding 129,761,606 parameters at
+  a fresh seed for 6,000 steps. Its local controller cannot deploy unless V21
+  and V27 each independently finish clean validation with promotion enabled
+  and graph v2 is hash-verified and acknowledged. Parent rejection produces a
+  terminal skip with zero AWS GPU use. If admitted, the remote runner still
+  waits for graph completion and GPU idleness, has a 108,000-second watchdog,
+  and its downstream dual-T4 validation/candidate controllers retain the
+  eight-hour Kaggle reserve and external-promotion submission boundary.
+  Hidden conditional controller PID `42212` is now waiting on those three
+  immutable evidence terminals.
