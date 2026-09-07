@@ -99,6 +99,12 @@ def validate_terminal(
         and terminal.get("authorized_for_submission") is False
     ):
         raise ValueError("peak-ranking terminal violates the frozen run contract")
+    last_name = (ROOT / "last_peak_rank_detector.pt").as_posix()
+    last_checkpoint = files.get(last_name)
+    if last_checkpoint is None or sha256_bytes(last_checkpoint) != terminal.get(
+        "last_checkpoint_sha256"
+    ):
+        raise ValueError("last validation checkpoint does not match terminal")
     status = terminal.get("status")
     accepted = status == "accepted_at_audit"
     if accepted:

@@ -19,6 +19,7 @@ SPEC.loader.exec_module(MODULE)
 def _archive(path: Path, *, accepted: bool = True, tamper: bool = False) -> None:
     root = "synthetic256-real-positive-temporal-peak-rank-v1"
     checkpoint = b"independent learned weights"
+    last_checkpoint = b"recoverable validation weights"
     terminal = {
         "schema_version": 1,
         "run_id": root,
@@ -33,6 +34,7 @@ def _archive(path: Path, *, accepted: bool = True, tamper: bool = False) -> None
         "audit_opened": accepted,
         "audit_passed": accepted,
         "checkpoint_sha256": hashlib.sha256(checkpoint).hexdigest() if accepted else None,
+        "last_checkpoint_sha256": hashlib.sha256(last_checkpoint).hexdigest(),
         "competition_train_data_read": True,
         "competition_test_data_read": False,
         "public_predictions_read": False,
@@ -45,6 +47,7 @@ def _archive(path: Path, *, accepted: bool = True, tamper: bool = False) -> None
         f"{root}/terminal.json": json.dumps(terminal).encode(),
         f"{root}/training.exit-code": b"0\n" if accepted else b"1\n",
         f"{root}/training.log": b"training evidence\n",
+        f"{root}/last_peak_rank_detector.pt": last_checkpoint,
     }
     if accepted:
         files[f"{root}/peak_rank_detector.pt"] = checkpoint

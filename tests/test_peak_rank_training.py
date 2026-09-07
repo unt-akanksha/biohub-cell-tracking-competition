@@ -8,6 +8,7 @@ from research.peak_rank_detection.train_synthetic_real_detector import (
     local_positive_metrics,
     normalize_frames,
     selection_passed,
+    atomic_torch_save,
 )
 
 
@@ -82,3 +83,13 @@ def test_selection_and_audit_gates_are_explicit() -> None:
     metrics["real_positive_only"]["positive_peak_recall"] = 0.79
     assert not selection_passed(metrics)
     assert not audit_passed(metrics)
+
+
+def test_atomic_checkpoint_replaces_partial(tmp_path) -> None:
+    import torch
+
+    path = tmp_path / "last.pt"
+    atomic_torch_save({"step": 1000, "value": torch.tensor([3.0])}, path)
+    saved = torch.load(path, map_location="cpu", weights_only=True)
+    assert saved["step"] == 1000
+    assert not path.with_suffix(".pt.partial").exists()

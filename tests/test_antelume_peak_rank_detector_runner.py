@@ -44,3 +44,13 @@ def test_runner_hashes_code_data_and_archive() -> None:
     assert source.count("sha256sum -c -") >= 5
     assert "SHA256SUMS" in source
     assert 'sha256sum "$result_archive"' in source
+
+
+def test_trainer_keeps_recoverable_validation_checkpoints() -> None:
+    trainer = (
+        Path(__file__).resolve().parents[1]
+        / "research/peak_rank_detection/train_synthetic_real_detector.py"
+    ).read_text(encoding="utf-8")
+    assert "last_peak_rank_detector.pt" in trainer
+    assert "atomic_torch_save(frozen, last_checkpoint_path)" in trainer
+    assert "last_checkpoint_sha256" in trainer

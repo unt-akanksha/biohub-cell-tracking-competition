@@ -518,6 +518,12 @@ def checkpoint_state(model: torch.nn.Module, *, step: int) -> dict[str, Any]:
     }
 
 
+def atomic_torch_save(payload: dict[str, Any], path: Path) -> None:
+    temporary = path.with_suffix(path.suffix + ".partial")
+    torch.save(payload, temporary)
+    temporary.replace(path)
+
+
 def main() -> None:
     args = parse_args()
     if args.steps <= 0 or not 0 < args.validation_every <= args.steps:
@@ -572,6 +578,7 @@ def main() -> None:
     best_composite = -math.inf
     best_step = 0
     checkpoint_path = args.output_root / "peak_rank_detector.pt"
+    last_checkpoint_path = args.output_root / "last_peak_rank_detector.pt"
 
     for step in range(1, args.steps + 1):
         if time.monotonic() - started > args.max_wall_seconds:
@@ -641,8 +648,10 @@ def main() -> None:
             history.append(row)
             atomic_json(args.output_root / "selection_history.json", {"rows": history})
             print("SELECTION", json.dumps(row, sort_keys=True), flush=True)
+            frozen = checkpoint_state(ema, step=step)
+            atomic_torch_save(frozen, last_checkpoint_path)
             if passed and composite > best_composite:
-                torch.save(checkpoint_state(ema, step=step), checkpoint_path)
+                atomic_torch_save(frozen, checkpoint_path)
                 best_composite = composite
                 best_step = step
 
@@ -669,6 +678,7 @@ def main() -> None:
         "submission_created": False,
         "authorized_for_submission": False,
         "elapsed_seconds": time.monotonic() - started,
+        "last_checkpoint_sha256": sha256_file(last_checkpoint_path),
     }
     if best_step > 0:
         state = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
