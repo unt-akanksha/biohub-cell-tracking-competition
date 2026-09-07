@@ -663,3 +663,12 @@ well as the synthetic generator.
   evaluated first across isolated GPU workers; the four acceptance movies stay
   closed unless pooled and worst-movie selection gates pass. The validation
   kernel contains no submission command or candidate materialization path.
+- A late September 6 Kaggle refresh audited five additional hot notebooks from
+  Aman Atar, Analytica Obscura, Anhad Mahajan, Kunal Desale, and Nusrati. Their
+  closest normalized-code overlap with the already-audited public family is
+  `0.921549`--`0.990681`; all retain the same U-Net/Trackastra/ILP inference
+  structure rather than supplying an independently validated model. Static
+  scanning found only explicit `metric_hack_used = False` text, not a known
+  exploit signature, but that is not proof of clean evaluation. They remain
+  excluded from candidate construction and no displayed score or output is
+  treated as experiment evidence.

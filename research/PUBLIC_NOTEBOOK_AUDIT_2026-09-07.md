@@ -61,6 +61,27 @@ sources. This means only that no registered signature matched; it is not a
 clean-score claim or a reproduction. Explicit metric-hack notebooks and the
 patched far-away-fork exploit remain excluded.
 
+## Late September 6 refresh
+
+Five additional notebooks near the top of the live hotness inventory were
+downloaded after the initial audit. None adds an independent model family:
+
+| Notebook | Raw SHA-256 | Unique code lines | Highest overlap with audited family |
+|---|---|---:|---:|
+| `amanatar/biohub-cell-tracking-v` | `93639fc9126698dd6e00521640a52b2e43629ea8148fb63cfa0c45738f4df225` | 2,774 | `0.990681` |
+| `analyticaobscura/biohub-lb-942` | `e59373ea569332e4ce34a94d8579507970345a62d38b99fe900c2c438b4220fc` | 2,908 | `0.921549` |
+| `anhadmahajan06/biohub-track-your-cells-development` | `310807cf4471b5eaef3db7ec51e3c487472cc4deb700ad3cd3f2603e7abc80da` | 2,775 | `0.987478` |
+| `kunaldesale2408/biohub-cell-tracking` | `6dc327ced8fa9ce74106b34054f52da4a434809243cc87a169021febdaf67568` | 2,778 | `0.981462` |
+| `nusrati/0-940` | `75a1f4ccf3b2b5a18783e0c034ebcd061be262624eaea43332d07c8907a8dd9a` | 2,773 | `0.989247` |
+
+Their closest matches are the same Flexon, RedOctopusk, Busyaprime, and
+Rishabh notebooks already excluded above. Each retains the public
+TemporalUNet/Trackastra/ILP stack and nearly identical post-processing. The
+only exploit-related text found was an explicit `metric_hack_used: False`
+field; isolated-node pruning is present as ordinary graph cleanup. Static
+inspection does not prove a clean score, but the very high code overlap is
+enough to exclude all five as independent ensemble members.
+
 ## Current discussion findings
 
 A September 7 discussion from a competitor stuck at `0.933` observes that the
@@ -87,6 +108,11 @@ References:
 - <https://www.kaggle.com/code/redoctopusk/biohub-948tta>
 - <https://www.kaggle.com/code/muhanqiu/biohub-final-submission-our-weights>
 - <https://www.kaggle.com/code/hengck23/cell-point-detector>
+- <https://www.kaggle.com/code/anhadmahajan06/biohub-track-your-cells-development>
+- <https://www.kaggle.com/code/amanatar/biohub-cell-tracking-v>
+- <https://www.kaggle.com/code/kunaldesale2408/biohub-cell-tracking>
+- <https://www.kaggle.com/code/analyticaobscura/biohub-lb-942>
+- <https://www.kaggle.com/code/nusrati/0-940>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737543>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154>
