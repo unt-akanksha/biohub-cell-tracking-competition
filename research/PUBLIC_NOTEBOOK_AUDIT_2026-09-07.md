@@ -153,6 +153,23 @@ contains only a five-line supersession note and no runnable candidate.
 overlap with `948tta2` and is another configuration of the shared public
 lineage, not an independent ensemble member.
 
+`qiweiyin/focus3d-nuclei-physical-pp-submit` is structurally independent and
+therefore more interesting than the public lineage. Its raw notebook SHA-256
+is `459cedbe2068fff6b4dfc57e20a9103a14bbc059baa4612c9f7693433a618de4`.
+It replaces detection with the newly released roughly 1.1B-parameter FOCUS-3D
+nuclei instance model, converts masks to centroids, and then uses
+coordinate-only physical relinking. The notebook reports 98.5% sparse-node
+recall and 95.2% annotated-edge recall on one movie, but no complete-movie
+patched-official score or independent leaderboard result is supplied.
+
+FOCUS-3D source code is BSD-3-Clause, but the exact checkpoint is not yet
+eligible for this workspace: the official Hugging Face model card has no
+declared weight license and is auto-gated, while the 4.5 GB Kaggle runtime
+dataset declares only `other`. The Antelume root also has only 2.1 GB free, so
+copying this runtime there would displace the active reproducible queue. No
+weight, prediction, or GPU budget is assigned until the checkpoint license is
+made explicit and a complete-movie clean evaluation can be staged safely.
+
 References:
 
 - <https://www.kaggle.com/code/redoctopusk/biohub-948tta>
@@ -167,6 +184,9 @@ References:
 - <https://www.kaggle.com/code/mjcho2023/a-z-axis-voxel-floor-on-cell-localisation>
 - <https://www.kaggle.com/code/anvithpothula/biohub-x69>
 - <https://www.kaggle.com/code/flexonafft/biohab-lineage-forge-adaptive-tracking>
+- <https://www.kaggle.com/code/qiweiyin/focus3d-nuclei-physical-pp-submit>
+- <https://github.com/yu-lab-vt/FOCUS-3D>
+- <https://www.biorxiv.org/content/10.64898/2026.08.25.746907v1>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737543>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154>

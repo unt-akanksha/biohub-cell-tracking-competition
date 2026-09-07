@@ -878,3 +878,14 @@ well as the synthetic generator.
   `association_coordinate_mode=subvoxel` in every worker manifest, and remains
   subject to the unchanged exact complete-movie promotion gate. The public
   notebook's one-movie result and predictions are not used as score evidence.
+- The newly released FOCUS-3D nuclei checkpoint was assessed as a possible
+  independent heavyweight detector. Its public wrapper describes a roughly
+  1.1B-parameter MaskFormer-style instance model and reports 98.5% sparse-node
+  recall on one movie, but supplies neither a patched-official complete-movie
+  score nor independent leaderboard evidence. The code is BSD-3-Clause; the
+  official Hugging Face card declares no checkpoint license and is auto-gated,
+  while the mirrored 4.5 GB Kaggle runtime uses the ambiguous `other` license.
+  Antelume currently has only 2.1 GB free. The lane is therefore held without
+  downloading weights, consuming GPU, copying predictions, or disturbing the
+  active queue; it can reopen only after explicit weight licensing and safe
+  storage are available.
