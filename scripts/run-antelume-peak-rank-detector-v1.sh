@@ -58,7 +58,7 @@ PYTHONPATH="$workspace" CUDA_VISIBLE_DEVICES=0 "$python_bin" "$trainer" \
   --real-root "$real_root" \
   --real-manifest-sha256 "$real_manifest_sha256" \
   --output-root "$result_root" \
-  --steps 12000 \
+  --steps 3000 \
   --validation-every 1000 \
   --log-every 50 \
   --learning-rate 2e-4 \

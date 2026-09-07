@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = PurePosixPath("synthetic256-real-positive-temporal-peak-rank-v1")
 EXPECTED_PARAMETER_COUNT = 38_381_478
-EXPECTED_STEPS = 12_000
+EXPECTED_STEPS = 3_000
 EXPECTED_SEED = 1_041_729
 HASH_PATTERN = re.compile(r"^([0-9a-f]{64})  (.+)$")
 

@@ -24,7 +24,7 @@ def test_runner_uses_clean_data_and_fixed_training_contract() -> None:
 
     assert "data/synthetic256" in source
     assert "data/real-replay" in source
-    assert "--steps 12000" in source
+    assert "--steps 3000" in source
     assert "--widths 96,192,384,768" in source
     assert "--depths 3,3,9,3" in source
     assert "--real-frequency 4" in source

@@ -708,3 +708,12 @@ well as the synthetic generator.
   and worst-movie proxy delta `>=-0.005`. An exact public-output hash is
   rejected. Only the separate one-shot submitter may cross the competition
   boundary after all gates pass.
+- Before the first peak-ranking selection evaluation, a live throughput audit
+  showed that the original 12,000-step declaration required roughly 20+ hours
+  while its hard wall guard was 7 hours, making a valid terminal impossible.
+  With no selection metric yet observed, the infeasible run was terminated at
+  step 250 and preserved as a non-evidentiary archive. The contract was changed
+  for resource feasibility—not performance—to 3,000 cosine-scheduled steps,
+  with the same 38,381,478-parameter model, data partitions, seed, objective,
+  and frozen evaluations at steps 1,000, 2,000, and 3,000. At the observed
+  throughput this fits the guard while using the A10G at 100% compute.
