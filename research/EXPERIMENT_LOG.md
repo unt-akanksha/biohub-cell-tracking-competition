@@ -835,3 +835,13 @@ well as the synthetic generator.
   counts, widths, depths, clean-validation hashes, and equal `0.5` weights are
   embedded in the private runtime; public predictions and leaderboard results
   remain outside the fusion path.
+- The official CELLECT release was pinned at Git commit
+  `3586070926f7f1fd5d8df37456861d22bdc63236` for fallback assessment. It
+  includes a roughly 10.2 MB two-frame 3D U-Net checkpoint and two sub-1 MB
+  matching heads under GPL-2.0, with explicit adjacent-frame embeddings,
+  center/size/division outputs, and anisotropic `zratio=5` inference. The
+  weights were trained for MSKCC confocal data and its preprocessing assumes a
+  different TIFF layout and intensity/axis contract, so no quota is assigned
+  to it until a hash-pinned Biohub adapter and clean frame-level smoke test
+  exist. Its architecture remains a useful association/division fallback, not
+  evidence that cross-domain checkpoints will improve this competition.
