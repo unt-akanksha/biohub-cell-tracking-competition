@@ -24,6 +24,8 @@ def test_runtime_builder_packages_inference_and_two_phase_evaluator() -> None:
     for name in (
         "model.py",
         "inference.py",
+        "peak_association_bridge.py",
+        "lsm_association_bridge.py",
         "evaluate_peak_rank_detector.py",
         "density_calibration.py",
         "evaluate_pretrained_detector.py",

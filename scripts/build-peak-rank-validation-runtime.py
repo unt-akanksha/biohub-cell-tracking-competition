@@ -20,6 +20,14 @@ ARCHIVE_ROOT = "synthetic256-real-positive-temporal-peak-rank-v1"
 SOURCES = {
     "model.py": ROOT / "research" / "peak_rank_detection" / "model.py",
     "inference.py": ROOT / "research" / "peak_rank_detection" / "inference.py",
+    "peak_association_bridge.py": ROOT
+    / "research"
+    / "peak_rank_detection"
+    / "association_bridge.py",
+    "lsm_association_bridge.py": ROOT
+    / "research"
+    / "lsm_fm_detection"
+    / "association_bridge.py",
     "evaluate_peak_rank_detector.py": ROOT
     / "research"
     / "peak_rank_detection"
@@ -113,7 +121,10 @@ def main() -> None:
         target / "SOURCE_MANIFEST.json",
         {
             "schema_version": 1,
-            "purpose": "Two-GPU clean held-out validation; no submission generation",
+            "purpose": (
+                "Two-GPU clean held-out validation plus a dormant official-linker "
+                "bridge; no submission generation"
+            ),
             "architecture": "independent temporal 3D ConvNeXt U-Net peak ranker",
             "parameter_count": 38_381_478,
             "checkpoint_sha256": report["checkpoint_sha256"],
