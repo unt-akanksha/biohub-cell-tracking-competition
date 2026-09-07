@@ -25,9 +25,17 @@ PUBLIC_CONTROL_VALIDATOR_SHA256 = COMMON["PUBLIC_CONTROL_VALIDATOR_SHA256"]
 RUN_ID = "peak-rank-tracking-candidate-v1"
 SOURCE_PUBLIC_KERNEL_REF = "redoctopusk/biohub-948tta2"
 SOURCE_PUBLIC_NOTEBOOK_SHA256 = "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
-MINIMUM_PROXY_GAIN = 0.003
-MAXIMUM_WEIGHTED_EDGE_REGRESSION = 0.001
-MAXIMUM_MOVIE_PROXY_REGRESSION = 0.005
+OFFICIAL_SCORER_LOCK_SHA256 = (
+    "1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c"
+)
+OFFICIAL_METRIC_RUN_ID = "peak-rank-patched-official-complete-movie-v1"
+OFFICIAL_EVALUATION_KIND = (
+    "patched_official_complete_movie_candidate_vs_frozen_control"
+)
+EXPECTED_CONTROL_SCORE = 0.9343483108193262
+MINIMUM_EXACT_SCORE_GAIN = 0.003
+MAXIMUM_EXACT_EDGE_REGRESSION = 0.001
+MAXIMUM_EXACT_MOVIE_REGRESSION = 0.005
 SUPPORTED_ARCHITECTURES = {
     "independent temporal 3D ConvNeXt U-Net peak ranker",
     "equal-logit ensemble of independent temporal 3D ConvNeXt U-Net peak rankers",
@@ -111,6 +119,7 @@ def verify_candidate(
     output_root: Path,
     baseline_validator: Path,
     runtime_manifest: Path,
+    official_metric_result: Path,
     *,
     expected_baseline_sha256: str | None = None,
     expected_run_id: str = RUN_ID,
@@ -123,12 +132,19 @@ def verify_candidate(
     evidence_path = unique_file(output_root, "candidate_evidence.json")
     submission_path = unique_file(output_root, "submission.csv")
     validator_path = unique_file(output_root, "validator_results.csv")
+    official_validator_path = unique_file(
+        output_root, "official_validator_candidate.csv"
+    )
+    exact_path = unique_file(output_root, "official_metric_result.json")
+    if exact_path.resolve() != official_metric_result.resolve():
+        raise RuntimeError("official metric result path is not the candidate result")
     unique_file(output_root, "run_stats.csv")
     worker_paths = sorted(path for path in output_root.rglob("worker-*.json") if path.is_file())
     if len(worker_paths) != 2:
         raise RuntimeError(f"expected two downloaded worker manifests, saw {worker_paths}")
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    exact = json.loads(exact_path.read_text(encoding="utf-8"))
     workers = [json.loads(path.read_text(encoding="utf-8")) for path in worker_paths]
     submission_sha256 = sha256_file(submission_path)
     if not (
@@ -220,25 +236,75 @@ def verify_candidate(
         _assert_close(label, evidence.get(key), candidate[aggregate_key])
     if evidence.get("complete_validator_movie_count") != len(candidate["stems"]):
         raise RuntimeError("candidate evidence validator movie count changed")
+    if not (
+        evidence.get("official_metric_status")
+        == "pending_external_patched_official_scoring"
+        and evidence.get("official_scorer_lock_sha256")
+        == OFFICIAL_SCORER_LOCK_SHA256
+        and evidence.get("official_validator_candidate_sha256")
+        == sha256_file(official_validator_path)
+    ):
+        raise RuntimeError("candidate official-validator materialization is invalid")
     proxy_gain = candidate["proxy_score"] - baseline["proxy_score"]
-    edge_delta = (
+    proxy_edge_delta = (
         candidate["weighted_adjusted_edge_jaccard"]
         - baseline["weighted_adjusted_edge_jaccard"]
     )
     candidate_movies = movie_proxy_rows(validator_path)
     baseline_movies = movie_proxy_rows(baseline_validator)
-    worst_movie_delta = min(
+    worst_movie_proxy_delta = min(
         candidate_movies[stem] - baseline_movies[stem] for stem in candidate["stems"]
     )
+    exact_gate = exact.get("gate", {})
+    exact_checks = exact_gate.get("checks", {})
+    exact_control = exact.get("control", {})
+    exact_candidate = exact.get("candidate", {})
+    exact_score_gain = float(exact_gate.get("score_gain", math.nan))
+    exact_edge_delta = float(exact_gate.get("adjusted_edge_delta", math.nan))
+    exact_worst_movie_delta = float(
+        exact_gate.get("worst_movie_score_delta", math.nan)
+    )
     if not (
-        proxy_gain >= MINIMUM_PROXY_GAIN
-        and edge_delta >= -MAXIMUM_WEIGHTED_EDGE_REGRESSION
-        and worst_movie_delta >= -MAXIMUM_MOVIE_PROXY_REGRESSION
+        exact.get("schema_version") == 1
+        and exact.get("run_id") == OFFICIAL_METRIC_RUN_ID
+        and exact.get("status") == "accepted"
+        and exact.get("evaluation_kind") == OFFICIAL_EVALUATION_KIND
+        and exact.get("exact_official_gate_passed") is True
+        and exact.get("official_scorer_source_verified") is True
+        and exact.get("scorer_lock_sha256") == OFFICIAL_SCORER_LOCK_SHA256
+        and exact.get("candidate_validator_sha256")
+        == sha256_file(official_validator_path)
+        and exact.get("complete_movie_count") == 4
+        and exact.get("embryo_prefixes") == ["44b6", "6bba"]
+        and len(exact.get("by_movie", [])) == 4
+        and bool(exact_checks)
+        and all(value is True for value in exact_checks.values())
+        and math.isclose(
+            float(exact_control.get("score", math.nan)),
+            EXPECTED_CONTROL_SCORE,
+            rel_tol=0.0,
+            abs_tol=1e-12,
+        )
+        and exact_score_gain >= MINIMUM_EXACT_SCORE_GAIN
+        and exact_edge_delta >= -MAXIMUM_EXACT_EDGE_REGRESSION
+        and exact_worst_movie_delta >= -MAXIMUM_EXACT_MOVIE_REGRESSION
+        and math.isclose(
+            float(exact_candidate.get("score", math.nan))
+            - float(exact_control.get("score", math.nan)),
+            exact_score_gain,
+            rel_tol=0.0,
+            abs_tol=1e-12,
+        )
+        and exact.get("competition_test_labels_read") is False
+        and exact.get("public_leaderboard_used_for_selection") is False
+        and exact.get("competition_submission_performed") is False
+        and exact.get("authorized_for_submission") is True
     ):
         raise RuntimeError(
-            "0.945 peak-ranking promotion gate failed: "
-            f"proxy_gain={proxy_gain:.6f}, edge_delta={edge_delta:.6f}, "
-            f"worst_movie_delta={worst_movie_delta:.6f}"
+            "0.945 peak-ranking patched-official promotion gate failed: "
+            f"exact_score_gain={exact_score_gain:.6f}, "
+            f"exact_edge_delta={exact_edge_delta:.6f}, "
+            f"exact_worst_movie_delta={exact_worst_movie_delta:.6f}"
         )
     return {
         "schema_version": 1,
@@ -262,9 +328,21 @@ def verify_candidate(
         "public_control": baseline,
         "public_control_validator_sha256": baseline_sha256,
         "candidate_validator": candidate,
-        "proxy_gain": proxy_gain,
-        "adjusted_edge_delta": edge_delta,
-        "worst_movie_proxy_delta": worst_movie_delta,
+        "diagnostic_proxy_gain": proxy_gain,
+        "diagnostic_proxy_adjusted_edge_delta": proxy_edge_delta,
+        "diagnostic_worst_movie_proxy_delta": worst_movie_proxy_delta,
+        "public_validator_proxy_used_for_promotion": False,
+        "official_metric_result": exact,
+        "official_metric_result_sha256": sha256_file(exact_path),
+        "official_validator_candidate_sha256": sha256_file(
+            official_validator_path
+        ),
+        "official_scorer_lock_sha256": OFFICIAL_SCORER_LOCK_SHA256,
+        "exact_control_score": float(exact_control["score"]),
+        "exact_candidate_score": float(exact_candidate["score"]),
+        "exact_score_gain": exact_score_gain,
+        "adjusted_edge_delta": exact_edge_delta,
+        "worst_movie_score_delta": exact_worst_movie_delta,
         "known_public_hash_match": False,
         "competition_submission_performed": False,
         "authorized_for_submission": True,
@@ -276,6 +354,7 @@ def main() -> None:
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--baseline-validator", type=Path, required=True)
     parser.add_argument("--runtime-manifest", type=Path, required=True)
+    parser.add_argument("--official-metric-result", type=Path, required=True)
     parser.add_argument("--expected-run-id", default=RUN_ID)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
@@ -283,6 +362,7 @@ def main() -> None:
         args.output_root,
         args.baseline_validator,
         args.runtime_manifest,
+        args.official_metric_result,
         expected_baseline_sha256=PUBLIC_CONTROL_VALIDATOR_SHA256,
         expected_run_id=args.expected_run_id,
     )

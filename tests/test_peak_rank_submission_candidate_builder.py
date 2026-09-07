@@ -30,6 +30,9 @@ def test_builder_is_hash_pinned_two_gpu_and_non_submitting() -> None:
         "dual_association_models_verified",
         "selected_peak_tta_mode",
         "max_worker_elapsed_seconds",
+        "official_validator_candidate.csv",
+        "pending_external_patched_official_scoring",
+        "public_validator_proxy_can_promote",
     ):
         assert required in source
     assert "kaggle competitions submit" not in source
@@ -47,7 +50,14 @@ def test_transformation_replaces_detector_but_retains_public_linker() -> None:
     assert "SEC_EDGE_TTA_ACTIVE" in joined
     assert '"source_public_kernel_ref": "redoctopusk/biohub-948tta2"' in joined
     assert "The notebook title's advertised `0.948`" in joined
+    assert "_pr_official_validator_rows" in joined
+    assert "Materialized {len(_pr_official_validator_rows)} official-score rows" in joined
+    assert "public notebook's local metric reimplementation" in joined
     assert notebook["metadata"]["codex"]["public_prediction_copied"] is False
+    assert notebook["metadata"]["codex"]["public_validator_proxy_can_promote"] is False
+    for index, cell in enumerate(notebook["cells"]):
+        if cell.get("cell_type") == "code":
+            compile("".join(cell.get("source", [])), f"candidate-cell-{index}", "exec")
 
 
 def test_depth_pu_candidate_has_distinct_runtime_and_run_identity() -> None:

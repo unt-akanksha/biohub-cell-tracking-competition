@@ -31,9 +31,21 @@ def validate_promotion(path: Path, *, expected_run_id: str = RUN_ID):
         and float(promotion.get("target_public_score", 0.0)) == 0.945
         and promotion.get("known_public_hash_match") is False
         and promotion.get("worker_count") == 2
-        and float(promotion.get("proxy_gain", 0.0)) >= 0.003
+        and promotion.get("public_validator_proxy_used_for_promotion") is False
+        and float(promotion.get("exact_control_score", 0.0))
+        == 0.9343483108193262
+        and float(promotion.get("exact_score_gain", 0.0)) >= 0.003
         and float(promotion.get("adjusted_edge_delta", -1.0)) >= -0.001
-        and float(promotion.get("worst_movie_proxy_delta", -1.0)) >= -0.005
+        and float(promotion.get("worst_movie_score_delta", -1.0)) >= -0.005
+        and isinstance(promotion.get("official_metric_result_sha256"), str)
+        and len(promotion["official_metric_result_sha256"]) == 64
+        and promotion.get("official_scorer_lock_sha256")
+        == "1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c"
+        and promotion.get("official_metric_result", {}).get("status") == "accepted"
+        and promotion.get("official_metric_result", {}).get(
+            "exact_official_gate_passed"
+        )
+        is True
         and isinstance(promotion.get("runtime_manifest_sha256"), str)
         and len(promotion["runtime_manifest_sha256"]) == 64
         and isinstance(promotion.get("checkpoint_sha256"), str)
@@ -85,7 +97,16 @@ def main() -> None:
         "promotion_sha256": sha256_file(promotion_path),
         "runtime_manifest_sha256": promotion["runtime_manifest_sha256"],
         "checkpoint_sha256": promotion["checkpoint_sha256"],
-        "proxy_gain": promotion["proxy_gain"],
+        "exact_control_score": promotion["exact_control_score"],
+        "exact_candidate_score": promotion["exact_candidate_score"],
+        "exact_score_gain": promotion["exact_score_gain"],
+        "worst_movie_score_delta": promotion["worst_movie_score_delta"],
+        "official_scorer_lock_sha256": promotion[
+            "official_scorer_lock_sha256"
+        ],
+        "official_metric_result_sha256": promotion[
+            "official_metric_result_sha256"
+        ],
         "competition_submission_performed": False,
     }
     if not args.execute:

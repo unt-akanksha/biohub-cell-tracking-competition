@@ -845,3 +845,24 @@ well as the synthetic generator.
   to it until a hash-pinned Biohub adapter and clean frame-level smoke test
   exist. Its architecture remains a useful association/division fallback, not
   evidence that cross-domain checkpoints will improve this competition.
+- A final-candidate audit found that the inherited public notebook labelled a
+  local SciPy reimplementation as an official-metric proxy. It is close enough
+  for diagnostics but is not the pinned patched organizer implementation, so
+  it can no longer authorize a peak-rank submission. The frozen public control
+  was recomputed with organizer commit
+  `075fc5f5a52d11077f9dc2b074644618f26939e2`, patch commit
+  `aa65e90aeb8a774ebb1b549e547787b87ac8a01c`, and scorer-lock SHA-256
+  `1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c`.
+  Its exact four-movie score is `0.9343483108193262`; the weakest exact movie
+  scores are `0.8051376014` for `44b6_267148e4` and `0.8361469901` for
+  `6bba_07e24132`, so pooled-only promotion would hide material failure modes.
+- Every peak-rank full candidate now materializes its postprocessed integer
+  validation graphs as `official_validator_candidate.csv`. After download, an
+  isolated CPU environment verifies the scorer source/dependency lock, all
+  frozen control and truth graph tree hashes, and the expected official control
+  counts before scoring candidate and control side-by-side. Promotion requires
+  at least `0.003` exact pooled score gain, at most `0.001` adjusted-edge
+  regression, at most `0.005` regression on any complete movie, two-embryo
+  reporting, and a non-replica result. The old public proxy remains recorded
+  for diagnosis only. A control-as-candidate smoke test reproduced the exact
+  baseline and was correctly rejected for zero gain and exact replication.

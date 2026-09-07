@@ -117,8 +117,10 @@ and does not select this candidate.
 
 Execution requires the detector to have passed its sealed training audit and
 the separate two-GPU complete-movie clean validation. Submission remains an
-external decision after this full candidate beats the clean control without a
-movie-level regression.
+external decision after the materialized four-movie graphs beat the frozen
+clean control under the locally pinned patched official scorer without a
+movie-level regression. The public notebook's local metric reimplementation is
+retained only as a diagnostic and cannot authorize submission.
 """
 
 
@@ -209,6 +211,9 @@ if _pr_observed != set(test_stems) or sum(len(row["movies"]) for row in _pr_work
     raise RuntimeError("Peak worker movie coverage is incomplete or duplicated")
 if not validator_summary_rows or len(validator_sample_rows) < 4:
     raise RuntimeError("Complete-movie candidate validator evidence is missing")
+_pr_official_validator = Path("/kaggle/working/official_validator_candidate.csv")
+if not _pr_official_validator.is_file():
+    raise FileNotFoundError(_pr_official_validator)
 _pr_submission = Path("/kaggle/working/submission.csv")
 if not _pr_submission.is_file():
     raise FileNotFoundError(_pr_submission)
@@ -236,6 +241,9 @@ _pr_evidence = {
     "worker_count": 2,
     "complete_test_movie_count": len(_pr_observed),
     "complete_validator_movie_count": len(validator_sample_rows),
+    "official_metric_status": "pending_external_patched_official_scoring",
+    "official_scorer_lock_sha256": "1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c",
+    "official_validator_candidate_sha256": _pr_sha256(_pr_official_validator),
     "validator_proxy_score": float(validator_summary_rows[-1]["proxy_score"]),
     "validator_adjusted_edge_jaccard": float(validator_summary_rows[-1]["adjusted_edge_jaccard"]),
     "validator_division_jaccard": float(validator_summary_rows[-1]["division_jaccard"]),
@@ -319,6 +327,74 @@ def build_notebook(manifest_sha256: str) -> dict:
         '        "--official-predictor", str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
     notebook["cells"][validator_inference_index]["source"] = validator_inference.splitlines(keepends=True)
+    validator_scoring_index = next(
+        index for index, cell in enumerate(notebook["cells"])
+        if "def score_sample(" in "".join(cell.get("source", []))
+    )
+    validator_scoring = "".join(notebook["cells"][validator_scoring_index]["source"])
+    validator_scoring = replace_exact(
+        validator_scoring,
+        "validator_sample_rows: list[dict[str, object]] = []\n"
+        "validator_summary_rows: list[dict[str, object]] = []\n",
+        "validator_sample_rows: list[dict[str, object]] = []\n"
+        "validator_summary_rows: list[dict[str, object]] = []\n"
+        "_pr_official_validator_rows: list[dict[str, object]] = []\n",
+    )
+    validator_scoring = replace_exact(
+        validator_scoring,
+        "        pred_nodes_plain = nodes_by_id_to_plain(processed_nodes)\n"
+        "        pred_edges_plain = [(int(e[\"source_id\"]), int(e[\"target_id\"])) for e in processed_edges]\n",
+        "        pred_nodes_plain = nodes_by_id_to_plain(processed_nodes)\n"
+        "        pred_edges_plain = [(int(e[\"source_id\"]), int(e[\"target_id\"])) for e in processed_edges]\n"
+        "        for _pr_node_id in sorted(processed_nodes):\n"
+        "            _pr_node = processed_nodes[_pr_node_id]\n"
+        "            _pr_official_validator_rows.append({\n"
+        "                \"dataset\": stem, \"row_type\": \"node\",\n"
+        "                \"node_id\": int(_pr_node[\"node_id\"]), \"t\": int(_pr_node[\"t\"]),\n"
+        "                \"z\": max(0, int(round(float(_pr_node[\"z\"])))),\n"
+        "                \"y\": max(0, int(round(float(_pr_node[\"y\"])))),\n"
+        "                \"x\": max(0, int(round(float(_pr_node[\"x\"])))),\n"
+        "                \"source_id\": -1, \"target_id\": -1,\n"
+        "            })\n"
+        "        for _pr_edge in sorted(processed_edges, key=lambda e: (int(e[\"source_id\"]), int(e[\"target_id\"]))):\n"
+        "            _pr_official_validator_rows.append({\n"
+        "                \"dataset\": stem, \"row_type\": \"edge\",\n"
+        "                \"node_id\": -1, \"t\": -1, \"z\": -1, \"y\": -1, \"x\": -1,\n"
+        "                \"source_id\": int(_pr_edge[\"source_id\"]),\n"
+        "                \"target_id\": int(_pr_edge[\"target_id\"]),\n"
+        "            })\n",
+    )
+    validator_scoring = replace_exact(
+        validator_scoring,
+        "        validator_sample_rows.append(row)\n\n"
+        "    if rows_this_config:\n",
+        "        validator_sample_rows.append(row)\n\n"
+        "    _pr_expected_validator_stems = {\n"
+        "        \"44b6_12dfb391\", \"44b6_267148e4\",\n"
+        "        \"6bba_062c8d37\", \"6bba_07e24132\",\n"
+        "    }\n"
+        "    _pr_observed_validator_stems = {str(row[\"dataset\"]) for row in _pr_official_validator_rows}\n"
+        "    if _pr_observed_validator_stems != _pr_expected_validator_stems:\n"
+        "        raise RuntimeError(\n"
+        "            f\"Official validator coverage mismatch: {_pr_observed_validator_stems}\"\n"
+        "        )\n"
+        "    _pr_official_validator_path = WORKING_DIR / \"official_validator_candidate.csv\"\n"
+        "    _pr_official_columns = [\n"
+        "        \"id\", \"dataset\", \"row_type\", \"node_id\", \"t\",\n"
+        "        \"z\", \"y\", \"x\", \"source_id\", \"target_id\",\n"
+        "    ]\n"
+        "    with _pr_official_validator_path.open(\"w\", newline=\"\") as _pr_stream:\n"
+        "        _pr_writer = csv.DictWriter(_pr_stream, fieldnames=_pr_official_columns)\n"
+        "        _pr_writer.writeheader()\n"
+        "        for _pr_row_id, _pr_row in enumerate(_pr_official_validator_rows):\n"
+        "            _pr_writer.writerow({\"id\": _pr_row_id, **_pr_row})\n"
+        "    print(\n"
+        "        f\"Materialized {len(_pr_official_validator_rows)} official-score rows \"\n"
+        "        f\"to {_pr_official_validator_path}\"\n"
+        "    )\n\n"
+        "    if rows_this_config:\n",
+    )
+    notebook["cells"][validator_scoring_index]["source"] = validator_scoring.splitlines(keepends=True)
     watchdog = WATCHDOG.replace("peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID)
     evidence = CANDIDATE_EVIDENCE.replace(
         "peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID
@@ -329,7 +405,7 @@ def build_notebook(manifest_sha256: str) -> dict:
     ]
     notebook["cells"].append(code_cell(evidence))
     notebook["metadata"]["codex"] = {
-        "status": "candidate_requires_external_clean_promotion",
+        "status": "candidate_requires_external_patched_official_promotion",
         "public_prediction_copied": False,
         "target_public_score": 0.945,
         "source_public_kernel_ref": SOURCE_KERNEL_REF,
@@ -337,6 +413,10 @@ def build_notebook(manifest_sha256: str) -> dict:
         "secondary_edge_feature_tta": True,
         "runtime_manifest_sha256": manifest_sha256,
         "candidate_run_id": CANDIDATE_RUN_ID,
+        "public_validator_proxy_can_promote": False,
+        "official_scorer_lock_sha256": (
+            "1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c"
+        ),
     }
     for cell in notebook["cells"]:
         if cell.get("cell_type") == "code":

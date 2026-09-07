@@ -85,6 +85,7 @@ $runtimeManifest = Join-Path $runtimeRoot "SOURCE_MANIFEST.json"
 $promoter = Join-Path $RepositoryRoot "scripts/promote-peak-rank-validation-runtime.py"
 $builder = Join-Path $RepositoryRoot $variantConfig.builder
 $verifier = Join-Path $RepositoryRoot "scripts/verify-peak-rank-submission-candidate.py"
+$exactScorer = Join-Path $RepositoryRoot "research/peak_rank_detection/score_official_candidate.py"
 $submitter = Join-Path $RepositoryRoot "scripts/submit-peak-rank-candidate.py"
 $kernelState = Join-Path $RepositoryRoot "scripts/get-kaggle-kernel-state.py"
 $evaluationPython = Join-Path $RepositoryRoot ".biohub/evaluation-venv/Scripts/python.exe"
@@ -92,12 +93,17 @@ $candidateRoot = Join-Path $RepositoryRoot $variantConfig.candidate_root
 $metadataPath = Join-Path $candidateRoot "kernel-metadata.json"
 $notebookPath = Join-Path $candidateRoot $variantConfig.notebook_name
 $baselineValidator = Join-Path $RepositoryRoot ".biohub/cache/public-frontier-outputs-20260829/biohub-ct-0940-ema/validator_results.csv"
+$controlGraphs = Join-Path $RepositoryRoot ".biohub/cache/processed-public-control-geffs-v1"
+$truthGraphs = Join-Path $RepositoryRoot ".biohub/cache/competition-truth/public-node-acceptance-v1"
+$scorerLock = Join-Path $RepositoryRoot "config/official-scorer.lock.json"
+$organizerCheckout = Join-Path $RepositoryRoot ".biohub/vendor/kaggle-cell-tracking-competition"
+$tracksdataCheckout = Join-Path $RepositoryRoot ".biohub/vendor/tracksdata"
 $automationRoot = Join-Path $RepositoryRoot ".biohub/automation"
 $terminalPath = Join-Path $automationRoot ($variantConfig.controller_id + ".json")
 $logPath = Join-Path $automationRoot ($variantConfig.controller_id + ".log")
 $promotionPath = Join-Path $automationRoot $variantConfig.promotion_name
 $receiptPath = Join-Path $automationRoot $variantConfig.receipt_name
-$requiredOutputPattern = '(^|.*/)(candidate_evidence\.json|run_stats\.csv|submission\.csv|validator_results\.csv|launcher_terminal\.json|worker-[01]\.json)$'
+$requiredOutputPattern = '(^|.*/)(candidate_evidence\.json|official_validator_candidate\.csv|run_stats\.csv|submission\.csv|validator_results\.csv|launcher_terminal\.json|worker-[01]\.json)$'
 
 function Write-Terminal([string]$Status, [hashtable]$Evidence) {
     $payload = @{
@@ -137,11 +143,18 @@ function Invoke-NativeOutput([scriptblock]$Command) {
 
 New-Item -ItemType Directory -Path $automationRoot -Force | Out-Null
 foreach ($required in @(
-    $promoter, $builder, $verifier, $submitter, $kernelState,
-    $evaluationPython, $baselineValidator
+    $promoter, $builder, $verifier, $exactScorer, $submitter, $kernelState,
+    $evaluationPython, $baselineValidator, $scorerLock
 )) {
     if (-not (Test-Path -LiteralPath $required -PathType Leaf)) {
         throw "Required peak-ranking candidate input is missing: $required"
+    }
+}
+foreach ($requiredDirectory in @(
+    $controlGraphs, $truthGraphs, $organizerCheckout, $tracksdataCheckout
+)) {
+    if (-not (Test-Path -LiteralPath $requiredDirectory -PathType Container)) {
+        throw "Required peak-ranking exact-scoring directory is missing: $requiredDirectory"
     }
 }
 foreach ($command in @("python", "kaggle")) {
@@ -155,7 +168,7 @@ if ($ValidateOnly) {
         $PSCommandPath, [ref]$null, [ref]$errors
     )
     if ($errors.Count -ne 0) { throw "Peak-ranking candidate controller syntax is invalid" }
-    & $evaluationPython -m py_compile $promoter $builder $verifier $submitter $kernelState
+    & $evaluationPython -m py_compile $promoter $builder $verifier $exactScorer $submitter $kernelState
     if ($LASTEXITCODE -ne 0) { throw "Peak-ranking candidate Python preflight failed" }
     @{
         status = "validated"
@@ -257,7 +270,9 @@ try {
         "max_projected_worker_seconds",
         "SEC_EDGE_TTA_ACTIVE",
         "redoctopusk/biohub-948tta2",
-        "completed_pending_external_promotion_gate"
+        "completed_pending_external_promotion_gate",
+        "official_validator_candidate.csv",
+        "pending_external_patched_official_scoring"
     )) {
         if ($notebook -notmatch [regex]::Escape($requiredPattern)) {
             throw "Built peak-ranking candidate lost contract: $requiredPattern"
@@ -319,9 +334,34 @@ try {
             --file-pattern $requiredOutputPattern --page-size 200
     }
     if ($native.ExitCode -ne 0) { throw "Candidate output download failed: $($native.Output)" }
+    $officialValidatorMatches = @(
+        Get-ChildItem -LiteralPath $downloadRoot -Recurse -File -Filter "official_validator_candidate.csv"
+    )
+    if ($officialValidatorMatches.Count -ne 1) {
+        throw "Expected exactly one materialized official validator CSV"
+    }
+    $officialMetricResult = Join-Path $downloadRoot "official_metric_result.json"
+    $native = Invoke-NativeOutput {
+        & $evaluationPython $exactScorer `
+            --candidate-validator $officialValidatorMatches[0].FullName `
+            --control-dir $controlGraphs --truth-dir $truthGraphs `
+            --scorer-lock $scorerLock --organizer-checkout $organizerCheckout `
+            --tracksdata-checkout $tracksdataCheckout --output $officialMetricResult
+    }
+    if ($native.ExitCode -ne 0) {
+        Write-Terminal "candidate_rejected_by_patched_official_metric" @{
+            kernel_version = $expectedVersion
+            download_root = $downloadRoot
+            verification_error = $native.Output
+            runtime_manifest_sha256 = $manifestHash
+            competition_submission_performed = $false
+        }
+        exit 0
+    }
     $native = Invoke-NativeOutput {
         & $evaluationPython $verifier --output-root $downloadRoot `
             --baseline-validator $baselineValidator --runtime-manifest $runtimeManifest `
+            --official-metric-result $officialMetricResult `
             --expected-run-id $variantConfig.expected_run_id --report $promotionPath
     }
     if ($native.ExitCode -ne 0) {
@@ -353,9 +393,13 @@ try {
         download_root = $downloadRoot
         runtime_manifest_sha256 = $manifestHash
         submission_sha256 = $promotion.submission_sha256
-        proxy_gain = $promotion.proxy_gain
+        exact_control_score = $promotion.exact_control_score
+        exact_candidate_score = $promotion.exact_candidate_score
+        exact_score_gain = $promotion.exact_score_gain
         adjusted_edge_delta = $promotion.adjusted_edge_delta
-        worst_movie_proxy_delta = $promotion.worst_movie_proxy_delta
+        worst_movie_score_delta = $promotion.worst_movie_score_delta
+        official_scorer_lock_sha256 = $promotion.official_scorer_lock_sha256
+        official_metric_result_sha256 = $promotion.official_metric_result_sha256
         promotion_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $promotionPath).Hash.ToLowerInvariant()
         receipt_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $receiptPath).Hash.ToLowerInvariant()
         competition_submission_performed = $true
