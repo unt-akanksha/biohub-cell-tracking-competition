@@ -15,8 +15,8 @@ $RepositoryRoot = (Resolve-Path -LiteralPath $RepositoryRoot).Path
 Set-Location -LiteralPath $RepositoryRoot
 $cacheRoot = Join-Path $RepositoryRoot ".biohub/cache/competition-real-localization-expanded-replay-v2"
 $downloadRoot = Join-Path $cacheRoot "kernel-v$ExpectedKernelVersion"
-$terminalPath = Join-Path $cacheRoot "harvest-terminal.json"
-$logPath = Join-Path $cacheRoot "harvest.log"
+$terminalPath = Join-Path $cacheRoot "harvest-v$ExpectedKernelVersion-terminal.json"
+$logPath = Join-Path $cacheRoot "harvest-v$ExpectedKernelVersion.log"
 $verifier = Join-Path $RepositoryRoot "scripts/verify-real-localization-expanded-replay-archive.py"
 $deadline = [DateTimeOffset]::UtcNow.AddHours($MaximumWaitHours)
 $versionedRef = "$KernelRef/$ExpectedKernelVersion"

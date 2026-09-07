@@ -22,5 +22,6 @@ def test_expanded_replay_harvester_is_versioned_and_never_submits() -> None:
     assert '"$KernelRef/$ExpectedKernelVersion"' in source
     assert "--file-pattern" in source
     assert "verify-real-localization-expanded-replay-archive.py" in source
+    assert '"harvest-v$ExpectedKernelVersion-terminal.json"' in source
     assert "kaggle competitions submit" not in source
     assert "competition_submission_performed = $false" in source

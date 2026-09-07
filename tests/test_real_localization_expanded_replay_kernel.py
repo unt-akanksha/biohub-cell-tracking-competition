@@ -16,6 +16,7 @@ def test_expanded_kernel_is_cpu_offline_and_optimization_only() -> None:
     assert '"competition_sources": ["biohub-cell-tracking-during-development"]' in source
     assert "selection_centers_changed" in source
     assert "sealed_audit_centers_changed" in source
+    assert 'INPUT_ROOT / "datasets" / "indarkarhana"' in source
 
 
 def test_source_transform_binds_dynamic_expanded_counts(tmp_path: Path) -> None:

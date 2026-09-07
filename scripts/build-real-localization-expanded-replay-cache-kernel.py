@@ -63,8 +63,27 @@ def expanded_kernel_source(
     )
     source = replace_once(
         source,
+        'DATASET_ROOT = INPUT_ROOT / "biohub-real-localization-labels-v2"',
+        '''label_dataset_candidates = [
+    INPUT_ROOT / "biohub-real-localization-labels-v2",
+    INPUT_ROOT / "datasets" / "indarkarhana" / "biohub-real-localization-labels-v2",
+]
+label_dataset_roots = [path for path in label_dataset_candidates if path.is_dir()]
+if len(label_dataset_roots) != 1:
+    raise RuntimeError({"eligible_label_dataset_roots": [str(path) for path in label_dataset_roots]})
+DATASET_ROOT = label_dataset_roots[0]''',
+    )
+    source = replace_once(
+        source,
         'inventory_path = label_root / "inventory.json"',
-        f'inventory_path = INPUT_ROOT / "{INVENTORY_SLUG}" / "expanded_inventory.json"',
+        f'''inventory_candidates = [
+    INPUT_ROOT / "{INVENTORY_SLUG}" / "expanded_inventory.json",
+    INPUT_ROOT / "datasets" / "indarkarhana" / "{INVENTORY_SLUG}" / "expanded_inventory.json",
+]
+inventory_paths = [path for path in inventory_candidates if path.is_file()]
+if len(inventory_paths) != 1:
+    raise RuntimeError({{"eligible_expanded_inventory_paths": [str(path) for path in inventory_paths]}})
+inventory_path = inventory_paths[0]''',
     )
     source = replace_once(
         source,
