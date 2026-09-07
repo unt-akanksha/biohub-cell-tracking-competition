@@ -27,10 +27,10 @@ base_trainer="$workspace/research/peak_rank_detection/train_synthetic_real_detec
 python_bin=/home/ubuntu/venv/bin/python
 result_archive=/home/ubuntu/biohub-peak-rank-hard-mined-temporal-snr-v27-results.tar.gz
 
-v23_run_root=/home/ubuntu/biohub-peak-rank-detector-v1/temporal-min-local-snr-balanced-v23
-v23_result_parent="$v23_run_root/results"
-v23_archive=/home/ubuntu/biohub-peak-rank-temporal-min-local-snr-balanced-v23-results.tar.gz
-v23_ack="$v23_run_root/harvest.verified"
+v21_run_root=/home/ubuntu/biohub-peak-rank-detector-v1/expanded-real-xl-balanced-v21
+v21_result_parent="$v21_run_root/results"
+v21_archive=/home/ubuntu/biohub-peak-rank-expanded-real-xl-balanced-v21-results.tar.gz
+v21_ack="$v21_run_root/harvest.verified"
 
 trainer_sha256=1832e8dc7738ca778b3b4f07159e68741d8d6fef2e30e2a14b1075748851e7c8
 temporal_trainer_sha256=57479c473929aad7f2fdaca5c1322ea88e5f051006faf32c96d066ee4f365a79
@@ -52,19 +52,19 @@ synthetic_data_sha256=8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc20
 inventory_sha256=a80c9028b21fdba1746bc2686dc5c64f0852e7954d1e758ba1357bcca5aa0edc
 minimum_free_bytes=2000000000
 
-safe_remove_v23_results() {
+safe_remove_v21_results() {
   local resolved
-  resolved="$(realpath -m -- "$v23_result_parent")"
-  test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/temporal-min-local-snr-balanced-v23/results
+  resolved="$(realpath -m -- "$v21_result_parent")"
+  test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/expanded-real-xl-balanced-v21/results
   rm -rf -- "$resolved"
 }
 
-verified_v23_harvest() {
-  test -s "$v23_archive"
-  test -s "$v23_archive.sha256"
-  test -s "$v23_ack"
-  sha256sum -c "$v23_archive.sha256" >/dev/null
-  test "$(awk '{print $1}' "$v23_ack")" = "$(awk '{print $1}' "$v23_archive.sha256")"
+verified_v21_harvest() {
+  test -s "$v21_archive"
+  test -s "$v21_archive.sha256"
+  test -s "$v21_ack"
+  sha256sum -c "$v21_archive.sha256" >/dev/null
+  test "$(awk '{print $1}' "$v21_ack")" = "$(awk '{print $1}' "$v21_archive.sha256")"
 }
 
 exec 9>"$run_root/run.lock"
@@ -93,16 +93,16 @@ echo "$model_sha256  $workspace/research/peak_rank_detection/model.py" | sha256s
 echo "$objectives_sha256  $workspace/research/peak_rank_detection/objectives.py" | sha256sum -c -
 echo "$synthetic_data_sha256  $workspace/research/synthetic_pretrain/data.py" | sha256sum -c -
 
-# Preserve sequential ownership and retain V23 until its local verifier has
-# copied and acknowledged the exact archive.
-while test ! -f "$v23_run_root/run.complete" || test ! -f "$v23_ack"; do sleep 30; done
-verified_v23_harvest
+# Cost-aware queue: run the complementary hard-mined temporal member directly
+# after the XL member. Retain V21 until its local verifier acknowledges it.
+while test ! -f "$v21_run_root/run.complete" || test ! -f "$v21_ack"; do sleep 30; done
+verified_v21_harvest
 while nvidia-smi --query-compute-apps=pid --format=csv,noheader,nounits \
   | grep -q '[0-9]'; do
   sleep 30
 done
-safe_remove_v23_results
-rm -f -- "$v23_archive" "$v23_archive.sha256"
+safe_remove_v21_results
+rm -f -- "$v21_archive" "$v21_archive.sha256"
 
 manifest="$real_root/real_localization_shard_manifest.json"
 test -f "$manifest"

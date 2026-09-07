@@ -25,10 +25,10 @@ base_trainer="$workspace/research/peak_rank_detection/train_synthetic_real_detec
 python_bin=/home/ubuntu/venv/bin/python
 result_archive=/home/ubuntu/biohub-peak-rank-expanded-real-xl-balanced-v21-results.tar.gz
 
-v19_run_root=/home/ubuntu/biohub-peak-rank-detector-v1/expanded-real-balanced-v19
-v19_result_parent="$v19_run_root/results"
-v19_archive=/home/ubuntu/biohub-peak-rank-expanded-real-balanced-v19-results.tar.gz
-v19_ack="$v19_run_root/harvest.verified"
+v3_run_root=/home/ubuntu/biohub-peak-rank-detector-v1/capacity-pu-v3
+v3_result_parent="$v3_run_root/results"
+v3_archive=/home/ubuntu/biohub-peak-rank-capacity-pu-v3-results.tar.gz
+v3_ack="$v3_run_root/harvest.verified"
 
 trainer_sha256=4f3ae24fa996082b976803e473086a94fe3c0f4eb45698c226fac566ab1a4d6e
 balanced_trainer_sha256=854a305143803d2b10116f83d7cf75483d6f91f5930bda8931d95323cdffc802
@@ -47,19 +47,19 @@ synthetic_data_sha256=8e108e0650f3565ea4c05f0e747fb04d3c9fdc09922b2ef077f753bc20
 inventory_sha256=a80c9028b21fdba1746bc2686dc5c64f0852e7954d1e758ba1357bcca5aa0edc
 minimum_free_bytes=1500000000
 
-safe_remove_v19_results() {
+safe_remove_v3_results() {
   local resolved
-  resolved="$(realpath -m -- "$v19_result_parent")"
-  test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/expanded-real-balanced-v19/results
+  resolved="$(realpath -m -- "$v3_result_parent")"
+  test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/capacity-pu-v3/results
   rm -rf -- "$resolved"
 }
 
-verified_v19_harvest() {
-  test -s "$v19_archive"
-  test -s "$v19_archive.sha256"
-  test -s "$v19_ack"
-  sha256sum -c "$v19_archive.sha256" >/dev/null
-  test "$(awk '{print $1}' "$v19_ack")" = "$(awk '{print $1}' "$v19_archive.sha256")"
+verified_v3_harvest() {
+  test -s "$v3_archive"
+  test -s "$v3_archive.sha256"
+  test -s "$v3_ack"
+  sha256sum -c "$v3_archive.sha256" >/dev/null
+  test "$(awk '{print $1}' "$v3_ack")" = "$(awk '{print $1}' "$v3_archive.sha256")"
 }
 
 exec 9>"$run_root/run.lock"
@@ -85,16 +85,16 @@ echo "$model_sha256  $workspace/research/peak_rank_detection/model.py" | sha256s
 echo "$objectives_sha256  $workspace/research/peak_rank_detection/objectives.py" | sha256sum -c -
 echo "$synthetic_data_sha256  $workspace/research/synthetic_pretrain/data.py" | sha256sum -c -
 
-# Start only after v19 is complete and its exact archive has been independently
-# harvested. Reclaim only that verified Biohub result copy.
-while test ! -f "$v19_run_root/run.complete" || test ! -f "$v19_ack"; do sleep 30; done
-verified_v19_harvest
+# Cost-aware queue: start the highest-value XL member directly after V3's exact
+# archive is independently harvested. Reclaim only that verified Biohub copy.
+while test ! -f "$v3_run_root/run.complete" || test ! -f "$v3_ack"; do sleep 30; done
+verified_v3_harvest
 while nvidia-smi --query-compute-apps=pid --format=csv,noheader,nounits \
   | grep -q '[0-9]'; do
   sleep 30
 done
-safe_remove_v19_results
-rm -f -- "$v19_archive" "$v19_archive.sha256"
+safe_remove_v3_results
+rm -f -- "$v3_archive" "$v3_archive.sha256"
 
 manifest="$real_root/real_localization_shard_manifest.json"
 test -f "$manifest"

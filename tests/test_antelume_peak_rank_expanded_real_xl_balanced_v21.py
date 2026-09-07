@@ -12,11 +12,12 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_runner_waits_for_verified_v19_and_pins_all_sources() -> None:
+def test_runner_waits_for_verified_v3_and_pins_all_sources() -> None:
     source = RUNNER.read_text(encoding="utf-8")
-    assert 'while test ! -f "$v19_run_root/run.complete"' in source
-    assert 'test ! -f "$v19_ack"' in source
-    assert "verified_v19_harvest" in source
+    assert 'while test ! -f "$v3_run_root/run.complete"' in source
+    assert 'test ! -f "$v3_ack"' in source
+    assert "verified_v3_harvest" in source
+    assert "v19_run_root" not in source
     assert "while nvidia-smi --query-compute-apps=pid" in source
     assert "--steps 5000" in source
     assert "--widths 160,320,640,1280" in source
@@ -48,7 +49,7 @@ def test_runner_cleanup_is_narrow() -> None:
     source = RUNNER.read_text(encoding="utf-8")
     assert (
         'test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/'
-        "expanded-real-balanced-v19/results"
+        "capacity-pu-v3/results"
     ) in source
     assert 'rm -rf -- "$resolved"' in source
     assert "pkill" not in source

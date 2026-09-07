@@ -10,9 +10,10 @@ DEPLOY = ROOT / "scripts/deploy-antelume-peak-rank-hard-mined-temporal-snr-v27.p
 
 def test_runner_is_hash_bound_sequential_and_hard_mined() -> None:
     source = RUNNER.read_text(encoding="utf-8")
-    assert "v23_run_root/run.complete" in source
-    assert "v23_ack" in source
-    assert "verified_v23_harvest" in source
+    assert "v21_run_root/run.complete" in source
+    assert "v21_ack" in source
+    assert "verified_v21_harvest" in source
+    assert "v23_run_root" not in source
     assert "while nvidia-smi --query-compute-apps=pid" in source
     assert "BIOHUB_HARD_MINING_MANIFEST" in source
     assert "9967efa25021453b4f043a23e47e744153da678f17f5c00180ecd6ebd4dca900" in source
