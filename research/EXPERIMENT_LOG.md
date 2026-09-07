@@ -1407,3 +1407,15 @@ well as the synthetic generator.
   dependency, waits for v21 completion plus verified local harvest, and checks
   for an idle GPU before launch. Focused diagnostic, model, trainer, evaluator,
   runner, and deployment tests pass; no public model or prediction is consumed.
+- V23 was staged on Antelume with runner SHA-256 `7675d0f5...da2a4d5c`
+  and entered its v21 harvest wait as PID 270072. The deployment preflight
+  exposed a latent flat-import path omission shared by the queued multiscale
+  models before any V23 GPU work began. Antelume now resolves the flat
+  `model.py` import through a symlink to the same repository source whose
+  SHA-256 (`da1eae6c...47c637`) is checked by every runner. The repaired
+  preflight instantiated exactly 83,812,614 parameters; the active v2 detector
+  remained the sole GPU process throughout. A hidden local controller (launch
+  PID 7444) now waits to copy, independently verify, and acknowledge the V23
+  archive. Its clean two-GPU validation and submission builders also pass
+  preflight. The refreshed Kaggle GPU balance is 30 hours, leaving 22 spendable
+  hours after the mandatory 8-hour reserve.

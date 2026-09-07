@@ -34,6 +34,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"expanded-real-safe-rank-v17", '
         '"expanded-real-balanced-v19", '
         '"expanded-real-xl-balanced-v21", '
+        '"temporal-min-local-snr-v23", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"capacity-faint-expanded-v8", '
@@ -75,6 +76,14 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     )
     assert (
         "build-peak-rank-expanded-real-xl-balanced-validation-kernel-v21.py" in source
+    )
+    assert (
+        "build-peak-rank-temporal-min-local-snr-balanced-validation-runtime-v23.py"
+        in source
+    )
+    assert (
+        "build-peak-rank-temporal-min-local-snr-balanced-validation-kernel-v23.py"
+        in source
     )
     assert "build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
@@ -145,6 +154,9 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-expanded-real-balanced-validation-v19"' in source
     assert (
         'output_slug = "peak-rank-expanded-real-xl-balanced-validation-v21"' in source
+    )
+    assert (
+        'output_slug = "peak-rank-temporal-min-local-snr-validation-v23"' in source
     )
     assert 'output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"' in source
     assert 'output_slug = "peak-rank-capacity-faint-confidence-validation-v6"' in source
