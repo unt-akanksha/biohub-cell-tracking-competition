@@ -39,7 +39,7 @@ except ModuleNotFoundError:
 
 
 RUN_ID = "peak-rank-official-linker-production-v1"
-PEAK_TTA_VIEWS = {"none": 1, "rot4": 4, "d4": 8}
+PEAK_TTA_VIEWS = {"none": 1, "zflip2": 2, "rot4": 4, "d4": 8}
 RUNTIME_PROJECTION_SAFETY_FACTOR = 1.15
 EXPECTED_ASSOCIATION_CONFIG = {
     "secondary_edge_weight": 0.20,
@@ -83,7 +83,9 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     selected_tta_mode = validation.get("selected_tta_mode")
     ensemble_members = training.get("ensemble_members")
-    expected_ensemble_size = len(ensemble_members) if ensemble_members is not None else 1
+    expected_ensemble_size = (
+        len(ensemble_members) if ensemble_members is not None else 1
+    )
     ensemble_fusion = training.get("ensemble_fusion")
     if not (
         manifest.get("training_audit_passed") is True
@@ -276,9 +278,7 @@ def run(args: argparse.Namespace) -> None:
         downsample,
         association_kwargs,
         association_manifest,
-    ) = load_attributed_association_stack(
-        official, args.weights, device
-    )
+    ) = load_attributed_association_stack(official, args.weights, device)
     cfg = official.PredictConfig(
         det_threshold=args.det_threshold,
         use_ilp=args.use_ilp,
@@ -293,7 +293,12 @@ def run(args: argparse.Namespace) -> None:
     if output_dir is None:
         from dataspec import PREDICTIONS_PATH
 
-        output_dir = Path(PREDICTIONS_PATH) / official.USERNAME / args.method / f"split_{args.fold}"
+        output_dir = (
+            Path(PREDICTIONS_PATH)
+            / official.USERNAME
+            / args.method
+            / f"split_{args.fold}"
+        )
     if output_dir.exists():
         raise FileExistsError(f"refusing to reuse production output: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=False)
@@ -320,7 +325,9 @@ def run(args: argparse.Namespace) -> None:
         movie_started = time.monotonic()
         sample_path = sample_path_for_name(args.data_dir, name)
         if sample_path is None:
-            raise FileNotFoundError(f"movie disappeared after inventory validation: {name}")
+            raise FileNotFoundError(
+                f"movie disappeared after inventory validation: {name}"
+            )
         cache = predict_movie_detection_cache(
             detector,
             sample_path,

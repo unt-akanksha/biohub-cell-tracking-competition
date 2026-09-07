@@ -15,9 +15,7 @@ from research.peak_rank_detection.inference import (
 class CoordinateModel(torch.nn.Module):
     def forward(self, frames: torch.Tensor):
         logits = frames[:, 1:2] * 8.0 - 4.0
-        offsets = torch.zeros(
-            len(frames), 3, *frames.shape[-3:], device=frames.device
-        )
+        offsets = torch.zeros(len(frames), 3, *frames.shape[-3:], device=frames.device)
         offsets[:, 1] = 0.25
         offsets[:, 2] = -0.25
         return {"logits": logits, "offsets": offsets, "auxiliary_logits": ()}
@@ -35,13 +33,20 @@ def test_scalar_transforms_round_trip() -> None:
     values = torch.arange(3 * 4 * 5).reshape(1, 3, 4, 5).float()
     for rotation in range(4):
         for flip_x in (False, True):
-            transformed = _transform_frames(
-                values, rotation=rotation, flip_x=flip_x
-            )
-            restored = _invert_scalar_field(
-                transformed, rotation=rotation, flip_x=flip_x
-            )
-            assert torch.equal(restored, values)
+            for flip_z in (False, True):
+                transformed = _transform_frames(
+                    values,
+                    rotation=rotation,
+                    flip_x=flip_x,
+                    flip_z=flip_z,
+                )
+                restored = _invert_scalar_field(
+                    transformed,
+                    rotation=rotation,
+                    flip_x=flip_x,
+                    flip_z=flip_z,
+                )
+                assert torch.equal(restored, values)
 
 
 def test_offset_inversion_changes_vector_basis() -> None:
@@ -50,6 +55,19 @@ def test_offset_inversion_changes_vector_basis() -> None:
     restored = _invert_offset_field(values, rotation=1, flip_x=False)
     assert torch.all(restored[:, 1] == 0)
     assert torch.all(restored[:, 2] == -2)
+
+
+def test_z_flip_offset_inversion_changes_z_basis() -> None:
+    values = torch.zeros(1, 3, 4, 4, 4)
+    values[:, 0] = 2.0
+    restored = _invert_offset_field(
+        values,
+        rotation=0,
+        flip_x=False,
+        flip_z=True,
+    )
+    assert torch.all(restored[:, 0] == -2)
+    assert torch.all(restored[:, 1:] == 0)
 
 
 def test_d4_probability_is_equivariant_for_coordinate_model() -> None:
@@ -79,7 +97,12 @@ def test_explicit_tta_modes_have_frozen_view_counts() -> None:
             return super().forward(frames)
 
     frames = torch.zeros(1, 3, 8, 8, 8)
-    for mode, expected in (("none", 1), ("rot4", 4), ("d4", 8)):
+    for mode, expected in (
+        ("none", 1),
+        ("zflip2", 2),
+        ("rot4", 4),
+        ("d4", 8),
+    ):
         model = CountingModel()
         predict_probability_and_offsets(model, frames, tta_mode=mode)
         assert model.calls == expected

@@ -63,7 +63,7 @@ def _args(root: Path, checkpoint: Path, terminal: Path) -> Namespace:
         batch_size=1,
         calibration_frames=12,
         max_wall_seconds=100.0,
-        tta_modes="none,rot4,d4",
+        tta_modes="none,zflip2,rot4,d4",
     )
 
 
@@ -75,6 +75,10 @@ def test_training_checkpoint_must_match_terminal(tmp_path: Path) -> None:
         evaluation.validate_training(checkpoint, terminal)
 
 
+def test_worker_imports_density_calibration_implementation() -> None:
+    assert callable(evaluation.density_threshold)
+
+
 def test_training_rejects_an_unknown_model_family(tmp_path: Path) -> None:
     checkpoint, terminal = _training_files(tmp_path)
     payload = json.loads(terminal.read_text(encoding="utf-8"))
@@ -84,7 +88,9 @@ def test_training_rejects_an_unknown_model_family(tmp_path: Path) -> None:
         evaluation.validate_training(checkpoint, terminal)
 
 
-def test_selection_rejection_keeps_acceptance_closed(tmp_path: Path, monkeypatch) -> None:
+def test_selection_rejection_keeps_acceptance_closed(
+    tmp_path: Path, monkeypatch
+) -> None:
     checkpoint, terminal = _training_files(tmp_path)
     args = _args(tmp_path, checkpoint, terminal)
     calls = []
@@ -98,6 +104,7 @@ def test_selection_rejection_keeps_acceptance_closed(tmp_path: Path, monkeypatch
     result = json.loads((args.output_dir / "peak_rank_validation.json").read_text())
     assert calls == [
         ("tta-calibration-none", False, "none"),
+        ("tta-calibration-zflip2", False, "zflip2"),
         ("tta-calibration-rot4", False, "rot4"),
         ("tta-calibration-d4", False, "d4"),
     ]
@@ -106,7 +113,9 @@ def test_selection_rejection_keeps_acceptance_closed(tmp_path: Path, monkeypatch
     assert result["promotion_passed"] is False
 
 
-def test_two_phase_validation_promotes_only_clean_gain(tmp_path: Path, monkeypatch) -> None:
+def test_two_phase_validation_promotes_only_clean_gain(
+    tmp_path: Path, monkeypatch
+) -> None:
     checkpoint, terminal = _training_files(tmp_path)
     args = _args(tmp_path, checkpoint, terminal)
 
@@ -144,17 +153,19 @@ def test_worker_launcher_requires_exactly_two_devices(tmp_path: Path) -> None:
 def test_tta_selection_prefers_cheapest_nonregressing_mode() -> None:
     summaries = {
         "none": {"annotated_node_recall": 0.966, "worst_movie_recall": 0.91},
+        "zflip2": {"annotated_node_recall": 0.967, "worst_movie_recall": 0.911},
         "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
         "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
     }
     selected, gate = evaluation.select_tta_mode(summaries)
     assert selected == "none"
-    assert gate["eligible_modes"] == ["none", "rot4", "d4"]
+    assert gate["eligible_modes"] == ["none", "zflip2", "rot4", "d4"]
 
 
 def test_tta_selection_rejects_fast_mode_with_recall_loss() -> None:
     summaries = {
         "none": {"annotated_node_recall": 0.95, "worst_movie_recall": 0.89},
+        "zflip2": {"annotated_node_recall": 0.951, "worst_movie_recall": 0.891},
         "rot4": {"annotated_node_recall": 0.968, "worst_movie_recall": 0.912},
         "d4": {"annotated_node_recall": 0.969, "worst_movie_recall": 0.914},
     }

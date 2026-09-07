@@ -32,7 +32,7 @@ def markdown_cell(source: str) -> dict:
     }
 
 
-WATCHDOG = r'''import atexit
+WATCHDOG = r"""import atexit
 import hashlib
 import json
 import os
@@ -81,10 +81,10 @@ TIMER = threading.Timer(42000, budget_expired)
 TIMER.daemon = True
 TIMER.start()
 print("Two-GPU peak-ranking validation watchdog armed for 42,000 seconds.")
-'''
+"""
 
 
-SETUP = r'''import importlib
+SETUP = r"""import importlib
 import subprocess
 import sys
 
@@ -169,10 +169,10 @@ print(json.dumps({
     "gpu_count": torch.cuda.device_count(),
     "devices": [torch.cuda.get_device_name(i) for i in range(2)],
 }, indent=2))
-'''
+"""
 
 
-VALIDATE = r'''output_dir = Path("/kaggle/working/peak_rank_validation")
+VALIDATE = r"""output_dir = Path("/kaggle/working/peak_rank_validation")
 command = [
     sys.executable,
     str(runtime / "evaluate_peak_rank_detector.py"),
@@ -184,7 +184,7 @@ command = [
     "--devices", "0,1",
     "--batch-size", "1",
     "--calibration-frames", "12",
-    "--tta-modes", "none,rot4,d4",
+    "--tta-modes", "none,zflip2,rot4,d4",
     "--max-wall-seconds", "39000",
 ]
 environment = os.environ.copy()
@@ -210,10 +210,10 @@ print(json.dumps({
     "selection_recall": None if result["selection"] is None else result["selection"]["annotated_node_recall"],
     "acceptance_recall": None if result["acceptance"] is None else result["acceptance"]["annotated_node_recall"],
 }, indent=2, sort_keys=True))
-'''
+"""
 
 
-FINISH = r'''unexpected = [
+FINISH = r"""unexpected = [
     path for path in Path("/kaggle/working").rglob("*")
     if path.is_file() and path.name.lower() in {"submission.csv", "submission.zip"}
 ]
@@ -223,15 +223,15 @@ FINISHED = True
 TIMER.cancel()
 write_terminal("completed")
 print("Peak-ranking clean validation complete; no submission was created.")
-'''
+"""
 
 
 def main() -> None:
     TARGET.mkdir(parents=True, exist_ok=True)
     watchdog = WATCHDOG.replace("peak-rank-validation-v1", TARGET_ID)
-    setup = SETUP.replace("biohub-peak-rank-validation-runtime-v1", RUNTIME_SLUG).replace(
-        "__EXPECTED_PARAMETER_COUNT__", str(EXPECTED_PARAMETER_COUNT)
-    )
+    setup = SETUP.replace(
+        "biohub-peak-rank-validation-runtime-v1", RUNTIME_SLUG
+    ).replace("__EXPECTED_PARAMETER_COUNT__", str(EXPECTED_PARAMETER_COUNT))
     notebook = {
         "metadata": {
             "kernelspec": {

@@ -10,16 +10,17 @@ import os
 import subprocess
 import sys
 import time
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
-import numpy as np
 import torch
 from torch import nn
 
 try:
     from density_calibration import read_estimated_node_count, uniform_frame_indices
     from evaluate_pretrained_detector import (
+        density_threshold,
         graph_points_by_frame,
         score_graph_nodes,
         score_predictions,
@@ -27,13 +28,17 @@ try:
     from inference import TTA_TRANSFORMS, predict_frames
     from model import TemporalPeakRankDetector, count_parameters
 except ModuleNotFoundError:
-    from research.density_calibration import read_estimated_node_count, uniform_frame_indices
+    from research.density_calibration import (
+        read_estimated_node_count,
+        uniform_frame_indices,
+    )
     from research.peak_rank_detection.inference import TTA_TRANSFORMS, predict_frames
     from research.peak_rank_detection.model import (
         TemporalPeakRankDetector,
         count_parameters,
     )
     from research.spotiflow_biohub.evaluate_pretrained_detector import (
+        density_threshold,
         graph_points_by_frame,
         score_graph_nodes,
         score_predictions,
@@ -62,7 +67,7 @@ SELECTION_POOLED_MIN = 0.80
 SELECTION_WORST_MIN = 0.65
 PROMOTION_WORST_DELTA_MIN = -0.01
 TTA_CALIBRATION_STEMS = ("44b6_d29c9ab2", "6bba_09961292")
-TTA_MODE_ORDER = ("none", "rot4", "d4")
+TTA_MODE_ORDER = ("none", "zflip2", "rot4", "d4")
 TTA_POOLED_REGRESSION_MAX = 0.003
 TTA_WORST_REGRESSION_MAX = 0.01
 DEFAULT_MODEL_FAMILY = "temporal_peak_rank_v1"
@@ -223,9 +228,7 @@ class PeakRankConfidenceMaxEnsemble(nn.Module):
 
     def forward(self, frames: torch.Tensor) -> dict[str, Any]:
         outputs = [member(frames) for member in self.members]
-        logits = torch.stack(
-            [output["logits"].float() for output in outputs], dim=0
-        )
+        logits = torch.stack([output["logits"].float() for output in outputs], dim=0)
         winner = logits.argmax(dim=0)
         auxiliary = []
         for level in range(len(outputs[0]["auxiliary_logits"])):
@@ -243,9 +246,7 @@ class PeakRankConfidenceMaxEnsemble(nn.Module):
         }
 
 
-def _load_single_member(
-    checkpoint: Path, contract: dict[str, Any]
-) -> nn.Module:
+def _load_single_member(checkpoint: Path, contract: dict[str, Any]) -> nn.Module:
     model_family = contract.get("model_family", DEFAULT_MODEL_FAMILY)
     if model_family == DEFAULT_MODEL_FAMILY:
         model_class = TemporalPeakRankDetector
@@ -289,9 +290,7 @@ def _load_single_member(
         model_class = SafeRankMultiscaleBlobGlobalDetector
     else:
         raise ValueError(f"unsupported detector model family: {model_family}")
-    model = model_class(
-        widths=contract["widths"], depths=contract["depths"]
-    )
+    model = model_class(widths=contract["widths"], depths=contract["depths"])
     state = torch.load(checkpoint, map_location="cpu", weights_only=True)
     model.load_state_dict(state["state_dict"], strict=True)
     if count_parameters(model) != contract["parameter_count"]:
@@ -352,7 +351,9 @@ def evaluate_worker(args: argparse.Namespace) -> None:
         )
         if observed_frames != frame_count:
             raise RuntimeError("detector inference frame count changed")
-        sampled = set(uniform_frame_indices(frame_count, args.calibration_frames).tolist())
+        sampled = set(
+            uniform_frame_indices(frame_count, args.calibration_frames).tolist()
+        )
         threshold, projected = density_threshold(
             [row for row in predictions if row.frame in sampled], estimated, frame_count
         )
@@ -425,7 +426,9 @@ def summarize(rows: Sequence[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def select_tta_mode(summaries: dict[str, dict[str, Any]]) -> tuple[str | None, dict[str, Any]]:
+def select_tta_mode(
+    summaries: dict[str, dict[str, Any]],
+) -> tuple[str | None, dict[str, Any]]:
     """Prefer the fewest views that stays close to the best frozen calibration result."""
 
     if not summaries:
@@ -541,7 +544,9 @@ def orchestrate(args: argparse.Namespace) -> None:
     selected_mode, tta_gate = select_tta_mode(calibration_summaries)
     selection_rows: list[dict[str, Any]] = []
     if selected_mode is not None:
-        remaining = tuple(stem for stem in SCREEN_STEMS if stem not in TTA_CALIBRATION_STEMS)
+        remaining = tuple(
+            stem for stem in SCREEN_STEMS if stem not in TTA_CALIBRATION_STEMS
+        )
         selection_rows = [*calibration_rows[selected_mode]]
         if remaining:
             selection_rows.extend(
@@ -630,9 +635,13 @@ def orchestrate(args: argparse.Namespace) -> None:
         if path.is_file() and path.name.lower() in {"submission.csv", "submission.zip"}
     ]
     if unexpected:
-        raise RuntimeError(f"validation created forbidden submission files: {unexpected}")
+        raise RuntimeError(
+            f"validation created forbidden submission files: {unexpected}"
+        )
     atomic_json(args.output_dir / "peak_rank_validation.json", result)
-    print("PEAK RANK VALIDATION COMPLETE", json.dumps(result, sort_keys=True), flush=True)
+    print(
+        "PEAK RANK VALIDATION COMPLETE", json.dumps(result, sort_keys=True), flush=True
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -653,11 +662,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--tta-mode", choices=tuple(TTA_TRANSFORMS), default="d4")
     parser.add_argument("--tta-modes", default=",".join(TTA_MODE_ORDER))
     args = parser.parse_args()
-    if args.batch_size <= 0 or args.calibration_frames <= 0 or args.max_wall_seconds <= 0:
+    if (
+        args.batch_size <= 0
+        or args.calibration_frames <= 0
+        or args.max_wall_seconds <= 0
+    ):
         parser.error("batch size, calibration frames, and wall limit must be positive")
     if args.worker and args.output is None:
         parser.error("workers require --output")
-    if not args.worker and (args.output_dir is None or args.baseline_predictions is None):
+    if not args.worker and (
+        args.output_dir is None or args.baseline_predictions is None
+    ):
         parser.error("orchestration requires --output-dir and --baseline-predictions")
     return args
 

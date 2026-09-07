@@ -12,19 +12,16 @@ import torch.nn.functional as F
 
 LOW_PROBABILITY_THRESHOLD = 0.01
 TTA_TRANSFORMS = {
-    "none": ((0, False),),
-    "rot4": tuple((rotation, False) for rotation in range(4)),
+    "none": ((0, False, False),),
+    "zflip2": ((0, False, False), (0, False, True)),
+    "rot4": tuple((rotation, False, False) for rotation in range(4)),
     "d4": tuple(
-        (rotation, flip_x)
-        for flip_x in (False, True)
-        for rotation in range(4)
+        (rotation, flip_x, False) for flip_x in (False, True) for rotation in range(4)
     ),
 }
 
 
-def resolve_tta_mode(
-    *, tta_mode: str | None = None, d4_tta: bool | None = None
-) -> str:
+def resolve_tta_mode(*, tta_mode: str | None = None, d4_tta: bool | None = None) -> str:
     """Resolve the new explicit TTA contract while retaining old call sites."""
 
     if tta_mode is None:
@@ -46,27 +43,50 @@ def normalize_triplet(frames: np.ndarray) -> np.ndarray:
     return np.clip((values - low) / (high - low), 0.0, 1.0).astype(np.float32)
 
 
-def _transform_frames(frames: torch.Tensor, *, rotation: int, flip_x: bool) -> torch.Tensor:
+def _transform_frames(
+    frames: torch.Tensor,
+    *,
+    rotation: int,
+    flip_x: bool,
+    flip_z: bool = False,
+) -> torch.Tensor:
     values = frames.flip((-1,)) if flip_x else frames
+    values = values.flip((-3,)) if flip_z else values
     return torch.rot90(values, rotation % 4, dims=(-2, -1))
 
 
 def _invert_scalar_field(
-    values: torch.Tensor, *, rotation: int, flip_x: bool
+    values: torch.Tensor,
+    *,
+    rotation: int,
+    flip_x: bool,
+    flip_z: bool = False,
 ) -> torch.Tensor:
     result = torch.rot90(values, -(rotation % 4), dims=(-2, -1))
-    return result.flip((-1,)) if flip_x else result
+    result = result.flip((-1,)) if flip_x else result
+    return result.flip((-3,)) if flip_z else result
 
 
 def _invert_offset_field(
-    values: torch.Tensor, *, rotation: int, flip_x: bool
+    values: torch.Tensor,
+    *,
+    rotation: int,
+    flip_x: bool,
+    flip_z: bool = False,
 ) -> torch.Tensor:
-    result = _invert_scalar_field(values, rotation=rotation, flip_x=flip_x)
+    result = _invert_scalar_field(
+        values,
+        rotation=rotation,
+        flip_x=flip_x,
+        flip_z=flip_z,
+    )
     z, y, x = result[:, 0], result[:, 1], result[:, 2]
     for _ in range(rotation % 4):
         y, x = x, -y
     if flip_x:
         x = -x
+    if flip_z:
+        z = -z
     return torch.stack((z, y, x), dim=1)
 
 
@@ -85,8 +105,13 @@ def predict_probability_and_offsets(
     logits_sum = None
     offset_sum = None
     device_type = frames.device.type
-    for rotation, flip_x in transforms:
-        augmented = _transform_frames(frames, rotation=rotation, flip_x=flip_x)
+    for rotation, flip_x, flip_z in transforms:
+        augmented = _transform_frames(
+            frames,
+            rotation=rotation,
+            flip_x=flip_x,
+            flip_z=flip_z,
+        )
         with torch.autocast(
             device_type=device_type,
             dtype=torch.float16,
@@ -94,10 +119,16 @@ def predict_probability_and_offsets(
         ):
             output = model(augmented)
         logits = _invert_scalar_field(
-            output["logits"].float(), rotation=rotation, flip_x=flip_x
+            output["logits"].float(),
+            rotation=rotation,
+            flip_x=flip_x,
+            flip_z=flip_z,
         )
         offsets = _invert_offset_field(
-            output["offsets"].float(), rotation=rotation, flip_x=flip_x
+            output["offsets"].float(),
+            rotation=rotation,
+            flip_x=flip_x,
+            flip_z=flip_z,
         )
         logits_sum = logits if logits_sum is None else logits_sum + logits
         offset_sum = offsets if offset_sum is None else offset_sum + offsets
@@ -114,9 +145,12 @@ def peaks_from_prediction(
         raise ValueError("probability and offset shapes differ")
     if not 0 < threshold < 1:
         raise ValueError("threshold must lie in (0, 1)")
-    maxima = probability == F.max_pool3d(
-        probability[None, None], kernel_size=3, stride=1, padding=1
-    )[0, 0]
+    maxima = (
+        probability
+        == F.max_pool3d(probability[None, None], kernel_size=3, stride=1, padding=1)[
+            0, 0
+        ]
+    )
     keep = maxima & (probability >= threshold)
     coords = torch.nonzero(keep, as_tuple=False)
     scores = probability[keep]

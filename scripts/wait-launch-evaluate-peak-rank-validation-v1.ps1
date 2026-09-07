@@ -701,7 +701,7 @@ try {
     foreach ($requiredPattern in @(
         "torch.cuda.device_count() != 2",
         '"--devices", "0,1"',
-        '"--tta-modes", "none,rot4,d4"',
+        '"--tta-modes", "none,zflip2,rot4,d4"',
         "acceptance_opened",
         "competition_submission_performed"
     )) {

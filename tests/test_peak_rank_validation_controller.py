@@ -15,15 +15,15 @@ def test_controller_is_gated_by_verified_training_audit() -> None:
 
 def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
-    assert 'expected_gpu_count = 2' in source
-    assert '$metadata.is_private -ne $true' in source
-    assert '$metadata.enable_gpu -ne $true' in source
-    assert '$metadata.enable_tpu -ne $false' in source
-    assert '$metadata.enable_internet -ne $false' in source
+    assert "expected_gpu_count = 2" in source
+    assert "$metadata.is_private -ne $true" in source
+    assert "$metadata.enable_gpu -ne $true" in source
+    assert "$metadata.enable_tpu -ne $false" in source
+    assert "$metadata.enable_internet -ne $false" in source
     assert '$metadata.machine_shape -ne "NvidiaTeslaT4"' in source
     assert "torch.cuda.device_count() != 2" in source
     assert '"--devices", "0,1"' in source
-    assert '"--tta-modes", "none,rot4,d4"' in source
+    assert '"--tta-modes", "none,zflip2,rot4,d4"' in source
     assert (
         '[ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", '
         '"faint-pu-v4", "expanded-real-faint-v7", '
@@ -54,28 +54,48 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-faint-pu-validation-kernel.py" in source
     assert "build-peak-rank-expanded-real-faint-validation-runtime-v7.py" in source
     assert "build-peak-rank-expanded-real-faint-validation-kernel-v7.py" in source
-    assert "build-peak-rank-expanded-real-local-shape-validation-runtime-v9.py" in source
+    assert (
+        "build-peak-rank-expanded-real-local-shape-validation-runtime-v9.py" in source
+    )
     assert "build-peak-rank-expanded-real-local-shape-validation-kernel-v9.py" in source
     assert "build-peak-rank-expanded-real-blob-validation-runtime-v11.py" in source
     assert "build-peak-rank-expanded-real-blob-validation-kernel-v11.py" in source
     assert "build-peak-rank-expanded-real-global-validation-runtime-v13.py" in source
     assert "build-peak-rank-expanded-real-global-validation-kernel-v13.py" in source
-    assert "build-peak-rank-expanded-real-multiscale-validation-runtime-v15.py" in source
+    assert (
+        "build-peak-rank-expanded-real-multiscale-validation-runtime-v15.py" in source
+    )
     assert "build-peak-rank-expanded-real-multiscale-validation-kernel-v15.py" in source
     assert "build-peak-rank-expanded-real-safe-rank-validation-runtime-v17.py" in source
     assert "build-peak-rank-expanded-real-safe-rank-validation-kernel-v17.py" in source
     assert "build-peak-rank-expanded-real-balanced-validation-runtime-v19.py" in source
     assert "build-peak-rank-expanded-real-balanced-validation-kernel-v19.py" in source
-    assert "build-peak-rank-expanded-real-xl-balanced-validation-runtime-v21.py" in source
-    assert "build-peak-rank-expanded-real-xl-balanced-validation-kernel-v21.py" in source
+    assert (
+        "build-peak-rank-expanded-real-xl-balanced-validation-runtime-v21.py" in source
+    )
+    assert (
+        "build-peak-rank-expanded-real-xl-balanced-validation-kernel-v21.py" in source
+    )
     assert "build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
-    assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py" in source
-    assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-kernel-v6.py" in source
+    assert (
+        "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py"
+        in source
+    )
+    assert (
+        "build-peak-rank-capacity-faint-confidence-ensemble-validation-kernel-v6.py"
+        in source
+    )
     assert "build-peak-rank-cfe-ensemble-validation-runtime-v8.py" in source
     assert "build-peak-rank-cfe-ensemble-validation-kernel-v8.py" in source
-    assert "build-peak-rank-expanded-local-shape-ensemble-validation-runtime-v10.py" in source
-    assert "build-peak-rank-expanded-local-shape-ensemble-validation-kernel-v10.py" in source
+    assert (
+        "build-peak-rank-expanded-local-shape-ensemble-validation-runtime-v10.py"
+        in source
+    )
+    assert (
+        "build-peak-rank-expanded-local-shape-ensemble-validation-kernel-v10.py"
+        in source
+    )
     assert "build-peak-rank-expanded-blob-ensemble-validation-runtime-v12.py" in source
     assert "build-peak-rank-expanded-blob-ensemble-validation-kernel-v12.py" in source
     assert "build-peak-rank-blob-global-ensemble-validation-runtime-v14.py" in source
@@ -123,11 +143,16 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-expanded-real-blob-validation-v11"' in source
     assert 'output_slug = "peak-rank-expanded-real-global-validation-v13"' in source
     assert 'output_slug = "peak-rank-expanded-real-balanced-validation-v19"' in source
-    assert 'output_slug = "peak-rank-expanded-real-xl-balanced-validation-v21"' in source
+    assert (
+        'output_slug = "peak-rank-expanded-real-xl-balanced-validation-v21"' in source
+    )
     assert 'output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"' in source
     assert 'output_slug = "peak-rank-capacity-faint-confidence-validation-v6"' in source
     assert 'output_slug = "peak-rank-cfe-ensemble-validation-v8"' in source
-    assert 'output_slug = "peak-rank-expanded-local-shape-ensemble-validation-v10"' in source
+    assert (
+        'output_slug = "peak-rank-expanded-local-shape-ensemble-validation-v10"'
+        in source
+    )
     assert 'output_slug = "peak-rank-expanded-blob-ensemble-validation-v12"' in source
     assert 'output_slug = "peak-rank-blob-global-ensemble-validation-v14"' in source
     assert 'output_slug = "peak-rank-safe-balanced-pair-validation-v20"' in source

@@ -11,11 +11,21 @@ import shutil
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_ROOT = ROOT / ".biohub" / "research" / "public-kernel-audit-20260907" / "redoctopusk-biohub-948tta2"
+SOURCE_ROOT = (
+    ROOT
+    / ".biohub"
+    / "research"
+    / "public-kernel-audit-20260907"
+    / "redoctopusk-biohub-948tta2"
+)
 SOURCE_NOTEBOOK = SOURCE_ROOT / "biohub-948tta2.ipynb"
 SOURCE_METADATA = SOURCE_ROOT / "kernel-metadata.json"
-SOURCE_NOTEBOOK_SHA256 = "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
-SOURCE_METADATA_SHA256 = "13c98287dd9228c0d8f9abd764e01b3484837ddc4cc0f4dee6e30f5df06086bb"
+SOURCE_NOTEBOOK_SHA256 = (
+    "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
+)
+SOURCE_METADATA_SHA256 = (
+    "13c98287dd9228c0d8f9abd764e01b3484837ddc4cc0f4dee6e30f5df06086bb"
+)
 SOURCE_KERNEL_REF = "redoctopusk/biohub-948tta2"
 RUNTIME_REF = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
 TARGET_ID = "biohub-peak-rank-tracking-candidate-v1"
@@ -36,7 +46,9 @@ def sha256_file(path: Path) -> str:
 def replace_exact(source: str, old: str, new: str, *, count: int = 1) -> str:
     actual = source.count(old)
     if actual != count:
-        raise RuntimeError(f"public source drift for {old!r}: expected {count}, saw {actual}")
+        raise RuntimeError(
+            f"public source drift for {old!r}: expected {count}, saw {actual}"
+        )
     return source.replace(old, new, count)
 
 
@@ -51,10 +63,14 @@ def code_cell(source: str) -> dict:
 
 
 def markdown_cell(source: str) -> dict:
-    return {"cell_type": "markdown", "metadata": {}, "source": source.splitlines(keepends=True)}
+    return {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": source.splitlines(keepends=True),
+    }
 
 
-WATCHDOG = r'''import atexit as _pr_atexit
+WATCHDOG = r"""import atexit as _pr_atexit
 import json as _pr_json
 import os as _pr_os
 import threading as _pr_threading
@@ -100,7 +116,7 @@ _PR_TIMER = _pr_threading.Timer(41400, _pr_expire)
 _PR_TIMER.daemon = True
 _PR_TIMER.start()
 print("Peak-ranking candidate watchdog armed for 41,400 seconds.")
-'''
+"""
 
 
 ATTRIBUTION = """## Independent detector plus attributed tracking backbone
@@ -124,7 +140,7 @@ retained only as a diagnostic and cannot authorize submission.
 """
 
 
-RUNTIME_SETUP = r'''# Locate and verify the clean-promoted private detector runtime.
+RUNTIME_SETUP = r"""# Locate and verify the clean-promoted private detector runtime.
 import hashlib as _pr_hashlib
 import json as _pr_json
 import torch as _pr_torch
@@ -156,7 +172,7 @@ if not (
     and _PR_VALIDATION.get("selection_passed") is True
     and _PR_VALIDATION.get("acceptance_opened") is True
     and _PR_VALIDATION.get("promotion_passed") is True
-    and _PR_VALIDATION.get("selected_tta_mode") in {"none", "rot4", "d4"}
+    and _PR_VALIDATION.get("selected_tta_mode") in {"none", "zflip2", "rot4", "d4"}
     and _PR_MANIFEST.get("selected_peak_tta_mode") == _PR_VALIDATION.get("selected_tta_mode")
     and _PR_MANIFEST.get("selected_peak_tta_views") == _PR_VALIDATION.get("selected_tta_views")
     and _PR_VALIDATION.get("competition_submission_performed") is False
@@ -175,10 +191,10 @@ print(_pr_json.dumps({
     "selected_peak_tta_mode": _PR_TTA_MODE,
     "gpu_count": _pr_torch.cuda.device_count(),
 }, indent=2, sort_keys=True))
-'''
+"""
 
 
-CANDIDATE_EVIDENCE = r'''# Hash-bind the complete two-worker output for external promotion.
+CANDIDATE_EVIDENCE = r"""# Hash-bind the complete two-worker output for external promotion.
 _pr_manifest_root = Path("/kaggle/working/peak_worker_manifests")
 _pr_worker_paths = sorted(_pr_manifest_root.glob("worker-*.json"))
 if len(_pr_worker_paths) != 2:
@@ -260,7 +276,7 @@ _PR_FINISHED = True
 _PR_TIMER.cancel()
 _pr_write_terminal("completed")
 print(_pr_json.dumps(_pr_evidence, indent=2, sort_keys=True))
-'''
+"""
 
 
 def verify_promoted_runtime(runtime_root: Path) -> str:
@@ -272,8 +288,9 @@ def verify_promoted_runtime(runtime_root: Path) -> str:
         and manifest.get("clean_validation_promotion_passed") is True
         and validation.is_file()
         and manifest.get("clean_validation_sha256") == sha256_file(validation)
-        and manifest.get("checkpoint_sha256") == sha256_file(runtime_root / "peak_rank_detector.pt")
-        and manifest.get("selected_peak_tta_mode") in {"none", "rot4", "d4"}
+        and manifest.get("checkpoint_sha256")
+        == sha256_file(runtime_root / "peak_rank_detector.pt")
+        and manifest.get("selected_peak_tta_mode") in {"none", "zflip2", "rot4", "d4"}
         and manifest.get("selected_peak_tta_views") in {1, 4, 8}
     ):
         raise RuntimeError("local peak runtime is not clean-promoted")
@@ -286,7 +303,8 @@ def build_notebook(manifest_sha256: str) -> dict:
     notebook = json.loads(SOURCE_NOTEBOOK.read_text(encoding="utf-8"))
     notebook["cells"][3] = markdown_cell(ATTRIBUTION)
     inference_index = next(
-        index for index, cell in enumerate(notebook["cells"])
+        index
+        for index, cell in enumerate(notebook["cells"])
         if "Fail fast instead of silently running volumetric inference on CPU"
         in "".join(cell.get("source", []))
     )
@@ -296,9 +314,9 @@ def build_notebook(manifest_sha256: str) -> dict:
         '    "scripts/predict_unet_transformer.py",\n',
         '    str(_PR_ROOT / "predict_with_official_linker.py"),\n'
         '    "--runtime-root",\n'
-        '    str(_PR_ROOT),\n'
+        "    str(_PR_ROOT),\n"
         '    "--peak-tta-mode",\n'
-        '    _PR_TTA_MODE,\n'
+        "    _PR_TTA_MODE,\n"
         '    "--official-predictor",\n'
         '    str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
@@ -316,10 +334,13 @@ def build_notebook(manifest_sha256: str) -> dict:
     )
     notebook["cells"][inference_index]["source"] = inference.splitlines(keepends=True)
     validator_inference_index = next(
-        index for index, cell in enumerate(notebook["cells"])
+        index
+        for index, cell in enumerate(notebook["cells"])
         if "predict_val_cmd = [" in "".join(cell.get("source", []))
     )
-    validator_inference = "".join(notebook["cells"][validator_inference_index]["source"])
+    validator_inference = "".join(
+        notebook["cells"][validator_inference_index]["source"]
+    )
     validator_inference = replace_exact(
         validator_inference,
         '        sys.executable, "scripts/predict_unet_transformer.py",\n',
@@ -328,9 +349,12 @@ def build_notebook(manifest_sha256: str) -> dict:
         '        "--peak-tta-mode", _PR_TTA_MODE,\n'
         '        "--official-predictor", str(REPO_DIR / "scripts/predict_unet_transformer.py"),\n',
     )
-    notebook["cells"][validator_inference_index]["source"] = validator_inference.splitlines(keepends=True)
+    notebook["cells"][validator_inference_index]["source"] = (
+        validator_inference.splitlines(keepends=True)
+    )
     validator_scoring_index = next(
-        index for index, cell in enumerate(notebook["cells"])
+        index
+        for index, cell in enumerate(notebook["cells"])
         if "def score_sample(" in "".join(cell.get("source", []))
     )
     validator_scoring = "".join(notebook["cells"][validator_scoring_index]["source"])
@@ -345,58 +369,59 @@ def build_notebook(manifest_sha256: str) -> dict:
     validator_scoring = replace_exact(
         validator_scoring,
         "        pred_nodes_plain = nodes_by_id_to_plain(processed_nodes)\n"
-        "        pred_edges_plain = [(int(e[\"source_id\"]), int(e[\"target_id\"])) for e in processed_edges]\n",
+        '        pred_edges_plain = [(int(e["source_id"]), int(e["target_id"])) for e in processed_edges]\n',
         "        pred_nodes_plain = nodes_by_id_to_plain(processed_nodes)\n"
-        "        pred_edges_plain = [(int(e[\"source_id\"]), int(e[\"target_id\"])) for e in processed_edges]\n"
+        '        pred_edges_plain = [(int(e["source_id"]), int(e["target_id"])) for e in processed_edges]\n'
         "        for _pr_node_id in sorted(processed_nodes):\n"
         "            _pr_node = processed_nodes[_pr_node_id]\n"
         "            _pr_official_validator_rows.append({\n"
-        "                \"dataset\": stem, \"row_type\": \"node\",\n"
-        "                \"node_id\": int(_pr_node[\"node_id\"]), \"t\": int(_pr_node[\"t\"]),\n"
-        "                \"z\": max(0, int(round(float(_pr_node[\"z\"])))),\n"
-        "                \"y\": max(0, int(round(float(_pr_node[\"y\"])))),\n"
-        "                \"x\": max(0, int(round(float(_pr_node[\"x\"])))),\n"
-        "                \"source_id\": -1, \"target_id\": -1,\n"
+        '                "dataset": stem, "row_type": "node",\n'
+        '                "node_id": int(_pr_node["node_id"]), "t": int(_pr_node["t"]),\n'
+        '                "z": max(0, int(round(float(_pr_node["z"])))),\n'
+        '                "y": max(0, int(round(float(_pr_node["y"])))),\n'
+        '                "x": max(0, int(round(float(_pr_node["x"])))),\n'
+        '                "source_id": -1, "target_id": -1,\n'
         "            })\n"
-        "        for _pr_edge in sorted(processed_edges, key=lambda e: (int(e[\"source_id\"]), int(e[\"target_id\"]))):\n"
+        '        for _pr_edge in sorted(processed_edges, key=lambda e: (int(e["source_id"]), int(e["target_id"]))):\n'
         "            _pr_official_validator_rows.append({\n"
-        "                \"dataset\": stem, \"row_type\": \"edge\",\n"
-        "                \"node_id\": -1, \"t\": -1, \"z\": -1, \"y\": -1, \"x\": -1,\n"
-        "                \"source_id\": int(_pr_edge[\"source_id\"]),\n"
-        "                \"target_id\": int(_pr_edge[\"target_id\"]),\n"
+        '                "dataset": stem, "row_type": "edge",\n'
+        '                "node_id": -1, "t": -1, "z": -1, "y": -1, "x": -1,\n'
+        '                "source_id": int(_pr_edge["source_id"]),\n'
+        '                "target_id": int(_pr_edge["target_id"]),\n'
         "            })\n",
     )
     validator_scoring = replace_exact(
         validator_scoring,
-        "        validator_sample_rows.append(row)\n\n"
-        "    if rows_this_config:\n",
+        "        validator_sample_rows.append(row)\n\n    if rows_this_config:\n",
         "        validator_sample_rows.append(row)\n\n"
         "    _pr_expected_validator_stems = {\n"
-        "        \"44b6_12dfb391\", \"44b6_267148e4\",\n"
-        "        \"6bba_062c8d37\", \"6bba_07e24132\",\n"
+        '        "44b6_12dfb391", "44b6_267148e4",\n'
+        '        "6bba_062c8d37", "6bba_07e24132",\n'
         "    }\n"
-        "    _pr_observed_validator_stems = {str(row[\"dataset\"]) for row in _pr_official_validator_rows}\n"
+        '    _pr_observed_validator_stems = {str(row["dataset"]) for row in _pr_official_validator_rows}\n'
         "    if _pr_observed_validator_stems != _pr_expected_validator_stems:\n"
         "        raise RuntimeError(\n"
-        "            f\"Official validator coverage mismatch: {_pr_observed_validator_stems}\"\n"
+        '            f"Official validator coverage mismatch: {_pr_observed_validator_stems}"\n'
         "        )\n"
-        "    _pr_official_validator_path = WORKING_DIR / \"official_validator_candidate.csv\"\n"
+        '    _pr_official_validator_path = WORKING_DIR / "official_validator_candidate.csv"\n'
         "    _pr_official_columns = [\n"
-        "        \"id\", \"dataset\", \"row_type\", \"node_id\", \"t\",\n"
-        "        \"z\", \"y\", \"x\", \"source_id\", \"target_id\",\n"
+        '        "id", "dataset", "row_type", "node_id", "t",\n'
+        '        "z", "y", "x", "source_id", "target_id",\n'
         "    ]\n"
-        "    with _pr_official_validator_path.open(\"w\", newline=\"\") as _pr_stream:\n"
+        '    with _pr_official_validator_path.open("w", newline="") as _pr_stream:\n'
         "        _pr_writer = csv.DictWriter(_pr_stream, fieldnames=_pr_official_columns)\n"
         "        _pr_writer.writeheader()\n"
         "        for _pr_row_id, _pr_row in enumerate(_pr_official_validator_rows):\n"
-        "            _pr_writer.writerow({\"id\": _pr_row_id, **_pr_row})\n"
+        '            _pr_writer.writerow({"id": _pr_row_id, **_pr_row})\n'
         "    print(\n"
-        "        f\"Materialized {len(_pr_official_validator_rows)} official-score rows \"\n"
-        "        f\"to {_pr_official_validator_path}\"\n"
+        '        f"Materialized {len(_pr_official_validator_rows)} official-score rows "\n'
+        '        f"to {_pr_official_validator_path}"\n'
         "    )\n\n"
         "    if rows_this_config:\n",
     )
-    notebook["cells"][validator_scoring_index]["source"] = validator_scoring.splitlines(keepends=True)
+    notebook["cells"][validator_scoring_index]["source"] = validator_scoring.splitlines(
+        keepends=True
+    )
     watchdog = WATCHDOG.replace("peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID)
     evidence = CANDIDATE_EVIDENCE.replace(
         "peak-rank-tracking-candidate-v1", CANDIDATE_RUN_ID
@@ -441,7 +466,9 @@ def main() -> None:
         shutil.rmtree(TARGET)
     TARGET.mkdir(parents=True)
     NOTEBOOK.write_text(
-        json.dumps(build_notebook(manifest_sha256), ensure_ascii=True, separators=(",", ":")),
+        json.dumps(
+            build_notebook(manifest_sha256), ensure_ascii=True, separators=(",", ":")
+        ),
         encoding="ascii",
     )
     source_metadata = json.loads(SOURCE_METADATA.read_text(encoding="utf-8"))

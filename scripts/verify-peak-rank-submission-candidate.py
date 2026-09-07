@@ -12,7 +12,9 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-COMMON = runpy.run_path(str(ROOT / "scripts/verify-learned-division-submission-candidate.py"))
+COMMON = runpy.run_path(
+    str(ROOT / "scripts/verify-learned-division-submission-candidate.py")
+)
 aggregate_validator = COMMON["aggregate_validator"]
 read_csv_rows = COMMON["read_csv_rows"]
 sha256_file = COMMON["sha256_file"]
@@ -24,14 +26,14 @@ PUBLIC_CONTROL_VALIDATOR_SHA256 = COMMON["PUBLIC_CONTROL_VALIDATOR_SHA256"]
 
 RUN_ID = "peak-rank-tracking-candidate-v1"
 SOURCE_PUBLIC_KERNEL_REF = "redoctopusk/biohub-948tta2"
-SOURCE_PUBLIC_NOTEBOOK_SHA256 = "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
+SOURCE_PUBLIC_NOTEBOOK_SHA256 = (
+    "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189"
+)
 OFFICIAL_SCORER_LOCK_SHA256 = (
     "1db65dee620059f19bf16633aa54a9f3379eb5d5bdff148a4037b949393b7a9c"
 )
 OFFICIAL_METRIC_RUN_ID = "peak-rank-patched-official-complete-movie-v1"
-OFFICIAL_EVALUATION_KIND = (
-    "patched_official_complete_movie_candidate_vs_frozen_control"
-)
+OFFICIAL_EVALUATION_KIND = "patched_official_complete_movie_candidate_vs_frozen_control"
 EXPECTED_CONTROL_SCORE = 0.9343483108193262
 MINIMUM_EXACT_SCORE_GAIN = 0.003
 MAXIMUM_EXACT_EDGE_REGRESSION = 0.001
@@ -53,7 +55,9 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
     parameter_count = manifest.get("parameter_count")
     ensemble_size = manifest.get("ensemble_size")
     ensemble_members = training.get("ensemble_members")
-    expected_ensemble_size = len(ensemble_members) if ensemble_members is not None else 1
+    expected_ensemble_size = (
+        len(ensemble_members) if ensemble_members is not None else 1
+    )
     ensemble_fusion = training.get("ensemble_fusion")
     if not (
         manifest.get("schema_version") == 1
@@ -96,13 +100,15 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         and validation.get("selection_passed") is True
         and validation.get("acceptance_opened") is True
         and validation.get("promotion_passed") is True
-        and validation.get("selected_tta_mode") in {"none", "rot4", "d4"}
-        and manifest.get("selected_peak_tta_mode") == validation.get("selected_tta_mode")
-        and manifest.get("selected_peak_tta_views") == validation.get("selected_tta_views")
+        and validation.get("selected_tta_mode") in {"none", "zflip2", "rot4", "d4"}
+        and manifest.get("selected_peak_tta_mode")
+        == validation.get("selected_tta_mode")
+        and manifest.get("selected_peak_tta_views")
+        == validation.get("selected_tta_views")
         and validation.get("competition_test_data_read") is False
         and validation.get("competition_submission_performed") is False
         and validation.get("provenance", {}).get("checkpoint_sha256")
-            == manifest["checkpoint_sha256"]
+        == manifest["checkpoint_sha256"]
     ):
         raise RuntimeError("peak-ranking clean validation is invalid")
     return {
@@ -152,9 +158,13 @@ def verify_candidate(
     if exact_path.resolve() != official_metric_result.resolve():
         raise RuntimeError("official metric result path is not the candidate result")
     unique_file(output_root, "run_stats.csv")
-    worker_paths = sorted(path for path in output_root.rglob("worker-*.json") if path.is_file())
+    worker_paths = sorted(
+        path for path in output_root.rglob("worker-*.json") if path.is_file()
+    )
     if len(worker_paths) != 2:
-        raise RuntimeError(f"expected two downloaded worker manifests, saw {worker_paths}")
+        raise RuntimeError(
+            f"expected two downloaded worker manifests, saw {worker_paths}"
+        )
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
     exact = json.loads(exact_path.read_text(encoding="utf-8"))
@@ -178,7 +188,7 @@ def verify_candidate(
         and evidence.get("source_public_lineage_attributed") is True
         and evidence.get("source_public_kernel_ref") == SOURCE_PUBLIC_KERNEL_REF
         and evidence.get("source_public_notebook_sha256")
-            == SOURCE_PUBLIC_NOTEBOOK_SHA256
+        == SOURCE_PUBLIC_NOTEBOOK_SHA256
         and evidence.get("secondary_edge_feature_tta") is True
         and evidence.get("subvoxel_association_coordinates") is True
         and evidence.get("dual_association_models_verified") is True
@@ -186,9 +196,11 @@ def verify_candidate(
         and evidence.get("public_predictions_copied") is False
         and evidence.get("checkpoint_sha256") == runtime["checkpoint_sha256"]
         and evidence.get("runtime_manifest_sha256") == runtime["manifest_sha256"]
-        and evidence.get("clean_validation_sha256") == runtime["clean_validation_sha256"]
+        and evidence.get("clean_validation_sha256")
+        == runtime["clean_validation_sha256"]
         and evidence.get("selected_peak_tta_mode") == runtime["selected_peak_tta_mode"]
-        and evidence.get("selected_peak_tta_views") == runtime["selected_peak_tta_views"]
+        and evidence.get("selected_peak_tta_views")
+        == runtime["selected_peak_tta_views"]
         and evidence.get("parameter_count") == runtime["parameter_count"]
         and evidence.get("ensemble_size") == runtime["ensemble_size"]
         and float(evidence.get("max_worker_elapsed_seconds", math.inf)) < 31_500.0
@@ -213,10 +225,11 @@ def verify_candidate(
             and row.get("peak_tta_views") == runtime["selected_peak_tta_views"]
             and row.get("association", {}).get("edge_feature_tta") is True
             and row.get("association", {}).get("secondary_link_mode")
-                == "low_margin_consensus"
+            == "low_margin_consensus"
             and float(
                 row.get("association", {}).get("bidirectional_edge_weight", math.nan)
-            ) == 0.15
+            )
+            == 0.15
             and float(row.get("worker_elapsed_seconds", math.inf)) < 31_500.0
             and float(row.get("projected_worker_seconds", math.inf)) <= 31_500.0
             and float(row.get("worker_budget_seconds", 0.0)) == 31_500.0
@@ -237,15 +250,25 @@ def verify_candidate(
     if evidence.get("complete_test_movie_count") != len(worker_movies):
         raise RuntimeError("candidate evidence test movie count changed")
     if submission_sha256 in KNOWN_PUBLIC_SUBMISSION_SHA256:
-        raise RuntimeError("peak-ranking candidate is identical to an audited public output")
+        raise RuntimeError(
+            "peak-ranking candidate is identical to an audited public output"
+        )
     candidate = aggregate_validator(validator_path)
     baseline = aggregate_validator(baseline_validator)
     if candidate["stems"] != baseline["stems"]:
         raise RuntimeError("candidate and clean control validator stems differ")
     for label, key, aggregate_key in (
         ("validator_proxy_score", "validator_proxy_score", "proxy_score"),
-        ("validator_adjusted_edge_jaccard", "validator_adjusted_edge_jaccard", "weighted_adjusted_edge_jaccard"),
-        ("validator_division_jaccard", "validator_division_jaccard", "division_jaccard"),
+        (
+            "validator_adjusted_edge_jaccard",
+            "validator_adjusted_edge_jaccard",
+            "weighted_adjusted_edge_jaccard",
+        ),
+        (
+            "validator_division_jaccard",
+            "validator_division_jaccard",
+            "division_jaccard",
+        ),
     ):
         _assert_close(label, evidence.get(key), candidate[aggregate_key])
     if evidence.get("complete_validator_movie_count") != len(candidate["stems"]):
@@ -253,8 +276,7 @@ def verify_candidate(
     if not (
         evidence.get("official_metric_status")
         == "pending_external_patched_official_scoring"
-        and evidence.get("official_scorer_lock_sha256")
-        == OFFICIAL_SCORER_LOCK_SHA256
+        and evidence.get("official_scorer_lock_sha256") == OFFICIAL_SCORER_LOCK_SHA256
         and evidence.get("official_validator_candidate_sha256")
         == sha256_file(official_validator_path)
     ):
@@ -275,9 +297,7 @@ def verify_candidate(
     exact_candidate = exact.get("candidate", {})
     exact_score_gain = float(exact_gate.get("score_gain", math.nan))
     exact_edge_delta = float(exact_gate.get("adjusted_edge_delta", math.nan))
-    exact_worst_movie_delta = float(
-        exact_gate.get("worst_movie_score_delta", math.nan)
-    )
+    exact_worst_movie_delta = float(exact_gate.get("worst_movie_score_delta", math.nan))
     if not (
         exact.get("schema_version") == 1
         and exact.get("run_id") == OFFICIAL_METRIC_RUN_ID
@@ -349,9 +369,7 @@ def verify_candidate(
         "public_validator_proxy_used_for_promotion": False,
         "official_metric_result": exact,
         "official_metric_result_sha256": sha256_file(exact_path),
-        "official_validator_candidate_sha256": sha256_file(
-            official_validator_path
-        ),
+        "official_validator_candidate_sha256": sha256_file(official_validator_path),
         "official_scorer_lock_sha256": OFFICIAL_SCORER_LOCK_SHA256,
         "exact_control_score": float(exact_control["score"]),
         "exact_candidate_score": float(exact_candidate["score"]),

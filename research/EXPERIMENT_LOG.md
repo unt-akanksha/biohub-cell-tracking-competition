@@ -1289,3 +1289,21 @@ well as the synthetic generator.
   verified the exact runner hash, sole idle waiter, and absent v19 training
   artifacts, then emitted the terminal priority receipt without restarting any
   process.
+- The owned detector inference already applies D4 X/Y TTA to both dense logits
+  and continuous offsets with the correct inverse vector basis. One symmetry
+  used during training was missing from clean validation: Z reflection. Because
+  the X/Y-pooled replay grid is physically isotropic, `zflip2` is now a frozen
+  two-view option ordered between `none` and `rot4`. Calibration cost rises from
+  13 to 15 aggregate views across the existing mode screen, rather than adding
+  a prohibitive 16-view mode. The unchanged selector may choose `zflip2` only
+  when it clears absolute selection floors and remains within `0.003` pooled
+  and `0.01` worst-movie recall of the best calibration mode. Runtime manifests,
+  promotion, production loading, and candidate verification all recognize the
+  exact two-view contract; no leaderboard feedback selects it.
+- The inference review also found a release-blocking validation defect:
+  `evaluate_peak_rank_detector.py` called the metadata-only density threshold
+  routine without importing it. Any real worker would have raised `NameError`
+  before opening labels or scoring, despite mocked orchestration tests passing.
+  Both packaged and repository import paths now bind the authoritative
+  Spotiflow-bridge implementation, and a direct import regression test protects
+  the worker. The expanded explicit peak-rank suite passes `206` tests.

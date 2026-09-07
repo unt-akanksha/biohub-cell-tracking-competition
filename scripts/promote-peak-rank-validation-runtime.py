@@ -35,7 +35,9 @@ def locate_result(controller: dict) -> Path:
     root = Path(controller["download_root"])
     matches = list(root.rglob("peak_rank_validation.json"))
     if len(matches) != 1:
-        raise FileNotFoundError(f"expected one clean validation result, found {matches}")
+        raise FileNotFoundError(
+            f"expected one clean validation result, found {matches}"
+        )
     return matches[0]
 
 
@@ -62,7 +64,7 @@ def main() -> None:
         and result.get("selection_passed") is True
         and result.get("acceptance_opened") is True
         and result.get("promotion_passed") is True
-        and result.get("selected_tta_mode") in {"none", "rot4", "d4"}
+        and result.get("selected_tta_mode") in {"none", "zflip2", "rot4", "d4"}
         and result.get("selected_tta_views") in {1, 4, 8}
         and result.get("competition_test_data_read") is False
         and result.get("competition_submission_performed") is False
