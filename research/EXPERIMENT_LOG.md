@@ -1568,3 +1568,5 @@ well as the synthetic generator.
   regression no worse than `0.001`. The V30 controller retains the global
   Kaggle GPU mutex, two-T4/no-Internet contract, 12-hour ceiling, and eight-hour
   reserve; only the external submitter can submit after every gate passes.
+  Hidden controller PID `31084` now waits for both independent component
+  terminals and will execute that path without manual intervention.
