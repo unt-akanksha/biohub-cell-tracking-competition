@@ -21,6 +21,12 @@ def test_triple_runtime_requires_three_individually_gated_members() -> None:
     ):
         assert required in source
     assert source.count('"expected_parameter_count": 66_977_670') == 3
+    base = (
+        ROOT / "scripts/build-peak-rank-logit-ensemble-validation-runtime.py"
+    ).read_text(encoding="utf-8")
+    assert 'equal_weight = 1.0 / len(members)' in base
+    assert 'row["ensemble_weight"] = equal_weight' in base
+    assert 'sum(row["ensemble_weight"] for row in members)' in base
 
 
 def test_triple_validation_and_candidate_have_distinct_identities() -> None:

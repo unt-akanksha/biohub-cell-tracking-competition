@@ -1001,3 +1001,17 @@ well as the synthetic generator.
   15-movie cross-fit direction and has no complete receipt; SAM4CellTracking
   was cancelled during inference, emitted no submission, and consumes public
   `.943` detector nodes. None enters model selection or the ensemble.
+- A fixed three-member v8 ensemble was precommitted before v3, v4, or v7
+  produced clean-validation results. It averages dense logits and offsets from
+  those three 66,977,670-parameter models with equal `1/3` weights, for
+  200,933,010 learned parameters. All three members must independently pass
+  their sealed training audit and complete-movie clean validation; otherwise
+  the v8 controller exits without building a runtime. An eligible ensemble is
+  revalidated end to end, including runtime projection and the patched exact
+  score/per-movie gates, before its distinct one-shot candidate may submit.
+- A read-only AWS queue audit at `2026-09-07T07:22:18Z` found v1 healthy at
+  step 1,750 with the A10G at 100% utilization. V2, v3, NucVerse, and v4 were
+  all waiting in sequence; v3 used the shorter `bash ./run.sh` process name and
+  was initially absent from a narrow display filter, but its held `run.lock`
+  and PID `71141` proved it was active. A duplicate start was rejected by that
+  lock, so no workload was interrupted or reordered.

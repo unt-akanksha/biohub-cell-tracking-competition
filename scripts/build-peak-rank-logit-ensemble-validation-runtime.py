@@ -135,7 +135,6 @@ def validate_member(spec: dict) -> dict:
         "member_runtime_manifest_sha256": sha256_file(manifest_path),
         "clean_validation_sha256": sha256_file(result_path),
         "clean_validation_selected_tta_mode": result["selected_tta_mode"],
-        "ensemble_weight": 0.5,
     }
 
 
@@ -145,6 +144,11 @@ def main() -> None:
     args = parser.parse_args()
     target = checked_target()
     members = [validate_member(spec) for spec in MEMBERS]
+    equal_weight = 1.0 / len(members)
+    for row in members:
+        row["ensemble_weight"] = equal_weight
+    if abs(sum(row["ensemble_weight"] for row in members) - 1.0) > 1e-12:
+        raise RuntimeError("ensemble weights do not sum to one")
     if sum(row["parameter_count"] for row in members) != PARAMETER_COUNT:
         raise RuntimeError("ensemble member parameter total changed")
     if len({row["checkpoint_sha256"] for row in members}) != len(members):
