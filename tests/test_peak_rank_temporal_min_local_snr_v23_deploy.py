@@ -16,6 +16,8 @@ def test_deploy_is_hash_bound_and_does_not_control_gpu() -> None:
     ):
         assert digest in source
     assert "83812614" in source
+    assert "ln -s 'research/peak_rank_detection/model.py'" in source
+    assert "readlink -f '/home/ubuntu/biohub/model.py'" in source
     assert "nohup bash" in source
     assert "nvidia-smi" not in source
     assert "pkill" not in source

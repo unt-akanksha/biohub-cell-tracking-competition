@@ -98,7 +98,9 @@ try {
     $remote = "${RemoteUser}@${RemoteHost}"
     $remoteRoot = "/home/ubuntu/biohub-peak-rank-detector-v1/temporal-min-local-snr-balanced-v23"
     $remoteInput = "$remoteRoot/input"
-    $prepare = "set -euo pipefail; test ! -e '$remoteRoot/run.sh'; test ! -e '/home/ubuntu/biohub-peak-rank-temporal-min-local-snr-balanced-v23-results.tar.gz'; mkdir -p '$remoteInput'"
+    # The staged model modules use their flat-import path first. Point that
+    # path at the same repository model.py that every runner already hashes.
+    $prepare = "set -euo pipefail; test ! -e '$remoteRoot/run.sh'; test ! -e '/home/ubuntu/biohub-peak-rank-temporal-min-local-snr-balanced-v23-results.tar.gz'; mkdir -p '$remoteInput'; if test ! -e '/home/ubuntu/biohub/model.py'; then ln -s 'research/peak_rank_detection/model.py' '/home/ubuntu/biohub/model.py'; fi; readlink -f '/home/ubuntu/biohub/model.py' | grep -Fx '/home/ubuntu/biohub/research/peak_rank_detection/model.py'"
     Invoke-External "ssh.exe" ($sshArgs + @($remote, $prepare))
     Invoke-External "scp.exe" ($sshArgs + @($trainer, "${remote}:$remoteInput/train_expanded_real_faint_detector.py"))
     Invoke-External "scp.exe" ($sshArgs + @($stableModel, "${remote}:$remoteInput/model_temporal_stable.py"))
