@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 
 import torch
+from torch import nn
 
 from research.peak_rank_detection import evaluate_peak_rank_detector as evaluation
 from research.peak_rank_detection.model import TemporalPeakRankDetector, count_parameters
@@ -74,6 +75,37 @@ def test_equal_logit_ensemble_strict_loads_independent_members(tmp_path: Path) -
     assert count_parameters(ensemble) == terminal["parameter_count"]
     assert output["logits"].shape == (1, 1, 8, 8, 8)
     assert output["offsets"].shape == (1, 3, 8, 8, 8)
+
+
+class FixedMember(nn.Module):
+    def __init__(self, logits: torch.Tensor, offsets: torch.Tensor) -> None:
+        super().__init__()
+        self.register_buffer("fixed_logits", logits)
+        self.register_buffer("fixed_offsets", offsets)
+
+    def forward(self, frames: torch.Tensor) -> dict:
+        del frames
+        return {
+            "logits": self.fixed_logits,
+            "offsets": self.fixed_offsets,
+            "auxiliary_logits": (self.fixed_logits[..., ::2, ::2, ::2],),
+        }
+
+
+def test_confidence_max_ensemble_uses_winning_offsets_per_voxel() -> None:
+    left_logits = torch.tensor([[[[[3.0, -1.0]]]]])
+    right_logits = torch.tensor([[[[[1.0, 4.0]]]]])
+    left_offsets = torch.full((1, 3, 1, 1, 2), 0.25)
+    right_offsets = torch.full((1, 3, 1, 1, 2), -0.25)
+    ensemble = evaluation.PeakRankConfidenceMaxEnsemble(
+        (FixedMember(left_logits, left_offsets), FixedMember(right_logits, right_offsets))
+    )
+
+    output = ensemble(torch.empty(0))
+
+    assert torch.equal(output["logits"], torch.tensor([[[[[3.0, 4.0]]]]]))
+    assert torch.equal(output["offsets"][..., 0], left_offsets[..., 0])
+    assert torch.equal(output["offsets"][..., 1], right_offsets[..., 1])
 
 
 def write_member_fixture(root: Path, name: str, checkpoint: bytes) -> tuple[dict, Path]:

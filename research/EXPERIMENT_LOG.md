@@ -971,3 +971,9 @@ well as the synthetic generator.
   selection, patched-official candidate score, and one-shot submission gate.
   Fourteen focused ensemble/controller tests and both controller preflights
   pass; failure of either member keeps the ensemble closed.
+- A complementary v6 fusion is frozen before v3/v4 results. It takes the
+  larger member logit at each voxel and the offset from that winning member,
+  allowing the faint-cell specialist to contribute local peaks without being
+  averaged away. It reuses only independently clean-promoted v3/v4 checkpoints
+  and must pass a distinct complete-movie, runtime, patched-score,
+  non-replica, and one-shot submission chain. It adds no AWS training cost.

@@ -107,6 +107,12 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
         raise ValueError("detector checkpoint hash differs from training terminal")
     members = terminal.get("ensemble_members")
     if members is not None:
+        fusion = terminal.get("ensemble_fusion", "equal_logit_and_offset_mean")
+        if fusion not in {
+            "equal_logit_and_offset_mean",
+            "confidence_max_logit_with_winner_offset",
+        }:
+            raise ValueError("detector ensemble fusion contract is invalid")
         if not isinstance(members, list) or len(members) < 2:
             raise ValueError("detector ensemble must contain at least two members")
         filenames = []
@@ -186,6 +192,45 @@ class PeakRankLogitEnsemble(nn.Module):
         }
 
 
+class PeakRankConfidenceMaxEnsemble(nn.Module):
+    """Take each voxel from the locally most confident independent member."""
+
+    def __init__(self, members: Sequence[nn.Module]) -> None:
+        super().__init__()
+        if len(members) < 2:
+            raise ValueError("confidence-max ensemble needs at least two members")
+        self.members = nn.ModuleList(members)
+
+    @staticmethod
+    def _select_vector(
+        values: Sequence[torch.Tensor], winner: torch.Tensor
+    ) -> torch.Tensor:
+        stacked = torch.stack([value.float() for value in values], dim=0)
+        index = winner.expand(-1, stacked.shape[2], *winner.shape[-3:]).unsqueeze(0)
+        return stacked.gather(0, index).squeeze(0)
+
+    def forward(self, frames: torch.Tensor) -> dict[str, Any]:
+        outputs = [member(frames) for member in self.members]
+        logits = torch.stack(
+            [output["logits"].float() for output in outputs], dim=0
+        )
+        winner = logits.argmax(dim=0)
+        auxiliary = []
+        for level in range(len(outputs[0]["auxiliary_logits"])):
+            level_logits = torch.stack(
+                [output["auxiliary_logits"][level].float() for output in outputs],
+                dim=0,
+            )
+            auxiliary.append(level_logits.amax(dim=0))
+        return {
+            "logits": logits.amax(dim=0),
+            "offsets": self._select_vector(
+                [output["offsets"] for output in outputs], winner
+            ),
+            "auxiliary_logits": tuple(auxiliary),
+        }
+
+
 def _load_single_member(
     checkpoint: Path, contract: dict[str, Any]
 ) -> TemporalPeakRankDetector:
@@ -206,12 +251,17 @@ def load_model(
     if members is None:
         model: nn.Module = _load_single_member(checkpoint, terminal)
     else:
-        model = PeakRankLogitEnsemble(
-            [
-                _load_single_member(checkpoint.parent / row["checkpoint_file"], row)
-                for row in members
-            ]
-        )
+        loaded = [
+            _load_single_member(checkpoint.parent / row["checkpoint_file"], row)
+            for row in members
+        ]
+        fusion = terminal.get("ensemble_fusion", "equal_logit_and_offset_mean")
+        if fusion == "equal_logit_and_offset_mean":
+            model = PeakRankLogitEnsemble(loaded)
+        elif fusion == "confidence_max_logit_with_winner_offset":
+            model = PeakRankConfidenceMaxEnsemble(loaded)
+        else:
+            raise ValueError(f"unsupported detector ensemble fusion: {fusion}")
     if count_parameters(model) != terminal["parameter_count"]:
         raise RuntimeError("unexpected detector parameter count")
     return model.requires_grad_(False).eval().to(device)

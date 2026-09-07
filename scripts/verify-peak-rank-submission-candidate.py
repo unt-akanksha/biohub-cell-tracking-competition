@@ -39,6 +39,7 @@ MAXIMUM_EXACT_MOVIE_REGRESSION = 0.005
 SUPPORTED_ARCHITECTURES = {
     "independent temporal 3D ConvNeXt U-Net peak ranker",
     "equal-logit ensemble of independent temporal 3D ConvNeXt U-Net peak rankers",
+    "confidence-selective ensemble of independent temporal 3D ConvNeXt U-Net peak rankers",
 }
 
 
@@ -53,6 +54,7 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
     ensemble_size = manifest.get("ensemble_size")
     ensemble_members = training.get("ensemble_members")
     expected_ensemble_size = len(ensemble_members) if ensemble_members is not None else 1
+    ensemble_fusion = training.get("ensemble_fusion")
     if not (
         manifest.get("schema_version") == 1
         and manifest.get("architecture") in SUPPORTED_ARCHITECTURES
@@ -63,6 +65,17 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         and manifest.get("widths") == training.get("widths")
         and manifest.get("depths") == training.get("depths")
         and ensemble_size == expected_ensemble_size
+        and (
+            ensemble_members is None
+            or (
+                ensemble_fusion
+                in {
+                    "equal_logit_and_offset_mean",
+                    "confidence_max_logit_with_winner_offset",
+                }
+                and manifest.get("ensemble_fusion") == ensemble_fusion
+            )
+        )
         and isinstance(ensemble_size, int)
         and ensemble_size > 0
         and manifest.get("training_audit_passed") is True

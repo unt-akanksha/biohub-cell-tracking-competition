@@ -70,6 +70,12 @@ complete-movie validation. It equal-averages their logits and offsets, contains
 gate rather than inheriting either member's result. If either component fails,
 the ensemble controller exits without building it.
 
+A complementary v6 fusion uses the same two promoted members without another
+training run. At each voxel it keeps the larger detection logit and the offset
+from that winning member. This is a fixed union-style faint-cell hypothesis,
+not a tuned weight; it has its own density calibration, complete-movie
+validation, runtime projection, patched official score, and submission gate.
+
 ## Promotion boundary
 
 This archive can authorize only the existing private clean-validation stage.

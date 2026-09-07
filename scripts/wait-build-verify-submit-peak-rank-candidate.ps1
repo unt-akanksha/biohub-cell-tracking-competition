@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "capacity-faint-ensemble-v5", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -91,6 +91,22 @@ elseif ($Variant -eq "capacity-faint-ensemble-v5") {
         receipt_name = "peak-rank-capacity-faint-ensemble-candidate-submission-receipt-v5.json"
         expected_run_id = "peak-rank-capacity-faint-ensemble-tracking-candidate-v5"
         output_slug = "peak-rank-capacity-faint-ensemble-tracking-candidate-v5"
+    }
+}
+elseif ($Variant -eq "capacity-faint-confidence-v6") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-confidence-validation-runtime-v6"
+        kernel_ref = "indarkarhana/biohub-peak-rank-capacity-faint-confidence-tracking-candidate-v6"
+        validation_terminal = ".biohub/automation/peak-rank-capacity-faint-confidence-validation-controller-v6.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-capacity-faint-confidence-validation-runtime-v6"
+        builder = "scripts/build-peak-rank-capacity-faint-confidence-ensemble-submission-candidate-v6.py"
+        candidate_root = "kaggle/biohub-peak-rank-capacity-faint-confidence-tracking-candidate-v6"
+        notebook_name = "biohub-peak-rank-capacity-faint-confidence-tracking-candidate-v6.ipynb"
+        controller_id = "peak-rank-capacity-faint-confidence-candidate-controller-v6"
+        promotion_name = "peak-rank-capacity-faint-confidence-candidate-promotion-v6.json"
+        receipt_name = "peak-rank-capacity-faint-confidence-candidate-submission-receipt-v6.json"
+        expected_run_id = "peak-rank-capacity-faint-confidence-tracking-candidate-v6"
+        output_slug = "peak-rank-capacity-faint-confidence-tracking-candidate-v6"
     }
 }
 else {

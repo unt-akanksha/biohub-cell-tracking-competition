@@ -21,6 +21,10 @@ DATASET_TITLE = "Biohub Peak Rank Equal-Logit Ensemble Validation Runtime v4"
 PURPOSE = "Two-GPU clean validation of a fixed equal-logit detector ensemble"
 PARAMETER_COUNT = 76_762_956
 RUN_ID = "clean-equal-logit-peak-rank-ensemble-v4"
+FUSION = "equal_logit_and_offset_mean"
+ARCHITECTURE_DESCRIPTION = (
+    "equal-logit ensemble of independent temporal 3D ConvNeXt U-Net peak rankers"
+)
 MEMBERS = (
     {
         "name": "v1",
@@ -170,7 +174,7 @@ def main() -> None:
     checkpoint_manifest = {
         "schema_version": 1,
         "run_id": RUN_ID,
-        "fusion": "equal_logit_and_offset_mean",
+        "fusion": FUSION,
         "members": [
             {
                 "name": row["name"],
@@ -194,6 +198,7 @@ def main() -> None:
         "widths": [row["widths"] for row in terminal_members],
         "depths": [row["depths"] for row in terminal_members],
         "ensemble_members": terminal_members,
+        "ensemble_fusion": FUSION,
         "checkpoint_sha256": sha256_file(checkpoint_path),
         "competition_train_data_read": True,
         "competition_test_data_read": False,
@@ -217,9 +222,8 @@ def main() -> None:
         {
             "schema_version": 1,
             "purpose": PURPOSE,
-            "architecture": (
-                "equal-logit ensemble of independent temporal 3D ConvNeXt U-Net peak rankers"
-            ),
+            "architecture": ARCHITECTURE_DESCRIPTION,
+            "ensemble_fusion": FUSION,
             "parameter_count": PARAMETER_COUNT,
             "widths": terminal["widths"],
             "depths": terminal["depths"],
