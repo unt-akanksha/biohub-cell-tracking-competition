@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "capacity-faint-ensemble-v5", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -76,6 +76,25 @@ elseif ($Variant -eq "faint-pu-v4") {
         output_slug = "peak-rank-faint-pu-validation-v4"
         parameter_count = 66977670
         dependency_terminals = @()
+    }
+}
+elseif ($Variant -eq "capacity-faint-ensemble-v5") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
+        kernel_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-v5"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py"
+        kernel_builder = "scripts/build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
+        kernel_root = "kaggle/biohub-peak-rank-capacity-faint-ensemble-validation-v5"
+        notebook_name = "biohub-peak-rank-capacity-faint-ensemble-validation-v5.ipynb"
+        controller_id = "peak-rank-capacity-faint-ensemble-validation-controller-v5"
+        output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"
+        parameter_count = 133955340
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-capacity-pu-validation-controller-v3.json",
+            ".biohub/automation/peak-rank-faint-pu-validation-controller-v4.json"
+        )
     }
 }
 else {

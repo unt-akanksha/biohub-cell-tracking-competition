@@ -963,3 +963,11 @@ well as the synthetic generator.
   candidate controller still requires the exact patched scorer gain and
   per-movie regression gates before its one permitted submission. Both v4
   controllers pass validation-only preflight and wait on the v4 harvest.
+- A capacity-diversity ensemble is precommitted without adding another AWS
+  training run. It requires both 66,977,670-parameter v3 and v4 members to pass
+  their own sealed audits and separate clean validations, then averages dense
+  logits and offsets with fixed equal weights. The resulting 133,955,340-
+  parameter v5 ensemble receives a new complete-movie validation, TTA/runtime
+  selection, patched-official candidate score, and one-shot submission gate.
+  Fourteen focused ensemble/controller tests and both controller preflights
+  pass; failure of either member keeps the ensemble closed.

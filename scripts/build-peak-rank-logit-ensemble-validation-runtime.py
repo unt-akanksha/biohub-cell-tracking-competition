@@ -17,6 +17,8 @@ SOURCES = BASE["SOURCES"]
 TARGET_NAME = "biohub-peak-rank-logit-ensemble-validation-runtime-v4"
 TARGET = ROOT / ".biohub" / "staging" / TARGET_NAME
 DATASET_ID = f"indarkarhana/{TARGET_NAME}"
+DATASET_TITLE = "Biohub Peak Rank Equal-Logit Ensemble Validation Runtime v4"
+PURPOSE = "Two-GPU clean validation of a fixed equal-logit detector ensemble"
 PARAMETER_COUNT = 76_762_956
 RUN_ID = "clean-equal-logit-peak-rank-ensemble-v4"
 MEMBERS = (
@@ -25,6 +27,7 @@ MEMBERS = (
         "runtime": ROOT / ".biohub" / "staging" / "biohub-peak-rank-validation-runtime-v1",
         "controller": ROOT / ".biohub" / "automation" / "peak-rank-validation-controller-v1.json",
         "checkpoint_file": "member-v1.pt",
+        "expected_parameter_count": 38_381_478,
     },
     {
         "name": "depth-pu-v2",
@@ -37,6 +40,7 @@ MEMBERS = (
         / "automation"
         / "peak-rank-depth-pu-validation-controller-v2.json",
         "checkpoint_file": "member-depth-pu-v2.pt",
+        "expected_parameter_count": 38_381_478,
     },
 )
 
@@ -81,6 +85,7 @@ def validate_member(spec: dict) -> dict:
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
     result_path = unique_result(Path(controller["download_root"]))
     result = json.loads(result_path.read_text(encoding="utf-8"))
+    expected_parameter_count = int(spec.get("expected_parameter_count", 38_381_478))
     if not (
         controller.get("status") == "completed"
         and controller.get("accepted_for_candidate_integration") is True
@@ -91,7 +96,7 @@ def validate_member(spec: dict) -> dict:
         and manifest.get("schema_version") == 1
         and manifest.get("architecture")
         == "independent temporal 3D ConvNeXt U-Net peak ranker"
-        and manifest.get("parameter_count") == 38_381_478
+        and manifest.get("parameter_count") == expected_parameter_count
         and manifest.get("ensemble_size") == 1
         and manifest.get("training_audit_passed") is True
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
@@ -211,7 +216,7 @@ def main() -> None:
         target / "SOURCE_MANIFEST.json",
         {
             "schema_version": 1,
-            "purpose": "Two-GPU clean validation of a fixed equal-logit detector ensemble",
+            "purpose": PURPOSE,
             "architecture": (
                 "equal-logit ensemble of independent temporal 3D ConvNeXt U-Net peak rankers"
             ),
@@ -232,7 +237,7 @@ def main() -> None:
     write_json(
         target / "dataset-metadata.json",
         {
-            "title": "Biohub Peak Rank Equal-Logit Ensemble Validation Runtime v4",
+            "title": DATASET_TITLE,
             "id": DATASET_ID,
             "licenses": [{"name": "MIT"}],
             "isPrivate": True,

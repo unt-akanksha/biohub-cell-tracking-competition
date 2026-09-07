@@ -63,6 +63,13 @@ validation, runtime projection, or exact-score promotion rejects the member.
 Sixteen focused candidate-path/controller tests and both controller preflights
 pass.
 
+A separate conditional capacity ensemble is also frozen. It can exist only if
+both v3 and v4 independently pass sealed training audit and separate
+complete-movie validation. It equal-averages their logits and offsets, contains
+133,955,340 learned parameters, and receives a fresh validation/TTA/runtime
+gate rather than inheriting either member's result. If either component fails,
+the ensemble controller exits without building it.
+
 ## Promotion boundary
 
 This archive can authorize only the existing private clean-validation stage.
