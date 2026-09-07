@@ -77,6 +77,7 @@ SUPPORTED_MODEL_FAMILIES = {
     "blob_global_context_temporal_peak_rank_v13",
     "multiscale_blob_global_context_temporal_peak_rank_v15",
     "safe_rank_multiscale_blob_global_temporal_peak_rank_v17",
+    "temporal_min_local_snr_safe_rank_multiscale_global_peak_rank_v23",
 }
 
 
@@ -288,6 +289,18 @@ def _load_single_member(checkpoint: Path, contract: dict[str, Any]) -> nn.Module
             )
 
         model_class = SafeRankMultiscaleBlobGlobalDetector
+    elif (
+        model_family
+        == "temporal_min_local_snr_safe_rank_multiscale_global_peak_rank_v23"
+    ):
+        try:
+            from model_temporal_stable import TemporalMinimumLocalSnrSafeRankDetector
+        except ModuleNotFoundError:
+            from research.peak_rank_detection.model_temporal_stable import (
+                TemporalMinimumLocalSnrSafeRankDetector,
+            )
+
+        model_class = TemporalMinimumLocalSnrSafeRankDetector
     else:
         raise ValueError(f"unsupported detector model family: {model_family}")
     model = model_class(widths=contract["widths"], depths=contract["depths"])

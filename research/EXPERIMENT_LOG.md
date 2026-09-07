@@ -1386,3 +1386,24 @@ well as the synthetic generator.
   and reproducibility gates. Their D4 edge-feature TTA concept is already
   independently implemented in the owned association bridge; no public code,
   weight, prediction, threshold, or score enters the candidate.
+- A second hash-locked optimization-only diagnostic screened eight fixed
+  combinations of temporal reduction and ordinary versus local-variance-
+  normalized multiscale blob evidence. The strongest existing two-scale prior
+  has pooled recall `0.488864`, with `0.200422` on 44b6 and `0.532713` on
+  6bba. Temporal-minimum local-SNR evidence reaches pooled recall `0.493318`,
+  raises 44b6 to `0.236287`, and preserves 6bba at `0.532393`. Thus it is a
+  Pareto-like improvement on the hard embryo rather than a pooled gain obtained
+  by sacrificing the easier embryo. Mean and median local-SNR alternatives are
+  slightly weaker, which keeps the follow-up to one fixed temporal-minimum
+  construction. All 480 optimization crops are used; selection, sealed audit,
+  competition test, and leaderboard artifacts remain closed.
+- V23 is precommitted from that training-role evidence before v19 or v21 opens
+  any selection result. It adds three temporal-minimum local-SNR bands to the
+  v19 safe-rank/multiscale/global detector, retaining embryo-balanced sampling,
+  5,000 steps, real frequency 2, widths `(128,256,512,1024)`, depths
+  `(3,3,9,3)`, and the same clean loss contract, with independent seed
+  `12568331`. The model has 83,812,614 parameters and a 72,000-second A10G
+  guard. Its sequential runner is hash-pinned to every staged and repository
+  dependency, waits for v21 completion plus verified local harvest, and checks
+  for an idle GPU before launch. Focused diagnostic, model, trainer, evaluator,
+  runner, and deployment tests pass; no public model or prediction is consumed.
