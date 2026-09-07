@@ -940,3 +940,19 @@ well as the synthetic generator.
   temporal fading augmentation is therefore the next independent training
   member; it will not encode a movie identity, copy public predictions, or use
   a leaderboard-selected constant.
+- The temporal-fading hypothesis is now an executable fourth peak-rank member.
+  It uses the 66,977,670-parameter capacity architecture, seed `3601079`, and
+  the same 2,000-step/7-hour bounds as v3. Generic soft local attenuation is
+  applied to a random subset of labeled training points on the center frame,
+  sometimes extending to one adjacent frame; probabilities are `0.70` for
+  complete synthetic examples and `0.40` for sparse-real positives. Axial
+  attenuation and conservative positive-unlabeled real loss are retained.
+  The augmentation has no movie-specific constant and changes neither point
+  coordinates nor labels.
+- V4 is queued behind the gated NucVerse optimization/selection screen. It may
+  reclaim only the exact v3 and NucVerse Biohub copies after independent local
+  harvesters verify their archives and acknowledge the archive hashes back to
+  Antelume. The capacity-v3 harvester was extended with that acknowledgement;
+  a new NucVerse verifier checks archive paths, every member hash, phase-access
+  flags, and the optimization-before-selection boundary. Eighteen focused
+  tests plus Python/Bash/PowerShell syntax validation pass.
