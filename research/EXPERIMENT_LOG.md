@@ -889,3 +889,13 @@ well as the synthetic generator.
   downloading weights, consuming GPU, copying predictions, or disturbing the
   active queue; it can reopen only after explicit weight licensing and safe
   storage are available.
+- Executed output from the advertised `biohub-detfusion-sdw30-exact0943`
+  notebook was audited before the active detector reached its first selection
+  checkpoint. The notebook explicitly ran with its validator disabled and zero
+  held-out samples. Its emitted guard report is stale: it records secondary
+  detector weight `0.475`, threshold `0.96875`, and gap distance `5.8`, while
+  the executed configuration used `0.30`, `0.965`, and `5.0`; it also declares
+  leaderboard feedback use and `candidate_unverified` quality. Consequently,
+  neither the claimed `.943` parent nor the new confidence-dominance repair is
+  admitted to candidate selection. Our first candidate remains an independent
+  detector test on the frozen linker and patched complete-movie scorer.

@@ -170,6 +170,20 @@ copying this runtime there would displace the active reproducible queue. No
 weight, prediction, or GPU budget is assigned until the checkpoint license is
 made explicit and a complete-movie clean evaluation can be staged safely.
 
+The executed outputs of
+`rishabhr0y/biohub-detfusion-sdw30-exact0943` were subsequently downloaded to
+audit its claimed validation lineage. The run log states
+`BIOHUB_VALIDATOR_ENABLE=0`, reports zero held-out samples, and explicitly
+skips scoring. Its emitted `dual_seed_frame_retention_guard_report.json` is
+also stale relative to the executed configuration: the report names secondary
+detection weight `0.475`, detector threshold `0.96875`, and gap distance `5.8`,
+whereas the live run declares `0.30`, `0.965`, and `5.0`. The report marks
+leaderboard feedback as used and quality as `candidate_unverified`. The
+confidence-dominance rule and claimed `0.943` parent therefore supply no clean
+validation evidence and are excluded from the frozen first candidate. They may
+be reconsidered only as a separately pre-registered experiment after an
+individually promoted detector exists.
+
 References:
 
 - <https://www.kaggle.com/code/redoctopusk/biohub-948tta>
