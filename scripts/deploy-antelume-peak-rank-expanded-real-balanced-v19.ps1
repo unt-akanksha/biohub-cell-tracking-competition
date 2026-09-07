@@ -32,7 +32,7 @@ $expectedHashes = @{
     local_shape_trainer = "1c3f4fd526aa2126f7b14403d91b4493efbc3dc0d48903992c84bb3aecd8654a"
     expanded_trainer = "6eb0f506204c1f30fbee3ad9859215826a07fe7c8d78a2be868371233fbd2ebe"
     faint_trainer = "6ef8092a89c1c01c536c690da573a10b49ce99bf83d4d3ddd69403741f808b0c"
-    runner = "f3453af801d13550f04e60ea632b78d2f913194abcd213aced0d259e32ac0e2d"
+    runner = "57ef88c6756848e83cf8932f2bdee7065633410407acda9bedd16daa0969d248"
 }
 
 function Write-Terminal([hashtable]$Payload) {
@@ -141,13 +141,13 @@ printf 'RUNNER_PID=%s\n' "$runner_pid"
     $launch = $launchTemplate.Replace("__TRAINER_SHA__", $expectedHashes.trainer).Replace("__SAFE_TRAINER_SHA__", $expectedHashes.safe_trainer).Replace("__SAFE_SHA__", $expectedHashes.safe_model).Replace("__MULTISCALE_SHA__", $expectedHashes.multiscale_model).Replace("__GLOBAL_SHA__", $expectedHashes.global_model).Replace("__BLOB_SHA__", $expectedHashes.blob_model).Replace("__LOCAL_SHAPE_SHA__", $expectedHashes.local_shape_trainer).Replace("__EXPANDED_SHA__", $expectedHashes.expanded_trainer).Replace("__FAINT_SHA__", $expectedHashes.faint_trainer).Replace("__RUNNER_SHA__", $expectedHashes.runner)
     Invoke-External "ssh.exe" ($sshArgs + @($remote, $launch))
     Write-Terminal @{
-        status = "deployed_waiting_for_v17"
+        status = "deployed_waiting_for_v2"
         remote_host = $RemoteHost
         runner_sha256 = $expectedHashes.runner
         trainer_sha256 = $expectedHashes.trainer
         model_family = "safe_rank_multiscale_blob_global_temporal_peak_rank_v17"
         optimization_sampling_policy = "duplicate_44b6_once_balance_embryo_crops"
-        gpu_policy = "sequential_after_verified_v17_and_yield_to_unrelated_clients"
+        gpu_policy = "prioritized_after_verified_v2_and_yield_to_unrelated_clients"
         remote_scope = $remoteRoot
     }
 }

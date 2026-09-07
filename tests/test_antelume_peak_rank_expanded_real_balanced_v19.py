@@ -12,11 +12,11 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def test_runner_waits_for_verified_v17_and_pins_all_sources() -> None:
+def test_runner_prioritizes_after_verified_v2_and_pins_all_sources() -> None:
     source = RUNNER.read_text(encoding="utf-8")
-    assert 'while test ! -f "$v17_run_root/run.complete"' in source
-    assert 'test ! -f "$v17_ack"' in source
-    assert "verified_v17_harvest" in source
+    assert 'while test ! -f "$v2_run_root/run.complete"' in source
+    assert 'test ! -f "$v2_ack"' in source
+    assert "verified_v2_harvest" in source
     assert "while nvidia-smi --query-compute-apps=pid" in source
     assert "--steps 5000" in source
     assert "--real-frequency 2" in source
@@ -77,7 +77,7 @@ def test_runner_cleanup_is_narrow_and_yield_guard_compatible() -> None:
     source = RUNNER.read_text(encoding="utf-8")
     assert (
         'test "$resolved" = /home/ubuntu/biohub-peak-rank-detector-v1/'
-        "expanded-real-safe-rank-v17/results"
+        "depth-pu-v2/results"
     ) in source
     assert 'rm -rf -- "$resolved"' in source
     assert 'trainer="$input_root/train_expanded_real_faint_detector.py"' in source

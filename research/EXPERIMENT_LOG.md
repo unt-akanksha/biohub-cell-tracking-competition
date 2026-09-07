@@ -1249,3 +1249,43 @@ well as the synthetic generator.
   non-replica, and conditional one-shot submission gates. Harvest, validation,
   and candidate controllers for v21/v22 are active with extended queue-safe
   wait windows.
+- The raw competition movies have anisotropic voxels at
+  `(1.625, 0.40625, 0.40625)` micrometres, but the frozen replay and inference
+  contract reduce X/Y by exactly four. The detector therefore sees physically
+  isotropic `(1.625, 1.625, 1.625)`-micrometre voxels; anisotropic kernels or
+  strides would encode the wrong geometry and are rejected.
+- An optimization-only raw/replay join tested whether phase-locked `::4` X/Y
+  decimation was losing faint cells. The diagnostic hash-verified the expanded
+  replay archive, reproduced each frozen decimated crop byte-for-byte, and
+  evaluated 1,027 annotated points across 114 available raw crops without
+  opening selection, sealed audit, competition test, or leaderboard artifacts.
+  Current decimation achieved top-64 recall `0.395326` within 2.5 voxels. The
+  best pooled alternatives, 50/50 and 75/25 mean/max blends, reached only
+  `0.393379`; mean, RMS, and max were lower still. The predeclared `+0.02`
+  promotion margin was missed, so anti-aliased replay rebuilding and a GPU
+  pooling ablation are rejected.
+- The `11:21Z` authenticated public refresh added no independent model.
+  `rogerrogerroger3r/biohub-run79` (SHA-256 `5dc609c6...6eb727`) is a
+  `0.995743`-overlap child of run77 that activates D4-averaged association
+  features already represented in the frozen association bridge. Run80
+  (SHA-256 `15ae7306...690554`) has `0.998576` overlap with run77 and changes
+  only the leaderboard-selected detector threshold from `0.965` to `0.96`.
+  Neither source, weight, prediction, score, nor threshold enters the project.
+- The single-A10G dependency audit found ten serial, single-change ablations
+  between the active v2 job and the balanced/XL candidates. V19 trains from an
+  independent initialization and does not consume a predecessor checkpoint;
+  its original v17 dependency was only a GPU-ownership ordering edge. To avoid
+  days of low-priority queue latency, v19 was reproducibly reprioritized to
+  start after v2's exact archive is locally harvested and acknowledged. The
+  replacement script required an exact idle v19 waiter match, absence of a v19
+  training log/results/archive, and changed only that waiter. The live v2 PID,
+  NucVerse waiter, RSNA, and all unrelated processes were untouched. The
+  installed runner hash is `57ef88c6...09d248`, replacement PID `225063`, and
+  v21 remains queued behind verified v19.
+- The priority deployment had two bookkeeping-only retries. The first failed
+  its remote inspection before mutation; the second successfully installed and
+  launched PID `225063` but its local parser included `sha256sum`'s `OK` line
+  with the PID. Both failed receipts were preserved. A read-only recovery check
+  verified the exact runner hash, sole idle waiter, and absent v19 training
+  artifacts, then emitted the terminal priority receipt without restarting any
+  process.

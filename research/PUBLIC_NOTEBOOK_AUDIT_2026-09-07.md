@@ -201,6 +201,7 @@ References:
 - <https://www.kaggle.com/code/qiweiyin/focus3d-nuclei-physical-pp-submit>
 - <https://github.com/yu-lab-vt/FOCUS-3D>
 - <https://www.biorxiv.org/content/10.64898/2026.08.25.746907v1>
+
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737543>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154>
@@ -376,3 +377,25 @@ the hash-pinned competition-train optimization role. It compared fixed generic
 scale-space responses without reading selection, sealed-audit, test, or
 leaderboard data. This is recorded in the experiment log and is not treated as
 public leaderboard evidence.
+
+## September 7 incremental refresh at 11:21 UTC
+
+The two run-number notebooks between the prior inventory entries are also
+members of the same public lineage. `rogerrogerroger3r/biohub-run79` has raw
+SHA-256 `5dc609c6cbf9cebde92a3c98305d00bb5d1a0d3807f45f5e49f226a22d6eb727`.
+Its normalized source overlaps run77 at `0.995743` and `948tta2` at `0.968815`.
+The only substantive patch accumulates already-computed D4 encoder maps for
+association feature averaging. That mechanism was already independently
+audited and frozen into the project association bridge; this notebook supplies
+no new member or clean score.
+
+`rogerrogerroger3r/biohub-run80` has raw SHA-256
+`15ae7306f308e907ba2a77a70b6e464a61b349e36e761ee7cf492f701a690554`,
+overlaps run77 at `0.998576`, and changes only `BIOHUB_DET_THRESHOLD` from
+`0.965` to `0.96`. Its own comment describes the setting through public-LB
+gradient reasoning, so the threshold is inadmissible for clean model selection.
+No code, weight, prediction, score, or constant from either notebook enters a
+candidate.
+
+- <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run79>
+- <https://www.kaggle.com/code/rogerrogerroger3r/biohub-run80>

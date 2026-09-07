@@ -14,7 +14,7 @@ def test_deploy_is_hash_bound_and_does_not_control_the_gpu() -> None:
     for digest in (
         "854a305143803d2b10116f83d7cf75483d6f91f5930bda8931d95323cdffc802",
         "5570ffcb9734623f28db006b5d85452cc0ff7372eee05a6a65231b0104540f93",
-        "f3453af801d13550f04e60ea632b78d2f913194abcd213aced0d259e32ac0e2d",
+        "57ef88c6756848e83cf8932f2bdee7065633410407acda9bedd16daa0969d248",
     ):
         assert digest in source
     assert "duplicate_44b6_once_balance_embryo_crops" in source
