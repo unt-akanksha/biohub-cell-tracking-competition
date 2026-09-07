@@ -27,7 +27,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert '"--tta-modes", "none,rot4,d4"' in source
     assert (
         '[ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", '
-        '"faint-pu-v4", "capacity-faint-ensemble-v5", '
+        '"faint-pu-v4", "expanded-real-faint-v7", '
+        '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"logit-ensemble-v4")]' in source
     )
@@ -37,6 +38,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-capacity-pu-validation-kernel.py" in source
     assert "build-peak-rank-faint-pu-validation-runtime.py" in source
     assert "build-peak-rank-faint-pu-validation-kernel.py" in source
+    assert "build-peak-rank-expanded-real-faint-validation-runtime-v7.py" in source
+    assert "build-peak-rank-expanded-real-faint-validation-kernel-v7.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-runtime-v5.py" in source
     assert "build-peak-rank-capacity-faint-ensemble-validation-kernel-v5.py" in source
     assert "build-peak-rank-capacity-faint-confidence-ensemble-validation-runtime-v6.py" in source
@@ -66,6 +69,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-depth-pu-validation-v2"' in source
     assert 'output_slug = "peak-rank-capacity-pu-validation-v3"' in source
     assert 'output_slug = "peak-rank-faint-pu-validation-v4"' in source
+    assert 'output_slug = "peak-rank-expanded-real-faint-validation-v7"' in source
     assert 'output_slug = "peak-rank-capacity-faint-ensemble-validation-v5"' in source
     assert 'output_slug = "peak-rank-capacity-faint-confidence-validation-v6"' in source
     assert 'output_slug = "peak-rank-logit-ensemble-validation-v4"' in source

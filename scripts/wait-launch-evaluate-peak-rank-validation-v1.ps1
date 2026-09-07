@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -74,6 +74,22 @@ elseif ($Variant -eq "faint-pu-v4") {
         notebook_name = "biohub-peak-rank-faint-pu-validation-v4.ipynb"
         controller_id = "peak-rank-faint-pu-validation-controller-v4"
         output_slug = "peak-rank-faint-pu-validation-v4"
+        parameter_count = 66977670
+        dependency_terminals = @()
+    }
+}
+elseif ($Variant -eq "expanded-real-faint-v7") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-faint-validation-runtime-v7"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-faint-validation-v7"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-expanded-real-faint-v7/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-expanded-real-faint-validation-runtime-v7.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-real-faint-validation-kernel-v7.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-faint-validation-runtime-v7"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-real-faint-validation-v7"
+        notebook_name = "biohub-peak-rank-expanded-real-faint-validation-v7.ipynb"
+        controller_id = "peak-rank-expanded-real-faint-validation-controller-v7"
+        output_slug = "peak-rank-expanded-real-faint-validation-v7"
         parameter_count = 66977670
         dependency_terminals = @()
     }

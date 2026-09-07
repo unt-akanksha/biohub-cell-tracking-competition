@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -75,6 +75,22 @@ elseif ($Variant -eq "faint-pu-v4") {
         receipt_name = "peak-rank-faint-pu-candidate-submission-receipt-v4.json"
         expected_run_id = "peak-rank-faint-pu-tracking-candidate-v4"
         output_slug = "peak-rank-faint-pu-tracking-candidate-v4"
+    }
+}
+elseif ($Variant -eq "expanded-real-faint-v7") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-faint-validation-runtime-v7"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-faint-tracking-candidate-v7"
+        validation_terminal = ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-faint-validation-runtime-v7"
+        builder = "scripts/build-peak-rank-expanded-real-faint-submission-candidate-v7.py"
+        candidate_root = "kaggle/biohub-peak-rank-expanded-real-faint-tracking-candidate-v7"
+        notebook_name = "biohub-peak-rank-expanded-real-faint-tracking-candidate-v7.ipynb"
+        controller_id = "peak-rank-expanded-real-faint-candidate-controller-v7"
+        promotion_name = "peak-rank-expanded-real-faint-candidate-promotion-v7.json"
+        receipt_name = "peak-rank-expanded-real-faint-candidate-submission-receipt-v7.json"
+        expected_run_id = "peak-rank-expanded-real-faint-tracking-candidate-v7"
+        output_slug = "peak-rank-expanded-real-faint-tracking-candidate-v7"
     }
 }
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
