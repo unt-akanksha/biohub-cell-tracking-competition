@@ -1599,3 +1599,12 @@ well as the synthetic generator.
   eight-hour Kaggle reserve and external-promotion submission boundary.
   Hidden conditional controller PID `42212` is now waiting on those three
   immutable evidence terminals.
+- A live process audit corrected the assumed queue owner: capacity-PU V3 won
+  the post-V2 idle race and was using 9,580 MiB on the A10G, while the first
+  priority V19 waiter had exited because V3 reclaimed V2's remote archive
+  before V19 could independently re-check it. The active V3 run was preserved.
+  V19 was rebound to V3's locally verified archive/ack, and repaired remote
+  waiter PID `363500` now makes it the next model owner. It still yields to all
+  active GPU processes and removes only the verified V3 Biohub artifacts.
+  Superseded V4-V17 waiters do not have a live path into the GPU; the intended
+  effective chain is now V3 -> V19 -> V21 -> V23 -> V27 -> graph v2.
