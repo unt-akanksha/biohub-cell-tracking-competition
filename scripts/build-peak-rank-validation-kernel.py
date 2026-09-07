@@ -5,8 +5,12 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TARGET = ROOT / "kaggle" / "biohub-peak-rank-validation-v1"
-NOTEBOOK = TARGET / "biohub-peak-rank-validation-v1.ipynb"
+TARGET_ID = "biohub-peak-rank-validation-v1"
+RUNTIME_SLUG = "biohub-peak-rank-validation-runtime-v1"
+RUNTIME_REF = f"indarkarhana/{RUNTIME_SLUG}"
+KERNEL_TITLE = "Biohub Peak Rank Validation v1"
+TARGET = ROOT / "kaggle" / TARGET_ID
+NOTEBOOK = TARGET / f"{TARGET_ID}.ipynb"
 
 
 def code_cell(source: str) -> dict:
@@ -223,6 +227,8 @@ print("Peak-ranking clean validation complete; no submission was created.")
 
 def main() -> None:
     TARGET.mkdir(parents=True, exist_ok=True)
+    watchdog = WATCHDOG.replace("peak-rank-validation-v1", TARGET_ID)
+    setup = SETUP.replace("biohub-peak-rank-validation-runtime-v1", RUNTIME_SLUG)
     notebook = {
         "metadata": {
             "kernelspec": {
@@ -243,13 +249,13 @@ def main() -> None:
         "nbformat": 4,
         "nbformat_minor": 4,
         "cells": [
-            code_cell(WATCHDOG),
+            code_cell(watchdog),
             markdown_cell(
                 "# Independent temporal peak-ranking detector validation\n\n"
                 "Two GPUs score frozen held-out movies. The acceptance set remains closed "
                 "unless the separate selection set passes; this notebook creates no submission.\n"
             ),
-            code_cell(SETUP),
+            code_cell(setup),
             code_cell(VALIDATE),
             code_cell(FINISH),
         ],
@@ -258,8 +264,8 @@ def main() -> None:
         json.dumps(notebook, ensure_ascii=True, separators=(",", ":")), encoding="ascii"
     )
     metadata = {
-        "id": "indarkarhana/biohub-peak-rank-validation-v1",
-        "title": "Biohub Peak Rank Validation v1",
+        "id": f"indarkarhana/{TARGET_ID}",
+        "title": KERNEL_TITLE,
         "code_file": NOTEBOOK.name,
         "language": "python",
         "kernel_type": "notebook",
@@ -269,7 +275,7 @@ def main() -> None:
         "enable_internet": False,
         "keywords": ["gpu", "3d-unet", "peak-ranking", "validation"],
         "dataset_sources": [
-            "indarkarhana/biohub-peak-rank-validation-runtime-v1",
+            RUNTIME_REF,
             "indarkarhana/biohub-trackastra-graph-runtime-v1",
             "pilkwang/biohub-tracking-support-pack-50ep-v1",
         ],

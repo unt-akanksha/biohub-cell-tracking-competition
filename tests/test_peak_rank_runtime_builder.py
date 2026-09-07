@@ -1,9 +1,11 @@
 import ast
 from pathlib import Path
+import runpy
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-validation-runtime.py"
+DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-validation-runtime.py"
 
 
 def test_runtime_builder_has_verified_private_inputs_only() -> None:
@@ -35,3 +37,12 @@ def test_runtime_builder_packages_inference_and_two_phase_evaluator() -> None:
     ):
         assert name in source
     assert "biohub-peak-rank-validation-runtime-v1" in source
+
+
+def test_depth_pu_wrapper_redirects_every_private_artifact() -> None:
+    wrapper = runpy.run_path(str(DEPTH_PU_SCRIPT), run_name="depth_pu_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    assert globals_["TARGET"].name == "biohub-peak-rank-depth-pu-validation-runtime-v2"
+    assert globals_["ARCHIVE"].name == "peak-rank-depth-pu-v2-results.tar.gz"
+    assert globals_["ARCHIVE_ROOT"].endswith("peak-rank-v2")
+    assert globals_["DATASET_ID"].endswith("depth-pu-validation-runtime-v2")

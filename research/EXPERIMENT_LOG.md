@@ -772,3 +772,11 @@ well as the synthetic generator.
   and promotion requires the same evidence. Sixty-two focused peak-rank tests
   pass after this correction; no candidate had been launched under the faulty
   integration.
+- The queued depth-robust PU v2 lane now has a distinct autonomous clean
+  validation handoff. After its existing AWS harvester verifies the frozen
+  archive, a separate private runtime dataset and separate offline dual-T4
+  kernel run the identical 1/4/8-view policy, complete-movie selection, and
+  sealed acceptance gates. The v1 runtime, kernel, and controller identities
+  are unchanged, so v2 cannot overwrite or contaminate the earlier candidate.
+  This lane still creates no submission; a v2 checkpoint must first earn clean
+  validation evidence before any ensemble or candidate integration.

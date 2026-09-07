@@ -1,10 +1,12 @@
 import importlib.util
 import json
 from pathlib import Path
+import runpy
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-validation-kernel.py"
+DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-validation-kernel.py"
 
 
 def test_builder_creates_private_two_gpu_non_submitting_kernel(tmp_path, monkeypatch) -> None:
@@ -41,3 +43,11 @@ def test_builder_keeps_full_runtime_watchdog() -> None:
     assert '"declared_budget_seconds": 43200' in source
     assert '"hard_stop_seconds": 42000' in source
     assert "threading.Timer(42000" in source
+
+
+def test_depth_pu_kernel_wrapper_has_distinct_private_identity() -> None:
+    wrapper = runpy.run_path(str(DEPTH_PU_SCRIPT), run_name="depth_pu_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    assert globals_["TARGET_ID"] == "biohub-peak-rank-depth-pu-validation-v2"
+    assert globals_["RUNTIME_REF"].endswith("depth-pu-validation-runtime-v2")
+    assert globals_["NOTEBOOK"].name == "biohub-peak-rank-depth-pu-validation-v2.ipynb"

@@ -25,6 +25,9 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "torch.cuda.device_count() != 2" in source
     assert '"--devices", "0,1"' in source
     assert '"--tta-modes", "none,rot4,d4"' in source
+    assert '[ValidateSet("v1", "depth-pu-v2")]' in source
+    assert "build-peak-rank-depth-pu-validation-runtime.py" in source
+    assert "build-peak-rank-depth-pu-validation-kernel.py" in source
 
 
 def test_controller_validates_outputs_without_submitting() -> None:

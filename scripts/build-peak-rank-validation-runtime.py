@@ -17,6 +17,9 @@ ARCHIVE = STATE / "peak-rank-detector-results.tar.gz"
 REPORT = STATE / "harvest-verification.json"
 TARGET = ROOT / ".biohub" / "staging" / "biohub-peak-rank-validation-runtime-v1"
 ARCHIVE_ROOT = "synthetic256-real-positive-temporal-peak-rank-v1"
+EXPECTED_TARGET_NAME = "biohub-peak-rank-validation-runtime-v1"
+DATASET_ID = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
+DATASET_TITLE = "Biohub Peak Rank Validation Runtime v1"
 SOURCES = {
     "model.py": ROOT / "research" / "peak_rank_detection" / "model.py",
     "inference.py": ROOT / "research" / "peak_rank_detection" / "inference.py",
@@ -61,7 +64,7 @@ def write_json(path: Path, payload: dict) -> None:
 def checked_target() -> Path:
     staging = (ROOT / ".biohub" / "staging").resolve()
     target = TARGET.resolve()
-    if target.parent != staging or target.name != "biohub-peak-rank-validation-runtime-v1":
+    if target.parent != staging or target.name != EXPECTED_TARGET_NAME:
         raise RuntimeError(f"unsafe peak-ranking staging target: {target}")
     return target
 
@@ -133,6 +136,7 @@ def main() -> None:
             "parameter_count": 38_381_478,
             "checkpoint_sha256": report["checkpoint_sha256"],
             "training_archive_sha256": report["archive_sha256"],
+            "training_run_id": terminal_payload["run_id"],
             "training_audit_passed": True,
             "competition_test_data_read_during_training": False,
             "public_notebook_weights_read_during_training": False,
@@ -142,8 +146,8 @@ def main() -> None:
     write_json(
         target / "dataset-metadata.json",
         {
-            "title": "Biohub Peak Rank Validation Runtime v1",
-            "id": "indarkarhana/biohub-peak-rank-validation-runtime-v1",
+            "title": DATASET_TITLE,
+            "id": DATASET_ID,
             "licenses": [{"name": "MIT"}],
             "isPrivate": True,
         },

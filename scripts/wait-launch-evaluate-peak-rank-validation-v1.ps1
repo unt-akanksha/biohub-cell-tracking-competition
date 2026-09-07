@@ -2,6 +2,8 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
+    [ValidateSet("v1", "depth-pu-v2")]
+    [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
 
@@ -10,26 +12,53 @@ if ($MaximumWaitHours -le 0 -or $PollSeconds -lt 60) {
     throw "Invalid peak-ranking validation wait bounds"
 }
 Set-Location -LiteralPath $RepositoryRoot
-$runtimeRef = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
-$kernelRef = "indarkarhana/biohub-peak-rank-validation-v1"
 $competitionRef = "biohub-cell-tracking-during-development"
-$harvestTerminal = Join-Path $RepositoryRoot ".biohub/cache/antelume-peak-rank-detector-v1/harvest-terminal.json"
-$runtimeBuilder = Join-Path $RepositoryRoot "scripts/build-peak-rank-validation-runtime.py"
-$kernelBuilder = Join-Path $RepositoryRoot "scripts/build-peak-rank-validation-kernel.py"
 $kernelStateScript = Join-Path $RepositoryRoot "scripts/get-kaggle-kernel-state.py"
-$runtimeRoot = Join-Path $RepositoryRoot ".biohub/staging/biohub-peak-rank-validation-runtime-v1"
+$variantConfig = if ($Variant -eq "v1") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
+        kernel_ref = "indarkarhana/biohub-peak-rank-validation-v1"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-detector-v1/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-validation-runtime.py"
+        kernel_builder = "scripts/build-peak-rank-validation-kernel.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-validation-runtime-v1"
+        kernel_root = "kaggle/biohub-peak-rank-validation-v1"
+        notebook_name = "biohub-peak-rank-validation-v1.ipynb"
+        controller_id = "peak-rank-validation-controller-v1"
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-runtime-v2"
+        kernel_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-v2"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-depth-pu-v2/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-depth-pu-validation-runtime.py"
+        kernel_builder = "scripts/build-peak-rank-depth-pu-validation-kernel.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-depth-pu-validation-runtime-v2"
+        kernel_root = "kaggle/biohub-peak-rank-depth-pu-validation-v2"
+        notebook_name = "biohub-peak-rank-depth-pu-validation-v2.ipynb"
+        controller_id = "peak-rank-depth-pu-validation-controller-v2"
+    }
+}
+$runtimeRef = $variantConfig.runtime_ref
+$kernelRef = $variantConfig.kernel_ref
+$harvestTerminal = Join-Path $RepositoryRoot $variantConfig.harvest_terminal
+$runtimeBuilder = Join-Path $RepositoryRoot $variantConfig.runtime_builder
+$kernelBuilder = Join-Path $RepositoryRoot $variantConfig.kernel_builder
+$runtimeRoot = Join-Path $RepositoryRoot $variantConfig.runtime_root
 $runtimeManifest = Join-Path $runtimeRoot "SOURCE_MANIFEST.json"
-$kernelRoot = Join-Path $RepositoryRoot "kaggle/biohub-peak-rank-validation-v1"
+$kernelRoot = Join-Path $RepositoryRoot $variantConfig.kernel_root
 $metadataPath = Join-Path $kernelRoot "kernel-metadata.json"
-$notebookPath = Join-Path $kernelRoot "biohub-peak-rank-validation-v1.ipynb"
+$notebookPath = Join-Path $kernelRoot $variantConfig.notebook_name
 $automationRoot = Join-Path $RepositoryRoot ".biohub/automation"
-$terminalPath = Join-Path $automationRoot "peak-rank-validation-controller-v1.json"
-$logPath = Join-Path $automationRoot "peak-rank-validation-controller-v1.log"
+$terminalPath = Join-Path $automationRoot ($variantConfig.controller_id + ".json")
+$logPath = Join-Path $automationRoot ($variantConfig.controller_id + ".log")
 
 function Write-Terminal([string]$Status, [hashtable]$Evidence) {
     $payload = @{
         schema_version = 1
-        run_id = "peak-rank-validation-controller-v1"
+        run_id = $variantConfig.controller_id
+        variant = $Variant
         status = $Status
         runtime_ref = $runtimeRef
         kernel_ref = $kernelRef
@@ -135,17 +164,18 @@ try {
     }
     $manifestHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $runtimeManifest).Hash.ToLowerInvariant()
 
-    $native = Invoke-NativeOutput { & kaggle datasets list --mine -s "biohub-peak-rank-validation-runtime-v1" --format json }
+    $runtimeSlug = $runtimeRef.Split("/", 2)[1]
+    $native = Invoke-NativeOutput { & kaggle datasets list --mine -s $runtimeSlug --format json }
     if ($native.ExitCode -ne 0) { throw "Dataset inventory failed: $($native.Output)" }
     if ($native.Output -match [regex]::Escape($runtimeRef)) {
-        $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m "Audited temporal peak-ranking detector v1" }
+        $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m "Audited temporal peak-ranking detector $Variant" }
         $datasetOperation = "versioned"
     }
     else {
         $native = Invoke-NativeOutput { & kaggle datasets create -p $runtimeRoot }
         $datasetOperation = "created"
         if ($native.ExitCode -ne 0 -and $native.Output -match "(?i)already exists|conflict") {
-            $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m "Audited temporal peak-ranking detector v1" }
+            $native = Invoke-NativeOutput { & kaggle datasets version -p $runtimeRoot -m "Audited temporal peak-ranking detector $Variant" }
             $datasetOperation = "versioned_after_create_conflict"
         }
     }
