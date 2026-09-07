@@ -1,0 +1,26 @@
+{
+  "code_file": "biohub-real-localization-expanded-replay-cache-v2.ipynb",
+  "competition_sources": [
+    "biohub-cell-tracking-during-development"
+  ],
+  "dataset_sources": [
+    "indarkarhana/biohub-real-localization-labels-v2",
+    "indarkarhana/biohub-real-localization-expanded-inventory-v2"
+  ],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "enable_tpu": false,
+  "id": "indarkarhana/biohub-real-localization-expanded-replay-cache-v2",
+  "is_private": true,
+  "kernel_sources": [],
+  "kernel_type": "notebook",
+  "keywords": [
+    "cpu",
+    "cell-tracking",
+    "training-data",
+    "expanded-replay"
+  ],
+  "language": "python",
+  "model_sources": [],
+  "title": "Biohub Real Localization Expanded Replay Cache v2"
+}
