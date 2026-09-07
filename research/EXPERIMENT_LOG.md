@@ -899,3 +899,44 @@ well as the synthetic generator.
   neither the claimed `.943` parent nor the new confidence-dominance repair is
   admitted to candidate selection. Our first candidate remains an independent
   detector test on the frozen linker and patched complete-movie scorer.
+- NucVerse3D was reopened after a selective-download route removed the earlier
+  7.93 GB packaging obstacle. The official MIT source is pinned at commit
+  `d809a2e6cf380342708b7a9107574b259e6b34eb`; the official Zenodo record is
+  CC-BY-4.0. Only the generalized scaled checkpoint was range-extracted and
+  verified (`486,294,864` bytes, SHA-256
+  `1c4e288350b1a86d361359cdd02151744d418e9fcf7ebe588c1c77e2cd8bbd67`).
+  Its exact 40,458,005-parameter Keras graph was exported to fixed-shape ONNX
+  (SHA-256
+  `ca16e1b26d21ae522d68aba384ee7121f5ba2de28a122c291d1e1e627601e871`),
+  with TensorFlow-to-ONNX and ONNX-to-PyTorch maximum absolute errors below
+  `3.4e-6` on controlled parity probes.
+- A train-only physical-compatibility screen for that checkpoint is now queued
+  behind all three peak-rank members on Antelume. It restores the fine Biohub
+  physical scale by mapping a `16x32x32` crop to the model's published
+  `64x128x128` field and uses the published foreground/gradient-attractor
+  decoder constants. Stable optimization crops must pass foreground support,
+  attractor recall, finite-output, and distance floors before the same frozen
+  checkpoint may open the disjoint selection role. Both phases share a strict
+  two-hour wall budget. Competition test data, public predictions, leaderboard
+  feedback, and submission commands are absent.
+- The first active peak-rank checkpoint at step 1,000 is not promotable.
+  Synthetic held-out AP/recall are `0.978156/0.978248`, but real positive-only
+  recall is `0.675325`, mean distance is `2.516388` voxels, and p90 distance is
+  `6.0` voxels. This isolates real-domain localization as the present failure
+  rather than insufficient synthetic capacity. Training continues to the
+  precommitted later checkpoints; v2 removes sparse-real negative pressure and
+  v3 adds capacity only after v2.
+- A same-day public refresh found no complete, auditable new submission model.
+  The advertised Greenfield seed-A scorer describes a strong 13-epoch,
+  124-train/32-development/39-holdout contract but is cancelled with no output
+  and no publicly attached exact checkpoint. The SAM4CellTracking run is also
+  cancelled, uses public `.943` detector nodes, and has no submission output.
+  The new Xiaolei two-U-Net fork is code-contained in an earlier public
+  notebook and reports only `0.5731/0.6589` checkpoint validation recall.
+- The useful new evidence is diagnostic: one complete EDA attributes most
+  remaining errors on `6bba_05db0fb1` to transiently faint cells that receive
+  no on-cell detection, and a current third-place forum response recommends
+  improving detection before linking and divisions. A project-authored
+  temporal fading augmentation is therefore the next independent training
+  member; it will not encode a movie identity, copy public predictions, or use
+  a leaderboard-selected constant.

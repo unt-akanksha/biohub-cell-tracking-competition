@@ -66,6 +66,7 @@ PYTHONPATH="$package_root:$workspace" "$python_bin" -c \
 
 mkdir -p "$result_root"
 cd "$run_root"
+started_at="$(date +%s)"
 set +e
 PYTHONPATH="$package_root:$workspace" CUDA_VISIBLE_DEVICES=0 \
   timeout --signal=TERM --kill-after=30s 7200s \
@@ -79,8 +80,46 @@ PYTHONPATH="$package_root:$workspace" CUDA_VISIBLE_DEVICES=0 \
     --maximum-points-per-example 4 \
     --device cuda \
     >"$result_root/screen.log" 2>&1
-status=$?
+optimization_status=$?
 set -e
+printf '%s\n' "$optimization_status" >"$result_root/optimization.exit-code"
+
+# Selection is disjoint and may open only when the serialized optimization
+# receipt says the frozen detector passed.  Both phases share one two-hour
+# wall budget so this compatibility probe cannot expand into an open-ended run.
+selection_status=0
+if test "$optimization_status" -eq 0 \
+  && "$python_bin" -c \
+    'import json,sys; report=json.load(open(sys.argv[1])); raise SystemExit(0 if report.get("compatibility_passed") is True else 1)' \
+    "$result_root/optimization-screen.json"; then
+  elapsed_seconds=$(($(date +%s) - started_at))
+  remaining_seconds=$((7200 - elapsed_seconds))
+  if test "$remaining_seconds" -lt 60; then
+    selection_status=124
+  else
+    set +e
+    PYTHONPATH="$package_root:$workspace" CUDA_VISIBLE_DEVICES=0 \
+      timeout --signal=TERM --kill-after=30s "${remaining_seconds}s" \
+      "$python_bin" "$screen" \
+        --onnx "$onnx_model" \
+        --real-root "$real_root" \
+        --manifest "$manifest" \
+        --output "$result_root/selection-screen.json" \
+        --phase selection \
+        --optimization-receipt "$result_root/optimization-screen.json" \
+        --per-embryo 8 \
+        --maximum-points-per-example 4 \
+        --device cuda \
+        >>"$result_root/screen.log" 2>&1
+    selection_status=$?
+    set -e
+  fi
+fi
+printf '%s\n' "$selection_status" >"$result_root/selection.exit-code"
+status="$optimization_status"
+if test "$status" -eq 0 && test "$selection_status" -ne 0; then
+  status="$selection_status"
+fi
 printf '%s\n' "$status" >"$result_root/screen.exit-code"
 find "$result_root" -type f ! -name SHA256SUMS -print0 \
   | sort -z | xargs -0 sha256sum >"$result_root/SHA256SUMS"
@@ -89,4 +128,3 @@ tar -czf "$result_archive" results
 sha256sum "$result_archive" >"$result_archive.sha256"
 printf '%s\n' completed >"$run_root/run.complete"
 exit "$status"
-

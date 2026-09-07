@@ -16,6 +16,10 @@ def test_runner_is_sequential_hash_bound_and_bounded() -> None:
     assert "minimum_free_bytes=1300000000" in source
     assert "timeout --signal=TERM --kill-after=30s 7200s" in source
     assert "--phase optimization" in source
+    assert "--phase selection" in source
+    assert '--optimization-receipt "$result_root/optimization-screen.json"' in source
+    assert 'report.get("compatibility_passed") is True' in source
+    assert "remaining_seconds=$((7200 - elapsed_seconds))" in source
     assert "--per-embryo 8" in source
     assert "--maximum-points-per-example 4" in source
     assert "competition" not in source.lower().split("real-replay", 1)[-1]
@@ -40,4 +44,3 @@ def test_runner_cannot_submit_or_touch_unrelated_workloads() -> None:
     assert "killall" not in source
     assert "rsna" not in source.lower()
     assert "rm -rf" not in source
-
