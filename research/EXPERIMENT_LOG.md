@@ -631,3 +631,26 @@ well as the synthetic generator.
   one-movie demonstration. Static scanning found no registered exploit
   signature, which is not a reproduced score claim. No public score, output, or
   displayed prediction is used for selection.
+- Recovered Kaggle execution logs close the earlier detector branches without
+  relying on notebook titles or displayed scores. Spotiflow PU reached only
+  `0.779239` pooled annotated recall and `0.486438` worst-movie recall.
+  SpatialDINO selective distillation reached `0.885906` and `0.602170`; LSM-FM
+  PU reached `0.884206` and `0.622061`; the image-text LSM-FM variant reached
+  `0.889128` and `0.641953`. All failed their frozen worst-movie selection gate
+  and never opened acceptance. Learned center offsets, feature-36 coordinate
+  refinement, and probability ensembles also failed per-movie non-regression.
+  A predeclared LSM-FM refinement of public coordinates raised four-movie
+  pooled recall from `0.969028` to `0.970725`, but regressed one movie by
+  `0.002786`, so it was correctly not promoted.
+- The next independent detection experiment is
+  `synthetic256-real-positive-temporal-peak-rank-v1`. It is not a port of a
+  public notebook: a 38,381,478-parameter temporal 3D ConvNeXt/U-Net consumes
+  previous/current/next frames plus explicit differences, predicts dense peaks
+  and subvoxel offsets, and uses a bounded hard-neighbor ranking loss that does
+  not label the unannotated real volume as background. Synthetic256 indices
+  0--239 optimize, 240--247 select, and 248--255 stay sealed; 146/17/14
+  stem-disjoint real positive-only shards have the same roles. The sealed audit
+  is opened only after synthetic AP/recall and real positive-peak localization
+  gates all pass. A fixed 12,000-step A10G run is queued behind graph recovery;
+  the Biohub-only yield guard will pause only this exact trainer if any
+  unrelated GPU workload appears.

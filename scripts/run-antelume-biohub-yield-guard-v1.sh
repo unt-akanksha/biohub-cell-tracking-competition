@@ -43,12 +43,18 @@ is_owned_biohub_gpu_pid() {
         || "$command" == *"score_graph_context_division_development_probe.py"* \
       ]]
       ;;
+    /home/ubuntu/biohub-peak-rank-detector-v1/*)
+      [[ -r "/proc/$pid/cmdline" ]] || return 1
+      command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
+      [[ "$command" == *"train_synthetic_real_detector.py"* ]]
+      ;;
     /home/ubuntu/biohub)
       [[ -r "/proc/$pid/cmdline" ]] || return 1
       command=$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)
       [[ \
         "$command" == *"/home/ubuntu/biohub-graph-context-recovery-v1/input/train_graph_context_division_sweep.py"* \
         || "$command" == *"score_graph_context_division_development_probe.py"* \
+        || "$command" == *"/home/ubuntu/biohub-peak-rank-detector-v1/input/train_synthetic_real_detector.py"* \
       ]]
       ;;
     *)
