@@ -654,3 +654,12 @@ well as the synthetic generator.
   gates all pass. A fixed 12,000-step A10G run is queued behind graph recovery;
   the Biohub-only yield guard will pause only this exact trainer if any
   unrelated GPU workload appears.
+- The peak-ranking lane now has a fail-closed autonomous handoff. Harvester PID
+  `44584` waits for the immutable AWS archive and verifies every archived file,
+  the frozen 38,381,478-parameter/12,000-step contract, the checkpoint hash,
+  and sealed-audit state. Validation controller PID `21972` does nothing after
+  a training rejection; after a positive audit only, it packages a private
+  runtime and runs an offline two-T4 Kaggle screen. Eight selection movies are
+  evaluated first across isolated GPU workers; the four acceptance movies stay
+  closed unless pooled and worst-movie selection gates pass. The validation
+  kernel contains no submission command or candidate materialization path.
