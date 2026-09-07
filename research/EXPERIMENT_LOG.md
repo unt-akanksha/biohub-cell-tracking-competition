@@ -1419,3 +1419,14 @@ well as the synthetic generator.
   archive. Its clean two-GPU validation and submission builders also pass
   preflight. The refreshed Kaggle GPU balance is 30 hours, leaving 22 spendable
   hours after the mandatory 8-hour reserve.
+- V24 is precommitted, before either member exposes validation evidence, as the
+  fixed equal-logit pair of v21 and v23. This combines the 129.7M-parameter XL
+  capacity lane with the 83.8M-parameter temporal-minimum local-SNR lane for
+  213,561,260 total parameters. The pair may be built only if both individual
+  complete-movie validation controllers report clean promotion, and it must
+  then pass its own complete-movie selection, sealed acceptance, patched
+  official-metric comparison, worst-movie non-regression, runtime, and
+  reproducibility gates. No validation result selects its members or fusion
+  weight. The generic ensemble packager's architecture check was also repaired
+  to recognize the already declared clean descriptive architecture strings for
+  v19/v21/v23 while continuing to reject strings marked public.

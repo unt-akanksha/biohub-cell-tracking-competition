@@ -45,6 +45,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"multiscale-safe-pair-v18", '
         '"safe-balanced-pair-v20", '
         '"balanced-xl-pair-v22", '
+        '"xl-temporal-snr-pair-v24", '
         '"logit-ensemble-v4")]' in source
     )
     assert "build-peak-rank-depth-pu-validation-runtime.py" in source
@@ -117,6 +118,8 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
     assert "build-peak-rank-safe-balanced-pair-validation-kernel-v20.py" in source
     assert "build-peak-rank-balanced-xl-pair-validation-runtime-v22.py" in source
     assert "build-peak-rank-balanced-xl-pair-validation-kernel-v22.py" in source
+    assert "build-peak-rank-xl-temporal-snr-pair-validation-runtime-v24.py" in source
+    assert "build-peak-rank-xl-temporal-snr-pair-validation-kernel-v24.py" in source
     assert "parameter_count = 66977670" in source
     assert "build-peak-rank-logit-ensemble-validation-runtime.py" in source
     assert "build-peak-rank-logit-ensemble-validation-kernel.py" in source
@@ -169,6 +172,7 @@ def test_variants_use_distinct_download_roots() -> None:
     assert 'output_slug = "peak-rank-blob-global-ensemble-validation-v14"' in source
     assert 'output_slug = "peak-rank-safe-balanced-pair-validation-v20"' in source
     assert 'output_slug = "peak-rank-balanced-xl-pair-validation-v22"' in source
+    assert 'output_slug = "peak-rank-xl-temporal-snr-pair-validation-v24"' in source
     assert 'output_slug = "peak-rank-logit-ensemble-validation-v4"' in source
     assert "$variantConfig.output_slug" in source
     assert (

@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "temporal-min-local-snr-v23", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "expanded-real-global-v13", "expanded-real-multiscale-v15", "expanded-real-safe-rank-v17", "expanded-real-balanced-v19", "expanded-real-xl-balanced-v21", "temporal-min-local-snr-v23", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "blob-global-ensemble-v14", "multiscale-triad-v16", "multiscale-safe-pair-v18", "safe-balanced-pair-v20", "balanced-xl-pair-v22", "xl-temporal-snr-pair-v24", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -412,6 +412,25 @@ elseif ($Variant -eq "balanced-xl-pair-v22") {
         dependency_terminals = @(
             ".biohub/automation/peak-rank-expanded-real-balanced-validation-controller-v19.json",
             ".biohub/automation/peak-rank-expanded-real-xl-balanced-validation-controller-v21.json"
+        )
+    }
+}
+elseif ($Variant -eq "xl-temporal-snr-pair-v24") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-xl-temporal-snr-pair-validation-runtime-v24"
+        kernel_ref = "indarkarhana/biohub-peak-rank-xl-temporal-snr-pair-validation-v24"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-xl-temporal-snr-pair-validation-runtime-v24.py"
+        kernel_builder = "scripts/build-peak-rank-xl-temporal-snr-pair-validation-kernel-v24.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-xl-temporal-snr-pair-validation-runtime-v24"
+        kernel_root = "kaggle/biohub-peak-rank-xl-temporal-snr-pair-validation-v24"
+        notebook_name = "biohub-peak-rank-xl-temporal-snr-pair-validation-v24.ipynb"
+        controller_id = "peak-rank-xl-temporal-snr-pair-validation-controller-v24"
+        output_slug = "peak-rank-xl-temporal-snr-pair-validation-v24"
+        parameter_count = 213561260
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-expanded-real-xl-balanced-validation-controller-v21.json",
+            ".biohub/automation/peak-rank-temporal-min-local-snr-validation-controller-v23.json"
         )
     }
 }

@@ -94,8 +94,7 @@ def validate_member(spec: dict) -> dict:
     architecture = manifest.get("architecture")
     architecture_is_project_detector = (
         isinstance(architecture, str)
-        and architecture.startswith("independent ")
-        and "temporal 3D ConvNeXt U-Net peak ranker" in architecture
+        and "temporal 3D ConvNeXt U-Net" in architecture
         and "public" not in architecture.lower()
     )
     if not (
