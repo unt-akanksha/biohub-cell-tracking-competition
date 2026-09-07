@@ -70,6 +70,51 @@ def test_trainer_is_large_sequential_and_sealed_audit_only() -> None:
     assert "kaggle competitions submit" not in source
 
 
+def _metrics(ap: float = 0.90, tp0: int = 3) -> dict:
+    return {
+        "average_precision": ap,
+        "true_positives_before_first_false_positive": tp0,
+        "by_embryo": {
+            "44b6": {"average_precision": 0.80},
+            "6bba": {"average_precision": 0.85},
+        },
+    }
+
+
+def test_v2_freezes_every_selection_admitted_member_before_audit() -> None:
+    accepted = [
+        {"member": "seed-a", "selection": _metrics(0.99, 8)},
+        {"member": "seed-b", "selection": _metrics(0.70, 3)},
+        {"member": "seed-c", "selection": _metrics(0.80, 4)},
+    ]
+
+    policy, members = MODULE.freeze_policy_before_audit(
+        accepted,
+        _metrics(0.92, 7),
+        policy_contract=MODULE.V2_POLICY_CONTRACT,
+    )
+
+    assert policy == "equal_rank_selection_admitted_ensemble"
+    assert members == ["seed-a", "seed-b", "seed-c"]
+
+
+def test_v2_audits_the_frozen_ensemble_not_its_constituents() -> None:
+    assert MODULE.frozen_policy_passes_audit(
+        policy_contract=MODULE.V2_POLICY_CONTRACT,
+        precommitted_policy="equal_rank_selection_admitted_ensemble",
+        precommitted_members=["seed-a", "seed-b"],
+        independently_strong=set(),
+        audit_ensemble=_metrics(0.75, 3),
+    )
+    assert not MODULE.frozen_policy_passes_audit(
+        policy_contract=MODULE.V2_POLICY_CONTRACT,
+        precommitted_policy="equal_rank_selection_admitted_ensemble",
+        precommitted_members=["seed-a", "seed-b"],
+        independently_strong={"seed-a", "seed-b"},
+        audit_ensemble=_metrics(0.54, 3),
+    )
+
+
 def _completed_terminal(member: str, seed: int, model_hash: str, initial_hash: str) -> dict:
     selection = {
         "average_precision": 0.90,

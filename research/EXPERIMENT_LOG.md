@@ -1519,3 +1519,26 @@ well as the synthetic generator.
   worst-movie non-regression, runtime, non-replica, and live Kaggle quota gates
   pass. Their Kaggle launch paths retain the mandatory eight-hour reserve and
   two-GPU execution contract.
+- The recovered graph-context division sweep isolates seed selection variance
+  as a policy failure rather than evidence against graph context. All eight
+  74,732,308-parameter members passed selection; the calibration-free
+  equal-rank ensemble reached selection AP `0.951062` with 11 true positives
+  before its first false positive. Selecting the apparent best individual
+  (`0.992157` selection AP) did not generalize (`0.682187` audit AP), while two
+  lower-ranked seeds passed the independent audit. Those audit outcomes are
+  diagnostic only and cannot be used to retroactively choose either seed.
+- Graph-context frozen ensemble v2 is therefore precommitted as a fresh-seed
+  experiment, not a rescue of favorable audited members. It trains four new
+  seeds (`1013131/1113137/1213139/1313141`) from each of the same two distinct
+  backbone initializations, admits members on selection evidence only, and
+  freezes every admitted member into one equal-within-movie-rank ensemble
+  before audit opens. There is no strongest-seed fallback and no post-audit
+  member removal. The audit gate evaluates that frozen ensemble as the policy
+  unit; per-member audit outcomes remain diagnostics. If accepted, the same
+  unit alone opens the still-sealed four-movie development probe. The declared
+  run is eight sequential 74.7M models, 20,000 steps each, with a five-hour
+  worst-case A10G budget after V27's verified harvest. Local trainer, probe,
+  runner, deployment, and harvest preflights pass. AWS credentials were expired
+  at the first deployment attempt, so hidden deployment PID `5316` now waits
+  for refresh and hidden harvest PID `12444` waits for the hash-bound result;
+  existing remote detector work is unaffected.

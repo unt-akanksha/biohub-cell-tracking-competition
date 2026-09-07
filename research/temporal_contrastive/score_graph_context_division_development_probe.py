@@ -37,7 +37,9 @@ from research.temporal_contrastive.patch_model import sample_physical_patches
 
 
 RUN_ID = "competition-graph-context-division-development-probe-v1"
-TRAIN_RUN_ID = "competition-graph-context-division-sweep-v1"
+V1_TRAIN_RUN_ID = "competition-graph-context-division-sweep-v1"
+V2_TRAIN_RUN_ID = "competition-graph-context-division-frozen-ensemble-v2"
+V2_POLICY_CONTRACT = "all-selection-admitted-equal-rank-ensemble-v2"
 INVENTORY_RUN_ID = "competition-graph-context-development-inventory-v1"
 INVENTORY_SHA256 = "c8883e77abcf76c5a837c5fd0b21afdfefb2e51cb8e550e3a81f69d70562f311"
 
@@ -47,10 +49,34 @@ def validate_policy(results_root: Path) -> tuple[dict[str, Any], list[dict[str, 
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
     members = [str(value) for value in terminal.get("deployment_members", [])]
     policy = terminal.get("deployment_policy")
+    train_run_id = terminal.get("run_id")
+    is_v2 = train_run_id == V2_TRAIN_RUN_ID
+    independently_strong = set(terminal.get("independently_strong_members", []))
+    audit_ensemble = terminal.get("audit_ensemble") or {}
+    v2_audit_unit_passed = bool(
+        is_v2
+        and terminal.get("policy_contract") == V2_POLICY_CONTRACT
+        and terminal.get("policy_unit_audited") is True
+        and terminal.get("constituent_audit_gate_required") is False
+        and policy == "equal_rank_selection_admitted_ensemble"
+        and len(members) >= 2
+        and audit_ensemble.get("average_precision", 0.0) >= 0.55
+        and audit_ensemble.get("true_positives_before_first_false_positive", 0) >= 2
+        and all(
+            row.get("average_precision", 0.0) >= 0.40
+            for row in audit_ensemble.get("by_embryo", {}).values()
+        )
+        and len(audit_ensemble.get("by_embryo", {})) == 2
+    )
+    v1_constituents_passed = bool(
+        train_run_id == V1_TRAIN_RUN_ID
+        and set(members) <= independently_strong
+        and terminal.get("constituent_audit_gate_required", True) is True
+    )
     if not (
         terminal.get("schema_version") == 1
         and terminal.get("status") == "completed"
-        and terminal.get("run_id") == TRAIN_RUN_ID
+        and train_run_id in {V1_TRAIN_RUN_ID, V2_TRAIN_RUN_ID}
         and terminal.get("family") == GRAPH_CONTEXT_DIVISION_FAMILY
         and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
         and terminal.get("planned_model_count") == 8
@@ -66,7 +92,7 @@ def validate_policy(results_root: Path) -> tuple[dict[str, Any], list[dict[str, 
         and 1 <= len(members) <= 8
         and len(set(members)) == len(members)
         and members == terminal.get("precommitted_members")
-        and set(members) <= set(terminal.get("independently_strong_members", []))
+        and (v1_constituents_passed or v2_audit_unit_passed)
         and terminal.get("absolute_threshold_used_for_deployment") is False
         and terminal.get("model_subset_searched_on_audit") is False
         and terminal.get("final_probe_opened") is False
@@ -92,7 +118,7 @@ def validate_policy(results_root: Path) -> tuple[dict[str, Any], list[dict[str, 
         checkpoint_hash = sha256_file(checkpoint)
         if not (
             worker.get("status") == "accepted_at_selection"
-            and worker.get("run_id") == TRAIN_RUN_ID
+            and worker.get("run_id") == train_run_id
             and worker.get("family") == GRAPH_CONTEXT_DIVISION_FAMILY
             and worker.get("member") == name
             and worker.get("parameter_count") == EXPECTED_PARAMETER_COUNT
@@ -106,7 +132,10 @@ def validate_policy(results_root: Path) -> tuple[dict[str, Any], list[dict[str, 
             and worker.get("authorized_for_submission") is False
             and audit.get("member") == name
             and audit.get("model_sha256") == checkpoint_hash
-            and audit.get("audit_gate_passed") is True
+            and (
+                audit.get("audit_gate_passed") is True
+                or (is_v2 and isinstance(audit.get("metrics"), dict))
+            )
         ):
             raise ValueError(f"graph-context deployment member is ineligible: {name}")
         records.append(
@@ -298,6 +327,8 @@ def main() -> None:
             args.results_root / "graph_context_division_sweep_terminal.json"
         ),
         "selection_policy": terminal["deployment_policy"],
+        "training_run_id": terminal["run_id"],
+        "policy_contract": terminal.get("policy_contract"),
         "member_count": len(records),
         "members": [
             {key: value for key, value in row.items() if key != "checkpoint"}

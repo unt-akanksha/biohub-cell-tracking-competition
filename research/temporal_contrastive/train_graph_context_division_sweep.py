@@ -43,7 +43,11 @@ from research.temporal_contrastive.train_real_division_gate import (
 )
 
 
-RUN_ID = "competition-graph-context-division-sweep-v1"
+V1_RUN_ID = "competition-graph-context-division-sweep-v1"
+V2_RUN_ID = "competition-graph-context-division-frozen-ensemble-v2"
+V1_POLICY_CONTRACT = "selection-best-or-improving-ensemble-v1"
+V2_POLICY_CONTRACT = "all-selection-admitted-equal-rank-ensemble-v2"
+RUN_ID = V1_RUN_ID
 DATA_RUN_ID = "competition-graph-context-relational-patches-v1"
 DATA_SOURCE_ARCHIVE_SHA256 = "66a822bce0c60d06f6a2b60ada313f0d4d55062de1f84fb60bded4ae456266c2"
 INVENTORY_SHA256 = "94150632f5a80b2ef48a39743a425cbe1b8e57b1c131c19ef0bde3d97d1c783e"
@@ -222,6 +226,85 @@ def passes_selection_gate(metrics: dict[str, Any]) -> bool:
         and all(
             row["average_precision"] >= EMBRYO_MINIMUM_AP
             for row in metrics["by_embryo"].values()
+        )
+    )
+
+
+def freeze_policy_before_audit(
+    accepted: list[dict[str, Any]],
+    selection_ensemble: dict[str, Any] | None,
+    *,
+    policy_contract: str,
+) -> tuple[str | None, list[str]]:
+    """Freeze a deployment unit using selection evidence only.
+
+    The v2 contract treats an equal-rank ensemble as the unit being audited. It
+    deliberately does not compare that lower-variance unit with the noisiest
+    single-seed maximum, and it never selects or removes members after audit.
+    """
+
+    if policy_contract == V2_POLICY_CONTRACT:
+        if len(accepted) >= 2 and selection_ensemble is not None and passes_selection_gate(
+            selection_ensemble
+        ):
+            return (
+                "equal_rank_selection_admitted_ensemble",
+                [row["member"] for row in accepted],
+            )
+        return None, []
+    if policy_contract != V1_POLICY_CONTRACT:
+        raise ValueError(f"unknown graph-context policy contract: {policy_contract}")
+
+    strongest = (
+        max(accepted, key=lambda row: selection_utility(row["selection"]))
+        if accepted
+        else None
+    )
+
+    ensemble_selected = bool(
+        selection_ensemble is not None
+        and strongest is not None
+        and selection_ensemble["average_precision"]
+        >= strongest["selection"]["average_precision"] + 0.01
+        and selection_ensemble["true_positives_before_first_false_positive"] >= 2
+        and all(
+            row["average_precision"] >= 0.45
+            for row in selection_ensemble["by_embryo"].values()
+        )
+    )
+    if ensemble_selected:
+        return (
+            "equal_rank_selection_admitted_ensemble",
+            [row["member"] for row in accepted],
+        )
+    if strongest is not None:
+        return "strongest_selection_individual", [strongest["member"]]
+    return None, []
+
+
+def frozen_policy_passes_audit(
+    *,
+    policy_contract: str,
+    precommitted_policy: str | None,
+    precommitted_members: list[str],
+    independently_strong: set[str],
+    audit_ensemble: dict[str, Any] | None,
+) -> bool:
+    if policy_contract == V2_POLICY_CONTRACT:
+        return bool(
+            precommitted_policy == "equal_rank_selection_admitted_ensemble"
+            and len(precommitted_members) >= 2
+            and audit_ensemble is not None
+            and passes_selection_gate(audit_ensemble)
+        )
+    if policy_contract != V1_POLICY_CONTRACT:
+        raise ValueError(f"unknown graph-context policy contract: {policy_contract}")
+    return bool(
+        precommitted_policy is not None
+        and set(precommitted_members) <= independently_strong
+        and (
+            precommitted_policy == "strongest_selection_individual"
+            or (audit_ensemble is not None and passes_selection_gate(audit_ensemble))
         )
     )
 
@@ -529,6 +612,7 @@ def train_member(
 
 
 def main() -> None:
+    global RUN_ID
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path, required=True)
     parser.add_argument("--initial-model", type=Path, action="append", required=True)
@@ -547,11 +631,17 @@ def main() -> None:
     parser.add_argument("--gradient-clip", type=float, default=2.0)
     parser.add_argument("--required-gpu-name", default="A10G")
     parser.add_argument(
+        "--policy-contract",
+        choices=(V1_POLICY_CONTRACT, V2_POLICY_CONTRACT),
+        default=V1_POLICY_CONTRACT,
+    )
+    parser.add_argument(
         "--resume-completed",
         action="store_true",
         help="reuse only hash-verified, pre-audit worker terminals in an existing output root",
     )
     args = parser.parse_args()
+    RUN_ID = V2_RUN_ID if args.policy_contract == V2_POLICY_CONTRACT else V1_RUN_ID
     seeds = [int(value) for value in args.seeds.split(",") if value.strip()]
     if len(args.initial_model) != 2 or len(seeds) != 4:
         raise ValueError("graph-context sweep requires two initial models and four seeds")
@@ -631,7 +721,6 @@ def main() -> None:
         )
         del model
         torch.cuda.empty_cache()
-    strongest = max(accepted, key=lambda row: selection_utility(row["selection"])) if accepted else None
     selection_ensemble = None
     if len(accepted) >= 2:
         ensemble_scores = calibration_free_equal_rank_ensemble(
@@ -640,27 +729,12 @@ def main() -> None:
         selection_ensemble = eligible_metrics(
             selection[4], ensemble_scores, selection[6], selection[7]
         )
-    ensemble_selected = bool(
-        selection_ensemble is not None
-        and strongest is not None
-        and selection_ensemble["average_precision"]
-        >= strongest["selection"]["average_precision"] + 0.01
-        and selection_ensemble["true_positives_before_first_false_positive"] >= 2
-        and all(
-            row["average_precision"] >= 0.45
-            for row in selection_ensemble["by_embryo"].values()
-        )
+    precommitted_policy, precommitted_members = freeze_policy_before_audit(
+        accepted,
+        selection_ensemble,
+        policy_contract=args.policy_contract,
     )
-    precommitted_policy = (
-        "equal_rank_selection_admitted_ensemble"
-        if ensemble_selected
-        else ("strongest_selection_individual" if strongest else None)
-    )
-    precommitted_members = (
-        [row["member"] for row in accepted]
-        if ensemble_selected
-        else ([strongest["member"]] if strongest else [])
-    )
+    ensemble_selected = precommitted_policy == "equal_rank_selection_admitted_ensemble"
 
     audit_results = []
     audit_scores: dict[str, torch.Tensor] = {}
@@ -712,13 +786,12 @@ def main() -> None:
             audit[6],
             audit[7],
         )
-    policy_audit_passed = bool(
-        precommitted_policy is not None
-        and set(precommitted_members) <= independently_strong
-        and (
-            precommitted_policy == "strongest_selection_individual"
-            or (audit_ensemble is not None and passes_selection_gate(audit_ensemble))
-        )
+    policy_audit_passed = frozen_policy_passes_audit(
+        policy_contract=args.policy_contract,
+        precommitted_policy=precommitted_policy,
+        precommitted_members=precommitted_members,
+        independently_strong=independently_strong,
+        audit_ensemble=audit_ensemble,
     )
     aggregate = {
         "schema_version": 1,
@@ -740,6 +813,13 @@ def main() -> None:
         "ensemble_members_precommitted_before_audit": True,
         "precommitted_policy": precommitted_policy,
         "precommitted_members": precommitted_members,
+        "policy_contract": args.policy_contract,
+        "policy_unit_audited": bool(
+            audit_ensemble is not None
+            if args.policy_contract == V2_POLICY_CONTRACT
+            else accepted
+        ),
+        "constituent_audit_gate_required": args.policy_contract == V1_POLICY_CONTRACT,
         "audit_opened": bool(accepted),
         "audit_results": audit_results,
         "audit_ensemble": audit_ensemble,

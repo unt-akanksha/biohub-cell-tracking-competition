@@ -23,13 +23,16 @@ def test_calibration_free_score_is_equal_rank_mean() -> None:
     assert public_contract()["absolute_threshold_used"] is False
 
 
-def test_probe_requires_independently_strong_precommitted_policy() -> None:
+def test_probe_requires_a_precommitted_audited_policy_unit() -> None:
     source = SCORER.read_text(encoding="utf-8")
 
     assert "graph_context_division_sweep_terminal.json" in source
     assert 'terminal.get("policy_audit_passed") is True' in source
     assert 'members == terminal.get("precommitted_members")' in source
-    assert 'set(members) <= set(terminal.get("independently_strong_members", []))' in source
+    assert "v1_constituents_passed" in source
+    assert "v2_audit_unit_passed" in source
+    assert 'terminal.get("policy_unit_audited") is True' in source
+    assert 'terminal.get("constituent_audit_gate_required") is False' in source
     assert 'audit.get("audit_gate_passed") is True' in source
     assert 'worker.get("parameter_count") == EXPECTED_PARAMETER_COUNT' in source
     assert 'inventory.get("graph_context_edges_read") is False' in source
