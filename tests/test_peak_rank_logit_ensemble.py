@@ -11,6 +11,7 @@ from torch import nn
 
 from research.peak_rank_detection import evaluate_peak_rank_detector as evaluation
 from research.peak_rank_detection.model import TemporalPeakRankDetector, count_parameters
+from research.peak_rank_detection.model_blob import BlobAwareTemporalPeakRankDetector
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,6 +76,55 @@ def test_equal_logit_ensemble_strict_loads_independent_members(tmp_path: Path) -
     assert count_parameters(ensemble) == terminal["parameter_count"]
     assert output["logits"].shape == (1, 1, 8, 8, 8)
     assert output["offsets"].shape == (1, 3, 8, 8, 8)
+
+
+def test_equal_logit_ensemble_loads_mixed_standard_and_blob_members(
+    tmp_path: Path,
+) -> None:
+    contracts = []
+    member_specs = (
+        ("standard", TemporalPeakRankDetector, "temporal_peak_rank_v1"),
+        (
+            "blob",
+            BlobAwareTemporalPeakRankDetector,
+            "blob_aware_temporal_peak_rank_v11",
+        ),
+    )
+    for index, (name, model_class, model_family) in enumerate(member_specs):
+        torch.manual_seed(200 + index)
+        model = model_class(widths=(4, 8, 16, 32), depths=(1, 1, 1, 1))
+        path = tmp_path / f"member-{name}.pt"
+        torch.save({"state_dict": model.state_dict()}, path)
+        contracts.append(
+            {
+                "name": name,
+                "checkpoint_file": path.name,
+                "checkpoint_sha256": sha256(path),
+                "parameter_count": count_parameters(model),
+                "widths": [4, 8, 16, 32],
+                "depths": [1, 1, 1, 1],
+                "model_family": model_family,
+            }
+        )
+    checkpoint = tmp_path / "peak_rank_detector.pt"
+    checkpoint.write_text(json.dumps({"members": contracts}), encoding="utf-8")
+    terminal = {
+        **accepted_flags(),
+        "parameter_count": sum(row["parameter_count"] for row in contracts),
+        "widths": [row["widths"] for row in contracts],
+        "depths": [row["depths"] for row in contracts],
+        "ensemble_members": contracts,
+        "checkpoint_sha256": sha256(checkpoint),
+    }
+    terminal_path = tmp_path / "training_terminal.json"
+    terminal_path.write_text(json.dumps(terminal), encoding="utf-8")
+
+    verified = evaluation.validate_training(checkpoint, terminal_path)
+    ensemble = evaluation.load_model(checkpoint, verified, torch.device("cpu"))
+    output = ensemble(torch.rand((1, 3, 16, 16, 16)))
+    assert count_parameters(ensemble) == terminal["parameter_count"]
+    assert output["logits"].shape == (1, 1, 16, 16, 16)
+    assert output["offsets"].shape == (1, 3, 16, 16, 16)
 
 
 class FixedMember(nn.Module):

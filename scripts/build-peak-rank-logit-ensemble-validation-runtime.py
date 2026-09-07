@@ -90,6 +90,7 @@ def validate_member(spec: dict) -> dict:
     result_path = unique_result(Path(controller["download_root"]))
     result = json.loads(result_path.read_text(encoding="utf-8"))
     expected_parameter_count = int(spec.get("expected_parameter_count", 38_381_478))
+    model_family = terminal.get("model_family", "temporal_peak_rank_v1")
     architecture = manifest.get("architecture")
     architecture_is_project_detector = (
         isinstance(architecture, str)
@@ -107,6 +108,7 @@ def validate_member(spec: dict) -> dict:
         and manifest.get("schema_version") == 1
         and architecture_is_project_detector
         and manifest.get("parameter_count") == expected_parameter_count
+        and manifest.get("model_family", "temporal_peak_rank_v1") == model_family
         and manifest.get("ensemble_size") == 1
         and manifest.get("training_audit_passed") is True
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
@@ -137,6 +139,7 @@ def validate_member(spec: dict) -> dict:
         "parameter_count": manifest["parameter_count"],
         "widths": manifest["widths"],
         "depths": manifest["depths"],
+        "model_family": model_family,
         "training_terminal_sha256": sha256_file(terminal_path),
         "member_runtime_manifest_sha256": sha256_file(manifest_path),
         "clean_validation_sha256": sha256_file(result_path),

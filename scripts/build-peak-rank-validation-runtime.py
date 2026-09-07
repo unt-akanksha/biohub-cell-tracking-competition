@@ -142,6 +142,9 @@ def main() -> None:
             "checkpoint_sha256": report["checkpoint_sha256"],
             "training_archive_sha256": report["archive_sha256"],
             "training_run_id": terminal_payload["run_id"],
+            "model_family": terminal_payload.get(
+                "model_family", "temporal_peak_rank_v1"
+            ),
             "training_audit_passed": True,
             "competition_test_data_read_during_training": False,
             "public_notebook_weights_read_during_training": False,

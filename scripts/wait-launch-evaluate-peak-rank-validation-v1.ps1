@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "expanded-real-blob-v11", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "expanded-blob-ensemble-v12", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -110,6 +110,22 @@ elseif ($Variant -eq "expanded-real-local-shape-v9") {
         dependency_terminals = @()
     }
 }
+elseif ($Variant -eq "expanded-real-blob-v11") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-blob-validation-runtime-v11"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-blob-validation-v11"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-expanded-real-blob-v11/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-expanded-real-blob-validation-runtime-v11.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-real-blob-validation-kernel-v11.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-blob-validation-runtime-v11"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-real-blob-validation-v11"
+        notebook_name = "biohub-peak-rank-expanded-real-blob-validation-v11.ipynb"
+        controller_id = "peak-rank-expanded-real-blob-validation-controller-v11"
+        output_slug = "peak-rank-expanded-real-blob-validation-v11"
+        parameter_count = 66984582
+        dependency_terminals = @()
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -184,6 +200,26 @@ elseif ($Variant -eq "expanded-local-shape-ensemble-v10") {
         dependency_terminals = @(
             ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json",
             ".biohub/automation/peak-rank-expanded-real-local-shape-validation-controller-v9.json"
+        )
+    }
+}
+elseif ($Variant -eq "expanded-blob-ensemble-v12") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-blob-ensemble-validation-runtime-v12"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-blob-ensemble-validation-v12"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-expanded-blob-ensemble-validation-runtime-v12.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-blob-ensemble-validation-kernel-v12.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-blob-ensemble-validation-runtime-v12"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-blob-ensemble-validation-v12"
+        notebook_name = "biohub-peak-rank-expanded-blob-ensemble-validation-v12.ipynb"
+        controller_id = "peak-rank-expanded-blob-ensemble-validation-controller-v12"
+        output_slug = "peak-rank-expanded-blob-ensemble-validation-v12"
+        parameter_count = 200939922
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json",
+            ".biohub/automation/peak-rank-expanded-real-local-shape-validation-controller-v9.json",
+            ".biohub/automation/peak-rank-expanded-real-blob-validation-controller-v11.json"
         )
     }
 }

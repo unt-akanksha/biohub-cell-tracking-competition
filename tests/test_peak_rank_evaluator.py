@@ -75,6 +75,15 @@ def test_training_checkpoint_must_match_terminal(tmp_path: Path) -> None:
         evaluation.validate_training(checkpoint, terminal)
 
 
+def test_training_rejects_an_unknown_model_family(tmp_path: Path) -> None:
+    checkpoint, terminal = _training_files(tmp_path)
+    payload = json.loads(terminal.read_text(encoding="utf-8"))
+    payload["model_family"] = "unreviewed_external_detector"
+    terminal.write_text(json.dumps(payload), encoding="utf-8")
+    with pytest.raises(ValueError, match="accepted clean"):
+        evaluation.validate_training(checkpoint, terminal)
+
+
 def test_selection_rejection_keeps_acceptance_closed(tmp_path: Path, monkeypatch) -> None:
     checkpoint, terminal = _training_files(tmp_path)
     args = _args(tmp_path, checkpoint, terminal)

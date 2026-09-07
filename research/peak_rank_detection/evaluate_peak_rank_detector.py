@@ -65,6 +65,11 @@ TTA_CALIBRATION_STEMS = ("44b6_d29c9ab2", "6bba_09961292")
 TTA_MODE_ORDER = ("none", "rot4", "d4")
 TTA_POOLED_REGRESSION_MAX = 0.003
 TTA_WORST_REGRESSION_MAX = 0.01
+DEFAULT_MODEL_FAMILY = "temporal_peak_rank_v1"
+SUPPORTED_MODEL_FAMILIES = {
+    DEFAULT_MODEL_FAMILY,
+    "blob_aware_temporal_peak_rank_v11",
+}
 
 
 def sha256_file(path: Path) -> str:
@@ -87,6 +92,7 @@ def atomic_json(path: Path, payload: Any) -> None:
 def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
     parameter_count = terminal.get("parameter_count")
+    model_family = terminal.get("model_family", DEFAULT_MODEL_FAMILY)
     if not (
         terminal.get("status") == "accepted_at_audit"
         and terminal.get("selection_passed") is True
@@ -101,6 +107,7 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
         and terminal.get("public_leaderboard_used_for_selection") is False
         and terminal.get("submission_created") is False
         and terminal.get("authorized_for_submission") is False
+        and model_family in SUPPORTED_MODEL_FAMILIES
     ):
         raise ValueError("training terminal is not an accepted clean checkpoint")
     if sha256_file(checkpoint) != terminal.get("checkpoint_sha256"):
@@ -121,6 +128,7 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
         for row in members:
             filename = row.get("checkpoint_file")
             member_parameter_count = row.get("parameter_count")
+            member_model_family = row.get("model_family", DEFAULT_MODEL_FAMILY)
             if not (
                 isinstance(filename, str)
                 and Path(filename).name == filename
@@ -129,6 +137,7 @@ def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
                 and member_parameter_count > 0
                 and isinstance(row.get("widths"), list)
                 and isinstance(row.get("depths"), list)
+                and member_model_family in SUPPORTED_MODEL_FAMILIES
             ):
                 raise ValueError("detector ensemble member contract is invalid")
             member_path = checkpoint.parent / filename
@@ -233,8 +242,22 @@ class PeakRankConfidenceMaxEnsemble(nn.Module):
 
 def _load_single_member(
     checkpoint: Path, contract: dict[str, Any]
-) -> TemporalPeakRankDetector:
-    model = TemporalPeakRankDetector(
+) -> nn.Module:
+    model_family = contract.get("model_family", DEFAULT_MODEL_FAMILY)
+    if model_family == DEFAULT_MODEL_FAMILY:
+        model_class = TemporalPeakRankDetector
+    elif model_family == "blob_aware_temporal_peak_rank_v11":
+        try:
+            from model_blob import BlobAwareTemporalPeakRankDetector
+        except ModuleNotFoundError:
+            from research.peak_rank_detection.model_blob import (
+                BlobAwareTemporalPeakRankDetector,
+            )
+
+        model_class = BlobAwareTemporalPeakRankDetector
+    else:
+        raise ValueError(f"unsupported detector model family: {model_family}")
+    model = model_class(
         widths=contract["widths"], depths=contract["depths"]
     )
     state = torch.load(checkpoint, map_location="cpu", weights_only=True)

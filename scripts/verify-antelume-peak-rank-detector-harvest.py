@@ -19,6 +19,7 @@ EXPECTED_STEPS = 3_000
 EXPECTED_SEED = 1_041_729
 EXPECTED_WIDTHS = [96, 192, 384, 768]
 EXPECTED_DEPTHS = [3, 3, 9, 3]
+EXPECTED_MODEL_FAMILY: str | None = None
 HASH_PATTERN = re.compile(r"^([0-9a-f]{64})  (.+)$")
 
 
@@ -92,6 +93,10 @@ def validate_terminal(
         and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
         and terminal.get("widths") == EXPECTED_WIDTHS
         and terminal.get("depths") == EXPECTED_DEPTHS
+        and (
+            EXPECTED_MODEL_FAMILY is None
+            or terminal.get("model_family") == EXPECTED_MODEL_FAMILY
+        )
         and terminal.get("competition_train_data_read") is True
         and terminal.get("competition_test_data_read") is False
         and terminal.get("public_predictions_read") is False
@@ -172,6 +177,7 @@ def verify(archive_path: Path) -> dict[str, Any]:
         "accepted_for_kaggle_validation": accepted,
         "best_step": terminal["best_step"],
         "parameter_count": terminal["parameter_count"],
+        "model_family": terminal.get("model_family"),
         "checkpoint_sha256": terminal.get("checkpoint_sha256"),
         "competition_submission_performed": False,
         "authorized_for_submission": False,

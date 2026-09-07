@@ -102,6 +102,18 @@ def test_rejects_checksum_tampering(tmp_path: Path) -> None:
         MODULE.verify(bad)
 
 
+def test_optional_model_family_contract_fails_closed(tmp_path: Path) -> None:
+    path = tmp_path / "results.tar.gz"
+    _archive(path)
+    previous = MODULE.EXPECTED_MODEL_FAMILY
+    MODULE.EXPECTED_MODEL_FAMILY = "blob_aware_temporal_peak_rank_v11"
+    try:
+        with pytest.raises(ValueError, match="frozen run contract"):
+            MODULE.verify(path)
+    finally:
+        MODULE.EXPECTED_MODEL_FAMILY = previous
+
+
 def test_harvest_controller_is_bounded_and_non_submitting() -> None:
     source = (
         ROOT / "scripts" / "wait-harvest-antelume-peak-rank-detector-v1.ps1"

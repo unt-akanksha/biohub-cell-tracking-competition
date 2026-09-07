@@ -1045,3 +1045,26 @@ well as the synthetic generator.
   validation, runtime projection, patched exact score, per-movie regression
   gate, non-replica check, and conditional one-shot submission. It adds no AWS
   training cost and cannot conceal a rejected member.
+- A train-role-only localization diagnostic on the frozen expanded-real crops
+  tested fixed blob priors without opening sealed, test, or leaderboard data.
+  The existing Gaussian difference-of-Gaussians reached `0.766234` top-k
+  recall with mean/p90 nearest-center distances `2.1211/5.5893` voxels. A
+  uniform `avg3-avg9` bandpass improved recall to `0.785714` and distances to
+  `2.0223/4.9823`; raw intensity reached only `0.538961`. This supports an
+  architecture change rather than a leaderboard-selected threshold.
+- V11 is a 66,984,582-parameter blob-aware detector queued after v9 on the
+  shared Antelume A10G. It preserves v9's expanded-real, temporal-fading, and
+  local-shape training contract, while adding fixed `avg3-avg9` local-contrast
+  channels for the current frame and temporal mean to the learned stem. Its
+  distinct model-family tag is required by harvest, runtime packaging, strict
+  checkpoint reconstruction, and inference. The deployed 3,000-step run uses
+  seed `6902243` and a 36,000-second wall guard; it remains compatible with the
+  Biohub-only GPU yield mechanism and does not address RSNA paths or processes.
+- A fixed v12 ensemble was precommitted before v7, v9, or v11 produced clean
+  validation results. It averages dense logits and offsets from all three
+  independently gated expanded-real members, totaling 200,939,922 learned
+  parameters. Mixed standard/blob strict loading has a forward-pass test. V12
+  can materialize only after all three individual complete-movie validations
+  pass, then receives its own offline private two-T4 validation, runtime check,
+  patched exact and per-movie gates, non-replica audit, and conditional one-shot
+  submission. Its background validation and candidate controllers are active.
