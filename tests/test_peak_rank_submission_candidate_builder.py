@@ -27,6 +27,7 @@ def test_builder_is_hash_pinned_two_gpu_and_non_submitting() -> None:
         "source_advertised_score_used_as_evidence",
         'SOURCE_KERNEL_REF = "redoctopusk/biohub-948tta2"',
         "secondary_edge_feature_tta",
+        "subvoxel_association_coordinates",
         "dual_association_models_verified",
         "selected_peak_tta_mode",
         "max_worker_elapsed_seconds",
@@ -47,6 +48,7 @@ def test_transformation_replaces_detector_but_retains_public_linker() -> None:
     assert "--official-predictor" in joined
     assert joined.count("--peak-tta-mode") == 2
     assert "worker_manifest.json" in joined
+    assert 'association_coordinate_mode") == "subvoxel"' in joined
     assert "SEC_EDGE_TTA_ACTIVE" in joined
     assert '"source_public_kernel_ref": "redoctopusk/biohub-948tta2"' in joined
     assert "The notebook title's advertised `0.948`" in joined

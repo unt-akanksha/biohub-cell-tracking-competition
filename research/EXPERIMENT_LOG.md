@@ -866,3 +866,15 @@ well as the synthetic generator.
   reporting, and a non-replica result. The old public proxy remains recorded
   for diagnosis only. A control-as-candidate smoke test reproduced the exact
   baseline and was correctly rejected for zero gain and exact replication.
+- A late public EDA isolated a z-axis localization floor on one hard movie:
+  integer z errors can be as large as a cell's one-frame motion, while
+  post-link coordinate smoothing cannot undo an earlier substitution. Source
+  tracing showed that the active detector's continuous offsets survived into
+  graph finishing but were rounded away before the frozen edge model. Before
+  v1's first selection checkpoint, production association was precommitted to
+  pass continuous detector coordinates into the linker's positional and
+  pairwise-coordinate branches while explicitly rounding only feature-map
+  lookup. This preserves the frozen model's trained feature contract, records
+  `association_coordinate_mode=subvoxel` in every worker manifest, and remains
+  subject to the unchanged exact complete-movie promotion gate. The public
+  notebook's one-movie result and predictions are not used as score evidence.

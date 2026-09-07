@@ -11,7 +11,7 @@ our learned checkpoints.
 from __future__ import annotations
 
 from collections.abc import Iterator, Mapping, Sequence
-from contextlib import contextmanager
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from types import ModuleType
@@ -40,6 +40,7 @@ except ModuleNotFoundError:
 
 LOW_PROBABILITY_THRESHOLD = 0.02
 SPATIAL_DOWNSAMPLE = np.asarray((1.0, 4.0, 4.0), dtype=np.float32)
+ASSOCIATION_COORDINATE_MODES = frozenset({"rounded", "subvoxel"})
 
 
 @dataclass(frozen=True)
@@ -110,17 +111,33 @@ class ExternalDetectionCache:
             raise RuntimeError("frame lookup is inconsistent")
         return row.points_input[row.confidence > self.threshold]
 
-    def association_coords(self, frame: int) -> np.ndarray:
-        """Return official-linker coordinates on its integer input grid."""
+    def association_coords(
+        self, frame: int, *, mode: str = "rounded"
+    ) -> np.ndarray:
+        """Return official-linker coordinates on its pooled input grid.
+
+        ``rounded`` preserves the organizer baseline contract. ``subvoxel``
+        keeps the detector's bounded offsets for positional and pairwise edge
+        scoring; feature-map lookup is still rounded separately so the frozen
+        linker sees the same kind of sampled image features it was trained on.
+        """
 
         points = self.selected_points(frame)
+        if mode not in ASSOCIATION_COORDINATE_MODES:
+            raise ValueError(f"unsupported association coordinate mode: {mode}")
         if not len(points):
-            return np.empty((0, 4), dtype=np.int16)
-        rounded = np.rint(points).astype(np.int64)
-        if np.any(rounded < 0) or np.any(rounded > np.iinfo(np.int16).max):
+            dtype = np.int16 if mode == "rounded" else np.float32
+            return np.empty((0, 4), dtype=dtype)
+        spatial = (
+            np.rint(points).astype(np.int64)
+            if mode == "rounded"
+            else np.asarray(points, dtype=np.float32)
+        )
+        if np.any(spatial < 0) or np.any(spatial > np.iinfo(np.int16).max):
             raise ValueError("association coordinate is outside int16 bounds")
-        times = np.full((len(rounded), 1), int(frame), dtype=np.int64)
-        return np.concatenate((times, rounded), axis=1).astype(np.int16)
+        dtype = np.int16 if mode == "rounded" else np.float32
+        times = np.full((len(spatial), 1), int(frame), dtype=dtype)
+        return np.concatenate((times, spatial), axis=1).astype(dtype, copy=False)
 
     def precise_output_coords(self) -> np.ndarray:
         """Return ``[t,z,y,x]`` with sub-voxel positions in original space."""
@@ -320,6 +337,8 @@ def predict_movie_detections(
 def substituted_official_detector(
     predict_module: ModuleType,
     cache: ExternalDetectionCache,
+    *,
+    coordinate_mode: str = "rounded",
 ) -> Iterator[None]:
     """Temporarily replace only the official baseline's detector callback."""
 
@@ -333,13 +352,53 @@ def substituted_official_detector(
         _det_threshold: float,
         _pool_kernel: Sequence[int],
     ) -> np.ndarray:
-        return cache.association_coords(int(frame))
+        return cache.association_coords(int(frame), mode=coordinate_mode)
 
     predict_module._detect_cells_pooled = external_detector
     try:
         yield
     finally:
         predict_module._detect_cells_pooled = original
+
+
+@contextmanager
+def rounded_feature_sampling(models: Sequence[Any]) -> Iterator[None]:
+    """Round subvoxel coordinates only at frozen feature-map lookups.
+
+    The official linker was trained with integer-indexed node features. This
+    adapter retains that contract while allowing its continuous positional and
+    pairwise-coordinate branches to consume detector offsets.
+    """
+
+    records: list[tuple[Any, bool, Any]] = []
+    try:
+        for model in models:
+            if model is None:
+                continue
+            original = getattr(model, "_index_features", None)
+            if not callable(original):
+                raise TypeError("association model has no callable _index_features")
+            had_instance_attribute = "_index_features" in vars(model)
+            previous_instance_value = vars(model).get("_index_features")
+
+            def nearest_grid_features(
+                feature_maps: Any,
+                coordinates: Any,
+                mask: Any,
+                *,
+                _original: Any = original,
+            ) -> Any:
+                return _original(feature_maps, coordinates.round(), mask)
+
+            setattr(model, "_index_features", nearest_grid_features)
+            records.append((model, had_instance_attribute, previous_instance_value))
+        yield
+    finally:
+        for model, had_instance_attribute, previous_instance_value in reversed(records):
+            if had_instance_attribute:
+                setattr(model, "_index_features", previous_instance_value)
+            else:
+                delattr(model, "_index_features")
 
 
 def predict_video_with_external_detections(
@@ -349,11 +408,29 @@ def predict_video_with_external_detections(
     device: Any,
     cfg: Any,
     cache: ExternalDetectionCache,
+    association_coordinate_mode: str = "rounded",
     **kwargs: Any,
 ) -> tuple[np.ndarray, list[tuple[int, int, float, float]]]:
     """Call the official linker, validating and restoring detector positions."""
 
-    with substituted_official_detector(predict_module, cache):
+    if association_coordinate_mode not in ASSOCIATION_COORDINATE_MODES:
+        raise ValueError(
+            f"unsupported association coordinate mode: {association_coordinate_mode}"
+        )
+    with ExitStack() as stack:
+        if association_coordinate_mode == "subvoxel":
+            stack.enter_context(
+                rounded_feature_sampling(
+                    (model, kwargs.get("secondary_model"))
+                )
+            )
+        stack.enter_context(
+            substituted_official_detector(
+                predict_module,
+                cache,
+                coordinate_mode=association_coordinate_mode,
+            )
+        )
         linked_coords, edges = predict_module.predict_video(
             model,
             sample_path,

@@ -115,8 +115,10 @@ def test_attributed_association_stack_loads_both_frozen_members(
     assert window == 5 and downsample == (1, 4, 4)
     assert kwargs["secondary_model"] == "secondary.pt"
     assert kwargs["secondary_link_mode"] == "low_margin_consensus"
+    assert kwargs["association_coordinate_mode"] == "subvoxel"
     assert manifest["edge_feature_tta"] is True
     assert manifest["bidirectional_edge_weight"] == 0.15
+    assert manifest["association_coordinate_mode"] == "subvoxel"
 
 
 def test_attributed_association_stack_rejects_config_drift(

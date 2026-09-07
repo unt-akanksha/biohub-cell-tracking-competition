@@ -167,6 +167,7 @@ def verify_candidate(
         and evidence.get("source_public_notebook_sha256")
             == SOURCE_PUBLIC_NOTEBOOK_SHA256
         and evidence.get("secondary_edge_feature_tta") is True
+        and evidence.get("subvoxel_association_coordinates") is True
         and evidence.get("dual_association_models_verified") is True
         and evidence.get("source_advertised_score_used_as_evidence") is False
         and evidence.get("public_predictions_copied") is False
@@ -314,6 +315,7 @@ def verify_candidate(
         "source_public_kernel_ref": SOURCE_PUBLIC_KERNEL_REF,
         "source_public_notebook_sha256": SOURCE_PUBLIC_NOTEBOOK_SHA256,
         "secondary_edge_feature_tta": True,
+        "subvoxel_association_coordinates": True,
         "dual_association_models_verified": True,
         "submission": submission,
         "submission_path": str(submission_path.resolve()),

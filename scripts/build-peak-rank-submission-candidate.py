@@ -195,6 +195,7 @@ if not all(
     and row.get("association", {}).get("edge_feature_tta") is True
     and row.get("association", {}).get("secondary_link_mode") == "low_margin_consensus"
     and row.get("association", {}).get("bidirectional_edge_weight") == 0.15
+    and row.get("association", {}).get("association_coordinate_mode") == "subvoxel"
     and row.get("input_partition") == "test"
     and row.get("competition_train_labels_read") is False
     and row.get("competition_test_labels_read") is False
@@ -226,6 +227,7 @@ _pr_evidence = {
     "source_public_kernel_ref": "redoctopusk/biohub-948tta2",
     "source_public_notebook_sha256": "3395f8df72c6d63d243fdb4fede1f1febdd36bfc086b2f0663fec3ccc9dbb189",
     "secondary_edge_feature_tta": True,
+    "subvoxel_association_coordinates": True,
     "dual_association_models_verified": True,
     "source_advertised_score_used_as_evidence": False,
     "public_predictions_copied": False,

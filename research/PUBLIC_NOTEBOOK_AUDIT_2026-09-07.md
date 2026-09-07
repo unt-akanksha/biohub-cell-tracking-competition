@@ -121,6 +121,38 @@ detector. The public notebook's predictions and advertised score remain
 excluded, and the combined candidate still needs the frozen clean-validation
 and complete-movie promotion gates.
 
+## September 7 localization refresh
+
+`mjcho2023/a-z-axis-voxel-floor-on-cell-localisation` is a genuinely distinct
+EDA source (raw SHA-256
+`799b501b42aef6456650c4842d576c8977727e9e690a336a0e0493540e133e62`;
+normalized-code overlap `0.000326` with `948tta2`). It uses one deliberately
+hard training movie and sparse labels, so its reported residuals are not a
+promotion result. Its reproducible geometric observation is nevertheless
+relevant: the z pitch is four times the x/y pitch, integer z localization can
+be comparable to a complete one-frame displacement, and post-link smoothing
+cannot repair an edge decision made before coordinates move.
+
+The active detector already predicts bounded continuous offsets and restores
+them before graph finishing, and the public association model already treats a
+pooled-grid z step as one quarter of a pooled-grid x/y step in its relative
+coordinate branch. A source trace found one remaining loss: the edge model was
+given rounded detector coordinates, so the learned offsets affected later
+finishing but not the initial association decision. Before the first detector
+selection checkpoint, the candidate was therefore frozen to provide continuous
+pooled-grid coordinates to positional and pairwise edge scoring while retaining
+nearest-grid feature sampling for compatibility with the frozen linker's
+training contract. The worker manifest records this mode as
+`association_coordinate_mode=subvoxel`; it remains ineligible unless the full
+candidate passes the pinned patched official scorer on all complete validation
+movies.
+
+Two other late kernels do not change the decision. `anvithpothula/biohub-x69`
+contains only a five-line supersession note and no runnable candidate.
+`flexonafft/biohab-lineage-forge-adaptive-tracking` has `0.951591` normalized
+overlap with `948tta2` and is another configuration of the shared public
+lineage, not an independent ensemble member.
+
 References:
 
 - <https://www.kaggle.com/code/redoctopusk/biohub-948tta>
@@ -132,6 +164,9 @@ References:
 - <https://www.kaggle.com/code/kunaldesale2408/biohub-cell-tracking>
 - <https://www.kaggle.com/code/analyticaobscura/biohub-lb-942>
 - <https://www.kaggle.com/code/nusrati/0-940>
+- <https://www.kaggle.com/code/mjcho2023/a-z-axis-voxel-floor-on-cell-localisation>
+- <https://www.kaggle.com/code/anvithpothula/biohub-x69>
+- <https://www.kaggle.com/code/flexonafft/biohab-lineage-forge-adaptive-tracking>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/737543>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/723655>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/727154>

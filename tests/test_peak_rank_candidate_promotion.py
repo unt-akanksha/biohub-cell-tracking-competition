@@ -22,6 +22,7 @@ def test_verifier_requires_patched_official_gain_non_regression_and_non_replica(
         "KNOWN_PUBLIC_SUBMISSION_SHA256",
         "SOURCE_PUBLIC_NOTEBOOK_SHA256",
         "secondary_edge_feature_tta",
+        "subvoxel_association_coordinates",
         "dual_association_models_verified",
         "worker_count",
         "clean_validation_promotion_passed",

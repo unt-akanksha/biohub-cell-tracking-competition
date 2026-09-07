@@ -49,6 +49,7 @@ EXPECTED_ASSOCIATION_CONFIG = {
     "secondary_low_margin_max": 0.35,
     "edge_candidate_threshold": 0.48,
     "bidirectional_edge_weight": 0.15,
+    "association_coordinate_mode": "subvoxel",
 }
 
 
@@ -152,6 +153,7 @@ def load_attributed_association_stack(
     observed["secondary_link_mode"] = os.environ.get(
         "BIOHUB_SECONDARY_LINK_MODE", ""
     ).strip()
+    observed["association_coordinate_mode"] = "subvoxel"
     for name, expected in EXPECTED_ASSOCIATION_CONFIG.items():
         actual = observed[name]
         if isinstance(expected, float):
@@ -181,6 +183,7 @@ def load_attributed_association_stack(
         "secondary_link_mode": observed["secondary_link_mode"],
         "secondary_mix_temperature": observed["secondary_mix_temperature"],
         "secondary_low_margin_max": observed["secondary_low_margin_max"],
+        "association_coordinate_mode": observed["association_coordinate_mode"],
     }
     manifest = {
         **observed,
