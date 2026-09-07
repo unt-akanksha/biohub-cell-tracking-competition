@@ -1148,3 +1148,36 @@ well as the synthetic generator.
   It then receives its own dual-T4 runtime projection, patched exact metric,
   per-movie regression, non-replica, and one-shot submission gates; failure or
   runtime excess of any member or the triad closes the lane.
+- The optimization-only scale diagnostic was extended to quantify whether a
+  generic intensity boundary can safely identify negative real voxels. Across
+  the same 480 crops and 3,592 annotated points, the `avg5-avg13` value at an
+  annotated center has a median of `+17.537430` robust background scales and a
+  tenth percentile of `+1.639818`; only `0.028118` of annotated centers fall
+  at or below the per-crop response median. For `avg7-avg15`, the corresponding
+  below-median fraction is `0.055958`. These are optimization-role diagnostics,
+  not validation or leaderboard metrics.
+- V17 uses the lower-risk `avg5-avg13` evidence to suppress a failure mode that
+  conservative positive-only real loss cannot address. On sparse-real steps,
+  each known center is ranked above the 16 hardest candidates in a 3-to-8-voxel
+  shell only when their fixed blob response is at or below the crop median;
+  candidates within 2.5 voxels of any known center are excluded. Bright
+  unlabeled cell-like structures remain unlabeled and receive no negative
+  loss. The new term has weight `0.25` and margin `0.5`; complete synthetic
+  supervision is unchanged.
+- V17 retains the 83,802,246-parameter v15 multiscale/global architecture,
+  expanded-real coverage, temporal fading, and local-shape objective, but uses
+  independent seed `9235183`. Its 3,000-step run has a 50,400-second AWS wall
+  guard. The hash-bound runner was deployed at `2026-09-07T10:08:18Z` as PID
+  `192045`, waits for verified v15 harvest, yields to unrelated GPU clients,
+  and contains no operation on an RSNA path or process.
+- V17 has a separate hash-verified harvest, private dual-T4 complete-movie
+  validation, patched exact metric/per-movie promotion, non-replica audit, and
+  conditional one-shot submission chain. The fixed evidence band, median
+  boundary, shell radii, and `0.028118` optimization diagnostic are embedded in
+  and checked against its terminal receipt.
+- V18 is a precommitted 167,604,492-parameter equal-logit/offset ensemble of
+  v15 and v17. Both members must pass their sealed training audits and separate
+  clean complete-movie validations before the pair can materialize. It then
+  receives its own dual-T4 runtime projection, patched official score,
+  per-movie regression, non-replica, and one-shot submission gates. No Kaggle
+  job or submission was launched while defining this lane.

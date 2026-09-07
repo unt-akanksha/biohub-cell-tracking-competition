@@ -7,6 +7,7 @@ from research.peak_rank_detection.diagnose_multiscale_blob_prior import (
     peak_coordinates,
     point_distances,
     response_maps,
+    standardized_response,
 )
 
 
@@ -46,6 +47,13 @@ def test_peak_coordinates_and_distances_use_local_top_k() -> None:
     assert tuple(peaks[0]) == (2.0, 3.0, 4.0)
     distances = point_distances(peaks, np.asarray([[2.0, 3.0, 4.0]]))
     assert distances.tolist() == [0.0]
+
+
+def test_standardized_response_sets_background_median_to_zero() -> None:
+    values = np.arange(27, dtype=np.float32).reshape(3, 3, 3)
+    standardized = standardized_response(values)
+    assert standardized[1, 1, 1] == 0.0
+    assert standardized[2, 2, 2] > 0.0
 
 
 def test_module_does_not_extract_or_reference_forbidden_roles() -> None:

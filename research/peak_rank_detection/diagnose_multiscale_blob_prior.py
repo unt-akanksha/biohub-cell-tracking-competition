@@ -147,6 +147,7 @@ def evaluate_archive(
     if actual_sha256 != expected_sha256.lower():
         raise ValueError("expanded replay archive hash changed")
     accumulated: dict[str, list[float]] = {}
+    center_standardized: dict[str, list[float]] = {}
     crops = 0
     with tarfile.open(archive, mode="r") as bundle:
         members = sorted(
@@ -173,11 +174,36 @@ def evaluate_archive(
                 predicted = peak_coordinates(response, maximum_predictions=64)
                 distances = point_distances(predicted, truth)
                 accumulated.setdefault(name, []).extend(float(x) for x in distances)
+                if not name.startswith("equal-z:"):
+                    centers = np.clip(np.rint(truth), 0, 63).astype(np.int64)
+                    standardized = standardized_response(response)
+                    center_values = standardized[
+                        centers[:, 0], centers[:, 1], centers[:, 2]
+                    ]
+                    center_standardized.setdefault(name, []).extend(
+                        float(value) for value in center_values
+                    )
             crops += 1
     rows = [
         {"response": name, **summarize(distances, crops=crops)}
         for name, distances in accumulated.items()
     ]
+    for row in rows:
+        values = center_standardized.get(row["response"])
+        if values is None:
+            continue
+        array = np.asarray(values, dtype=np.float32)
+        row.update(
+            {
+                "annotated_center_standardized_p10": float(
+                    np.quantile(array, 0.1)
+                ),
+                "annotated_center_standardized_median": float(np.median(array)),
+                "annotated_centers_at_or_below_background_median_fraction": float(
+                    np.mean(array <= 0.0)
+                ),
+            }
+        )
     rows.sort(
         key=lambda row: (
             -row["top64_recall_at_2_5_voxels"],
