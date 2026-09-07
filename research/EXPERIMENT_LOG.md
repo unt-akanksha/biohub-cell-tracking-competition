@@ -1699,3 +1699,27 @@ well as the synthetic generator.
   RSNA/unrelated process were left untouched. V21/V27 remain staged and can be
   relaunched only if the harvested complete-movie V3 evidence justifies their
   incremental cost.
+- Executed Kaggle outputs were re-downloaded to distinguish infrastructure
+  errors from scientific failures in the older ZebraHub lane. The 20.7M
+  contextual association transfer completed 20,000 steps per reciprocal
+  Biohub fold in 17,061 seconds total, but both folds selected the unchanged
+  initialization (`best_step=0`) and recorded exactly zero real and synthetic
+  validation gain. The sparse real association gate was already saturated at
+  top-1 `1.0`, contained zero division rows, and correctly rejected both fold
+  checkpoints. Kaggle's `ERROR` status was the notebook deliberately failing
+  closed on that rejected aggregate, not a lost or recoverable training run.
+- The 46.4M multiscale ZebraHub expansion likewise completed 12,000 steps per
+  fold (5,104/5,008 seconds) and preserved its accepted v3 initialization
+  exactly, but both folds again chose `best_step=0`; selection and one-shot
+  audit gains were all exactly zero against the precommitted `0.01` gate.
+  This second Kaggle `ERROR` is also a valid scientific rejection. The
+  accepted external association checkpoints remain reproducible evidence that
+  ZebraHub appearance can be learned, but neither their Biohub transfer nor a
+  wider multiscale head improved the target task, and neither may enter a
+  submission candidate.
+- Dense external *detector* pretraining remains conceptually distinct from
+  those rejected association runs. However, the FOCUS-3D weights still lack an
+  explicit license and clean complete-movie precision evidence, while an owned
+  ZebraHub detector pretrain would require a new data/validation lane. It is
+  therefore not cost-justified before V3 identifies whether clean capacity
+  already fixes the present detector bottleneck.
