@@ -8,6 +8,7 @@ import runpy
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-submission-candidate.py"
 DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-submission-candidate.py"
+CAPACITY_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-capacity-pu-submission-candidate.py"
 MODULE = runpy.run_path(str(SCRIPT))
 
 
@@ -57,3 +58,14 @@ def test_depth_pu_candidate_has_distinct_runtime_and_run_identity() -> None:
     assert globals_["TARGET_ID"] == "biohub-peak-rank-depth-pu-tracking-candidate-v2"
     assert "peak-rank-depth-pu-tracking-candidate-v2" in joined
     assert '"run_id": "peak-rank-tracking-candidate-v1"' not in joined
+
+
+def test_capacity_pu_candidate_has_distinct_runtime_size_and_identity() -> None:
+    wrapper = runpy.run_path(str(CAPACITY_PU_SCRIPT), run_name="capacity_pu_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    notebook = globals_["build_notebook"]("c" * 64)
+    joined = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
+    assert globals_["RUNTIME_REF"].endswith("capacity-pu-validation-runtime-v3")
+    assert globals_["TARGET_ID"] == "biohub-peak-rank-capacity-pu-tracking-candidate-v3"
+    assert "peak-rank-capacity-pu-tracking-candidate-v3" in joined
+    assert "67.0M-parameter capacity-scaled" in joined

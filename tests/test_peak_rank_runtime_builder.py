@@ -6,6 +6,7 @@ import runpy
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-validation-runtime.py"
 DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-validation-runtime.py"
+CAPACITY_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-capacity-pu-validation-runtime.py"
 
 
 def test_runtime_builder_has_verified_private_inputs_only() -> None:
@@ -46,3 +47,11 @@ def test_depth_pu_wrapper_redirects_every_private_artifact() -> None:
     assert globals_["ARCHIVE"].name == "peak-rank-depth-pu-v2-results.tar.gz"
     assert globals_["ARCHIVE_ROOT"].endswith("peak-rank-v2")
     assert globals_["DATASET_ID"].endswith("depth-pu-validation-runtime-v2")
+
+
+def test_capacity_pu_wrapper_binds_larger_verified_checkpoint() -> None:
+    wrapper = runpy.run_path(str(CAPACITY_PU_SCRIPT), run_name="capacity_pu_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    assert globals_["TARGET"].name == "biohub-peak-rank-capacity-pu-validation-runtime-v3"
+    assert globals_["EXPECTED_PARAMETER_COUNT"] == 66_977_670
+    assert globals_["ARCHIVE_ROOT"].endswith("capacity-peak-rank-v3")

@@ -17,6 +17,8 @@ EXPECTED_RUN_ID = "synthetic256-real-positive-temporal-peak-rank-v1"
 EXPECTED_PARAMETER_COUNT = 38_381_478
 EXPECTED_STEPS = 3_000
 EXPECTED_SEED = 1_041_729
+EXPECTED_WIDTHS = [96, 192, 384, 768]
+EXPECTED_DEPTHS = [3, 3, 9, 3]
 HASH_PATTERN = re.compile(r"^([0-9a-f]{64})  (.+)$")
 
 
@@ -88,8 +90,8 @@ def validate_terminal(
         and terminal.get("completed_steps") == EXPECTED_STEPS
         and terminal.get("seed") == EXPECTED_SEED
         and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
-        and terminal.get("widths") == [96, 192, 384, 768]
-        and terminal.get("depths") == [3, 3, 9, 3]
+        and terminal.get("widths") == EXPECTED_WIDTHS
+        and terminal.get("depths") == EXPECTED_DEPTHS
         and terminal.get("competition_train_data_read") is True
         and terminal.get("competition_test_data_read") is False
         and terminal.get("public_predictions_read") is False

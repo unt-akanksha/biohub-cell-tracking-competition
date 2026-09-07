@@ -186,6 +186,7 @@ if not all(
     row.get("run_id") == "peak-rank-official-linker-production-v1"
     and row.get("worker_count") == 2
     and row.get("checkpoint_sha256") == _PR_MANIFEST["checkpoint_sha256"]
+    and row.get("parameter_count") == _PR_MANIFEST["parameter_count"]
     and row.get("peak_tta_mode") == _PR_TTA_MODE
     and row.get("peak_tta_views") == _PR_MANIFEST["selected_peak_tta_views"]
     and row.get("association", {}).get("edge_feature_tta") is True
@@ -223,6 +224,7 @@ _pr_evidence = {
     "source_advertised_score_used_as_evidence": False,
     "public_predictions_copied": False,
     "checkpoint_sha256": _PR_MANIFEST["checkpoint_sha256"],
+    "parameter_count": _PR_MANIFEST["parameter_count"],
     "clean_validation_sha256": _PR_MANIFEST["clean_validation_sha256"],
     "selected_peak_tta_mode": _PR_TTA_MODE,
     "selected_peak_tta_views": _PR_MANIFEST["selected_peak_tta_views"],

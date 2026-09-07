@@ -11,6 +11,7 @@ RUNTIME_REF = f"indarkarhana/{RUNTIME_SLUG}"
 KERNEL_TITLE = "Biohub Peak Rank Validation v1"
 TARGET = ROOT / "kaggle" / TARGET_ID
 NOTEBOOK = TARGET / f"{TARGET_ID}.ipynb"
+EXPECTED_PARAMETER_COUNT = 38_381_478
 
 
 def code_cell(source: str) -> dict:
@@ -149,7 +150,7 @@ if not torch.cuda.is_available() or torch.cuda.device_count() != 2:
     raise RuntimeError(f"exactly two CUDA GPUs required, found {torch.cuda.device_count()}")
 
 manifest = json.loads((runtime / "SOURCE_MANIFEST.json").read_text(encoding="utf-8"))
-if manifest.get("training_audit_passed") is not True or manifest.get("parameter_count") != 38381478:
+if manifest.get("training_audit_passed") is not True or manifest.get("parameter_count") != __EXPECTED_PARAMETER_COUNT__:
     raise RuntimeError("runtime manifest does not contain an accepted detector")
 for name, row in manifest["files"].items():
     path = runtime / name
@@ -228,7 +229,9 @@ print("Peak-ranking clean validation complete; no submission was created.")
 def main() -> None:
     TARGET.mkdir(parents=True, exist_ok=True)
     watchdog = WATCHDOG.replace("peak-rank-validation-v1", TARGET_ID)
-    setup = SETUP.replace("biohub-peak-rank-validation-runtime-v1", RUNTIME_SLUG)
+    setup = SETUP.replace("biohub-peak-rank-validation-runtime-v1", RUNTIME_SLUG).replace(
+        "__EXPECTED_PARAMETER_COUNT__", str(EXPECTED_PARAMETER_COUNT)
+    )
     notebook = {
         "metadata": {
             "kernelspec": {

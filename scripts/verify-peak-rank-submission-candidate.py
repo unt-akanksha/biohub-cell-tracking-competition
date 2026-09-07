@@ -36,10 +36,17 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
     files = manifest.get("files", {})
     validation_path = root / "clean_validation.json"
     checkpoint = root / "peak_rank_detector.pt"
+    training = json.loads((root / "training_terminal.json").read_text(encoding="utf-8"))
+    parameter_count = manifest.get("parameter_count")
     if not (
         manifest.get("schema_version") == 1
         and manifest.get("architecture") == "independent temporal 3D ConvNeXt U-Net peak ranker"
-        and manifest.get("parameter_count") == 38_381_478
+        and isinstance(parameter_count, int)
+        and not isinstance(parameter_count, bool)
+        and parameter_count > 0
+        and parameter_count == training.get("parameter_count")
+        and manifest.get("widths") == training.get("widths")
+        and manifest.get("depths") == training.get("depths")
         and manifest.get("training_audit_passed") is True
         and manifest.get("clean_validation_promotion_passed") is True
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
@@ -73,6 +80,7 @@ def validate_runtime(runtime_manifest: Path) -> dict[str, Any]:
         "clean_validation_sha256": manifest["clean_validation_sha256"],
         "selected_peak_tta_mode": manifest["selected_peak_tta_mode"],
         "selected_peak_tta_views": manifest["selected_peak_tta_views"],
+        "parameter_count": parameter_count,
     }
 
 
@@ -140,6 +148,7 @@ def verify_candidate(
         and evidence.get("clean_validation_sha256") == runtime["clean_validation_sha256"]
         and evidence.get("selected_peak_tta_mode") == runtime["selected_peak_tta_mode"]
         and evidence.get("selected_peak_tta_views") == runtime["selected_peak_tta_views"]
+        and evidence.get("parameter_count") == runtime["parameter_count"]
         and float(evidence.get("max_worker_elapsed_seconds", math.inf)) < 31_500.0
         and float(evidence.get("max_projected_worker_seconds", math.inf)) <= 31_500.0
         and float(evidence.get("worker_budget_seconds", 0.0)) == 31_500.0
@@ -156,6 +165,7 @@ def verify_candidate(
             row.get("run_id") == "peak-rank-official-linker-production-v1"
             and row.get("worker_count") == 2
             and row.get("checkpoint_sha256") == runtime["checkpoint_sha256"]
+            and row.get("parameter_count") == runtime["parameter_count"]
             and row.get("peak_tta_mode") == runtime["selected_peak_tta_mode"]
             and row.get("peak_tta_views") == runtime["selected_peak_tta_views"]
             and row.get("association", {}).get("edge_feature_tta") is True

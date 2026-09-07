@@ -77,12 +77,18 @@ def verify_runtime(runtime_root: Path) -> tuple[Path, Path, dict[str, Any]]:
             raise RuntimeError(f"peak-ranking runtime file changed: {name}")
     checkpoint = runtime_root / "peak_rank_detector.pt"
     terminal = runtime_root / "training_terminal.json"
+    training = json.loads(terminal.read_text(encoding="utf-8"))
     validation_path = runtime_root / "clean_validation.json"
     validation = json.loads(validation_path.read_text(encoding="utf-8"))
     selected_tta_mode = validation.get("selected_tta_mode")
     if not (
         manifest.get("training_audit_passed") is True
-        and manifest.get("parameter_count") == 38_381_478
+        and isinstance(manifest.get("parameter_count"), int)
+        and not isinstance(manifest.get("parameter_count"), bool)
+        and manifest.get("parameter_count") == training.get("parameter_count")
+        and manifest.get("parameter_count", 0) > 0
+        and manifest.get("widths") == training.get("widths")
+        and manifest.get("depths") == training.get("depths")
         and manifest.get("checkpoint_sha256") == sha256_file(checkpoint)
         and manifest.get("clean_validation_promotion_passed") is True
         and manifest.get("clean_validation_sha256") == sha256_file(validation_path)
@@ -397,6 +403,7 @@ def run(args: argparse.Namespace) -> None:
             "worker_budget_seconds": args.max_projected_worker_seconds,
             "association": association_manifest,
             "checkpoint_sha256": runtime_manifest["checkpoint_sha256"],
+            "parameter_count": runtime_manifest["parameter_count"],
             "input_partition": args.data_dir.name,
             "competition_train_labels_read": False,
             "competition_test_labels_read": False,

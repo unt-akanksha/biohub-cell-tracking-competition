@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -26,9 +26,10 @@ $variantConfig = if ($Variant -eq "v1") {
         notebook_name = "biohub-peak-rank-validation-v1.ipynb"
         controller_id = "peak-rank-validation-controller-v1"
         output_slug = "peak-rank-validation-v1"
+        parameter_count = 38381478
     }
 }
-else {
+elseif ($Variant -eq "depth-pu-v2") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-runtime-v2"
         kernel_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-v2"
@@ -40,6 +41,22 @@ else {
         notebook_name = "biohub-peak-rank-depth-pu-validation-v2.ipynb"
         controller_id = "peak-rank-depth-pu-validation-controller-v2"
         output_slug = "peak-rank-depth-pu-validation-v2"
+        parameter_count = 38381478
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-runtime-v3"
+        kernel_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-v3"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-capacity-pu-v3/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-capacity-pu-validation-runtime.py"
+        kernel_builder = "scripts/build-peak-rank-capacity-pu-validation-kernel.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-capacity-pu-validation-runtime-v3"
+        kernel_root = "kaggle/biohub-peak-rank-capacity-pu-validation-v3"
+        notebook_name = "biohub-peak-rank-capacity-pu-validation-v3.ipynb"
+        controller_id = "peak-rank-capacity-pu-validation-controller-v3"
+        output_slug = "peak-rank-capacity-pu-validation-v3"
+        parameter_count = 66977670
     }
 }
 $runtimeRef = $variantConfig.runtime_ref
@@ -155,7 +172,7 @@ try {
     $manifest = Get-Content -Raw -LiteralPath $runtimeManifest | ConvertFrom-Json
     if (
         $manifest.training_audit_passed -ne $true -or
-        [int64]$manifest.parameter_count -ne 38381478 -or
+        [int64]$manifest.parameter_count -ne [int64]$variantConfig.parameter_count -or
         $manifest.checkpoint_sha256 -ne $harvest.checkpoint_sha256
     ) {
         throw "Built runtime manifest differs from verified training evidence"

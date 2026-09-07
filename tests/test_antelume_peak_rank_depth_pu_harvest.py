@@ -75,4 +75,6 @@ def test_depth_pu_harvester_is_bounded_and_non_submitting() -> None:
     assert "MaximumPolls" in source
     assert "ServerAliveInterval=60" in source
     assert "accepted_for_kaggle_validation" in source
+    assert "harvest.verified" in source
+    assert "Remote v2 harvest acknowledgement failed" in source
     assert "kaggle competitions submit" not in source

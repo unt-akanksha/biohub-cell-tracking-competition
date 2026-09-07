@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 60.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -29,7 +29,7 @@ $variantConfig = if ($Variant -eq "v1") {
         output_slug = "peak-rank-tracking-candidate-v1"
     }
 }
-else {
+elseif ($Variant -eq "depth-pu-v2") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-depth-pu-validation-runtime-v2"
         kernel_ref = "indarkarhana/biohub-peak-rank-depth-pu-tracking-candidate-v2"
@@ -43,6 +43,22 @@ else {
         receipt_name = "peak-rank-depth-pu-candidate-submission-receipt-v2.json"
         expected_run_id = "peak-rank-depth-pu-tracking-candidate-v2"
         output_slug = "peak-rank-depth-pu-tracking-candidate-v2"
+    }
+}
+else {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-capacity-pu-validation-runtime-v3"
+        kernel_ref = "indarkarhana/biohub-peak-rank-capacity-pu-tracking-candidate-v3"
+        validation_terminal = ".biohub/automation/peak-rank-capacity-pu-validation-controller-v3.json"
+        runtime_root = ".biohub/staging/biohub-peak-rank-capacity-pu-validation-runtime-v3"
+        builder = "scripts/build-peak-rank-capacity-pu-submission-candidate.py"
+        candidate_root = "kaggle/biohub-peak-rank-capacity-pu-tracking-candidate-v3"
+        notebook_name = "biohub-peak-rank-capacity-pu-tracking-candidate-v3.ipynb"
+        controller_id = "peak-rank-capacity-pu-candidate-controller-v3"
+        promotion_name = "peak-rank-capacity-pu-candidate-promotion-v3.json"
+        receipt_name = "peak-rank-capacity-pu-candidate-submission-receipt-v3.json"
+        expected_run_id = "peak-rank-capacity-pu-tracking-candidate-v3"
+        output_slug = "peak-rank-capacity-pu-tracking-candidate-v3"
     }
 }
 $runtimeRef = $variantConfig.runtime_ref

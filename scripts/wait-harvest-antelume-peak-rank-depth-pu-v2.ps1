@@ -20,6 +20,7 @@ $sshErrorPath = Join-Path $stateRoot "harvest.stderr.log"
 $verifier = Join-Path $RepositoryRoot "scripts/verify-antelume-peak-rank-depth-pu-v2-harvest.py"
 $remoteArchive = "/home/ubuntu/biohub-peak-rank-depth-pu-v2-results.tar.gz"
 $remoteSums = "$remoteArchive.sha256"
+$remoteAcknowledgement = "/home/ubuntu/biohub-peak-rank-detector-v1/depth-pu-v2/harvest.verified"
 
 function Write-Terminal([hashtable]$Payload) {
     $Payload["schema_version"] = 1
@@ -60,6 +61,15 @@ try {
     & python $verifier --archive $archivePath --report $reportPath *> $null
     if ($LASTEXITCODE -ne 0) { throw "Depth-PU harvest verification failed" }
     $report = Get-Content -Raw -LiteralPath $reportPath | ConvertFrom-Json
+    $ackCommand = "set -euo pipefail; test -f '$remoteArchive'; test -f '$remoteSums'; sha256sum -c '$remoteSums' >/dev/null; printf '%s %s\n' '$($report.archive_sha256)' '$($report.archive_bytes)' > '$remoteAcknowledgement.partial'; mv '$remoteAcknowledgement.partial' '$remoteAcknowledgement'"
+    $ackProcess = Start-Process -FilePath ssh.exe -ArgumentList @(
+        "-i", $SshKey,
+        "-o", "BatchMode=yes",
+        "-o", "StrictHostKeyChecking=accept-new",
+        "${RemoteUser}@${RemoteHost}",
+        $ackCommand
+    ) -WindowStyle Hidden -RedirectStandardError $sshErrorPath -Wait -PassThru
+    if ($ackProcess.ExitCode -ne 0) { throw "Remote v2 harvest acknowledgement failed" }
     Write-Terminal @{
         status = "harvest_verified"
         archive_sha256 = $report.archive_sha256

@@ -7,6 +7,7 @@ import runpy
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-peak-rank-validation-kernel.py"
 DEPTH_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-depth-pu-validation-kernel.py"
+CAPACITY_PU_SCRIPT = ROOT / "scripts" / "build-peak-rank-capacity-pu-validation-kernel.py"
 
 
 def test_builder_creates_private_two_gpu_non_submitting_kernel(tmp_path, monkeypatch) -> None:
@@ -51,3 +52,22 @@ def test_depth_pu_kernel_wrapper_has_distinct_private_identity() -> None:
     assert globals_["TARGET_ID"] == "biohub-peak-rank-depth-pu-validation-v2"
     assert globals_["RUNTIME_REF"].endswith("depth-pu-validation-runtime-v2")
     assert globals_["NOTEBOOK"].name == "biohub-peak-rank-depth-pu-validation-v2.ipynb"
+
+
+def test_capacity_pu_kernel_wrapper_binds_larger_parameter_contract(tmp_path: Path) -> None:
+    wrapper = runpy.run_path(str(CAPACITY_PU_SCRIPT), run_name="capacity_pu_probe")
+    globals_ = wrapper["module"]["main"].__globals__
+    assert globals_["TARGET_ID"] == "biohub-peak-rank-capacity-pu-validation-v3"
+    assert globals_["EXPECTED_PARAMETER_COUNT"] == 66_977_670
+    target = globals_["TARGET"]
+    original = (globals_["TARGET"], globals_["NOTEBOOK"])
+    try:
+        root = tmp_path / "kernel"
+        globals_["TARGET"] = root
+        globals_["NOTEBOOK"] = root / "capacity.ipynb"
+        globals_["main"]()
+        code = (root / "capacity.ipynb").read_text(encoding="utf-8")
+        assert "66977670" in code
+        assert "__EXPECTED_PARAMETER_COUNT__" not in code
+    finally:
+        globals_["TARGET"], globals_["NOTEBOOK"] = original

@@ -20,6 +20,8 @@ ARCHIVE_ROOT = "synthetic256-real-positive-temporal-peak-rank-v1"
 EXPECTED_TARGET_NAME = "biohub-peak-rank-validation-runtime-v1"
 DATASET_ID = "indarkarhana/biohub-peak-rank-validation-runtime-v1"
 DATASET_TITLE = "Biohub Peak Rank Validation Runtime v1"
+EXPECTED_PARAMETER_COUNT = 38_381_478
+ARCHITECTURE_DESCRIPTION = "independent temporal 3D ConvNeXt U-Net peak ranker"
 SOURCES = {
     "model.py": ROOT / "research" / "peak_rank_detection" / "model.py",
     "inference.py": ROOT / "research" / "peak_rank_detection" / "inference.py",
@@ -94,7 +96,7 @@ def main() -> None:
         report.get("status") == "verified"
         and report.get("accepted_for_kaggle_validation") is True
         and report.get("audit_passed") is True
-        and report.get("parameter_count") == 38_381_478
+        and report.get("parameter_count") == EXPECTED_PARAMETER_COUNT
         and report.get("archive_sha256") == sha256_file(ARCHIVE)
     ):
         raise ValueError("peak-ranking harvest is not eligible for Kaggle validation")
@@ -132,8 +134,10 @@ def main() -> None:
                 "Two-GPU clean held-out validation plus a dormant official-linker "
                 "bridge; no submission generation"
             ),
-            "architecture": "independent temporal 3D ConvNeXt U-Net peak ranker",
-            "parameter_count": 38_381_478,
+            "architecture": ARCHITECTURE_DESCRIPTION,
+            "parameter_count": EXPECTED_PARAMETER_COUNT,
+            "widths": terminal_payload["widths"],
+            "depths": terminal_payload["depths"],
             "checkpoint_sha256": report["checkpoint_sha256"],
             "training_archive_sha256": report["archive_sha256"],
             "training_run_id": terminal_payload["run_id"],

@@ -788,3 +788,37 @@ well as the synthetic generator.
   submitter, output cache, promotion receipt, and run IDs are variant-aware;
   the existing v1 process remains isolated. Sixty-five focused peak-rank tests
   pass across both autonomous paths.
+- A September 7 source-level refresh audited the newly published
+  `biohub-detfusion-sdw30-exact0943`, `biohub-detfusion-sdw80-exact0943`,
+  `biohub-0-942-lb-one-knob-past-the-public-line`, and `biohub-run77`
+  notebooks. The two detector-fusion notebooks have `0.999037` normalized
+  line overlap and differ only in a secondary detector weight (`0.30` versus
+  `0.80`). The advertised 0.942 notebook is `0.985431` line-identical to the
+  already audited `948tta2` source and changes the detector threshold from
+  `0.965` to `0.96` after explicit public-leaderboard probes. Those weights,
+  thresholds, displayed scores, and predictions are excluded from selection.
+  The general idea of detector fusion remains a hypothesis for independently
+  trained members only, subject to the existing clean movie-held-out gates.
+- Before v1 produced its first step-1,000 selection result, a third detector
+  member was frozen for the sequential A10G queue. It widens the same
+  independently authored temporal ConvNeXt/U-Net to
+  `(128,256,512,1024)`, yielding exactly `66,977,670` parameters, while using
+  the conservative positive-unlabeled real loss and depth attenuation from
+  v2. Seed `2607157`, 2,000 steps, checkpoints at 1,000 and 2,000, and a
+  25,200-second wall guard were fixed from the measured v1 throughput rather
+  than any validation result. It is 74.5% larger than v1/v2 and exists to add
+  capacity and ensemble diversity, not to reproduce a public notebook.
+- The capacity member cannot start until v2 completes, both predecessor
+  archives pass local hash verification, and the A10G is idle. Verified local
+  harvests write remote acknowledgements; only then may the runner delete the
+  exact redundant Biohub v1/v2 result directories and archives to recover disk
+  space. Resolved paths are allow-listed, a 1.3 GB free-space floor is checked,
+  and no unrelated project path or process is inspected or changed. The v3
+  archive, private two-GPU clean validation, full candidate, and one-shot
+  promotion path have distinct identities and the same no-public-prediction,
+  no-leaderboard-selection gates.
+- A pre-launch automation audit also found that the v1 and v2 validation
+  controllers would have downloaded separate kernel version-1 outputs into a
+  shared local directory. Variant-specific output slugs now prevent that
+  collision. The idle v2 controller was restarted to load the fix; no training
+  or unrelated workload was interrupted.

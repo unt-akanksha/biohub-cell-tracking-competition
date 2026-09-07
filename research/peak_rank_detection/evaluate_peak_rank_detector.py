@@ -60,7 +60,6 @@ PUBLIC_PREFIX_RECALL = {"44b6": 0.9588014981273408, "6bba": 0.9775019394879751}
 SELECTION_POOLED_MIN = 0.80
 SELECTION_WORST_MIN = 0.65
 PROMOTION_WORST_DELTA_MIN = -0.01
-EXPECTED_PARAMETER_COUNT = 38_381_478
 TTA_CALIBRATION_STEMS = ("44b6_d29c9ab2", "6bba_09961292")
 TTA_MODE_ORDER = ("none", "rot4", "d4")
 TTA_POOLED_REGRESSION_MAX = 0.003
@@ -86,12 +85,15 @@ def atomic_json(path: Path, payload: Any) -> None:
 
 def validate_training(checkpoint: Path, terminal_path: Path) -> dict[str, Any]:
     terminal = json.loads(terminal_path.read_text(encoding="utf-8"))
+    parameter_count = terminal.get("parameter_count")
     if not (
         terminal.get("status") == "accepted_at_audit"
         and terminal.get("selection_passed") is True
         and terminal.get("audit_opened") is True
         and terminal.get("audit_passed") is True
-        and terminal.get("parameter_count") == EXPECTED_PARAMETER_COUNT
+        and isinstance(parameter_count, int)
+        and not isinstance(parameter_count, bool)
+        and parameter_count > 0
         and terminal.get("competition_test_data_read") is False
         and terminal.get("public_predictions_read") is False
         and terminal.get("public_notebook_weights_read") is False
@@ -113,7 +115,7 @@ def load_model(
     )
     state = torch.load(checkpoint, map_location="cpu", weights_only=True)
     model.load_state_dict(state["state_dict"], strict=True)
-    if count_parameters(model) != EXPECTED_PARAMETER_COUNT:
+    if count_parameters(model) != terminal["parameter_count"]:
         raise RuntimeError("unexpected detector parameter count")
     return model.requires_grad_(False).eval().to(device)
 

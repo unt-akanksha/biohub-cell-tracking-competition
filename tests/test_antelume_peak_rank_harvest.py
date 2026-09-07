@@ -110,4 +110,6 @@ def test_harvest_controller_is_bounded_and_non_submitting() -> None:
     assert "ServerAliveInterval=60" in source
     assert "accepted_for_kaggle_validation" in source
     assert "competition_submission_performed" in source
+    assert "harvest.verified" in source
+    assert "Remote v1 harvest acknowledgement failed" in source
     assert "kaggle competitions submit" not in source
