@@ -258,3 +258,38 @@ Additional references:
 - <https://www.kaggle.com/code/rishabhr0y/biohub-greenfield-seed-a-dev32-score-v1>
 - <https://www.kaggle.com/code/rishabhr0y/biohub-sam4celltracking-submission>
 - <https://www.kaggle.com/code/mjcho2023/one-faint-cell-costs-two-errors>
+
+## September 7 public-detector teacher screen
+
+Two CC0 Pilkwang detector checkpoints were downloaded by exact dataset file,
+hashed, and evaluated only as possible training-time teachers. The 400-epoch
+`unet_transformer_alltrain_seed314159_v1` checkpoint has SHA-256
+`ee6c123717c9f99945888b502c6301c5d769bf9647bc0b96f0016037df42d8c`;
+the independently initialized epoch-402 `unet_transformer_5090_50ep_v1`
+checkpoint has SHA-256
+`8294faafd646274e4f81e5a96d407a295d7ef2c7b47e2c50ac42931a543aec60`.
+Their model-state cosine similarity is only `0.408907`, so the screen did not
+mistake identical snapshots for diversity.
+
+Both checkpoints were run at the replay cubes' existing isotropic physical
+resolution, using the published two-frame sliding contract and averaging the
+two center-frame logits. On the frozen 17-crop, 154-point real selection role,
+top-64 local-max recall within 2.5 voxels was only `0.564935` and `0.623377`;
+the probability average fell to `0.584416`. Mean nearest-peak distances were
+`4.5612`, `4.1111`, and `4.6878` voxels respectively, with p90 distances above
+`10` voxels. Although mean probabilities at rounded true centers exceeded
+`0.98`, the BCE heads emitted many saturated competing maxima. Their top-64
+peak agreement was `0.637868`.
+
+Public-teacher distillation is therefore rejected before any AWS GPU time. No
+teacher weight, logit, prediction, threshold, or leaderboard result enters a
+project model. A fresh authenticated kernel listing after the prior audit also
+found only `muelsyse111/biohub-zarr-metadata-and-memory-planner` newer than the
+last snapshot; source inspection confirms it is metadata-only memory planning
+with no model, prediction, metric, or submission candidate.
+
+Additional references:
+
+- <https://www.kaggle.com/datasets/pilkwang/biohub-temporal-unet3d-seed314159-v1>
+- <https://www.kaggle.com/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1>
+- <https://www.kaggle.com/code/muelsyse111/biohub-zarr-metadata-and-memory-planner>

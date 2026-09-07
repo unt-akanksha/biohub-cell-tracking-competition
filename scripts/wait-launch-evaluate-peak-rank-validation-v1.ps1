@@ -2,7 +2,7 @@ param(
     [string]$RepositoryRoot = "C:/Users/IndarKumar/Documents/Comp/Biohub",
     [double]$MaximumWaitHours = 36.0,
     [int]$PollSeconds = 120,
-    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "logit-ensemble-v4")]
+    [ValidateSet("v1", "depth-pu-v2", "capacity-pu-v3", "faint-pu-v4", "expanded-real-faint-v7", "expanded-real-local-shape-v9", "capacity-faint-ensemble-v5", "capacity-faint-confidence-v6", "capacity-faint-expanded-v8", "expanded-local-shape-ensemble-v10", "logit-ensemble-v4")]
     [string]$Variant = "v1",
     [switch]$ValidateOnly
 )
@@ -94,6 +94,22 @@ elseif ($Variant -eq "expanded-real-faint-v7") {
         dependency_terminals = @()
     }
 }
+elseif ($Variant -eq "expanded-real-local-shape-v9") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-real-local-shape-validation-runtime-v9"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-real-local-shape-validation-v9"
+        harvest_terminal = ".biohub/cache/antelume-peak-rank-expanded-real-local-shape-v9/harvest-terminal.json"
+        runtime_builder = "scripts/build-peak-rank-expanded-real-local-shape-validation-runtime-v9.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-real-local-shape-validation-kernel-v9.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-real-local-shape-validation-runtime-v9"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-real-local-shape-validation-v9"
+        notebook_name = "biohub-peak-rank-expanded-real-local-shape-validation-v9.ipynb"
+        controller_id = "peak-rank-expanded-real-local-shape-validation-controller-v9"
+        output_slug = "peak-rank-expanded-real-local-shape-validation-v9"
+        parameter_count = 66977670
+        dependency_terminals = @()
+    }
+}
 elseif ($Variant -eq "capacity-faint-ensemble-v5") {
     @{
         runtime_ref = "indarkarhana/biohub-peak-rank-capacity-faint-ensemble-validation-runtime-v5"
@@ -149,6 +165,25 @@ elseif ($Variant -eq "capacity-faint-expanded-v8") {
             ".biohub/automation/peak-rank-capacity-pu-validation-controller-v3.json",
             ".biohub/automation/peak-rank-faint-pu-validation-controller-v4.json",
             ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json"
+        )
+    }
+}
+elseif ($Variant -eq "expanded-local-shape-ensemble-v10") {
+    @{
+        runtime_ref = "indarkarhana/biohub-peak-rank-expanded-local-shape-ensemble-validation-runtime-v10"
+        kernel_ref = "indarkarhana/biohub-peak-rank-expanded-local-shape-ensemble-validation-v10"
+        harvest_terminal = $null
+        runtime_builder = "scripts/build-peak-rank-expanded-local-shape-ensemble-validation-runtime-v10.py"
+        kernel_builder = "scripts/build-peak-rank-expanded-local-shape-ensemble-validation-kernel-v10.py"
+        runtime_root = ".biohub/staging/biohub-peak-rank-expanded-local-shape-ensemble-validation-runtime-v10"
+        kernel_root = "kaggle/biohub-peak-rank-expanded-local-shape-ensemble-validation-v10"
+        notebook_name = "biohub-peak-rank-expanded-local-shape-ensemble-validation-v10.ipynb"
+        controller_id = "peak-rank-expanded-local-shape-ensemble-validation-controller-v10"
+        output_slug = "peak-rank-expanded-local-shape-ensemble-validation-v10"
+        parameter_count = 133955340
+        dependency_terminals = @(
+            ".biohub/automation/peak-rank-expanded-real-faint-validation-controller-v7.json",
+            ".biohub/automation/peak-rank-expanded-real-local-shape-validation-controller-v9.json"
         )
     }
 }

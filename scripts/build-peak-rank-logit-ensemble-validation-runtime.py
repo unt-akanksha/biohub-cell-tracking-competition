@@ -90,6 +90,13 @@ def validate_member(spec: dict) -> dict:
     result_path = unique_result(Path(controller["download_root"]))
     result = json.loads(result_path.read_text(encoding="utf-8"))
     expected_parameter_count = int(spec.get("expected_parameter_count", 38_381_478))
+    architecture = manifest.get("architecture")
+    architecture_is_project_detector = (
+        isinstance(architecture, str)
+        and architecture.startswith("independent ")
+        and "temporal 3D ConvNeXt U-Net peak ranker" in architecture
+        and "public" not in architecture.lower()
+    )
     if not (
         controller.get("status") == "completed"
         and controller.get("accepted_for_candidate_integration") is True
@@ -98,8 +105,7 @@ def validate_member(spec: dict) -> dict:
         and controller.get("checkpoint_sha256") == manifest.get("checkpoint_sha256")
         and controller.get("validation_result_sha256") == sha256_file(result_path)
         and manifest.get("schema_version") == 1
-        and manifest.get("architecture")
-        == "independent temporal 3D ConvNeXt U-Net peak ranker"
+        and architecture_is_project_detector
         and manifest.get("parameter_count") == expected_parameter_count
         and manifest.get("ensemble_size") == 1
         and manifest.get("training_audit_passed") is True

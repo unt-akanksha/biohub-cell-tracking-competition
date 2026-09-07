@@ -27,6 +27,9 @@ def test_triple_runtime_requires_three_individually_gated_members() -> None:
     assert 'equal_weight = 1.0 / len(members)' in base
     assert 'row["ensemble_weight"] = equal_weight' in base
     assert 'sum(row["ensemble_weight"] for row in members)' in base
+    assert 'architecture.startswith("independent ")' in base
+    assert '"temporal 3D ConvNeXt U-Net peak ranker" in architecture' in base
+    assert '"public" not in architecture.lower()' in base
 
 
 def test_triple_validation_and_candidate_have_distinct_identities() -> None:

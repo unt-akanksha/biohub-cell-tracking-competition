@@ -1018,3 +1018,30 @@ well as the synthetic generator.
   was initially absent from a narrow display filter, but its held `run.lock`
   and PID `71141` proved it was active. A duplicate start was rejected by that
   lock, so no workload was interrupted or reordered.
+- Two diverse public TemporalUNet checkpoints were screened as possible
+  training-only teachers against the frozen real selection crops. Their
+  top-64 localization recall was only `0.564935` and `0.623377`, their average
+  was `0.584416`, and all p90 nearest-peak errors exceeded `10` voxels. High
+  on-cell probability coexisted with many saturated false local maxima, so the
+  distillation hypothesis was rejected without consuming GPU or admitting any
+  public weight/logit into training.
+- A ninth independent detector member is queued behind v7 on Antelume. It
+  retains the 66,977,670-parameter capacity architecture, expanded 480-frame
+  real optimization role, conservative positive-unlabeled policy, temporal
+  fading, seed `5803219`, 3,000 steps, and 36,000-second wall guard. Its only
+  change is a train-only local-shape margin: each annotated center is ranked
+  above a fixed two-voxel shell, while shell locations near any other known
+  center are excluded. This teaches a unique local maximum without assigning
+  background labels across an incomplete real crop. The hash-pinned waiting
+  wrapper is remote as PID `140809`; local harvest, dual-GPU complete-movie
+  validation, patched exact scoring, and conditional one-shot submission
+  controllers are active. The queue still yields to unrelated GPU clients and
+  contains no RSNA process or path operation.
+- A fixed v10 ensemble is precommitted before either expanded-real member has
+  produced a result. It averages dense logits and offsets from v7 and v9 with
+  equal weights (133,955,340 parameters total), and can materialize only if
+  both members independently pass their sealed audits and separate clean
+  complete-movie validations. The ensemble then receives its own two-GPU
+  validation, runtime projection, patched exact score, per-movie regression
+  gate, non-replica check, and conditional one-shot submission. It adds no AWS
+  training cost and cannot conceal a rejected member.
