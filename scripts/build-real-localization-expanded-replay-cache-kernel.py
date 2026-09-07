@@ -108,6 +108,25 @@ def expanded_kernel_source(
         '"run_id": "competition-real-localization-kaggle-cache-v1"',
         '"run_id": "competition-real-localization-expanded-kaggle-cache-v2"',
     )
+    source += '''
+
+# Emit one immutable uncompressed tar so the external trainer can stream and
+# verify hundreds of already-compressed NPZ shards without directory races.
+import tarfile
+archive_path = WORKING / "biohub-real-localization-expanded-shards-v2.tar"
+with tarfile.open(archive_path, mode="w") as archive:
+    archive.add(OUTPUT_ROOT, arcname=OUTPUT_ROOT.name, recursive=True)
+archive_sha256 = sha256_file(archive_path)
+(WORKING / "biohub-real-localization-expanded-shards-v2.tar.sha256").write_text(
+    f"{archive_sha256}  {archive_path.name}\\n"
+)
+terminal = json.loads((WORKING / "launcher_terminal.json").read_text())
+terminal["archive_name"] = archive_path.name
+terminal["archive_bytes"] = archive_path.stat().st_size
+terminal["archive_sha256"] = archive_sha256
+atomic_json(WORKING / "launcher_terminal.json", terminal)
+print(json.dumps(terminal, indent=2, sort_keys=True))
+'''
     return source
 
 

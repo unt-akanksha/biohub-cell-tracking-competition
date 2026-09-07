@@ -44,3 +44,6 @@ def test_source_transform_binds_dynamic_expanded_counts(tmp_path: Path) -> None:
     assert 'counts["optimization"]["shards"] != 480' in source
     assert "competition-real-localization-expanded-shards-v2" in source
     assert "EXPECTED_PARENT_INVENTORY_SHA256" in source
+    assert "biohub-real-localization-expanded-shards-v2.tar" in source
+    assert 'tarfile.open(archive_path, mode="w")' in source
+    assert 'terminal["archive_sha256"] = archive_sha256' in source
