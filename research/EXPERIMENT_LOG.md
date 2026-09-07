@@ -1749,3 +1749,29 @@ well as the synthetic generator.
   four-mode real-movie TTA sweep: Kaggle now evaluates only the clean-frozen
   mode, but still covers every frame of all eight selection movies and, if the
   gate passes, all four disjoint acceptance movies.
+- Capacity-PU V3 reached its first and only intermediate gate at step 1,000
+  after 11,525 seconds. Synthetic generalization is already strong (mean AP
+  `0.979661`, mean recall `0.979823`, worst-movie AP `0.957690`), but the
+  positive-only real role is still the bottleneck: pooled recall `0.467532`,
+  mean distance `3.481299` voxels, and p90 distance `6.0` versus frozen floors
+  of `0.85`, `2.25`, and `3.5`. The gate correctly records
+  `selection_passed=false`. Training continues only to the already-declared
+  final step 2,000; no V21, V27, graph, public-ranker, or other model can start
+  automatically afterward. At the live cost audit V3 was the sole CUDA
+  process, held 10,606 MiB, used 100% GPU at about 215 W, and had roughly 3.7
+  hours left under its seven-hour hard wall. If the final gate fails, threshold
+  calibration is skipped and AWS Biohub compute ends; if it passes, the only
+  successor is the checkpoint-bound synthetic threshold/TTA calibration with
+  a one-hour hard guard.
+- The 16:59 UTC public refresh excludes another seven apparent frontier
+  candidates without GPU use. Six are direct shared-stack reproductions,
+  leaderboard knob ablations, or a nine-candidate small-proxy post-processing
+  sweep. The seventh, `tharunkumar369/biohub-cell-tracking-lineage-submission`,
+  adds the public 350-epoch `alltrain` edge snapshot and 22-feature local
+  association ranker but has no executed output. The ranker feature table was
+  built from all 199 competition-train movies before its internal split, so it
+  has no embryo-unseen role and cannot provide clean promotion evidence. Two
+  newly indexed Keras position/division models are also excluded before
+  download because they are `CC BY-NC-SA 4.0`, undocumented, and omit training
+  provenance and metrics. Exact source hashes and overlap measurements are in
+  `research/PUBLIC_NOTEBOOK_AUDIT_2026-09-07.md`.

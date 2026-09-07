@@ -592,3 +592,55 @@ Additional references:
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738276>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/738778>
 - <https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/discussion/739018>
+
+## September 7 incremental refresh at 16:59 UTC
+
+Seven kernels newer than the 13:50 UTC inventory were downloaded from the
+authenticated `dateRun` listing. They do not supply a clean independent model:
+
+| Notebook | Raw SHA-256 | Unique code lines | Finding |
+|---|---|---:|---|
+| `brucezheng666/biohub-942tta-repro-20260907` | `a6a8d9e79c62593083bc3ea0352469dafbf5c7535d26863f74cfeaa660259e83` | 3,264 | Same three Pilkwang artifacts and shared public inference stack; title/config reproduce the public TTA line. |
+| `tharunkumar369/biohub-cell-tracking-lineage-submission` | `7fd8f754d49023bb120097b4223e479566c475c08ceafe1bb5812b4cbebfcbda` | 2,903 | Adds the public 350-epoch edge snapshot and public 22-feature local ranker to the same base; current source has no executed cell or output. |
+| `mianwang1024/biohub-edge-probe` | `7d95d33b471212ce56a41fd2e49cfb97b6fc18b34e205b8757ddcaf1d3f82380` | 2,868 | Public stack with divisions disabled for a leaderboard edge-only probe. |
+| `mianwang1024/biohub-relink-v1` | `9ba2e996a03ed26584e7ab087e8fd2d09dfcc66af94879d743d4e51d424bb001` | 2,867 | Differs from `edge-probe` only by re-enabling safe divisions and changing the score-axis label; normalized overlap is `0.998954`. |
+| `anhadmahajan06/biohub-track-your-cells` | `ca93e5426673db2d17d0e823d8d77e7a29be0d5437776b443d36e5a75e28282f` | 2,849 | Shared public detector/linker with an online nine-candidate post-processing sweep that rewrites the CSV from a small validation proxy; no new checkpoint family. |
+| `rogerrogerroger3r/one-knob-moved-twice` | `91bd365e65c0ee7793b44f82c09a2c804e9d3e500d584ce9c0f87f2b0e928e85` | 2,865 | Explicit public-leaderboard single-knob experiment; `0.999302` overlap with the accompanying ablation notebook. |
+| `rogerrogerroger3r/what-each-piece-of-this-pipeline-is-worth` | `30c30a69173c29a3a9d4beef124a253e332798cbe5ee17f63831776f53e87a51` | 2,865 | Useful leaderboard ablation report, but explicitly selected and measured through 34 public submissions on the unchanged public stack. |
+
+The apparent novelty in Tharun's source is not eligible clean evidence. The
+attached `biohub-local-association-ranker-unet300-v1` manifest reports 126,705
+groups and a random `dataset` split after its feature table was assembled. The
+checkpoint's own public provenance audit shows `datasets_seen ==
+datasets_written == 199`: every competition-train movie entered the feature
+table before the 15% internal split. The 350-epoch edge snapshot is likewise a
+version-pinned copy of the public `alltrain` support-pack weight. Both datasets
+are CC0, so licensing is not the problem; the absence of an embryo-unseen role
+and the lack of an executed end-to-end result are. Neither checkpoint, ranker
+probability, or configuration enters the owned candidate.
+
+The authenticated Kaggle Models inventory was also checked. The two newest
+entries, Rutger Kok's 248.5 MB Keras position model and 1.91 MB division model,
+declare `CC BY-NC-SA 4.0` and provide no overview, usage, metrics, training-data
+record, or creating notebook. They fail the workspace's commercial-use and
+reproducibility policies before inference. Older indexed models either expose
+an unspecified `Other` license, are small baseline U-Nets, or were already
+superseded by the stronger detector screens. No model bytes or GPU time were
+allocated.
+
+The discussion inventory remains directionally unchanged: current high-ranked
+advice still prioritizes detection before linking and division, while the new
+notebook material is almost entirely leaderboard ablation and shared-stack
+post-processing. Public scores remain contextual only and did not select a
+model, threshold, ensemble weight, or run.
+
+Additional references:
+
+- <https://www.kaggle.com/code/tharunkumar369/biohub-cell-tracking-lineage-submission>
+- <https://www.kaggle.com/code/mianwang1024/biohub-edge-probe>
+- <https://www.kaggle.com/code/mianwang1024/biohub-relink-v1>
+- <https://www.kaggle.com/code/anhadmahajan06/biohub-track-your-cells>
+- <https://www.kaggle.com/code/rogerrogerroger3r/what-each-piece-of-this-pipeline-is-worth>
+- <https://www.kaggle.com/code/rogerrogerroger3r/one-knob-moved-twice>
+- <https://www.kaggle.com/models/rutgernl/model-positions-biohub-2>
+- <https://www.kaggle.com/models/rutgernl/model-divisions-biohub-1>
