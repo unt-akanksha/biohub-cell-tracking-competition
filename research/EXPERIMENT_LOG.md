@@ -1608,3 +1608,27 @@ well as the synthetic generator.
   active GPU processes and removes only the verified V3 Biohub artifacts.
   Superseded V4-V17 waiters do not have a live path into the GPU; the intended
   effective chain is now V3 -> V19 -> V21 -> V23 -> V27 -> graph v2.
+- The 2026-09-07 public refresh found a newly popular notebook,
+  `kunaldesale2408/biohub-cell-tracking` (download SHA-256
+  `6dc327ce...f67568`). Static inspection classifies it as another derivative
+  of the public dual-seed harmonic TemporalUNet/transformer/ILP stack, not an
+  independently validated new model family. Its material changes are mostly
+  leaderboard-described post-processing knobs (including detection `0.960`,
+  division weight `1.3`, minimum track length `5`, wider divergence, and
+  rescue thresholds), and its source explicitly labels the axis as targeted
+  improvement over an LB score. It contains no execution outputs or raw
+  prediction archive from which those knobs could be evaluated cleanly.
+  Therefore neither the notebook nor its parameter bundle is admitted as
+  promotion evidence; isolated ideas may be reconsidered only as
+  precommitted hypotheses with complete-movie patched-official validation.
+- The same discussion refresh reinforces the current experiment ordering.
+  In `what layer did ur gains actually come from` (discussion 737543), a
+  reported top competitor recommends solving detection before linking and
+  division; other current threads separately focus on 3D detection, GNN
+  association, and sparse-GT overfitting. Host discussions 727154 and 728324
+  confirm the patched scorer/rescore, while discussion 728613 identifies
+  nonconsecutive lineage edges as a catastrophic structural failure. No
+  leaderboard-only score was used for model selection. The committed queue
+  remains detection-first, and V30 now fails closed if its final ranked graph
+  contains a dangling or nonconsecutive edge before `submission.csv` can be
+  accepted.

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import importlib.util
 from pathlib import Path
 
@@ -34,6 +35,10 @@ def test_builder_composes_graph_after_production_and_around_validator() -> None:
     assert inference < graph_setup < post < offload < validator < restore < evidence
     assert cells[post].count("def _graph_context_scores_for_candidates") == 1
     assert cells[post].count("edges, ranked_consensus_stats =") == 1
+    assert "ranked consensus produced a nonconsecutive edge" in cells[post]
+    for cell, source in zip(notebook["cells"], cells, strict=True):
+        if cell.get("cell_type") == "code":
+            ast.parse(source)
     assert notebook["metadata"]["codex"]["component_order"] == [
         "peak_rank_detector_v28",
         "graph_context_division_v2",

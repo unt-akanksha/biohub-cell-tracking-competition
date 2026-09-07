@@ -364,6 +364,21 @@ RANKED_APPLY = r'''
     edges, ranked_consensus_stats = _apply_external_ranked_consensus(
         nodes_by_id, edges, dataset
     )
+    for edge in edges:
+        source_id = int(edge["source_id"])
+        target_id = int(edge["target_id"])
+        if source_id not in nodes_by_id or target_id not in nodes_by_id:
+            raise RuntimeError(
+                f"{dataset}: ranked consensus produced a dangling edge "
+                f"{source_id}->{target_id}"
+            )
+        source_time = int(nodes_by_id[source_id]["t"])
+        target_time = int(nodes_by_id[target_id]["t"])
+        if target_time != source_time + 1:
+            raise RuntimeError(
+                f"{dataset}: ranked consensus produced a nonconsecutive edge "
+                f"{source_id}@{source_time}->{target_id}@{target_time}"
+            )
     for key, value in ranked_consensus_stats.items():
         stats[f"ranked_consensus_{key}"] = value
     print(

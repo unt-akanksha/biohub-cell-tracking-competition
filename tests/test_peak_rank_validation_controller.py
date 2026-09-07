@@ -36,6 +36,7 @@ def test_controller_requires_private_dual_gpu_offline_validation() -> None:
         '"expanded-real-xl-balanced-v21", '
         '"temporal-min-local-snr-v23", '
         '"hard-mined-temporal-snr-v27", '
+        '"xl-hard-mined-temporal-snr-v31", '
         '"capacity-faint-ensemble-v5", '
         '"capacity-faint-confidence-v6", '
         '"capacity-faint-expanded-v8", '
