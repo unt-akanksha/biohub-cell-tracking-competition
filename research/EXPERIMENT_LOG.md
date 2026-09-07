@@ -726,3 +726,14 @@ well as the synthetic generator.
   peak-ranker selection result was observed, the full candidate builder was
   hash-pinned to this attributed, compute-neutral linker update. The independent
   detector and all frozen clean-validation/promotion gates remain unchanged.
+- Before v1 produced its first selection result, a complementary detector run
+  was frozen and queued unconditionally behind it. The v2 member retains the
+  38,381,478-parameter temporal ConvNeXt/U-Net and complete-label synthetic
+  objective, but sparse competition crops contribute only positive-logit and
+  subvoxel-offset loss; they contribute no negative rank term. It also applies
+  random axial intensity attenuation down to `0.25`, matching published 3D
+  microscopy augmentation for depth-dependent fluorescence decay. The run uses
+  seed `1407733`, the same disjoint splits and gates, 3,000 steps, and the same
+  7-hour wall guard. It starts only after the v1 archive is hash-verified and
+  the shared A10G is idle; the Biohub yield guard remains authoritative if an
+  unrelated workload later appears.
