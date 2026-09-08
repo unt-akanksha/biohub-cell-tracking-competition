@@ -167,7 +167,6 @@ RUN_ID = "competition-graph-context-fresh-ensemble-v3"
 EXPECTED_RUNTIME_MANIFEST_SHA256 = "{runtime_manifest_sha256}"
 EXPECTED_ARCHIVE_SHA256 = "{EXPECTED['archive']}"
 EXPECTED_SPLIT_SHA256 = "{EXPECTED['split']}"
-RUNTIME = Path("/kaggle/input/{RUNTIME_ID}")
 WORK = Path("/kaggle/working/graph_context_fresh_v3")
 OUTPUT = Path("/kaggle/working/graph_context_fresh_ensemble_v3")
 
@@ -178,9 +177,17 @@ def sha256_file(path):
             digest.update(block)
     return digest.hexdigest()
 
+runtime_manifests = [
+    path
+    for path in Path("/kaggle/input").rglob("runtime_manifest.json")
+    if sha256_file(path) == EXPECTED_RUNTIME_MANIFEST_SHA256
+]
+if len(runtime_manifests) != 1:
+    raise RuntimeError(
+        f"expected one hash-matched runtime manifest, found {{runtime_manifests}}"
+    )
+RUNTIME = runtime_manifests[0].parent
 manifest_path = RUNTIME / "runtime_manifest.json"
-if sha256_file(manifest_path) != EXPECTED_RUNTIME_MANIFEST_SHA256:
-    raise RuntimeError("runtime manifest changed")
 manifest = json.loads(manifest_path.read_text())
 for relative, record in manifest["files"].items():
     path = RUNTIME / relative
