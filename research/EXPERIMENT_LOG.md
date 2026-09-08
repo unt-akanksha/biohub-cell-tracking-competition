@@ -1775,3 +1775,23 @@ well as the synthetic generator.
   download because they are `CC BY-NC-SA 4.0`, undocumented, and omit training
   provenance and metrics. Exact source hashes and overlap measurements are in
   `research/PUBLIC_NOTEBOOK_AUDIT_2026-09-07.md`.
+- Capacity-PU V3 completed all 2,000 steps in `22,982.81` seconds and its
+  SHA-256-bound archive `4e1b5744...55eec6b` was independently harvested and
+  verified. The final checkpoint increased synthetic mean AP/recall to
+  `0.984904/0.985001` with worst-movie AP `0.972804`, but real positive-only
+  recall reached only `0.584416`; mean distance remained `2.928127` voxels and
+  p90 distance remained the `6.0`-voxel miss cap. Those values fail the frozen
+  real floors (`0.85`, `2.25`, `3.5`), so the terminal is
+  `rejected_at_selection`, `best_step=0`, with sealed audit unopened, no
+  promotable checkpoint, no threshold calibration, no Kaggle validation, and
+  no submission. Competition test data, public predictions/weights, and
+  leaderboard feedback were not read.
+- The post-run resource audit at `2026-09-08T01:29:44Z` found no CUDA process
+  and no Biohub trainer/calibrator on Antelume; the A10G reported `0 MiB` model
+  memory and only `4%` background utilization. Kaggle usage remains exactly
+  `0.00/30.00` GPU hours, and the V3 controllers correctly launched no kernel.
+  V21, V27, and graph-v2 remain staged with no automatic launch path. Because
+  scaling from the depth-PU model to 66.98M parameters did not close the real
+  localization gap, further capacity-only runs are rejected on cost grounds;
+  the next lane must change real-domain supervision or input representation
+  and pass an optimization-only diagnostic before receiving GPU time.
