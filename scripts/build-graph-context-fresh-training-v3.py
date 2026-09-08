@@ -17,6 +17,7 @@ ARCHIVE = (
     / ".biohub/cache/graph-context-relational-v1"
     / "biohub_graph_context_relational_patches_v1.tar.gz"
 )
+STAGED_ARCHIVE_NAME = "graph_context_relational_patches_v1.tar.bin"
 PRETRAIN_ROOT = (
     ROOT
     / ".biohub/cache/kernel-outputs"
@@ -86,7 +87,10 @@ def build_runtime() -> dict:
     for name, path in inputs.items():
         if sha256_file(path) != EXPECTED[name]:
             raise RuntimeError(f"frozen input changed: {name}")
-    shutil.copy2(ARCHIVE, STAGING / ARCHIVE.name)
+    # Kaggle expands recognized archive suffixes during dataset ingestion. Keep
+    # the gzip-compressed tar bytes opaque so the notebook can verify and unpack
+    # the exact frozen artifact itself.
+    shutil.copy2(ARCHIVE, STAGING / STAGED_ARCHIVE_NAME)
     shutil.copy2(SPLIT, STAGING / SPLIT.name)
     shutil.copy2(PRETRAIN_ROOT / "pretraining_terminal.json", STAGING)
     for fold in ("target_44b6", "target_6bba"):
@@ -199,7 +203,7 @@ for relative, flat_name in manifest["source_layout"].items():
     destination = WORK / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(RUNTIME / flat_name, destination)
-archive = RUNTIME / "{ARCHIVE.name}"
+archive = RUNTIME / "{STAGED_ARCHIVE_NAME}"
 with tarfile.open(archive, "r:gz") as stream:
     stream.extractall(WORK, filter="data")
 DATA = WORK / "biohub_graph_context_relational_patches_v1"
