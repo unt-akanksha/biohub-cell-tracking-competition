@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "run_id": "948tta2-lsm-consensus-v2",
+  "status": "rejected_at_complete_movie_gate",
+  "kernel_ref": "indarkarhana/biohub-948tta2-lsm-consensus-v2",
+  "kernel_version": 2,
+  "strategy": {
+    "control": "attributed_redoctopusk_biohub_948tta2",
+    "coordinate_policy": "two_lsm_exact_final_integer_agreement_r2_p2_b025",
+    "feature24_model_sha256": "1a87e6ed6322e0cac98d9c92f7aade2a07bc5dbd4b322c5947f17227f6e256d1",
+    "feature36_model_sha256": "adedfaf056ee6e53922df24dd01c5f4cf27d20f313771a37275f335c48093421",
+    "topology_preserved": true,
+    "node_ids_and_times_preserved": true,
+    "estimated_node_count_used": false
+  },
+  "complete_movie_validation": {
+    "movies": 4,
+    "control_adjusted_edge_jaccard": 0.9201972026768339,
+    "candidate_adjusted_edge_jaccard": 0.9197683570232382,
+    "control_division_jaccard": 0.16666666666666666,
+    "candidate_division_jaccard": 0.16666666666666666,
+    "control_proxy_score": 0.9368638693435006,
+    "candidate_proxy_score": 0.9364350236899049,
+    "proxy_score_delta": -0.0004288456535956886,
+    "minimum_movie_adjusted_edge_delta": -0.00126793770691358,
+    "per_movie_adjusted_edge_delta": {
+      "44b6_12dfb391": -0.00126793770691358,
+      "44b6_267148e4": 0.0,
+      "6bba_062c8d37": 0.0,
+      "6bba_07e24132": 0.0
+    },
+    "promotion_passed": false
+  },
+  "production": {
+    "coordinate_changes": 47995,
+    "newly_introduced_out_of_bounds": 0,
+    "submission_sha256": "c28befec398294a49e408c19196f42e3d22d851dfea2bb6178edb96a328fd614",
+    "competition_submission_performed": false
+  },
+  "execution": {
+    "launcher_elapsed_seconds": 2855.932,
+    "quota_before_hours": 29.24,
+    "quota_after_hours": 28.44,
+    "charged_hours": 0.8,
+    "protected_reserve_hours": 8.0
+  },
+  "artifacts": {
+    "candidate_evidence_sha256": "ce26744bcc3f44b717c7e88a73de53f3fd8cd8fd0422029413b852650051475f",
+    "launcher_terminal_sha256": "645f4e156a0d5513dbd62b394c8f592f9c1f2a7f3e4fb3b9fb2ab8213540a0c0",
+    "run_stats_sha256": "065d6d6c02004c786b3492e738152ecb9d71d3e10866b3ecca1f96378c258355",
+    "validator_results_sha256": "e3ed0d00537085e280281f02bacba564f08ec265ded6f39ceab08574a0f63845",
+    "kernel_log_sha256": "466507dd14798cb317d13fbc7b85c8f80552ce7365964f23137e7c28b9c9c45f"
+  },
+  "decision": {
+    "state": "retire_lsm_coordinate_relocation_family",
+    "reason": "Exact final-integer agreement between two independently trained LSM models still moved 47,995 production nodes and reduced the clean complete-movie proxy by 0.000428846, including a 0.001267938 regression on 44b6_12dfb391.",
+    "no_further_label_tuning": true,
+    "next_direction": "Preserve the strongest attributed public control and pursue an independently trained association or division correction with a newly frozen validation split; do not tune LSM radius, power, blend, or agreement rules against these opened movies."
+  },
+  "metric_hack_used": false,
+  "public_predictions_copied": false,
+  "public_leaderboard_used_for_project_selection": false,
+  "authorized_for_submission": false
+}

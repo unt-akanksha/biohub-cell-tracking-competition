@@ -1923,3 +1923,26 @@ well as the synthetic generator.
   `c7894174a876eec874115e613d3f9b6f000f031f4ded0890c3beac4437a2dd42`;
   all seven focused tests pass. Live quota before relaunch is `29.24h`, again
   leaving more than the mandatory eight-hour reserve under the worst case.
+- Kernel v2 version 2 completed cleanly in `2,855.932s` but was rejected by
+  the external complete-movie gate, so the controller made no competition
+  submission. Exact two-model final-integer agreement preserved every node,
+  time, ID, and edge and introduced zero out-of-bounds coordinates, but it
+  still moved 47,995 production coordinates. The candidate proxy was
+  `0.936435024` versus control `0.936863869` (delta `-0.000428846`), with one
+  movie regression: `44b6_12dfb391` adjusted-edge delta
+  `-0.001267938`; the other three movies were unchanged and division Jaccard
+  remained `0.166666667`. This retires the LSM coordinate-relocation family:
+  radius, power, blend, confidence, or agreement rules will not be tuned on
+  these now-open labels. The rejected production CSV hash is
+  `c28befec398294a49e408c19196f42e3d22d851dfea2bb6178edb96a328fd614`.
+  The run consumed `0.80h`, leaving `28.44h`; the eight-hour Kaggle reserve is
+  intact. Full immutable evidence is recorded in
+  `reports/experiments/948tta2-lsm-consensus-v2-result.json`.
+- The September 8 public refresh found no new independently validated clean
+  model. Known negative-time and synthetic-node metric-hack notebooks were
+  skipped before source download. The changed Harmonic Fusion source and the
+  newly surfaced `reyhanksatria/biohub-cell-tracking-0-946-lb` source contain
+  no known exploit, but both explicitly descend from leaderboard-tuned public
+  configurations; they are hash-bound comparator-only sources and cannot
+  select project experiments. The audit projection and policy update are
+  committed as `7bb5fa2`.
