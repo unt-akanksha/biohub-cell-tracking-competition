@@ -90,14 +90,17 @@ def build_runtime() -> dict:
     shutil.copy2(SPLIT, STAGING / SPLIT.name)
     shutil.copy2(PRETRAIN_ROOT / "pretraining_terminal.json", STAGING)
     for fold in ("target_44b6", "target_6bba"):
-        destination = STAGING / "warm_starts" / fold
-        destination.mkdir(parents=True)
-        shutil.copy2(PRETRAIN_ROOT / fold / "pretrained_model.pt", destination)
+        shutil.copy2(
+            PRETRAIN_ROOT / fold / "pretrained_model.pt",
+            STAGING / f"warm_start_{fold}.pt",
+        )
+    source_layout = {}
     for relative in SOURCE_FILES:
         source = ROOT / relative
-        destination = STAGING / relative
-        destination.parent.mkdir(parents=True, exist_ok=True)
+        flat_name = "source__" + relative.replace("/", "__")
+        destination = STAGING / flat_name
         shutil.copy2(source, destination)
+        source_layout[relative] = flat_name
     inventory = {
         str(path.relative_to(STAGING)).replace("\\", "/"): {
             "bytes": path.stat().st_size,
@@ -125,6 +128,7 @@ def build_runtime() -> dict:
         "public_leaderboard_used_for_selection": False,
         "metric_hack_allowed": False,
         "submission_command_included": False,
+        "source_layout": source_layout,
         "files": inventory,
     }
     (STAGING / "runtime_manifest.json").write_text(
@@ -191,7 +195,10 @@ if WORK.exists() or OUTPUT.exists():
     raise RuntimeError("fresh output paths unexpectedly exist")
 WORK.mkdir(parents=True)
 OUTPUT.mkdir(parents=True)
-shutil.copytree(RUNTIME / "research", WORK / "research")
+for relative, flat_name in manifest["source_layout"].items():
+    destination = WORK / relative
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(RUNTIME / flat_name, destination)
 archive = RUNTIME / "{ARCHIVE.name}"
 with tarfile.open(archive, "r:gz") as stream:
     stream.extractall(WORK, filter="data")
@@ -211,7 +218,7 @@ def launch_worker(seed, fold, index, gpu):
     command = [
         sys.executable, str(TRAINER), "worker",
         "--data-root", str(DATA), "--split", str(SPLIT),
-        "--initial-model", str(RUNTIME / "warm_starts" / fold / "pretrained_model.pt"),
+        "--initial-model", str(RUNTIME / f"warm_start_{{fold}}.pt"),
         "--warm-start-terminal", str(TERMINAL),
         "--output-root", str(OUTPUT), "--member", member,
         "--seed", str(seed), "--fold", fold,
