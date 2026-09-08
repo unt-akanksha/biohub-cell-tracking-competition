@@ -1844,3 +1844,15 @@ well as the synthetic generator.
   required eight-hour reserve. A hidden ten-minute-poll controller verifies
   the five hash-bound outputs and submits exactly once only after the external
   clean promotion gate passes; a rejected or failed kernel cannot submit.
+- The authenticated `dateRun` refresh at `2026-09-08T02:27Z` found no notebook
+  newer than the already retained September 8 source set. The four current
+  `sjlee101` division-radius variants are mechanically clean but explicitly
+  document public-leaderboard sweeps in their parameter comments, so their
+  parent/sister radii, DeepCenter threshold, and symmetry setting remain
+  excluded from project selection. The two previously classified exploit
+  notebook directories were confirmed empty and removed; the local refresh
+  root now contains only the clean attributed public family. Imported
+  `prior-dense-motion-state-guard` evidence is also not actionable because the
+  original code/configuration was not preserved, despite its recorded positive
+  OOF delta. No public score, prediction, or leaderboard-selected constant was
+  used.
