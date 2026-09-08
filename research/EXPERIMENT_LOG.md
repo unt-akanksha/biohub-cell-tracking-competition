@@ -1795,3 +1795,52 @@ well as the synthetic generator.
   localization gap, further capacity-only runs are rejected on cost grounds;
   the next lane must change real-domain supervision or input representation
   and pass an optimization-only diagnostic before receiving GPU time.
+- Before the Antelume instance was powered down, every Biohub artifact with
+  remaining evidentiary value was hash-verified against its local copy. The
+  recovered graph-context, relational-division, Capacity-PU V3, and two patch
+  archives matched exactly. A final compact source/log/JSON salvage archive is
+  stored at
+  `.biohub/cache/antelume-final-salvage-20260908/biohub-final-salvage-20260908.tar.gz`
+  with SHA-256 `4391be4f83e0550f8574ceec62c8c3c6f1604551578c66d91e19e6ad2cee98cf`.
+  After verification, only exact `/home/ubuntu/*biohub*` paths and stale
+  Biohub waiters were removed. A post-delete scan found no Biohub path under
+  `/home/ubuntu`, `/tmp`, `/var/tmp`, or `/mnt`; no RSNA path, process, or
+  service was touched.
+- The 2026-09-08 public refresh is now source-first and recent-only. The clean
+  retained frontier consists of `redoctopusk/biohub-948base`,
+  `redoctopusk/biohub-948tta2`, the byte-identical
+  `rishabhr0y/biohub-948-sew20`, and four recent `sjlee101` division-radius
+  ablations. `948base` and `948-sew20` have identical source SHA-256 values;
+  `948tta2` differs materially only by reusing detector D4 passes to average
+  edge features. Its advertised `0.948` is a control hypothesis, not clean
+  validation evidence; the downloaded source has no executed outputs.
+- Older score-sorted notebooks are a permanent exclusion lane. Two older
+  sources were briefly downloaded only to classify their mechanics, then all
+  downloaded files were deleted: `anvithpothula/biohub-0-95` inserts
+  out-of-bounds synthetic hub/division nodes, and
+  `kaiwalyaatulraut/biohub-solution` contains an explicitly labeled
+  division-term metric-hack cell with negative-time nodes. Neither source,
+  prediction, constant, score, or synthetic-node mechanism may be imported,
+  reproduced, ensembled, or used for selection. Future public refreshes must
+  inspect recent clean candidates directly and must not pull the older
+  score-sorted metric-hack family.
+- Candidate `biohub-948tta2-lsm-consensus-v1` uses the audited clean
+  `948tta2` notebook only as an attributed control and copies no prediction.
+  Its owned topology-preserving addition loads the independently trained
+  feature-24 and feature-36 LSM-FM heatmap networks on separate T4s. Each
+  existing node is moved only when both networks yield exactly the same final
+  integer coordinate under the single frozen radius-2, squared-probability,
+  0.25-blend rule. It cannot add/delete nodes or edges, change IDs/times, use
+  the organizer estimated count in production, or emit negative/out-of-bounds
+  coordinates. The same run evaluates untouched control and candidate on at
+  least four complete held-out movies. Promotion requires a strict proxy gain,
+  zero per-movie adjusted-edge regression, no division regression, at least
+  one production coordinate change, a non-public submission hash, and all
+  external graph-integrity checks.
+- Static generation checks compile every code cell and reject known exploit
+  signatures; four focused builder/controller tests pass. Live Kaggle quota
+  was `30.00h` before launch. Version 1 was pushed private with Internet/TPU
+  disabled and the two-T4 shape; its `42,000s` hard stop leaves more than the
+  required eight-hour reserve. A hidden ten-minute-poll controller verifies
+  the five hash-bound outputs and submits exactly once only after the external
+  clean promotion gate passes; a rejected or failed kernel cannot submit.
