@@ -34,14 +34,16 @@ EXPECTED = {
 SOURCE_FILES = (
     "research/train_handcrafted_division_gate.py",
     "research/temporal_contrastive/__init__.py",
+    "research/temporal_contrastive/contextual_pair_fusion.py",
     "research/temporal_contrastive/graph_context_division_model.py",
+    "research/temporal_contrastive/graph_context_training_support.py",
     "research/temporal_contrastive/multiscale_contextual_pair_fusion.py",
+    "research/temporal_contrastive/pair_fusion.py",
+    "research/temporal_contrastive/patch_model.py",
     "research/temporal_contrastive/relational_division_model.py",
-    "research/temporal_contrastive/train_focused_division_gate.py",
     "research/temporal_contrastive/train_graph_context_division_sweep.py",
     "research/temporal_contrastive/train_graph_context_fresh_ensemble_v3.py",
-    "research/temporal_contrastive/train_real_division_gate.py",
-    "research/temporal_contrastive/train_relational_division_sweep.py",
+    "research/temporal_contrastive/transition_context.py",
 )
 
 

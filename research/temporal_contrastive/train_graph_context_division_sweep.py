@@ -27,18 +27,16 @@ from research.temporal_contrastive.graph_context_division_model import (
     architecture_contract,
     load_backbone_checkpoint,
 )
-from research.temporal_contrastive.train_relational_division_sweep import (
+from research.temporal_contrastive.graph_context_training_support import (
+    atomic_json,
     calibration_free_equal_rank_ensemble,
     eligible_metrics,
     focal_loss,
-    selection_utility,
-    threshold_decisions,
-)
-from research.temporal_contrastive.train_real_division_gate import (
-    atomic_json,
     select_frozen_threshold,
+    selection_utility,
     sha256_file,
     state_dict_cpu,
+    threshold_decisions,
     update_ema,
 )
 
