@@ -1856,3 +1856,39 @@ well as the synthetic generator.
   original code/configuration was not preserved, despite its recorded positive
   OOF delta. No public score, prediction, or leaderboard-selected constant was
   used.
+- Candidate `biohub-948tta2-lsm-consensus-v1` reached terminal Kaggle status
+  `ERROR` after about 23 minutes and consumed `0.39h` of quota, but the retained
+  output proves that all four production movies completed base inference in
+  9.35 minutes. No submission occurred. The failure was infrastructure in our
+  added integrity attribution, not a scientific promotion result: on the first
+  postprocessed movie, 10,663 of 25,642 nodes moved under exact two-model
+  agreement, while the final scan incorrectly attributed 42 slightly invalid
+  coordinates inherited from the untouched public linefit control to the LSM
+  candidate. The partial 57-byte header-only CSV with SHA-256
+  `6fe604bb8626f715cc0a74e5fe6f497bffd7fabdeafd19cea321b64b77af9f4e`
+  is explicitly non-submittable. Complete retained error output is
+  under
+  `.biohub/cache/kernel-errors/biohub-948tta2-lsm-consensus-v1-version1`.
+- The v2 repair changes only bounds provenance. It records invalid coordinates
+  before and after the candidate step for every movie and fails only if the
+  candidate newly introduces one; all coordinates actually moved by either
+  LSM voter remain clipped to the exact frame bounds. Node count, node ID/time,
+  edge, non-public-hash, at-least-one-move, complete-movie strict proxy gain,
+  zero per-movie regression, and division non-regression gates remain intact.
+  The generated notebook SHA-256 is
+  `1ad253d89356034a3aa4466d363ae955c4759f1a7ff8c5fdc075d3486bd8df83`;
+  metadata SHA-256 is
+  `c620b00bd95fc8cb72b174932940472da148a20d826638d39e984705bb1b9277`.
+  Seven focused v1/v2 builder and controller tests pass. Prelaunch quota is
+  `29.61/30.00h` remaining, so the declared 12-hour worst case preserves
+  17.61 hours and exceeds the mandatory eight-hour reserve.
+- A separate CPU-only audit-role diagnostic evaluated the fixed, already
+  selection-admitted eight-member graph-context v1 ensemble without reading
+  test data, public predictions, or leaderboard results. On the 53 eligible
+  audit rows it reached AP `0.758117`, best Jaccard `0.583333`, and seven true
+  positives before its first false positive; per-embryo AP was `1.0` and
+  `0.708422`. This passes the predeclared diagnostic shape check but cannot
+  authorize selection or submission because that audit role had already been
+  opened. It only justifies retaining graph context as a prospective fallback
+  after the LSM v2 complete-movie result; no graph GPU run is queued in
+  parallel.
