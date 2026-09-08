@@ -3,12 +3,20 @@
   "audit_scores_opened": false,
   "authorized_for_submission": false,
   "competition_test_data_read": false,
+  "complete_movie_validation_rule": "for each embryo, take the first two fresh-audit stems by the already-frozen stable key among stems containing at least one inference-eligible positive; do not use model scores or prior per-movie performance",
+  "complete_movie_validation_stems": [
+    "44b6_d754aa59",
+    "44b6_7a302da0",
+    "6bba_debd7bfa",
+    "6bba_fc5f39dc"
+  ],
   "frozen_experiment": {
     "absolute_threshold_for_deployment": false,
     "audit_gate": "at least three true agreed recoveries, at most one false agreed recovery, positive pooled eligible Jaccard delta, and no embryo with zero true agreed recoveries",
     "backbone_learning_rate_multiplier": 0.15,
     "batch_size": 10,
     "candidate_base": "redoctopusk/biohub-948tta2",
+    "complete_movie_promotion_gate": "patched-official pooled proxy delta>0, pooled adjusted-edge delta>=0, division Jaccard strictly improves, no movie proxy regresses, graph integrity passes, and production differs from the attributed public control",
     "deployment_rule": "within each movie, add at most one parent-free edge only when the graph-context equal-rank ensemble and independent morphology ranking select the same geometry>=3 candidate",
     "ema_decay": 0.995,
     "external_only_warm_starts": {
@@ -17,6 +25,7 @@
     },
     "family": "temporal_multiscale_graph_context_division_v1",
     "independent_voter": "132-feature temporal morphology ensemble fitted only on fresh optimization movies",
+    "independent_voter_selection_gate": "pooled eligible AP>=0.55, per-embryo eligible AP>=0.40, and at least two eligible true positives before the first false positive",
     "learning_rate": 6e-05,
     "metric_hack_allowed": false,
     "minimum_learning_rate": 3e-07,
@@ -36,6 +45,7 @@
     "weight_decay": 0.0002
   },
   "labels_used_for_assignment": false,
+  "labels_used_only_to_require_validation_event_presence": true,
   "leaderboard_used_for_assignment": false,
   "model_outputs_used_for_assignment": false,
   "prior_roles_used_for_assignment": false,

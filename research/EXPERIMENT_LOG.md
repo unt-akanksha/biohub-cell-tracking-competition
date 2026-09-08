@@ -1958,12 +1958,15 @@ well as the synthetic generator.
   audit contains 30 movies and nine inference-eligible positives; selection
   contains 30 different movies and eleven eligible positives. The frozen
   artifact is `research/graph_context_fresh_split_v3.json` with SHA-256
-  `b218c255d92e45f5d6ad2f0d2f38e095d6bfc805686732c5fd68d98132033cf5`.
+  `8d53a55217be88efc895ae9bf0bf378a3a4acb6c42437836a342d888cc9296da`.
   Its four planned 74,732,308-parameter members warm-start only from recovered
   external ZebraHub/ZSNS checkpoints whose terminal records
   `competition_data_read=false`; all admitted members are equal-rank ensembled
   before audit, then must agree with an independently fitted 132-feature
   morphology voter. The deployment rule remains threshold-free, geometry
   bounded, and limited to one parent-free edge per movie. Two deterministic
-  split tests pass. No audit prediction, Kaggle job, or submission has yet been
+  split tests pass. Four complete validation movies were frozen before scoring
+  as the first two event-bearing audit stems per embryo under the same stable
+  ordering: `44b6_d754aa59`, `44b6_7a302da0`, `6bba_debd7bfa`, and
+  `6bba_fc5f39dc`. No audit prediction, Kaggle job, or submission has yet been
   produced under this v3 contract.

@@ -144,6 +144,22 @@ def build_split(manifest_path: Path) -> dict[str, Any]:
             ):
                 raise RuntimeError(f"fresh split produced an unusable stratum: {role}")
 
+    validation_stems: list[str] = []
+    for embryo in ("44b6", "6bba"):
+        eligible_stems = sorted(
+            {
+                str(record["stem"])
+                for record in records
+                if record.get("embryo") == embryo
+                and roles[str(record["stem"])] == "audit"
+                and int(record["inference_eligible_positives"]) > 0
+            },
+            key=lambda stem: (stable_key(embryo=embryo, stem=stem), stem),
+        )
+        if len(eligible_stems) < 2:
+            raise RuntimeError(f"fresh audit lacks two event movies for {embryo}")
+        validation_stems.extend(eligible_stems[:2])
+
     return {
         "schema_version": 1,
         "status": "frozen_before_model_scoring",
@@ -158,6 +174,7 @@ def build_split(manifest_path: Path) -> dict[str, Any]:
             "optimization"
         ),
         "labels_used_for_assignment": False,
+        "labels_used_only_to_require_validation_event_presence": True,
         "model_outputs_used_for_assignment": False,
         "prior_roles_used_for_assignment": False,
         "leaderboard_used_for_assignment": False,
@@ -173,6 +190,13 @@ def build_split(manifest_path: Path) -> dict[str, Any]:
             for stem in sorted(roles)
         ],
         "summary": summaries,
+        "complete_movie_validation_stems": validation_stems,
+        "complete_movie_validation_rule": (
+            "for each embryo, take the first two fresh-audit stems by the "
+            "already-frozen stable key among stems containing at least one "
+            "inference-eligible positive; do not use model scores or prior "
+            "per-movie performance"
+        ),
         "frozen_experiment": {
             "family": "temporal_multiscale_graph_context_division_v1",
             "parameter_count_per_member": 74732308,
@@ -202,6 +226,11 @@ def build_split(manifest_path: Path) -> dict[str, Any]:
                 "132-feature temporal morphology ensemble fitted only on "
                 "fresh optimization movies"
             ),
+            "independent_voter_selection_gate": (
+                "pooled eligible AP>=0.55, per-embryo eligible AP>=0.40, and "
+                "at least two eligible true positives before the first false "
+                "positive"
+            ),
             "deployment_rule": (
                 "within each movie, add at most one parent-free edge only "
                 "when the graph-context equal-rank ensemble and independent "
@@ -212,6 +241,12 @@ def build_split(manifest_path: Path) -> dict[str, Any]:
                 "at least three true agreed recoveries, at most one false "
                 "agreed recovery, positive pooled eligible Jaccard delta, "
                 "and no embryo with zero true agreed recoveries"
+            ),
+            "complete_movie_promotion_gate": (
+                "patched-official pooled proxy delta>0, pooled adjusted-edge "
+                "delta>=0, division Jaccard strictly improves, no movie proxy "
+                "regresses, graph integrity passes, and production differs "
+                "from the attributed public control"
             ),
             "candidate_base": "redoctopusk/biohub-948tta2",
             "public_predictions_copied": False,
