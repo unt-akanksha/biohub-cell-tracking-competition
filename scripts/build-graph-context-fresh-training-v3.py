@@ -167,7 +167,7 @@ RUN_ID = "competition-graph-context-fresh-ensemble-v3"
 EXPECTED_RUNTIME_MANIFEST_SHA256 = "{runtime_manifest_sha256}"
 EXPECTED_ARCHIVE_SHA256 = "{EXPECTED['archive']}"
 EXPECTED_SPLIT_SHA256 = "{EXPECTED['split']}"
-WORK = Path("/kaggle/working/graph_context_fresh_v3")
+WORK = Path("/tmp/graph_context_fresh_v3")
 OUTPUT = Path("/kaggle/working/graph_context_fresh_ensemble_v3")
 
 def sha256_file(path):
@@ -210,6 +210,11 @@ for relative, flat_name in manifest["source_layout"].items():
     destination = WORK / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(RUNTIME / flat_name, destination)
+# The repository package initializer exports unrelated base-model modules.
+# This isolated trainer imports its explicitly packaged modules directly.
+(WORK / "research/temporal_contrastive/__init__.py").write_text(
+    '"""Isolated fresh graph-context training package."""\\n', encoding="utf-8"
+)
 archive = RUNTIME / "{STAGED_ARCHIVE_NAME}"
 with tarfile.open(archive, "r:gz") as stream:
     stream.extractall(WORK, filter="data")
