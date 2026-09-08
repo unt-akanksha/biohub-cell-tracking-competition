@@ -217,9 +217,9 @@
     {
       "ref": "flexonafft/biohub-harmonic-fusion",
       "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "Current source sets metric_hack_used false and is 0.996 code-line-Jaccard similar to the 0.926 divsub notebook; it is another public-lineage post-processing variant.",
-      "reviewed_sha256": "2391569398c2beb129743019e607d3b0dac979db430b8d7cf48074eb3c707199",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "2026-09-08 source review found the public 0.939 lineage plus edge-feature TTA and a holdout-selected post-processing sweep. No known metric-hack signature was present, but the notebook is a leaderboard-reported public-lineage comparator without reproduced clean independent evidence and cannot select project experiments.",
+      "reviewed_sha256": "3846edc001baf46a93d246e8546dec157bca2592ded858ff05fb4f2f96a9ba5b",
       "score_reproduced": false
     },
     {
@@ -264,6 +264,14 @@
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "reyhanksatria/biohub-cell-tracking-0-946-lb",
+      "classification": "reported_post_patch",
+      "disposition": "leaderboard_selected_comparator_only",
+      "evidence": "2026-09-08 source review found no known metric exploit. The notebook explicitly records leaderboard feedback in its cumulative 0.934-to-0.946 configuration lineage; its edge-feature D4 TTA is therefore comparator context, not project selection evidence.",
+      "reviewed_sha256": "210f2ed9c6906e492cae32acb83965abb4c265608e4e75f937a72aae91222ca5",
       "score_reproduced": false
     },
     {
