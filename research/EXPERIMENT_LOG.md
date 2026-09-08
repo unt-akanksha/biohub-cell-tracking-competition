@@ -1892,3 +1892,20 @@ well as the synthetic generator.
   opened. It only justifies retaining graph context as a prospective fallback
   after the LSM v2 complete-movie result; no graph GPU run is queued in
   parallel.
+- The regular public-watch path now enforces known metric-hack exclusions
+  before source download. Curated references and explicit hack titles are
+  classified without a pull; `anvithpothula/biohub-0-95` and
+  `kaiwalyaatulraut/biohub-solution` are permanent pre-download exclusions.
+  The September 8 clean retained family is hash-bound in the same registry,
+  while the four mechanically clean `sjlee101` leaderboard sweeps are marked
+  comparator-only and their tuned constants remain forbidden for selection.
+  Twenty provenance, watch, and refresh-policy tests pass. The newest
+  discussion inventory adds only unsubstantiated suggestions about GNNs and
+  sparse-label detector overfitting; those are consistent with the already
+  staged graph-context fallback and the rejected capacity-only detector runs,
+  but do not justify another GPU job or importing another notebook.
+- Private Kaggle kernel `indarkarhana/biohub-948tta2-lsm-consensus-v2`
+  version 1 was launched at the live `29.61h` quota point with two T4s and
+  Internet/TPU disabled. Controller PID `39208` owns the sequential run and
+  can submit exactly once only if the independently downloaded artifacts pass
+  every clean complete-movie promotion and provenance gate.

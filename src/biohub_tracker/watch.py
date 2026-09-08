@@ -231,7 +231,13 @@ def collect_snapshot(
     source_status: dict[str, str] = {}
     for notebook in notebooks:
         source_paths: list[Path] = []
-        if audit_notebook_sources:
+        preaudit = classify_notebook(
+            notebook["ref"], notebook["title"], None, registry, patterns
+        )
+        skip_source_pull = preaudit.disposition == "excluded_metric_hack"
+        if audit_notebook_sources and skip_source_pull:
+            source_status[notebook["ref"]] = "skipped_explicit_metric_hack"
+        elif audit_notebook_sources:
             try:
                 if live:
                     source_paths = [
@@ -247,15 +253,23 @@ def collect_snapshot(
                 source_status[notebook["ref"]] = "audited" if source_paths else "unavailable"
             except (KaggleCommandError, OSError, ValueError) as exc:
                 source_status[notebook["ref"]] = f"unavailable: {str(exc)[:200]}"
-        audit = classify_notebook(
-            notebook["ref"], notebook["title"], source_paths, registry, patterns
+        audit = (
+            preaudit
+            if skip_source_pull
+            else classify_notebook(
+                notebook["ref"], notebook["title"], source_paths, registry, patterns
+            )
         )
         notebook.update(audit.to_dict())
     if audit_notebook_sources:
         statuses["notebook_sources"] = {
             "status": (
                 "ok"
-                if source_status and all(value == "audited" for value in source_status.values())
+                if source_status
+                and all(
+                    value in {"audited", "skipped_explicit_metric_hack"}
+                    for value in source_status.values()
+                )
                 else "partial"
             ),
             "reason": "; ".join(f"{key}={value}" for key, value in source_status.items()),

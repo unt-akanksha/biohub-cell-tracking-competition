@@ -29,6 +29,17 @@ def test_known_and_titled_metric_hacks_are_excluded():
     assert known.disposition == titled.disposition == "excluded_metric_hack"
 
 
+def test_recently_classified_older_hacks_are_permanent_exclusions():
+    registry, patterns = policies()
+    for ref in (
+        "anvithpothula/biohub-0-95",
+        "kaiwalyaatulraut/biohub-solution",
+    ):
+        result = classify_notebook(ref, "ordinary copied title", None, registry, patterns)
+        assert result.provenance == ProvenanceClass.EXPLICIT_METRIC_HACK
+        assert result.disposition == "excluded_metric_hack"
+
+
 def test_unknown_requires_source_before_automated_no_signature(tmp_path):
     registry, patterns = policies()
     unknown = classify_notebook("new/cleanish", "ordinary title", None, registry, patterns)

@@ -18,6 +18,32 @@ from biohub_tracker.watch import (
 )
 
 
+class _NoHackPullRunner:
+    pulled: list[str] = []
+
+    def run_json(self, args):
+        command = tuple(args)
+        if command[:2] == ("kernels", "list"):
+            return [
+                {
+                    "ref": "anvithpothula/biohub-0-95",
+                    "title": "innocent-looking copied title",
+                },
+                {"ref": "owner/clean", "title": "clean current notebook"},
+            ]
+        return []
+
+    def download_leaderboard(self, competition_slug):
+        return []
+
+    def pull_kernel_source(self, ref, cache_root):
+        self.pulled.append(ref)
+        target = cache_root / ref
+        target.mkdir(parents=True)
+        (target / "kernel.py").write_text("print('clean')", encoding="utf-8")
+        return target
+
+
 def test_tracer_snapshot_schema_and_status(tmp_path, fixture_dir, competition_config):
     snapshot = collect_snapshot(
         competition_config,
@@ -151,3 +177,35 @@ def test_report_escapes_external_markdown(fixture_dir, competition_config):
     assert "\n## injected" not in report
     assert "&lt;script&gt;" in report
     assert "\\[link\\]" in report
+
+
+def test_live_source_audit_never_pulls_curated_metric_hacks(
+    tmp_path, competition_config, monkeypatch
+):
+    (tmp_path / "policies").mkdir()
+    shutil.copy2(
+        "policies/notebook_audits.json", tmp_path / "policies/notebook_audits.json"
+    )
+    shutil.copy2(
+        "policies/metric_hack_patterns.json",
+        tmp_path / "policies/metric_hack_patterns.json",
+    )
+    _NoHackPullRunner.pulled = []
+    monkeypatch.setattr("biohub_tracker.watch.KaggleRunner", _NoHackPullRunner)
+    snapshot = collect_snapshot(
+        competition_config,
+        live=True,
+        root=tmp_path,
+        audit_notebook_sources=True,
+    )
+    by_ref = {row["ref"]: row for row in snapshot["notebooks"]}
+    assert "anvithpothula/biohub-0-95" not in _NoHackPullRunner.pulled
+    assert "owner/clean" in _NoHackPullRunner.pulled
+    assert (
+        by_ref["anvithpothula/biohub-0-95"]["disposition"]
+        == "excluded_metric_hack"
+    )
+    assert "skipped_explicit_metric_hack" in snapshot["collection_status"][
+        "notebook_sources"
+    ]["reason"]
+    assert snapshot["collection_status"]["notebook_sources"]["status"] == "ok"

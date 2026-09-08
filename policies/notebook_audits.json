@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "audited_at": "2026-08-31T19:33:11.2820431Z",
-  "discussions_audited_at": "2026-08-31T19:33:11.2820431Z",
+  "audited_at": "2026-09-08T03:35:21.6974441Z",
+  "discussions_audited_at": "2026-09-08T03:35:21.6974441Z",
   "discussion_refs": [
     "730160",
     "734604",
@@ -20,6 +20,76 @@
     "727154"
   ],
   "notebooks": [
+    {
+      "ref": "anvithpothula/biohub-0-95",
+      "classification": "explicit_metric_hack",
+      "disposition": "excluded_metric_hack",
+      "evidence": "Manual source audit found out-of-volume synthetic hub and division nodes. Permanent pre-download exclusion; source, predictions, constants, and mechanism are forbidden.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "kaiwalyaatulraut/biohub-solution",
+      "classification": "explicit_metric_hack",
+      "disposition": "excluded_metric_hack",
+      "evidence": "Manual source audit found an explicitly labeled metric-hack cell that inserts negative-time nodes. Permanent pre-download exclusion; source, predictions, constants, and mechanism are forbidden.",
+      "score_reproduced": false
+    },
+    {
+      "ref": "redoctopusk/biohub-948base",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "September 8 source audit found no known exploit. It is the attributed clean shared-stack control; its advertised leaderboard score is not validation or selection evidence.",
+      "reviewed_sha256": "d55e7a13de9319f26b9d1acd952262fe4fea437775d9f244d1f0823c04c4d500",
+      "score_reproduced": false
+    },
+    {
+      "ref": "redoctopusk/biohub-948tta2",
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "September 8 source audit found no known exploit. It reuses detector D4 passes for edge-feature TTA and is admissible only as an attributed control under independent complete-movie validation.",
+      "reviewed_sha256": "7878a2739fae22b72c31598a324310eeb708cf4946bb2eeb68ffc4960a3e0051",
+      "score_reproduced": false
+    },
+    {
+      "ref": "rishabhr0y/biohub-948-sew20",
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "September 8 audit found its notebook source byte-identical to the clean 948base notebook; metadata differences do not make it an independent candidate.",
+      "reviewed_sha256": "390b3a66ede24d039e31147538e10ef1c1d8d33a611828891340b3143b790e02",
+      "score_reproduced": false
+    },
+    {
+      "ref": "sjlee101/biohub-lb942-divboth-12-16",
+      "classification": "reported_post_patch",
+      "disposition": "leaderboard_selected_comparator_only",
+      "evidence": "Mechanically clean September 8 source, but its division radii are documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "reviewed_sha256": "7938a00692682b8f55d6ab7a4411165a4c6a40f0fd2a8c84640c3cce6a98bfbd",
+      "score_reproduced": false
+    },
+    {
+      "ref": "sjlee101/biohub-lb942-divmax-14-18",
+      "classification": "reported_post_patch",
+      "disposition": "leaderboard_selected_comparator_only",
+      "evidence": "Mechanically clean September 8 source, but its division radii are documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "reviewed_sha256": "64613c2cd0007d1c1cae926fb01647846bed8636451f70d5bb0e7a4873b5c621",
+      "score_reproduced": false
+    },
+    {
+      "ref": "sjlee101/biohub-lb942-divparent12",
+      "classification": "reported_post_patch",
+      "disposition": "leaderboard_selected_comparator_only",
+      "evidence": "Mechanically clean September 8 source, but its division radius is documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "reviewed_sha256": "9017db72aa89e503b4f4b1aa35723c25c2fb4590ef9d9e77d35d343d4f95e74d",
+      "score_reproduced": false
+    },
+    {
+      "ref": "sjlee101/biohub-lb942-divsister16",
+      "classification": "reported_post_patch",
+      "disposition": "leaderboard_selected_comparator_only",
+      "evidence": "Mechanically clean September 8 source, but its division radius is documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "reviewed_sha256": "15f28ff11b8f393932ce6996698fcb8e510cb2de95ed666f88147d799a57cd37",
+      "score_reproduced": false
+    },
     {
       "ref": "xiaoleilian/biohub-ct-mix-divaug",
       "classification": "explicit_metric_hack",
