@@ -1985,3 +1985,14 @@ well as the synthetic generator.
   remaining, leaving 18.94 hours under the worst case and therefore preserving
   the mandatory eight-hour reserve. Current remote status is `RUNNING`; no
   competition submission is authorized by this training run.
+- Kernel version 1 failed closed after 17 seconds and consumed only `0.01h`:
+  the just-versioned private dataset was attached in server metadata but was
+  not available at the assumed literal mount directory. No worker started and
+  no audit shard opened. The version 2 notebook instead discovers the unique
+  `runtime_manifest.json` recursively under `/kaggle/input` and accepts it only
+  when its SHA-256 is exactly
+  `95736d19856572cf88f15f7c3ff27df0862ea5240a1c7a0a6db49d356755f69a`.
+  The full 536 MiB remote dataset was independently downloaded before retry;
+  all 15 file hashes and sizes match the frozen manifest. Four focused tests
+  and all generated notebook cells pass locally. Version 2 was relaunched at
+  `28.43h` remaining and remained `RUNNING` after the startup window.
