@@ -1946,3 +1946,24 @@ well as the synthetic generator.
   configurations; they are hash-bound comparator-only sources and cannot
   select project experiments. The audit projection and policy update are
   committed as `7bb5fa2`.
+- The ranked-consensus transfer audit found that its 46.4M-parameter Biohub
+  voter had already optimized or selected on all 195 non-probe training
+  movies, while the remaining four complete-movie probes had subsequently
+  been opened. Reusing either side would not provide independent acceptance
+  evidence. A new split was therefore frozen before generating any model
+  prediction. Within each embryo, unique graph-context movie stems are ordered
+  only by `sha256(salt\0embryo\0stem)` and partitioned 20% audit, 20%
+  selection, and 60% optimization. Labels, prior roles, model outputs, public
+  scores, and leaderboard feedback do not influence assignment. The sealed
+  audit contains 30 movies and nine inference-eligible positives; selection
+  contains 30 different movies and eleven eligible positives. The frozen
+  artifact is `research/graph_context_fresh_split_v3.json` with SHA-256
+  `b218c255d92e45f5d6ad2f0d2f38e095d6bfc805686732c5fd68d98132033cf5`.
+  Its four planned 74,732,308-parameter members warm-start only from recovered
+  external ZebraHub/ZSNS checkpoints whose terminal records
+  `competition_data_read=false`; all admitted members are equal-rank ensembled
+  before audit, then must agree with an independently fitted 132-feature
+  morphology voter. The deployment rule remains threshold-free, geometry
+  bounded, and limited to one parent-free edge per movie. Two deterministic
+  split tests pass. No audit prediction, Kaggle job, or submission has yet been
+  produced under this v3 contract.

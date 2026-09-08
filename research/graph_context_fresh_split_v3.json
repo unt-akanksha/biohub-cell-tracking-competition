@@ -1,0 +1,990 @@
+{
+  "audit_model_predictions_generated": false,
+  "audit_scores_opened": false,
+  "authorized_for_submission": false,
+  "competition_test_data_read": false,
+  "frozen_experiment": {
+    "absolute_threshold_for_deployment": false,
+    "audit_gate": "at least three true agreed recoveries, at most one false agreed recovery, positive pooled eligible Jaccard delta, and no embryo with zero true agreed recoveries",
+    "backbone_learning_rate_multiplier": 0.15,
+    "batch_size": 10,
+    "candidate_base": "redoctopusk/biohub-948tta2",
+    "deployment_rule": "within each movie, add at most one parent-free edge only when the graph-context equal-rank ensemble and independent morphology ranking select the same geometry>=3 candidate",
+    "ema_decay": 0.995,
+    "external_only_warm_starts": {
+      "target_44b6": "a0a1794134893d191d896b8b83abee61a754bc3852e2b8f74dacd353ce118a76",
+      "target_6bba": "9e8af9aeb247297d3ed09bda3bcc2b5af413d78c6bf2546eff5f4898667e074d"
+    },
+    "family": "temporal_multiscale_graph_context_division_v1",
+    "independent_voter": "132-feature temporal morphology ensemble fitted only on fresh optimization movies",
+    "learning_rate": 6e-05,
+    "metric_hack_allowed": false,
+    "minimum_learning_rate": 3e-07,
+    "parameter_count_per_member": 74732308,
+    "planned_model_count": 4,
+    "public_leaderboard_used_for_selection": false,
+    "public_predictions_copied": false,
+    "seeds": [
+      1409101,
+      1509107
+    ],
+    "selection_policy": "admit each member only at AP>=0.55, per-embryo AP>=0.40, and at least two true positives before its first false positive; freeze the equal-rank ensemble of every admitted member before opening audit",
+    "steps_per_model": 20000,
+    "validation_batch_size": 20,
+    "validation_every": 250,
+    "warm_start_competition_data_read": false,
+    "weight_decay": 0.0002
+  },
+  "labels_used_for_assignment": false,
+  "leaderboard_used_for_assignment": false,
+  "model_outputs_used_for_assignment": false,
+  "prior_roles_used_for_assignment": false,
+  "public_leaderboard_used_for_selection": false,
+  "public_predictions_copied": false,
+  "run_id": "competition-graph-context-fresh-split-v3",
+  "schema_version": 1,
+  "source_manifest_sha256": "2e5c4c46b11ff1480194c29e88c0e16b0ebf2f0fd65b2fc29548d26fee599bd9",
+  "source_run_id": "competition-graph-context-relational-patches-v1",
+  "split_rule": "within each embryo, sort unique stems by sha256(salt\\0embryo\\0stem); assign the first ceil(20%) to audit, the next ceil(20%) to selection, and the remainder to optimization",
+  "split_salt": "biohub-graph-context-fresh-split-v3",
+  "status": "frozen_before_model_scoring",
+  "stem_roles": [
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "4b3a211cf9d55f7a2721bb770ca9fa9cef3253b5d36792e3bd9b97d609cb70e4",
+      "stem": "44b6_24264f12"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "45c12032d67916adeed3d944457e4d0adfecbde141bc77c7ca406bb57938d188",
+      "stem": "44b6_2a2eff9f"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "46c5a6f76c6368e9b043ad5e1f94d11a85d279271be98119bcebc5597b0db76f",
+      "stem": "44b6_341df25f"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "ac73625d8aec7e2971fefd0cdd4c9d5930ae130863027f5b021a07b8227caf2f",
+      "stem": "44b6_3a861e03"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "55ad9ad47ff2faf59174ef8f3f7a93a0ba44ac59595c3ea783a09910699425a6",
+      "stem": "44b6_3bb3690f"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "ab31c00075d8b1fcb8e93b9961216f169c7a179c3bbc5a42180d435def785781",
+      "stem": "44b6_40c45f5a"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "d28859ed9a1e69e454f13b671385df00d246eaf5690504f7130b4f12457f7d6b",
+      "stem": "44b6_551a5dba"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "fff92e96c62e9c37437c1abca6cf9c8dc8fe2f44d16474d046828399057f2bab",
+      "stem": "44b6_587a1e22"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "e1fbf1363dba01502f83a3abf2023bc188d398044de4c334a0eacdf61977520b",
+      "stem": "44b6_5f15d135"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "ff63dccf7e4be3029ec2856530989ae7e46592c33d46ee2e7b3fcd2b200fe4dd",
+      "stem": "44b6_668e0cc7"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "9b3c330da33a1fba14dde360f8aaeedf00834c2bf2c40194b863101c4d0e974a",
+      "stem": "44b6_706092f0"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "78c54dc75edd4d078b26ad57008c215d05393eabd85044d6435be51ed6d923f3",
+      "stem": "44b6_74d0c52e"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "1c4c3282e8014a47b33b7ec2c365f783ebbdda4a8fbaa203770cc0ff90355f7e",
+      "stem": "44b6_7a302da0"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "a05d9c6c6cba3db137483162c28c7bf859d700bada27544a623571b2a7a62ad1",
+      "stem": "44b6_7e557709"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "fdf86eb2277544a774a197f7bb0fc76c8421a1392faece9d3fc082d01dedf14f",
+      "stem": "44b6_81c256f0"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "8c12d530ec057fd0d7c5b40b8d3372921ce6f780be9eb7b7453d953dc1d8afbe",
+      "stem": "44b6_8cc6506c"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "f94b7f365bab5f0898907e921caa379872ff07b0e6c88f9c07806e4503fdf5b8",
+      "stem": "44b6_8f5ab931"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "915c8f907e014619b39f4eaa27419f6551eb9a01bc54d64c19e78b3a7393500d",
+      "stem": "44b6_996155de"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "2914f62355682f91ce9d96ec9480dda3326fed6c3836001393f5fd661578e7b1",
+      "stem": "44b6_9be80b04"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "b714050ee723377b0084306e84b81bd839700da2fbbfb6f96d8e2e4c2326923d",
+      "stem": "44b6_a21120c2"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "7abb4692215eeb925d3a28b0a7158afbf74235139b8c7b0f24b0a2e125671bc9",
+      "stem": "44b6_a2bb48bb"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "157961c65d512758b5deaa4ee333c4d817f04231042737bd8e9d4caad63486e5",
+      "stem": "44b6_aaf8b0ea"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "c9f1e42e1b19e2384dc372605e1693e4534c828655b34e6e01c517fdc40ba162",
+      "stem": "44b6_c15fded2"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "1cb26b1e27fa5c6d1514cafa73a3744db435eb4bd182d98d8ba718146d082cf8",
+      "stem": "44b6_c50204e0"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "85d54787f607975d6a107db1a8e4a5336a7e7b2b884cd05f7aadd6ae1fd0906d",
+      "stem": "44b6_c771cb04"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "3bdcf52384484a4c3a6b06afd67efcc62abf34ba5e85f73e0a5b1d9d6455db38",
+      "stem": "44b6_c8e2a523"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "e8ee8b9a7710e883de78b930576c1d4c9bdb55daa79863ebe101551d95365201",
+      "stem": "44b6_c96cfa10"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "853d3c7c8c9aa07865a4fd9ade47b271d6614c894e33d1c02af7b44f6da4651b",
+      "stem": "44b6_d29c9ab2"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "92bc64a9d2bb70bdba11e12bdede70e5b7670dcee756a273ad415c04c99bd381",
+      "stem": "44b6_d2f34f90"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "3a0998efdf739c30aa374671dd1fb8c44fb6dbc798b273c7881f42b909eda8a0",
+      "stem": "44b6_d5e7d891"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "01af4b5fbef483dd12d447d2ef73a3c726506f6087bdb93845232d033579dafd",
+      "stem": "44b6_d754aa59"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "251c33c9150a367baece91a1297a9a0a51dc94fa5750ccbd4155172315ee0648",
+      "stem": "44b6_d78e09d9"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "b5ddf2419ea1d71a6ddbea2e39e455c9987dd225d01415292092b7489c11e68c",
+      "stem": "44b6_ddf577ad"
+    },
+    {
+      "embryo": "44b6",
+      "role": "audit",
+      "stable_key": "2b71fdb7d9222531ac54b4ed2c5bece03320b030525a46b8b38b369eb41337b9",
+      "stem": "44b6_deabac95"
+    },
+    {
+      "embryo": "44b6",
+      "role": "selection",
+      "stable_key": "7ef8791d7958981a64d50ff6af2d851cdf52e283e322fb0a3ae578d2f0197a43",
+      "stem": "44b6_e28840c6"
+    },
+    {
+      "embryo": "44b6",
+      "role": "optimization",
+      "stable_key": "f180992e96afb78e6b33a108cd89a1e40d128e3c07d7574f900c5501ca039f30",
+      "stem": "44b6_eb2880fc"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "2cd4ad843018168a80f66d6c7defa8c2af791ad01209fba725fb1144bb8a2dc3",
+      "stem": "6bba_05b6850b"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c4edcc56bcbe200ef8466bfcc6f06b1ef37d7d5ad9d0bb20ef1fb139d7a13408",
+      "stem": "6bba_05db0fb1"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1c528bfbe214aae96963b9e21bbf36c25ed79c0feca47a7261a94ee86b30c464",
+      "stem": "6bba_085bf656"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "75ce64574538bf433cb83a95ee35a9f3bd17790123fb027475401c3f9ee78de8",
+      "stem": "6bba_09961292"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "7c8feeb7921e70a4250d3b3267554137425dd63fc59ba22d2168c2a758a5d2c7",
+      "stem": "6bba_0c7fa718"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "6d630e7b9484be7f671a3e7c4d6a5dfc02ffcce13ede2cfe17548e6a9e344ba2",
+      "stem": "6bba_0e7c0d07"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3810654a51fd5b8be25ed21b8651a1d7e10d667d01a1a1d126cc68377846e349",
+      "stem": "6bba_12665c0e"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "e412a3b168a8a452b389e9aa4d52a2c7a7eaa1374aad7310890622714c392704",
+      "stem": "6bba_1d0d8384"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "a2ac2ba46505e9206d7306818be067647b239cd16e39fe6cf23eef035245bfc6",
+      "stem": "6bba_1ebfb80d"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "41e33a644a3fccb18a3e9f4804fbab1f564ad4c5c69cd422797f48e30ab078fa",
+      "stem": "6bba_207c6aaf"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "aab27e27384483771aa08b623f716f072a1eba5e665913eb7d6ac5458bb253ba",
+      "stem": "6bba_20852818"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "57cc5bac0ccdd0588a8218305429b1bb675db7ba1c40c50e3e2b4fd15b107989",
+      "stem": "6bba_2312ac41"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3c3f538e54d074079f0ec1e004d9fbfdd9a6fc772604877916c9af041f81aac0",
+      "stem": "6bba_23af9eeb"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "2071997ae06a87f1229417aab32951e5eefdc3b0c24f0c0693cfeba0f74e8efe",
+      "stem": "6bba_2646afc7"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3235329c23e8e7f49eba74c462d59d92e688ec1e610da49926ee898cd85b58f6",
+      "stem": "6bba_268e1230"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "6536247817c84ab50a709ef78bd791bbf074c64b2c44715fc521040c82a1b614",
+      "stem": "6bba_2819ca14"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "0198008733045e6b623f6c8fb1f7d4c056e93a4be5194549e081e54aba154da8",
+      "stem": "6bba_283bf9f1"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "0ec2630e3df3081251085bd3b769ed85372a0e5aea881390bdbfb3fd263f43bf",
+      "stem": "6bba_312f0dc3"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "21778c220511942bd08efb4a10aee66d7d46e00d0ff03975b187924871ddb28f",
+      "stem": "6bba_32db13fc"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "94f4028c43492d91687a96ae8552f43dadcfe12377d6a3aaa74b982adefa7d22",
+      "stem": "6bba_337b1b3a"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1caaa430a9e3c2a37240a8bc4b4ade6c4acf35f48293ed1a7984d4ed6e01959c",
+      "stem": "6bba_372c8cb8"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "88ccb2e705fa9219fc58f070740d08f28bedd11029a8f159339301303d7fced0",
+      "stem": "6bba_3a1849c2"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "80f37543df4a9697f5383ca557592d223aea095a8b28d2beec8827a8b3667960",
+      "stem": "6bba_3abfe10a"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "928f0cf94160ff40395dd17a41e9541e9b4f3aa75be07215776da1af025f86a4",
+      "stem": "6bba_3c5691b6"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "67631e7e5b89fbc68b52d64d9a5c62ebfcad64a69fb6817e22f97ad8a23a6c9d",
+      "stem": "6bba_3db54e20"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "a9784e2994c2341ad47a78832cdd52ee9524d832ef5fb0f2f950763df6d919e5",
+      "stem": "6bba_3fda6b25"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b64bdeaf9768db191ababb59d02f0eee1642d8c7390365fe2d54aa60765b68de",
+      "stem": "6bba_43fea39d"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "6e214cdc1143b2982641e2abda2aa48a2698ebb85554c4955e9a2d08668e7623",
+      "stem": "6bba_474be664"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3158705293e29ae8bcc540bfa24339e0ee910f49a4fb38e2821b580d6d94205a",
+      "stem": "6bba_48816121"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "997696c73707813f03b4c48564bc25ea5909961c688b5ee3e6b93becbf60b743",
+      "stem": "6bba_4aa14c89"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b409736dae71e4c2b52afadfb56bdf0bc293093105fdd931c7bb5a18d4b28b08",
+      "stem": "6bba_4f99ce20"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "2789bcdd9d80e46d551eba774270e982d705f47b42bbc5d0317db511f1b9fe0d",
+      "stem": "6bba_4ffd3da3"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "75dd92d9cd839b8e46066fbdc62455de7e9bf9ab99b7584d4561fb07acd0acc4",
+      "stem": "6bba_55b7eebe"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "91e577fec10e788a38ca135e0b51db7f10f2b00dcb61ab6e693e7421b0d5db22",
+      "stem": "6bba_55c70843"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "d74ebf68a4fc8da611bb8ab4ef257923b9482c051fcf60a8fd082f4dfd74009d",
+      "stem": "6bba_57b7cc1e"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "f60c2fa441be63e199357afeb561a33ea5a6dafde2b7b1631d1cfdda565b8f39",
+      "stem": "6bba_5a4d9360"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1aab79e9d6dc590eb656947ac29691fe411a8ec39c3ac7a15c21cddfa3e67b5b",
+      "stem": "6bba_5b28472a"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "98c1b1e27e5f87c2551ebc4f5a4edf4d529821d7e21e58c49cdc48aab7a228b7",
+      "stem": "6bba_5c039895"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "473af29fc0647a88d53650ca6e6d178cafe6fb49b863a81c3ceb8b7f39a67622",
+      "stem": "6bba_5c824876"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "ed349dd7d3a5ed18e380c24944548093816ae269b0ec189333eb454e40ef3595",
+      "stem": "6bba_5dfe9ad1"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b92d14ad3502682283046ef6761beed3084e8f5e52ad46aaca7b5307532a5f00",
+      "stem": "6bba_61ecbe65"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "a28df8171d57305166728c19004ef1d4f0e35612f8e737a0241237fce13f6e67",
+      "stem": "6bba_6321a359"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3def997d613070ba23373b91d825297cb63c6ed479290481835ed3455275d65f",
+      "stem": "6bba_6479435d"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b5ba0d4edbfe3d01d71797816830bafdb8c41f431e34e65587c753e7d555b26c",
+      "stem": "6bba_67ebd073"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "72bcde8e1a1952d6b9c75f8d5aea5aba8e59c7d84f66c79e8fe0ae97b25ccf4e",
+      "stem": "6bba_6ca87370"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "5cb24815a6eedffcba3f4b5ae20d6a559065ee9d8647f064a9acdaba9e19c23d",
+      "stem": "6bba_6feb10f0"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "4c2e8205796ff933ac18897e9515cdf281420d6f708d10e137340afda59d72d5",
+      "stem": "6bba_6feeb0b1"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "980811e52d40482e07a09b3548a16928f7799b7c20a966baebb0e4deccacbd65",
+      "stem": "6bba_705ec2c9"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "5b525ada17195f27d52376c095524e8da898a04de184ef3458c7d01f5921f8ff",
+      "stem": "6bba_74686d6a"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "308885aab8272b43d0dec9e4d827a41e35a1181287a197c4a520a8e77edfafd9",
+      "stem": "6bba_767a1e17"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "19531c68065ebee85d8d93a0127e86342ff9dc74c76b2b23e30dbce6137b1c34",
+      "stem": "6bba_784a78c9"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "820b21f92d9bf6239c0195276ce8baa79a0f6f37e0b21afd679aff75c810fa6a",
+      "stem": "6bba_786893ac"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3768c31edf25269ebc1920ac98403632c4298e01761257a3f6a0e7248358e97f",
+      "stem": "6bba_789f8168"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b1af4e55feb2aa176995310597e8ddcd4b366c613f90b1445cce2e3b8a8b5e7f",
+      "stem": "6bba_78a7bd97"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "650b843c27a646a683c14c1504a2487deca4e4ca05d6710070ee04932410ea5a",
+      "stem": "6bba_7af54fde"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "657e50500ca73461ff9c7b506b4e9a7272cc861131520257c183c9ffa78e3098",
+      "stem": "6bba_7d3058ae"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "f1108d0c0ee8700191a1b2b1e50b457a0c47bbfa51df4765193d478ba353af11",
+      "stem": "6bba_7f87b3d8"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "8d914a681268d56cb0eb1429de3fb3d28c317fef774663454e7de6de180d7f87",
+      "stem": "6bba_80d12824"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3bbb089a6cd3863fcae238e63315b29a0bd40b0d05d5467a45a18d9be5f59bc3",
+      "stem": "6bba_825bd1c6"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "9b0a6770a222d84fba7d632ebd1053e53d3b6ca5f090111e1c0f672c2da9a615",
+      "stem": "6bba_87289e13"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3d24033d7450364b64938d41697756b6fd191ef948483609a5b3f346c95a3dcb",
+      "stem": "6bba_8b7818bf"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "bfa12b33106c3e22a2a34b69d09082580bff4f761b5ac7eeac8455f93512950d",
+      "stem": "6bba_907271db"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b45359dae01b5b8bef9b6e924acf8fc639a2a9608b6f78ab42d2e19148e1b4ae",
+      "stem": "6bba_96833384"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "f1fa316bd60f9e33d8203e2e67c9f093552d54f4688ca03e39deb989102acd88",
+      "stem": "6bba_969618f6"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "19a440debe4fe6a30e983083a592c344b9d5fc3c97f9dedaec823357c2118801",
+      "stem": "6bba_971fa5e0"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c5cc9d1ce1ce02a0617d85f4a7196df2f0a6c1d52557845e498878ba11ec3f6d",
+      "stem": "6bba_9a41d029"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1a9d1370237a53645710ec4e09914c38bfc328775a6d08c15f3871d4b96849a8",
+      "stem": "6bba_9e23430b"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c7f36fa3a165dd60ec2eb041cb68dbd58eb0ec6eefadc42c938388ae99a2d110",
+      "stem": "6bba_a5e926bb"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "eb20a6ce838a59f27ad3ba391374fb8cf94991af75c68534f072e289db0a0e83",
+      "stem": "6bba_a90a0b9c"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "25b54c93f7d4ac7d010fe33aab3d4972fc07b5a0d07dbcfaf7d96fe6dcce73e0",
+      "stem": "6bba_ab78413d"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "71dedaef2464252a505cb43b5690fdf0f68adceb369b49a9f24fea1b9e4759fa",
+      "stem": "6bba_acd782a8"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "cb3ae7319b6bb4048da8740f1253dbeacf9817ef629582cdacb279b6c6cd4401",
+      "stem": "6bba_ae82a791"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "28f90a976b9c8fd40e81891b59985c43cf570ba3c90e85d21dc46ee7c0a4580c",
+      "stem": "6bba_aeee7805"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c04d877ba0b1ac73ee8cf70b5f9725c78fa7758141db57e099c51608fe38a12d",
+      "stem": "6bba_af149c94"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "9bc50bbddab1a40024971bc35979bc5f5ebba68cf396bde2885133898317e6fd",
+      "stem": "6bba_afb141ff"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "f9fcbfb838876ce599ef2c20dbc802b4c5991a66b6df4230014cf59b1ac9456e",
+      "stem": "6bba_b1ae37b9"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c151412b2f71f2edf19dffdb85c716e3076e0ce4647dc7f25a957ecd31a4eeeb",
+      "stem": "6bba_b204cac7"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "06b10047903966afcf39c5e4aa68a02ccf82eb08528c2e09f314dab2e1c5ce9c",
+      "stem": "6bba_b329af44"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "25d660174be57438cd466b535275a47a307fb6aaaff12fd0b9ef591b3984454a",
+      "stem": "6bba_b693381b"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "8836082abdf5e29f6988443550ecd97a54f578f2dc41f54cc3e3635b89685bb1",
+      "stem": "6bba_bb9f20c3"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "a970fbd99e41046d0013ffef69463015439128321b11bc05b203a255f3704200",
+      "stem": "6bba_bbb708ca"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "f511cc677639132e20aace5913a0c9f3646f3ec471be7ab47678cb8e0642c25b",
+      "stem": "6bba_c328f2fd"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "648bd56b9c96813f478fb3a7727f117ee8034e7abd89592bb081e765679bb008",
+      "stem": "6bba_c73a1d11"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "902e452931479c0594142716ade7ed81fbab2c79fc4bbac42ded105460d6dc91",
+      "stem": "6bba_cdcfe533"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "fe227483d220646cbeb1699138742b411bcab819d29dd1dd85b3f915fa59ddac",
+      "stem": "6bba_cf35214c"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "72c53ef79d1b2ed53d2eb01c16642abf0714836acf777191370306d568318e66",
+      "stem": "6bba_cff5865f"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "16bfa87408db16202f8c260c455c5d76e831fe25c4b2dd6de617d6fecb6a4a23",
+      "stem": "6bba_d0fc38b5"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "6f09a0e632f0f54349692e68a874f8ae1763b37b38ea7850635cdc443fd1f4d8",
+      "stem": "6bba_d1acb6ff"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "de205ee5d1728c85b906aa341fd8dca8e10b34dd945cc088965390307ecf6044",
+      "stem": "6bba_d2b9fc0c"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "e93e98c19f46df213b2beaf9955d6b4f0038198bcd5051e40304128c30220d82",
+      "stem": "6bba_d3da753b"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "6a0c357172698bf2137e4a9efd8381bd064387ea21b5c012043a499a26acc4de",
+      "stem": "6bba_d6ecebbb"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1152dc534519111630b2f3450891773b5b2be92a6dd6d28a134bc856d30fad82",
+      "stem": "6bba_debd7bfa"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "beeeef059e79a7feb10c3781811ee1c29e36dc917aae02317ac3a545a47651e3",
+      "stem": "6bba_df673a83"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "14cebc83848118ff48859fc6f74caa4cfad0ba35e88dba6a41438fe7e79c4887",
+      "stem": "6bba_e16ffc58"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "3a373e4eb5d9051992dc434ace1fefa6c920fc2942ef5c9456797aa2c6c57ee6",
+      "stem": "6bba_ebdf3b34"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1300fb6674e4237a056a0a2b23ed33c252d2f4d977d0f00533e218c30947ac0b",
+      "stem": "6bba_ebff6e76"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "ba6b226de1d71789b56a09e7bf79bea7bacf51c1fdd2ec8a2fdf8435df376188",
+      "stem": "6bba_ed9377fd"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "912fcc49edf32a3c879e6e13ee5357dbd00c63875c026ebb45156b9a4326de58",
+      "stem": "6bba_edf14583"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "16a46e1af8c305c00cf2a951c6556148b199d5757cbc89f1d5437523ad75a4a6",
+      "stem": "6bba_eebc57a5"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "598e8ad143117562727ca224226c07b993ad6f650ac0587a48d5af2dedb4dafb",
+      "stem": "6bba_ef7b4f7e"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "1cfb6c5c8435702b5d1e4a4c843a4e2c0980ff296de1a459cf71ce6ff922482e",
+      "stem": "6bba_f17befbc"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "fa2f8979206a0c3887f6755b10fa8d5ae2bb278836a8cbcc3f44e14a74c190a8",
+      "stem": "6bba_f1fde7e0"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "a8b75cb0c17a7b921edbe628e8205af737d15863456746f9e49177be1621552b",
+      "stem": "6bba_f20478e9"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "4b50ab4b4c05a43faf64676fc8ebcf8e4dc65385af3969832d45c0550b27c5fd",
+      "stem": "6bba_f4ae811c"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "11cd31180bbdc895098bed838195aff19a9570786bc5cc62c7f66e4bf4f8415b",
+      "stem": "6bba_f8ffd5e7"
+    },
+    {
+      "embryo": "6bba",
+      "role": "selection",
+      "stable_key": "5a65f9f5ed7d9f05e385ddfdf17818468f50e7f10fcd0e6f48180a3d27543a50",
+      "stem": "6bba_fbc898dc"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "c68a3bbd979a0c20c7aff6e6372010780d1f955f066b7c93b055b24e4528fbde",
+      "stem": "6bba_fc516dc6"
+    },
+    {
+      "embryo": "6bba",
+      "role": "audit",
+      "stable_key": "2145999c59145b253630e50a16f66cc9e1fe19688a71a4ec432f3daee4f6ea84",
+      "stem": "6bba_fc5f39dc"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "b37001adc5cdb48de0e4f75ce77910f503cc51e019ab6cba27df50a7c938f9a9",
+      "stem": "6bba_fc83837d"
+    },
+    {
+      "embryo": "6bba",
+      "role": "optimization",
+      "stable_key": "cbb9fe91c35de58c792125663fe95526ad48797e4f00434eb050a3580e930a91",
+      "stem": "6bba_fe670320"
+    }
+  ],
+  "submission_created": false,
+  "summary": {
+    "44b6": {
+      "audit": {
+        "hard_negatives": 131,
+        "inference_eligible_hard_negatives": 1,
+        "inference_eligible_positives": 5,
+        "movies": 8,
+        "positives": 9,
+        "records": 103,
+        "rows": 140
+      },
+      "optimization": {
+        "hard_negatives": 413,
+        "inference_eligible_hard_negatives": 7,
+        "inference_eligible_positives": 3,
+        "movies": 20,
+        "positives": 9,
+        "records": 341,
+        "rows": 422
+      },
+      "selection": {
+        "hard_negatives": 123,
+        "inference_eligible_hard_negatives": 2,
+        "inference_eligible_positives": 1,
+        "movies": 8,
+        "positives": 6,
+        "records": 109,
+        "rows": 129
+      }
+    },
+    "6bba": {
+      "audit": {
+        "hard_negatives": 454,
+        "inference_eligible_hard_negatives": 31,
+        "inference_eligible_positives": 4,
+        "movies": 22,
+        "positives": 16,
+        "records": 344,
+        "rows": 470
+      },
+      "optimization": {
+        "hard_negatives": 1407,
+        "inference_eligible_hard_negatives": 96,
+        "inference_eligible_positives": 32,
+        "movies": 66,
+        "positives": 75,
+        "records": 1102,
+        "rows": 1482
+      },
+      "selection": {
+        "hard_negatives": 351,
+        "inference_eligible_hard_negatives": 28,
+        "inference_eligible_positives": 10,
+        "movies": 22,
+        "positives": 19,
+        "records": 275,
+        "rows": 370
+      }
+    }
+  }
+}
