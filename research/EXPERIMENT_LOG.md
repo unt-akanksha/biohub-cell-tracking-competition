@@ -1970,3 +1970,18 @@ well as the synthetic generator.
   ordering: `44b6_d754aa59`, `44b6_7a302da0`, `6bba_debd7bfa`, and
   `6bba_fc5f39dc`. No audit prediction, Kaggle job, or submission has yet been
   produced under this v3 contract.
+- The fresh graph-context v3 training/evaluation package passed six focused
+  local tests, notebook compilation, exact 15-file runtime re-download, and a
+  strict external-checkpoint load into the 74,732,308-parameter model. The
+  private runtime manifest SHA-256 is
+  `95736d19856572cf88f15f7c3ff27df0862ea5240a1c7a0a6db49d356755f69a`;
+  all remotely downloaded file sizes and hashes match. Private Kaggle kernel
+  `indarkarhana/biohub-graph-context-fresh-training-v3` version 1 was launched
+  with two isolated T4 workers, Internet/TPU disabled, no competition source,
+  and no submission path. It trains four fresh 74.7M members in two concurrent
+  waves, freezes the all-admitted equal-rank plus morphology policy on the new
+  selection split, and only then permits the aggregator to open the sealed
+  audit. The notebook's 9.5-hour hard bound was accepted at `28.44/30.00h`
+  remaining, leaving 18.94 hours under the worst case and therefore preserving
+  the mandatory eight-hour reserve. Current remote status is `RUNNING`; no
+  competition submission is authorized by this training run.
