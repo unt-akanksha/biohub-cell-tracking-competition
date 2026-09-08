@@ -58,17 +58,18 @@ def build_notebook() -> dict:
         "            dtype=np.float32,\n"
         "        )\n"
         "        base_small = base_native / scale\n",
-        "        base_native = np.asarray(\n"
+        "        before_native = np.asarray(\n"
         "            [[nodes_by_id[node_id][axis] for axis in (\"z\", \"y\", \"x\")] for node_id in node_ids],\n"
-        "            dtype=np.float32,\n"
+        "            dtype=np.float64,\n"
         "        )\n"
         "        maximum = np.asarray(frame.shape, dtype=np.int64) - 1\n"
         "        before_valid = (\n"
-        "            np.isfinite(base_native).all(axis=1)\n"
-        "            & np.all(base_native >= 0, axis=1)\n"
-        "            & np.all(base_native <= maximum, axis=1)\n"
+        "            np.isfinite(before_native).all(axis=1)\n"
+        "            & np.all(before_native >= 0, axis=1)\n"
+        "            & np.all(before_native <= maximum, axis=1)\n"
         "        )\n"
         "        stats[\"lsm_consensus_preexisting_out_of_bounds\"] += int((~before_valid).sum())\n"
+        "        base_native = before_native.astype(np.float32)\n"
         "        base_small = base_native / scale\n",
     )
     helper = replace_exact(

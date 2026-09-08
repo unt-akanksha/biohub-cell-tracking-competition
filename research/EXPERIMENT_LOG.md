@@ -1909,3 +1909,17 @@ well as the synthetic generator.
   Internet/TPU disabled. Controller PID `39208` owns the sequential run and
   can submit exactly once only if the independently downloaded artifacts pass
   every clean complete-movie promotion and provenance gate.
+- Kernel v2 version 1 failed closed after `1,316.82s`, consumed only another
+  `0.37h`, and made no submission. All four base predictions completed in
+  9.32 minutes. On the first production movie the exact provenance counters
+  reported 101 pre-existing invalid coordinates, 53 remaining after the LSM
+  pass, and six apparently introduced. This cannot be a candidate mutation:
+  only agreed nodes are written and every written proposal is clipped. The
+  mismatch was an audit precision bug—`before_valid` used float32 while
+  `after_valid` reread the unchanged Python float at float64, so tiny boundary
+  violations could disappear only in the before cast. Version 2 of the same
+  kernel computes bounds provenance from the exact float64 originals and uses
+  a float32 copy only for model refinement. Its notebook SHA-256 is
+  `c7894174a876eec874115e613d3f9b6f000f031f4ded0890c3beac4437a2dd42`;
+  all seven focused tests pass. Live quota before relaunch is `29.24h`, again
+  leaving more than the mandatory eight-hour reserve under the worst case.

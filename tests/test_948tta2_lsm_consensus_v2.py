@@ -19,6 +19,9 @@ def test_v2_repairs_bounds_provenance_without_weakening_integrity() -> None:
     assert "lsm_consensus_preexisting_out_of_bounds" in source
     assert "lsm_consensus_remaining_out_of_bounds" in source
     assert "(~after_valid & before_valid).sum()" in source
+    assert "before_native" in source
+    assert "dtype=np.float64" in source
+    assert "base_native = before_native.astype(np.float32)" in source
     assert "proposal24 = np.clip(proposal24, 0, maximum)" in source
     assert "proposal36 = np.clip(proposal36, 0, maximum)" in source
     assert "lsm_consensus_node_count_changes" in source
