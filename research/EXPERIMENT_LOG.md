@@ -1996,3 +1996,18 @@ well as the synthetic generator.
   all 15 file hashes and sizes match the frozen manifest. Four focused tests
   and all generated notebook cells pass locally. Version 2 was relaunched at
   `28.43h` remaining and remained `RUNNING` after the startup window.
+- Version 2 then exposed the original eager package initializer and version 3
+  exposed an incomplete transitive model dependency before either worker
+  allocated a model; both failed with zero completed steps and the audit
+  remained sealed. Combined startup cost through version 3 was only `0.03h`.
+  The final repair removes the trainer's unnecessary dependency on the much
+  larger historical training stack: exact metric, rank-ensemble, checkpoint,
+  EMA, and focal-loss helpers now live in the self-contained
+  `graph_context_training_support.py`. Their outputs were checked for semantic
+  parity with the original functions. A reconstruction from only the 12
+  packaged source files successfully imports the worker CLI, 17 graph-context
+  regression tests pass, all notebook cells compile, and the full remote
+  dataset was re-downloaded and verified. The revised runtime manifest SHA-256
+  is `78c4e24b1f6c72157e2c2d8f8416897422b8abd2443968b2fa9d4647c178ea5b`.
+  Kernel version 4 was launched at `28.41h` remaining and remained running
+  beyond its startup window.
