@@ -91,3 +91,5 @@ def test_generated_kernel_has_no_submission_or_competition_source() -> None:
     assert len(metadata["dataset_sources"]) == 1
     assert "kaggle competitions submit" not in source.lower()
     assert "submission.csv" not in source.lower()
+    assert 'f"warm_start_{fold}.pt"' in source
+    assert "warm_start_{{fold}}.pt" not in source

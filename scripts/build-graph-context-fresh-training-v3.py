@@ -236,7 +236,7 @@ def launch_worker(seed, fold, index, gpu):
     command = [
         sys.executable, str(TRAINER), "worker",
         "--data-root", str(DATA), "--split", str(SPLIT),
-        "--initial-model", str(RUNTIME / f"warm_start_{{fold}}.pt"),
+        "--initial-model", str(RUNTIME / f"warm_start_{fold}.pt"),
         "--warm-start-terminal", str(TERMINAL),
         "--output-root", str(OUTPUT), "--member", member,
         "--seed", str(seed), "--fold", fold,
