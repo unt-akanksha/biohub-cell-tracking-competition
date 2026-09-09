@@ -1996,6 +1996,21 @@ well as the synthetic generator.
   all 15 file hashes and sizes match the frozen manifest. Four focused tests
   and all generated notebook cells pass locally. Version 2 was relaunched at
   `28.43h` remaining and remained `RUNNING` after the startup window.
+- Versions 2 through 4 were startup-only dependency/transport diagnostics and
+  consumed `0.04h` combined without completing step 1 or opening audit. V2
+  revealed the unrelated eager package initializer, V3 revealed the omitted
+  contextual-fusion dependency, and V4 revealed a literal escaped `{fold}` in
+  the generated warm-start path. The final package now uses a self-contained
+  graph training utility module instead of importing the older trainer's broad
+  transitive stack. Its packaged `--help` entry point succeeds in an isolated
+  reconstructed runtime, 17 graph-model/trainer tests pass, copied metric
+  functions match their original implementations numerically, and the
+  generated notebook has a regression assertion for the interpolated warm
+  start. The revised 12-source remote runtime was fully redownloaded and its
+  manifest is SHA-256
+  `78c4e24b1f6c72157e2c2d8f8416897422b8abd2443968b2fa9d4647c178ea5b`.
+  Kernel version 5 was launched at `28.39h` remaining and remained `RUNNING`
+  beyond the prior failure windows; no submission path is present.
 - Version 2 then exposed the original eager package initializer and version 3
   exposed an incomplete transitive model dependency before either worker
   allocated a model; both failed with zero completed steps and the audit
