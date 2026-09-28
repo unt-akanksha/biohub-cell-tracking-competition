@@ -1,0 +1,202 @@
+{
+  "run_id": "public-d4-retention-v1",
+  "status": "complete",
+  "source_sha256": "4b177d7d68d70d40b49f1c67c015a9010c1d9ae8cc5d729401cad67e929ba2e6",
+  "per_movie": {
+    "44b6_24264f12": {
+      "original": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 27198,
+            "matched_annotations": 228
+          },
+          "retained_at_detector_positions": {
+            "nodes": 26873,
+            "matched_annotations": 228
+          },
+          "final_with_detector_positions": {
+            "nodes": 27090,
+            "matched_annotations": 228
+          },
+          "final": {
+            "nodes": 27090,
+            "matched_annotations": 228
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 0
+      },
+      "corrected": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 27363,
+            "matched_annotations": 228
+          },
+          "retained_at_detector_positions": {
+            "nodes": 26986,
+            "matched_annotations": 228
+          },
+          "final_with_detector_positions": {
+            "nodes": 27206,
+            "matched_annotations": 228
+          },
+          "final": {
+            "nodes": 27206,
+            "matched_annotations": 228
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 0
+      }
+    },
+    "44b6_81c256f0": {
+      "original": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 11306,
+            "matched_annotations": 199
+          },
+          "retained_at_detector_positions": {
+            "nodes": 11220,
+            "matched_annotations": 199
+          },
+          "final_with_detector_positions": {
+            "nodes": 11284,
+            "matched_annotations": 199
+          },
+          "final": {
+            "nodes": 11284,
+            "matched_annotations": 199
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 0
+      },
+      "corrected": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 11219,
+            "matched_annotations": 199
+          },
+          "retained_at_detector_positions": {
+            "nodes": 11101,
+            "matched_annotations": 199
+          },
+          "final_with_detector_positions": {
+            "nodes": 11157,
+            "matched_annotations": 199
+          },
+          "final": {
+            "nodes": 11157,
+            "matched_annotations": 199
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 0
+      }
+    },
+    "6bba_23af9eeb": {
+      "original": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 4269,
+            "matched_annotations": 511
+          },
+          "retained_at_detector_positions": {
+            "nodes": 4156,
+            "matched_annotations": 511
+          },
+          "final_with_detector_positions": {
+            "nodes": 4175,
+            "matched_annotations": 511
+          },
+          "final": {
+            "nodes": 4175,
+            "matched_annotations": 513
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 2
+      },
+      "corrected": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 4276,
+            "matched_annotations": 512
+          },
+          "retained_at_detector_positions": {
+            "nodes": 4164,
+            "matched_annotations": 512
+          },
+          "final_with_detector_positions": {
+            "nodes": 4177,
+            "matched_annotations": 512
+          },
+          "final": {
+            "nodes": 4177,
+            "matched_annotations": 512
+          }
+        },
+        "annotations_lost_with_deletion": 0,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 0
+      }
+    },
+    "6bba_f1fde7e0": {
+      "original": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 8683,
+            "matched_annotations": 475
+          },
+          "retained_at_detector_positions": {
+            "nodes": 8007,
+            "matched_annotations": 468
+          },
+          "final_with_detector_positions": {
+            "nodes": 8109,
+            "matched_annotations": 468
+          },
+          "final": {
+            "nodes": 8109,
+            "matched_annotations": 467
+          }
+        },
+        "annotations_lost_with_deletion": 7,
+        "annotations_lost_with_coordinate_changes": 1,
+        "annotations_gained_with_coordinate_changes": 0
+      },
+      "corrected": {
+        "stages": {
+          "post_ilp": {
+            "nodes": 8650,
+            "matched_annotations": 473
+          },
+          "retained_at_detector_positions": {
+            "nodes": 7989,
+            "matched_annotations": 462
+          },
+          "final_with_detector_positions": {
+            "nodes": 8093,
+            "matched_annotations": 462
+          },
+          "final": {
+            "nodes": 8093,
+            "matched_annotations": 464
+          }
+        },
+        "annotations_lost_with_deletion": 11,
+        "annotations_lost_with_coordinate_changes": 0,
+        "annotations_gained_with_coordinate_changes": 2
+      }
+    }
+  },
+  "authorized_for_submission": false,
+  "independently_held_out": false,
+  "gpu_hours": 0
+}

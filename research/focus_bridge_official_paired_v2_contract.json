@@ -1,0 +1,24 @@
+{
+  "run_id": "focus-bridge-official-paired-v2",
+  "status": "frozen_before_paired_inference_and_scoring",
+  "supersedes_gate_only": "focus3d-bridge-rescue-v1",
+  "reason": "The original zero-increase node penalty gate rejects every added node; use full adjusted official score including that cost and require true edge recovery.",
+  "proposal_coordinates": "postprocessed FOCUS coordinates including public trajectory smoothing; not raw centroids",
+  "proposal_terminal_sha256": "288eab6b9e2c568f38587fa51c0af0c2dd140443df8a890a05f8cf2d290ee985",
+  "validation_stems": ["44b6_81c256f0", "44b6_24264f12", "6bba_f1fde7e0", "6bba_23af9eeb"],
+  "threshold_changes": false,
+  "maximum_bridges_per_movie": 1,
+  "serialize_coordinates": "same integer rounding and nonnegative clamp as base submission; require added node within image bounds",
+  "paired_gate": {
+    "official_adjusted_score_strict_gain": true,
+    "edge_true_positives_strict_gain": true,
+    "per_movie_adjusted_edge_nonregression": true,
+    "pooled_division_nonregression": true,
+    "existing_nodes_edges_unchanged": true
+  },
+  "requires_production_test_after_pass": true,
+  "authorized_for_submission": false,
+  "leaderboard_used_for_project_selection": false,
+  "base_public_parameters_have_leaderboard_tuned_lineage": true,
+  "metric_hack_used": false
+}

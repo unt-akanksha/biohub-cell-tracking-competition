@@ -1,0 +1,12 @@
+{
+  "status": "staged",
+  "contract_sha256": "94fd57e631523de95201ec7ac57567ff1e2908a35b3bf9d6294fc2e1b6c46254",
+  "archive_sha256": "c714095d83cf2de62c5b63486ecf6aa77521587cad94100a5cf152760afd8926",
+  "archive_bytes": 50556159,
+  "smoke_frames": 8,
+  "full_movies": 4,
+  "maximum_full_seconds": 3600,
+  "no_weights_changed": true,
+  "source_model_ensemble_unchanged": true,
+  "submission_performed": false
+}

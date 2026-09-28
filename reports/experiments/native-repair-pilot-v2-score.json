@@ -1,0 +1,18 @@
+{
+  "run_id": "native-repair-pilot-v2",
+  "status": "verified_neutral_complete_graphs",
+  "movies": [
+    "44b6_12dfb391",
+    "6bba_062c8d37",
+    "44b6_267148e4",
+    "6bba_07e24132"
+  ],
+  "all_nodes_and_edges_identical": true,
+  "ground_truth_opened": false,
+  "pilot_gate_passed": false,
+  "authorized_for_submission": false,
+  "terminal_sha256": "90b4b4dc278aef8dc7482444edf68158f06bd62b1320d78e56162b343c638e6f",
+  "pilot_sha256": "70e52675a68f62b75f028164e2a8a31260d6365f275bebd4c115ec7af8e81ee6",
+  "elapsed_seconds": 1.5619999999762513,
+  "reason": "No semantic graph changes; official rescoring cannot produce a genuine gain"
+}

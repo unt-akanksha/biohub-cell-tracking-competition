@@ -1,0 +1,42 @@
+{
+  "status": "source_event_pilot_training_complete",
+  "contract_sha256": "c738ea876106a40cf9b0f57877e12644dc17d3ff6b9dc6c184a717ea975279c1",
+  "epochs_completed": [
+    {
+      "epoch": 1,
+      "steps": 673,
+      "cases": 673,
+      "online_objective_mean": 0.1429573241449725,
+      "displacement_norm": 0.9353400537829051,
+      "weights_sha256": "1a822b9884a85ff1638f99618fac9919ac6f16d43072c5678eeb2908074c1ac2",
+      "elapsed_seconds": 255.31200000003446
+    },
+    {
+      "epoch": 2,
+      "steps": 1346,
+      "cases": 673,
+      "online_objective_mean": 0.13651749979590647,
+      "displacement_norm": 0.39392426929894625,
+      "weights_sha256": "a4beb8d707307f0b79026f634386635742a785e2cb4d1a13980245b45d1d89cf",
+      "elapsed_seconds": 460.39000000001397
+    },
+    {
+      "epoch": 3,
+      "steps": 2019,
+      "cases": 673,
+      "online_objective_mean": 0.1361598003284073,
+      "displacement_norm": 0.5460180821579812,
+      "weights_sha256": "01c7ad5c6078db669b8e7042934a23cd3bc2534c00f850681f89adde48afada1",
+      "elapsed_seconds": 662.2339999999967
+    }
+  ],
+  "source_only": true,
+  "authorized_for_submission": false,
+  "quality_gain_established": false,
+  "seconds": 662.265000000014,
+  "serialized_case_smoke_passed": true,
+  "weights_sha256": "01c7ad5c6078db669b8e7042934a23cd3bc2534c00f850681f89adde48afada1",
+  "weights_changed": true,
+  "model_fitted": true,
+  "source_sha256": "767bb950c281e2fc706d76f723602842c11801a5c68a0f25a27bebaaba6cd174"
+}

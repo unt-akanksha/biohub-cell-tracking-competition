@@ -1,0 +1,52 @@
+{
+  "status": "verified_training_pilot",
+  "trained_steps": 1000,
+  "optimizer_steps_min": 959,
+  "optimizer_steps_max": 1000,
+  "first_block": {
+    "step": 10,
+    "edge_loss": 0,
+    "detection_loss": 3.8824403285980225,
+    "matched_training_nodes": 0,
+    "annotated_training_nodes": 312,
+    "training_node_recall": 0,
+    "supervised_training_pairs": 0,
+    "grad_scaler_scale": 2048,
+    "optimizer_steps_max": 10,
+    "max_detected_nodes": 0,
+    "elapsed_seconds": 32.34964125800002,
+    "gpu_peak_allocated": [
+      2564876288,
+      2398110208
+    ]
+  },
+  "last_block": {
+    "step": 1000,
+    "edge_loss": 0.006949574779719114,
+    "detection_loss": 0.010605474421754479,
+    "matched_training_nodes": 305,
+    "annotated_training_nodes": 324,
+    "training_node_recall": 0.941358024691358,
+    "supervised_training_pairs": 20,
+    "grad_scaler_scale": 2048,
+    "optimizer_steps_max": 1000,
+    "max_detected_nodes": 776,
+    "elapsed_seconds": 420.54751017499996,
+    "gpu_peak_allocated": [
+      2582552064,
+      2398110208
+    ]
+  },
+  "checkpoint_sha256": "51664e6817519745330c3687c81aee50bf321b0fd59ded97e7fd79a91f21e34c",
+  "notebook_sha256": "088d947fbe62109d6fbc5e37f2589903fb5f841932f28e2524799809ec2078ca",
+  "detection_loss_change": -3.871834854176268,
+  "edge_loss_change": 0.006949574779719114,
+  "blocks_with_nonzero_association_loss": 98,
+  "final_block_max_detected_nodes": 776,
+  "final_block_training_node_recall": 0.941358024691358,
+  "detector_coverage_established": false,
+  "validation_scope": "Source-only optimization and throughput; no held-out evaluation",
+  "longer_gpu_run_authorized": false,
+  "authorized_for_submission": false,
+  "verification_environment": "Kaggle CPU-only kernel indarkarhana/biohub-independent-checkpoint-verification-v1 version 1"
+}

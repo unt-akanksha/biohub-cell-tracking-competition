@@ -1,0 +1,235 @@
+{
+  "status": "push_returned",
+  "utc": "2026-09-14T12:05:15.321327+00:00",
+  "kernel": "indarkarhana/biohub-structured-trajectory-acceptance",
+  "notebook_sha256": "1bc396d39faf65afb84fa331c672b05778ce1a6cd75b59957f48cfb1bf58e858",
+  "contract_sha256": "4e13ec7dea134c2da7b13133d8ed5ba92d5bb392954f35e26c29288c446a4695",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "1.35h",
+      "remaining": "28.65h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "sequential": {
+    "research_status": "complete_prelabel_predictions",
+    "gpu_processes": []
+  },
+  "submission_statuses": [
+    {
+      "ref": "56219125",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55784044",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55364415",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55191057",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190985",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190960",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190946",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190944",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55155485",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154131",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154126",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154124",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55151372",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55099266",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55097917",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067327",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067321",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067317",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067313",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067209",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045561",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045560",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045557",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045550",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55043293",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55013181",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55012552",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54982182",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54979905",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54975092",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54969472",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54969466",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54948346",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54941178",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54940777",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54940556",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54939162",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54936504",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54883784",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54872847",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54860720",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54837780",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54823291",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54817880",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54811655",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54799100",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54795728",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54795384",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54789697",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54774223",
+      "status": "SubmissionStatus.COMPLETE"
+    }
+  ],
+  "worst_case_reserved_gpu_hours": 2,
+  "reserve_hours": 8,
+  "submission_performed": false,
+  "exit_code": 0,
+  "stdout": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/indarkarhana/biohub-structured-trajectory-acceptance\n",
+  "stderr": ""
+}

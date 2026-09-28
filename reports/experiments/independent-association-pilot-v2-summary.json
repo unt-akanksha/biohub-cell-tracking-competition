@@ -1,0 +1,127 @@
+{
+  "status": "completed",
+  "identity": {
+    "run_id": "independent-association-pilot-v1",
+    "training_stems": [
+      "6bba_b204cac7",
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17"
+    ],
+    "initialization_sha256": "51664e6817519745330c3687c81aee50bf321b0fd59ded97e7fd79a91f21e34c",
+    "loss": "sparse_parent_classification_v1",
+    "frozen_modules": [
+      "unet",
+      "detect_head"
+    ],
+    "max_steps": 1000,
+    "seed": 20260909,
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.0001,
+      "weight_decay": 0.01
+    },
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "history": [
+    {
+      "step": 10,
+      "parent_loss": 4.097055387496948,
+      "detector_loss": 0.02796985348686576,
+      "correct": 10,
+      "positive_links": 154,
+      "confident_correct": 0,
+      "max_nodes": 807,
+      "elapsed_seconds": 7.099301465000053
+    },
+    {
+      "step": 1000,
+      "parent_loss": 3.4768910884857176,
+      "detector_loss": 0.12310908269137144,
+      "correct": 14,
+      "positive_links": 113,
+      "confident_correct": 4,
+      "max_nodes": 756,
+      "elapsed_seconds": 363.018114278
+    }
+  ],
+  "before": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 0,
+    "checkpoint_sha256": "7ee96cd5ae2a21fc2dadf5b37e2c00fb06cfbd8f756ad61c9885b739dd8fad36",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 408,
+    "predicted_edges": 0,
+    "scorer_counts": {
+      "edge_tp": 0,
+      "edge_fp": 0,
+      "edge_fn": 16,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 0,
+      "num_pred_nodes": 408
+    },
+    "elapsed_seconds": 2.490906306999932,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false
+  },
+  "after": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 1000,
+    "checkpoint_sha256": "efdeac51c9e5218a106fae305e7bae32cdc97f8bc2d4215535cbd286a1bfae48",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 408,
+    "predicted_edges": 1,
+    "scorer_counts": {
+      "edge_tp": 1,
+      "edge_fp": 0,
+      "edge_fn": 15,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 0,
+      "num_pred_nodes": 408
+    },
+    "elapsed_seconds": 0.974863613000025,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false
+  },
+  "step100_smoke": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 100,
+    "checkpoint_sha256": "351e7046184bb25a1e735be48ec3f0cce275871d49a5d064f02f5fb3f84ba7aa",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 408,
+    "predicted_edges": 0,
+    "scorer_counts": {
+      "edge_tp": 0,
+      "edge_fp": 0,
+      "edge_fn": 16,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 0,
+      "num_pred_nodes": 408
+    },
+    "elapsed_seconds": 1.0787750810000034,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false
+  },
+  "frozen_detector_sha256": "3c40f4c6f68e8b431d2029e7f7b2bb20af8425e2d12109a3aa2c03b4cb9046c0",
+  "detector_unchanged": true,
+  "checkpoint_sha256": "efdeac51c9e5218a106fae305e7bae32cdc97f8bc2d4215535cbd286a1bfae48",
+  "authorized_for_submission": false,
+  "history_scope": "First and last blocks only; complete history retained in recovered result.json"
+}

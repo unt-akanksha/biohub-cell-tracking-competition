@@ -1,0 +1,49 @@
+{
+  "status": "verified_complete_label_free_appearance_inference_smoke",
+  "run_id": "focus-pair-appearance-inference-v1",
+  "source_hashes": {
+    "research/focus_pair_appearance_inference.py": "a35866e8cd997921dd8022701b845cbd16c5904696732c69423c1a7baf47dd36",
+    "scripts/smoke-focus-pair-appearance-inference.py": "f727d51f82dc3b28a335101cd0e0efb8a79956514acaf7ad9c591471e7c399b2",
+    "tests/test_focus_pair_appearance_inference.py": "ad6a4021012fe071cb498b4767ae51d7bcf1bf7400aa79483b41a2ee478d96ee",
+    "reports/experiments/focus-pair-appearance-inference-v1-design.md": "5a0eb63cdb60967e8c4c70b2de07b886396b8e62086f84772a01936921459dc2"
+  },
+  "packet_sha256": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e",
+  "arms": [
+    {
+      "arm": "full",
+      "model_sha256": "760c4af100278bc5431d20039f20d73963f078228cd3310dec7843fb29e5a32e",
+      "output_sha256": "90ac113e76192ca41009ff7a6d1f61dcb4d2377a1cd02a45aa686835e1d7fbe6",
+      "source_nodes": 1160,
+      "target_nodes": 1187,
+      "complete_choices": 1378107,
+      "originally_unknown_targets": 1167,
+      "all_targets_replayed": true,
+      "known_smoke_choices_replayed": true,
+      "maximum_probability_error": 3.6637359812630166e-15,
+      "inference_seconds": 1.7969999999913853,
+      "conservative_working_bytes": 154577920
+    },
+    {
+      "arm": "lda",
+      "model_sha256": "10345f8fa3070a01bec7698037ad2bbec4386f28f4e7571e444d96dd2910a5a0",
+      "output_sha256": "3a4373478f2f741f39a48d49be3dadfd8686647910e0080d38e9444e3aae23ed",
+      "source_nodes": 1160,
+      "target_nodes": 1187,
+      "complete_choices": 1378107,
+      "originally_unknown_targets": 1167,
+      "all_targets_replayed": true,
+      "known_smoke_choices_replayed": true,
+      "maximum_probability_error": 7.771561172376096e-16,
+      "inference_seconds": 2.764999999984866,
+      "conservative_working_bytes": 154577920
+    }
+  ],
+  "input_arrays_unchanged": true,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "gpu_seconds": 0,
+  "quality_evaluated": false,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 10.76600000000326
+}

@@ -1,0 +1,23 @@
+{
+  "pid": 20495,
+  "mode": "train",
+  "started_epoch": 1789354652.0771146,
+  "command": [
+    "/home/ubuntu/venv/bin/python",
+    "-u",
+    "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-ensemble-v1-r2-bundle/run.py",
+    "--bundle",
+    "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-ensemble-v1-r2-bundle",
+    "--bundle-sha256",
+    "a3a59450791c4d6aef7e75f8d7e2a40c5a41f9dc1a4a14d0440f0a1f0e1712d0",
+    "--mode",
+    "train",
+    "--output",
+    "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-train-v1-r2",
+    "--smoke-proof",
+    "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-smoke-v1-r2/result.json"
+  ],
+  "bundle_sha256": "a3a59450791c4d6aef7e75f8d7e2a40c5a41f9dc1a4a14d0440f0a1f0e1712d0",
+  "log": "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-train-v1-r2.log",
+  "output": "/tmp/biohub-image-context-v2.ScdSdY/visual-correspondence-train-v1-r2"
+}

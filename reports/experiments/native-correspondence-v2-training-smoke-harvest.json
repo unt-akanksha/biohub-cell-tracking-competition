@@ -1,0 +1,72 @@
+{
+  "status": "verified_backup",
+  "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-correspondence-v2-training-smoke-output",
+  "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-smoke",
+  "records": [
+    {
+      "path": "RESULT.json",
+      "bytes": 18387,
+      "sha256": "01bea93d97769ee4f7621656bd7e9f12343614a0c2f6187c79ed7516db8f2c35"
+    },
+    {
+      "path": "resume.pt",
+      "bytes": 190346829,
+      "sha256": "332ff961237c6460c54f9639fb1f0b9fa03da48bc9b6a19a15e8ec833257ea13"
+    },
+    {
+      "path": "6bba-resnet3d/best.pt",
+      "bytes": 36080010,
+      "sha256": "0a1bb52598a0df19c48489e0f468594e2a8ca9ca23b92a301fd7f37c25632026"
+    },
+    {
+      "path": "6bba-resnet3d/HISTORY.json",
+      "bytes": 7221,
+      "sha256": "23209b917f05dd4bc99f4eec082d041a4da6598185f5d1001c570ada9b4a3457"
+    },
+    {
+      "path": "6bba-resnet3d/RESULT.json",
+      "bytes": 7461,
+      "sha256": "9d95f383babe301631d7d2ac0d4354f88541e413411179f2348e87d832767b9d"
+    },
+    {
+      "path": "6bba-token_transformer3d/best.pt",
+      "bytes": 63437100,
+      "sha256": "d08114a0f9f79fceeee30dba303f1101403bb842379931c4db54aad1b220046c"
+    },
+    {
+      "path": "6bba-token_transformer3d/HISTORY.json",
+      "bytes": 7200,
+      "sha256": "a39fd4a3f090af85c3c93811f8bb174e69746d72cc354ecde7ae57216004c8c7"
+    },
+    {
+      "path": "6bba-token_transformer3d/RESULT.json",
+      "bytes": 7439,
+      "sha256": "7226f470e10d5a957ce23065e537e038b97aff2bffa90b049e02596752066bd3"
+    }
+  ],
+  "total_bytes": 289911647,
+  "remote_files_deleted": true,
+  "cleanup": {
+    "removed": [
+      {
+        "path": "resume.pt",
+        "bytes": 190346829,
+        "sha256": "332ff961237c6460c54f9639fb1f0b9fa03da48bc9b6a19a15e8ec833257ea13"
+      },
+      {
+        "path": "6bba-resnet3d/best.pt",
+        "bytes": 36080010,
+        "sha256": "0a1bb52598a0df19c48489e0f468594e2a8ca9ca23b92a301fd7f37c25632026"
+      },
+      {
+        "path": "6bba-token_transformer3d/best.pt",
+        "bytes": 63437100,
+        "sha256": "d08114a0f9f79fceeee30dba303f1101403bb842379931c4db54aad1b220046c"
+      }
+    ],
+    "recovered_bytes": 289863939,
+    "free_before": 1005453312,
+    "free_after": 1295335424
+  },
+  "seconds": 17.45400000002701
+}

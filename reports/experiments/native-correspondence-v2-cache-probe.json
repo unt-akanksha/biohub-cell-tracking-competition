@@ -1,0 +1,32 @@
+{
+  "status": "cache_probe_passed",
+  "optimization_packet_sha256": "b5b67a2e14bccad2883d1d6ae698a948c8928fcf0674bd5266f280c9aa2a4c05",
+  "stem": "6bba_085bf656",
+  "transition": 0,
+  "results": [
+    {
+      "family": "resnet3d",
+      "max_logit_error": 0.0,
+      "choices_equal": true,
+      "ordinary_seconds": 0.004341888001363259,
+      "cached_seconds": 0.0042666059962357394,
+      "groups": 4,
+      "unique_patches": 24,
+      "weights_sha256": "6fbd68f59d68cb7970f8e11c87d3e171243bdfd447c70a9fe13ce15dd2500f73"
+    },
+    {
+      "family": "token_transformer3d",
+      "max_logit_error": 0.0,
+      "choices_equal": true,
+      "ordinary_seconds": 0.006993634997343179,
+      "cached_seconds": 0.0069271939937607385,
+      "groups": 4,
+      "unique_patches": 24,
+      "weights_sha256": "401df7cd2c43211c96b3caf05666615e99a73bcb59d6630c92de4130baa38cdb"
+    }
+  ],
+  "elapsed_seconds": 0.8063571140010026,
+  "target_labels_opened": false,
+  "complete_movie_runtime_tested": false,
+  "script_sha256": "c0624adcc48fc9064d88309023e05cc36ef1259e82e4db5b966ad2f449f66cd8"
+}

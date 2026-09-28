@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "failure": "Traceback (most recent call last):\n  File \"C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\scripts\\profile-focus-pair-tree.py\", line 176, in main\n    raise RuntimeError(f'Profile worker exited {process.returncode}')\nRuntimeError: Profile worker exited 4294967295\n",
+  "process_exit_code": 4294967295,
+  "peak_working_bytes": 4562944,
+  "elapsed_seconds": 170.26500000001397
+}

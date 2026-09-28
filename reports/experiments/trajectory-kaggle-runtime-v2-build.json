@@ -1,0 +1,16 @@
+{
+  "status": "staged_not_launched",
+  "packaging_revision": 2,
+  "contract_sha256": "d10d19b1e21b30e2eb5c6bf1c05161559f74594ce30e250e3c473f2d8b0379f2",
+  "archive_sha256": "a6bc494521cd93eabcad83abac2aaf040aab0f101078a2e1151b2ab2fe005e5a",
+  "archive_bytes": 382434288,
+  "files": 92,
+  "wheels": 64,
+  "notebook_sha256": "c6b6081e6f7472eef5a4793a596a45dd2caf0d694d4b1e5bb28b0cecb9a91c77",
+  "dataset_private": true,
+  "internet_enabled": false,
+  "required_gpus": 2,
+  "acceptance_wall_cap_seconds": 3600,
+  "production_not_staged": true,
+  "submission_performed": false
+}

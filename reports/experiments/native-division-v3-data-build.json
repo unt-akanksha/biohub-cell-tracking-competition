@@ -1,0 +1,29 @@
+{
+  "status": "triplets_merged",
+  "totals": {
+    "44b6-selection": {
+      "positive": 1,
+      "negative": 151,
+      "triples": 152
+    },
+    "44b6-optimization": {
+      "positive": 6,
+      "negative": 235,
+      "triples": 241
+    },
+    "6bba-optimization": {
+      "positive": 38,
+      "negative": 2070,
+      "triples": 2108
+    },
+    "6bba-selection": {
+      "positive": 6,
+      "negative": 580,
+      "triples": 586
+    }
+  },
+  "packets": 718,
+  "data_sha256": "7e0e7b1ca3c11b27319824fad3746b49f8a1cf519a73d3dad38e12d2ef8a0e06",
+  "archive_sha256": "978d20b9f922067a78b6499354e1f674bcb6054589e3105485c30eb171f761b2",
+  "archive_bytes": 72202240
+}

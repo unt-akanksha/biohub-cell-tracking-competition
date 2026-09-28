@@ -1,0 +1,674 @@
+{
+  "scope": "Frozen 120 training movies; true displacements only, not predicted detections",
+  "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+  "prior": {
+    "variance_um2": [
+      5.039403450197348,
+      1.8241133653936037,
+      2.5762211031033333
+    ],
+    "null_logit": -4.5,
+    "scale": [
+      1.625,
+      0.40625,
+      0.40625
+    ]
+  },
+  "summaries": {
+    "single_child": {
+      "edges": 102019,
+      "prior_not_above_null": 6464,
+      "fraction_prior_not_above_null": 0.0633607465276076,
+      "displacement_um": {
+        "p50": 1.8168052317185792,
+        "p90": 4.241374519244911,
+        "p95": 5.450415695155737,
+        "p99": 8.414378040740742
+      },
+      "residual_required_to_exceed_null": {
+        "p50": 0.0,
+        "p90": 0.0,
+        "p95": 0.7532221943732464,
+        "p99": 8.417206834655984
+      },
+      "null_only_parent_posterior_quantiles": {
+        "p50": 0.9817916764534594,
+        "p90": 0.9886594907348831,
+        "p95": 0.9890130573694068,
+        "p99": 0.9890130573694068
+      }
+    },
+    "division_daughter": {
+      "edges": 228,
+      "prior_not_above_null": 148,
+      "fraction_prior_not_above_null": 0.6491228070175439,
+      "displacement_um": {
+        "p50": 5.92902355472636,
+        "p90": 9.065839901796192,
+        "p95": 10.575877855364284,
+        "p99": 12.907514001768897
+      },
+      "residual_required_to_exceed_null": {
+        "p50": 1.766614157640252,
+        "p90": 12.719061064341231,
+        "p95": 17.32629698627724,
+        "p99": 31.581279651105746
+      },
+      "null_only_parent_posterior_quantiles": {
+        "p50": 0.14597867574820061,
+        "p90": 0.9602114336639527,
+        "p95": 0.9810552961017573,
+        "p99": 0.9843569545423054
+      }
+    }
+  },
+  "per_movie": [
+    {
+      "stem": "6bba_b204cac7",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_6479435d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_df673a83",
+      "division_events": 4,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_edf14583",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_312f0dc3",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_b693381b",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_2540cd90",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_09961292",
+      "division_events": 4,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_78a7bd97",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_207c6aaf",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_d1acb6ff",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_268e1230",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_ae82a791",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "division_events": 4,
+      "divisions_with_any_daughter_prior_not_above_null": 4
+    },
+    {
+      "stem": "6bba_372c8cb8",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_f1fde7e0",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_1f58c2f6",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_ab78413d",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_ef7b4f7e",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_6feb10f0",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_d2b9fc0c",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_7af54fde",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_05db0fb1",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_61ecbe65",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_1d0d8384",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_20852818",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_474be664",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_4ffd3da3",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_6db0e9b4",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_825bd1c6",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_ebdf3b34",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_f4ae811c",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_fc83837d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_c328f2fd",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_7b5d3b2c",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_4aa14c89",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_55b7eebe",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_32db13fc",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_f8ffd5e7",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_80d12824",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_3c5691b6",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_13f19531",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_3fda6b25",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_debd7bfa",
+      "division_events": 4,
+      "divisions_with_any_daughter_prior_not_above_null": 4
+    },
+    {
+      "stem": "6bba_d82a4fc6",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_337b1b3a",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_e5e44988",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_48816121",
+      "division_events": 5,
+      "divisions_with_any_daughter_prior_not_above_null": 4
+    },
+    {
+      "stem": "6bba_ed9377fd",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_b329af44",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_705ec2c9",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_784a78c9",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_718b21f9",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_969618f6",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_55c70843",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_d0fc38b5",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_d6ecebbb",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_ebff6e76",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_0e7c0d07",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_5dfe9ad1",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_0c7fa718",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_07e24132",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_3a1849c2",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_c27cba08",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_a5e926bb",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_74686d6a",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_6321a359",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_d5eae175",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_9e23430b",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_9a41d029",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_eebc57a5",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_6feeb0b1",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_3db54e20",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_96833384",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_61dd1e0d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_07477033",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_085bf656",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_907271db",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_fc516dc6",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_aeee7805",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_43fea39d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_f17befbc",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_5f89039d",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_af149c94",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_789f8168",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_a90a0b9c",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_91951b3a",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_fbc898dc",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_d3da753b",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_15403b9a",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_786893ac",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_76db78c1",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_fe670320",
+      "division_events": 2,
+      "divisions_with_any_daughter_prior_not_above_null": 2
+    },
+    {
+      "stem": "6bba_acd782a8",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_b1ae37b9",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_5c824876",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_e16ffc58",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_bbb708ca",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "division_events": 3,
+      "divisions_with_any_daughter_prior_not_above_null": 3
+    },
+    {
+      "stem": "6bba_f20478e9",
+      "division_events": 1,
+      "divisions_with_any_daughter_prior_not_above_null": 1
+    },
+    {
+      "stem": "6bba_05b6850b",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    },
+    {
+      "stem": "6bba_5a4d9360",
+      "division_events": 0,
+      "divisions_with_any_daughter_prior_not_above_null": 0
+    }
+  ],
+  "division_events": 114,
+  "divisions_with_any_daughter_prior_not_above_null": 102,
+  "caveat": "Learned residuals may overcome this prior; no actual model error rate is inferred",
+  "selection_opened": false,
+  "target_audit_opened": false,
+  "model_changed": false,
+  "authorized_for_submission": false
+}

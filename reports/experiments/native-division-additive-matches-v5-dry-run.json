@@ -1,0 +1,1257 @@
+{
+  "status": "source_additive_match_dry_run",
+  "totals": {
+    "44b6": {
+      "events": 19,
+      "strict": 6,
+      "additive": 9,
+      "newly_available": 3
+    },
+    "6bba": {
+      "events": 93,
+      "strict": 38,
+      "additive": 56,
+      "newly_available": 18
+    }
+  },
+  "events": [
+    {
+      "stem": "44b6_587a1e22",
+      "parent": 21000000052,
+      "children": [
+        22000000053,
+        22000000052
+      ],
+      "transition": 19,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "parent": 125000000011,
+      "children": [
+        126000000011,
+        126000000012
+      ],
+      "transition": 36,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_74d0c52e",
+      "parent": 296000000021,
+      "children": [
+        297000000022,
+        297000000021
+      ],
+      "transition": 58,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "44b6_7a302da0",
+      "parent": 263000000019,
+      "children": [
+        264000000020,
+        264000000019
+      ],
+      "transition": 90,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_996155de",
+      "parent": 438000000002,
+      "children": [
+        439000000003,
+        439000000002
+      ],
+      "transition": 19,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "44b6_9be80b04",
+      "parent": 476000000008,
+      "children": [
+        477000000009,
+        477000000008
+      ],
+      "transition": 77,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "44b6_a21120c2",
+      "parent": 68000000011,
+      "children": [
+        69000000011,
+        69000000012
+      ],
+      "transition": 52,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "44b6_a21120c2",
+      "parent": 76000000019,
+      "children": [
+        77000000020,
+        77000000019
+      ],
+      "transition": 60,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "44b6_c50204e0",
+      "parent": 171000000043,
+      "children": [
+        172000000043,
+        172000000044
+      ],
+      "transition": 28,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "44b6_c50204e0",
+      "parent": 208000000033,
+      "children": [
+        209000000034,
+        209000000033
+      ],
+      "transition": 65,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_c8e2a523",
+      "parent": 128000000004,
+      "children": [
+        129000000005,
+        129000000004
+      ],
+      "transition": 72,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_d2f34f90",
+      "parent": 275000000002,
+      "children": [
+        276000000002,
+        276000000003
+      ],
+      "transition": 51,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "44b6_d2f34f90",
+      "parent": 286000000004,
+      "children": [
+        287000000004,
+        287000000005
+      ],
+      "transition": 62,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_d5e7d891",
+      "parent": 173000000010,
+      "children": [
+        174000000010,
+        174000000011
+      ],
+      "transition": 12,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_d5e7d891",
+      "parent": 208000000033,
+      "children": [
+        209000000034,
+        209000000033
+      ],
+      "transition": 47,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_deabac95",
+      "parent": 120000000018,
+      "children": [
+        121000000018,
+        121000000019
+      ],
+      "transition": 28,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_e28840c6",
+      "parent": 381000000009,
+      "children": [
+        382000000010,
+        382000000009
+      ],
+      "transition": 23,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "44b6_e28840c6",
+      "parent": 419000000009,
+      "children": [
+        420000000010,
+        420000000009
+      ],
+      "transition": 61,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "44b6_eb2880fc",
+      "parent": 160000000048,
+      "children": [
+        161000000049,
+        161000000048
+      ],
+      "transition": 72,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_085bf656",
+      "parent": 19000327,
+      "children": [
+        20000345,
+        20000346
+      ],
+      "transition": 18,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_09961292",
+      "parent": 25000920,
+      "children": [
+        26000956,
+        26000987
+      ],
+      "transition": 24,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_09961292",
+      "parent": 45001493,
+      "children": [
+        46001530,
+        46001531
+      ],
+      "transition": 44,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_09961292",
+      "parent": 53001680,
+      "children": [
+        54001733,
+        54001734
+      ],
+      "transition": 52,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_09961292",
+      "parent": 49001609,
+      "children": [
+        50001629,
+        50001630
+      ],
+      "transition": 48,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "parent": 40000830,
+      "children": [
+        41000850,
+        41000856
+      ],
+      "transition": 39,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "parent": 98001485,
+      "children": [
+        99001495,
+        99001497
+      ],
+      "transition": 97,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "parent": 21000472,
+      "children": [
+        22000494,
+        22000495
+      ],
+      "transition": 20,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_1d0d8384",
+      "parent": 15000455,
+      "children": [
+        16000515,
+        16000516
+      ],
+      "transition": 14,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_20852818",
+      "parent": 40000487,
+      "children": [
+        41000500,
+        41000513
+      ],
+      "transition": 39,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_20852818",
+      "parent": 42000516,
+      "children": [
+        43000541,
+        43000542
+      ],
+      "transition": 41,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_20852818",
+      "parent": 83001034,
+      "children": [
+        84001041,
+        84001044
+      ],
+      "transition": 82,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_268e1230",
+      "parent": 25000170,
+      "children": [
+        26000179,
+        26000180
+      ],
+      "transition": 24,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "parent": 62000719,
+      "children": [
+        63000734,
+        63000735
+      ],
+      "transition": 61,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_337b1b3a",
+      "parent": 39000297,
+      "children": [
+        40000311,
+        40000324
+      ],
+      "transition": 38,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_337b1b3a",
+      "parent": 59000663,
+      "children": [
+        60000685,
+        60000686
+      ],
+      "transition": 58,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "parent": 82001296,
+      "children": [
+        83001334,
+        83001350
+      ],
+      "transition": 81,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_3c5691b6",
+      "parent": 7000054,
+      "children": [
+        8000066,
+        8000067
+      ],
+      "transition": 6,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_3c5691b6",
+      "parent": 23000172,
+      "children": [
+        24000178,
+        24000183
+      ],
+      "transition": 22,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_3db54e20",
+      "parent": 83000724,
+      "children": [
+        84000737,
+        84000738
+      ],
+      "transition": 82,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_48816121",
+      "parent": 6000026,
+      "children": [
+        7000035,
+        7000036
+      ],
+      "transition": 5,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_48816121",
+      "parent": 12000059,
+      "children": [
+        13000062,
+        13000063
+      ],
+      "transition": 11,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_48816121",
+      "parent": 17000095,
+      "children": [
+        18000098,
+        18000100
+      ],
+      "transition": 16,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_48816121",
+      "parent": 58000508,
+      "children": [
+        59000522,
+        59000533
+      ],
+      "transition": 57,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_48816121",
+      "parent": 61000553,
+      "children": [
+        62000570,
+        62000571
+      ],
+      "transition": 60,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_55b7eebe",
+      "parent": 49000351,
+      "children": [
+        50000359,
+        50000360
+      ],
+      "transition": 48,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "parent": 13000378,
+      "children": [
+        14000412,
+        14000426
+      ],
+      "transition": 12,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "parent": 78002270,
+      "children": [
+        79002293,
+        79002316
+      ],
+      "transition": 77,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "parent": 24000720,
+      "children": [
+        25000750,
+        25000751
+      ],
+      "transition": 23,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_5c039895",
+      "parent": 59000855,
+      "children": [
+        60000873,
+        60000878
+      ],
+      "transition": 58,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_5c039895",
+      "parent": 53000762,
+      "children": [
+        54000765,
+        54000776
+      ],
+      "transition": 52,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_5c039895",
+      "parent": 11000170,
+      "children": [
+        12000185,
+        12000186
+      ],
+      "transition": 10,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_5c824876",
+      "parent": 3000057,
+      "children": [
+        4000073,
+        4000074
+      ],
+      "transition": 2,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_61ecbe65",
+      "parent": 35000328,
+      "children": [
+        36000339,
+        36000340
+      ],
+      "transition": 34,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_6321a359",
+      "parent": 9000094,
+      "children": [
+        10000105,
+        10000106
+      ],
+      "transition": 8,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_67ebd073",
+      "parent": 87000772,
+      "children": [
+        88000778,
+        88000779
+      ],
+      "transition": 86,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "parent": 67000540,
+      "children": [
+        68000569,
+        68000570
+      ],
+      "transition": 66,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_705ec2c9",
+      "parent": 43000460,
+      "children": [
+        44000474,
+        44000477
+      ],
+      "transition": 42,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_74686d6a",
+      "parent": 9000037,
+      "children": [
+        10000042,
+        10000043
+      ],
+      "transition": 8,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_74686d6a",
+      "parent": 25000128,
+      "children": [
+        26000134,
+        26000135
+      ],
+      "transition": 24,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_784a78c9",
+      "parent": 26000566,
+      "children": [
+        27000585,
+        27000586
+      ],
+      "transition": 25,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_786893ac",
+      "parent": 64002179,
+      "children": [
+        65002214,
+        65002215
+      ],
+      "transition": 63,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_786893ac",
+      "parent": 18000797,
+      "children": [
+        19000842,
+        19000843
+      ],
+      "transition": 17,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_786893ac",
+      "parent": 2000105,
+      "children": [
+        3000158,
+        3000159
+      ],
+      "transition": 1,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_78a7bd97",
+      "parent": 65000803,
+      "children": [
+        66000836,
+        66000837
+      ],
+      "transition": 64,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_78a7bd97",
+      "parent": 57000619,
+      "children": [
+        58000644,
+        58000647
+      ],
+      "transition": 56,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_7af54fde",
+      "parent": 53000865,
+      "children": [
+        54000876,
+        54000877
+      ],
+      "transition": 52,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_7af54fde",
+      "parent": 56000905,
+      "children": [
+        57000916,
+        57000917
+      ],
+      "transition": 55,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "parent": 33000475,
+      "children": [
+        34000492,
+        34000493
+      ],
+      "transition": 32,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "parent": 84001401,
+      "children": [
+        85001403,
+        85001421
+      ],
+      "transition": 83,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "parent": 28000723,
+      "children": [
+        29000761,
+        29000762
+      ],
+      "transition": 27,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "parent": 38000925,
+      "children": [
+        39000938,
+        39000942
+      ],
+      "transition": 37,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "parent": 73001556,
+      "children": [
+        74001569,
+        74001570
+      ],
+      "transition": 72,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_80d12824",
+      "parent": 60000533,
+      "children": [
+        61000541,
+        61000542
+      ],
+      "transition": 59,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_907271db",
+      "parent": 97001173,
+      "children": [
+        98001189,
+        98001190
+      ],
+      "transition": 96,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_969618f6",
+      "parent": 57000466,
+      "children": [
+        58000482,
+        58000483
+      ],
+      "transition": 56,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_969618f6",
+      "parent": 72000614,
+      "children": [
+        73000624,
+        73000633
+      ],
+      "transition": 71,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_969618f6",
+      "parent": 40000345,
+      "children": [
+        41000358,
+        41000359
+      ],
+      "transition": 39,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_9a41d029",
+      "parent": 50000865,
+      "children": [
+        51000896,
+        51000897
+      ],
+      "transition": 49,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_9a41d029",
+      "parent": 53000912,
+      "children": [
+        54000928,
+        54000950
+      ],
+      "transition": 52,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_9e23430b",
+      "parent": 90001032,
+      "children": [
+        91001045,
+        91001046
+      ],
+      "transition": 89,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_ab78413d",
+      "parent": 68001291,
+      "children": [
+        69001319,
+        69001320
+      ],
+      "transition": 67,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_ab78413d",
+      "parent": 78001460,
+      "children": [
+        79001493,
+        79001494
+      ],
+      "transition": 77,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_aeee7805",
+      "parent": 14000155,
+      "children": [
+        15000176,
+        15000177
+      ],
+      "transition": 13,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "parent": 48000452,
+      "children": [
+        49000469,
+        49000477
+      ],
+      "transition": 47,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "parent": 33000277,
+      "children": [
+        34000290,
+        34000291
+      ],
+      "transition": 32,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "parent": 49000478,
+      "children": [
+        50000486,
+        50000487
+      ],
+      "transition": 48,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "parent": 29000239,
+      "children": [
+        30000252,
+        30000253
+      ],
+      "transition": 28,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "parent": 74000810,
+      "children": [
+        75000817,
+        75000821
+      ],
+      "transition": 73,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "parent": 95001023,
+      "children": [
+        96001033,
+        96001038
+      ],
+      "transition": 94,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "parent": 32000835,
+      "children": [
+        33000858,
+        33000860
+      ],
+      "transition": 31,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "parent": 47001238,
+      "children": [
+        48001265,
+        48001293
+      ],
+      "transition": 46,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "parent": 86002188,
+      "children": [
+        87002233,
+        87002234
+      ],
+      "transition": 85,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_c328f2fd",
+      "parent": 67000304,
+      "children": [
+        68000311,
+        68000314
+      ],
+      "transition": 66,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_c328f2fd",
+      "parent": 29000074,
+      "children": [
+        30000074,
+        30000075
+      ],
+      "transition": 28,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "parent": 29000464,
+      "children": [
+        30000479,
+        30000480
+      ],
+      "transition": 28,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "parent": 49000935,
+      "children": [
+        50000962,
+        50000963
+      ],
+      "transition": 48,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "parent": 53001039,
+      "children": [
+        54001078,
+        54001079
+      ],
+      "transition": 52,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "parent": 87002049,
+      "children": [
+        88002083,
+        88002084
+      ],
+      "transition": 86,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_d1acb6ff",
+      "parent": 68000881,
+      "children": [
+        69000897,
+        69000898
+      ],
+      "transition": 67,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_d2b9fc0c",
+      "parent": 73000666,
+      "children": [
+        74000680,
+        74000687
+      ],
+      "transition": 72,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_d2b9fc0c",
+      "parent": 79000759,
+      "children": [
+        80000776,
+        80000779
+      ],
+      "transition": 78,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_d3da753b",
+      "parent": 64000722,
+      "children": [
+        65000738,
+        65000748
+      ],
+      "transition": 63,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_e16ffc58",
+      "parent": 27000395,
+      "children": [
+        28000419,
+        28000420
+      ],
+      "transition": 26,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_ebdf3b34",
+      "parent": 14000412,
+      "children": [
+        15000432,
+        15000433
+      ],
+      "transition": 13,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_ebdf3b34",
+      "parent": 85001151,
+      "children": [
+        86001164,
+        86001165
+      ],
+      "transition": 84,
+      "strict": false,
+      "additive": true
+    },
+    {
+      "stem": "6bba_ef7b4f7e",
+      "parent": 15000245,
+      "children": [
+        16000264,
+        16000265
+      ],
+      "transition": 14,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_ef7b4f7e",
+      "parent": 90001375,
+      "children": [
+        91001391,
+        91001392
+      ],
+      "transition": 89,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_f20478e9",
+      "parent": 24000334,
+      "children": [
+        25000352,
+        25000353
+      ],
+      "transition": 23,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_f8ffd5e7",
+      "parent": 11000111,
+      "children": [
+        12000123,
+        12000124
+      ],
+      "transition": 10,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_f8ffd5e7",
+      "parent": 64000650,
+      "children": [
+        65000662,
+        65000663
+      ],
+      "transition": 63,
+      "strict": false,
+      "additive": false
+    },
+    {
+      "stem": "6bba_fe670320",
+      "parent": 1000014,
+      "children": [
+        2000029,
+        2000030
+      ],
+      "transition": 0,
+      "strict": true,
+      "additive": true
+    },
+    {
+      "stem": "6bba_fe670320",
+      "parent": 67000712,
+      "children": [
+        68000720,
+        68000721
+      ],
+      "transition": 66,
+      "strict": false,
+      "additive": true
+    }
+  ],
+  "matcher_sha256": "a4283493608f0aa3867d6ff79d400c6a52c7cc1151f4a2e0ecd7106c6d0a6fee",
+  "source_result_sha256": "0f12f8a011c0575f63f9160e97db2dcc2dc8ccab6cb8c898e3963cc18e6a2d4e",
+  "canonical_training_labels_changed": false,
+  "selection_opened": false,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false
+}

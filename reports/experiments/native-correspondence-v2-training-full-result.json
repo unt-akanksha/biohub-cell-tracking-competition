@@ -1,0 +1,5428 @@
+{
+  "run_id": "native-correspondence-v2",
+  "status": "training_complete",
+  "smoke": false,
+  "training_contract_sha256": "bda044511d3f37b33caa76d5f226fa64c4542d2705d304749e60f95c52869593",
+  "data_result_sha256": "f2861ce9f21307507ed521716ca3bf9a7adf3b76ce9f8216e4407233616c693a",
+  "members": [
+    {
+      "embryo": "6bba",
+      "family": "resnet3d",
+      "seed": 20260914,
+      "parameters": 9015138,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 500,
+          "optimizer_steps": 500,
+          "selection": {
+            "nll": 0.32643795013427734,
+            "correct": 2538,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 389,
+                "nll": 0.5257752537727356
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 353,
+                "nll": 0.21360142529010773
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 207,
+                "nll": 0.3261766731739044
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 375,
+                "nll": 0.3989032804965973
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 173,
+                "nll": 0.1033589318394661
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 762,
+                "nll": 0.2457462102174759
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 279,
+                "nll": 0.39509522914886475
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.27155831456184387,
+            "correct": 2565,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 400,
+                "nll": 0.4417303800582886
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 375,
+                "nll": 0.028859630227088928
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 229,
+                "nll": 0.09894764423370361
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 417,
+                "nll": 0.060332898050546646
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.03722476586699486
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 660,
+                "nll": 0.5535244345664978
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 308,
+                "nll": 0.11284433305263519
+              }
+            }
+          },
+          "eval_seconds": 4.597757370000181
+        },
+        {
+          "step": 1000,
+          "optimizer_steps": 1000,
+          "selection": {
+            "nll": 0.11272822320461273,
+            "correct": 2730,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 451,
+                "nll": 0.209262415766716
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.0551772378385067
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 221,
+                "nll": 0.11535108834505081
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 410,
+                "nll": 0.14124245941638947
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 179,
+                "nll": 0.004352605435997248
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 791,
+                "nll": 0.10626220703125
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 309,
+                "nll": 0.07213129103183746
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.7584079504013062,
+            "correct": 1964,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 282,
+                "nll": 1.0127309560775757
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 317,
+                "nll": 0.39009854197502136
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 199,
+                "nll": 0.3989117741584778
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 295,
+                "nll": 0.7089090943336487
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 171,
+                "nll": 0.13407233357429504
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 461,
+                "nll": 1.084368109703064
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 239,
+                "nll": 0.6503620147705078
+              }
+            }
+          },
+          "eval_seconds": 4.296121012994263
+        },
+        {
+          "step": 1500,
+          "optimizer_steps": 1500,
+          "selection": {
+            "nll": 0.1284952312707901,
+            "correct": 2728,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.23002392053604126
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 366,
+                "nll": 0.08337149769067764
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 224,
+                "nll": 0.129750594496727
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 407,
+                "nll": 0.18856005370616913
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.031546998769044876
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 803,
+                "nll": 0.07605688273906708
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 305,
+                "nll": 0.13692328333854675
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.3242169916629791,
+            "correct": 2478,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 404,
+                "nll": 0.42083436250686646
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.08054018020629883
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 219,
+                "nll": 0.22157959640026093
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 395,
+                "nll": 0.1603728085756302
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.023730363696813583
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 616,
+                "nll": 0.6059746742248535
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 298,
+                "nll": 0.20180551707744598
+              }
+            }
+          },
+          "eval_seconds": 4.250920894999581
+        },
+        {
+          "step": 2000,
+          "optimizer_steps": 2000,
+          "selection": {
+            "nll": 0.1327233463525772,
+            "correct": 2722,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.2571048140525818
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 367,
+                "nll": 0.07012487947940826
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.14039668440818787
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 411,
+                "nll": 0.1600709855556488
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.020269522443413734
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 792,
+                "nll": 0.10112584382295609
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 306,
+                "nll": 0.12073725461959839
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.24899227917194366,
+            "correct": 2576,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 428,
+                "nll": 0.3086778521537781
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 357,
+                "nll": 0.12338057160377502
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.13568755984306335
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 390,
+                "nll": 0.2059546709060669
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.041116900742053986
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 703,
+                "nll": 0.38605716824531555
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 299,
+                "nll": 0.21144919097423553
+              }
+            }
+          },
+          "eval_seconds": 4.26602080900193
+        },
+        {
+          "step": 2500,
+          "optimizer_steps": 2500,
+          "selection": {
+            "nll": 0.16190406680107117,
+            "correct": 2696,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 433,
+                "nll": 0.3232402205467224
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 365,
+                "nll": 0.09627889841794968
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 218,
+                "nll": 0.19393935799598694
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 409,
+                "nll": 0.1895017921924591
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.0295166727155447
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 788,
+                "nll": 0.11336569488048553
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 305,
+                "nll": 0.1338929533958435
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1444249004125595,
+            "correct": 2677,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 451,
+                "nll": 0.19463442265987396
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 368,
+                "nll": 0.061196401715278625
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.11686333268880844
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 397,
+                "nll": 0.14300625026226044
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.029551493003964424
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 758,
+                "nll": 0.18669453263282776
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 304,
+                "nll": 0.1447189599275589
+              }
+            }
+          },
+          "eval_seconds": 4.266829457999847
+        },
+        {
+          "step": 3000,
+          "optimizer_steps": 3000,
+          "selection": {
+            "nll": 0.12803985178470612,
+            "correct": 2735,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 446,
+                "nll": 0.22445575892925262
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 373,
+                "nll": 0.050860971212387085
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.14387822151184082
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 409,
+                "nll": 0.18465293943881989
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.025206144899129868
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 794,
+                "nll": 0.11021392047405243
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 312,
+                "nll": 0.09010869264602661
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.29892244935035706,
+            "correct": 2531,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 410,
+                "nll": 0.4275308847427368
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 359,
+                "nll": 0.14565739035606384
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 215,
+                "nll": 0.23165783286094666
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 381,
+                "nll": 0.274454802274704
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 174,
+                "nll": 0.09036865085363388
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 700,
+                "nll": 0.379392147064209
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 292,
+                "nll": 0.27717941999435425
+              }
+            }
+          },
+          "eval_seconds": 4.248783913004445
+        },
+        {
+          "step": 3500,
+          "optimizer_steps": 3500,
+          "selection": {
+            "nll": 0.15866492688655853,
+            "correct": 2705,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 443,
+                "nll": 0.29239001870155334
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 367,
+                "nll": 0.10222871601581573
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 219,
+                "nll": 0.18955866992473602
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 408,
+                "nll": 0.1921234428882599
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.03410860523581505
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 783,
+                "nll": 0.11794731765985489
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 307,
+                "nll": 0.13022203743457794
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.18934696912765503,
+            "correct": 2649,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.22642330825328827
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 372,
+                "nll": 0.0734611377120018
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.13977469503879547
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 403,
+                "nll": 0.10607960820198059
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 175,
+                "nll": 0.05803649500012398
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 735,
+                "nll": 0.2904406189918518
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 296,
+                "nll": 0.23071449995040894
+              }
+            }
+          },
+          "eval_seconds": 4.2494682040050975
+        },
+        {
+          "step": 4000,
+          "optimizer_steps": 4000,
+          "selection": {
+            "nll": 0.15784278512001038,
+            "correct": 2706,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 437,
+                "nll": 0.31760916113853455
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 367,
+                "nll": 0.09071263670921326
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.18625357747077942
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 409,
+                "nll": 0.1798744797706604
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.04330657795071602
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 789,
+                "nll": 0.10738164931535721
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 304,
+                "nll": 0.13899043202400208
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.11951251327991486,
+            "correct": 2718,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 458,
+                "nll": 0.14523567259311676
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 372,
+                "nll": 0.04803221672773361
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 230,
+                "nll": 0.061802253127098083
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 407,
+                "nll": 0.09456990659236908
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.03065306693315506
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 771,
+                "nll": 0.17749494314193726
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.14139775931835175
+              }
+            }
+          },
+          "eval_seconds": 4.247877378002158
+        },
+        {
+          "step": 4500,
+          "optimizer_steps": 4500,
+          "selection": {
+            "nll": 0.1738525778055191,
+            "correct": 2694,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 432,
+                "nll": 0.336185097694397
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 368,
+                "nll": 0.11593647301197052
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 221,
+                "nll": 0.22237956523895264
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 406,
+                "nll": 0.20664706826210022
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 175,
+                "nll": 0.0845620408654213
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 789,
+                "nll": 0.11327051371335983
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.12291261553764343
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.10937802493572235,
+            "correct": 2721,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 458,
+                "nll": 0.14462846517562866
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 371,
+                "nll": 0.045805662870407104
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 231,
+                "nll": 0.05247029289603233
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 405,
+                "nll": 0.09909423440694809
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.023274075239896774
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.16529329121112823
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 310,
+                "nll": 0.09110251069068909
+              }
+            }
+          },
+          "eval_seconds": 4.248500894995232
+        },
+        {
+          "step": 5000,
+          "optimizer_steps": 5000,
+          "selection": {
+            "nll": 0.1609688699245453,
+            "correct": 2706,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 436,
+                "nll": 0.31482434272766113
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 367,
+                "nll": 0.09284059703350067
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 221,
+                "nll": 0.229919895529747
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 408,
+                "nll": 0.16800624132156372
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.05555889755487442
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 790,
+                "nll": 0.11326640099287033
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 306,
+                "nll": 0.1299794465303421
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.11069830507040024,
+            "correct": 2724,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 463,
+                "nll": 0.13012783229351044
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 373,
+                "nll": 0.04320539906620979
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 232,
+                "nll": 0.057449113577604294
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 405,
+                "nll": 0.09299167990684509
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.030131595209240913
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 769,
+                "nll": 0.1681579202413559
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 306,
+                "nll": 0.12120545655488968
+              }
+            }
+          },
+          "eval_seconds": 4.246919293997053
+        },
+        {
+          "step": 5500,
+          "optimizer_steps": 5500,
+          "selection": {
+            "nll": 0.11065426468849182,
+            "correct": 2744,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 453,
+                "nll": 0.21477635204792023
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 371,
+                "nll": 0.05824499949812889
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 220,
+                "nll": 0.1978841871023178
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 412,
+                "nll": 0.1178121343255043
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.03511996567249298
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 797,
+                "nll": 0.08158214390277863
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 313,
+                "nll": 0.058090876787900925
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2545314431190491,
+            "correct": 2578,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 418,
+                "nll": 0.34753769636154175
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 360,
+                "nll": 0.112149678170681
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 220,
+                "nll": 0.17478257417678833
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 378,
+                "nll": 0.2978527843952179
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 175,
+                "nll": 0.07794121652841568
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 728,
+                "nll": 0.3178200125694275
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 299,
+                "nll": 0.21967099606990814
+              }
+            }
+          },
+          "eval_seconds": 4.250050854003348
+        },
+        {
+          "step": 6000,
+          "optimizer_steps": 6000,
+          "selection": {
+            "nll": 0.16002461314201355,
+            "correct": 2707,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 433,
+                "nll": 0.3041623532772064
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 367,
+                "nll": 0.09430981427431107
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.22080181539058685
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 407,
+                "nll": 0.1648527979850769
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.050861794501543045
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 792,
+                "nll": 0.12247440218925476
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 307,
+                "nll": 0.12583042681217194
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.10517367720603943,
+            "correct": 2728,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 461,
+                "nll": 0.13545018434524536
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 374,
+                "nll": 0.0336475670337677
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 231,
+                "nll": 0.05997949466109276
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 408,
+                "nll": 0.08366304636001587
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.039607007056474686
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 772,
+                "nll": 0.1546400487422943
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 306,
+                "nll": 0.11525445431470871
+              }
+            }
+          },
+          "eval_seconds": 4.248503745999187
+        },
+        {
+          "step": 6500,
+          "optimizer_steps": 6500,
+          "selection": {
+            "nll": 0.11839842796325684,
+            "correct": 2739,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 453,
+                "nll": 0.2322676032781601
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.07001037895679474
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.180322527885437
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 410,
+                "nll": 0.127803236246109
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.036407165229320526
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 796,
+                "nll": 0.08656597882509232
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 310,
+                "nll": 0.07269986718893051
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.228303924202919,
+            "correct": 2610,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 435,
+                "nll": 0.28714719414711
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.09869404882192612
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 226,
+                "nll": 0.1284579634666443
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 386,
+                "nll": 0.2396421730518341
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.0594935268163681
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 728,
+                "nll": 0.31683608889579773
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 297,
+                "nll": 0.21800093352794647
+              }
+            }
+          },
+          "eval_seconds": 4.2482280080002965
+        },
+        {
+          "step": 7000,
+          "optimizer_steps": 7000,
+          "selection": {
+            "nll": 0.13429035246372223,
+            "correct": 2736,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 452,
+                "nll": 0.2648419439792633
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.07590663433074951
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.21433748304843903
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 410,
+                "nll": 0.13306449353694916
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.049534156918525696
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 796,
+                "nll": 0.10009381920099258
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 310,
+                "nll": 0.08345706760883331
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.17923636734485626,
+            "correct": 2653,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 446,
+                "nll": 0.2112930417060852
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 366,
+                "nll": 0.07664544880390167
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 228,
+                "nll": 0.09622824937105179
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 388,
+                "nll": 0.20492300391197205
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.04116695746779442
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 746,
+                "nll": 0.24838295578956604
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.1788470447063446
+              }
+            }
+          },
+          "eval_seconds": 4.259192252000503
+        },
+        {
+          "step": 7500,
+          "optimizer_steps": 7500,
+          "selection": {
+            "nll": 0.13697780668735504,
+            "correct": 2733,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 452,
+                "nll": 0.2610570192337036
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 368,
+                "nll": 0.08881963789463043
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.21639922261238098
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 408,
+                "nll": 0.13958337903022766
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.05470160394906998
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 797,
+                "nll": 0.09948933869600296
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 309,
+                "nll": 0.0863216295838356
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1687091588973999,
+            "correct": 2669,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 448,
+                "nll": 0.2061498761177063
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 371,
+                "nll": 0.05989152565598488
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 228,
+                "nll": 0.09397319704294205
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 395,
+                "nll": 0.17672134935855865
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.038691770285367966
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 749,
+                "nll": 0.24347582459449768
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 302,
+                "nll": 0.16582629084587097
+              }
+            }
+          },
+          "eval_seconds": 4.254146951003349
+        },
+        {
+          "step": 8000,
+          "optimizer_steps": 8000,
+          "selection": {
+            "nll": 0.14015209674835205,
+            "correct": 2734,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 453,
+                "nll": 0.2654915750026703
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 368,
+                "nll": 0.09021997451782227
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.22054436802864075
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 408,
+                "nll": 0.14144445955753326
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.05879766121506691
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 797,
+                "nll": 0.10190549492835999
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 309,
+                "nll": 0.09215015918016434
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.16057425737380981,
+            "correct": 2677,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 450,
+                "nll": 0.19473056495189667
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 372,
+                "nll": 0.05473066866397858
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 229,
+                "nll": 0.08644510060548782
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 397,
+                "nll": 0.1680227518081665
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.03475377336144447
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 750,
+                "nll": 0.23480106890201569
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.15848611295223236
+              }
+            }
+          },
+          "eval_seconds": 4.246516375002102
+        }
+      ],
+      "best_step": 5500,
+      "selected": {
+        "nll": 0.11065426468849182,
+        "correct": 2744,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 453,
+            "nll": 0.21477635204792023
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 371,
+            "nll": 0.05824499949812889
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 220,
+            "nll": 0.1978841871023178
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 412,
+            "nll": 0.1178121343255043
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.03511996567249298
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 797,
+            "nll": 0.08158214390277863
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 313,
+            "nll": 0.058090876787900925
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 0.2545314431190491,
+        "correct": 2578,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 418,
+            "nll": 0.34753769636154175
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 360,
+            "nll": 0.112149678170681
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 220,
+            "nll": 0.17478257417678833
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 378,
+            "nll": 0.2978527843952179
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 175,
+            "nll": 0.07794121652841568
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 728,
+            "nll": 0.3178200125694275
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 299,
+            "nll": 0.21967099606990814
+          }
+        }
+      },
+      "optimizer_steps": 8000,
+      "elapsed_seconds": 313.3055106220054,
+      "weights_sha256": "6fbd68f59d68cb7970f8e11c87d3e171243bdfd447c70a9fe13ce15dd2500f73",
+      "source_gate": true,
+      "peak_gpu_bytes": 2200468480,
+      "status": "trained"
+    },
+    {
+      "embryo": "6bba",
+      "family": "token_transformer3d",
+      "seed": 20260915,
+      "parameters": 15850722,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 500,
+          "optimizer_steps": 500,
+          "selection": {
+            "nll": 0.22544825077056885,
+            "correct": 2667,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 431,
+                "nll": 0.32898157835006714
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.10093836486339569
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 220,
+                "nll": 0.2825121283531189
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 398,
+                "nll": 0.3164963126182556
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 179,
+                "nll": 0.010928305797278881
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 767,
+                "nll": 0.22428569197654724
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.17663031816482544
+              }
+            }
+          },
+          "missing": {
+            "nll": 1.9791333675384521,
+            "correct": 947,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 67,
+                "nll": 2.57033634185791
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 284,
+                "nll": 0.7511811256408691
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 68,
+                "nll": 1.9784274101257324
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 210,
+                "nll": 1.5693330764770508
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 148,
+                "nll": 0.4811902642250061
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 64,
+                "nll": 2.6972463130950928
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 106,
+                "nll": 2.0724856853485107
+              }
+            }
+          },
+          "eval_seconds": 5.423238096002024
+        },
+        {
+          "step": 1000,
+          "optimizer_steps": 1000,
+          "selection": {
+            "nll": 0.2782348096370697,
+            "correct": 2601,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 429,
+                "nll": 0.36126816272735596
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 354,
+                "nll": 0.2592344880104065
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 224,
+                "nll": 0.1155131384730339
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 372,
+                "nll": 0.4612748920917511
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 179,
+                "nll": 0.0198722742497921
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 766,
+                "nll": 0.21037159860134125
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 277,
+                "nll": 0.37242764234542847
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.15703658759593964,
+            "correct": 2711,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 447,
+                "nll": 0.24913963675498962
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.08307825028896332
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 227,
+                "nll": 0.09598120301961899
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 411,
+                "nll": 0.08900801837444305
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.054858073592185974
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 777,
+                "nll": 0.21407374739646912
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 303,
+                "nll": 0.15042291581630707
+              }
+            }
+          },
+          "eval_seconds": 5.415175783004088
+        },
+        {
+          "step": 1500,
+          "optimizer_steps": 1500,
+          "selection": {
+            "nll": 0.23853223025798798,
+            "correct": 2674,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 437,
+                "nll": 0.34220799803733826
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 365,
+                "nll": 0.19260458648204803
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 226,
+                "nll": 0.15550896525382996
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 390,
+                "nll": 0.39382803440093994
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 179,
+                "nll": 0.004017289262264967
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 775,
+                "nll": 0.2053815722465515
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 302,
+                "nll": 0.20819292962551117
+              }
+            }
+          },
+          "missing": {
+            "nll": 1.1384861469268799,
+            "correct": 1891,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 261,
+                "nll": 1.6628682613372803
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 337,
+                "nll": 0.36718273162841797
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 180,
+                "nll": 0.802923321723938
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 323,
+                "nll": 0.7953543066978455
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 170,
+                "nll": 0.13666503131389618
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 379,
+                "nll": 1.7829489707946777
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 241,
+                "nll": 0.8606010675430298
+              }
+            }
+          },
+          "eval_seconds": 5.417878500004008
+        },
+        {
+          "step": 2000,
+          "optimizer_steps": 2000,
+          "selection": {
+            "nll": 0.29204899072647095,
+            "correct": 2628,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 427,
+                "nll": 0.4387247562408447
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 364,
+                "nll": 0.18773671984672546
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.14323723316192627
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 380,
+                "nll": 0.48557570576667786
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 179,
+                "nll": 0.009522630833089352
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.2510969340801239
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 288,
+                "nll": 0.3107133209705353
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.16320374608039856,
+            "correct": 2666,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 453,
+                "nll": 0.19059105217456818
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 355,
+                "nll": 0.14329373836517334
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 220,
+                "nll": 0.1651231199502945
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 401,
+                "nll": 0.11887791752815247
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 174,
+                "nll": 0.07473224401473999
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 775,
+                "nll": 0.1509113758802414
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 288,
+                "nll": 0.28412649035453796
+              }
+            }
+          },
+          "eval_seconds": 5.4341544800045085
+        },
+        {
+          "step": 2500,
+          "optimizer_steps": 2500,
+          "selection": {
+            "nll": 0.23540209233760834,
+            "correct": 2650,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 440,
+                "nll": 0.31047990918159485
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 359,
+                "nll": 0.21418368816375732
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 228,
+                "nll": 0.08330921083688736
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 382,
+                "nll": 0.4116824269294739
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.017132695764303207
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 772,
+                "nll": 0.18062543869018555
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 291,
+                "nll": 0.28910112380981445
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.23231463134288788,
+            "correct": 2602,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 424,
+                "nll": 0.3440879285335541
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.10106634348630905
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 219,
+                "nll": 0.15343937277793884
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 395,
+                "nll": 0.16476193070411682
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 175,
+                "nll": 0.06137567758560181
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 734,
+                "nll": 0.3248564898967743
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 293,
+                "nll": 0.22343963384628296
+              }
+            }
+          },
+          "eval_seconds": 5.457053195001208
+        },
+        {
+          "step": 3000,
+          "optimizer_steps": 3000,
+          "selection": {
+            "nll": 0.22047702968120575,
+            "correct": 2684,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 443,
+                "nll": 0.31343889236450195
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 366,
+                "nll": 0.14005163311958313
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 224,
+                "nll": 0.15752176940441132
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 389,
+                "nll": 0.41418638825416565
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.016313452273607254
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 779,
+                "nll": 0.1879589706659317
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 305,
+                "nll": 0.16292685270309448
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.7461479902267456,
+            "correct": 2087,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 321,
+                "nll": 0.9892258048057556
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 319,
+                "nll": 0.40568554401397705
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 176,
+                "nll": 0.7402015328407288
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 327,
+                "nll": 0.6270469427108765
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 162,
+                "nll": 0.24531875550746918
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 551,
+                "nll": 0.8983827829360962
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 231,
+                "nll": 0.8322067856788635
+              }
+            }
+          },
+          "eval_seconds": 5.411702844998217
+        },
+        {
+          "step": 3500,
+          "optimizer_steps": 3500,
+          "selection": {
+            "nll": 0.2443106472492218,
+            "correct": 2663,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 443,
+                "nll": 0.3229426145553589
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 359,
+                "nll": 0.23550261557102203
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 226,
+                "nll": 0.07590403407812119
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 386,
+                "nll": 0.42036116123199463
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.024649862200021744
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 776,
+                "nll": 0.19217897951602936
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 296,
+                "nll": 0.2841634154319763
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.37107744812965393,
+            "correct": 2467,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 390,
+                "nll": 0.5525989532470703
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 355,
+                "nll": 0.15999409556388855
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 209,
+                "nll": 0.2738763689994812
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 372,
+                "nll": 0.3330382704734802
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.05636800825595856
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 682,
+                "nll": 0.49362391233444214
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 283,
+                "nll": 0.3287827968597412
+              }
+            }
+          },
+          "eval_seconds": 5.416920983996533
+        },
+        {
+          "step": 4000,
+          "optimizer_steps": 4000,
+          "selection": {
+            "nll": 0.2398700714111328,
+            "correct": 2640,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 438,
+                "nll": 0.3342747092247009
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.1786891520023346
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.11980359256267548
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 379,
+                "nll": 0.4087742865085602
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.033339206129312515
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 769,
+                "nll": 0.1987455189228058
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 293,
+                "nll": 0.2559232711791992
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.22212931513786316,
+            "correct": 2631,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.2932025194168091
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 360,
+                "nll": 0.13371653854846954
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 217,
+                "nll": 0.1984817236661911
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 385,
+                "nll": 0.220139279961586
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 175,
+                "nll": 0.06282263249158859
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 765,
+                "nll": 0.2463235855102539
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 284,
+                "nll": 0.2663744390010834
+              }
+            }
+          },
+          "eval_seconds": 5.4119003060040995
+        },
+        {
+          "step": 4500,
+          "optimizer_steps": 4500,
+          "selection": {
+            "nll": 0.2838156223297119,
+            "correct": 2631,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 434,
+                "nll": 0.3841826915740967
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 361,
+                "nll": 0.2137206494808197
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.13238221406936646
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 379,
+                "nll": 0.4596017003059387
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.032829634845256805
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 769,
+                "nll": 0.24783048033714294
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 288,
+                "nll": 0.32719185948371887
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.14187878370285034,
+            "correct": 2701,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 455,
+                "nll": 0.18616463243961334
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.11484556645154953
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 225,
+                "nll": 0.11918257176876068
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 400,
+                "nll": 0.1370924711227417
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.05911363661289215
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 786,
+                "nll": 0.13053561747074127
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 297,
+                "nll": 0.20560620725154877
+              }
+            }
+          },
+          "eval_seconds": 5.441196128995216
+        },
+        {
+          "step": 5000,
+          "optimizer_steps": 5000,
+          "selection": {
+            "nll": 0.2887048125267029,
+            "correct": 2634,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 433,
+                "nll": 0.38279810547828674
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 360,
+                "nll": 0.23230372369289398
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 227,
+                "nll": 0.11556126177310944
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 382,
+                "nll": 0.4691435694694519
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.018907614052295685
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.2509332299232483
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 286,
+                "nll": 0.3504222631454468
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.15096154808998108,
+            "correct": 2701,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 452,
+                "nll": 0.20140817761421204
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 365,
+                "nll": 0.11332210153341293
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 227,
+                "nll": 0.11724682152271271
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 399,
+                "nll": 0.15510812401771545
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.06518365442752838
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 784,
+                "nll": 0.14678511023521423
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 298,
+                "nll": 0.19740089774131775
+              }
+            }
+          },
+          "eval_seconds": 5.4623011680014315
+        },
+        {
+          "step": 5500,
+          "optimizer_steps": 5500,
+          "selection": {
+            "nll": 0.2720116972923279,
+            "correct": 2630,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 435,
+                "nll": 0.3650687038898468
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 361,
+                "nll": 0.2140420824289322
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 221,
+                "nll": 0.11934290081262589
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 382,
+                "nll": 0.4185378849506378
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.037938207387924194
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.2338283658027649
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 286,
+                "nll": 0.3479982316493988
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.16540159285068512,
+            "correct": 2670,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 447,
+                "nll": 0.20833364129066467
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 365,
+                "nll": 0.10208969563245773
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 222,
+                "nll": 0.12708735466003418
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 395,
+                "nll": 0.17117908596992493
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.05597909539937973
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 763,
+                "nll": 0.19475331902503967
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 302,
+                "nll": 0.18177706003189087
+              }
+            }
+          },
+          "eval_seconds": 5.424181246999069
+        },
+        {
+          "step": 6000,
+          "optimizer_steps": 6000,
+          "selection": {
+            "nll": 0.2212873101234436,
+            "correct": 2663,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 443,
+                "nll": 0.30043861269950867
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.18702439963817596
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 225,
+                "nll": 0.09553655982017517
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 384,
+                "nll": 0.3571842908859253
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.03411483392119408
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 775,
+                "nll": 0.1931481659412384
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 297,
+                "nll": 0.2321401685476303
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.29134833812713623,
+            "correct": 2543,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 412,
+                "nll": 0.3973151445388794
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 357,
+                "nll": 0.16265420615673065
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 212,
+                "nll": 0.2484305053949356
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 381,
+                "nll": 0.30145516991615295
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.07013188302516937
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 721,
+                "nll": 0.33064505457878113
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 284,
+                "nll": 0.3244117796421051
+              }
+            }
+          },
+          "eval_seconds": 5.504199173003144
+        },
+        {
+          "step": 6500,
+          "optimizer_steps": 6500,
+          "selection": {
+            "nll": 0.236612930893898,
+            "correct": 2667,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.31510913372039795
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 364,
+                "nll": 0.19964256882667542
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 226,
+                "nll": 0.10114384442567825
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 384,
+                "nll": 0.39317587018013
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.030857719480991364
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 776,
+                "nll": 0.19523629546165466
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 294,
+                "nll": 0.2760741412639618
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.25439876317977905,
+            "correct": 2577,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 426,
+                "nll": 0.3260682225227356
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 358,
+                "nll": 0.16552717983722687
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 213,
+                "nll": 0.21439361572265625
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 388,
+                "nll": 0.24512602388858795
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.0625724196434021
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 724,
+                "nll": 0.31080782413482666
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 291,
+                "nll": 0.25516852736473083
+              }
+            }
+          },
+          "eval_seconds": 5.4179235710034845
+        },
+        {
+          "step": 7000,
+          "optimizer_steps": 7000,
+          "selection": {
+            "nll": 0.22484347224235535,
+            "correct": 2667,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 445,
+                "nll": 0.3051523268222809
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 364,
+                "nll": 0.18583478033542633
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 225,
+                "nll": 0.10024208575487137
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 385,
+                "nll": 0.36826059222221375
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.03125252574682236
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 776,
+                "nll": 0.19332315027713776
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 296,
+                "nll": 0.24108891189098358
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.24048927426338196,
+            "correct": 2579,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 427,
+                "nll": 0.2996666431427002
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 356,
+                "nll": 0.1664489209651947
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 213,
+                "nll": 0.19724620878696442
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 389,
+                "nll": 0.23825883865356445
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.06384466588497162
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 729,
+                "nll": 0.28411397337913513
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 289,
+                "nll": 0.2601502239704132
+              }
+            }
+          },
+          "eval_seconds": 5.437794097997539
+        },
+        {
+          "step": 7500,
+          "optimizer_steps": 7500,
+          "selection": {
+            "nll": 0.23039282858371735,
+            "correct": 2662,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 443,
+                "nll": 0.3143075406551361
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 364,
+                "nll": 0.19179405272006989
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 225,
+                "nll": 0.09995125234127045
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 383,
+                "nll": 0.37684616446495056
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.03472951799631119
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 776,
+                "nll": 0.19543763995170593
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 295,
+                "nll": 0.25098395347595215
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.23200181126594543,
+            "correct": 2591,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 428,
+                "nll": 0.2920759320259094
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 358,
+                "nll": 0.15676966309547424
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 217,
+                "nll": 0.185032457113266
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 386,
+                "nll": 0.2346019595861435
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.05621296167373657
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 734,
+                "nll": 0.2750612199306488
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 291,
+                "nll": 0.24903620779514313
+              }
+            }
+          },
+          "eval_seconds": 5.415476679001586
+        },
+        {
+          "step": 8000,
+          "optimizer_steps": 8000,
+          "selection": {
+            "nll": 0.24426648020744324,
+            "correct": 2656,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 440,
+                "nll": 0.3293780982494354
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 364,
+                "nll": 0.20291824638843536
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 226,
+                "nll": 0.10510209947824478
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 383,
+                "nll": 0.3938516080379486
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 176,
+                "nll": 0.036203593015670776
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 775,
+                "nll": 0.20716825127601624
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 292,
+                "nll": 0.28110677003860474
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.20116911828517914,
+            "correct": 2618,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 436,
+                "nll": 0.25065696239471436
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 359,
+                "nll": 0.13996265828609467
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 218,
+                "nll": 0.15776892006397247
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 391,
+                "nll": 0.20973962545394897
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 177,
+                "nll": 0.05023112893104553
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 743,
+                "nll": 0.23533540964126587
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 294,
+                "nll": 0.21605481207370758
+              }
+            }
+          },
+          "eval_seconds": 5.419192096996994
+        }
+      ],
+      "best_step": 3000,
+      "selected": {
+        "nll": 0.22047702968120575,
+        "correct": 2684,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 443,
+            "nll": 0.31343889236450195
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 366,
+            "nll": 0.14005163311958313
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 224,
+            "nll": 0.15752176940441132
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.41418638825416565
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.016313452273607254
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 779,
+            "nll": 0.1879589706659317
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 305,
+            "nll": 0.16292685270309448
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 0.7461479902267456,
+        "correct": 2087,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 321,
+            "nll": 0.9892258048057556
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 319,
+            "nll": 0.40568554401397705
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 176,
+            "nll": 0.7402015328407288
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 327,
+            "nll": 0.6270469427108765
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 162,
+            "nll": 0.24531875550746918
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 551,
+            "nll": 0.8983827829360962
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 231,
+            "nll": 0.8322067856788635
+          }
+        }
+      },
+      "optimizer_steps": 8000,
+      "elapsed_seconds": 406.4472131759976,
+      "weights_sha256": "401df7cd2c43211c96b3caf05666615e99a73bcb59d6630c92de4130baa38cdb",
+      "source_gate": true,
+      "peak_gpu_bytes": 2363034112,
+      "status": "trained"
+    },
+    {
+      "embryo": "44b6",
+      "family": "resnet3d",
+      "seed": 20260916,
+      "parameters": 9015138,
+      "baseline": {
+        "nll": 0.569383442401886,
+        "correct": 312,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 164,
+            "nll": 0.7682053446769714
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 109,
+            "nll": 0.24867060780525208
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.6194674372673035
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 7.389666557312012,
+        "correct": 0,
+        "total": 314,
+        "present": 0,
+        "null": 314,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 0,
+            "nll": 7.970345973968506
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 0,
+            "nll": 6.383569717407227
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 0,
+            "nll": 7.729968070983887
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.569383442401886,
+        "correct": 312,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 164,
+            "nll": 0.7682053446769714
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 109,
+            "nll": 0.24867060780525208
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.6194674372673035
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 500,
+          "optimizer_steps": 500,
+          "selection": {
+            "nll": 0.06825339049100876,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.104322649538517
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.028521057218313217
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.02577458880841732
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.4322921931743622,
+            "correct": 268,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 136,
+                "nll": 0.5424753427505493
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 101,
+                "nll": 0.20046454668045044
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 31,
+                "nll": 0.6112357378005981
+              }
+            }
+          },
+          "eval_seconds": 0.504164091005805
+        },
+        {
+          "step": 1000,
+          "optimizer_steps": 1000,
+          "selection": {
+            "nll": 0.09022968262434006,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.15989144146442413
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.013784981332719326
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.007373828906565905
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.08654043823480606,
+            "correct": 306,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 161,
+                "nll": 0.12124091386795044
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 106,
+                "nll": 0.04587087780237198
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.052507057785987854
+              }
+            }
+          },
+          "eval_seconds": 0.5022504579974338
+        },
+        {
+          "step": 1500,
+          "optimizer_steps": 1500,
+          "selection": {
+            "nll": 0.09743881225585938,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.1831340342760086
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0016797848511487246
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0003188759146723896
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.17811095714569092,
+            "correct": 294,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 156,
+                "nll": 0.21198350191116333
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 106,
+                "nll": 0.05059598386287689
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 32,
+                "nll": 0.3903234899044037
+              }
+            }
+          },
+          "eval_seconds": 0.5023542750059278
+        },
+        {
+          "step": 2000,
+          "optimizer_steps": 2000,
+          "selection": {
+            "nll": 0.09659262746572495,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.18204957246780396
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0006565323565155268
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0009819117840379477
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1693170666694641,
+            "correct": 294,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 149,
+                "nll": 0.268666535615921
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 106,
+                "nll": 0.058920491486787796
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.05498937889933586
+              }
+            }
+          },
+          "eval_seconds": 0.5021251229991321
+        },
+        {
+          "step": 2500,
+          "optimizer_steps": 2500,
+          "selection": {
+            "nll": 0.09108787029981613,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.17067782580852509
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.001686696894466877
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0021851693745702505
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.09210962057113647,
+            "correct": 306,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 160,
+                "nll": 0.1483152210712433
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.028862066566944122
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.029644323512911797
+              }
+            }
+          },
+          "eval_seconds": 0.5019068480032729
+        },
+        {
+          "step": 3000,
+          "optimizer_steps": 3000,
+          "selection": {
+            "nll": 0.1089048907160759,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.19389556348323822
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.01789763569831848
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.001503446721471846
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.11917013674974442,
+            "correct": 303,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 156,
+                "nll": 0.19830814003944397
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.019170129671692848
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.06181352585554123
+              }
+            }
+          },
+          "eval_seconds": 0.5022080029957579
+        },
+        {
+          "step": 3500,
+          "optimizer_steps": 3500,
+          "selection": {
+            "nll": 0.10672696679830551,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.20093408226966858
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.00021465505415108055
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.003431155579164624
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2373516857624054,
+            "correct": 290,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 144,
+                "nll": 0.39000609517097473
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.08396974951028824
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.01627454347908497
+              }
+            }
+          },
+          "eval_seconds": 0.502244935996714
+        },
+        {
+          "step": 4000,
+          "optimizer_steps": 4000,
+          "selection": {
+            "nll": 0.12467014789581299,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.2351861447095871
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0008781815995462239
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0002513886138331145
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.16046352684497833,
+            "correct": 300,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 153,
+                "nll": 0.2749074697494507
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.024916846305131912
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.05217882990837097
+              }
+            }
+          },
+          "eval_seconds": 0.5023003930036793
+        },
+        {
+          "step": 4500,
+          "optimizer_steps": 4500,
+          "selection": {
+            "nll": 0.159718319773674,
+            "correct": 308,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.28622156381607056
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.01689218543469906
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 38,
+                "nll": 0.020449373871088028
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.05521691218018532,
+            "correct": 312,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.10165339708328247
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.003296776907518506
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.002674316056072712
+              }
+            }
+          },
+          "eval_seconds": 0.5022840130041004
+        },
+        {
+          "step": 5000,
+          "optimizer_steps": 5000,
+          "selection": {
+            "nll": 0.1583465337753296,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.2937551438808441
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.008227151818573475
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0015565423527732491
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.09976073354482651,
+            "correct": 307,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 161,
+                "nll": 0.17132751643657684
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.015965212136507034
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.02934105321764946
+              }
+            }
+          },
+          "eval_seconds": 0.5020207459965604
+        },
+        {
+          "step": 5500,
+          "optimizer_steps": 5500,
+          "selection": {
+            "nll": 0.17102089524269104,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.3191371262073517
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.006579550448805094
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.00016982045781333
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.13705091178417206,
+            "correct": 305,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 157,
+                "nll": 0.25353294610977173
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0048189009539783
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.01082710549235344
+              }
+            }
+          },
+          "eval_seconds": 0.502152141998522
+        },
+        {
+          "step": 6000,
+          "optimizer_steps": 6000,
+          "selection": {
+            "nll": 0.17811799049377441,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.33475229144096375
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.003276702482253313
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 7.723600720055401e-05
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1635047346353531,
+            "correct": 302,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 155,
+                "nll": 0.2954682409763336
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.01763339526951313
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.009505847468972206
+              }
+            }
+          },
+          "eval_seconds": 0.5018132650002372
+        },
+        {
+          "step": 6500,
+          "optimizer_steps": 6500,
+          "selection": {
+            "nll": 0.18337848782539368,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.34432563185691833
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0038330319803208113
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.00012801871343981475
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.12562823295593262,
+            "correct": 304,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 157,
+                "nll": 0.22981321811676025
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.009260046295821667
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.007408349774777889
+              }
+            }
+          },
+          "eval_seconds": 0.5020458889994188
+        },
+        {
+          "step": 7000,
+          "optimizer_steps": 7000,
+          "selection": {
+            "nll": 0.18625447154045105,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.35116249322891235
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0017427016282454133
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 2.4934586690505967e-05
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1583114117383957,
+            "correct": 303,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 156,
+                "nll": 0.2882120609283447
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.01232855673879385
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.013404271565377712
+              }
+            }
+          },
+          "eval_seconds": 0.5018783549967338
+        },
+        {
+          "step": 7500,
+          "optimizer_steps": 7500,
+          "selection": {
+            "nll": 0.2014332115650177,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.3771827220916748
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.00582114327698946
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 8.186675404431298e-05
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.12058907002210617,
+            "correct": 305,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 157,
+                "nll": 0.22342661023139954
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.005830806214362383
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0036048567853868008
+              }
+            }
+          },
+          "eval_seconds": 0.5023190339998109
+        },
+        {
+          "step": 8000,
+          "optimizer_steps": 8000,
+          "selection": {
+            "nll": 0.1996065229177475,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.3754329979419708
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.003238027449697256
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 4.175578578724526e-05
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.13096900284290314,
+            "correct": 305,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 157,
+                "nll": 0.24175338447093964
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.007278426084667444
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.005124472547322512
+              }
+            }
+          },
+          "eval_seconds": 0.5027510700019775
+        }
+      ],
+      "best_step": 500,
+      "selected": {
+        "nll": 0.06825339049100876,
+        "correct": 310,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 163,
+            "nll": 0.104322649538517
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 108,
+            "nll": 0.028521057218313217
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.02577458880841732
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 0.4322921931743622,
+        "correct": 268,
+        "total": 314,
+        "present": 0,
+        "null": 314,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 136,
+            "nll": 0.5424753427505493
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 101,
+            "nll": 0.20046454668045044
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 31,
+            "nll": 0.6112357378005981
+          }
+        }
+      },
+      "optimizer_steps": 8000,
+      "elapsed_seconds": 313.18982422500267,
+      "weights_sha256": "c5c188b1776e01ab1f7c53c2a2526bb04e1ccf94b0e4c0edf96f02d4cd3c517a",
+      "source_gate": false,
+      "peak_gpu_bytes": 2363034112,
+      "status": "trained"
+    },
+    {
+      "embryo": "44b6",
+      "family": "token_transformer3d",
+      "seed": 20260917,
+      "parameters": 15850722,
+      "baseline": {
+        "nll": 0.569383442401886,
+        "correct": 312,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 164,
+            "nll": 0.7682053446769714
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 109,
+            "nll": 0.24867060780525208
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.6194674372673035
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 7.389666557312012,
+        "correct": 0,
+        "total": 314,
+        "present": 0,
+        "null": 314,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 0,
+            "nll": 7.970345973968506
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 0,
+            "nll": 6.383569717407227
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 0,
+            "nll": 7.729968070983887
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.569383442401886,
+        "correct": 312,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 164,
+            "nll": 0.7682053446769714
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 109,
+            "nll": 0.24867060780525208
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.6194674372673035
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 500,
+          "optimizer_steps": 500,
+          "selection": {
+            "nll": 0.09680381417274475,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.16743242740631104
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.017480548471212387
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.017877798527479172
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.16321402788162231,
+            "correct": 295,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 155,
+                "nll": 0.18970097601413727
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 102,
+                "nll": 0.12774068117141724
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 38,
+                "nll": 0.14961814880371094
+              }
+            }
+          },
+          "eval_seconds": 0.6352777430001879
+        },
+        {
+          "step": 1000,
+          "optimizer_steps": 1000,
+          "selection": {
+            "nll": 0.08983824402093887,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.14833007752895355
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.02268623188138008
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.02855423092842102
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.13686078786849976,
+            "correct": 302,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 158,
+                "nll": 0.18123169243335724
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 105,
+                "nll": 0.08472944796085358
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.09370052814483643
+              }
+            }
+          },
+          "eval_seconds": 0.6353150220020325
+        },
+        {
+          "step": 1500,
+          "optimizer_steps": 1500,
+          "selection": {
+            "nll": 0.09393855184316635,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.16653278470039368
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.011986645869910717
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.013992827385663986
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.0805511474609375,
+            "correct": 308,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 161,
+                "nll": 0.12567338347434998
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.030830271542072296
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.02745591662824154
+              }
+            }
+          },
+          "eval_seconds": 0.6353863939948496
+        },
+        {
+          "step": 2000,
+          "optimizer_steps": 2000,
+          "selection": {
+            "nll": 0.07409728318452835,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.1365235298871994
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.004290527664124966
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.003486572066321969
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.5101323127746582,
+            "correct": 244,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 125,
+                "nll": 0.5827794075012207
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 88,
+                "nll": 0.3849217891693115
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 31,
+                "nll": 0.5508636236190796
+              }
+            }
+          },
+          "eval_seconds": 0.6381650240000454
+        },
+        {
+          "step": 2500,
+          "optimizer_steps": 2500,
+          "selection": {
+            "nll": 0.08735425025224686,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.15648211538791656
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.009163021109998226
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.011652093380689621
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.128933385014534,
+            "correct": 299,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 157,
+                "nll": 0.16492538154125214
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 104,
+                "nll": 0.08733493834733963
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 38,
+                "nll": 0.09199895709753036
+              }
+            }
+          },
+          "eval_seconds": 0.6359591469954466
+        },
+        {
+          "step": 3000,
+          "optimizer_steps": 3000,
+          "selection": {
+            "nll": 0.13945187628269196,
+            "correct": 307,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 161,
+                "nll": 0.222534641623497
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.052532024681568146
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.028747452422976494
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.0364103689789772,
+            "correct": 311,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.06056522578001022
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.009034332819283009
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.010109925642609596
+              }
+            }
+          },
+          "eval_seconds": 0.6353978050028672
+        },
+        {
+          "step": 3500,
+          "optimizer_steps": 3500,
+          "selection": {
+            "nll": 0.06945999711751938,
+            "correct": 312,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 164,
+                "nll": 0.11995422095060349
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.011700171045958996
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.015967149287462234
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.5617873072624207,
+            "correct": 241,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 110,
+                "nll": 0.8071516752243042
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 100,
+                "nll": 0.18333669006824493
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 31,
+                "nll": 0.5751366019248962
+              }
+            }
+          },
+          "eval_seconds": 0.6362654499971541
+        },
+        {
+          "step": 4000,
+          "optimizer_steps": 4000,
+          "selection": {
+            "nll": 0.09672483801841736,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.17137093842029572
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.01604657620191574
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.004485740792006254
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2739717960357666,
+            "correct": 282,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 148,
+                "nll": 0.3260223865509033
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 99,
+                "nll": 0.20743469893932343
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 35,
+                "nll": 0.2383858561515808
+              }
+            }
+          },
+          "eval_seconds": 0.6366863670045859
+        },
+        {
+          "step": 4500,
+          "optimizer_steps": 4500,
+          "selection": {
+            "nll": 0.08840209990739822,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.16129787266254425
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.007929997518658638
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0030369414016604424
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2539237439632416,
+            "correct": 287,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 149,
+                "nll": 0.30839675664901733
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 102,
+                "nll": 0.20567217469215393
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 36,
+                "nll": 0.1569211184978485
+              }
+            }
+          },
+          "eval_seconds": 0.6364749330023187
+        },
+        {
+          "step": 5000,
+          "optimizer_steps": 5000,
+          "selection": {
+            "nll": 0.1219070553779602,
+            "correct": 309,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.2162572294473648
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.012036689557135105
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 38,
+                "nll": 0.02738756686449051
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.06247600167989731,
+            "correct": 309,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.09556179493665695
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 108,
+                "nll": 0.031978823244571686
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0068849739618599415
+              }
+            }
+          },
+          "eval_seconds": 0.6362731280023581
+        },
+        {
+          "step": 5500,
+          "optimizer_steps": 5500,
+          "selection": {
+            "nll": 0.10051380842924118,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.18466511368751526
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.006752330809831619
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.004382690414786339
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2700117528438568,
+            "correct": 280,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 148,
+                "nll": 0.29686078429222107
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 96,
+                "nll": 0.27135375142097473
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 36,
+                "nll": 0.15198057889938354
+              }
+            }
+          },
+          "eval_seconds": 0.636161666996486
+        },
+        {
+          "step": 6000,
+          "optimizer_steps": 6000,
+          "selection": {
+            "nll": 0.10744854062795639,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.19390691816806793
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.009033145383000374
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.014504616148769855
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.13727439939975739,
+            "correct": 301,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 161,
+                "nll": 0.1727333813905716
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 103,
+                "nll": 0.0881267711520195
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 37,
+                "nll": 0.12370757758617401
+              }
+            }
+          },
+          "eval_seconds": 0.6357559179959935
+        },
+        {
+          "step": 6500,
+          "optimizer_steps": 6500,
+          "selection": {
+            "nll": 0.10656223446130753,
+            "correct": 311,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 163,
+                "nll": 0.19814558327198029
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.004059731960296631
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.0032273046672344208
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.17690089344978333,
+            "correct": 297,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 153,
+                "nll": 0.2762622535228729
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.05059540644288063
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 37,
+                "nll": 0.10698582231998444
+              }
+            }
+          },
+          "eval_seconds": 0.6366774400012218
+        },
+        {
+          "step": 7000,
+          "optimizer_steps": 7000,
+          "selection": {
+            "nll": 0.10729432851076126,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.19909459352493286
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0028573842719197273
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.008442576043307781
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1734684854745865,
+            "correct": 300,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 156,
+                "nll": 0.2596380114555359
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.045876771211624146
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 37,
+                "nll": 0.16329829394817352
+              }
+            }
+          },
+          "eval_seconds": 0.6366441310019582
+        },
+        {
+          "step": 7500,
+          "optimizer_steps": 7500,
+          "selection": {
+            "nll": 0.10384571552276611,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.1931830197572708
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0027877341490238905
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.006033467128872871
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.2132629156112671,
+            "correct": 295,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 151,
+                "nll": 0.3266372084617615
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.06276467442512512
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 37,
+                "nll": 0.1513187289237976
+              }
+            }
+          },
+          "eval_seconds": 0.6352488520060433
+        },
+        {
+          "step": 8000,
+          "optimizer_steps": 8000,
+          "selection": {
+            "nll": 0.10879046469926834,
+            "correct": 310,
+            "total": 314,
+            "present": 314,
+            "null": 0,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 162,
+                "nll": 0.1991978883743286
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 109,
+                "nll": 0.0034778763074427843
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 39,
+                "nll": 0.018314585089683533
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.1609795093536377,
+            "correct": 300,
+            "total": 314,
+            "present": 0,
+            "null": 314,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "total": 166,
+                "correct": 156,
+                "nll": 0.24568893015384674
+              },
+              "44b6_341df25f": {
+                "total": 109,
+                "correct": 107,
+                "nll": 0.04226403310894966
+              },
+              "44b6_706092f0": {
+                "total": 39,
+                "correct": 37,
+                "nll": 0.13221600651741028
+              }
+            }
+          },
+          "eval_seconds": 0.6353658960069879
+        }
+      ],
+      "best_step": 3500,
+      "selected": {
+        "nll": 0.06945999711751938,
+        "correct": 312,
+        "total": 314,
+        "present": 314,
+        "null": 0,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 164,
+            "nll": 0.11995422095060349
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 109,
+            "nll": 0.011700171045958996
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 39,
+            "nll": 0.015967149287462234
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 0.5617873072624207,
+        "correct": 241,
+        "total": 314,
+        "present": 0,
+        "null": 314,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "total": 166,
+            "correct": 110,
+            "nll": 0.8071516752243042
+          },
+          "44b6_341df25f": {
+            "total": 109,
+            "correct": 100,
+            "nll": 0.18333669006824493
+          },
+          "44b6_706092f0": {
+            "total": 39,
+            "correct": 31,
+            "nll": 0.5751366019248962
+          }
+        }
+      },
+      "optimizer_steps": 8000,
+      "elapsed_seconds": 402.29748992199893,
+      "weights_sha256": "fef09a9eaa02bf6e12524097570604e76d104de1a7efa29c1a373f295b6ab0b9",
+      "source_gate": true,
+      "peak_gpu_bytes": 2363034112,
+      "status": "trained"
+    }
+  ],
+  "environment": {
+    "torch": "2.5.1+cu121",
+    "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+    "gpu": "NVIDIA A10G"
+  },
+  "authorized_for_submission": false,
+  "elapsed_seconds": 1437.5611768099989
+}

@@ -1,0 +1,28 @@
+{
+  "authorized_for_submission": false,
+  "candidate": {
+    "adjusted_edge_jaccard": 0.9201972026768339,
+    "div_fn": 4,
+    "div_fp": 1,
+    "div_tp": 1,
+    "division_jaccard": 0.16666666666666666,
+    "proxy_score": 0.9368638693435006
+  },
+  "candidate_evidence_sha256": "e16ae4b2aded58441beba4f1631a68eb706f26f723234a69fd46f8be6aa60b8a",
+  "control": {
+    "adjusted_edge_jaccard": 0.9201972026768339,
+    "div_fn": 4,
+    "div_fp": 1,
+    "div_tp": 1,
+    "division_jaccard": 0.16666666666666666,
+    "proxy_score": 0.9368638693435006
+  },
+  "launcher_terminal_sha256": "3bda4e44fbbc37c9128c875f828802c55a0bcf253b7b2c527ea9dd862de6c13f",
+  "minimum_movie_adjusted_edge_delta": 0.0,
+  "production_edges_added": 0,
+  "proxy_score_delta": 0.0,
+  "run_id": "948tta2-unanimous-salvage-v4",
+  "schema_version": 1,
+  "status": "verified_rejection",
+  "submission_sha256": "ada9bea29b87061da08f494ff4a8f160186f47df45a3c61596035b1c8c7f3d57"
+}

@@ -1,0 +1,533 @@
+{
+  "run_id": "visual-correspondence-ensemble-v1-cross-embryo",
+  "training_terminal_sha256": "d67df95db152d84515dd1261a29f3087ac7660ea29b121b2f4381f44554a7c88",
+  "bundle_sha256": "a3a59450791c4d6aef7e75f8d7e2a40c5a41f9dc1a4a14d0440f0a1f0e1712d0",
+  "policy": "fixed equal-probability mixture; only source-screen-admitted members",
+  "members": [
+    {
+      "source_embryo": "6bba",
+      "family": "resnet3d",
+      "source_screen_passed": true,
+      "best_step": 3750,
+      "checkpoint_sha256": "a8d3e0b14185c3c23ded1a87985d7bc363b51befca8e92a94741e295f1a49596",
+      "source_selected": {
+        "nll": 0.227792888879776,
+        "correct": 167,
+        "total": 180,
+        "present": 173,
+        "null": 7,
+        "accuracy": 0.9277777671813965,
+        "low_confidence": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "nll": 0.3022618591785431,
+            "correct": 33,
+            "total": 37
+          },
+          "6bba_4f99ce20": {
+            "nll": 0.06328297406435013,
+            "correct": 22,
+            "total": 23
+          },
+          "6bba_4ffd3da3": {
+            "nll": 0.5270538926124573,
+            "correct": 20,
+            "total": 23
+          },
+          "6bba_87289e13": {
+            "nll": 0.18931156396865845,
+            "correct": 8,
+            "total": 9
+          },
+          "6bba_8b7818bf": {
+            "nll": 0.23442211747169495,
+            "correct": 14,
+            "total": 15
+          },
+          "6bba_b329af44": {
+            "nll": 0.09335380792617798,
+            "correct": 16,
+            "total": 17
+          },
+          "6bba_debd7bfa": {
+            "nll": 0.16846667230129242,
+            "correct": 54,
+            "total": 56
+          }
+        }
+      },
+      "source_missing": {
+        "nll": 0.2632273733615875,
+        "correct": 162,
+        "total": 180,
+        "present": 0,
+        "null": 180,
+        "accuracy": 0.8999999761581421,
+        "low_confidence": 118,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "nll": 0.3680018484592438,
+            "correct": 32,
+            "total": 37
+          },
+          "6bba_4f99ce20": {
+            "nll": 0.012294014915823936,
+            "correct": 23,
+            "total": 23
+          },
+          "6bba_4ffd3da3": {
+            "nll": 0.3351871371269226,
+            "correct": 20,
+            "total": 23
+          },
+          "6bba_87289e13": {
+            "nll": 0.2395923137664795,
+            "correct": 8,
+            "total": 9
+          },
+          "6bba_8b7818bf": {
+            "nll": 0.05209814012050629,
+            "correct": 15,
+            "total": 15
+          },
+          "6bba_b329af44": {
+            "nll": 0.5748759508132935,
+            "correct": 13,
+            "total": 17
+          },
+          "6bba_debd7bfa": {
+            "nll": 0.2332518994808197,
+            "correct": 51,
+            "total": 56
+          }
+        }
+      }
+    },
+    {
+      "source_embryo": "6bba",
+      "family": "token_transformer3d",
+      "source_screen_passed": true,
+      "best_step": 2750,
+      "checkpoint_sha256": "9448ae84c570e0c7aa569028d915265dab45d9480f3c44205578227cd76b3cc5",
+      "source_selected": {
+        "nll": 0.2951788902282715,
+        "correct": 167,
+        "total": 180,
+        "present": 173,
+        "null": 7,
+        "accuracy": 0.9277777671813965,
+        "low_confidence": 108,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "nll": 0.3991149663925171,
+            "correct": 33,
+            "total": 37
+          },
+          "6bba_4f99ce20": {
+            "nll": 0.024799857288599014,
+            "correct": 23,
+            "total": 23
+          },
+          "6bba_4ffd3da3": {
+            "nll": 0.5373420119285583,
+            "correct": 21,
+            "total": 23
+          },
+          "6bba_87289e13": {
+            "nll": 0.44579485058784485,
+            "correct": 8,
+            "total": 9
+          },
+          "6bba_8b7818bf": {
+            "nll": 0.08818063884973526,
+            "correct": 14,
+            "total": 15
+          },
+          "6bba_b329af44": {
+            "nll": 0.16467133164405823,
+            "correct": 16,
+            "total": 17
+          },
+          "6bba_debd7bfa": {
+            "nll": 0.3089537024497986,
+            "correct": 52,
+            "total": 56
+          }
+        }
+      },
+      "source_missing": {
+        "nll": 0.3313251733779907,
+        "correct": 162,
+        "total": 180,
+        "present": 0,
+        "null": 180,
+        "accuracy": 0.8999999761581421,
+        "low_confidence": 158,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "nll": 0.34296220541000366,
+            "correct": 32,
+            "total": 37
+          },
+          "6bba_4f99ce20": {
+            "nll": 0.036725081503391266,
+            "correct": 23,
+            "total": 23
+          },
+          "6bba_4ffd3da3": {
+            "nll": 0.36468029022216797,
+            "correct": 20,
+            "total": 23
+          },
+          "6bba_87289e13": {
+            "nll": 0.7578628659248352,
+            "correct": 8,
+            "total": 9
+          },
+          "6bba_8b7818bf": {
+            "nll": 0.44606006145477295,
+            "correct": 12,
+            "total": 15
+          },
+          "6bba_b329af44": {
+            "nll": 0.2352232038974762,
+            "correct": 16,
+            "total": 17
+          },
+          "6bba_debd7bfa": {
+            "nll": 0.36082392930984497,
+            "correct": 51,
+            "total": 56
+          }
+        }
+      }
+    },
+    {
+      "source_embryo": "44b6",
+      "family": "resnet3d",
+      "source_screen_passed": false,
+      "best_step": 250,
+      "checkpoint_sha256": "9dd023ab3ac694f44d6c55c7c539118b4df022e18a5bb09cd74b5a68211c2a8e",
+      "source_selected": {
+        "nll": 0.5280561447143555,
+        "correct": 9,
+        "total": 11,
+        "present": 11,
+        "null": 0,
+        "accuracy": 0.8181818127632141,
+        "low_confidence": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 0.9490667581558228,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.3822729289531708,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.16108615696430206,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      },
+      "source_missing": {
+        "nll": 0.5485313534736633,
+        "correct": 9,
+        "total": 11,
+        "present": 0,
+        "null": 11,
+        "accuracy": 0.8181818127632141,
+        "low_confidence": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 0.7465492486953735,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.6071658730506897,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.2063281387090683,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      }
+    },
+    {
+      "source_embryo": "44b6",
+      "family": "token_transformer3d",
+      "source_screen_passed": false,
+      "best_step": 1000,
+      "checkpoint_sha256": "edc92c512cafc3eb9c96282b24790ed816ed17c15dd052cd7062248a34c5a742",
+      "source_selected": {
+        "nll": 0.9024075865745544,
+        "correct": 9,
+        "total": 11,
+        "present": 11,
+        "null": 0,
+        "accuracy": 0.8181818127632141,
+        "low_confidence": 10,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 1.7849165201187134,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.5832874178886414,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.15122266113758087,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      },
+      "source_missing": {
+        "nll": 0.49640533328056335,
+        "correct": 10,
+        "total": 11,
+        "present": 0,
+        "null": 11,
+        "accuracy": 0.9090909361839294,
+        "low_confidence": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 1.2152024507522583,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.11012212932109833,
+            "correct": 4,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.05305330082774162,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      }
+    }
+  ],
+  "folds": [
+    {
+      "source": "6bba",
+      "target": "44b6",
+      "target_opened": true,
+      "baseline": {
+        "nll": 0.6750476956367493,
+        "correct": 10,
+        "total": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 1.1219689846038818,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.4383186995983124,
+            "correct": 4,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.39479145407676697,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 7.322288990020752,
+        "correct": 0,
+        "total": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 8.015188217163086,
+            "correct": 0,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 6.851295471191406,
+            "correct": 0,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 7.02641487121582,
+            "correct": 0,
+            "total": 3
+          }
+        }
+      },
+      "members": [
+        {
+          "family": "resnet3d",
+          "metrics": {
+            "nll": 1.1674214601516724,
+            "correct": 9,
+            "total": 11,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "nll": 2.93015456199646,
+                "correct": 3,
+                "total": 4
+              },
+              "44b6_341df25f": {
+                "nll": 0.25563013553619385,
+                "correct": 3,
+                "total": 4
+              },
+              "44b6_706092f0": {
+                "nll": 0.03283241018652916,
+                "correct": 3,
+                "total": 3
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.7714467644691467,
+            "correct": 10,
+            "total": 11,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "nll": 1.8595448732376099,
+                "correct": 3,
+                "total": 4
+              },
+              "44b6_341df25f": {
+                "nll": 0.22328343987464905,
+                "correct": 4,
+                "total": 4
+              },
+              "44b6_706092f0": {
+                "nll": 0.05153332278132439,
+                "correct": 3,
+                "total": 3
+              }
+            }
+          }
+        },
+        {
+          "family": "token_transformer3d",
+          "metrics": {
+            "nll": 0.8356761336326599,
+            "correct": 10,
+            "total": 11,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "nll": 2.113523244857788,
+                "correct": 3,
+                "total": 4
+              },
+              "44b6_341df25f": {
+                "nll": 0.10469742119312286,
+                "correct": 4,
+                "total": 4
+              },
+              "44b6_706092f0": {
+                "nll": 0.10651785880327225,
+                "correct": 3,
+                "total": 3
+              }
+            }
+          },
+          "missing": {
+            "nll": 0.5491338968276978,
+            "correct": 10,
+            "total": 11,
+            "per_movie": {
+              "44b6_2a2eff9f": {
+                "nll": 1.285370111465454,
+                "correct": 3,
+                "total": 4
+              },
+              "44b6_341df25f": {
+                "nll": 0.19774721562862396,
+                "correct": 4,
+                "total": 4
+              },
+              "44b6_706092f0": {
+                "nll": 0.03600115701556206,
+                "correct": 3,
+                "total": 3
+              }
+            }
+          }
+        }
+      ],
+      "mixture": {
+        "nll": 0.9069826006889343,
+        "correct": 10,
+        "total": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 2.274639368057251,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.16866816580295563,
+            "correct": 4,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.06785962730646133,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      },
+      "mixture_missing": {
+        "nll": 0.6071489453315735,
+        "correct": 10,
+        "total": 11,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "nll": 1.438438057899475,
+            "correct": 3,
+            "total": 4
+          },
+          "44b6_341df25f": {
+            "nll": 0.19849927723407745,
+            "correct": 4,
+            "total": 4
+          },
+          "44b6_706092f0": {
+            "nll": 0.043629635125398636,
+            "correct": 3,
+            "total": 3
+          }
+        }
+      },
+      "complementarity": {
+        "first_only_correct": 0,
+        "second_only_correct": 1,
+        "both_wrong": 1
+      },
+      "conditional_screen_passed": false,
+      "status": "conditional_rejected"
+    },
+    {
+      "source": "44b6",
+      "status": "no_two_strong_source_members",
+      "target_opened": false
+    }
+  ],
+  "complete_movie_metric_gate_passed": false,
+  "authorized_for_submission": false,
+  "weights_updated": false,
+  "sealed_audit_opened": false,
+  "status": "completed_diagnostic",
+  "elapsed_seconds": 4.423398777002149
+}

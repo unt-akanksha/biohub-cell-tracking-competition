@@ -1,0 +1,22 @@
+{
+  "status": "source_collection_staged_not_launched",
+  "batch": 1,
+  "contract_sha256": "11de0aec9265b7bbd01146cd7ac079f951aab34b8ed829284a993560d228853f",
+  "archive_sha256": "5a74af170e25e2b807ef00189b883b5d9bf85bab4efdcff16c497b43d6f5e01a",
+  "images_sha256": "fc62b4de091806f5b04ba584bbe60c9a97bccccf503f215f9f62964d6e62dab2",
+  "archive_bytes": 54927360,
+  "movies": [
+    "6bba_d2b9fc0c",
+    "6bba_09961292",
+    "6bba_7f87b3d8",
+    "6bba_d3da753b",
+    "6bba_57b7cc1e",
+    "44b6_e28840c6",
+    "6bba_ef7b4f7e",
+    "6bba_5c824876"
+  ],
+  "full_wall_cap_seconds": 2700,
+  "smoke_required": true,
+  "source_scope_sha256": "3faae3ec7154ed4c02fb39423b6ec1aa1c89b4afe2d8eda43e8fd1d392ff5ac2",
+  "authorized_for_submission": false
+}

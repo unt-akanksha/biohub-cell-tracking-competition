@@ -1,0 +1,118 @@
+{
+  "status": "verified_focus_null_balanced_head",
+  "run_id": "focus-null-balanced-head-v1",
+  "notebook_sha256": "2253c9927b1ccc6ee87f75e835c44665a164ee8aec78a12bcdb1a5994b59664e",
+  "worker_result_sha256": "8707c59d9e7232afb788f45c9f364956d2ffe9526bcc0d297f2a6b4c180fbe08",
+  "launcher": {
+    "status": "completed",
+    "run_id": "focus-null-balanced-head-v1",
+    "elapsed_seconds": 169.913475182,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "worker": {
+    "status": "completed_focus_null_balanced_head",
+    "null_weight": 8.172822710416556,
+    "supervision_counts": {
+      "fitting": {
+        "known_parent": 10754,
+        "known_absent": 161
+      },
+      "diagnostic": {
+        "known_parent": 2645,
+        "known_absent": 27
+      }
+    },
+    "settings": {
+      "steps": 800,
+      "smoke_steps": 4,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.0001,
+      "gradient_clip": 1.0,
+      "seed": 244691,
+      "neural_weight": 1.0,
+      "physical_weight": 1.0,
+      "null_logit": -4.5
+    },
+    "physical_diagnostic": {
+      "loss_sum": 892.2207538979128,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2500,
+      "correct_absent": 18,
+      "nll": 0.3339149528061051
+    },
+    "initial_diagnostic": {
+      "loss_sum": 585.1917770872515,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2585,
+      "correct_absent": 12,
+      "nll": 0.2190088986104983
+    },
+    "final_diagnostic": {
+      "loss_sum": 577.8833523300673,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2588,
+      "correct_absent": 11,
+      "nll": 0.2162737097043665
+    },
+    "diagnostic_gate": {
+      "passed": false,
+      "gates": {
+        "nll_below_both": true,
+        "parent_correct_not_lower": true,
+        "null_correct_not_lower": false
+      },
+      "scope": "Training-domain feasibility only; no tracking-score promotion"
+    },
+    "smoke": {
+      "file": "step-0004.pt",
+      "sha256": "ebdb30fb9c67f4849a5ee6bf62a608035b20928c73e6914eb1a1cd2492c4c221",
+      "exact_real_logit_reload": true
+    },
+    "checkpoint": {
+      "file": "step-0800.pt",
+      "sha256": "03663b9367e158e41719ba32bb2953b6bca209d2480a84ae7e5b86ce65336ea4",
+      "exact_real_logit_reload": true
+    },
+    "frozen_before": "a9a07f3362fd2891894ee3b534ab34a9395d68cbce7e2e9ac2be16a144ac5ef1",
+    "frozen_after": "a9a07f3362fd2891894ee3b534ab34a9395d68cbce7e2e9ac2be16a144ac5ef1",
+    "initial_model_sha256": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+    "final_model_sha256": "093fb33b566039d7c81b78ab9811f672321337ce5d9c270b9940af69a17d7552",
+    "fitting_pairs": 1121,
+    "diagnostic_pairs": 377,
+    "source_hashes": {
+      "run_pilot.py": "a4593183b7b191d67869e09c3d1ca3a3ac6274863b20230f73fe7625cccf3aa8",
+      "split.json": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "focus_cached_pair.py": "05c62d9ebd9ff9bfc7a402685e93b47672edb91528a241e3e149f8245acb5172",
+      "focus_adaptation_training.py": "4ff7b3be234e753839928889bda580d1fd239196515e7d523376fd0c4a564507",
+      "focus_indexed_parent_loss.py": "804d096dd49224cb2360676e45c4818184cab0e53293428134c04d4d1066f48d",
+      "sparse_parent_loss.py": "e3cb38e4abf0650e8f9dbd64e3c006715ed5288cb4f41e36ff2c13d16c02df53",
+      "sparse_parent_missing_null.py": "1cc65c652f4b7c9e669c5ff75299e30515cac680af48f952dddc6fe643db834a",
+      "independent_real_baseline.py": "fc823784fb2dcb6caf2097446859bfac027048b7b635c4de292725377140876c",
+      "training_spec.json": "71fe2c456cc4f676472d063dcefe7987a83525252010833b8c187359b0677275",
+      "focus_null_balanced_loss.py": "a17d0c33a2eab536e4b3e5ade3d543ea29e2478e0420bf0179ed5b988ed36c4b"
+    },
+    "training_spec_sha256": "71fe2c456cc4f676472d063dcefe7987a83525252010833b8c187359b0677275",
+    "all_diagnostic_samples_excluded_from_optimizer": true,
+    "raw_detections_changed": false,
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "elapsed_seconds": 115.90689942099993
+  },
+  "diagnostic_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": true,
+      "parent_correct_not_lower": true,
+      "null_correct_not_lower": false
+    },
+    "scope": "Training-domain feasibility only; no tracking-score promotion"
+  },
+  "eligible_for_source_tracking_evaluation": false,
+  "authorized_for_submission": false,
+  "caveat": "Training-domain feasibility only; diagnostic movies were in original encoder training; no independent or leaderboard claim."
+}

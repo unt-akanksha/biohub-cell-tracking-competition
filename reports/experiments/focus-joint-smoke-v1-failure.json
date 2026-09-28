@@ -1,0 +1,67 @@
+{
+  "status": "verified_joint_smoke_nonfinite_gradient_failure",
+  "run_id": "focus-joint-smoke-v1",
+  "notebook_sha256": "87f68814914a35dfa71b2e4015f8ddf1e392b7e68d8be42654dee2054c0f1f30",
+  "terminal": {
+    "status": "error",
+    "run_id": "focus-joint-smoke-v1",
+    "elapsed_seconds": 70.60380819400001,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "terminal_sha256": "69b868092a3093ed53aba2533784f8867933e924e4a36b06624c16414d3cd23d",
+  "log_sha256": "5139587c582c8fad20797a67c75b43ddada77f184c87ac51b9551b9cf810bf10",
+  "exact_original_pair_replays": [
+    {
+      "stem": "6bba_6479435d",
+      "source_frame": 0,
+      "pair_sha256": "b1b4c42ef0a56587c87b69e09c5dfda6f65c616427a5f9e9f38517f9ddb3ebd4",
+      "source_nodes": 476,
+      "target_nodes": 471,
+      "exact_feature_and_logit_replay": true
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "source_frame": 31,
+      "pair_sha256": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e",
+      "source_nodes": 1160,
+      "target_nodes": 1187,
+      "exact_feature_and_logit_replay": true
+    },
+    {
+      "stem": "6bba_6479435d",
+      "source_frame": 8,
+      "pair_sha256": "46837cc15c217c9adb5d918daff0d747b358a8597005165c2e7dfc6eb3acb7a2",
+      "source_nodes": 552,
+      "target_nodes": 505,
+      "exact_feature_and_logit_replay": true
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "source_frame": 98,
+      "pair_sha256": "3983826d77af77b6546683dbd58f567aee6de31ece80f0e5fab0816b372132fd",
+      "source_nodes": 822,
+      "target_nodes": 822,
+      "exact_feature_and_logit_replay": true
+    }
+  ],
+  "completed_updates": [
+    {
+      "stage": "joint_smoke_step",
+      "step": 1,
+      "stem": "6bba_6479435d",
+      "source_frame": 0,
+      "loss": 2.7820181846618652,
+      "gradient_norm": 8.435441970825195,
+      "nonzero_gradients": {
+        "encoder": true,
+        "head": true
+      },
+      "elapsed_seconds": 27.179237312999987
+    }
+  ],
+  "failure": "Nonfinite unscaled gradient norm before the second optimizer update",
+  "scale_overflow_hypothesis_unproven": true,
+  "eligible_for_larger_training": false,
+  "authorized_for_submission": false
+}

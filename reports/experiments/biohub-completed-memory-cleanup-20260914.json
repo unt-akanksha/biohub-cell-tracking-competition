@@ -1,0 +1,21 @@
+{
+  "status": "completed_backed_up_ram_cleanup",
+  "removed": [
+    {
+      "remote": "/dev/shm/biohub-dense-warp-movie-v1-full",
+      "backup": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-movie-v1-full-output",
+      "bytes": 114380387,
+      "files": 110
+    },
+    {
+      "remote": "/dev/shm/biohub-dense-warp-v1-full",
+      "backup": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-v1-full-output",
+      "bytes": 78393697,
+      "files": 10
+    }
+  ],
+  "bytes": 192774084,
+  "utc": "2026-09-14T10:52:23Z",
+  "active_run_untouched": true,
+  "foreign_jobs_untouched": true
+}

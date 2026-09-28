@@ -1,0 +1,542 @@
+{
+  "status": "proposal_audit_smoke_passed",
+  "contract_sha256": "55e22648d8d9477277874b23a0bbb0965534753f980a5c3080de00897a12e8db",
+  "movie_plan_sha256": "30c914750af6ce3d03af2e39cf9a172cd6dd95817dbd1bfe266b275468346281",
+  "records": [
+    {
+      "stem": "44b6_587a1e22",
+      "embryo": "44b6",
+      "transition": 19,
+      "variant": "baseline",
+      "events": [
+        {
+          "parent": 21000000052,
+          "children": [
+            22000000052,
+            22000000053
+          ],
+          "nearest_um": [
+            3.2626705169677734,
+            1.5469539165496826,
+            1.9270129203796387
+          ],
+          "matched": [
+            false,
+            true,
+            true
+          ],
+          "reasons": [
+            "no_proposal_within_3.25um",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            null,
+            null
+          ],
+          "eligible": false,
+          "category": "missing_parent_only",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "missing_parent_only": 1,
+        "events": 1,
+        "parent_matched": 0,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 251,
+        "child_proposals": 242
+      }
+    },
+    {
+      "stem": "44b6_587a1e22",
+      "embryo": "44b6",
+      "transition": 19,
+      "variant": "xy2",
+      "events": [
+        {
+          "parent": 21000000052,
+          "children": [
+            22000000052,
+            22000000053
+          ],
+          "nearest_um": [
+            3.10721492767334,
+            0.2872621417045593,
+            2.1687815189361572
+          ],
+          "matched": [
+            true,
+            true,
+            true
+          ],
+          "reasons": [
+            "matched",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            9.228225708007812,
+            5.859020709991455
+          ],
+          "eligible": true,
+          "category": "eligible",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "eligible": 1,
+        "events": 1,
+        "parent_matched": 1,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 252,
+        "child_proposals": 244
+      }
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "embryo": "44b6",
+      "transition": 36,
+      "variant": "baseline",
+      "events": [
+        {
+          "parent": 125000000011,
+          "children": [
+            126000000011,
+            126000000012
+          ],
+          "nearest_um": [
+            3.9492013454437256,
+            1.6501953601837158,
+            1.747347354888916
+          ],
+          "matched": [
+            false,
+            true,
+            true
+          ],
+          "reasons": [
+            "no_proposal_within_3.25um",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            null,
+            null
+          ],
+          "eligible": false,
+          "category": "missing_parent_only",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "missing_parent_only": 1,
+        "events": 1,
+        "parent_matched": 0,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 516,
+        "child_proposals": 520
+      }
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "embryo": "44b6",
+      "transition": 36,
+      "variant": "xy2",
+      "events": [
+        {
+          "parent": 125000000011,
+          "children": [
+            126000000011,
+            126000000012
+          ],
+          "nearest_um": [
+            3.159883499145508,
+            1.747347354888916,
+            1.747347354888916
+          ],
+          "matched": [
+            true,
+            true,
+            true
+          ],
+          "reasons": [
+            "matched",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            2.9295103549957275,
+            8.325647354125977
+          ],
+          "eligible": true,
+          "category": "eligible",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "eligible": 1,
+        "events": 1,
+        "parent_matched": 1,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 524,
+        "child_proposals": 528
+      }
+    },
+    {
+      "stem": "6bba_085bf656",
+      "embryo": "6bba",
+      "transition": 18,
+      "variant": "baseline",
+      "events": [
+        {
+          "parent": 19000327,
+          "children": [
+            20000345,
+            20000346
+          ],
+          "nearest_um": [
+            3.312868595123291,
+            1.6501953601837158,
+            1.6501953601837158
+          ],
+          "matched": [
+            false,
+            true,
+            true
+          ],
+          "reasons": [
+            "no_proposal_within_3.25um",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            null,
+            null
+          ],
+          "eligible": false,
+          "category": "missing_parent_only",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "missing_parent_only": 1,
+        "events": 1,
+        "parent_matched": 0,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 148,
+        "child_proposals": 148
+      }
+    },
+    {
+      "stem": "6bba_085bf656",
+      "embryo": "6bba",
+      "transition": 18,
+      "variant": "xy2",
+      "events": [
+        {
+          "parent": 19000327,
+          "children": [
+            20000345,
+            20000346
+          ],
+          "nearest_um": [
+            1.747347354888916,
+            0.6423376202583313,
+            1.6501953601837158
+          ],
+          "matched": [
+            true,
+            true,
+            true
+          ],
+          "reasons": [
+            "matched",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            3.3500232696533203,
+            6.600781440734863
+          ],
+          "eligible": true,
+          "category": "eligible",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "eligible": 1,
+        "events": 1,
+        "parent_matched": 1,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 157,
+        "child_proposals": 158
+      }
+    },
+    {
+      "stem": "6bba_09961292",
+      "embryo": "6bba",
+      "transition": 24,
+      "variant": "baseline",
+      "events": [
+        {
+          "parent": 25000920,
+          "children": [
+            26000956,
+            26000987
+          ],
+          "nearest_um": [
+            2.454368829727173,
+            1.8393751382827759,
+            1.9270129203796387
+          ],
+          "matched": [
+            true,
+            true,
+            true
+          ],
+          "reasons": [
+            "matched",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            8.285906791687012,
+            4.875
+          ],
+          "eligible": true,
+          "category": "eligible",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "eligible": 1,
+        "events": 1,
+        "parent_matched": 1,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 368,
+        "child_proposals": 379
+      }
+    },
+    {
+      "stem": "6bba_09961292",
+      "embryo": "6bba",
+      "transition": 24,
+      "variant": "xy2",
+      "events": [
+        {
+          "parent": 25000920,
+          "children": [
+            26000956,
+            26000987
+          ],
+          "nearest_um": [
+            0.8617863655090332,
+            1.9270129203796387,
+            1.8393751382827759
+          ],
+          "matched": [
+            true,
+            true,
+            true
+          ],
+          "reasons": [
+            "matched",
+            "matched",
+            "matched"
+          ],
+          "displacement_um": [
+            6.5,
+            6.700046539306641
+          ],
+          "eligible": true,
+          "category": "eligible",
+          "nearest_all_within_7um": true
+        }
+      ],
+      "counts": {
+        "eligible": 1,
+        "events": 1,
+        "parent_matched": 1,
+        "daughters_matched": 2,
+        "nearest_all_within_7um": 1,
+        "one_to_one_conflicts": 0,
+        "parent_proposals": 382,
+        "child_proposals": 394
+      }
+    }
+  ],
+  "totals": {
+    "44b6-baseline": {
+      "missing_parent_only": 2,
+      "events": 2,
+      "parent_matched": 0,
+      "daughters_matched": 4,
+      "nearest_all_within_7um": 2,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 767,
+      "child_proposals": 762
+    },
+    "44b6-xy2": {
+      "eligible": 2,
+      "events": 2,
+      "parent_matched": 2,
+      "daughters_matched": 4,
+      "nearest_all_within_7um": 2,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 776,
+      "child_proposals": 772
+    },
+    "6bba-baseline": {
+      "missing_parent_only": 1,
+      "events": 2,
+      "parent_matched": 1,
+      "daughters_matched": 4,
+      "nearest_all_within_7um": 2,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 516,
+      "child_proposals": 527,
+      "eligible": 1
+    },
+    "6bba-xy2": {
+      "eligible": 2,
+      "events": 2,
+      "parent_matched": 2,
+      "daughters_matched": 4,
+      "nearest_all_within_7um": 2,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 539,
+      "child_proposals": 552
+    }
+  },
+  "point_artifacts": [
+    {
+      "path": "points/44b6_587a1e22.npz",
+      "bytes": 5187,
+      "sha256": "f42a550d242e9ae321bc29d73d58ee29d437e21b2991a3dd5851779d2e32acd3",
+      "metadata": {
+        "group_sha256": "b5589a6b9b74e80f29c57c7c8158db9952b4167163baac1042b82fe8f001ec0c",
+        "array_sha256": "73e3ff105fe0c50983cff97a50bfa95f8c0da16e1cb5adb56968d1cb7e1c41b0"
+      }
+    },
+    {
+      "path": "points/44b6_5f15d135.npz",
+      "bytes": 8313,
+      "sha256": "723e4e0c9cd1d765a32de607e172e26bd84584e34aef6f8bcf1dd9ca310c3a2b",
+      "metadata": {
+        "group_sha256": "418cbc74c74bfd82eb888c44275d217144999102aacda25005c3dd2af0506717",
+        "array_sha256": "73e3ff105fe0c50983cff97a50bfa95f8c0da16e1cb5adb56968d1cb7e1c41b0"
+      }
+    },
+    {
+      "path": "points/6bba_085bf656.npz",
+      "bytes": 3876,
+      "sha256": "67635aad7b95f86c687e9c885ec66684f6c052c6d21ab8ed4c1794da406c043f",
+      "metadata": {
+        "group_sha256": "72c6448fdf20a8f1fd3fec41238aafa91606419dd393f2cb08c098171cf4cea7",
+        "array_sha256": "73e3ff105fe0c50983cff97a50bfa95f8c0da16e1cb5adb56968d1cb7e1c41b0"
+      }
+    },
+    {
+      "path": "points/6bba_09961292.npz",
+      "bytes": 6239,
+      "sha256": "ffd17b45e7f27a48af506a2c50789005a93f9543084727c93440906ff2078935",
+      "metadata": {
+        "group_sha256": "150559a166dcb980c6342441bdbb454ecec5334dc701783434c2fc19b37a4908",
+        "array_sha256": "73e3ff105fe0c50983cff97a50bfa95f8c0da16e1cb5adb56968d1cb7e1c41b0"
+      }
+    }
+  ],
+  "frames": [
+    {
+      "stem": "44b6_587a1e22",
+      "time": 19,
+      "raw_sha256": "c55f8b52ff639aeb7b58934710d58fde26d047a27d5cb1dd8533989ea90102b6",
+      "baseline_points": 251,
+      "xy2_points": 252,
+      "baseline_with_normalization_seconds": 0.20987314300145954,
+      "xy2_after_normalization_seconds": 0.4115352340013487
+    },
+    {
+      "stem": "44b6_587a1e22",
+      "time": 20,
+      "raw_sha256": "9b4356bf06db5f37be2782df3ea2100332dde01258ab8ccd052dd755c0a23cb1",
+      "baseline_points": 242,
+      "xy2_points": 244,
+      "baseline_with_normalization_seconds": 0.03657897600351134,
+      "xy2_after_normalization_seconds": 0.41013130999635905
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "time": 36,
+      "raw_sha256": "94d3b88e643eadd181ab4b87e3f38e2b69c178ef5e82f0d7af6b685dd9437d8f",
+      "baseline_points": 516,
+      "xy2_points": 524,
+      "baseline_with_normalization_seconds": 0.04372688099829247,
+      "xy2_after_normalization_seconds": 0.42591261400229996
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "time": 37,
+      "raw_sha256": "3903691358ca45d0a3c0a576f799f083efba9600d197f03b140749426393b0d0",
+      "baseline_points": 520,
+      "xy2_points": 528,
+      "baseline_with_normalization_seconds": 0.03508376100216992,
+      "xy2_after_normalization_seconds": 0.40710039600526216
+    },
+    {
+      "stem": "6bba_085bf656",
+      "time": 18,
+      "raw_sha256": "a91658ee7e3df97211b4c931c0ed1589d45fc338ee730235a674b01925c02e1b",
+      "baseline_points": 148,
+      "xy2_points": 157,
+      "baseline_with_normalization_seconds": 0.035117705003358424,
+      "xy2_after_normalization_seconds": 0.40930245400522836
+    },
+    {
+      "stem": "6bba_085bf656",
+      "time": 19,
+      "raw_sha256": "5f21e6426b0a262e4546639c4a72bf878816411dec3b414b6ac135b105c6f725",
+      "baseline_points": 148,
+      "xy2_points": 158,
+      "baseline_with_normalization_seconds": 0.04314718200475909,
+      "xy2_after_normalization_seconds": 0.42658915300125955
+    },
+    {
+      "stem": "6bba_09961292",
+      "time": 24,
+      "raw_sha256": "6f578381365bccbb39abc3fc93288fce29f4105a9eb6e74fd83306826dd7876e",
+      "baseline_points": 368,
+      "xy2_points": 382,
+      "baseline_with_normalization_seconds": 0.034351181995589286,
+      "xy2_after_normalization_seconds": 0.4106452179985354
+    },
+    {
+      "stem": "6bba_09961292",
+      "time": 25,
+      "raw_sha256": "1c13d40796da476bac54ecc9bd23b8403fc5b67933be753af28300d7986e0409",
+      "baseline_points": 379,
+      "xy2_points": 394,
+      "baseline_with_normalization_seconds": 0.03629553499922622,
+      "xy2_after_normalization_seconds": 0.4112059879989829
+    }
+  ],
+  "selection_opened": false,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "seconds": 5.697339025005931
+}

@@ -1,0 +1,37 @@
+{
+  "run_id": "d4-complete-harmonic-production-v2",
+  "status": "kernel_complete_submitted_pending",
+  "kernel": "indarkarhana/biohub-d4-complete-harmonic-production-v1 version 2",
+  "kaggle_submission_ref": 56285962,
+  "submitted_at_utc": "2026-09-16T19:00:55Z",
+  "device": "2x Tesla T4 (BIOHUB_D4_DEVICE_GUARD confirmed)",
+  "on_kernel_predictor_sha256": "ef6fc4f8335ec799f7229dc880b2247fb776394821c382a2f113906f6b9b0c6a",
+  "on_kernel_predictor_bytes": 51316,
+  "predictor_matches_gpu_validated_20260910": true,
+  "d4_correction_persisted": true,
+  "tta_views_reported": {
+    "edge_feature": 8,
+    "secondary_edge_feature": 8,
+    "deepcenter": 8
+  },
+  "secondary_edge_tta_weight": 0.75,
+  "proxy_sweep_selection": "base (validator disabled; no override reached submission.csv)",
+  "public_example_movies": 4,
+  "submission_rows": 239795,
+  "rows_per_movie": {
+    "44b6_0113de3b": 50363,
+    "44b6_0b24845f": 38977,
+    "6bba_05b6850b": 12096,
+    "6bba_05db0fb1": 138359
+  },
+  "predict_minutes_public_movies": 9.067980591456095,
+  "kernel_wall_minutes_approx": 26,
+  "csv_contract": {
+    "ids_contiguous": true,
+    "max_out_degree": 2,
+    "multi_parent": 0
+  },
+  "public_score": null,
+  "quality_gain_established": false,
+  "notes": "Public-example-movie run only; the 199-movie hidden rerun is scored by Kaggle separately. No local official-metric scoring was performed on this artifact and no leaderboard claim is made here."
+}

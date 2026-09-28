@@ -1,0 +1,40 @@
+{
+  "status": "existing_division_scope_audited",
+  "source_sha256": "f94aa2a843fece1b1ffa0edc53327aaf99c4ec4ce324b730aed951ed5ed7b40f",
+  "helper_sha256": "1c101aa89f27db4a1c0e04bf92676bdfcbce26a838ad854c91e921a2003285f2",
+  "dataset_sha256": "e279e24348d17e60e07b8e6bb964ffab95490e502a3f70ac67ecd35928dfa1db",
+  "prior_scoring_sha256": "bf735591bfb02bc707d7ec85fc8dd3aaa5baf02563dead1052b51c92eea90616",
+  "records": {
+    "6bba_55b7eebe": {
+      "counts": {
+        "unscored_not_negative": 3,
+        "unscored_not_negative_observed_scope": 3,
+        "unscored_not_negative_with_temporal_context": 3
+      },
+      "baseline_counts_reproduced": true
+    }
+  },
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "ground_truth_opened": true,
+  "gpu_used": false,
+  "model_fitted": false,
+  "candidate_changed": false,
+  "oracle_graphs_exported": false,
+  "per_fork_gt_labels_exported": false,
+  "authorized_for_submission": false,
+  "seconds": 51.21900000004098,
+  "movies": [
+    "6bba_55b7eebe"
+  ],
+  "scope_sha256": "e65b0056a941c4b657bb12958083593c14e814deb70c988f4a2d681303ea6759",
+  "all_requested_scopes_frozen_before_gt": true,
+  "by_embryo": {
+    "44b6": {},
+    "6bba": {
+      "unscored_not_negative": 3,
+      "unscored_not_negative_observed_scope": 3,
+      "unscored_not_negative_with_temporal_context": 3
+    }
+  }
+}

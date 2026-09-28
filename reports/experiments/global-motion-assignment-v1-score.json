@@ -1,0 +1,388 @@
+{
+  "status": "completed_static_assignment_source_ablation",
+  "contract": {
+    "version": 1,
+    "method": "Rectangular linear assignment with one private null column per child",
+    "scale": [
+      1.625,
+      0.40625,
+      0.40625
+    ],
+    "variance_um2": [
+      5.039403450197348,
+      1.8241133653936037,
+      2.5762211031033333
+    ],
+    "null_cost": 4.5,
+    "max_parents": 1,
+    "max_children": 1,
+    "divisions": "Not modeled in this ordinary-link ablation",
+    "node_policy": "All coordinates and node IDs preserved",
+    "maximum_nodes_per_frame": 2048,
+    "threshold_sweep": false,
+    "graph_count_objective": false
+  },
+  "summaries": {
+    "static_greedy": {
+      "n": 8,
+      "edge_jaccard": 0.6547333921593345,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 204,
+      "division_fn": 11,
+      "node_recall": 0.9575953066100492,
+      "adj_edge_jaccard": 0.6060043054367866,
+      "n_adj": 8,
+      "score": 0.6060043054367866
+    },
+    "static_lap": {
+      "n": 8,
+      "edge_jaccard": 0.6585553278688525,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 11,
+      "node_recall": 0.9575953066100492,
+      "adj_edge_jaccard": 0.6093853679997758,
+      "n_adj": 8,
+      "score": 0.6093853679997758
+    }
+  },
+  "per_movie": {
+    "static_greedy": [
+      {
+        "edge_tp": 924,
+        "edge_fp": 209,
+        "edge_fn": 364,
+        "division_tp": 0,
+        "division_fp": 39,
+        "division_fn": 0,
+        "num_pred_nodes": 34592,
+        "node_recall": 0.9597615499254843,
+        "total_node_ratio": 0.6582138919514884,
+        "edge_jaccard": 0.6172344689378757,
+        "adj_edge_jaccard": 0.5766072387332548,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 572,
+        "edge_fp": 251,
+        "edge_fn": 152,
+        "division_tp": 0,
+        "division_fp": 63,
+        "division_fn": 0,
+        "num_pred_nodes": 7068,
+        "node_recall": 0.994572591587517,
+        "total_node_ratio": 0.21820062047569805,
+        "edge_jaccard": 0.5866666666666667,
+        "adj_edge_jaccard": 0.5738655635987591,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 378,
+        "edge_fp": 147,
+        "edge_fn": 332,
+        "division_tp": 0,
+        "division_fp": 29,
+        "division_fn": 0,
+        "num_pred_nodes": 38547,
+        "node_recall": 0.864314789687924,
+        "total_node_ratio": 1.3626723873735826,
+        "edge_jaccard": 0.441073512252042,
+        "adj_edge_jaccard": 0.3809696426572679,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 324,
+        "edge_fp": 103,
+        "edge_fn": 114,
+        "division_tp": 0,
+        "division_fp": 10,
+        "division_fn": 1,
+        "num_pred_nodes": 19932,
+        "node_recall": 0.9588744588744589,
+        "total_node_ratio": 0.24101861652450035,
+        "edge_jaccard": 0.5988909426987061,
+        "adj_edge_jaccard": 0.5844565560528766,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 914,
+        "edge_fp": 262,
+        "edge_fn": 231,
+        "division_tp": 0,
+        "division_fp": 35,
+        "division_fn": 3,
+        "num_pred_nodes": 16941,
+        "node_recall": 0.9914821124361158,
+        "total_node_ratio": 0.976779463243874,
+        "edge_jaccard": 0.6496090973702914,
+        "adj_edge_jaccard": 0.5861566148255223,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 346,
+        "edge_fp": 25,
+        "edge_fn": 112,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 2,
+        "num_pred_nodes": 17712,
+        "node_recall": 0.8938428874734607,
+        "total_node_ratio": 0.26333808844507844,
+        "edge_jaccard": 0.7163561076604554,
+        "adj_edge_jaccard": 0.6974917228567293,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 544,
+        "edge_fp": 78,
+        "edge_fn": 155,
+        "division_tp": 0,
+        "division_fp": 16,
+        "division_fn": 1,
+        "num_pred_nodes": 25425,
+        "node_recall": 0.9986187845303868,
+        "total_node_ratio": 0.6988507283175197,
+        "edge_jaccard": 0.7001287001287001,
+        "adj_edge_jaccard": 0.6512001549286061,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1192,
+        "edge_fp": 48,
+        "edge_fn": 156,
+        "division_tp": 0,
+        "division_fp": 8,
+        "division_fn": 4,
+        "num_pred_nodes": 59156,
+        "node_recall": 0.9992952783650458,
+        "total_node_ratio": 0.9861003861003861,
+        "edge_jaccard": 0.8538681948424068,
+        "adj_edge_jaccard": 0.7696682191811132,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ],
+    "static_lap": [
+      {
+        "edge_tp": 917,
+        "edge_fp": 186,
+        "edge_fn": 371,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 34592,
+        "node_recall": 0.9597615499254843,
+        "total_node_ratio": 0.6582138919514884,
+        "edge_jaccard": 0.6221166892808684,
+        "adj_edge_jaccard": 0.5811681045509149,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 544,
+        "edge_fp": 216,
+        "edge_fn": 180,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 7068,
+        "node_recall": 0.994572591587517,
+        "total_node_ratio": 0.21820062047569805,
+        "edge_jaccard": 0.5787234042553191,
+        "adj_edge_jaccard": 0.5660956236660872,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 375,
+        "edge_fp": 129,
+        "edge_fn": 335,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 38547,
+        "node_recall": 0.864314789687924,
+        "total_node_ratio": 1.3626723873735826,
+        "edge_jaccard": 0.4469606674612634,
+        "adj_edge_jaccard": 0.3860545714821104,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 324,
+        "edge_fp": 99,
+        "edge_fn": 114,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 1,
+        "num_pred_nodes": 19932,
+        "node_recall": 0.9588744588744589,
+        "total_node_ratio": 0.24101861652450035,
+        "edge_jaccard": 0.6033519553072626,
+        "adj_edge_jaccard": 0.5888100499527118,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 903,
+        "edge_fp": 235,
+        "edge_fn": 242,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 3,
+        "num_pred_nodes": 16941,
+        "node_recall": 0.9914821124361158,
+        "total_node_ratio": 0.976779463243874,
+        "edge_jaccard": 0.6543478260869565,
+        "adj_edge_jaccard": 0.5904324742529552,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 344,
+        "edge_fp": 21,
+        "edge_fn": 114,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 2,
+        "num_pred_nodes": 17712,
+        "node_recall": 0.8938428874734607,
+        "total_node_ratio": 0.26333808844507844,
+        "edge_jaccard": 0.7181628392484343,
+        "adj_edge_jaccard": 0.6992508763204369,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 542,
+        "edge_fp": 70,
+        "edge_fn": 157,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 1,
+        "num_pred_nodes": 25425,
+        "node_recall": 0.9986187845303868,
+        "total_node_ratio": 0.6988507283175197,
+        "edge_jaccard": 0.7048114434330299,
+        "adj_edge_jaccard": 0.6555556443760604,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1193,
+        "edge_fp": 42,
+        "edge_fn": 155,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 4,
+        "num_pred_nodes": 59156,
+        "node_recall": 0.9992952783650458,
+        "total_node_ratio": 0.9861003861003861,
+        "edge_jaccard": 0.858273381294964,
+        "adj_edge_jaccard": 0.7736390100274992,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "deltas": {
+    "static_greedy": {
+      "score": 0.003381062562989201,
+      "edge_jaccard": 0.003821935709518054,
+      "node_recall": 0.0,
+      "division_jaccard": 0.0
+    },
+    "frozen_image_flow": {
+      "score": -0.020454164821055554,
+      "edge_jaccard": -0.021274714620525104,
+      "node_recall": 0.0,
+      "division_jaccard": -0.007246376811594203
+    }
+  },
+  "paired": {
+    "static_greedy": [
+      {
+        "stem": "6bba_283bf9f1",
+        "score_delta": 0.004560865817660131
+      },
+      {
+        "stem": "6bba_5b28472a",
+        "score_delta": -0.007769939932671832
+      },
+      {
+        "stem": "6bba_c73a1d11",
+        "score_delta": 0.005084928824842516
+      },
+      {
+        "stem": "6bba_67ebd073",
+        "score_delta": 0.004353493899835192
+      },
+      {
+        "stem": "6bba_5c039895",
+        "score_delta": 0.004275859427432915
+      },
+      {
+        "stem": "6bba_fc5f39dc",
+        "score_delta": 0.0017591534637075856
+      },
+      {
+        "stem": "6bba_87289e13",
+        "score_delta": 0.0043554894474543415
+      },
+      {
+        "stem": "6bba_cdcfe533",
+        "score_delta": 0.003970790846386074
+      }
+    ],
+    "frozen_image_flow": [
+      {
+        "stem": "6bba_283bf9f1",
+        "score_delta": -0.030496462047499562
+      },
+      {
+        "stem": "6bba_5b28472a",
+        "score_delta": -0.009245685404812076
+      },
+      {
+        "stem": "6bba_c73a1d11",
+        "score_delta": 0.0008496158845184287
+      },
+      {
+        "stem": "6bba_67ebd073",
+        "score_delta": -0.00414071765086288
+      },
+      {
+        "stem": "6bba_5c039895",
+        "score_delta": -0.020921092943278374
+      },
+      {
+        "stem": "6bba_fc5f39dc",
+        "score_delta": -0.004507849114333662
+      },
+      {
+        "stem": "6bba_87289e13",
+        "score_delta": -0.0485389887856541
+      },
+      {
+        "stem": "6bba_cdcfe533",
+        "score_delta": -0.027453637541610565
+      }
+    ]
+  },
+  "baseline_report_sha256": "db9d75ad43a9bc74d3f38f3aef48e5e617510a6abb93205a0387e726415d080f",
+  "elapsed_seconds": 41.26600000000326,
+  "candidate_source_sha256": "a9b8c18a238999f23bb2f9e292377e618e00b08b4817741c417ee7bad5100fd4",
+  "nodes_preserved": true,
+  "target_audit_opened": false,
+  "authorized_for_submission": false,
+  "limitation": "No divisions can be predicted by this one-to-one ablation. Not the full Jaqaman algorithm, not an embryo audit or submission candidate."
+}

@@ -1,0 +1,1641 @@
+{
+  "run_id": "public-pruned-track-recovery-v1",
+  "status": "complete",
+  "receipt": {
+    "run_id": "public-pruned-track-recovery-v1",
+    "pins": {
+      "research/public_pruned_track_recovery.py": "68827c90bda26f77eded76cc3222d29d4d31f8faf4dd957ad21e82dabf79980d",
+      "scripts/run-public-pruned-track-recovery-v1.py": "1da47904b34ed93603f32af3662919bf17bb27ce78129a8fc695c7743efadd67",
+      "research/public_d4_quality.py": "59b0090f8f68632faccdb7101c07ecbfc3f3a9077f96bf181bc80e595456bd36",
+      "reports/experiments/public-pruned-track-recovery-v1-design.md": "7fbefc546a3d9d1db3c186ab303550f4822cba2bfde7e0fd10111a83e2e11520"
+    },
+    "records": {
+      "44b6_24264f12": {
+        "original": {
+          "path": "44b6_24264f12-original-recovery.json",
+          "sha256": "fcc0ee0c2c81a591f03ff1ad24f2b5a7237200516dbac4176b9f9b321403d535",
+          "motion_counts": {
+            "motion_relink_edges": 25965,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 25749,
+            "motion_relink_relaxed_edges": 216
+          },
+          "seconds": 33.78200000000652,
+          "tested_short_components": 69,
+          "eligible_components": 17,
+          "recovered_components": 17,
+          "added_nodes": 78,
+          "added_edges": 61,
+          "node_budget": 120,
+          "components": [
+            {
+              "node_ids": [
+                27892,
+                28176,
+                28464,
+                28749,
+                29033
+              ],
+              "mean_edge_probability": 0.9555638283491135,
+              "mean_edge_distance_um": 0.7036456405748563
+            },
+            {
+              "node_ids": [
+                27918,
+                28203,
+                28489,
+                28774
+              ],
+              "mean_edge_probability": 0.9536479115486145,
+              "mean_edge_distance_um": 0.5416666666666666
+            },
+            {
+              "node_ids": [
+                23798,
+                24102,
+                24399,
+                24702,
+                25003
+              ],
+              "mean_edge_probability": 0.9603444039821625,
+              "mean_edge_distance_um": 1.5552985194281397
+            },
+            {
+              "node_ids": [
+                7782,
+                8061,
+                8358,
+                8658,
+                8941
+              ],
+              "mean_edge_probability": 0.9558572769165039,
+              "mean_edge_distance_um": 1.7209026158592895
+            },
+            {
+              "node_ids": [
+                190,
+                424,
+                673,
+                917,
+                1153
+              ],
+              "mean_edge_probability": 0.9558545798063278,
+              "mean_edge_distance_um": 2.1109369217245693
+            },
+            {
+              "node_ids": [
+                26887,
+                27163,
+                27449,
+                27733,
+                28012
+              ],
+              "mean_edge_probability": 0.9278944432735443,
+              "mean_edge_distance_um": 1.21875
+            },
+            {
+              "node_ids": [
+                28080,
+                28367,
+                28656,
+                28939
+              ],
+              "mean_edge_probability": 0.942978302637736,
+              "mean_edge_distance_um": 1.8493656796187599
+            },
+            {
+              "node_ids": [
+                27682,
+                27959,
+                28237,
+                28527,
+                28818
+              ],
+              "mean_edge_probability": 0.9274420589208603,
+              "mean_edge_distance_um": 1.2781699002889262
+            },
+            {
+              "node_ids": [
+                218,
+                456,
+                701,
+                945,
+                1185
+              ],
+              "mean_edge_probability": 0.9505772292613983,
+              "mean_edge_distance_um": 2.550403727433806
+            },
+            {
+              "node_ids": [
+                13807,
+                14128,
+                14439,
+                14753
+              ],
+              "mean_edge_probability": 0.9274873534838358,
+              "mean_edge_distance_um": 1.4798608540998084
+            },
+            {
+              "node_ids": [
+                17386,
+                17696,
+                18002,
+                18316
+              ],
+              "mean_edge_probability": 0.9087306062380472,
+              "mean_edge_distance_um": 0.7660323462854265
+            },
+            {
+              "node_ids": [
+                3566,
+                3832,
+                4095,
+                4358,
+                4641
+              ],
+              "mean_edge_probability": 0.9212890714406967,
+              "mean_edge_distance_um": 1.8168052317185792
+            },
+            {
+              "node_ids": [
+                8474,
+                8778,
+                9056,
+                9344
+              ],
+              "mean_edge_probability": 0.9108707308769226,
+              "mean_edge_distance_um": 2.0737313592375197
+            },
+            {
+              "node_ids": [
+                18755,
+                19076,
+                19380,
+                19695,
+                20019
+              ],
+              "mean_edge_probability": 0.9004813432693481,
+              "mean_edge_distance_um": 2.1298227791422093
+            },
+            {
+              "node_ids": [
+                4389,
+                4665,
+                4936,
+                5207,
+                5483
+              ],
+              "mean_edge_probability": 0.9018938541412354,
+              "mean_edge_distance_um": 2.2980970388562794
+            },
+            {
+              "node_ids": [
+                232,
+                469,
+                718,
+                962
+              ],
+              "mean_edge_probability": 0.8840528726577759,
+              "mean_edge_distance_um": 2.0737313592375197
+            },
+            {
+              "node_ids": [
+                3076,
+                3331,
+                3588,
+                3848
+              ],
+              "mean_edge_probability": 0.880309263865153,
+              "mean_edge_distance_um": 2.0737313592375197
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "44b6_24264f12-corrected-recovery.json",
+          "sha256": "cbd18d9c0fd9c8890f69c67c182f0b99a98746645b888aefb2b5c3ec97ce329f",
+          "motion_counts": {
+            "motion_relink_edges": 26122,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 25907,
+            "motion_relink_relaxed_edges": 215
+          },
+          "seconds": 31.73399999999674,
+          "tested_short_components": 82,
+          "eligible_components": 26,
+          "recovered_components": 26,
+          "added_nodes": 119,
+          "added_edges": 93,
+          "node_budget": 120,
+          "components": [
+            {
+              "node_ids": [
+                28002,
+                28285,
+                28568,
+                28859,
+                29145
+              ],
+              "mean_edge_probability": 0.9533853679895401,
+              "mean_edge_distance_um": 0.9807742597140698
+            },
+            {
+              "node_ids": [
+                27755,
+                28028,
+                28312,
+                28595,
+                28884
+              ],
+              "mean_edge_probability": 0.94392529129982,
+              "mean_edge_distance_um": 0.8125
+            },
+            {
+              "node_ids": [
+                28193,
+                28475,
+                28763,
+                29050
+              ],
+              "mean_edge_probability": 0.950350801150004,
+              "mean_edge_distance_um": 1.3076990129520931
+            },
+            {
+              "node_ids": [
+                6256,
+                6532,
+                6811,
+                7076
+              ],
+              "mean_edge_probability": 0.9596353967984518,
+              "mean_edge_distance_um": 1.8493656796187599
+            },
+            {
+              "node_ids": [
+                7794,
+                8079,
+                8375,
+                8681,
+                8974
+              ],
+              "mean_edge_probability": 0.9505654722452164,
+              "mean_edge_distance_um": 1.7209026158592895
+            },
+            {
+              "node_ids": [
+                8914,
+                9208,
+                9498,
+                9778,
+                10057
+              ],
+              "mean_edge_probability": 0.9313849210739136,
+              "mean_edge_distance_um": 1.1098956405748563
+            },
+            {
+              "node_ids": [
+                219,
+                460,
+                702,
+                943,
+                1183
+              ],
+              "mean_edge_probability": 0.958912581205368,
+              "mean_edge_distance_um": 2.550403727433806
+            },
+            {
+              "node_ids": [
+                27792,
+                28070,
+                28348,
+                28634,
+                28928
+              ],
+              "mean_edge_probability": 0.9277123063802719,
+              "mean_edge_distance_um": 1.2781699002889262
+            },
+            {
+              "node_ids": [
+                192,
+                429,
+                673,
+                911,
+                1152
+              ],
+              "mean_edge_probability": 0.9589436948299408,
+              "mean_edge_distance_um": 2.890218156723072
+            },
+            {
+              "node_ids": [
+                1938,
+                2191,
+                2438,
+                2694,
+                2954
+              ],
+              "mean_edge_probability": 0.9222880899906158,
+              "mean_edge_distance_um": 1.1490485194281397
+            },
+            {
+              "node_ids": [
+                3574,
+                3833,
+                4092,
+                4353,
+                4634
+              ],
+              "mean_edge_probability": 0.9166343808174133,
+              "mean_edge_distance_um": 1.3146526158592895
+            },
+            {
+              "node_ids": [
+                1492,
+                1735,
+                1988,
+                2244,
+                2491
+              ],
+              "mean_edge_probability": 0.93146812915802,
+              "mean_edge_distance_um": 2.1271526158592895
+            },
+            {
+              "node_ids": [
+                8495,
+                8806,
+                9098,
+                9389
+              ],
+              "mean_edge_probability": 0.9233590563138326,
+              "mean_edge_distance_um": 2.0737313592375197
+            },
+            {
+              "node_ids": [
+                2815,
+                3079,
+                3335,
+                3592,
+                3848
+              ],
+              "mean_edge_probability": 0.9187510013580322,
+              "mean_edge_distance_um": 2.1298227791422093
+            },
+            {
+              "node_ids": [
+                52,
+                296,
+                533,
+                781
+              ],
+              "mean_edge_probability": 0.9353569348653158,
+              "mean_edge_distance_um": 2.839763705522946
+            },
+            {
+              "node_ids": [
+                28213,
+                28495,
+                28783,
+                29073
+              ],
+              "mean_edge_probability": 0.8983946641286215,
+              "mean_edge_distance_um": 1.3076990129520931
+            },
+            {
+              "node_ids": [
+                8101,
+                8387,
+                8693,
+                8984
+              ],
+              "mean_edge_probability": 0.8979910214742025,
+              "mean_edge_distance_um": 1.3076990129520931
+            },
+            {
+              "node_ids": [
+                13872,
+                14200,
+                14514,
+                14831
+              ],
+              "mean_edge_probability": 0.8984552224477133,
+              "mean_edge_distance_um": 1.4798608540998084
+            },
+            {
+              "node_ids": [
+                4383,
+                4659,
+                4933,
+                5203,
+                5479
+              ],
+              "mean_edge_probability": 0.9098390936851501,
+              "mean_edge_distance_um": 2.2980970388562794
+            },
+            {
+              "node_ids": [
+                28128,
+                28408,
+                28691,
+                28985
+              ],
+              "mean_edge_probability": 0.8858427206675211,
+              "mean_edge_distance_um": 1.0833333333333333
+            },
+            {
+              "node_ids": [
+                10784,
+                11094,
+                11394,
+                11700
+              ],
+              "mean_edge_probability": 0.9115468660990397,
+              "mean_edge_distance_um": 2.634505956959648
+            },
+            {
+              "node_ids": [
+                27925,
+                28205,
+                28491,
+                28777,
+                29068
+              ],
+              "mean_edge_probability": 0.8874078691005707,
+              "mean_edge_distance_um": 1.7932742597140698
+            },
+            {
+              "node_ids": [
+                26994,
+                27274,
+                27558,
+                27844,
+                28117
+              ],
+              "mean_edge_probability": 0.8960431665182114,
+              "mean_edge_distance_um": 2.2589441600029962
+            },
+            {
+              "node_ids": [
+                28256,
+                28543,
+                28833,
+                29125
+              ],
+              "mean_edge_probability": 0.8970037301381429,
+              "mean_edge_distance_um": 2.2980970388562794
+            },
+            {
+              "node_ids": [
+                27871,
+                28158,
+                28433,
+                28714,
+                29004
+              ],
+              "mean_edge_probability": 0.8867246806621552,
+              "mean_edge_distance_um": 2.2954268755733596
+            },
+            {
+              "node_ids": [
+                28048,
+                28323,
+                28606,
+                28895
+              ],
+              "mean_edge_probability": 0.8893085519472758,
+              "mean_edge_distance_um": 2.796233732591206
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "44b6_81c256f0": {
+        "original": {
+          "path": "44b6_81c256f0-original-recovery.json",
+          "sha256": "a824349915c361ed4f1b9e802867ece632271c5076411ca8c78d264567324f20",
+          "motion_counts": {
+            "motion_relink_edges": 10955,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 10935,
+            "motion_relink_relaxed_edges": 20
+          },
+          "seconds": 6.828000000008615,
+          "tested_short_components": 18,
+          "eligible_components": 4,
+          "recovered_components": 4,
+          "added_nodes": 16,
+          "added_edges": 12,
+          "node_budget": 120,
+          "components": [
+            {
+              "node_ids": [
+                60,
+                184,
+                301,
+                425
+              ],
+              "mean_edge_probability": 0.9073552886644999,
+              "mean_edge_distance_um": 0.0
+            },
+            {
+              "node_ids": [
+                75,
+                197,
+                314,
+                438
+              ],
+              "mean_edge_probability": 0.9423357645670573,
+              "mean_edge_distance_um": 1.8493656796187599
+            },
+            {
+              "node_ids": [
+                2466,
+                2586,
+                2710,
+                2829
+              ],
+              "mean_edge_probability": 0.9274792869885763,
+              "mean_edge_distance_um": 2.518902500764479
+            },
+            {
+              "node_ids": [
+                11459,
+                11562,
+                11667,
+                11767
+              ],
+              "mean_edge_probability": 0.88323974609375,
+              "mean_edge_distance_um": 1.0833333333333333
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "44b6_81c256f0-corrected-recovery.json",
+          "sha256": "eb15b99534d30b514922854fae5236497c09f6e96158becbb0ac26f7046d3267",
+          "motion_counts": {
+            "motion_relink_edges": 10872,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 10843,
+            "motion_relink_relaxed_edges": 29
+          },
+          "seconds": 5.546999999991385,
+          "tested_short_components": 24,
+          "eligible_components": 3,
+          "recovered_components": 3,
+          "added_nodes": 13,
+          "added_edges": 10,
+          "node_budget": 120,
+          "components": [
+            {
+              "node_ids": [
+                8492,
+                8605,
+                8719,
+                8834,
+                8947
+              ],
+              "mean_edge_probability": 0.9511570632457733,
+              "mean_edge_distance_um": 0.40625
+            },
+            {
+              "node_ids": [
+                2454,
+                2574,
+                2696,
+                2815
+              ],
+              "mean_edge_probability": 0.9355708956718445,
+              "mean_edge_distance_um": 2.518902500764479
+            },
+            {
+              "node_ids": [
+                11398,
+                11499,
+                11603,
+                11703
+              ],
+              "mean_edge_probability": 0.8941790660222372,
+              "mean_edge_distance_um": 1.0833333333333333
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "6bba_23af9eeb": {
+        "original": {
+          "path": "6bba_23af9eeb-original-recovery.json",
+          "sha256": "bc3271ede6b420e7e70af74035d7d1302147328336ccb5faffa99871a1e693b4",
+          "motion_counts": {
+            "motion_relink_edges": 4085,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 4011,
+            "motion_relink_relaxed_edges": 74
+          },
+          "seconds": 1.0469999999913853,
+          "tested_short_components": 24,
+          "eligible_components": 1,
+          "recovered_components": 1,
+          "added_nodes": 4,
+          "added_edges": 3,
+          "node_budget": 51,
+          "components": [
+            {
+              "node_ids": [
+                4928,
+                4960,
+                4987,
+                5017
+              ],
+              "mean_edge_probability": 0.8911845684051514,
+              "mean_edge_distance_um": 1.3076990129520931
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "6bba_23af9eeb-corrected-recovery.json",
+          "sha256": "4a9bcb735c53a2434e922d0df0a012020376d063acc558b16b6b5f6ce208521e",
+          "motion_counts": {
+            "motion_relink_edges": 4082,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 4013,
+            "motion_relink_relaxed_edges": 69
+          },
+          "seconds": 1.172000000020489,
+          "tested_short_components": 20,
+          "eligible_components": 1,
+          "recovered_components": 1,
+          "added_nodes": 5,
+          "added_edges": 4,
+          "node_budget": 51,
+          "components": [
+            {
+              "node_ids": [
+                767,
+                837,
+                908,
+                972,
+                1038
+              ],
+              "mean_edge_probability": 0.908518597483635,
+              "mean_edge_distance_um": 1.5552985194281397
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "6bba_f1fde7e0": {
+        "original": {
+          "path": "6bba_f1fde7e0-original-recovery.json",
+          "sha256": "49a19e6e45ace0423f95314ea8e7ffd7a71d23c2f82e4bec63c2f8f0ae8c36b8",
+          "motion_counts": {
+            "motion_relink_edges": 7853,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 6253,
+            "motion_relink_relaxed_edges": 1600
+          },
+          "seconds": 4.905999999988126,
+          "tested_short_components": 110,
+          "eligible_components": 28,
+          "recovered_components": 24,
+          "added_nodes": 104,
+          "added_edges": 80,
+          "node_budget": 105,
+          "components": [
+            {
+              "node_ids": [
+                451,
+                707,
+                953,
+                1192
+              ],
+              "mean_edge_probability": 0.986909826596578,
+              "mean_edge_distance_um": 1.8493656796187599
+            },
+            {
+              "node_ids": [
+                162,
+                407,
+                666,
+                911,
+                1143
+              ],
+              "mean_edge_probability": 0.989917203783989,
+              "mean_edge_distance_um": 2.5112508485805227
+            },
+            {
+              "node_ids": [
+                36,
+                289,
+                545,
+                794
+              ],
+              "mean_edge_probability": 0.9630166888237,
+              "mean_edge_distance_um": 1.3076990129520931
+            },
+            {
+              "node_ids": [
+                5726,
+                5802,
+                5898,
+                5977
+              ],
+              "mean_edge_probability": 0.9697728157043457,
+              "mean_edge_distance_um": 1.7528701544790526
+            },
+            {
+              "node_ids": [
+                5567,
+                5652,
+                5727,
+                5803
+              ],
+              "mean_edge_probability": 0.9782645503679911,
+              "mean_edge_distance_um": 2.2980970388562794
+            },
+            {
+              "node_ids": [
+                185,
+                427,
+                682,
+                927
+              ],
+              "mean_edge_probability": 0.9617774486541748,
+              "mean_edge_distance_um": 1.7042265337185682
+            },
+            {
+              "node_ids": [
+                118,
+                357,
+                613,
+                861
+              ],
+              "mean_edge_probability": 0.9510749777158102,
+              "mean_edge_distance_um": 1.326806944007555
+            },
+            {
+              "node_ids": [
+                173,
+                417,
+                662,
+                906
+              ],
+              "mean_edge_probability": 0.9693403045336405,
+              "mean_edge_distance_um": 2.265001131440697
+            },
+            {
+              "node_ids": [
+                5613,
+                5697,
+                5773,
+                5848
+              ],
+              "mean_edge_probability": 0.9391732613245646,
+              "mean_edge_distance_um": 1.211203487812386
+            },
+            {
+              "node_ids": [
+                71,
+                315,
+                574,
+                823
+              ],
+              "mean_edge_probability": 0.9371493657430013,
+              "mean_edge_distance_um": 1.4798608540998084
+            },
+            {
+              "node_ids": [
+                101,
+                331,
+                597,
+                845
+              ],
+              "mean_edge_probability": 0.9526880383491516,
+              "mean_edge_distance_um": 2.265001131440697
+            },
+            {
+              "node_ids": [
+                136,
+                377,
+                635,
+                883,
+                1127
+              ],
+              "mean_edge_probability": 0.9540034532546997,
+              "mean_edge_distance_um": 2.5628451997323305
+            },
+            {
+              "node_ids": [
+                33,
+                287,
+                544,
+                793,
+                1041
+              ],
+              "mean_edge_probability": 0.9526218175888062,
+              "mean_edge_distance_um": 2.767602175016764
+            },
+            {
+              "node_ids": [
+                239,
+                492,
+                746,
+                991
+              ],
+              "mean_edge_probability": 0.9567514459292094,
+              "mean_edge_distance_um": 2.836203487812386
+            },
+            {
+              "node_ids": [
+                186,
+                444,
+                719,
+                965,
+                1188
+              ],
+              "mean_edge_probability": 0.9462497234344482,
+              "mean_edge_distance_um": 2.5204508722934356
+            },
+            {
+              "node_ids": [
+                229,
+                487,
+                743,
+                988
+              ],
+              "mean_edge_probability": 0.9224896430969238,
+              "mean_edge_distance_um": 1.532064692570853
+            },
+            {
+              "node_ids": [
+                194,
+                437,
+                695,
+                940,
+                1186
+              ],
+              "mean_edge_probability": 0.9239236563444138,
+              "mean_edge_distance_um": 1.852694160002996
+            },
+            {
+              "node_ids": [
+                139,
+                383,
+                638,
+                885
+              ],
+              "mean_edge_probability": 0.9240984916687012,
+              "mean_edge_distance_um": 1.9772358340978127
+            },
+            {
+              "node_ids": [
+                6054,
+                6131,
+                6199,
+                6267,
+                6337
+              ],
+              "mean_edge_probability": 0.9316283315420151,
+              "mean_edge_distance_um": 2.607153464439812
+            },
+            {
+              "node_ids": [
+                232,
+                489,
+                735,
+                980
+              ],
+              "mean_edge_probability": 0.9159574508666992,
+              "mean_edge_distance_um": 1.7042265337185682
+            },
+            {
+              "node_ids": [
+                9511,
+                9574,
+                9637,
+                9698,
+                9763
+              ],
+              "mean_edge_probability": 0.8984219580888748,
+              "mean_edge_distance_um": 1.625
+            },
+            {
+              "node_ids": [
+                18,
+                257,
+                512,
+                762
+              ],
+              "mean_edge_probability": 0.9106315771738688,
+              "mean_edge_distance_um": 2.0928392902929813
+            },
+            {
+              "node_ids": [
+                7220,
+                7287,
+                7352,
+                7421,
+                7479
+              ],
+              "mean_edge_probability": 0.920094221830368,
+              "mean_edge_distance_um": 2.9853156240169985
+            },
+            {
+              "node_ids": [
+                69,
+                314,
+                572,
+                821
+              ],
+              "mean_edge_probability": 0.9061847726504008,
+              "mean_edge_distance_um": 2.422406975624772
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "6bba_f1fde7e0-corrected-recovery.json",
+          "sha256": "ad748ef5b45c355a184b1600cc450d575e95ea7965cadbf3d176ee4429be0d8e",
+          "motion_counts": {
+            "motion_relink_edges": 7826,
+            "motion_relink_frames": 99,
+            "motion_relink_tight_edges": 6230,
+            "motion_relink_relaxed_edges": 1596
+          },
+          "seconds": 4.687000000005355,
+          "tested_short_components": 109,
+          "eligible_components": 28,
+          "recovered_components": 24,
+          "added_nodes": 104,
+          "added_edges": 80,
+          "node_budget": 104,
+          "components": [
+            {
+              "node_ids": [
+                168,
+                411,
+                678,
+                921,
+                1142
+              ],
+              "mean_edge_probability": 0.990994930267334,
+              "mean_edge_distance_um": 2.685461181438639
+            },
+            {
+              "node_ids": [
+                188,
+                444,
+                680,
+                924,
+                1171
+              ],
+              "mean_edge_probability": 0.9889674037694931,
+              "mean_edge_distance_um": 2.833468419717066
+            },
+            {
+              "node_ids": [
+                5552,
+                5635,
+                5710,
+                5786
+              ],
+              "mean_edge_probability": 0.9814842740694681,
+              "mean_edge_distance_um": 2.2980970388562794
+            },
+            {
+              "node_ids": [
+                47,
+                291,
+                549,
+                796
+              ],
+              "mean_edge_probability": 0.9627830386161804,
+              "mean_edge_distance_um": 1.4798608540998084
+            },
+            {
+              "node_ids": [
+                5709,
+                5785,
+                5881,
+                5958
+              ],
+              "mean_edge_probability": 0.9634637633959452,
+              "mean_edge_distance_um": 1.7528701544790526
+            },
+            {
+              "node_ids": [
+                193,
+                431,
+                667,
+                929
+              ],
+              "mean_edge_probability": 0.9640523195266724,
+              "mean_edge_distance_um": 2.4180550415329503
+            },
+            {
+              "node_ids": [
+                5598,
+                5680,
+                5756,
+                5833
+              ],
+              "mean_edge_probability": 0.9382496476173401,
+              "mean_edge_distance_um": 1.211203487812386
+            },
+            {
+              "node_ids": [
+                140,
+                381,
+                636,
+                881,
+                1126
+              ],
+              "mean_edge_probability": 0.9531808495521545,
+              "mean_edge_distance_um": 2.5628451997323305
+            },
+            {
+              "node_ids": [
+                73,
+                318,
+                576,
+                823
+              ],
+              "mean_edge_probability": 0.9332373340924581,
+              "mean_edge_distance_um": 1.4798608540998084
+            },
+            {
+              "node_ids": [
+                104,
+                334,
+                598,
+                846
+              ],
+              "mean_edge_probability": 0.9487458268801371,
+              "mean_edge_distance_um": 2.265001131440697
+            },
+            {
+              "node_ids": [
+                246,
+                495,
+                747,
+                991
+              ],
+              "mean_edge_probability": 0.9557167092959086,
+              "mean_edge_distance_um": 2.836203487812386
+            },
+            {
+              "node_ids": [
+                111,
+                369,
+                606,
+                854
+              ],
+              "mean_edge_probability": 0.9361278017361959,
+              "mean_edge_distance_um": 2.0737313592375197
+            },
+            {
+              "node_ids": [
+                194,
+                449,
+                720,
+                966,
+                1189
+              ],
+              "mean_edge_probability": 0.9354773461818695,
+              "mean_edge_distance_um": 2.5204508722934356
+            },
+            {
+              "node_ids": [
+                235,
+                490,
+                745,
+                989
+              ],
+              "mean_edge_probability": 0.9173690676689148,
+              "mean_edge_distance_um": 1.532064692570853
+            },
+            {
+              "node_ids": [
+                139,
+                360,
+                616,
+                864
+              ],
+              "mean_edge_probability": 0.9184981187184652,
+              "mean_edge_distance_um": 1.625
+            },
+            {
+              "node_ids": [
+                9488,
+                9551,
+                9614,
+                9678,
+                9744
+              ],
+              "mean_edge_probability": 0.9023257195949554,
+              "mean_edge_distance_um": 1.21875
+            },
+            {
+              "node_ids": [
+                6034,
+                6103,
+                6168,
+                6242,
+                6314
+              ],
+              "mean_edge_probability": 0.9136959910392761,
+              "mean_edge_distance_um": 2.2732751082945923
+            },
+            {
+              "node_ids": [
+                3,
+                257,
+                528,
+                775,
+                1015
+              ],
+              "mean_edge_probability": 0.9250742793083191,
+              "mean_edge_distance_um": 2.927339594526626
+            },
+            {
+              "node_ids": [
+                202,
+                442,
+                696,
+                922,
+                1186
+              ],
+              "mean_edge_probability": 0.9133659303188324,
+              "mean_edge_distance_um": 2.3880655408637823
+            },
+            {
+              "node_ids": [
+                43,
+                300,
+                559,
+                805
+              ],
+              "mean_edge_probability": 0.9044929146766663,
+              "mean_edge_distance_um": 2.2945368211457193
+            },
+            {
+              "node_ids": [
+                71,
+                317,
+                574,
+                821
+              ],
+              "mean_edge_probability": 0.9057187835375468,
+              "mean_edge_distance_um": 2.422406975624772
+            },
+            {
+              "node_ids": [
+                195,
+                452,
+                689,
+                936
+              ],
+              "mean_edge_probability": 0.9078035553296407,
+              "mean_edge_distance_um": 2.538010431819941
+            },
+            {
+              "node_ids": [
+                30,
+                262,
+                516,
+                764
+              ],
+              "mean_edge_probability": 0.8992364406585693,
+              "mean_edge_distance_um": 2.3910323462854266
+            },
+            {
+              "node_ids": [
+                238,
+                492,
+                736,
+                980
+              ],
+              "mean_edge_probability": 0.8810353477795919,
+              "mean_edge_distance_um": 1.625
+            }
+          ],
+          "existing_output_unchanged": true,
+          "invented_detections": false,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      }
+    },
+    "ground_truth_used": false
+  },
+  "manifest_sha256": "fa45b63d3e23591ebcdcf72df3d41c250336a9071a81eb9afe1c22d57ed49a72",
+  "per_movie": {
+    "original_recovery": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27168,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.030926270253861042,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8950955561601852,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11300,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.12415439713489852,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9875845602865101,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 0,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 4179,
+        "node_recall": 1.0,
+        "total_node_ratio": -0.06089887640449438,
+        "edge_jaccard": 0.9979959919839679,
+        "adj_edge_jaccard": 1.004073675440769,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 30,
+        "edge_fn": 27,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8213,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.09148230088495575,
+        "edge_jaccard": 0.8802521008403361,
+        "adj_edge_jaccard": 0.8883048495947051,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ],
+    "corrected_recovery": [
+      {
+        "edge_tp": 213,
+        "edge_fp": 9,
+        "edge_fn": 8,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 27325,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.03688384624141464,
+        "edge_jaccard": 0.9260869565217391,
+        "adj_edge_jaccard": 0.9226711916306863,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11170,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.1112216474333466,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9888778352566654,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 497,
+        "edge_fp": 2,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4182,
+        "node_recall": 0.9980506822612085,
+        "total_node_ratio": -0.0602247191011236,
+        "edge_jaccard": 0.9920159680638723,
+        "adj_edge_jaccard": 0.9979903563659198,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 420,
+        "edge_fp": 28,
+        "edge_fn": 26,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8197,
+        "node_recall": 0.9831932773109243,
+        "total_node_ratio": -0.09325221238938053,
+        "edge_jaccard": 0.8860759493670886,
+        "adj_edge_jaccard": 0.8943388036294387,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "original_recovery": {
+      "n": 4,
+      "edge_jaccard": 0.9417199715707179,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 1,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9443976450078958,
+      "n_adj": 4,
+      "score": 0.9443976450078958
+    },
+    "corrected_recovery": {
+      "n": 4,
+      "edge_jaccard": 0.9465049928673324,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 1,
+      "division_fn": 0,
+      "node_recall": 0.993137076849555,
+      "adj_edge_jaccard": 0.9493103203140519,
+      "n_adj": 4,
+      "score": 0.9493103203140519
+    }
+  },
+  "by_embryo": {
+    "original_recovery": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9372722548011251,
+        "n_adj": 2,
+        "score": 0.9372722548011251
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9405128205128205,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9475547409764342,
+        "n_adj": 2,
+        "score": 0.9475547409764342
+      }
+    },
+    "corrected_recovery": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9601873536299765,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9532161770974729,
+        "n_adj": 2,
+        "score": 0.9532161770974729
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9405128205128205,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9906219797860665,
+        "adj_edge_jaccard": 0.9475997553432614,
+        "n_adj": 2,
+        "score": 0.9475997553432614
+      }
+    }
+  },
+  "per_movie_summaries": {
+    "original_recovery": {
+      "44b6_24264f12": {
+        "n": 1,
+        "edge_jaccard": 0.8978723404255319,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.991304347826087,
+        "adj_edge_jaccard": 0.8950955561601851,
+        "n_adj": 1,
+        "score": 0.8950955561601851
+      },
+      "44b6_81c256f0": {
+        "n": 1,
+        "edge_jaccard": 1.0,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 0.9875845602865102,
+        "n_adj": 1,
+        "score": 0.9875845602865102
+      },
+      "6bba_23af9eeb": {
+        "n": 1,
+        "edge_jaccard": 0.9979959919839679,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 1.004073675440769,
+        "n_adj": 1,
+        "score": 1.004073675440769
+      },
+      "6bba_f1fde7e0": {
+        "n": 1,
+        "edge_jaccard": 0.8802521008403361,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9810924369747899,
+        "adj_edge_jaccard": 0.8883048495947051,
+        "n_adj": 1,
+        "score": 0.8883048495947051
+      }
+    },
+    "corrected_recovery": {
+      "44b6_24264f12": {
+        "n": 1,
+        "edge_jaccard": 0.9260869565217391,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.991304347826087,
+        "adj_edge_jaccard": 0.9226711916306863,
+        "n_adj": 1,
+        "score": 0.9226711916306863
+      },
+      "44b6_81c256f0": {
+        "n": 1,
+        "edge_jaccard": 1.0,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 0.9888778352566654,
+        "n_adj": 1,
+        "score": 0.9888778352566654
+      },
+      "6bba_23af9eeb": {
+        "n": 1,
+        "edge_jaccard": 0.9920159680638723,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9980506822612085,
+        "adj_edge_jaccard": 0.9979903563659198,
+        "n_adj": 1,
+        "score": 0.9979903563659198
+      },
+      "6bba_f1fde7e0": {
+        "n": 1,
+        "edge_jaccard": 0.8860759493670886,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9831932773109243,
+        "adj_edge_jaccard": 0.8943388036294386,
+        "n_adj": 1,
+        "score": 0.8943388036294386
+      }
+    }
+  },
+  "comparisons": {
+    "original_recovery": {
+      "gates": {
+        "pooled_combined_strictly_improves": false,
+        "pooled_raw_edge_jaccard_strictly_improves": false,
+        "per_embryo_combined_nonregression": false,
+        "per_movie_combined_nonregression": false
+      },
+      "diagnostic_gate_passed": false,
+      "pooled_delta": {
+        "score": -0.0004410863395925002,
+        "edge_jaccard": 0.0,
+        "adj_edge_jaccard": -0.0004410863395925002
+      },
+      "per_movie_combined_delta": {
+        "44b6_24264f12": -0.0002657535861314564,
+        "44b6_81c256f0": -0.00015917230401918392,
+        "6bba_23af9eeb": -8.970750489756263e-05,
+        "6bba_f1fde7e0": -0.0010126794080463908
+      },
+      "per_embryo_combined_delta": {
+        "44b6": -0.00021715054776072495,
+        "6bba": -0.0005403071212041199
+      },
+      "worst_movies": {
+        "original": "6bba_f1fde7e0",
+        "corrected": "6bba_f1fde7e0"
+      },
+      "independently_held_out": false,
+      "authorized_for_submission": false,
+      "limitation": "Public-checkpoint training overlap; diagnostic pass alone cannot authorize promotion",
+      "added_edge_tp_against_parent": 0
+    },
+    "corrected_recovery": {
+      "gates": {
+        "pooled_combined_strictly_improves": true,
+        "pooled_raw_edge_jaccard_strictly_improves": true,
+        "per_embryo_combined_nonregression": false,
+        "per_movie_combined_nonregression": false
+      },
+      "diagnostic_gate_passed": false,
+      "pooled_delta": {
+        "score": 0.004471588966563633,
+        "edge_jaccard": 0.004785021296614511,
+        "adj_edge_jaccard": 0.004471588966563633
+      },
+      "per_movie_combined_delta": {
+        "44b6_24264f12": 0.02730988188436978,
+        "44b6_81c256f0": 0.0011341026661360054,
+        "6bba_23af9eeb": -0.006173026579746832,
+        "6bba_f1fde7e0": 0.005021274626687111
+      },
+      "per_embryo_combined_delta": {
+        "44b6": 0.015726771748587054,
+        "6bba": -0.0004952927543769858
+      },
+      "worst_movies": {
+        "original": "6bba_f1fde7e0",
+        "corrected": "6bba_f1fde7e0"
+      },
+      "independently_held_out": false,
+      "authorized_for_submission": false,
+      "limitation": "Public-checkpoint training overlap; diagnostic pass alone cannot authorize promotion",
+      "added_edge_tp_against_parent": 3,
+      "own_parent_nonregression": {
+        "pooled_combined_delta": 0.0016909688581273619,
+        "per_movie_combined_delta": {
+          "44b6_24264f12": -0.0004181852078553039,
+          "44b6_81c256f0": -0.0001293274970153302,
+          "6bba_23af9eeb": -0.00011146246832183238,
+          "6bba_f1fde7e0": 0.005376036182367927
+        },
+        "passed": false
+      }
+    }
+  },
+  "elapsed_seconds": 104.68700000000536,
+  "gpu_hours": 0,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2"
+}

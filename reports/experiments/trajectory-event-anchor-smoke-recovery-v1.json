@@ -1,0 +1,263 @@
+{
+  "status": "required_smoke_evidence_recovered",
+  "kernel": "indarkarhana/biohub-event-anchor-acceptance",
+  "version": 1,
+  "pages": 54,
+  "files": {
+    "trajectory-smoke/movies-0.json": {
+      "bytes": 17,
+      "sha256": "3bf34268057f81f83c4d85c26b835d31cec45f72f8c6da2330937dad2d26579b"
+    },
+    "trajectory-smoke/movies-1.json": {
+      "bytes": 17,
+      "sha256": "20dc28887c9732291634d6be769f126f9f4f301450525d5f06f32f27a232253f"
+    },
+    "trajectory-smoke/movies-2.json": {
+      "bytes": 17,
+      "sha256": "3b9c5a46fe636d7750fbf1e533ca3e4dfe53a87bc1fc2bd5149896bab47cff2a"
+    },
+    "trajectory-smoke/movies-3.json": {
+      "bytes": 17,
+      "sha256": "9f89b847a918a0d6075ef48335350cfaa52249448eb30094519a394ce8326d8b"
+    },
+    "trajectory-smoke/plan.json": {
+      "bytes": 1005,
+      "sha256": "9d67618ece4af71b8a7110947e610c395e51a55d3d51baa47798d143215b38ef"
+    },
+    "trajectory-smoke/result.json": {
+      "bytes": 6040,
+      "sha256": "d2ab6dd8a85b922db93ad17e946fdf177a09c53851cbd4c6d1dd95030ccd06d7"
+    },
+    "trajectory-smoke/shard-0.log": {
+      "bytes": 2223,
+      "sha256": "161b4aeec8d926e91b58b7b04a371704b748c4b5459559e3e0c1cfa9676b752c"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/detector_coordinates_harmonic_association_production_single.jsonl": {
+      "bytes": 324,
+      "sha256": "012babc04e5da8e8282f4d8ade268067855d6005214e8ee28d8054c44bca23a5"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/inference.log": {
+      "bytes": 1589,
+      "sha256": "7063f653a28358f432f0d9ac6b41ea00aa999b3bc64ee0e7dd32579776915f4e"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/motion-repaired-prediction.json": {
+      "bytes": 267267,
+      "sha256": "a501adfda0144bdae39f963e9ac653959225fcf40cc2e7b2849b85a7c36af1c0"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/postprocess-stats.json": {
+      "bytes": 1973,
+      "sha256": "9afaf101c30f4d80306b8ed0ddd8350b3bf49d45544acfcb1255dbad90659632"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/pre-postprocess.json": {
+      "bytes": 396614,
+      "sha256": "f86823289fad51a96b798b286be6507724c163c93fe82682bfc681e15d75d496"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/prediction.json": {
+      "bytes": 267267,
+      "sha256": "a501adfda0144bdae39f963e9ac653959225fcf40cc2e7b2849b85a7c36af1c0"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/raw-candidates.npz": {
+      "bytes": 35771,
+      "sha256": "f293910c040310ab3caf37ba13a55c9da06910347e994f3e7b3d95520186e1ce"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/repair-details.json": {
+      "bytes": 3174,
+      "sha256": "89a1a40067daea2476a8c61afc31645eeb08d3b38c0cc3d220beb91ce89323ba"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/repaired-prediction.json": {
+      "bytes": 267227,
+      "sha256": "0eb7c1fe103eab9f3ec2a8dffcd96c58fc5d2a4562c2dee7fa45c8f7f963d48b"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/retention_guard_single.jsonl": {
+      "bytes": 1408,
+      "sha256": "1c3be260e81c59b04e8f6a68678b2775bb4edb10c32191209d335d00423db5a4"
+    },
+    "trajectory-smoke/shard-0/44b6_12dfb391-original/structured-repaired-prediction.json": {
+      "bytes": 267267,
+      "sha256": "a501adfda0144bdae39f963e9ac653959225fcf40cc2e7b2849b85a7c36af1c0"
+    },
+    "trajectory-smoke/shard-0/prelabel-progress.json": {
+      "bytes": 927,
+      "sha256": "c35ccac0ab94c21501bdd7afac7d39378b3fbddcab8218cdf5275124dcb62bbb"
+    },
+    "trajectory-smoke/shard-0/result.json": {
+      "bytes": 1045,
+      "sha256": "6e478f456bd213bd974e3fa8b90bd5bb26184dc0e50af300d2b90f31654a3ab5"
+    },
+    "trajectory-smoke/shard-1.log": {
+      "bytes": 2222,
+      "sha256": "850109447ca1bc438ecb4c1213dd8625330cd8dd123cb86371df51ea97f072ad"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/detector_coordinates_harmonic_association_production_single.jsonl": {
+      "bytes": 315,
+      "sha256": "e98e6ad71319d268b019521f12fb19b850268da02ec0c887c3b4d72b278fa34b"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/inference.log": {
+      "bytes": 1574,
+      "sha256": "132c202b08fc0515d80c97a400b52c0ac95ade3ab511cafbf7149ce69bc20885"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/motion-repaired-prediction.json": {
+      "bytes": 32077,
+      "sha256": "35414bd134a902daa19bc7011fc66e4065b381f4068ef73842bbc03e6dbb1e2f"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/postprocess-stats.json": {
+      "bytes": 1966,
+      "sha256": "f1e1c20fb4816491b19a1ccebc87f76ed52378abb0e47426956044452aab1f61"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/pre-postprocess.json": {
+      "bytes": 64318,
+      "sha256": "f864a057af3a63c0ad0b1b83377b445b8b7189a5fd70239c369a6440cbc2a3ed"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/prediction.json": {
+      "bytes": 32077,
+      "sha256": "35414bd134a902daa19bc7011fc66e4065b381f4068ef73842bbc03e6dbb1e2f"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/raw-candidates.npz": {
+      "bytes": 7414,
+      "sha256": "7d0b606e7a5a5a6ad5c08d948a1d42ce545823913c5d75a32f5493646f42355b"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/repair-details.json": {
+      "bytes": 3073,
+      "sha256": "32f0b79d5c0bbbe0d68abfdd4c63a8c541d0a3f0d54f3c1950d007286fcb962f"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/repaired-prediction.json": {
+      "bytes": 31887,
+      "sha256": "00e9b14ee5eca5632b74bbae10e3ead4005235eb270cb3dc14dd9f1ad9f8d33f"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/retention_guard_single.jsonl": {
+      "bytes": 1346,
+      "sha256": "96b3985ea71b08f8d3ec1c612f9b19bd8dd2d9843734c4c37a701620f043e36c"
+    },
+    "trajectory-smoke/shard-1/6bba_062c8d37-original/structured-repaired-prediction.json": {
+      "bytes": 32077,
+      "sha256": "417331e2510864051ef72b6a3eebb98697c3c18c82f2b258d6a717d857292ddb"
+    },
+    "trajectory-smoke/shard-1/prelabel-progress.json": {
+      "bytes": 926,
+      "sha256": "9f834a9045e4428b5d14f69fd8421b4e44b0127795513a36048705893521a196"
+    },
+    "trajectory-smoke/shard-1/result.json": {
+      "bytes": 1045,
+      "sha256": "73e2e5183bbadb589fd7f3cb813ac63aecb6ddcc4aca356947e1afb3e27c0f0d"
+    },
+    "trajectory-smoke/shard-2.log": {
+      "bytes": 2223,
+      "sha256": "751b14046a0d7d91500d1efb9d25de51526413041f71bd34a2ebee1ba2beb454"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/detector_coordinates_harmonic_association_production_single.jsonl": {
+      "bytes": 324,
+      "sha256": "90f48b9213ac83031afcff8aa8f9f587ae043f90e87d56b5d7b0890f8001c1c8"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/inference.log": {
+      "bytes": 1590,
+      "sha256": "c70580cce587233854c59eedfdfb14aa6231479cebf87f6527c83bacfc1e86c7"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/motion-repaired-prediction.json": {
+      "bytes": 216056,
+      "sha256": "cbcace71eab04e84cd11eaecab79bc8951c349b346d758ad7507e8e26a8b356f"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/postprocess-stats.json": {
+      "bytes": 1972,
+      "sha256": "79c6fcfa4c2398008a293edcda28944d93c5121e5b959fe9b8a82a35556f8459"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/pre-postprocess.json": {
+      "bytes": 328591,
+      "sha256": "24394cbee493f8a23179c0eabcc92f65b752dc1f251152fc99b0405ba7ad83cb"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/prediction.json": {
+      "bytes": 216056,
+      "sha256": "cbcace71eab04e84cd11eaecab79bc8951c349b346d758ad7507e8e26a8b356f"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/raw-candidates.npz": {
+      "bytes": 32838,
+      "sha256": "e075d9fa0e334c465c36fa6c1a4aae2ed60d22de01492cbdf0429f7d22e9e80e"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/repair-details.json": {
+      "bytes": 3171,
+      "sha256": "93be3b4616db5a7525f806d8110d4d5532731303a418bef66e9f8459e0af4aef"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/repaired-prediction.json": {
+      "bytes": 215976,
+      "sha256": "b208d22f255c2614006ba1858509eebbdd7137e151bdc242df5759ca594c31c3"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/retention_guard_single.jsonl": {
+      "bytes": 1406,
+      "sha256": "c77992b4d12ab7bfcb7b6309a5c243cbfd834e2ddec02a61ad6fba004256086b"
+    },
+    "trajectory-smoke/shard-2/6bba_07e24132-original/structured-repaired-prediction.json": {
+      "bytes": 216056,
+      "sha256": "cbcace71eab04e84cd11eaecab79bc8951c349b346d758ad7507e8e26a8b356f"
+    },
+    "trajectory-smoke/shard-2/prelabel-progress.json": {
+      "bytes": 927,
+      "sha256": "aba8b049fa77409083e60d35268cdb64c17b630245d50514506f21723b46e0d5"
+    },
+    "trajectory-smoke/shard-2/result.json": {
+      "bytes": 1045,
+      "sha256": "bb4cf5137b1022a47994ba8536d9982f0ee6b601a7068ab303bf011df73f6702"
+    },
+    "trajectory-smoke/shard-3.log": {
+      "bytes": 2228,
+      "sha256": "572747649f99cbb0387afb520715f0c7c42152a566c6635d141fb3bc814f99ac"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/detector_coordinates_harmonic_association_production_single.jsonl": {
+      "bytes": 324,
+      "sha256": "659fec00735a07616d24438e20173140a054ca922084411ca8538bd434644d49"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/inference.log": {
+      "bytes": 1590,
+      "sha256": "e79bf8b97637c44124488ae480a62822016c0e2044c98e51466145a56ada5ddc"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/motion-repaired-prediction.json": {
+      "bytes": 116864,
+      "sha256": "5fa2f05bab7072aef85c82a7901da67430b9fca7a01c3048da8b617848b41e8f"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/postprocess-stats.json": {
+      "bytes": 1971,
+      "sha256": "bd74478b6bd4e564561429882a3c189c830ff30cb81029ff2f263235dcbf4919"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/pre-postprocess.json": {
+      "bytes": 176639,
+      "sha256": "1c9d896be748b0bcb9f8717c7c97845a423179f7f8f8839c98594574236c0848"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/prediction.json": {
+      "bytes": 116864,
+      "sha256": "5fa2f05bab7072aef85c82a7901da67430b9fca7a01c3048da8b617848b41e8f"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/raw-candidates.npz": {
+      "bytes": 17089,
+      "sha256": "0a586218f22ed9db9d23a14dc1202eac2e925fa6d0f8a76ae0d93612889610af"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/repair-details.json": {
+      "bytes": 3161,
+      "sha256": "51ff6b04f072b466c6e209ee939241c2d80453b29d9194829210da74a4278cf8"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/repaired-prediction.json": {
+      "bytes": 116788,
+      "sha256": "b9f9925e7eb889eca3cfe3bd179e85aaef72b43664d3f56e9e4afa2886ed12a8"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/retention_guard_single.jsonl": {
+      "bytes": 1408,
+      "sha256": "77929ac5ff0c56962346dc38fb0028d6c46e360abdfb1fd691624340d56a836a"
+    },
+    "trajectory-smoke/shard-3/44b6_267148e4-original/structured-repaired-prediction.json": {
+      "bytes": 116864,
+      "sha256": "5fa2f05bab7072aef85c82a7901da67430b9fca7a01c3048da8b617848b41e8f"
+    },
+    "trajectory-smoke/shard-3/prelabel-progress.json": {
+      "bytes": 929,
+      "sha256": "900ef805b424d4dc624560d2c50b8f258ef227e9916bd1ab9eade274ec6aecbe"
+    },
+    "trajectory-smoke/shard-3/result.json": {
+      "bytes": 1048,
+      "sha256": "51d9170e7358eb63f1c70a8ce85e864fad7b9b6a11463b75ec07a493a650cffe"
+    },
+    "trajectory-smoke/smoke-predictions.csv": {
+      "bytes": 594238,
+      "sha256": "44f31df747d3aa0f79ab19cc356d11aa843ff8024d3a63d0cfb067926a6eb156"
+    }
+  },
+  "gpu_job_restarted": false,
+  "updated_utc": "2026-09-14T17:16:38.926320+00:00",
+  "remote_version_verified": 1
+}

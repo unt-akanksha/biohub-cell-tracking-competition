@@ -1,0 +1,119 @@
+{
+  "status": "verified_backup",
+  "groups": [
+    {
+      "name": "native-division-v3-feature-full",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-v3-feature-full-output",
+      "remote_root": "/dev/shm/biohub-native-division-v3-feature-full",
+      "records": [
+        {
+          "path": "44b6.npz",
+          "bytes": 22868489,
+          "sha256": "3703b8774ee74002bb641cdf656080d8d9b8127e664f83ae006bdf3b8a2b21a3"
+        },
+        {
+          "path": "6bba.npz",
+          "bytes": 22786892,
+          "sha256": "89cb14acceec26c98f961b45b308fa15d9f18d55e8f6d07383ef3ad36551847b"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2158,
+          "sha256": "50173b81c2798f8524a14ff9b8d11752a7ea714694184f26e943846db5722130"
+        },
+        {
+          "path": "ROWS.json",
+          "bytes": 333926,
+          "sha256": "5087ce748213fd0fdbb85616036bcf89c1710cf12582bf0bbb39758e24ae27b3"
+        }
+      ]
+    },
+    {
+      "name": "native-division-v3-feature-smoke",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-v3-feature-smoke-output",
+      "remote_root": "/dev/shm/biohub-native-division-v3-feature-smoke",
+      "records": [
+        {
+          "path": "44b6.npz",
+          "bytes": 120606,
+          "sha256": "e417a9331dcc7e0d09c634d85ea5e53c60071afee305a55532278f89610714f3"
+        },
+        {
+          "path": "6bba.npz",
+          "bytes": 120125,
+          "sha256": "280b09c6f95e82c5947851ad87728ee9a0f058dc68a86f18638d7d9e2ccfd7d6"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2150,
+          "sha256": "2754a9d883ff63cc4953d7ccc1c52910b7b254a4bfe79b5e209f2d77d6944cb0"
+        },
+        {
+          "path": "ROWS.json",
+          "bytes": 1747,
+          "sha256": "9e1ac756d291e8ef94ddf66dfc4c63a8e196ee44c67d556d61d70d649c379df9"
+        }
+      ]
+    },
+    {
+      "name": "native-division-v3-head-full",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-v3-head-full-output",
+      "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-division-v3-head-full",
+      "records": [
+        {
+          "path": "44b6-cnn_origin.pt",
+          "bytes": 29012,
+          "sha256": "a685e9b36235078610ffb3fe4989dea1e78127dbed18ad5024b1c2effaa60d5e"
+        },
+        {
+          "path": "44b6-geometry.pt",
+          "bytes": 3010,
+          "sha256": "2fe74a51009becf35ce710b9f154081f5780c11f67aa8483d5761ee44e4dff5e"
+        },
+        {
+          "path": "44b6-transformer_origin.pt",
+          "bytes": 29404,
+          "sha256": "a2553aae1a57b94fd70f7096a74897458c98a6271df5b4b8078525939f65fdde"
+        },
+        {
+          "path": "6bba-cnn_origin.pt",
+          "bytes": 29012,
+          "sha256": "1b0925c19b27712890697425580ae00a5214358cf4f12aeb3ac8a0807a1d61b0"
+        },
+        {
+          "path": "6bba-geometry.pt",
+          "bytes": 3010,
+          "sha256": "6246e624c25f6c511468f55519a94cb617ca244ef0fb272aa3d66d9667c78ac8"
+        },
+        {
+          "path": "6bba-transformer_origin.pt",
+          "bytes": 29404,
+          "sha256": "1e091347aeec758457b301150bd0b69b7b9698ccbb0e21a22a34546e9b4c5aef"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 5015,
+          "sha256": "a98e2ded30ea8c5dc161c2274224ef3f25b70eda1c52db47708139b09c29e757"
+        }
+      ]
+    },
+    {
+      "name": "native-division-v3-head-smoke",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-v3-head-smoke-output",
+      "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-division-v3-head-smoke",
+      "records": [
+        {
+          "path": "RESULT.json",
+          "bytes": 374,
+          "sha256": "821ddda8b49f20303c7c68b11326f0df6810f27ec90031d3989a8fdaa2f00ea8"
+        },
+        {
+          "path": "smoke.pt",
+          "bytes": 2234,
+          "sha256": "9c5a04bb20a0f1577a672c2cc5cf25de3335be0dcfb5efc7e8776300dbbeb15b"
+        }
+      ]
+    }
+  ],
+  "remote_files_deleted": false
+}

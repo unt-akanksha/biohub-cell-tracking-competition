@@ -1,0 +1,200 @@
+{
+  "status": "source_supervision_complete",
+  "source_sha256": "ebf70c9e836ab7393d7cba5315fbcefd3bf9e62b8d31f2f95d7c563b393032e3",
+  "helper_sha256": "e272b09ad2f3e6c7c5e6ffb0e0bcb16c0d47870240ebdaad7d967c06ded3123a",
+  "matching_helper_sha256": "de5d6c7e753544f2cdbb9dc2c1c30d532c633365408380c44702c2d3c30f9931",
+  "records_sha256": "df9b1ee4c3f6a9d4e37443c7b0c45790ae8d5c85b5a0004fc18eb3f8e1b2991e",
+  "features_sha256": "0131997ab9573918f4ea97ed82ca7dbb99d0db4c72a9478d33d240ce9b734fb0",
+  "source_scope_sha256": "5c4b64793068565598537db6bb3af439513bde3d46e357ffeab59164bda020bf",
+  "labels_sha256": "2f5a61de4b732d29ca51981e54811eba98ecd39e93650d2f2f437fe0abce838a",
+  "terminal_sha256": "105712b15bdfcd673b554b80e09ca8c97505c3136f185b0c67c35c5b4114bbeb",
+  "feature_names": [
+    "neural_probability",
+    "motion_probability",
+    "motion_probability_known",
+    "probability_delta",
+    "neural_raw_distance",
+    "motion_raw_distance",
+    "neural_final_distance",
+    "motion_final_distance",
+    "neural_history_residual",
+    "motion_history_residual",
+    "neural_history_known",
+    "motion_history_known",
+    "neural_future_residual",
+    "motion_future_residual",
+    "future_known",
+    "future_observed",
+    "child_localization_shift",
+    "neural_parent_shift",
+    "motion_parent_shift",
+    "neural_parent_outdegree",
+    "motion_parent_outdegree",
+    "child_outdegree",
+    "neural_parent_indegree",
+    "motion_parent_indegree",
+    "local_parent_count_10um",
+    "initial_neural_parent_outdegree",
+    "initial_motion_parent_outdegree",
+    "initial_child_outdegree"
+  ],
+  "per_movie_features": {
+    "44b6_cf8fed6b": {
+      "parent_agreement": 38169,
+      "parent_disagreement": 989,
+      "eligible_observed_disagreement": 880,
+      "motif_occupied_parent": 710,
+      "motif_free_parent": 152,
+      "nonshared_observed_endpoint": 109,
+      "motif_division_adjacent": 16,
+      "motif_closed_two_parent_swap": 2
+    },
+    "44b6_f28707c6": {
+      "parent_agreement": 19393,
+      "parent_disagreement": 1005,
+      "eligible_observed_disagreement": 852,
+      "motif_free_parent": 149,
+      "motif_occupied_parent": 678,
+      "nonshared_observed_endpoint": 153,
+      "motif_division_adjacent": 23,
+      "motif_closed_two_parent_swap": 2
+    },
+    "44b6_c50204e0": {
+      "parent_agreement": 35190,
+      "parent_disagreement": 96,
+      "eligible_observed_disagreement": 72,
+      "motif_occupied_parent": 47,
+      "motif_free_parent": 25,
+      "nonshared_observed_endpoint": 24
+    },
+    "44b6_cf2536e8": {
+      "parent_agreement": 20605,
+      "parent_disagreement": 10,
+      "eligible_observed_disagreement": 5,
+      "motif_closed_two_parent_swap": 2,
+      "motif_occupied_parent": 3,
+      "nonshared_observed_endpoint": 5
+    },
+    "6bba_78a7bd97": {
+      "parent_agreement": 34982,
+      "parent_disagreement": 1251,
+      "eligible_observed_disagreement": 1109,
+      "motif_occupied_parent": 899,
+      "nonshared_observed_endpoint": 142,
+      "motif_division_adjacent": 3,
+      "motif_free_parent": 203,
+      "motif_closed_two_parent_swap": 4
+    },
+    "6bba_5dfe9ad1": {
+      "parent_agreement": 28386,
+      "parent_disagreement": 33,
+      "eligible_observed_disagreement": 26,
+      "motif_free_parent": 18,
+      "nonshared_observed_endpoint": 7,
+      "motif_occupied_parent": 8
+    },
+    "6bba_acd782a8": {
+      "parent_agreement": 18328,
+      "parent_disagreement": 395,
+      "eligible_observed_disagreement": 356,
+      "motif_division_adjacent": 13,
+      "nonshared_observed_endpoint": 39,
+      "motif_free_parent": 91,
+      "motif_occupied_parent": 252
+    },
+    "6bba_969618f6": {
+      "parent_agreement": 14821,
+      "parent_disagreement": 76,
+      "nonshared_observed_endpoint": 19,
+      "eligible_observed_disagreement": 57,
+      "motif_free_parent": 30,
+      "motif_occupied_parent": 26,
+      "motif_division_adjacent": 1
+    }
+  },
+  "per_movie_labels": {
+    "44b6_cf8fed6b": {
+      "unannotated_or_unmatched_child": 877,
+      "neural_parent_correct": 2,
+      "ambiguous_parent_alternative": 1
+    },
+    "44b6_f28707c6": {
+      "unannotated_or_unmatched_child": 850,
+      "ambiguous_parent_alternative": 2
+    },
+    "44b6_c50204e0": {
+      "unannotated_or_unmatched_child": 71,
+      "neural_parent_correct": 1
+    },
+    "44b6_cf2536e8": {
+      "unannotated_or_unmatched_child": 4,
+      "ambiguous_parent_alternative": 1
+    },
+    "6bba_78a7bd97": {
+      "unannotated_or_unmatched_child": 1101,
+      "neural_parent_correct": 4,
+      "ambiguous_parent_alternative": 2,
+      "parent_annotation_unavailable": 1,
+      "motion_parent_correct": 1
+    },
+    "6bba_5dfe9ad1": {
+      "unannotated_or_unmatched_child": 26
+    },
+    "6bba_acd782a8": {
+      "unannotated_or_unmatched_child": 349,
+      "neural_parent_correct": 4,
+      "parent_annotation_unavailable": 1,
+      "ambiguous_parent_alternative": 2
+    },
+    "6bba_969618f6": {
+      "unannotated_or_unmatched_child": 57
+    }
+  },
+  "annotations": {
+    "44b6_cf8fed6b": {
+      "nodes": 191,
+      "edges": 188
+    },
+    "44b6_f28707c6": {
+      "nodes": 63,
+      "edges": 61
+    },
+    "44b6_c50204e0": {
+      "nodes": 333,
+      "edges": 325
+    },
+    "44b6_cf2536e8": {
+      "nodes": 76,
+      "edges": 75
+    },
+    "6bba_78a7bd97": {
+      "nodes": 886,
+      "edges": 832
+    },
+    "6bba_5dfe9ad1": {
+      "nodes": 1542,
+      "edges": 1487
+    },
+    "6bba_acd782a8": {
+      "nodes": 356,
+      "edges": 330
+    },
+    "6bba_969618f6": {
+      "nodes": 679,
+      "edges": 658
+    }
+  },
+  "candidates": 3357,
+  "eligible_labels": 12,
+  "class_counts": {
+    "neural": 11,
+    "motion": 1,
+    "neither": 0
+  },
+  "source_only": true,
+  "holdout_opened": false,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "public_backbone_training_overlap": true,
+  "seconds": 14.375
+}

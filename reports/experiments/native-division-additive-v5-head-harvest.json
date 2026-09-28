@@ -1,0 +1,141 @@
+{
+  "status": "verified_backup",
+  "groups": [
+    {
+      "name": "native-division-additive-v5-feature-full",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-feature-full-output",
+      "remote_root": "/dev/shm/biohub-native-division-additive-v5-feature-full",
+      "records": [
+        {
+          "path": "44b6.npz",
+          "bytes": 205716,
+          "sha256": "5b27b4f3b6a71a4637706421c750b8081cb45f6f3bd3449fa3c74fee21e32d32"
+        },
+        {
+          "path": "6bba.npz",
+          "bytes": 204891,
+          "sha256": "d265f3dfec8262a947059feccf21daa5d97e0bb84d9387b5b850cf57cbd01aed"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2148,
+          "sha256": "f19ae97ea3a5c07d0786030ae77d6d3c0e87f9dd3e5c64d9f9243a36cbbae3e0"
+        },
+        {
+          "path": "ROWS.json",
+          "bytes": 2292,
+          "sha256": "58e2e8310e3dd46f6b99fad1255d2811ad504381c1323e1ad6c1570a32f6d800"
+        }
+      ]
+    },
+    {
+      "name": "native-division-additive-v5-feature-smoke",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-feature-smoke-output",
+      "remote_root": "/dev/shm/biohub-native-division-additive-v5-feature-smoke",
+      "records": [
+        {
+          "path": "44b6.npz",
+          "bytes": 20520,
+          "sha256": "2b92d125983a4b822e0302d1f8ad1115cf68d980e479a21ca164117828f65536"
+        },
+        {
+          "path": "6bba.npz",
+          "bytes": 20425,
+          "sha256": "7650fe3343f9d22dc7830d1cfc8220d76e50a869e7ac258d763d28101aca7b35"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2145,
+          "sha256": "e316b41d2fb354c2c62a3396d03bcbc614004de82d9e06be25b7e9114206b74f"
+        },
+        {
+          "path": "ROWS.json",
+          "bytes": 221,
+          "sha256": "d4a8bb6c948c149bf6d8fb42a509929922859471598bdd11f05c2343d6b5d59d"
+        }
+      ]
+    },
+    {
+      "name": "native-division-additive-v5-features-merged",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-features-merged-output",
+      "remote_root": "/dev/shm/biohub-native-division-additive-v5-features-merged",
+      "records": [
+        {
+          "path": "44b6.npz",
+          "bytes": 23073097,
+          "sha256": "8d6caeff8880ee4a2c00a7bf0898b1e77bf3ec0d33b0429c4fb4254fd596db82"
+        },
+        {
+          "path": "6bba.npz",
+          "bytes": 22990711,
+          "sha256": "fa253026da0d4516795a643b48e4bd3f60f2373f776056d09a9f75ccf744220c"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2182,
+          "sha256": "9c45e07f422f36f5fbaa9df55751e6d0542a1cb19eb37e5a2ebfaa70ee78b373"
+        }
+      ]
+    },
+    {
+      "name": "native-division-additive-v5-head-smoke",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-head-smoke-output",
+      "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-division-additive-v5-head-smoke",
+      "records": [
+        {
+          "path": "RESULT.json",
+          "bytes": 374,
+          "sha256": "04c38ea8038379b340532c60c9359137137d4c7a89eeae5f782ebc2851442734"
+        },
+        {
+          "path": "smoke.pt",
+          "bytes": 2234,
+          "sha256": "9c5a04bb20a0f1577a672c2cc5cf25de3335be0dcfb5efc7e8776300dbbeb15b"
+        }
+      ]
+    },
+    {
+      "name": "native-division-additive-v5-head-full",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-head-full-output",
+      "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-division-additive-v5-head-full",
+      "records": [
+        {
+          "path": "44b6-cnn_origin.pt",
+          "bytes": 29012,
+          "sha256": "ffdf94c487816e00e174633016780ca9b06936134b0627cd4c36c803e0a3e0d7"
+        },
+        {
+          "path": "44b6-geometry.pt",
+          "bytes": 3010,
+          "sha256": "625f32336611339d2c7da25d6b67012815e81146a77debdd38556dc26052db94"
+        },
+        {
+          "path": "44b6-transformer_origin.pt",
+          "bytes": 29404,
+          "sha256": "4e82459b94a4289f47360f5ca542bfbd4f4568210f2867ae3045c16f10d11267"
+        },
+        {
+          "path": "6bba-cnn_origin.pt",
+          "bytes": 29012,
+          "sha256": "ad5bcb833d5aa07389f271d9893c3de6631c7c76eebe06d16d7065d1f4f0cd1d"
+        },
+        {
+          "path": "6bba-geometry.pt",
+          "bytes": 3010,
+          "sha256": "e29da5b71dfcfd57baf36cdfb8e515e87446f9ef48e8ba3a5973ae24b33a28a4"
+        },
+        {
+          "path": "6bba-transformer_origin.pt",
+          "bytes": 29404,
+          "sha256": "d69b6632f710cc2cf61c7cf168ac6c5cdc136bcb63fe14770e853195d72f646c"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 7116,
+          "sha256": "89e24752a67b47e0ebca6ec89bd2fd23a65d63360e965f8c0c63fa6b575d421a"
+        }
+      ]
+    }
+  ],
+  "remote_files_deleted": false
+}

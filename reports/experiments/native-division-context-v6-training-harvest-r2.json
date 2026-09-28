@@ -1,0 +1,178 @@
+{
+  "status": "verified_backup",
+  "archive_sha256": "52db31ee28e3f5286b403466938063d4e95247bfb0f7abb6a820a3c6a48bc35d",
+  "records": [
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-context/HISTORY.json",
+      "bytes": 1019,
+      "sha256": "06f82f91008416aaa375e835167fbc63cd272575ef35c9b612ceafb97eaa6d89"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-context/RESULT.json",
+      "bytes": 554,
+      "sha256": "fc399c139b2c7afcd9889a9bfe6d7a021b77779a0884d75b15a0e12cf574b371"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-context/best.pt",
+      "bytes": 38699402,
+      "sha256": "10eb9542ed740629b490c4bab2219f1a0ce7265246394321183eeaa3166d4f89"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-control/HISTORY.json",
+      "bytes": 847,
+      "sha256": "03615d07f39cc61eb8fa128ba444df90a92843105b8d1cb45a6e08ed1a2954d5"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-control/RESULT.json",
+      "bytes": 558,
+      "sha256": "be20e37a4c10d58b9f0c4246258a2395222eb311e1bd035d0c1d3322a3bf4799"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-resnet3d-control/best.pt",
+      "bytes": 38699402,
+      "sha256": "7fd0c174bba4b7d563c6c74f47849a9f8e66571f4dfe3587442d66858f13fb68"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-context/HISTORY.json",
+      "bytes": 1006,
+      "sha256": "8d64fed054c367b06323bbbd5c4a7b81b3864db350e18b915f103ba8e1a2d586"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-context/RESULT.json",
+      "bytes": 565,
+      "sha256": "e67ae91441dd1fcec15b3baba28ebad4ed1a849c5bb5cbde2f46c57d81e329ad"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-context/best.pt",
+      "bytes": 38699402,
+      "sha256": "20d383cb6ee92b93ebc073711167ccb5366e99f7977c8fc2f281a7735b713dcc"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-control/HISTORY.json",
+      "bytes": 998,
+      "sha256": "565e0a9469858de1bbd5d3b5d553560ad202461720e0a8d19c5cf6e6556aa519"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-control/RESULT.json",
+      "bytes": 566,
+      "sha256": "d9167ad113c2c2dd1527fe4bf63e86ec1e85606872c0eaa7dc3ef9f7fd1d904f"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "44b6-token_transformer3d-control/best.pt",
+      "bytes": 38699402,
+      "sha256": "1df48da5ed4261d4d02be4ca7e60398daca30cfd310cc6c0c6cceef05773fc42"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-context/HISTORY.json",
+      "bytes": 1003,
+      "sha256": "ffb93b1152be3f335c997737632cd43a850bb12deb9f0337afd0b4b3ee2e3c5f"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-context/RESULT.json",
+      "bytes": 555,
+      "sha256": "ff6a2b8958da5f86e7df280b17fd8e3c3178a7b87b68dc58b6b3be460161359b"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-context/best.pt",
+      "bytes": 38699402,
+      "sha256": "9c1dccc316207e64a92b22594c5cf9265be6a6bf0dede98a7e07bdab279a5533"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-control/HISTORY.json",
+      "bytes": 1007,
+      "sha256": "86066a1a4011e79341f7fa0a818223de1265297d11020805a607a35cc1ca065d"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-control/RESULT.json",
+      "bytes": 555,
+      "sha256": "dd3345dcf45d0ee4b81e59b284c3ddcf82694c2fe07c4bb8445a4dba8b936a55"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-resnet3d-control/best.pt",
+      "bytes": 38699402,
+      "sha256": "6c8e33afed03ed365859265b6cef3d206e0f2424a664fa3db085977eaddc1e06"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-SOURCE_CHOICE.json",
+      "bytes": 1933,
+      "sha256": "d268aa690fb63be976597d6988be497fb60e8b152a9fe0d78dd914a84192733c"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-context/HISTORY.json",
+      "bytes": 993,
+      "sha256": "347e1b505790052c935d1adac64d4cad4875898a7509a69a0e053915fdf3d74d"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-context/RESULT.json",
+      "bytes": 566,
+      "sha256": "aea62f01183ad56bec4ae0e42b4c1e70bacd3fbec0bdbc41c07e77ef41093d25"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-context/best.pt",
+      "bytes": 38699402,
+      "sha256": "6cde5113ac94d52826009e27fbe238eba6871bbb3b4778249913a9eaeef8eb34"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-control/HISTORY.json",
+      "bytes": 992,
+      "sha256": "58f1327d778bc6d348e69e40192cd6ca1bba9222a249b6d2db274a2385699195"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-control/RESULT.json",
+      "bytes": 581,
+      "sha256": "b137086a70274f81eb727eb69da98f24c1bb0abe1b20d47abd0a68a391a520cf"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "6bba-token_transformer3d-control/best.pt",
+      "bytes": 38699402,
+      "sha256": "6bdc8625283eec4667a166657eee48bc044c45fd7604efc438bf41f70b56db9d"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "PROGRESS.json",
+      "bytes": 9349,
+      "sha256": "c8a49804a26cb03f1ef2acd9eeb09f33abeef7329389e0184500fc0a706494e3"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "RESULT.json",
+      "bytes": 9400,
+      "sha256": "02ec2e43944aa2074ee1ff797f09bc7004edacb54a1f587ac991929c7b55f257"
+    },
+    {
+      "group": "native-division-context-v6-training-full-r2",
+      "path": "resume.pt",
+      "bytes": 116118693,
+      "sha256": "8875f2953f6b9368e48d7e9d1884c3c5b5beedc10f271e42f8f580575d811f3e"
+    }
+  ],
+  "bytes": 425746956,
+  "new_or_recovered_files": 28,
+  "replaced_incomplete_files": 0,
+  "remote_files_deleted": false
+}

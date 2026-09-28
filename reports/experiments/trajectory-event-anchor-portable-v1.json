@@ -1,0 +1,80 @@
+{
+  "status": "portable_inference_verified",
+  "code_sha256": "c7f98a711adb4d3247b12297cde0b31a246043e906d8ea462a3e5f763f03d954",
+  "model_sha256": "3a7db02111037732f3130337a68ffe551b4a80ddf04f9b1690c844e292d88c4b",
+  "source_sha256": "cdcd7425baf9d873ba0fdf9a8a470e0085e1edd4842c854805a3f24c3c09df4a",
+  "quality_reference_sha256": "f56568612879bf5d7f604a459b17ca2a7f4f6185920f51af8e0cdccfa3d465b1",
+  "records": [
+    {
+      "stem": "6bba_23af9eeb",
+      "exact_graph_identity": true,
+      "seconds": 4.01600000000326,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "44b6_12dfb391",
+      "exact_graph_identity": true,
+      "seconds": 82.53100000001723,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "44b6_81c256f0",
+      "exact_graph_identity": true,
+      "seconds": 17.60899999999674,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "6bba_f1fde7e0",
+      "exact_graph_identity": true,
+      "seconds": 11.34399999998277,
+      "processed_frames": 97,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "44b6_24264f12",
+      "exact_graph_identity": true,
+      "seconds": 54.15599999995902,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "exact_graph_identity": true,
+      "seconds": 5.342999999993481,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "6bba_07e24132",
+      "exact_graph_identity": true,
+      "seconds": 49.45300000003772,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    },
+    {
+      "stem": "44b6_267148e4",
+      "exact_graph_identity": true,
+      "seconds": 38.11000000004424,
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0
+    }
+  ],
+  "training_or_annotations_included": false,
+  "movie_id_routing": false,
+  "selection_failure_preserved": true,
+  "validation_movie_failure_preserved": true,
+  "authorized_for_submission": false,
+  "blas_thread_limit": 1,
+  "seconds": 265.2029999999795
+}

@@ -1,0 +1,23 @@
+{
+  "status": "remote_process_started",
+  "utc": "2026-09-14T14:20:32.961081+00:00",
+  "batch": 2,
+  "mode": "smoke",
+  "remote_root": "/dev/shm/biohub-event-source-v1-b2.wuBipy",
+  "build_sha256": "2bb23afc7720b269b2ed004928fb3fc289e46caf8494b4b6841ab47eae72a88a",
+  "contract_sha256": "94e2ffeb0d697433ea49a125f0e55242c16773eb2a42ed65a8a225731e360e49",
+  "foreign_jobs_untouched": true,
+  "no_kaggle_experiment_launched": true,
+  "frozen_submission_untouched": true,
+  "exit_code": 0,
+  "remote": {
+    "status": "remote_process_started",
+    "pid": 61362,
+    "root": "/dev/shm/biohub-event-source-v1-b2.wuBipy",
+    "mode": "smoke",
+    "log": "/dev/shm/biohub-event-source-v1-b2.wuBipy/smoke.log",
+    "contract_sha256": "94e2ffeb0d697433ea49a125f0e55242c16773eb2a42ed65a8a225731e360e49",
+    "started_epoch": 1789395635.9539526,
+    "wall_cap_seconds": 600
+  }
+}

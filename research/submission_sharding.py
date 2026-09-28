@@ -194,10 +194,21 @@ def validate_shard_outputs(
 ) -> tuple[str, ...]:
     """Reject missing, extra, or duplicate movies before submission assembly."""
 
+    expected_indices = {shard.shard_index for shard in shards}
+    if (len(shards) != 2 or expected_indices != {0, 1}
+        or any(shard.shard_count != 2 or not shard.movie_ids for shard in shards)):
+        raise RuntimeError("invalid two-GPU shard plan")
+    if set(observed_by_shard) != expected_indices:
+        raise RuntimeError("missing or extra GPU shard outputs")
     expected_all = {movie for shard in shards for movie in shard.movie_ids}
+    if sum(len(shard.movie_ids) for shard in shards) != len(expected_all):
+        raise RuntimeError("duplicate movies in GPU shard plan")
     seen: set[str] = set()
     for shard in shards:
-        observed = {str(movie) for movie in observed_by_shard.get(shard.shard_index, ())}
+        observed_rows = tuple(str(movie) for movie in observed_by_shard[shard.shard_index])
+        observed = set(observed_rows)
+        if len(observed_rows) != len(observed):
+            raise RuntimeError(f"duplicate movie outputs within GPU shard {shard.shard_index}")
         expected = set(shard.movie_ids)
         if observed != expected:
             raise RuntimeError(

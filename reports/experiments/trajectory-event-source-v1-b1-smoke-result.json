@@ -1,0 +1,32 @@
+{
+  "run_id": "trajectory-event-source-v1-batch-1",
+  "status": "functionality_passed",
+  "authorized_for_submission": false,
+  "device": "NVIDIA A10G",
+  "torch_version": "2.5.1+cu121",
+  "contract_sha256": "11de0aec9265b7bbd01146cd7ac079f951aab34b8ed829284a993560d228853f",
+  "numpy_version": "2.5.2",
+  "mode": "smoke",
+  "movies": {
+    "6bba_d2b9fc0c": {
+      "original": {
+        "seconds": 8.229940772987902,
+        "inference_seconds": 6.773479812996811,
+        "peak_cuda_bytes": 738871808,
+        "frames": 8,
+        "nodes": 1010,
+        "edges": 883,
+        "prediction_sha256": "c01e0d19874c66cf129be048d72e93a57a1b2619dc4da027fab0ca538c46ca44",
+        "repaired_sha256": "c01e0d19874c66cf129be048d72e93a57a1b2619dc4da027fab0ca538c46ca44",
+        "added_edges": 0,
+        "repair_seconds": 0.03895948501303792
+      }
+    }
+  },
+  "ground_truth_opened": false,
+  "independently_held_out": false,
+  "kaggle_gpu_hours": 0,
+  "quality_gain_established": false,
+  "inputs_unchanged": true,
+  "elapsed_seconds": 18.884213550001732
+}

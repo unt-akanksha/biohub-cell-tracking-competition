@@ -1,0 +1,172 @@
+{
+  "status": "source_event_solver_pilot_complete",
+  "per_movie": {
+    "44b6_cf8fed6b": [
+      {
+        "t": 45,
+        "parents": 527,
+        "children": 544,
+        "options": 23389,
+        "fork_options": 14537,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.6720000000204891,
+        "solver_fallback": false
+      }
+    ],
+    "44b6_f28707c6": [
+      {
+        "t": 21,
+        "parents": 260,
+        "children": 257,
+        "options": 10875,
+        "fork_options": 7016,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.2809999999590218,
+        "solver_fallback": false
+      }
+    ],
+    "44b6_c50204e0": [
+      {
+        "t": 28,
+        "parents": 350,
+        "children": 364,
+        "options": 14958,
+        "fork_options": 9501,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.39000000001396984,
+        "solver_fallback": false
+      },
+      {
+        "t": 29,
+        "parents": 367,
+        "children": 383,
+        "options": 15890,
+        "fork_options": 10010,
+        "known_forks_representable": 1,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.4220000000204891,
+        "solver_fallback": false
+      },
+      {
+        "t": 66,
+        "parents": 396,
+        "children": 399,
+        "options": 16624,
+        "fork_options": 10348,
+        "known_forks_representable": 1,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.45300000003771856,
+        "solver_fallback": false
+      }
+    ],
+    "44b6_cf2536e8": [
+      {
+        "t": 45,
+        "parents": 195,
+        "children": 188,
+        "options": 5779,
+        "fork_options": 3910,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.125,
+        "solver_fallback": false
+      }
+    ],
+    "6bba_78a7bd97": [
+      {
+        "t": 56,
+        "parents": 480,
+        "children": 487,
+        "options": 20750,
+        "fork_options": 12899,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.5779999999795109,
+        "solver_fallback": false
+      },
+      {
+        "t": 57,
+        "parents": 499,
+        "children": 504,
+        "options": 21768,
+        "fork_options": 13449,
+        "known_forks_representable": 1,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.5779999999795109,
+        "solver_fallback": false
+      }
+    ],
+    "6bba_5dfe9ad1": [
+      {
+        "t": 28,
+        "parents": 241,
+        "children": 238,
+        "options": 9570,
+        "fork_options": 6221,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.2970000000204891,
+        "solver_fallback": false
+      }
+    ],
+    "6bba_acd782a8": [
+      {
+        "t": 60,
+        "parents": 204,
+        "children": 202,
+        "options": 8222,
+        "fork_options": 5381,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.23399999999674037,
+        "solver_fallback": false
+      }
+    ],
+    "6bba_969618f6": [
+      {
+        "t": 40,
+        "parents": 180,
+        "children": 180,
+        "options": 6961,
+        "fork_options": 4712,
+        "known_forks_representable": 1,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.18800000002374873,
+        "solver_fallback": false
+      },
+      {
+        "t": 47,
+        "parents": 173,
+        "children": 172,
+        "options": 6736,
+        "fork_options": 4546,
+        "known_forks_representable": 0,
+        "known_forks_not_representable": 0,
+        "solve_seconds": 0.20300000003771856,
+        "solver_fallback": false
+      }
+    ]
+  },
+  "totals": {
+    "known_forks_representable": 4,
+    "known_forks_not_representable": 0,
+    "solver_fallbacks": 0,
+    "known_matched_forks_in_source_labels": 4
+  },
+  "source_only": true,
+  "ground_truth_files_opened": false,
+  "existing_source_labels_used": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "graph_predictions_exported": false,
+  "quality_gain_established": false,
+  "runtime_coefficients_not_a_candidate": true,
+  "source_scope_sha256": "5c4b64793068565598537db6bb3af439513bde3d46e357ffeab59164bda020bf",
+  "source_sha256": "b9e67a866636a022144d9a604144561d9c06df158564f474007cffb3307f5de0",
+  "candidate_module_sha256": "b0140970917fe44c9d5f5599560406441c79a4488647eaf589c3a77495ac732d",
+  "solver_module_sha256": "f554fc5ff2e3b4e4d39693244e96fa226db5295e74274965cf8a771f447fcded",
+  "elapsed_seconds": 11.780999999959022
+}

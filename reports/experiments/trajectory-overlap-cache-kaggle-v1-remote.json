@@ -1,0 +1,16 @@
+{
+  "status": "verified_running_kernel_identity",
+  "observed_utc": "2026-09-14T09:20:58Z",
+  "requested_kernel": "indarkarhana/biohub-trajectory-overlap-cache-acceptance",
+  "actual_kernel": "indarkarhana/biohub-exact-cache-runtime-acceptance",
+  "kernel_id": 134314478,
+  "pushed_version": 1,
+  "last_status": "KernelWorkerStatus.RUNNING",
+  "slug_reason": "Kaggle created the new kernel from its title and reported this actual URL; do not push again under the requested slug",
+  "code_cells_exact": true,
+  "offline_gpu_and_input_metadata_exact": true,
+  "remote_notebook_sha256": "26a25f0bbd86ede30988744c58efa4711de91cc990a2adcf11775204c4ac2459",
+  "remote_metadata_sha256": "0c5847f5f5139c7b3e0d57eea600d409d23cebe0d29c3f54ef951a44f6f8cc07",
+  "contract_sha256": "99c9fb48404e31051ce3096a0901b32698d19742abb3f04d5f4dc0453f9ec411",
+  "submission_performed": false
+}

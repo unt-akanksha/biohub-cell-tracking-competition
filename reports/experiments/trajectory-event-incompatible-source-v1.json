@@ -1,0 +1,87 @@
+{
+  "status": "source_incompatibility_diagnosed",
+  "stem": "44b6_eb2880fc",
+  "t": 73,
+  "records": [
+    {
+      "max_fork_children": 8,
+      "options": 12464,
+      "reason": "incompatible_partial_constraints",
+      "feasible": false,
+      "known_parents": [
+        {
+          "parent_id": 32620,
+          "child_ids": [
+            32971,
+            32995
+          ],
+          "known_daughters": 2,
+          "required_event_present": false
+        },
+        {
+          "parent_id": 32661,
+          "child_ids": [
+            33031
+          ],
+          "known_daughters": 1,
+          "required_event_present": true
+        },
+        {
+          "parent_id": 32711,
+          "child_ids": [
+            33077
+          ],
+          "known_daughters": 1,
+          "required_event_present": true
+        }
+      ],
+      "known_constraints_retained": 4,
+      "known_constraints_outside_editable_scope": 0
+    },
+    {
+      "max_fork_children": 16,
+      "options": 26112,
+      "reason": "prepared",
+      "feasible": true,
+      "known_parents": [
+        {
+          "parent_id": 32620,
+          "child_ids": [
+            32971,
+            32995
+          ],
+          "known_daughters": 2,
+          "required_event_present": true
+        },
+        {
+          "parent_id": 32661,
+          "child_ids": [
+            33031
+          ],
+          "known_daughters": 1,
+          "required_event_present": true
+        },
+        {
+          "parent_id": 32711,
+          "child_ids": [
+            33077
+          ],
+          "known_daughters": 1,
+          "required_event_present": true
+        }
+      ],
+      "known_constraints_retained": 4,
+      "known_constraints_outside_editable_scope": 0
+    }
+  ],
+  "original_receipt_sha256": "0bacb620fb9aa70645e9ecc751704bfaa1a6f92c9c31cd0bc289652a3f3b22e7",
+  "source_sha256": "122115866adc0337dbb9ae96f5b7eb9910f34701d7510a1f783d3302e3d698fa",
+  "seconds": 3.1410000000032596,
+  "source_only": true,
+  "labels_changed": false,
+  "predictions_changed": false,
+  "training_guard_unchanged": true,
+  "production_candidate_unchanged": true,
+  "expanded_vocabulary_not_adopted": true,
+  "authorized_for_submission": false
+}

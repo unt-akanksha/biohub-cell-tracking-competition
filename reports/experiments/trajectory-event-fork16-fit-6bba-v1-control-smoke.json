@@ -1,0 +1,20 @@
+{
+  "status": "paused_at_step_limit",
+  "pid": 25752,
+  "source_only": true,
+  "source_embryo": "6bba",
+  "contract_sha256": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111",
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "selection_or_validation_opened": false,
+  "opposite_embryo_excluded_from_optimizer": true,
+  "resumed": false,
+  "control_smoke": true,
+  "invocation_start_step": 0,
+  "invocation_wall_cap": 7200,
+  "steps": 4,
+  "epochs_completed": [],
+  "checkpoint_sha256": "80e96afbf0451aedf67aad3487cb623680e3545cef2ad8b6c3836a1296e4e14c",
+  "seconds": 1.625,
+  "cache_bytes": 20420071
+}

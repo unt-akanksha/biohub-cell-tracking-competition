@@ -1,0 +1,123 @@
+{
+  "status": "real_fast_training_functionality_passed",
+  "source_only": true,
+  "exact_saved_case_reconstructions": 673,
+  "cache_bytes": 1002164445,
+  "cache_items": 673,
+  "cache_limit_bytes": 1610612736,
+  "preparation_seconds": 38.75,
+  "paired_objectives": [
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 70,
+      "reference_hinge": 0.7928765326600807,
+      "reduced_hinge": 0.7928765326600807,
+      "reference_seconds": 3.2179999999934807,
+      "reduced_seconds": 1.7820000000065193,
+      "maximum_gradient_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 64,
+      "reference_hinge": 0.0,
+      "reduced_hinge": 0.0,
+      "reference_seconds": 3.125,
+      "reduced_seconds": 1.7650000000139698,
+      "maximum_gradient_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 65,
+      "reference_hinge": 0.6302667278171777,
+      "reduced_hinge": 0.6302667278171777,
+      "reference_seconds": 3.0320000000065193,
+      "reduced_seconds": 1.702999999979511,
+      "maximum_gradient_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 71,
+      "reference_hinge": 0.0,
+      "reduced_hinge": 0.0,
+      "reference_seconds": 3.047000000020489,
+      "reduced_seconds": 1.75,
+      "maximum_gradient_difference": 0.0
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "t": 67,
+      "reference_hinge": 0.7168999225935522,
+      "reduced_hinge": 0.7168999225935522,
+      "reference_seconds": 0.10899999999674037,
+      "reduced_seconds": 0.061999999976251274,
+      "maximum_gradient_difference": 0.0
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "t": 62,
+      "reference_hinge": 0.2669530127334339,
+      "reduced_hinge": 0.2669530127334339,
+      "reference_seconds": 0.0470000000204891,
+      "reduced_seconds": 0.0470000000204891,
+      "maximum_gradient_difference": 0.0
+    }
+  ],
+  "small_fit_seconds": 8.25,
+  "small_fit_cases": 6,
+  "coefficients_not_exported": true,
+  "model_selected": false,
+  "authorized_for_submission": false,
+  "selection_or_validation_opened": false,
+  "blas_before": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 14,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\graph-analysis-venv\\Lib\\site-packages\\numpy.libs\\libscipy_openblas64_-ed4f167a5330424524f45258e7ca2c8d.dll",
+      "version": "0.3.34.106.0",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 14,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\graph-analysis-venv\\Lib\\site-packages\\scipy.libs\\libscipy_openblas-197ee2fc9b4d071f7e048078cac74115.dll",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    }
+  ],
+  "blas_limited": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\graph-analysis-venv\\Lib\\site-packages\\numpy.libs\\libscipy_openblas64_-ed4f167a5330424524f45258e7ca2c8d.dll",
+      "version": "0.3.34.106.0",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\graph-analysis-venv\\Lib\\site-packages\\scipy.libs\\libscipy_openblas-197ee2fc9b4d071f7e048078cac74115.dll",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "Haswell"
+    }
+  ],
+  "source_sha256": "17a2506ae01559044d270ca257197ca567ad8fe6c52cc18b5bca76cda439d745",
+  "case_manifest_sha256": "50e6a1e69c806dae331eaab642508d6dbaa03a7ce036093fe2bbfaa1d3403618",
+  "modules_sha256": {
+    "trajectory_event_fast_training_v1.py": "528a739e4a2d35c6d475bf1173c5ecce5aaaa6f5a6cb78d1ee6f3c1ff34cce28",
+    "trajectory_event_fast_case_store_v1.py": "369e16ae4c05afd74fbee31fef2fcb9ae89e62598f9797934b72e922af081078",
+    "trajectory_event_dominance_v1.py": "e8f7daa6b05ece8803c75313b743ce3a3d8ae1816e6203d1d54f530e381a5c3e"
+  },
+  "seconds": 66.76600000000326
+}

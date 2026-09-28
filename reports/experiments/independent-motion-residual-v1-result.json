@@ -1,0 +1,199 @@
+{
+  "status": "completed",
+  "identity": {
+    "run_id": "independent-motion-residual-v1",
+    "training_stems": [
+      "6bba_b204cac7",
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17"
+    ],
+    "initialization_sha256": "51664e6817519745330c3687c81aee50bf321b0fd59ded97e7fd79a91f21e34c",
+    "loss": "sparse_parent_classification_with_null_v1",
+    "frozen_modules": [
+      "unet",
+      "detect_head"
+    ],
+    "max_steps": 100,
+    "seed": 20260909,
+    "optimizer": {
+      "name": "AdamW",
+      "lr": 0.0001,
+      "weight_decay": 0.01
+    },
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false,
+    "motion_residual": {
+      "version": 1,
+      "scale": [
+        1.625,
+        0.40625,
+        0.40625
+      ],
+      "variance_um2": [
+        5.039403450197348,
+        1.8241133653936037,
+        2.5762211031033333
+      ],
+      "null_logit": -4.5,
+      "inference_activation": "sigmoid_of_parent_posterior_log_odds"
+    },
+    "residual_head_initialization": "zero"
+  },
+  "history": [
+    {
+      "step": 10,
+      "parent_loss": 0.6690078685060143,
+      "detector_loss": 0.022077451273798943,
+      "correct": 144,
+      "positive_links": 153,
+      "confident_correct": 140,
+      "max_nodes": 837,
+      "elapsed_seconds": 5.997783034000122
+    },
+    {
+      "step": 20,
+      "parent_loss": 1.8028653156012298,
+      "detector_loss": 0.05109780328348279,
+      "correct": 102,
+      "positive_links": 122,
+      "confident_correct": 93,
+      "max_nodes": 853,
+      "elapsed_seconds": 11.027508261000094
+    },
+    {
+      "step": 30,
+      "parent_loss": 0.7995757538825273,
+      "detector_loss": 0.057688501034863296,
+      "correct": 107,
+      "positive_links": 115,
+      "confident_correct": 105,
+      "max_nodes": 779,
+      "elapsed_seconds": 15.0491776450001
+    },
+    {
+      "step": 40,
+      "parent_loss": 0.45726477168500423,
+      "detector_loss": 0.042572590382769705,
+      "correct": 118,
+      "positive_links": 125,
+      "confident_correct": 118,
+      "max_nodes": 781,
+      "elapsed_seconds": 19.535332085000164
+    },
+    {
+      "step": 50,
+      "parent_loss": 0.6685937833040952,
+      "detector_loss": 0.05834144344553351,
+      "correct": 112,
+      "positive_links": 123,
+      "confident_correct": 108,
+      "max_nodes": 818,
+      "elapsed_seconds": 23.380893630000173
+    },
+    {
+      "step": 60,
+      "parent_loss": 0.39311064975336196,
+      "detector_loss": 0.13370269797742368,
+      "correct": 136,
+      "positive_links": 145,
+      "confident_correct": 133,
+      "max_nodes": 856,
+      "elapsed_seconds": 27.95094102799999
+    },
+    {
+      "step": 70,
+      "parent_loss": 1.145329935476184,
+      "detector_loss": 0.02442939265165478,
+      "correct": 107,
+      "positive_links": 117,
+      "confident_correct": 100,
+      "max_nodes": 825,
+      "elapsed_seconds": 31.92833385300014
+    },
+    {
+      "step": 80,
+      "parent_loss": 0.5170383125543594,
+      "detector_loss": 0.0296170680783689,
+      "correct": 128,
+      "positive_links": 139,
+      "confident_correct": 123,
+      "max_nodes": 972,
+      "elapsed_seconds": 36.225724679999985
+    },
+    {
+      "step": 90,
+      "parent_loss": 0.6561293230392039,
+      "detector_loss": 0.037431921204552056,
+      "correct": 122,
+      "positive_links": 131,
+      "confident_correct": 117,
+      "max_nodes": 763,
+      "elapsed_seconds": 39.763138862000005
+    },
+    {
+      "step": 100,
+      "parent_loss": 0.26999394986778497,
+      "detector_loss": 0.12636516217608004,
+      "correct": 102,
+      "positive_links": 104,
+      "confident_correct": 101,
+      "max_nodes": 818,
+      "elapsed_seconds": 43.172622017000094
+    }
+  ],
+  "before": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 0,
+    "checkpoint_sha256": "9effcbecab126dabc99bfa9f0ba41bdb61fd1db1ac3f22b2af803486932950b8",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 408,
+    "predicted_edges": 230,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 7,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 4,
+      "division_fn": 0,
+      "num_pred_nodes": 408
+    },
+    "elapsed_seconds": 2.0259153850001894,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false
+  },
+  "after": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 100,
+    "checkpoint_sha256": "023e8e73de66cfa75480314f3cd82e296dcb38f196a482d6bcd33ab87dab22e5",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 408,
+    "predicted_edges": 236,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 7,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 4,
+      "division_fn": 0,
+      "num_pred_nodes": 408
+    },
+    "elapsed_seconds": 0.7689548759999525,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false
+  },
+  "step100_smoke": null,
+  "frozen_detector_sha256": "3c40f4c6f68e8b431d2029e7f7b2bb20af8425e2d12109a3aa2c03b4cb9046c0",
+  "detector_unchanged": true,
+  "checkpoint_sha256": "023e8e73de66cfa75480314f3cd82e296dcb38f196a482d6bcd33ab87dab22e5",
+  "authorized_for_submission": false
+}

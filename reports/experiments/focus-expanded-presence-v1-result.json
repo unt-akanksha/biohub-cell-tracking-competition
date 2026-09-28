@@ -1,0 +1,408 @@
+{
+  "status": "completed_twelve_movie_parent_presence_fit",
+  "run_id": "focus-expanded-presence-v1",
+  "evidence": {
+    "notebook_sha256": "5a67ae0216cc809f5bae4fdf04ad642d90e91cbf577d4ae1374e07615f71a8b9",
+    "staged_identity_sha256": "ff98e5e8a565d9509bd1d71f40fab46d90b53fdf149ab9f4e7809ed956f903d7",
+    "worker_result_sha256": "ee040d09a5fd9f5c08107da5b5ff29222817ce411da5819fbe1aebe7a55b2aa4",
+    "launcher": {
+      "status": "completed",
+      "run_id": "focus-expanded-summary-v1",
+      "elapsed_seconds": 135.8435749969999,
+      "declared_budget_seconds": 3600,
+      "submission_performed": false
+    },
+    "records": [
+      {
+        "stem": "6bba_6479435d",
+        "role": "fitting",
+        "sha256": "1f2e2bb127f7af6ac9c20064b0a60b048c565b1362a74410f9659f9b4dfe75f0",
+        "rows": 512,
+        "baseline": {
+          "loss_sum": 581.1471284215985,
+          "known_parent": 492,
+          "known_absent": 20,
+          "correct_parent": 421,
+          "correct_absent": 14,
+          "nll": 1.1350529851984346
+        },
+        "labels_sha256": "7299a1499185d5f7bf2c92fb855757266d414805e6b8a3de8cf6ffb944325687",
+        "host_baseline": {
+          "loss_sum": 581.1471284215985,
+          "known_parent": 492,
+          "known_absent": 20,
+          "correct_parent": 421,
+          "correct_absent": 14,
+          "nll": 1.1350529851984346
+        }
+      },
+      {
+        "stem": "6bba_df673a83",
+        "role": "fitting",
+        "sha256": "f974831fa3c4b4d2ae7eb88a69568200664e01f59ba366c8abd12bcb145af7ee",
+        "rows": 639,
+        "baseline": {
+          "loss_sum": 128.31565505545697,
+          "known_parent": 631,
+          "known_absent": 8,
+          "correct_parent": 609,
+          "correct_absent": 2,
+          "nll": 0.20080697191777305
+        },
+        "labels_sha256": "0a7c71b14fc62942dd717c34c14ed2c5b305362c84425768ca3128e387633b20",
+        "host_baseline": {
+          "loss_sum": 128.31565505545697,
+          "known_parent": 631,
+          "known_absent": 8,
+          "correct_parent": 609,
+          "correct_absent": 2,
+          "nll": 0.20080697191777305
+        }
+      },
+      {
+        "stem": "6bba_767a1e17",
+        "role": "fitting",
+        "sha256": "c4adff5648ea5a554c16246d038003f53da34770c1768f4f6a8654eaf8794951",
+        "rows": 602,
+        "baseline": {
+          "loss_sum": 1114.4279897032775,
+          "known_parent": 587,
+          "known_absent": 15,
+          "correct_parent": 453,
+          "correct_absent": 2,
+          "nll": 1.8512092852213913
+        },
+        "labels_sha256": "605fb3812a87b0f4c0257ce59d8235daf83410fbb30bf7737ff6c7bdebf9ee7f",
+        "host_baseline": {
+          "loss_sum": 1114.4279897032775,
+          "known_parent": 587,
+          "known_absent": 15,
+          "correct_parent": 453,
+          "correct_absent": 2,
+          "nll": 1.8512092852213913
+        }
+      },
+      {
+        "stem": "6bba_2312ac41",
+        "role": "fitting",
+        "sha256": "2aaeb2dd68c2c0229ee0fb27f816927295a42e13a4a8be9876e4c56bce911eae",
+        "rows": 1117,
+        "baseline": {
+          "loss_sum": 202.1939597678404,
+          "known_parent": 1108,
+          "known_absent": 9,
+          "correct_parent": 1083,
+          "correct_absent": 5,
+          "nll": 0.1810151833194632
+        },
+        "labels_sha256": "5bd683dae14396a9421802e88981d5315495f21537e81a570a628ca08c9bf4af",
+        "host_baseline": {
+          "loss_sum": 202.1939597678404,
+          "known_parent": 1108,
+          "known_absent": 9,
+          "correct_parent": 1083,
+          "correct_absent": 5,
+          "nll": 0.1810151833194632
+        }
+      },
+      {
+        "stem": "6bba_971fa5e0",
+        "role": "fitting",
+        "sha256": "09b0c777ad21b885746fa36dd20c24ed28a62353baa4b37fac4cd4fdfe319698",
+        "rows": 764,
+        "baseline": {
+          "loss_sum": 344.7879437291949,
+          "known_parent": 762,
+          "known_absent": 2,
+          "correct_parent": 737,
+          "correct_absent": 1,
+          "nll": 0.45129312006439126
+        },
+        "labels_sha256": "a6d62e60d89f3c15b4fb8950815bd3167f4f3df6b1ba308496d0266a08169af2",
+        "host_baseline": {
+          "loss_sum": 344.7879437291949,
+          "known_parent": 762,
+          "known_absent": 2,
+          "correct_parent": 737,
+          "correct_absent": 1,
+          "nll": 0.45129312006439126
+        }
+      },
+      {
+        "stem": "6bba_cf35214c",
+        "role": "fitting",
+        "sha256": "6a8b5d5904a0fc8bab260dad891d92ad4b99049e0e7708b440e8f0077d05db98",
+        "rows": 809,
+        "baseline": {
+          "loss_sum": 272.09500693823566,
+          "known_parent": 804,
+          "known_absent": 5,
+          "correct_parent": 765,
+          "correct_absent": 3,
+          "nll": 0.3363349900349019
+        },
+        "labels_sha256": "13636472ab65062c3c0f67cd0bbd95d6a65c5c5b9c44ec7b2c5b4ff67a4105d1",
+        "host_baseline": {
+          "loss_sum": 272.09500693823566,
+          "known_parent": 804,
+          "known_absent": 5,
+          "correct_parent": 765,
+          "correct_absent": 3,
+          "nll": 0.3363349900349019
+        }
+      },
+      {
+        "stem": "6bba_cff5865f",
+        "role": "fitting",
+        "sha256": "a160328e52832a9b15eace94ca041bd839c5b1ecd6d622d955e13eeb23e6c11d",
+        "rows": 1494,
+        "baseline": {
+          "loss_sum": 494.41701384762524,
+          "known_parent": 1490,
+          "known_absent": 4,
+          "correct_parent": 1414,
+          "correct_absent": 3,
+          "nll": 0.3309350828966702
+        },
+        "labels_sha256": "186ad67619bf89d821853d4a867cd66509ddba37e88bf72652e7d62508d517a4",
+        "host_baseline": {
+          "loss_sum": 494.41701384762524,
+          "known_parent": 1490,
+          "known_absent": 4,
+          "correct_parent": 1414,
+          "correct_absent": 3,
+          "nll": 0.3309350828966702
+        }
+      },
+      {
+        "stem": "6bba_edf14583",
+        "role": "fitting",
+        "sha256": "bf899867d6d59952b871602d2a025dd5d35323c2852fd0bebccf54fbf7167fa0",
+        "rows": 745,
+        "baseline": {
+          "loss_sum": 540.3230547292479,
+          "known_parent": 736,
+          "known_absent": 9,
+          "correct_parent": 644,
+          "correct_absent": 6,
+          "nll": 0.7252658452741583
+        },
+        "labels_sha256": "981610ab92c5cc975c78880ee7ecc005d8d0d1cbedc39be0299d50925c51b5ca",
+        "host_baseline": {
+          "loss_sum": 540.3230547292479,
+          "known_parent": 736,
+          "known_absent": 9,
+          "correct_parent": 644,
+          "correct_absent": 6,
+          "nll": 0.7252658452741583
+        }
+      },
+      {
+        "stem": "6bba_1ebfb80d",
+        "role": "fitting",
+        "sha256": "456d8c6d755fc512ef4ef91d2bfa9df6089a9978036fda1faa3978d1187e8489",
+        "rows": 716,
+        "baseline": {
+          "loss_sum": 543.461415235273,
+          "known_parent": 714,
+          "known_absent": 2,
+          "correct_parent": 653,
+          "correct_absent": 2,
+          "nll": 0.7590243229542919
+        },
+        "labels_sha256": "e4550aa055c7a94294cc75b4f06026b9169507603838638c505ab67015f5feb6",
+        "host_baseline": {
+          "loss_sum": 543.461415235273,
+          "known_parent": 714,
+          "known_absent": 2,
+          "correct_parent": 653,
+          "correct_absent": 2,
+          "nll": 0.7590243229542919
+        }
+      },
+      {
+        "stem": "6bba_7d3058ae",
+        "role": "fitting",
+        "sha256": "e2914641214cc869444c0af15a62aa6ea2de8087d70cab725f99e22fc80abcd4",
+        "rows": 1164,
+        "baseline": {
+          "loss_sum": 245.4009148614949,
+          "known_parent": 1157,
+          "known_absent": 7,
+          "correct_parent": 1120,
+          "correct_absent": 5,
+          "nll": 0.21082552823152484
+        },
+        "labels_sha256": "bf7b76c25938cb6dac326024f841319d119bf89da0c276a51019e9e5d8fe1e0d",
+        "host_baseline": {
+          "loss_sum": 245.4009148614949,
+          "known_parent": 1157,
+          "known_absent": 7,
+          "correct_parent": 1120,
+          "correct_absent": 5,
+          "nll": 0.21082552823152484
+        }
+      },
+      {
+        "stem": "6bba_4f99ce20",
+        "role": "fitting",
+        "sha256": "d54c32e260a4160a3318050ff6ea08f33e9f2fc4a3a26c842f5c61395dbc0731",
+        "rows": 979,
+        "baseline": {
+          "loss_sum": 242.58111023900486,
+          "known_parent": 965,
+          "known_absent": 14,
+          "correct_parent": 937,
+          "correct_absent": 8,
+          "nll": 0.24778458655669547
+        },
+        "labels_sha256": "a04e9cb9467da3647179b43744bd241e47c9322d57e4fca39bd6fdb37c8f4009",
+        "host_baseline": {
+          "loss_sum": 242.58111023900486,
+          "known_parent": 965,
+          "known_absent": 14,
+          "correct_parent": 937,
+          "correct_absent": 8,
+          "nll": 0.24778458655669547
+        }
+      },
+      {
+        "stem": "6bba_57b7cc1e",
+        "role": "fitting",
+        "sha256": "f39455d2143013df1734a1ecc86769f8e1e6709bfefffa1d9d349d82463a8ee0",
+        "rows": 1374,
+        "baseline": {
+          "loss_sum": 2575.596382030655,
+          "known_parent": 1308,
+          "known_absent": 66,
+          "correct_parent": 999,
+          "correct_absent": 21,
+          "nll": 1.8745242955099382
+        },
+        "labels_sha256": "5e5460721f1f700a808142498f3e5d09d02bf7d109f3aa8788002c126f99f78a",
+        "host_baseline": {
+          "loss_sum": 2575.596382030655,
+          "known_parent": 1308,
+          "known_absent": 66,
+          "correct_parent": 999,
+          "correct_absent": 21,
+          "nll": 1.8745242955099382
+        }
+      }
+    ],
+    "contract": {
+      "fitting_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "training_stems": [
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "replay_stems": [
+        "6bba_f1fde7e0",
+        "6bba_23af9eeb"
+      ],
+      "previous_fitting_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41"
+      ],
+      "unchanged_diagnostic_stems": [
+        "6bba_b204cac7",
+        "6bba_2646afc7",
+        "6bba_8b7818bf",
+        "6bba_312f0dc3"
+      ],
+      "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "source_selection_opened": false,
+      "new_target_movies_opened": 0,
+      "authorized_for_submission": false,
+      "role_assignment": "Next eight original96 fitting movies, excluding cached/replay movies; no labels or scores used",
+      "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies",
+      "diagnostic_stems": [],
+      "feature_scope": "Eight new fitting movies only; original four diagnostic summaries reused unchanged"
+    },
+    "baseline": {
+      "loss_sum": 585.1917849296981,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2585,
+      "correct_absent": 12,
+      "nll": 0.2190089015455457
+    },
+    "physical": {
+      "loss_sum": 892.2207538979128,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2500,
+      "correct_absent": 18,
+      "nll": 0.3339149528061051
+    },
+    "unchanged_diagnostic_summaries": {
+      "6bba_b204cac7": "a119e177d8273f9d6784a8b605c5116b9e19f071890f9583ced38c4ce465a53d",
+      "6bba_2646afc7": "8f0d62c553901cbae35fa29a3a23c35b7855a04d452b4a6b016f72bce67040bc",
+      "6bba_8b7818bf": "81dece376a38eb9236c943b614a2c7d22a2013edfa0d721c55f5d044fee3f39f",
+      "6bba_312f0dc3": "71798812d0f7da6ea535e206cf069e824a8a8a8cadbf1ab27dfa2359acf0abc2"
+    },
+    "previous_summary_worker_sha256": "4993810152196f08268f15e4a8c5a22f449c5ce3f3e1d042738745f479f06d55"
+  },
+  "source_hashes": {
+    "research/focus_parent_presence.py": "9c6c473adf8f2f4b595a71e94ea6009cf0a006bd0573021fcecefa6b71151539",
+    "research/focus_summary_validation.py": "0b4c58eb9c9d7bab445156151a2d77147a5dc5ecbb9f63725bed92b03b3bed9d",
+    "research/focus_adaptation_training.py": "4ff7b3be234e753839928889bda580d1fd239196515e7d523376fd0c4a564507",
+    "scripts/fit-focus-expanded-presence.py": "5ac8bd23c4189b7f290483fb6f0314cc472f426fc4fd5eaf7b7c42821cbafcfc",
+    "reports/experiments/focus-expanded-presence-v1-protocol.md": "0ebcee4c64325b0d554431ac722407f458acca3badfce883922d75112f0911ca"
+  },
+  "fitting_metrics": {
+    "loss_sum": 6871.641382384013,
+    "known_parent": 10754,
+    "known_absent": 161,
+    "correct_parent": 9895,
+    "correct_absent": 36,
+    "nll": 0.6295594486838307
+  },
+  "diagnostic_metrics": {
+    "loss_sum": 498.4417758152518,
+    "known_parent": 2645,
+    "known_absent": 27,
+    "correct_parent": 2602,
+    "correct_absent": 7,
+    "nll": 0.18654258076918107
+  },
+  "diagnostic_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": true,
+      "parent_correct_not_lower": true,
+      "null_correct_not_lower": false
+    },
+    "scope": "Training-domain feasibility only; no tracking-score promotion"
+  },
+  "fit_sha256": "b07f912a7eea8d81fabf8934f42724a4b0cc4a3a5cfc334bda3f398f27d1c272",
+  "coefficients_persisted_before_diagnostic": true,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "eligible_for_source_tracking_evaluation": false,
+  "authorized_for_submission": false,
+  "gpu_fit_seconds": 0,
+  "elapsed_seconds": 67.73500000000058,
+  "caveat": "Same exposed training-domain diagnostic; not an independent tracking score"
+}

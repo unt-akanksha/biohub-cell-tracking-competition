@@ -1,0 +1,63 @@
+{
+  "model": {
+    "features": [
+      "best_physical",
+      "physical_logsumexp",
+      "best_joint",
+      "joint_margin",
+      "conditional_entropy",
+      "nearest_feature_cosine",
+      "ranking_disagreement_um"
+    ],
+    "mean": [
+      -1.3441203938914759,
+      -1.3186192144011377,
+      3.993541406634965,
+      22.7401976839097,
+      0.00838391814679847,
+      0.9993803352069521,
+      0.13753433294822298
+    ],
+    "std": [
+      3.0563804614031342,
+      3.0334408175537115,
+      3.412018612960774,
+      26.137405823818685,
+      0.02499954779628281,
+      0.004122220006430869,
+      1.107987199176762
+    ],
+    "theta": [
+      -3.3648728710710962,
+      -0.0194468895010268,
+      -0.4102860667785955,
+      -1.7546397264261095,
+      0.33271274753930286,
+      0.0520754195305337,
+      -0.06410886033673809,
+      0.13854742966739306
+    ],
+    "fitting_examples": 10915,
+    "fitting_present": 10754,
+    "ridge": 1.0,
+    "intercept_penalized": false,
+    "optimizer": "L-BFGS-B",
+    "iterations": 43,
+    "objective": 555.4583052394559,
+    "role": "fitting"
+  },
+  "summary_worker_sha256": "ee040d09a5fd9f5c08107da5b5ff29222817ce411da5819fbe1aebe7a55b2aa4",
+  "unchanged_diagnostic_summaries": {
+    "6bba_b204cac7": "a119e177d8273f9d6784a8b605c5116b9e19f071890f9583ced38c4ce465a53d",
+    "6bba_2646afc7": "8f0d62c553901cbae35fa29a3a23c35b7855a04d452b4a6b016f72bce67040bc",
+    "6bba_8b7818bf": "81dece376a38eb9236c943b614a2c7d22a2013edfa0d721c55f5d044fee3f39f",
+    "6bba_312f0dc3": "71798812d0f7da6ea535e206cf069e824a8a8a8cadbf1ab27dfa2359acf0abc2"
+  },
+  "source_hashes": {
+    "research/focus_parent_presence.py": "9c6c473adf8f2f4b595a71e94ea6009cf0a006bd0573021fcecefa6b71151539",
+    "research/focus_summary_validation.py": "0b4c58eb9c9d7bab445156151a2d77147a5dc5ecbb9f63725bed92b03b3bed9d",
+    "research/focus_adaptation_training.py": "4ff7b3be234e753839928889bda580d1fd239196515e7d523376fd0c4a564507",
+    "scripts/fit-focus-expanded-presence.py": "5ac8bd23c4189b7f290483fb6f0314cc472f426fc4fd5eaf7b7c42821cbafcfc",
+    "reports/experiments/focus-expanded-presence-v1-protocol.md": "0ebcee4c64325b0d554431ac722407f458acca3badfce883922d75112f0911ca"
+  }
+}

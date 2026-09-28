@@ -1,0 +1,9 @@
+{
+  "status": "retired_completed_recoverable_image_cache",
+  "path": "/dev/shm/biohub-disagreement-source-v1.nRsU8k/images",
+  "bytes": 3738323342,
+  "raw_images_locally_backed_up": false,
+  "recovery": "Kaggle competition archive, saved member CRC and SHA256 manifest",
+  "experiment_outputs_preserved": true,
+  "utc": "2026-09-14T11:06:25Z"
+}

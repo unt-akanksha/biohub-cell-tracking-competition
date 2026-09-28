@@ -1,0 +1,196 @@
+{
+  "status": "completed_eight_movie_focus_adaptation_label_inventory",
+  "run_id": "focus-adaptation-labels-v1",
+  "records": [
+    {
+      "stem": "6bba_6479435d",
+      "role": "fitting",
+      "raw_sha256": "3955602262a1dc2c19f7d1a6ab06f1df43232e1286943676be967208656a3832",
+      "labels_sha256": "7299a1499185d5f7bf2c92fb855757266d414805e6b8a3de8cf6ffb944325687",
+      "counts": {
+        "unknown_target": 37994,
+        "known_parent": 492,
+        "no_unique_adjacent_annotated_parent": 25,
+        "known_parent_absent": 20
+      },
+      "windows": 99,
+      "nodes": 39007,
+      "max_frame_nodes": 560
+    },
+    {
+      "stem": "6bba_df673a83",
+      "role": "fitting",
+      "raw_sha256": "5a18071352ea2365195617854da76e09350dc397a5580cbbd9cd9e2ca98d0cf4",
+      "labels_sha256": "0a7c71b14fc62942dd717c34c14ed2c5b305362c84425768ca3128e387633b20",
+      "counts": {
+        "unknown_target": 24614,
+        "known_parent": 631,
+        "known_parent_absent": 8,
+        "no_unique_adjacent_annotated_parent": 6,
+        "ambiguous_or_unmatched_near_parent": 1
+      },
+      "windows": 99,
+      "nodes": 25518,
+      "max_frame_nodes": 280
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "role": "fitting",
+      "raw_sha256": "44191f70f7384dad766844f37c619da2bcd121221fad05c4ed40351faf2a1232",
+      "labels_sha256": "605fb3812a87b0f4c0257ce59d8235daf83410fbb30bf7737ff6c7bdebf9ee7f",
+      "counts": {
+        "unknown_target": 61444,
+        "no_unique_adjacent_annotated_parent": 54,
+        "known_parent": 587,
+        "known_parent_absent": 15
+      },
+      "windows": 99,
+      "nodes": 62512,
+      "max_frame_nodes": 822
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "role": "fitting",
+      "raw_sha256": "e292bf199e94518e26eac3b2249d2401af4f9ae0637eea3b104cee8088c93f9e",
+      "labels_sha256": "5bd683dae14396a9421802e88981d5315495f21537e81a570a628ca08c9bf4af",
+      "counts": {
+        "unknown_target": 13689,
+        "known_parent": 1108,
+        "known_parent_absent": 9,
+        "no_unique_adjacent_annotated_parent": 8
+      },
+      "windows": 99,
+      "nodes": 15090,
+      "max_frame_nodes": 276
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "role": "diagnostic",
+      "raw_sha256": "683bb2dd75b6ec87900efa287e77432a0ad02f10f2d424d9dd25ada0586d1d1f",
+      "labels_sha256": "1c857f0d591783f5f61dacd7191873ef2bb8fd14b22acd8af21d314bc79c39ca",
+      "counts": {
+        "unknown_target": 4748,
+        "known_parent": 742,
+        "known_parent_absent": 15,
+        "no_unique_adjacent_annotated_parent": 5,
+        "ambiguous_or_unmatched_near_parent": 2
+      },
+      "windows": 99,
+      "nodes": 5576,
+      "max_frame_nodes": 71
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "role": "diagnostic",
+      "raw_sha256": "f2d0b149dc6eaac60c1149c3e2c56a3e8ab27557e31fd0b1b8b8cbd376fdaab7",
+      "labels_sha256": "d6c6ed0c4e014ecd69ead1d2afaecb68fbf135df7d79e5661f037549cb63121b",
+      "counts": {
+        "unknown_target": 6597,
+        "known_parent": 700,
+        "no_unique_adjacent_annotated_parent": 8,
+        "known_parent_absent": 6
+      },
+      "windows": 99,
+      "nodes": 7373,
+      "max_frame_nodes": 90
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "role": "diagnostic",
+      "raw_sha256": "c16991b4c5eb20a5d0cfcbce33d3d5e7d9d91971ec0ba1d9bb0cffad154889f2",
+      "labels_sha256": "e865d4d52abf99175bc88ad699ca1083035ad63b950ac4b1c7dd902c756a6962",
+      "counts": {
+        "unknown_target": 7001,
+        "no_unique_adjacent_annotated_parent": 12,
+        "known_parent": 721,
+        "known_parent_absent": 2
+      },
+      "windows": 99,
+      "nodes": 7795,
+      "max_frame_nodes": 100
+    },
+    {
+      "stem": "6bba_312f0dc3",
+      "role": "diagnostic",
+      "raw_sha256": "15d603146cad53fa9098332ce10dea4231f015a216791397f4b5e7c67f15d523",
+      "labels_sha256": "aeac947e9b7fe6f68bc4348bd7a940538aa651ed24e3fac65eb810ce2d3cde0f",
+      "counts": {
+        "unknown_target": 11297,
+        "known_parent": 482,
+        "no_unique_adjacent_annotated_parent": 15,
+        "known_parent_absent": 4
+      },
+      "windows": 99,
+      "nodes": 11947,
+      "max_frame_nodes": 363
+    }
+  ],
+  "totals": {
+    "fitting": {
+      "unknown_target": 137741,
+      "known_parent": 2818,
+      "no_unique_adjacent_annotated_parent": 93,
+      "known_parent_absent": 52,
+      "ambiguous_or_unmatched_near_parent": 1
+    },
+    "diagnostic": {
+      "unknown_target": 29643,
+      "known_parent": 2645,
+      "known_parent_absent": 27,
+      "no_unique_adjacent_annotated_parent": 40,
+      "ambiguous_or_unmatched_near_parent": 2
+    }
+  },
+  "contract": {
+    "fitting_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41"
+    ],
+    "diagnostic_stems": [
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "training_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41",
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "replay_stems": [
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "role_assignment": "Original fixed96/24 training partition, first four per role excluding replay movies",
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+  },
+  "raw_cache_receipt_sha256": "92db28e2a482d0a9d7dc5cfb2d294180ad42cd7e5f53140a44797874b8841b40",
+  "source_hashes": {
+    "research/focus_adaptation_labels.py": "69ebaeae0dab39f1b9561f8fb8f5ce35c694fc83aa89a7fcbefd57eb775912dd",
+    "research/focus_predicted_training_labels.py": "48e90685b049ad0d388e08e7710fd2e5280a2a3ad9852fc6358f7e271dd050b2",
+    "scripts/audit-focus-adaptation-labels.py": "3889a8846f01f1add431e39fc7b33323d83c404803d653a4c537247e160010d5",
+    "scripts/verify-focus-adaptation-cache.py": "2c6a17facb17e4f79f29350f5221664475ad24b8b25400e32d5e9badb59bf077",
+    "reports/experiments/focus-adaptation-labels-v1-design.md": "871cc6eb13be7631ba16b0c5ebaad9384764547b90e87d6c172198edda39d3ec"
+  },
+  "full_training_matcher_receipt_sha256": "ca41210bcad92aeaa42c4bde83d2f9f7075d45c302816f0f40d7d3f11d82af78",
+  "all_raw_outputs_verified_before_label_access": true,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "optimizer_run": false,
+  "automatic_training_launch": false,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 10.89100000000326,
+  "gpu_seconds": 0,
+  "caveat": "Four diagnostic movies are excluded from future FOCUS adaptation only, not from original checkpoint training; no independent score established"
+}

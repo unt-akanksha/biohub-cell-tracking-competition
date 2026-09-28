@@ -1,0 +1,145 @@
+{
+  "status": "source_event_supervision_prepared",
+  "per_movie": {
+    "6bba_e16ffc58": {
+      "counts": {
+        "unknown_child": 4904,
+        "known_parent_constraints": 940,
+        "safe_wrong_parent_options": 2381,
+        "current_correct": 927,
+        "no_unique_annotated_parent": 10,
+        "annotated_consecutive_parent_opportunities": 941,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "0bb283fda38aa16ea84ac6b2bf40d4dbf87410eb1e197bc54fe905f9c1f4db06",
+      "prediction_sha256": "acebd918e053a54902aab25ed4ed9d3bb0c46915a2b46303a612676f5f501f01",
+      "groups_sha256": "f314e5ad4ca5a14548c604dfa44144dd193d8270e2ccba1aeee8e06b83cad145"
+    },
+    "6bba_9e23430b": {
+      "counts": {
+        "known_parent_constraints": 874,
+        "safe_wrong_parent_options": 803,
+        "current_correct": 862,
+        "unknown_child": 6478,
+        "no_unique_annotated_parent": 15,
+        "matched_parent_missing_or_outside_candidates": 5,
+        "annotated_consecutive_parent_opportunities": 890,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "379d9d729adf83d2381a927444e5d6ec47f704e5d8231273d38c4135c6d85415",
+      "prediction_sha256": "0dfaebc8c0408e7b3aa236e4e207e92ddb6d6ca5d60901729be0d81cc61ae30d",
+      "groups_sha256": "580ab9e685ef8079a82f937c1063b7f5ac362f5172d2dfb48d5feb36eb29ac8d"
+    },
+    "6bba_61ecbe65": {
+      "counts": {
+        "unknown_child": 4727,
+        "known_parent_constraints": 607,
+        "safe_wrong_parent_options": 1276,
+        "current_correct": 595,
+        "no_unique_annotated_parent": 21,
+        "matched_parent_missing_or_outside_candidates": 3,
+        "annotated_consecutive_parent_opportunities": 613,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "5f13bcb4b18b3da91947111fc0d415aee4584c4cd6bc6f526f5b631e821e7d38",
+      "prediction_sha256": "67f531472b638d9960ff3e675f90d61e122d52ae2ca798551fd1a075bc4fcdcc",
+      "groups_sha256": "3f39a45e04d93ad3598af4130ab6b75c32937f2c1b0cb09bcd9b1762a247531c"
+    },
+    "6bba_7af54fde": {
+      "counts": {
+        "unknown_child": 8887,
+        "known_parent_constraints": 1065,
+        "safe_wrong_parent_options": 5755,
+        "current_correct": 1042,
+        "no_unique_annotated_parent": 26,
+        "matched_parent_missing_or_outside_candidates": 8,
+        "annotated_consecutive_parent_opportunities": 1090,
+        "annotated_division_parents": 2
+      },
+      "labels_sha256": "c4c7653b900acd7eaa3a128430503c3a3164eaefd73a76c4d07531dc4f5f1ab0",
+      "prediction_sha256": "d2c82bbd635c11e456ff84a7326f2961e16f2b2fa15b4c57b54f416b4de0b947",
+      "groups_sha256": "e9455a085007a6b6aaf913e3b1412e60916f891e5f9533ce3afb7bd6360f18a7"
+    },
+    "6bba_3db54e20": {
+      "counts": {
+        "unknown_child": 22574,
+        "known_parent_constraints": 456,
+        "safe_wrong_parent_options": 3475,
+        "current_correct": 425,
+        "no_unique_annotated_parent": 20,
+        "matched_parent_missing_or_outside_candidates": 5,
+        "annotated_consecutive_parent_opportunities": 473,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "06f1085569cb2e1d9c8e0325fb24a55cc71e3a1def84d016a977fe69149d2646",
+      "prediction_sha256": "befbbfd2935fac99f1d15b93593d7f6eef14cb89a0f14175a058c320c66cce18",
+      "groups_sha256": "72731c582294ab4fcc598468d913c4e0dadb6f03af1010add19272ba96ba3271"
+    },
+    "6bba_20852818": {
+      "counts": {
+        "unknown_child": 8830,
+        "known_parent_constraints": 856,
+        "safe_wrong_parent_options": 4770,
+        "current_correct": 838,
+        "no_unique_annotated_parent": 31,
+        "matched_parent_missing_or_outside_candidates": 6,
+        "annotated_consecutive_parent_opportunities": 906,
+        "annotated_division_parents": 3
+      },
+      "labels_sha256": "74179dee237ff4e5c6fcaf42248a7222e95e787f73fd4c6b7cdc16646e920345",
+      "prediction_sha256": "80c93cbf2d9a924b968b285f1bbbf3802ba9b08ca53e966856e36e2eb6069d74",
+      "groups_sha256": "cd08a244869880c8a52fdf23611dc8accdf87564298d7c0701b9a453c53bae86"
+    },
+    "6bba_55b7eebe": {
+      "counts": {
+        "unknown_child": 3821,
+        "known_parent_constraints": 680,
+        "safe_wrong_parent_options": 431,
+        "current_correct": 678,
+        "no_unique_annotated_parent": 11,
+        "matched_parent_missing_or_outside_candidates": 1,
+        "annotated_consecutive_parent_opportunities": 687,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "086f185cd5c5e17dd54e752a2df79ff46cded8f6664bf1a554318e0e70ab815e",
+      "prediction_sha256": "71be3d8eb061c3802d273142d24c34fe59c32785b7191b250cdf7499f182fce4",
+      "groups_sha256": "d86ed62cf312f1d6bfe52b91405f317a1804fd6331c39b1108e1f54c9b99fdce"
+    },
+    "44b6_74d0c52e": {
+      "counts": {
+        "unknown_child": 8231,
+        "known_parent_constraints": 137,
+        "safe_wrong_parent_options": 1010,
+        "current_correct": 130,
+        "annotated_consecutive_parent_opportunities": 138,
+        "annotated_division_parents": 1
+      },
+      "labels_sha256": "15ebd0fc78e35e852194efe8410d3783b28647ff584cad9b57b00125b2673925",
+      "prediction_sha256": "f2469788babdb08d8bfd8c873fda7fb64e51d1c2bc1c0d4089fd5a56b3122c7a",
+      "groups_sha256": "18b813ed642d918e16a31b8912a2f7c80c68823d50ea1b7e50590d1e08b8c330"
+    }
+  },
+  "pooled": {
+    "unknown_child": 68452,
+    "known_parent_constraints": 5615,
+    "safe_wrong_parent_options": 19901,
+    "current_correct": 5497,
+    "no_unique_annotated_parent": 134,
+    "annotated_consecutive_parent_opportunities": 5738,
+    "annotated_division_parents": 11,
+    "matched_parent_missing_or_outside_candidates": 28
+  },
+  "source_scope_sha256": "096a397bbead0eacfe574df55bbf10388d78768ab3a5c405070302a8977b852a",
+  "feature_receipt_sha256": "01ec4d10da2e2d6e6faa9a5b2cae5f04ebab181c9d9093793724112bd2544c36",
+  "source_sha256": "ea4663e5b79cb6414acdd99b1b93ecfae31c75bcc4635491f7c11ca0444c782e",
+  "label_helper_sha256": "28a273f07ed0d2c95078058ea743fa941c97f9d036ff92dc20f5b139fd1b9f66",
+  "source_only": true,
+  "ground_truth_files_opened": true,
+  "selection_or_validation_opened": false,
+  "missing_parents_are_unknown_not_births": true,
+  "unannotated_children_are_not_negative": true,
+  "predictions_unchanged": true,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "seconds": 18.18699999997625
+}

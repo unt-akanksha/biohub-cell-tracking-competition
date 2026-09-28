@@ -1,0 +1,172 @@
+{
+  "status": "verified_gt_parent_dropout_smoke",
+  "worker_result_sha256": "bd0ee23ae85c79d7142c78277e6b6aceeac71cc1bf6cc2ab31cde3899978d9e1",
+  "launcher": {
+    "status": "completed",
+    "run_id": "focus-gt-parent-dropout-smoke-v1",
+    "elapsed_seconds": 73.03632218299998,
+    "declared_budget_seconds": 900,
+    "submission_performed": false
+  },
+  "worker": {
+    "status": "completed_focus_gt_parent_dropout_smoke",
+    "updates": [
+      {
+        "step": 1,
+        "stem": "6bba_57b7cc1e",
+        "source_frame": 31,
+        "pair_sha256": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e",
+        "augmentation": null,
+        "loss": 4.968155384063721,
+        "gradient_norm": 7.818954944610596
+      },
+      {
+        "step": 2,
+        "stem": "6bba_57b7cc1e",
+        "source_frame": 31,
+        "pair_sha256": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e",
+        "augmentation": {
+          "selected_parent_row": 192,
+          "selected_gt_parent_coords": [
+            27.0,
+            9.0,
+            233.0
+          ],
+          "removed_source_rows": [
+            192,
+            211
+          ],
+          "synthetic_null_columns": [
+            251
+          ],
+          "source_nodes_before": 1160,
+          "source_nodes_after": 1158,
+          "eligible_nonempty_source": true,
+          "ambiguous_removed_parent_targets": 0
+        },
+        "loss": 4.6131415367126465,
+        "gradient_norm": 10.007210731506348
+      },
+      {
+        "step": 3,
+        "stem": "6bba_6479435d",
+        "source_frame": 0,
+        "pair_sha256": "b1b4c42ef0a56587c87b69e09c5dfda6f65c616427a5f9e9f38517f9ddb3ebd4",
+        "augmentation": null,
+        "loss": 2.1893887519836426,
+        "gradient_norm": 4.7140984535217285
+      },
+      {
+        "step": 4,
+        "stem": "6bba_6479435d",
+        "source_frame": 0,
+        "pair_sha256": "b1b4c42ef0a56587c87b69e09c5dfda6f65c616427a5f9e9f38517f9ddb3ebd4",
+        "augmentation": {
+          "selected_parent_row": 428,
+          "selected_gt_parent_coords": [
+            58.0,
+            153.0,
+            195.0
+          ],
+          "removed_source_rows": [
+            428
+          ],
+          "synthetic_null_columns": [
+            408
+          ],
+          "source_nodes_before": 476,
+          "source_nodes_after": 475,
+          "eligible_nonempty_source": true,
+          "ambiguous_removed_parent_targets": 0
+        },
+        "loss": 1.913448452949524,
+        "gradient_norm": 2.611476421356201
+      }
+    ],
+    "verified_augmentation_pairs": 1121,
+    "peak_allocated_bytes": 168129536,
+    "null_weight": 3.758750474320572,
+    "supervision_counts": {
+      "fitting": {
+        "known_parent": 10754,
+        "known_absent": 161
+      },
+      "diagnostic": {
+        "known_parent": 2645,
+        "known_absent": 27
+      }
+    },
+    "settings": {
+      "steps": 4,
+      "smoke_steps": 4,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.0001,
+      "gradient_clip": 1.0,
+      "seed": 244691,
+      "neural_weight": 1.0,
+      "physical_weight": 1.0,
+      "null_logit": -4.5
+    },
+    "physical_diagnostic": {
+      "loss_sum": 892.2207538979128,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2500,
+      "correct_absent": 18,
+      "nll": 0.3339149528061051
+    },
+    "initial_diagnostic": {
+      "loss_sum": 585.1917770872515,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2585,
+      "correct_absent": 12,
+      "nll": 0.2190088986104983
+    },
+    "final_diagnostic": null,
+    "diagnostic_gate": {
+      "passed": false,
+      "scope": "Four-step functionality only; no quality evaluation"
+    },
+    "smoke": {
+      "file": "step-0004.pt",
+      "sha256": "e0a43eb0d4c664bdb74d20eb81a65119ecc30470be74aa28fe2266f644f5b93e",
+      "exact_real_logit_reload": true
+    },
+    "checkpoint": {
+      "file": "step-0004.pt",
+      "sha256": "e0a43eb0d4c664bdb74d20eb81a65119ecc30470be74aa28fe2266f644f5b93e",
+      "exact_real_logit_reload": true
+    },
+    "frozen_before": "a9a07f3362fd2891894ee3b534ab34a9395d68cbce7e2e9ac2be16a144ac5ef1",
+    "frozen_after": "a9a07f3362fd2891894ee3b534ab34a9395d68cbce7e2e9ac2be16a144ac5ef1",
+    "initial_model_sha256": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+    "final_model_sha256": "52f8b97d4f58502eb4560f65ed72527783f48951518df44d29a02b5b4a4b3a19",
+    "fitting_pairs": 1121,
+    "diagnostic_pairs": 377,
+    "source_hashes": {
+      "run_pilot.py": "07f226bec3e0afa0bfffc4680680b31ca18d66aa58dfb094bb849ea666a20819",
+      "split.json": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "focus_cached_pair.py": "05c62d9ebd9ff9bfc7a402685e93b47672edb91528a241e3e149f8245acb5172",
+      "focus_adaptation_training.py": "4ff7b3be234e753839928889bda580d1fd239196515e7d523376fd0c4a564507",
+      "focus_indexed_parent_loss.py": "804d096dd49224cb2360676e45c4818184cab0e53293428134c04d4d1066f48d",
+      "sparse_parent_loss.py": "e3cb38e4abf0650e8f9dbd64e3c006715ed5288cb4f41e36ff2c13d16c02df53",
+      "sparse_parent_missing_null.py": "1cc65c652f4b7c9e669c5ff75299e30515cac680af48f952dddc6fe643db834a",
+      "independent_real_baseline.py": "fc823784fb2dcb6caf2097446859bfac027048b7b635c4de292725377140876c",
+      "training_spec.json": "9e6b2fc45ca7c10b1aa8b880a068a75adc4129f82597e6635ee290013cabac80",
+      "focus_null_balanced_loss.py": "a17d0c33a2eab536e4b3e5ade3d543ea29e2478e0420bf0179ed5b988ed36c4b",
+      "focus_parent_dropout.py": "ef9d31fd3a1e5f732c6123274752c0555da55f343516c304fe16a94a849c9de6",
+      "dropout_audit.json": "aa745142d8741e5e249e290547e70ab08270ec164b5c88ca2f50b207d5933f74",
+      "focus_gt_parent_dropout.py": "c9519d8b2a3a6ea8d5408b89f1b517304d13741befb795fd22332b19e544332a"
+    },
+    "training_spec_sha256": "9e6b2fc45ca7c10b1aa8b880a068a75adc4129f82597e6635ee290013cabac80",
+    "all_diagnostic_samples_excluded_from_optimizer": true,
+    "raw_detections_changed": false,
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "elapsed_seconds": 29.147983134000015
+  },
+  "eligible_for_bounded_training": true,
+  "authorized_for_submission": false
+}

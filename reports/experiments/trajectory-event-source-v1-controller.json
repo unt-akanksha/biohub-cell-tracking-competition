@@ -1,0 +1,27 @@
+{
+  "status": "stopped_requires_inspection",
+  "started_utc": "2026-09-14T13:58:19.982054+00:00",
+  "active_batch": 3,
+  "through_batch": 7,
+  "completed": [
+    1,
+    2
+  ],
+  "maximum_new_gpu_hours": 4.5,
+  "source_plan_sha256": "d1a74c831392721525b6c60fb4bb6c55c2fdbc978d9ffd4df0710eac1d2a9843",
+  "model_fitting_or_submission_authorized": false,
+  "foreign_jobs_must_not_be_interrupted": true,
+  "phase": "controller_stopped_no_automatic_restart",
+  "updated_utc": "2026-09-14T15:00:46.163025+00:00",
+  "remote_root": "/dev/shm/biohub-event-source-v1-b3.hpf9EX",
+  "pid": 65151,
+  "finished_movies": [
+    "44b6_deabac95",
+    "6bba_786893ac",
+    "6bba_cdcfe533",
+    "6bba_7d3058ae",
+    "6bba_6321a359"
+  ],
+  "terminal_status": "complete_prelabel_predictions",
+  "error_type": "CalledProcessError"
+}

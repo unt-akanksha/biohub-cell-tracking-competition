@@ -1,0 +1,21 @@
+{
+  "status": "timeout",
+  "contract_sha256": "48fa919f39170daac42b58221308a703e54674580d78b3f59a13fe0a22813798",
+  "epochs_completed": [
+    {
+      "epoch": 1,
+      "steps": 673,
+      "cases": 673,
+      "online_objective_mean": 0.14295732414497264,
+      "displacement_norm": 0.9353400537829051,
+      "weights_sha256": "1a822b9884a85ff1638f99618fac9919ac6f16d43072c5678eeb2908074c1ac2",
+      "elapsed_seconds": 796.4060000000172
+    }
+  ],
+  "source_only": true,
+  "authorized_for_submission": false,
+  "quality_gain_established": false,
+  "seconds": 1205.1089999999967,
+  "serialized_case_smoke_passed": true,
+  "error": "TimeoutError('Twenty-minute CPU fit deadline; completed epochs preserved')"
+}

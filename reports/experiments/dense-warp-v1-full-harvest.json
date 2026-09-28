@@ -1,0 +1,57 @@
+{
+  "status": "verified_backup",
+  "bytes": 78393697,
+  "records": [
+    {
+      "path": "44b6-HISTORY.json",
+      "bytes": 1508,
+      "sha256": "2a7570edb265568a491f21488dae399fafaba30280e06fa0639c90f70ad9b26e"
+    },
+    {
+      "path": "44b6-SOURCE_GATE.json",
+      "bytes": 985,
+      "sha256": "5d51ec30a561d65d076db0c2a0b1018d79999bbf32ddff823347d1f4af86cff0"
+    },
+    {
+      "path": "44b6-final.pt",
+      "bytes": 8361606,
+      "sha256": "bbb447a02c7ae096de9cbfc5e0d98e1c6f16db20341cb32b36d466aa7718eb96"
+    },
+    {
+      "path": "6bba-HISTORY.json",
+      "bytes": 1512,
+      "sha256": "b28f2c2276d514071192aede09dfe466227176cf6cc77087e1b433ba1f6b65d4"
+    },
+    {
+      "path": "6bba-SOURCE_GATE.json",
+      "bytes": 1822,
+      "sha256": "aaad64d53bdfb226f23eff434f5566c1bc308d893b2e90610cbb6622e39ab573"
+    },
+    {
+      "path": "6bba-final.pt",
+      "bytes": 8361606,
+      "sha256": "ebece605a713211d06aa69f4df6b1635ce955f69d81ed26f23cf2053eba2452d"
+    },
+    {
+      "path": "PROGRESS.json",
+      "bytes": 3900,
+      "sha256": "34cb3246fbc670f53b252c9dc3c931395ca92cae90b7826c31e619ff9b675b20"
+    },
+    {
+      "path": "RESULT.json",
+      "bytes": 4052,
+      "sha256": "bd0960a7e731e796a0e8f064a78323b9debbc6f0f246189669f54037184b83f3"
+    },
+    {
+      "path": "features.pt",
+      "bytes": 48602382,
+      "sha256": "f9ef89f3cd2875704d7782774f47217e0e7ab47d3b4fd8025b556a0af1ad8c6f"
+    },
+    {
+      "path": "resume.pt",
+      "bytes": 13054324,
+      "sha256": "e8e5ebd29b265481a1a620643f4ea83792be751ab25d5fb71039c9bd08051a7f"
+    }
+  ],
+  "remote_files_deleted": false
+}

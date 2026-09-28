@@ -6585,3 +6585,58 @@ screen since they yield submittable CSVs directly.
 Caveat carried forward: the proxy reads 0.9321 where the public LB reads 0.960,
 so it is a biased estimator and is used as a screen, not a predictor. The
 pre-declared both-embryos rule applies to any winner.
+
+
+## 2026-09-28 -- Two days lost to a silent launch refusal; division axis corroborated
+
+**The loss.** The queue I wrote on 09-26 carried a hypothesis longer than the
+1000-character limit the guarded chain enforces. Registration was refused,
+`autorun-queue-v1.sh` treated the refused launch as a terminal state and moved
+on, and the two follow-on entries were then refused as duplicate run IDs from
+their earlier registration. Nothing ran for two days. Ten submission slots and
+roughly 14 GPU hours went unused. Fixed in `autorun-verified-v1.sh`, which
+checks the hypothesis length before launching and aborts the queue unless
+`fast-launch` prints LAUNCHED.
+
+**Seventh refutation on the edge axis.** `hfv3-ppsweep-v1` completed and every
+one of its eight edge and gap candidates returned PROXY_SCORE exactly 0.9321,
+identical to base; the best delta was -0.0001 (gapclose6). Division numbers were
+12/17/48 in all nine rows. Across the density sweep and this one, 14 distinct
+configurations have now produced identical division counts. The edge axis is
+closed and the division term has never been touched by anything we have run.
+
+**Independent corroboration of the division hypothesis.** The deadline-window
+notebook audit listed 100 public notebooks by score. Three previously unaudited
+notebooks sort at or above v3 and were source reviewed. The material finding:
+`amanatar/optimized-biohub-max-score`, which sorts above v3 itself, has
+independently loosened exactly the safe-division gates our decomposition
+identified, in the same direction:
+
+    knob                        v3 (ours)   amanatar    our candidate
+    SAFE_DIV_FRAME_FRAC_CAP     0.0076      0.012       caps2x 0.0152
+    SAFE_DIV_GLOBAL_FRAC_CAP    0.00375     0.006       caps2x 0.0075
+    SAFE_DIV_DIVERGE_UM         2.25        1.50        diverge15 1.5 (exact)
+    SAFE_DIV_MAX_UM             9.0         10.5        geomwide 11.0
+    SAFE_DIV_SISTER_MAX_UM      14.0        15.0        geomwide 17.0
+
+They loosened the caps AND the geometry. This is corroboration from a second,
+independent direction rather than adoption of public folklore -- the hypothesis
+came from our own 40-movie decomposition first, and the cost model that says
+added divisions pay above roughly 1:4 precision is ours.
+
+`anvithpothula/biohub-0-953-lb-original` is by the same author as the
+permanently excluded `anvithpothula/biohub-0-95`; the out-of-volume synthetic
+hub and division construction is NOT present in it, and it is strictly dominated
+by our 0.960 stack, so it was recorded with caution and not adopted. The
+`estimated_number_of_nodes` and `t_pred` occurrences in all three are the
+validator computing the official metric, matching our own base.
+
+**Launched.** `hfv3-divwide-v1` (amanatar's division values on v3 + density +
+det93) is running; `hfv3-divmax-v1` brackets beyond it at FRAME_FRAC_CAP 0.0152,
+GLOBAL_FRAC_CAP 0.0075, MAX_UM 11.0, SISTER_MAX_UM 17.0, EXISTING_CHILD_MAX_UM
+12.0, DIVERGE_UM 1.5. Probing two points rather than sampling one tells us which
+side of the optimum amanatar's setting sits on instead of assuming it is the
+peak. `hfv3-divsweep-v1` follows for the per-embryo evidence the leaderboard
+cannot supply. Nine SAFE_DIV keys added to ENV_OVERRIDABLE with audited ranges.
+
+Submitted `hfv3-contdet93-v1` from the bank (ref 56646242).

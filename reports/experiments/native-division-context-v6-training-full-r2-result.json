@@ -1,0 +1,289 @@
+{
+  "status": "temporal_training_complete",
+  "contract_sha256": "36d024261fa71f38ff6b273c3fcb94ec48fff0272cfd7f4d8374e0036f796150",
+  "data_sha256": "933fab6898ae726168614d28494b963a2f79c844fa400bfed608e3fe2bf0b61c",
+  "folds": [
+    {
+      "source": "44b6",
+      "geometry_source": {
+        "positive": 1,
+        "negative": 151,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "recall": 0.0,
+        "balanced_nll": 0.6948005828461905,
+        "threshold": 0.9671329259872437
+      },
+      "origins": [
+        {
+          "family": "resnet3d",
+          "arms": [
+            {
+              "use_context": false,
+              "path": "44b6-resnet3d-control/best.pt",
+              "sha256": "7fd0c174bba4b7d563c6c74f47849a9f8e66571f4dfe3587442d66858f13fb68",
+              "source": {
+                "positive": 1,
+                "negative": 151,
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "recall": 0.0,
+                "balanced_nll": 1.879356872742407,
+                "threshold": 0.45966121554374695
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 33.645381741000165,
+              "steps": 1500,
+              "attempted_batches": 1254,
+              "amp_skipped_batches": 4,
+              "recovered_updates": 250
+            },
+            {
+              "use_context": true,
+              "path": "44b6-resnet3d-context/best.pt",
+              "sha256": "10eb9542ed740629b490c4bab2219f1a0ce7265246394321183eeaa3166d4f89",
+              "source": {
+                "positive": 1,
+                "negative": 151,
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "recall": 0.0,
+                "balanced_nll": 8.086614826576634,
+                "threshold": 0.9998448491096497
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 45.505509798000276,
+              "steps": 1500,
+              "attempted_batches": 1504,
+              "amp_skipped_batches": 4,
+              "recovered_updates": 0
+            }
+          ],
+          "selected": null
+        },
+        {
+          "family": "token_transformer3d",
+          "arms": [
+            {
+              "use_context": false,
+              "path": "44b6-token_transformer3d-control/best.pt",
+              "sha256": "1df48da5ed4261d4d02be4ca7e60398daca30cfd310cc6c0c6cceef05773fc42",
+              "source": {
+                "positive": 1,
+                "negative": 151,
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "recall": 0.0,
+                "balanced_nll": 3.8344846373405774,
+                "threshold": 1.0000982284545898
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 34.33023522900476,
+              "steps": 1500,
+              "attempted_batches": 1503,
+              "amp_skipped_batches": 3,
+              "recovered_updates": 0
+            },
+            {
+              "use_context": true,
+              "path": "44b6-token_transformer3d-context/best.pt",
+              "sha256": "20d383cb6ee92b93ebc073711167ccb5366e99f7977c8fc2f281a7735b713dcc",
+              "source": {
+                "positive": 1,
+                "negative": 151,
+                "tp": 0,
+                "fp": 0,
+                "fn": 1,
+                "recall": 0.0,
+                "balanced_nll": 0.3476496976598987,
+                "threshold": 0.9979925751686096
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 45.60131934899982,
+              "steps": 1500,
+              "attempted_batches": 1504,
+              "amp_skipped_batches": 4,
+              "recovered_updates": 0
+            }
+          ],
+          "selected": null
+        }
+      ],
+      "ensemble": {
+        "status": "not_eligible_individual_gates"
+      }
+    },
+    {
+      "source": "6bba",
+      "geometry_source": {
+        "positive": 6,
+        "negative": 580,
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "recall": 0.5,
+        "balanced_nll": 0.17208315383556244,
+        "threshold": 0.9780341386795044
+      },
+      "origins": [
+        {
+          "family": "resnet3d",
+          "arms": [
+            {
+              "use_context": false,
+              "path": "6bba-resnet3d-control/best.pt",
+              "sha256": "6c8e33afed03ed365859265b6cef3d206e0f2424a664fa3db085977eaddc1e06",
+              "source": {
+                "positive": 6,
+                "negative": 580,
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "recall": 0.0,
+                "balanced_nll": 0.1453498478275927,
+                "threshold": 1.0000739097595215
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 34.70787812699564,
+              "steps": 1500,
+              "attempted_batches": 1504,
+              "amp_skipped_batches": 4,
+              "recovered_updates": 0
+            },
+            {
+              "use_context": true,
+              "path": "6bba-resnet3d-context/best.pt",
+              "sha256": "9c1dccc316207e64a92b22594c5cf9265be6a6bf0dede98a7e07bdab279a5533",
+              "source": {
+                "positive": 6,
+                "negative": 580,
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "recall": 0.0,
+                "balanced_nll": 0.10662830401057702,
+                "threshold": 1.000087022781372
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 46.028965792000236,
+              "steps": 1500,
+              "attempted_batches": 1503,
+              "amp_skipped_batches": 3,
+              "recovered_updates": 0
+            }
+          ],
+          "selected": null
+        },
+        {
+          "family": "token_transformer3d",
+          "arms": [
+            {
+              "use_context": false,
+              "path": "6bba-token_transformer3d-control/best.pt",
+              "sha256": "6bdc8625283eec4667a166657eee48bc044c45fd7604efc438bf41f70b56db9d",
+              "source": {
+                "positive": 6,
+                "negative": 580,
+                "tp": 4,
+                "fp": 0,
+                "fn": 2,
+                "recall": 0.6666666666666666,
+                "balanced_nll": 0.09536959978332199,
+                "threshold": 0.9979258179664612
+              },
+              "source_pass": true,
+              "opposite_opened": false,
+              "seconds": 34.68167952699878,
+              "steps": 1500,
+              "attempted_batches": 1503,
+              "amp_skipped_batches": 3,
+              "recovered_updates": 0
+            },
+            {
+              "use_context": true,
+              "path": "6bba-token_transformer3d-context/best.pt",
+              "sha256": "6cde5113ac94d52826009e27fbe238eba6871bbb3b4778249913a9eaeef8eb34",
+              "source": {
+                "positive": 6,
+                "negative": 580,
+                "tp": 0,
+                "fp": 0,
+                "fn": 6,
+                "recall": 0.0,
+                "balanced_nll": 0.1032566697533226,
+                "threshold": 1.0000461339950562
+              },
+              "source_pass": false,
+              "opposite_opened": false,
+              "seconds": 45.990857462995336,
+              "steps": 1500,
+              "attempted_batches": 1503,
+              "amp_skipped_batches": 3,
+              "recovered_updates": 0
+            }
+          ],
+          "selected": {
+            "use_context": false,
+            "path": "6bba-token_transformer3d-control/best.pt",
+            "sha256": "6bdc8625283eec4667a166657eee48bc044c45fd7604efc438bf41f70b56db9d",
+            "source": {
+              "positive": 6,
+              "negative": 580,
+              "tp": 4,
+              "fp": 0,
+              "fn": 2,
+              "recall": 0.6666666666666666,
+              "balanced_nll": 0.09536959978332199,
+              "threshold": 0.9979258179664612
+            },
+            "source_pass": true,
+            "opposite_opened": true,
+            "seconds": 34.68167952699878,
+            "steps": 1500,
+            "attempted_batches": 1503,
+            "amp_skipped_batches": 3,
+            "recovered_updates": 0,
+            "opposite": {
+              "positive": 1,
+              "negative": 151,
+              "tp": 0,
+              "fp": 2,
+              "fn": 1,
+              "recall": 0.0,
+              "balanced_nll": 2.751911668181658,
+              "threshold": 0.9979258179664612
+            },
+            "geometry_opposite": {
+              "positive": 1,
+              "negative": 151,
+              "tp": 0,
+              "fp": 0,
+              "fn": 1,
+              "recall": 0.0,
+              "balanced_nll": 0.4926918916571308,
+              "threshold": 0.9780341386795044
+            },
+            "opposite_pass": false
+          }
+        }
+      ],
+      "ensemble": {
+        "status": "not_eligible_individual_gates"
+      }
+    }
+  ],
+  "successful_updates": 12000,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "seconds": 324.7294688499969
+}

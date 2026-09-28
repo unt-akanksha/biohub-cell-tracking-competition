@@ -1,0 +1,48 @@
+{
+  "status": "real_source_feature_smoke_passed",
+  "contract": {
+    "design_sha256": "1a4b7a2df7165f5bc0bcb73711b0cd45d1df04b8deddb823456a0d52eabf3425",
+    "source_sha256": "ed9acd673bf927278ba3a4b06cb2f662f1c13b0a384df56dfedf8bf97b876acb",
+    "helper_sha256": "bbf0d2881b3ab12c71b6baa493a0464917389ce5c461ccb8b3727efa9fd7dcb9",
+    "data_sha256": [
+      "7e0e7b1ca3c11b27319824fad3746b49f8a1cf519a73d3dad38e12d2ef8a0e06",
+      "e358a984eade85b96fbf2d77937ba0d57307f4813f44fb6c339346024d17df87"
+    ]
+  },
+  "smoke": true,
+  "source_only_fitting": true,
+  "gpu_used": false,
+  "competition_test_opened": false,
+  "complete_movie_validation_opened": false,
+  "previously_exposed_selection_cohort": true,
+  "authorized_for_submission": false,
+  "records": [
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-072.npz",
+      "sha256": "20f3ed95fd49768fe50e462a94e8f45c4820f132146f916c216b88b96c086a4c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-052.npz",
+      "sha256": "5039fbdc18e549135f48d91ff034c6a61f0da7d814457c06800fe64234747cf7",
+      "rows": 15
+    }
+  ],
+  "seconds": 0.14100000000325963,
+  "rows": 16,
+  "feature_sha256": "492f4873d9b6f73ddb673a5cf4ac5b43e2a13fb4072fbc47af2c50cfc3514cd5",
+  "feature_shapes": {
+    "geometry": [
+      16,
+      6
+    ],
+    "legacy_statistics": [
+      16,
+      30
+    ],
+    "morphology": [
+      16,
+      18
+    ]
+  }
+}

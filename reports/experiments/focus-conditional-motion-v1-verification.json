@@ -1,0 +1,28 @@
+{
+  "status": "verified_conditional_motion_training_folds",
+  "result_sha256": "ad168df2c52620470e659436815b4fd8dd004095b385eee9e21a7b857c6cf226",
+  "final_model_sha256": "508d0589d7ed961cb8d325c574719c918ec8005f15274343106ab34f1377968f",
+  "exact_fold_replays": 14,
+  "gate": {
+    "pooled": {
+      "baseline": {
+        "observations": 11661,
+        "nll": 5.804118857048891,
+        "mse_um2": 8.81605172276937
+      },
+      "candidate": {
+        "observations": 11661,
+        "nll": 5.741789847991003,
+        "mse_um2": 8.51668218066724
+      }
+    },
+    "conditions": {
+      "pooled_nll_improves": true,
+      "pooled_mse_improves": true,
+      "majority_movies_nll_improve": true,
+      "worst_movie_mse_not_higher": true
+    },
+    "passed": true
+  },
+  "authorized_for_submission": false
+}

@@ -1,0 +1,689 @@
+{
+  "run_id": "focus-expanded-motion-calibration-v1",
+  "parameters": {
+    "mean_um": [
+      0.31556683798825885,
+      -0.09889882439681745,
+      0.2466244411416114
+    ],
+    "variance_um2": [
+      4.67299653253452,
+      1.9255701831426226,
+      2.0843889840813974
+    ],
+    "unconstrained_variance_um2": [
+      4.67299653253452,
+      1.9255701831426226,
+      2.0843889840813974
+    ],
+    "variance_floor_um2": [
+      0.4401041666666667,
+      0.027506510416666668,
+      0.027506510416666668
+    ],
+    "observations": 11661,
+    "method": "Pooled diagonal Gaussian maximum likelihood with native-voxel variance floor"
+  },
+  "training_stems": [
+    "6bba_f1fde7e0",
+    "6bba_23af9eeb",
+    "6bba_6479435d",
+    "6bba_df673a83",
+    "6bba_767a1e17",
+    "6bba_2312ac41",
+    "6bba_971fa5e0",
+    "6bba_cf35214c",
+    "6bba_cff5865f",
+    "6bba_edf14583",
+    "6bba_1ebfb80d",
+    "6bba_7d3058ae",
+    "6bba_4f99ce20",
+    "6bba_57b7cc1e"
+  ],
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "residuals": 438,
+      "mean_um": [
+        0.5856035805733776,
+        1.1729167251862036,
+        1.5239005938467898
+      ],
+      "variance_um2": [
+        3.3862360826517386,
+        3.5619943677458172,
+        5.894311495287286
+      ],
+      "evidence": {
+        "sample_sha256": "cf970302a726434df62ed45a55b2ef47648aaacd7d56c1b33b65b27faae2b5df"
+      }
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "residuals": 490,
+      "mean_um": [
+        0.7733932354316234,
+        -0.11022156072039233,
+        -0.19011629142476857
+      ],
+      "variance_um2": [
+        1.8310612109393263,
+        0.5355708061125509,
+        0.33321294896587045
+      ],
+      "evidence": {
+        "sample_sha256": "6531abde5b1b10c1aa76552a9b1b2a7250ad3497db7a806796a4035398e6944b"
+      }
+    },
+    {
+      "stem": "6bba_6479435d",
+      "residuals": 492,
+      "mean_um": [
+        1.6609385442323925,
+        0.149237334086537,
+        0.13999743230048875
+      ],
+      "variance_um2": [
+        7.107108506735498,
+        2.258429848531254,
+        2.773367085817106
+      ],
+      "evidence": {
+        "raw_sha256": "3955602262a1dc2c19f7d1a6ab06f1df43232e1286943676be967208656a3832",
+        "manifest_sha256": "9e402ffc3d5d4642b0d03b1eb2ba908a97225d17e27da2e46ba56d5854a2dc80",
+        "recovered_flow_sha256": "73d80215818b1f1fde053d3d0b5466c5a1067564898c35eab8240f52163aae6e"
+      }
+    },
+    {
+      "stem": "6bba_df673a83",
+      "residuals": 624,
+      "mean_um": [
+        0.20527876104861192,
+        -0.13841352853752398,
+        0.46910419693430855
+      ],
+      "variance_um2": [
+        2.4287952523583893,
+        0.5632489725076955,
+        0.5235306443421736
+      ],
+      "evidence": {
+        "raw_sha256": "5a18071352ea2365195617854da76e09350dc397a5580cbbd9cd9e2ca98d0cf4",
+        "manifest_sha256": "227dcca7082dbb07b9a11f37ec1371de0a0031f1457a433f06efff82d0c24192",
+        "recovered_flow_sha256": "a8f8201d4c0281417419f51dbedbdd89cf55a78170c5e75dd3b4dacf8be0da0c"
+      }
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "residuals": 587,
+      "mean_um": [
+        -1.996483034610972,
+        -1.04806675505398,
+        -0.9635783289922364
+      ],
+      "variance_um2": [
+        6.5696683404179375,
+        2.137005193408009,
+        2.897095623239961
+      ],
+      "evidence": {
+        "raw_sha256": "44191f70f7384dad766844f37c619da2bcd121221fad05c4ed40351faf2a1232",
+        "manifest_sha256": "bbb0ea2bd58f74c92bb54550e57f39e08665833e2f05d26bc21b899322b7e850",
+        "recovered_flow_sha256": "66863a6e5ce5413cbed0ef1570846657557caad2b215aebb674249c53b2ea6a0"
+      }
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "residuals": 1104,
+      "mean_um": [
+        0.22379093031288114,
+        -0.20608457311106537,
+        0.08368572457529018
+      ],
+      "variance_um2": [
+        2.8231713655368904,
+        0.9554357754505647,
+        0.3271587547820684
+      ],
+      "evidence": {
+        "raw_sha256": "e292bf199e94518e26eac3b2249d2401af4f9ae0637eea3b104cee8088c93f9e",
+        "manifest_sha256": "00f9eefa4e67e1e7f4421e5dca82e5f84a547829ff5732a6047fcf6cbe148aa2",
+        "recovered_flow_sha256": "b9dc0af8188095dfadecaff556874a54ba32dc51e823f87c0bf1b5e3f5815554"
+      }
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "residuals": 762,
+      "mean_um": [
+        1.3059709877469594,
+        -0.1528460220032442,
+        0.5781463229531663
+      ],
+      "variance_um2": [
+        4.371088552785518,
+        0.9531050509322176,
+        1.2596267901232192
+      ],
+      "evidence": {
+        "raw_sha256": "3d56cb90637c99da0c90c90ac8137664575ef0d339814b6692ff61a5c49f57ef",
+        "manifest_sha256": "384b06f06ab15274e41b0d15a8d911266c5fe71e3ec13c671d59e326fb4623f8",
+        "recovered_flow_sha256": "97872f45efce478a89bbab131e3344ef4fcc7e1e8a64a6b48af1f2aa4515d5bf"
+      }
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "residuals": 804,
+      "mean_um": [
+        1.3254088452943766,
+        0.3912498520250882,
+        -0.09683828807678606
+      ],
+      "variance_um2": [
+        4.033515293388986,
+        1.0097405673281088,
+        1.1266260863948125
+      ],
+      "evidence": {
+        "raw_sha256": "62fc0fdf143ddbf5a5c21770f97d410c127d3af14f2949e47c1dc183bef0ffbe",
+        "manifest_sha256": "4c561ea583daf8d0348482b8afc88facab548d392e0be8d21b0064040cf0e75d",
+        "recovered_flow_sha256": "81e44052dac12bbee0cf5be8961950022cc0cad7c2db3e6d5ff47f544b82c59e"
+      }
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "residuals": 1490,
+      "mean_um": [
+        0.1818237766264832,
+        0.06616595811323862,
+        0.8142227091477252
+      ],
+      "variance_um2": [
+        3.4013574002629783,
+        1.3108455252724283,
+        2.0552028586015267
+      ],
+      "evidence": {
+        "raw_sha256": "c12f0b2a4cc3ec8ea156f2ba9814b71755794c6434b0f7bcef88592171648e0a",
+        "manifest_sha256": "8b324f29d9bc3054ee5b2a381545d7a3e8db2c9321aefe35dbbda5bea90e431b",
+        "recovered_flow_sha256": "f4c6d7117a427f03c2f5b3d7a5d1d331fb0a1b69d27e7e657188a5976bcf65f5"
+      }
+    },
+    {
+      "stem": "6bba_edf14583",
+      "residuals": 736,
+      "mean_um": [
+        0.16030629439247565,
+        -0.7559543588951941,
+        0.007967517061546381
+      ],
+      "variance_um2": [
+        2.506280247429668,
+        2.5030877640510796,
+        0.9289832409827092
+      ],
+      "evidence": {
+        "raw_sha256": "8de1d8bd9196b4e9b087bc1b4c104b21efcc113ae1c791d4ff7b066282527ac5",
+        "manifest_sha256": "a667f77319a79ada4a14446ad1b1879c527a3007ccb35172e096094268474db6",
+        "recovered_flow_sha256": "267eee65ca1e7dddcc6f056517bc108f75a7cecb67072290c2d25b8ba02aa12c"
+      }
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "residuals": 714,
+      "mean_um": [
+        -0.06147920549440771,
+        -0.5668208507165475,
+        0.6405932745866605
+      ],
+      "variance_um2": [
+        3.1862992591012964,
+        2.5871807638629174,
+        2.584927513400541
+      ],
+      "evidence": {
+        "raw_sha256": "9b801f95e068373c42dd9e08cc479d72c8ed0590f98012d9ca1d814f0e7cc9a6",
+        "manifest_sha256": "b978858269d8b48b19bba839ff20f2bd5ea9029a405d532d91b4f01fca055a1c",
+        "recovered_flow_sha256": "e5ab2ef8b890ba435b6efbdf1895d16cca75df368fd51a3b26970cfad990644f"
+      }
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "residuals": 1153,
+      "mean_um": [
+        0.2562236662762544,
+        -0.2389591886534758,
+        -0.022561697347605793
+      ],
+      "variance_um2": [
+        3.9406744349797336,
+        0.5661379549605368,
+        0.43530445700332776
+      ],
+      "evidence": {
+        "raw_sha256": "27c3e94cd6899f0fb6b25ee59c240260574f47c6484729bcc8f2f9cb37aabff4",
+        "manifest_sha256": "fd27067c4e96a140a8be0e6977264b3321b459f1cde84fa8bb56969ed1b6629d",
+        "recovered_flow_sha256": "113f180af78d59067c450a7d2ad7162671e9616263661c2443f00610cb798e15"
+      }
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "residuals": 962,
+      "mean_um": [
+        0.0077677432760807985,
+        0.6035943698514836,
+        0.7079657733934378
+      ],
+      "variance_um2": [
+        2.2290081278914795,
+        1.4883082146860824,
+        2.83102432925346
+      ],
+      "evidence": {
+        "raw_sha256": "90c7e9929fdade9c56a17f97b760101ab85ad46ddbf06a1de330b883248e6a19",
+        "manifest_sha256": "fc5dff8174daa929a374cd6622a4a19f165efc97addecd330fa6bab2fda19108",
+        "recovered_flow_sha256": "8e48bd6537a87ecfd8c2d933a05c6ee4be85c72f7802011000358e6306133ee7"
+      }
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "residuals": 1305,
+      "mean_um": [
+        0.24159288894384198,
+        -0.3050108493282209,
+        -0.21530319097893663
+      ],
+      "variance_um2": [
+        8.951102110899182,
+        3.8698764485603485,
+        3.075744807670465
+      ],
+      "evidence": {
+        "raw_sha256": "5859e0566de5638a6c97270523de1d4914090c510865a8c9864a1e8e7016e442",
+        "manifest_sha256": "ffda5690ebecd4075d4b9135050034e99f49cbde3942bb2fc345d4d6c1c2ceee",
+        "recovered_flow_sha256": "c40595e1dd9cb86c657190592c64213bf5f89b7372bda0123e5de6ad2bc9a790"
+      }
+    }
+  ],
+  "original_two_fit_exactly_replayed": true,
+  "feature_spec": {
+    "settings": {
+      "steps": 800,
+      "smoke_steps": 4,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.0001,
+      "gradient_clip": 1.0,
+      "seed": 244691,
+      "neural_weight": 1.0,
+      "physical_weight": 1.0,
+      "null_logit": -4.5
+    },
+    "contract": {
+      "fitting_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "training_stems": [
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "replay_stems": [
+        "6bba_f1fde7e0",
+        "6bba_23af9eeb"
+      ],
+      "previous_fitting_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41"
+      ],
+      "unchanged_diagnostic_stems": [
+        "6bba_b204cac7",
+        "6bba_2646afc7",
+        "6bba_8b7818bf",
+        "6bba_312f0dc3"
+      ],
+      "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "source_selection_opened": false,
+      "new_target_movies_opened": 0,
+      "authorized_for_submission": false,
+      "role_assignment": "Next eight original96 fitting movies, excluding cached/replay movies; no labels or scores used",
+      "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies",
+      "diagnostic_stems": [],
+      "feature_scope": "Eight new fitting movies only; original four diagnostic summaries reused unchanged"
+    },
+    "feature_receipt_sha256": "c0f5482b29f6861bc879dce25f35db9faf97298fc409dbb28efdcdb0c3e6e3e7",
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "model_tensor_sha256": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+    "motion_parameters": {
+      "mean_um": [
+        0.6847597560912013,
+        0.49539758715362603,
+        0.6188701264081437
+      ],
+      "variance_um2": [
+        2.573865493861958,
+        2.3743091105305036,
+        3.6901129377029953
+      ],
+      "unconstrained_variance_um2": [
+        2.573865493861958,
+        2.3743091105305036,
+        3.6901129377029953
+      ],
+      "variance_floor_um2": [
+        0.4401041666666667,
+        0.027506510416666668,
+        0.027506510416666668
+      ],
+      "observations": 928,
+      "method": "Pooled diagonal Gaussian maximum likelihood with native-voxel variance floor"
+    },
+    "motion_fit_sha256": "fcef805eabaa616102a4588437d0ea7cdcd5ef1cb7a7eeaa6d77138a7834c066",
+    "design_sha256": "a01b3d36fa3c0dffb590dd99a3e8b36268b1aab2017da5de62ab61f6e6eae8ab",
+    "feature_groups": [
+      {
+        "feature_records": [
+          {
+            "stem": "6bba_6479435d",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 39007,
+            "pairs": 99,
+            "raw_sha256": "3955602262a1dc2c19f7d1a6ab06f1df43232e1286943676be967208656a3832",
+            "manifest_sha256": "9e402ffc3d5d4642b0d03b1eb2ba908a97225d17e27da2e46ba56d5854a2dc80",
+            "counts": {
+              "known_parent": 492,
+              "known_absent": 20,
+              "unknown": 38019
+            }
+          },
+          {
+            "stem": "6bba_df673a83",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 25518,
+            "pairs": 99,
+            "raw_sha256": "5a18071352ea2365195617854da76e09350dc397a5580cbbd9cd9e2ca98d0cf4",
+            "manifest_sha256": "227dcca7082dbb07b9a11f37ec1371de0a0031f1457a433f06efff82d0c24192",
+            "counts": {
+              "known_parent": 631,
+              "known_absent": 8,
+              "unknown": 24621
+            }
+          },
+          {
+            "stem": "6bba_767a1e17",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 62512,
+            "pairs": 99,
+            "raw_sha256": "44191f70f7384dad766844f37c619da2bcd121221fad05c4ed40351faf2a1232",
+            "manifest_sha256": "bbb0ea2bd58f74c92bb54550e57f39e08665833e2f05d26bc21b899322b7e850",
+            "counts": {
+              "known_parent": 587,
+              "known_absent": 15,
+              "unknown": 61498
+            }
+          },
+          {
+            "stem": "6bba_2312ac41",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 15090,
+            "pairs": 99,
+            "raw_sha256": "e292bf199e94518e26eac3b2249d2401af4f9ae0637eea3b104cee8088c93f9e",
+            "manifest_sha256": "00f9eefa4e67e1e7f4421e5dca82e5f84a547829ff5732a6047fcf6cbe148aa2",
+            "counts": {
+              "known_parent": 1108,
+              "known_absent": 9,
+              "unknown": 13697
+            }
+          }
+        ],
+        "feature_worker_result_sha256": "3b7d190cf26dc171688ad175ac61c2983192df08e4cd941e2c72b6a71e7cf03e",
+        "feature_spec_file_sha256": "08a08a973567c33e12d414b9eb6a564f988239971bf4d6f986a0dfe2b339db38",
+        "contract": {
+          "fitting_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41"
+          ],
+          "diagnostic_stems": [
+            "6bba_b204cac7",
+            "6bba_2646afc7",
+            "6bba_8b7818bf",
+            "6bba_312f0dc3"
+          ],
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_b204cac7",
+            "6bba_2646afc7",
+            "6bba_8b7818bf",
+            "6bba_312f0dc3"
+          ],
+          "replay_stems": [
+            "6bba_f1fde7e0",
+            "6bba_23af9eeb"
+          ],
+          "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+          "role_assignment": "Original fixed96/24 training partition, first four per role excluding replay movies",
+          "source_selection_opened": false,
+          "new_target_movies_opened": 0,
+          "authorized_for_submission": false,
+          "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+        }
+      },
+      {
+        "feature_records": [
+          {
+            "stem": "6bba_971fa5e0",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 6549,
+            "pairs": 99,
+            "raw_sha256": "3d56cb90637c99da0c90c90ac8137664575ef0d339814b6692ff61a5c49f57ef",
+            "manifest_sha256": "384b06f06ab15274e41b0d15a8d911266c5fe71e3ec13c671d59e326fb4623f8",
+            "counts": {
+              "known_parent": 762,
+              "known_absent": 2,
+              "unknown": 5692
+            }
+          },
+          {
+            "stem": "6bba_cf35214c",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 42172,
+            "pairs": 99,
+            "raw_sha256": "62fc0fdf143ddbf5a5c21770f97d410c127d3af14f2949e47c1dc183bef0ffbe",
+            "manifest_sha256": "4c561ea583daf8d0348482b8afc88facab548d392e0be8d21b0064040cf0e75d",
+            "counts": {
+              "known_parent": 804,
+              "known_absent": 5,
+              "unknown": 41015
+            }
+          },
+          {
+            "stem": "6bba_cff5865f",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 53559,
+            "pairs": 99,
+            "raw_sha256": "c12f0b2a4cc3ec8ea156f2ba9814b71755794c6434b0f7bcef88592171648e0a",
+            "manifest_sha256": "8b324f29d9bc3054ee5b2a381545d7a3e8db2c9321aefe35dbbda5bea90e431b",
+            "counts": {
+              "known_parent": 1490,
+              "known_absent": 4,
+              "unknown": 51787
+            }
+          },
+          {
+            "stem": "6bba_edf14583",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 80491,
+            "pairs": 99,
+            "raw_sha256": "8de1d8bd9196b4e9b087bc1b4c104b21efcc113ae1c791d4ff7b066282527ac5",
+            "manifest_sha256": "a667f77319a79ada4a14446ad1b1879c527a3007ccb35172e096094268474db6",
+            "counts": {
+              "known_parent": 736,
+              "known_absent": 9,
+              "unknown": 78989
+            }
+          },
+          {
+            "stem": "6bba_1ebfb80d",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 16686,
+            "pairs": 99,
+            "raw_sha256": "9b801f95e068373c42dd9e08cc479d72c8ed0590f98012d9ca1d814f0e7cc9a6",
+            "manifest_sha256": "b978858269d8b48b19bba839ff20f2bd5ea9029a405d532d91b4f01fca055a1c",
+            "counts": {
+              "known_parent": 714,
+              "known_absent": 2,
+              "unknown": 15637
+            }
+          },
+          {
+            "stem": "6bba_7d3058ae",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 8778,
+            "pairs": 99,
+            "raw_sha256": "27c3e94cd6899f0fb6b25ee59c240260574f47c6484729bcc8f2f9cb37aabff4",
+            "manifest_sha256": "fd27067c4e96a140a8be0e6977264b3321b459f1cde84fa8bb56969ed1b6629d",
+            "counts": {
+              "known_parent": 1157,
+              "known_absent": 7,
+              "unknown": 7543
+            }
+          },
+          {
+            "stem": "6bba_4f99ce20",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 6211,
+            "pairs": 99,
+            "raw_sha256": "90c7e9929fdade9c56a17f97b760101ab85ad46ddbf06a1de330b883248e6a19",
+            "manifest_sha256": "fc5dff8174daa929a374cd6622a4a19f165efc97addecd330fa6bab2fda19108",
+            "counts": {
+              "known_parent": 965,
+              "known_absent": 14,
+              "unknown": 5152
+            }
+          },
+          {
+            "stem": "6bba_57b7cc1e",
+            "role": "fitting",
+            "frames": 100,
+            "nodes": 109965,
+            "pairs": 99,
+            "raw_sha256": "5859e0566de5638a6c97270523de1d4914090c510865a8c9864a1e8e7016e442",
+            "manifest_sha256": "ffda5690ebecd4075d4b9135050034e99f49cbde3942bb2fc345d4d6c1c2ceee",
+            "counts": {
+              "known_parent": 1308,
+              "known_absent": 66,
+              "unknown": 107510
+            }
+          }
+        ],
+        "feature_worker_result_sha256": "66f7b3f34173e838ff553ecfb97bfbdae9adb667b1ea36ef87530a8ab263f421",
+        "contract": {
+          "fitting_stems": [
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "training_stems": [
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "replay_stems": [
+            "6bba_f1fde7e0",
+            "6bba_23af9eeb"
+          ],
+          "previous_fitting_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41"
+          ],
+          "unchanged_diagnostic_stems": [
+            "6bba_b204cac7",
+            "6bba_2646afc7",
+            "6bba_8b7818bf",
+            "6bba_312f0dc3"
+          ],
+          "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+          "source_selection_opened": false,
+          "new_target_movies_opened": 0,
+          "authorized_for_submission": false,
+          "role_assignment": "Next eight original96 fitting movies, excluding cached/replay movies; no labels or scores used",
+          "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies",
+          "diagnostic_stems": [],
+          "feature_scope": "Eight new fitting movies only; original four diagnostic summaries reused unchanged"
+        },
+        "feature_spec_file_sha256": "09850e27b7570cfc0e06c3bf1ee0d4e0b6245f90cba4c056f2341bf05b2b7aa5"
+      }
+    ],
+    "replay_summaries": {
+      "6bba_6479435d": "1f2e2bb127f7af6ac9c20064b0a60b048c565b1362a74410f9659f9b4dfe75f0",
+      "6bba_df673a83": "f974831fa3c4b4d2ae7eb88a69568200664e01f59ba366c8abd12bcb145af7ee",
+      "6bba_767a1e17": "c4adff5648ea5a554c16246d038003f53da34770c1768f4f6a8654eaf8794951",
+      "6bba_2312ac41": "2aaeb2dd68c2c0229ee0fb27f816927295a42e13a4a8be9876e4c56bce911eae"
+    },
+    "unchanged_diagnostic_summaries": {
+      "6bba_b204cac7": "a119e177d8273f9d6784a8b605c5116b9e19f071890f9583ced38c4ce465a53d",
+      "6bba_2646afc7": "8f0d62c553901cbae35fa29a3a23c35b7855a04d452b4a6b016f72bce67040bc",
+      "6bba_8b7818bf": "81dece376a38eb9236c943b614a2c7d22a2013edfa0d721c55f5d044fee3f39f",
+      "6bba_312f0dc3": "71798812d0f7da6ea535e206cf069e824a8a8a8cadbf1ab27dfa2359acf0abc2"
+    },
+    "extra_feature_receipt_sha256": "3d40210f8f4ef6486d278b8749e600cc4c5d8363dea00b2c4d6e1af560cc5de4",
+    "previous_summary_worker_sha256": "4993810152196f08268f15e4a8c5a22f449c5ce3f3e1d042738745f479f06d55"
+  },
+  "source_hashes": {
+    "scripts/score-focus-expanded-motion-calibration.py": "659169f3fa76a9a7852ef35d30b7ec98a0b3160497508b0d02eb168634c2bc6b",
+    "research/focus_cached_motion.py": "8abcb5efdbd210197583244f57ec1caedc760680ccd33217b539a0743a2a59ba",
+    "research/focus_residual_calibration.py": "72beb76ae18c77da58f0535445fb12ca1a4bbd1aedda41fb69832b15c12044e9",
+    "research/focus_adaptation_labels.py": "69ebaeae0dab39f1b9561f8fb8f5ce35c694fc83aa89a7fcbefd57eb775912dd",
+    "research/focus_source_flow_comparison.py": "e591536221950213b73d937a44b316494881e0ae6aba937f933dd2b33fde4fed",
+    "scripts/score-focus-division-preserving-assignment.py": "3e1370a206ce8e8e414e007179ca7c6edac567c91a58e19378289c6b712dfd39",
+    "scripts/score-focus-source-flow.py": "c5e84dd08c02238810150938e1280a178f9e5b993362d9b9787454d221a6610e",
+    "reports/experiments/focus-expanded-motion-calibration-v1-design.md": "ae8d89e5283e7aaf00dc7e72ccc451d0ddcd00241b581a436b561da603e88417"
+  },
+  "source_labels_used": false,
+  "diagnostic_labels_used": false,
+  "new_target_movies_opened": 0
+}

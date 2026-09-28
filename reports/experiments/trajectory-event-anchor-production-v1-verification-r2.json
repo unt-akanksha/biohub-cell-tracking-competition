@@ -1,0 +1,108 @@
+{
+  "status": "public_production_verified_not_submittable_version",
+  "submission_performed": false,
+  "public_test_only": true,
+  "final_submission_version_requires_twelve_hour_timeout_review": true,
+  "quality_tradeoff_release_review_required": true,
+  "acceptance_sha256": "2b6b681926f596d422261f34c40cca3d22811a02df691896cdbc68ffef5dfe96",
+  "build_sha256": "6c859898bbc53b0003636d0d17e1b827dc9de18dcabeb25b337631cd5681e40b",
+  "harvest_sha256": "6959398146a025cae14cadc02a0a32c9874dabc2525e6584ee8b3c43d78d3f77",
+  "records": [
+    {
+      "mode": "smoke",
+      "stem": "6bba_05db0fb1",
+      "frames": 8,
+      "three_stages_exact": true,
+      "final_sha256": "a851d4bd8b7ea2fe3f72b82786132d73d6636515f30e4cfb529e5fa0a6a3197d"
+    },
+    {
+      "mode": "smoke",
+      "stem": "6bba_05b6850b",
+      "frames": 8,
+      "three_stages_exact": true,
+      "final_sha256": "6dae7e376e243c93bb4e76786c88a3e53d59a3c130c7e8ca81d846869c765338"
+    },
+    {
+      "mode": "smoke",
+      "stem": "44b6_0b24845f",
+      "frames": 8,
+      "three_stages_exact": true,
+      "final_sha256": "fa4fd264d073b2c57cb2e96c6a2b3aa353d7e7c63aa24660711340c65c3a938e"
+    },
+    {
+      "mode": "smoke",
+      "stem": "44b6_0113de3b",
+      "frames": 8,
+      "three_stages_exact": true,
+      "final_sha256": "6e3e2cb97d17e262590e43c804cecf94b59df1bcb3d4810498052a707661a793"
+    },
+    {
+      "mode": "production",
+      "stem": "44b6_0b24845f",
+      "frames": 100,
+      "three_stages_exact": true,
+      "final_sha256": "d5d4cad322fbab55ddd807b26d2aadd1fc3f998fdc8a51dc7f3161d14bf21789"
+    },
+    {
+      "mode": "production",
+      "stem": "6bba_05b6850b",
+      "frames": 100,
+      "three_stages_exact": true,
+      "final_sha256": "c57e9b52f4ab5fa8c5ad6c198d327d8e2165044bac415dc902d5f94ba8f6eb3d"
+    },
+    {
+      "mode": "production",
+      "stem": "6bba_05db0fb1",
+      "frames": 100,
+      "three_stages_exact": true,
+      "final_sha256": "d1b10492b96ac550a5c75e0d4c17c17595f13f2b7c70293b7888148d9b332c4a"
+    },
+    {
+      "mode": "production",
+      "stem": "44b6_0113de3b",
+      "frames": 100,
+      "three_stages_exact": true,
+      "final_sha256": "fdcee9a1fcad6c8486c279f52ab20208104e13d8366381e0ce8597b4e7c61e5c"
+    }
+  ],
+  "local_verification_revision": {
+    "previous_failed_verification_sha256": "da07ffb5aaf36678947d03d194b5c3f161028bbac6781986f8cafece3c2ea818",
+    "cpu_budget_diagnosis_sha256": "3cba2da625a61623130f4017e8c4201f1bc54db7611ef4534ff35a365803310d",
+    "original_verifier_sha256": "cf3f526d093de36233606c48d7e750e8e74271056df80b9213ecfa309274944c",
+    "local_replay_per_frame_seconds": 10,
+    "local_replay_stage_seconds": 600,
+    "production_notebook_or_model_changed": false,
+    "actual_kaggle_default_budget_checks_unchanged": true
+  },
+  "seconds": 326.60999999998603,
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "kernel_version": 1,
+  "csv_sha256": "b940d465aafbe62270caaab5dbd8803f6c679781c50763679b4a2a85533ae0df",
+  "rows": 240305,
+  "runtime_risk": {
+    "validation_cohort_projection_hours": 7.504155394838402,
+    "validation_calibrated_public_work_projection_hours": 9.371297485840381,
+    "combined_twelve_movie_makespan_projection_hours": 8.850950530539837,
+    "public_four_movie_makespan_projection_hours": 11.544540801942707,
+    "effective_workers_measured_on_two_gpus": 3.3651238205248584,
+    "runtime_policy_revision": 3,
+    "assumes_validation_scheduling_efficiency_transfers": true,
+    "worker_times_include_overlap_and_waiting": true,
+    "hidden_inference_cutoff_hours": 10,
+    "hidden_movie_count_projection_assumption": 199,
+    "dense_movie_and_static_shard_imbalance_timeout_risk": true,
+    "hidden_runtime_guaranteed": false
+  },
+  "public_movie_seconds": [
+    524.8906332880001,
+    410.59736777800003,
+    811.7981699029999,
+    534.685186534
+  ],
+  "public_wall_seconds": 835.383857025,
+  "ground_truth_opened": false,
+  "source_sha256": "2085981c76eed788d9d9c5368796f0e25825e0fea654d933aa5290fa611eaf52",
+  "remote_source_sha256": "e8e4c97c2c7ae7a519dd70c48f28c74b22319c8646b303110db4dd09e1b4354a",
+  "strict_quality_failures_preserved": true,
+  "competition_submission_authorized": false
+}

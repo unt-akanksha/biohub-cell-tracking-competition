@@ -1,0 +1,165 @@
+{
+  "status": "context_smoke_passed",
+  "contract_sha256": "79b8b979e2b4b3c1189b8e362ffb0f60b1b4f17201dd8442d56b4d3896032acd",
+  "plan_sha256": "a464e5c563130dcb6eed9047d759c5552cc57ee1ec2ae411c012cd8feee21952",
+  "records": [
+    {
+      "path": "data/0055.npz",
+      "sha256": "244aca6e015660aac2e906747a7e4b745823248d48b53d014df74f670711486b",
+      "bytes": 82221,
+      "stem": "44b6_3a861e03",
+      "embryo": "44b6",
+      "role": "optimization",
+      "transition": 0,
+      "source_packet_sha256": "04b9a92433de3cd30084f9268c54ad37ab18f6b1a50fd94335599a6e02686ae4",
+      "patches": 3,
+      "triples": 1,
+      "positive": 0,
+      "negative": 1,
+      "ambiguous_pairs_omitted": 0,
+      "origin": "legacy",
+      "source_alias": "legacy",
+      "id": 55,
+      "context_frames": [
+        2
+      ],
+      "original_fields_exact": true,
+      "invalid_context_patches": 1
+    },
+    {
+      "path": "data/0161.npz",
+      "sha256": "ec464aa8c4befd3a23761406fe2f3b3ce66f5f2c2e2d4de4cbd9df6b46596693",
+      "bytes": 94150,
+      "stem": "44b6_eb2880fc",
+      "embryo": "44b6",
+      "role": "optimization",
+      "transition": 72,
+      "source_packet_sha256": "20f3ed95fd49768fe50e462a94e8f45c4820f132146f916c216b88b96c086a4c",
+      "patches": 3,
+      "triples": 1,
+      "positive": 1,
+      "negative": 0,
+      "ambiguous_pairs_omitted": 0,
+      "origin": "legacy",
+      "source_alias": "legacy",
+      "id": 161,
+      "context_frames": [
+        71,
+        74
+      ],
+      "original_fields_exact": true,
+      "invalid_context_patches": 0
+    },
+    {
+      "path": "data/0164.npz",
+      "sha256": "ea529b2fc9b6e1784506ce5bba23ad7deb7dc59e2bb152d3582973cfbdbf5f54",
+      "bytes": 92394,
+      "stem": "6bba_085bf656",
+      "embryo": "6bba",
+      "role": "optimization",
+      "transition": 20,
+      "source_packet_sha256": "8dbb580cf2c7f4b7281555654eb6e7b7d2e85a524a916a5dd3e353ae8d3b0707",
+      "patches": 4,
+      "triples": 2,
+      "positive": 0,
+      "negative": 2,
+      "ambiguous_pairs_omitted": 0,
+      "origin": "legacy",
+      "source_alias": "legacy",
+      "id": 164,
+      "context_frames": [
+        19,
+        22
+      ],
+      "original_fields_exact": true,
+      "invalid_context_patches": 0
+    },
+    {
+      "path": "data/0174.npz",
+      "sha256": "6a85633dc4436c0d9a42e62f9d0f8393c8b9922f3cde204d2c6bce26311712ef",
+      "bytes": 380615,
+      "stem": "6bba_09961292",
+      "embryo": "6bba",
+      "role": "optimization",
+      "transition": 52,
+      "source_packet_sha256": "5039fbdc18e549135f48d91ff034c6a61f0da7d814457c06800fe64234747cf7",
+      "patches": 17,
+      "triples": 15,
+      "positive": 1,
+      "negative": 14,
+      "ambiguous_pairs_omitted": 0,
+      "origin": "legacy",
+      "source_alias": "legacy",
+      "id": 174,
+      "context_frames": [
+        51,
+        54
+      ],
+      "original_fields_exact": true,
+      "invalid_context_patches": 0
+    }
+  ],
+  "frames": [
+    {
+      "stem": "44b6_3a861e03",
+      "time": 2,
+      "raw_sha256": "5ee993797c22e7466727f7fd5465eb73bd8d0de8f1f34db30e4418017a95f46d",
+      "patches": 2
+    },
+    {
+      "stem": "44b6_eb2880fc",
+      "time": 71,
+      "raw_sha256": "48a1e1820ac2831dd078cd63d647e2eab55f326483adbb90ba916d70f7a6c558",
+      "patches": 1
+    },
+    {
+      "stem": "44b6_eb2880fc",
+      "time": 74,
+      "raw_sha256": "fd71bd32408b99ad22eda7d933e5a792cb05b600a67bdfd8aecb29fe044e7cbf",
+      "patches": 2
+    },
+    {
+      "stem": "6bba_085bf656",
+      "time": 19,
+      "raw_sha256": "5f21e6426b0a262e4546639c4a72bf878816411dec3b414b6ac135b105c6f725",
+      "patches": 2
+    },
+    {
+      "stem": "6bba_085bf656",
+      "time": 22,
+      "raw_sha256": "90d6f6450f032239c8d2a75379c75441a5d3a1a1009617f45e20f3106894ce73",
+      "patches": 2
+    },
+    {
+      "stem": "6bba_09961292",
+      "time": 51,
+      "raw_sha256": "6d6683faef5b53b22ded5c7cb4261d4e42f5a36ed96467a26f8e4486f4fd62df",
+      "patches": 8
+    },
+    {
+      "stem": "6bba_09961292",
+      "time": 54,
+      "raw_sha256": "37e3d015699db0bb40375292b4f2c320583a9d0d80b3a7a20ca2611783dd331f",
+      "patches": 9
+    }
+  ],
+  "totals": {
+    "44b6-optimization": {
+      "positive": 1,
+      "negative": 1,
+      "triples": 2
+    },
+    "6bba-optimization": {
+      "positive": 1,
+      "negative": 16,
+      "triples": 17
+    }
+  },
+  "old_data_unchanged": true,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "geometry_max_error": 0.000484466552734375,
+  "seconds": 2.1383874989987817,
+  "bytes": 649380,
+  "estimated_full_seconds": 380.93845875021157
+}

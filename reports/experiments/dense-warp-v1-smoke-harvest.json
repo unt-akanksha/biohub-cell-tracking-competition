@@ -1,0 +1,22 @@
+{
+  "status": "verified_backup",
+  "bytes": 18582952,
+  "records": [
+    {
+      "path": "RESULT.json",
+      "bytes": 5840,
+      "sha256": "192086427da8243360328cc1da2ce917c6889d2c8e09406dd04823d256259007"
+    },
+    {
+      "path": "smoke-only.pt",
+      "bytes": 8361542,
+      "sha256": "c09f96724549d81c447755cd5dbb66c6e163f0d555883c28d7bd4e296934eea3"
+    },
+    {
+      "path": "source-frames.npz",
+      "bytes": 10215570,
+      "sha256": "5dd3c37347f41ce0f302d33862665e4b6b8ffde8a4737e27fa03bfd3009bc08f"
+    }
+  ],
+  "remote_files_deleted": false
+}

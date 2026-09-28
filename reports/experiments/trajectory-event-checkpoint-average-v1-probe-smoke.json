@@ -1,0 +1,107 @@
+{
+  "status": "source_objective_probe_complete",
+  "source_sha256": "7120fadd005cf4d74a4472fef13116b588f797201f44de9702ce329c7f42c5c4",
+  "average_proof_sha256": "75dc1dcf4253dd2e964dc4acccbbbb396124afa05cfa526677120e7a418d8e6d",
+  "source_only": true,
+  "ground_truth_files_opened": false,
+  "source_labels_from_original_training_cases": true,
+  "selection_or_validation_opened": false,
+  "plan": {
+    "6bba": {
+      "ordinary": [
+        0
+      ],
+      "division": [
+        66
+      ]
+    }
+  },
+  "source_case_selection": "first_two_ordinary_and_first_two_forced_fork_cases_in_frozen_order",
+  "full_training_risk_not_estimated": true,
+  "authorized_for_submission": false,
+  "gpu_used": false,
+  "source_smoke_is_not_quality_validation": true,
+  "records": {
+    "6bba": [
+      {
+        "kind": "ordinary",
+        "index": 0,
+        "stem": "6bba_6ca87370",
+        "t": 1,
+        "case_sha256": "908026ab20315f7e54a0218265753c546b42575a68cd88344e24ae80ed565e00",
+        "forced_forks": 0,
+        "known_constraints": 2,
+        "arms": {
+          "anchor": {
+            "hinge": 0.0,
+            "regularizer": 0.0,
+            "objective": 0.0,
+            "gradient_norm": 0.0,
+            "seconds": 0.125
+          },
+          "final": {
+            "hinge": 0.0,
+            "regularizer": 0.022259055884231042,
+            "objective": 0.022259055884231042,
+            "gradient_norm": 0.0,
+            "seconds": 0.061999999976251274
+          },
+          "average": {
+            "hinge": 0.0,
+            "regularizer": 0.010823850788543993,
+            "objective": 0.010823850788543993,
+            "gradient_norm": 0.0,
+            "seconds": 0.0779999999795109
+          }
+        }
+      },
+      {
+        "kind": "division",
+        "index": 66,
+        "stem": "6bba_6ca87370",
+        "t": 67,
+        "case_sha256": "061fa6a8c30e4f64d24749599d9c61f9953128106059c6544df3cc2ff5dfa9fe",
+        "forced_forks": 1,
+        "known_constraints": 15,
+        "arms": {
+          "anchor": {
+            "hinge": 0.9754805446623266,
+            "regularizer": 0.0,
+            "objective": 0.9754805446623266,
+            "gradient_norm": 0.36626798228311336,
+            "seconds": 0.10999999998603016
+          },
+          "final": {
+            "hinge": 0.8160324521333696,
+            "regularizer": 0.022259055884231042,
+            "objective": 0.8382915080176007,
+            "gradient_norm": 0.36626798228311336,
+            "seconds": 0.10899999999674037
+          },
+          "average": {
+            "hinge": 0.8191106096626906,
+            "regularizer": 0.010823850788543993,
+            "objective": 0.8299344604512345,
+            "gradient_norm": 0.36626798228311336,
+            "seconds": 0.0940000000409782
+          }
+        }
+      }
+    ]
+  },
+  "seconds": 0.7190000000409782,
+  "by_source_and_kind": {
+    "6bba": {
+      "ordinary": {
+        "anchor": 0.0,
+        "final": 0.022259055884231042,
+        "average": 0.010823850788543993
+      },
+      "division": {
+        "anchor": 0.9754805446623266,
+        "final": 0.8382915080176007,
+        "average": 0.8299344604512345
+      }
+    }
+  }
+}

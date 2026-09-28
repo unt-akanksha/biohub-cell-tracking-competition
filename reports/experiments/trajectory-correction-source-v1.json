@@ -1,0 +1,1147 @@
+{
+  "status": "source_correction_dataset_frozen",
+  "source_only": true,
+  "model_fitted": false,
+  "gate_threshold_selected": false,
+  "selection_or_validation_opened": false,
+  "features_include_ids": false,
+  "feature_names": [
+    "log_removed_edges",
+    "log_added_edges",
+    "removed_mean_final_distance",
+    "removed_mean_raw_distance",
+    "removed_mean_half_history_residual",
+    "removed_mean_full_history_residual",
+    "removed_mean_half_future_residual",
+    "removed_mean_full_future_residual",
+    "removed_mean_history_speed",
+    "removed_mean_future_speed",
+    "removed_mean_velocity_disagreement",
+    "removed_mean_history_known",
+    "removed_mean_future_known",
+    "removed_mean_both_known",
+    "removed_mean_raw_probability",
+    "removed_mean_raw_log_odds",
+    "removed_mean_raw_probability_known",
+    "removed_mean_initial_edge",
+    "removed_mean_parent_localization_shift",
+    "removed_mean_child_localization_shift",
+    "added_mean_final_distance",
+    "added_mean_raw_distance",
+    "added_mean_half_history_residual",
+    "added_mean_full_history_residual",
+    "added_mean_half_future_residual",
+    "added_mean_full_future_residual",
+    "added_mean_history_speed",
+    "added_mean_future_speed",
+    "added_mean_velocity_disagreement",
+    "added_mean_history_known",
+    "added_mean_future_known",
+    "added_mean_both_known",
+    "added_mean_raw_probability",
+    "added_mean_raw_log_odds",
+    "added_mean_raw_probability_known",
+    "added_mean_initial_edge",
+    "added_mean_parent_localization_shift",
+    "added_mean_child_localization_shift"
+  ],
+  "source_reports_sha256": {
+    "0": "e1667c04fd1dd83d18932f63981e98e54ff0a2f72873932f55216987131b44fd",
+    "1": "d1e6adde78dde9a9eb324454cee90ec4973075df0c2458be253643d84e6d1894"
+  },
+  "gate_helper_sha256": "c83612a28ccf204719902814becd68add13b3943d5a3935629204e657e77954b",
+  "label_helper_sha256": "7ded49045191d0d2cfdac7f91dde840d0eb9c844a8877a6e492ecc7f1bf6aa53",
+  "source_sha256": "7460052914758ed81de43b78502fc06b9d43f032dc55fc48d2590c29ee3a80d8",
+  "prior_backbone_independence_not_established": true,
+  "labels_are_partial_known_link_changes_not_complete_metric_gains": true,
+  "authorized_for_submission": false,
+  "records": {
+    "6bba_6ca87370": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 102,
+        "partial_improvement": 15,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 87
+      },
+      "features_sha256": "a4ee691e285ae4920969fded4072ff2be7f3a563aa19383d12c347bb1b93b2ee",
+      "labels_sha256": "e4c3c9f1d59ecf762ef2c9c4caac4db51163c3907e4ef137223957a4eb58f7a3",
+      "components_sha256": "ac539e31881742530dc5369cc423791e957dfed70ca2e784e13f4650aa0dd471",
+      "baseline_sha256": "f39041e1b31da6cea024f1fd5596e92fadaa7f3b7d356a8ad6d3a186e750cc00",
+      "candidate_sha256": "4710430964884d4b591ad145ab3a6a3b6a0fd098e522a5d36c456f8a08a2d479",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_6ca87370-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_6ca87370-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_6ca87370-original/pre-postprocess.json"
+    },
+    "6bba_2819ca14": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 61,
+        "partial_improvement": 12,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 48
+      },
+      "features_sha256": "c6b63810e75ae4be7fb86c607b991b1529fe3d0c8c06d0f71d0e0c7375fdbfc1",
+      "labels_sha256": "f0bb17640ffd900b846567cd6e52e75348dcf64970ff7cf98f654d925164bb09",
+      "components_sha256": "e0e88ea043ed7c63fc95a63acde62644af05865346720f8e74e5a1a83f8a4935",
+      "baseline_sha256": "b50e203037606dc69a6db9bf0cf87de60234fc62bfc3cffe0de04a81af61e85e",
+      "candidate_sha256": "dbc500952851548bc1067b37e713dccc6b72bbf5c81d5f968555247c86a6df4a",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_2819ca14-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_2819ca14-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_2819ca14-original/pre-postprocess.json"
+    },
+    "6bba_67ebd073": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 442,
+        "partial_improvement": 9,
+        "partial_regression": 3,
+        "unlabeled_or_neutral": 430
+      },
+      "features_sha256": "875513033dd93213168ac0cd3705af05027abaef98b218b80b1bb7ffeedcc1b2",
+      "labels_sha256": "a87afdbaf61bf939af3a0166e8bd661b0c64731e3551cf616a39d1ec7609081f",
+      "components_sha256": "9cef3bd1e5d79521a839904c5624539811e7ba0938a5627fb5dd05ddbf6c094c",
+      "baseline_sha256": "e4efd9fd55caeb39d6f753375dac13a7b703029f23f4626b36557d3ae3ee0c77",
+      "candidate_sha256": "adf580490d31161355332956592a441370ae5fb207f4c3ce0bdb0bde88314a50",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_67ebd073-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_67ebd073-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_67ebd073-original/pre-postprocess.json"
+    },
+    "6bba_3abfe10a": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 1396,
+        "partial_improvement": 3,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 1391
+      },
+      "features_sha256": "583d8fe713a82d5737072a3002ecf2bae3f56b4f0aedd2d338605aefa863ac46",
+      "labels_sha256": "e874b86af70d68d480ce01515496cfcb1201fba0fe9ace215eac8c7a60b07847",
+      "components_sha256": "71c948d39bb01354b443c6a4e98f065b63c1503008792b48bd1978a4f23b7713",
+      "baseline_sha256": "b809dc135976a505ef0b6d89aab8ad9cf6a1a34894bbf6782ad10758228033a1",
+      "candidate_sha256": "145c19230c00c6a3e421bd23809ca2c959cd508f43a2ea90c5bf8d45448e7814",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_3abfe10a-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_3abfe10a-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_3abfe10a-original/pre-postprocess.json"
+    },
+    "44b6_996155de": {
+      "batch": 0,
+      "embryo": "44b6",
+      "counts": {
+        "components": 30,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 30
+      },
+      "features_sha256": "9a28c83ed030ef20b66f730668d2ba7b4fcd650ac02cf74e97ee67e6ac2dabf7",
+      "labels_sha256": "165863c3590a20fc51927f4e1fecd8d4367048261072450e4e97a1f71fa04fc1",
+      "components_sha256": "2caa8d6b1ef3ddcbceadcfeefbba51dc619df62a4b9a4907debf5d092b6b8d1e",
+      "baseline_sha256": "f6bcaf7fbf2494edac4db8340a95f023e46d8aa3bd514bc1cb52e12e56835d76",
+      "candidate_sha256": "8733f7e05575b7ba70c0bef4b0263370bd59f4eaa56f3e1f46988b08d322d486",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/44b6_996155de-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/44b6_996155de-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/44b6_996155de-original/pre-postprocess.json"
+    },
+    "6bba_5c039895": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 9,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 9
+      },
+      "features_sha256": "65de1280267d0de85e91392cac0386c25ae9b301c85a4fa16d20ed7d757678d5",
+      "labels_sha256": "9dc8222d8225cecf9d57c004233187eeef62abbc54a61304b6148fdb78e21530",
+      "components_sha256": "f540f0d28a3680b2cff3463b6a6c19140b66a9b38939cf91ca9bae20a2a86770",
+      "baseline_sha256": "a72c0d687171f89c3f01674aca880ca9a94fa09cdd4668e4c7ee20316ee47320",
+      "candidate_sha256": "64e7d25f39bf003b344c1865a17a7485dbb9ccb8e559b39b3f6ffa207d80d48f",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_5c039895-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_5c039895-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_5c039895-original/pre-postprocess.json"
+    },
+    "6bba_705ec2c9": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 115,
+        "partial_improvement": 3,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 111
+      },
+      "features_sha256": "b7efa7a33b00fade6521e2d6ff8e9e1a9a4112b9e5624d120cdea2d8cf4b063d",
+      "labels_sha256": "2e7b9010624dbdcd805fa0908fc83f43cfffbcab39fd9e2ae542e03eddc7862b",
+      "components_sha256": "6615db210af8e34514b24bd6711e92f2ba200b50e3efbe849099cc26b71fde07",
+      "baseline_sha256": "9976e4cb52f3f6849f9d44fb354d6078d9dec85628ce486e5dbf2c179b2c25da",
+      "candidate_sha256": "4bff0ed7c4924e4a83f92feb8338b94cbc4ebe7270130b5fcee51a4807af51c3",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_705ec2c9-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_705ec2c9-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_705ec2c9-original/pre-postprocess.json"
+    },
+    "6bba_12665c0e": {
+      "batch": 0,
+      "embryo": "6bba",
+      "counts": {
+        "components": 117,
+        "partial_improvement": 18,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 98
+      },
+      "features_sha256": "1fa72ed12275f6239b55d38cb8ce03effc717b20b06cf06ab21e4c3305a06e26",
+      "labels_sha256": "6ff7fa4e3f27bca653958974e8f0171f9d3a06a69afb91005a2fd2e5a2ae131a",
+      "components_sha256": "02df5d6c334e9404593c14de3a924098c5f7452bfa7559cb00749838039d90dd",
+      "baseline_sha256": "ef7c786bd6157a7b90fc752dca9daa7d29f3c96cb8468add1e410a67b2767020",
+      "candidate_sha256": "a41201edb524c441c5e8b3a9d40331cd40b3aa9c1b22d07e81663868522599a0",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-source-v1/6bba_12665c0e-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b0-features/6bba_12665c0e-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b0-full-output/6bba_12665c0e-original/pre-postprocess.json"
+    },
+    "6bba_d2b9fc0c": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 44,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 44
+      },
+      "features_sha256": "f04b044293693117c19fda2c155424a28dac9283662b151a0793761f54eb3aa3",
+      "labels_sha256": "fadf159bd2e8da3ec81519a85425282720c4b7fe135722b3caf39c667ee1e435",
+      "components_sha256": "5900e7724ee597d9790adeff93bd0ab8b7082b32ef200f3f6c08f2abd5b23d9a",
+      "baseline_sha256": "f560822d387e1db4b24dca61a9efdfbbbc57a4e491ce427b8e06224a3b15bd31",
+      "candidate_sha256": "89a165f539ccda0b2ba577d50101c433e8ef187247f83359e5898c2971cd1654",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_d2b9fc0c-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_d2b9fc0c-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_d2b9fc0c-original/pre-postprocess.json"
+    },
+    "6bba_09961292": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 294,
+        "partial_improvement": 6,
+        "partial_regression": 6,
+        "unlabeled_or_neutral": 282
+      },
+      "features_sha256": "ec525885f4d6cd98e398bb19f4918d35b6c1a047be750d61e184c116b7c5cebe",
+      "labels_sha256": "a54ae8ec01c72612021f67d827bfcfc3ebd5aa8140a9e13f6d8eb6257e7e2b57",
+      "components_sha256": "39f4dc900a3a52e52e9a66ad5a7e6e741eaf3ad84c1aaeade142680a23001007",
+      "baseline_sha256": "bbd3775fd958bc25db476ece2403946d6ddaa2c3a1ae5eed781158355c26550e",
+      "candidate_sha256": "3f344d26b1cb60de04c4232bd7fab9771eb59535931925d78f72e1e9d9afa52b",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_09961292-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_09961292-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_09961292-original/pre-postprocess.json"
+    },
+    "6bba_7f87b3d8": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 416,
+        "partial_improvement": 33,
+        "partial_regression": 4,
+        "unlabeled_or_neutral": 379
+      },
+      "features_sha256": "1e956a0b73330cbcfdebac3ae6ad79497eac5794835398df09261aac789972d7",
+      "labels_sha256": "9cd531bd08f81a8bee03148c619ef2cb49f412fe19d94654d3d41961d9f1f80f",
+      "components_sha256": "f971cd6bb8e9d82fe216c5ec7027a744b7324ad653b7935f606564bd4b2f0b24",
+      "baseline_sha256": "b1ef25fa00e40f4f4de2401ff1838fea8bc9d2b0012dfc3f3ad0e7f585d90e38",
+      "candidate_sha256": "2d099eda33eae4a625a9d334024d316c830a50badeecba4d907358e47cd97758",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_7f87b3d8-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_7f87b3d8-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_7f87b3d8-original/pre-postprocess.json"
+    },
+    "6bba_d3da753b": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 256,
+        "partial_improvement": 22,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 234
+      },
+      "features_sha256": "cc9f37e92e688d4397cf44c5861c633ef2dca920f4e5822b58262f3ebca3f6e7",
+      "labels_sha256": "6d5c67a0e9d3d5e7ee42f28f70fda33aa3f02e7629fc4021850033d1948b3084",
+      "components_sha256": "5e43980f497609f5cb55b5ed9756626371077f744966ff3f0538b1eded06fe48",
+      "baseline_sha256": "eb5ae3be1ba030a297601d2cd90368de5e49258b5722f947bfc06895e7199a1f",
+      "candidate_sha256": "c8b1e12df76b4428bd1442c96d0e6a5851d1240956108a33747cfd0676344470",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_d3da753b-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_d3da753b-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_d3da753b-original/pre-postprocess.json"
+    },
+    "6bba_57b7cc1e": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 1650,
+        "partial_improvement": 8,
+        "partial_regression": 16,
+        "unlabeled_or_neutral": 1626
+      },
+      "features_sha256": "2893e40a3410632fcad8fb6013cbd94a8d45f6e4f3e00af42c60704ce9cd5130",
+      "labels_sha256": "1af16a8e9598ce1d868fe8d6f3ad4aaedd7cf8271b3c8d529782316dff66f133",
+      "components_sha256": "7aa7765037301c1a1c26377c9178ac7d33e0e0911d5d0da878c81d03b47cc18e",
+      "baseline_sha256": "8d7298fb13e673300e661b74d38e26df18b648d5da18682c8fd97d5c8bf3cb01",
+      "candidate_sha256": "cd3665f37b54622a8c15d20618e709917cd870a753080b914389c585f80a2ad7",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_57b7cc1e-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_57b7cc1e-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_57b7cc1e-original/pre-postprocess.json"
+    },
+    "44b6_e28840c6": {
+      "batch": 1,
+      "embryo": "44b6",
+      "counts": {
+        "components": 104,
+        "partial_improvement": 0,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 103
+      },
+      "features_sha256": "abb9bd300b932378a090b7c66a310577e1256633484b41d355bba0d11fe08b30",
+      "labels_sha256": "c5ec231b1ad374a649e7848426ca28c5e1d058a76491715393df666a946ebb4f",
+      "components_sha256": "dc4282a8fe9b298d7112d22908139472e412e8500539c9333c50226ead7e0d24",
+      "baseline_sha256": "2d8a6c68a75a3add86a2b3e74a995a1979ad1b1b6c1389c2d20c8558c4a711d3",
+      "candidate_sha256": "bf651de5f439df4bfdcee55d608ef9f6fcbbf7d9ace259a23475898c3e8edbd9",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_e28840c6-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/44b6_e28840c6-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/44b6_e28840c6-original/pre-postprocess.json"
+    },
+    "6bba_ef7b4f7e": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 30,
+        "partial_improvement": 2,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 27
+      },
+      "features_sha256": "770fc492439bf58013bd4db060440266de286379e2b006b59b4a14bf082273bc",
+      "labels_sha256": "202021e464fa7f0a5f672228c1eaa76911698d7e91a1429e9d0dc67c986ca904",
+      "components_sha256": "467c89a7814ba1dcdad4e7bfba82a9998b0d4a113b2060b02a583eaa8c22398e",
+      "baseline_sha256": "f136063a04c923c9c6b9e9e42c31bef4be809a5977bddc54a539ea5a47203d17",
+      "candidate_sha256": "4affa4cefad3b840ae97ff4ade85eb3fb2fe00eb7f201b6c5019b6f052fa2589",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_ef7b4f7e-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_ef7b4f7e-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_ef7b4f7e-original/pre-postprocess.json"
+    },
+    "6bba_5c824876": {
+      "batch": 1,
+      "embryo": "6bba",
+      "counts": {
+        "components": 153,
+        "partial_improvement": 0,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 152
+      },
+      "features_sha256": "5078f7f8298b3f1023c72cab068b5ed47c7e88f1600d9f73f9dee499e8508bc8",
+      "labels_sha256": "e02c80ed686ed6df9612ba58396c25c02a24027d0e23da0e1321170b120db5bc",
+      "components_sha256": "18171d14f4ebed385aca07ddb752728f8d6baae95c9be4a79f2907b6f59bf8e6",
+      "baseline_sha256": "ed0f38d865ad8f7c9990879778453a91e36780d0f5d8689310d284875c097d90",
+      "candidate_sha256": "df17eb01242f9769665102b1b7a6ac4b3c2560c16008b2a12eea498655513381",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_5c824876-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b1-features/6bba_5c824876-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b1-full-output/6bba_5c824876-original/pre-postprocess.json"
+    },
+    "6bba_ebdf3b34": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 997,
+        "partial_improvement": 14,
+        "partial_regression": 6,
+        "unlabeled_or_neutral": 977
+      },
+      "features_sha256": "39f4e9e75654a1a0cac6a509578feb9d55e428e6b937ed605497f40c4235dd73",
+      "labels_sha256": "48dffe4a16e881af34fe0a6424d5104b18eb96783d54ef4c4a862f4730441920",
+      "components_sha256": "cf363b5ae2feba4a929b5ef3d62d6c53d82781db6417647de9de9f3f722226e9",
+      "baseline_sha256": "ad4f2c2a2d72687ce542842fb2053776eef01b19368890a227f0c6efc16749ff",
+      "candidate_sha256": "5ba859454afc093170b4d73db91c3a0d1fc06b4bfb2b2506566abd1a186e61fc",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_ebdf3b34-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_ebdf3b34-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_ebdf3b34-original/pre-postprocess.json"
+    },
+    "6bba_74686d6a": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 296,
+        "partial_improvement": 3,
+        "partial_regression": 4,
+        "unlabeled_or_neutral": 289
+      },
+      "features_sha256": "ad8ef2fc8f9b8f0c54fd36dca9256281fd6987e01a580f814e8d4f1f06387915",
+      "labels_sha256": "d1b38bea457df712d4258b081b869fd5b123790c58cf992506329d765420f139",
+      "components_sha256": "1d38bb86914d25c781adeee18e65a4c1a7a2cbffd9ecb24886cd6c9f231e1bcd",
+      "baseline_sha256": "dc6352a515367f66e7f59279feb1950c52ffaee8db83ff6a8d35e96caada5667",
+      "candidate_sha256": "7bd5032418fee89d7edc6b128e4f1c8eac21456b80bccc4282a328fe7f513c1d",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_74686d6a-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_74686d6a-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_74686d6a-original/pre-postprocess.json"
+    },
+    "6bba_80d12824": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 158,
+        "partial_improvement": 4,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 153
+      },
+      "features_sha256": "70d1e0ea3edb0d2b428004650dc7f8adafcb74258d643c04c88129d622c8c49a",
+      "labels_sha256": "4bbc5327ae83764c7064206c94e5190ffd7806c4f12a0fba46212aa6b3d87e23",
+      "components_sha256": "e6717a97b54d49ce3779aae152b595553e4243b0d8abd4da69e17f47fc9ed363",
+      "baseline_sha256": "8c0583d48217d3e0a3ed77b5a67f5da93d2705a9c2f7049c64d8e4603cf4b61a",
+      "candidate_sha256": "3f5d839856fa0e085039c5079b20fd05047633728b9c8fbec8351689cc2713f2",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_80d12824-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_80d12824-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_80d12824-original/pre-postprocess.json"
+    },
+    "44b6_a21120c2": {
+      "batch": 2,
+      "embryo": "44b6",
+      "counts": {
+        "components": 200,
+        "partial_improvement": 3,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 197
+      },
+      "features_sha256": "aeecbe543cb5006c36e666f5ee4ff34b975e4118b790a621c400815d7fa98e42",
+      "labels_sha256": "b4f0b6f5d3a68b65392b5790174e240d1476529c9050760d50876e4448e4b7e3",
+      "components_sha256": "bedb4b51adc8aa7181bcb3357c7d31650d2a088fa1168c06faed087ccf0c1601",
+      "baseline_sha256": "fd4848ef77fe58ca17e2395cd8a87149f23def2232ffd7621919720aaac35e2e",
+      "candidate_sha256": "805f805349ade4171fb8b38d6827a408c4c4c078295e599eed1461f98dead4fb",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_a21120c2-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/44b6_a21120c2-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/44b6_a21120c2-original/pre-postprocess.json"
+    },
+    "6bba_d1acb6ff": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 324,
+        "partial_improvement": 8,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 315
+      },
+      "features_sha256": "3f3497b24c0b06efea671dcee02e82298bdf8c1457b348d4aa5c1e00ab2aa103",
+      "labels_sha256": "2dda9390031fc03d880708b8e45e9ca0dffc4dececba9027e1a63c6f1cee8cb6",
+      "components_sha256": "0946ac3106bb252672c5a76cab3ac803851a8387dcb34a5f03efeb68459178a1",
+      "baseline_sha256": "225f25855e295988b36190d7f235d7e3a709d2660d450aad873b7826519215e6",
+      "candidate_sha256": "fd8c8319bc5f93fee5a6e6e4bee9a3458c428d4b70b1743fe8f0f3c0c16a7055",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_d1acb6ff-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_d1acb6ff-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_d1acb6ff-original/pre-postprocess.json"
+    },
+    "6bba_907271db": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 18,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 18
+      },
+      "features_sha256": "974a02d9286b5f77f39d18b4d9c7baa10c8b032885a706f2f4b490212998d088",
+      "labels_sha256": "df39d364cc24458be0e35c1cf8671bf1f76814270be952e49409d925b24ef905",
+      "components_sha256": "1ae59fb96f4d2949398d7b1d3ef6ea4ec6b11386ef8f18a80e5c1957bbe0bd36",
+      "baseline_sha256": "403f84cb6fd8cfe9efd3519fb4f00b0fad47e3db21c16f95651a97ce65b38ec6",
+      "candidate_sha256": "97a810d651b8fdc410b6ee6f0bcbd844eff9c3fd268023ce5e9f7080f064aad0",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_907271db-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_907271db-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_907271db-original/pre-postprocess.json"
+    },
+    "6bba_784a78c9": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 20,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 20
+      },
+      "features_sha256": "9021c786687e92bf9c7d74b1ff15dd009bcecafd7512a960c5533abdee5651ef",
+      "labels_sha256": "81ad33ef0d1122f7f57f2bfff8ed26696da97afa2c0a51efc6566c955a766a8f",
+      "components_sha256": "2b60021b67eca3a46bf87e36fecefc8ad0f2a6d84d218959d0074b752bec8cbf",
+      "baseline_sha256": "7bb67d2f82f39cf6b68db141c93177da4fb930b11f5ed2523cc5f761fadc7623",
+      "candidate_sha256": "926b1deac264053ebf83b373060a4cbfe0cb53a607ffbe63748defbd4ae62e8b",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_784a78c9-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_784a78c9-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_784a78c9-original/pre-postprocess.json"
+    },
+    "6bba_9a41d029": {
+      "batch": 2,
+      "embryo": "6bba",
+      "counts": {
+        "components": 219,
+        "partial_improvement": 9,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 208
+      },
+      "features_sha256": "ab80db16f769a8141e695cdbc00ed0c5799b4124a3617b69d3501f968ba3ada8",
+      "labels_sha256": "568bbc5732c7686f0aed06510be414061c86ca2b05b220f33481b23ae40d398a",
+      "components_sha256": "1253914733bffcdb6b2010306382af89e1a6e0fd82450a7716fa1cf3bb47647c",
+      "baseline_sha256": "c11a7cdbb62f8d35d48a89eb25d4696924d32ea19a7eba5d13299d2dbe9eb368",
+      "candidate_sha256": "1ef320c52e93862ccb3acfeac41182987ec3a7dba3dd4d1fb6cf4851e0ff1245",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_9a41d029-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b2-features/6bba_9a41d029-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b2-full-output/6bba_9a41d029-original/pre-postprocess.json"
+    },
+    "44b6_deabac95": {
+      "batch": 3,
+      "embryo": "44b6",
+      "counts": {
+        "components": 60,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 60
+      },
+      "features_sha256": "a98534a1722e34f9ef69fc04aef1884b675d69fd20b1aea54b90468a6a7467be",
+      "labels_sha256": "8a66f58d1d5718f7b268df7d8802a86e569437ae6ca20925cee5a6c67858fd93",
+      "components_sha256": "cc246b21c8fa8b3a164f3d17613acf916e73eb0005fc60f57e28394b5726ef12",
+      "baseline_sha256": "f62c8649db4ce32c65a46a368a3c03427b58fd3bb2bc324710c749773e9871a8",
+      "candidate_sha256": "db8be248509b8ab6dad7161e416553c906d7982d4bc23cd31c750775a5db4307",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_deabac95-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/44b6_deabac95-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/44b6_deabac95-original/pre-postprocess.json"
+    },
+    "6bba_786893ac": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 1130,
+        "partial_improvement": 5,
+        "partial_regression": 17,
+        "unlabeled_or_neutral": 1108
+      },
+      "features_sha256": "1ef550bea4a9c5b523b6a347c8f0313b1fe3ee28818cce85004cd6b3fd6b3fe0",
+      "labels_sha256": "2d3b789b3525326ef144db58f75bd6d218c05d1d830706c7b37d3ad82bd41455",
+      "components_sha256": "f6dc89e78941e40ff4cf718dc7ed6acc569715a9d4e7582e84c21ca7205f12b7",
+      "baseline_sha256": "284a27c4f6af07076d701b03763f7dc9d22467f053f4e37f3d4c8f058bbdbf1c",
+      "candidate_sha256": "91b493c33c868008a560620d6e70ddb99eb5c4d157d18d6bb34507a662b18218",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_786893ac-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_786893ac-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_786893ac-original/pre-postprocess.json"
+    },
+    "6bba_cdcfe533": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 261,
+        "partial_improvement": 14,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 247
+      },
+      "features_sha256": "05dd5a6cb2ccb7b6947a71661c801b142c7ae3032ce62b9c4ae296446a898701",
+      "labels_sha256": "25d865e45cca22233b465cc1dfc73aa51635080248650321b43c59f48c090fc7",
+      "components_sha256": "7370aa18eaf2584ca6ae2a07c65631b54fa0ac750ac2d9807aa1f42c23e402d3",
+      "baseline_sha256": "bd8a0eed31c84d585dd7da96a8d52ffe1171f13d20b4daa0fe82f619e8f4a90e",
+      "candidate_sha256": "c18b7ee92278f7a59f364c390ec1cbe941ba80b4b53d1c343282e4c0dcf8bac4",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_cdcfe533-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_cdcfe533-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_cdcfe533-original/pre-postprocess.json"
+    },
+    "6bba_7d3058ae": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 38,
+        "partial_improvement": 4,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 34
+      },
+      "features_sha256": "4c47b1089a953ac591be55f5fa4417fcc00e93d9708ec2a33cb1ff9b3238df7f",
+      "labels_sha256": "e670ac0a1e0ed8bdb9151390e608eab5b701da1de1cd2a4165725d7625e87bd1",
+      "components_sha256": "60011ed233e414147c47abf876b9110c74b9c078e711cf30d8485fb9417318c9",
+      "baseline_sha256": "2af912fcde29a903dd5c2c8ba90b4634056238eaaa9cbee0290b0dbc5c6a4395",
+      "candidate_sha256": "535743a497eae49d3e887336e7fec06eff4054daf9364ddd8dfc7292888bd2ca",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_7d3058ae-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_7d3058ae-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_7d3058ae-original/pre-postprocess.json"
+    },
+    "6bba_6321a359": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 36,
+        "partial_improvement": 1,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 35
+      },
+      "features_sha256": "bcdee90c4dc57004e35f8b0710b4655241a16472fac6ca43ccdb5c298e169500",
+      "labels_sha256": "b713d58bb4ba566b8098a79965e44b2ee6340f6b8d9f18258faa0aa887621321",
+      "components_sha256": "94e2acec2911dd9626265df56263e46fd5c5542d5c47adcf25b55934fce19dac",
+      "baseline_sha256": "200cd187fcaa6144f59404a8edac6f481925b03a026d55e2fe00435bd761b3de",
+      "candidate_sha256": "c301db9ba47a10a9ac114c6a02d421c0dddcd98d0fe4adf26f7ed00be04137e5",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_6321a359-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_6321a359-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_6321a359-original/pre-postprocess.json"
+    },
+    "6bba_bb9f20c3": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 151,
+        "partial_improvement": 6,
+        "partial_regression": 3,
+        "unlabeled_or_neutral": 142
+      },
+      "features_sha256": "4635a0df43bc3c61b68f6e481cd7bbf50e1c0217ecedddd9e1794a143e7685fa",
+      "labels_sha256": "4fdfd3e6532c0317cd6690e7884d2900ccc89cb29221b2bfe188731ccb7b301a",
+      "components_sha256": "f8f4ce8502b317f8a9b3304fb67b2d695fffb0fe28eee7618ffbb8ac5f794203",
+      "baseline_sha256": "d3ab9c3fa844471e91fb7bbfcd0f776549230ad5cf7fcfd9c46fb7fdb48b3e8d",
+      "candidate_sha256": "4b4232d89f3478ce6f43e7d6468e63ae880be3462302a9ac2ef90f7fba98f6e4",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_bb9f20c3-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_bb9f20c3-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_bb9f20c3-original/pre-postprocess.json"
+    },
+    "6bba_3c5691b6": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 25,
+        "partial_improvement": 2,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 23
+      },
+      "features_sha256": "797e45b8652c284571894f380d0fdf00acb7487d4a73b421a38a2bb256b9e584",
+      "labels_sha256": "12a7d12f4d50f8171c42112da94a8bffd240a31cea53a3bb0fd0c9bd2ea020b1",
+      "components_sha256": "250b0fa761ec1b6866bf0d27e76c0bf6d601ce3dc206cf28b77397c6792d07d0",
+      "baseline_sha256": "824bda5dbd3724bf05aba1923b1952d8c7b4cb236e0bcb4922b938bb7f71cfbc",
+      "candidate_sha256": "84af38086055ef71f145507dff2cb3908b3276ed273bc82e176166876f7b92e6",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_3c5691b6-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_3c5691b6-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_3c5691b6-original/pre-postprocess.json"
+    },
+    "6bba_afb141ff": {
+      "batch": 3,
+      "embryo": "6bba",
+      "counts": {
+        "components": 132,
+        "partial_improvement": 5,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 126
+      },
+      "features_sha256": "0dc8cccca38da3c82e0c46f0c7b3338588aa409b66663ffcb04f23dec33c3184",
+      "labels_sha256": "396f6030255902ef254f124f932587d98c79fc1f4547839d522ea9c1e700a9de",
+      "components_sha256": "551162ccdfed1346f0102e2f3b27a5d9a134b4c45cd51c5207043015daf37d22",
+      "baseline_sha256": "13dddd15ec7132f4a3f33576e3b0bb9a4a840d1cbccc4482e2a0d89e7ee248f3",
+      "candidate_sha256": "aa0d6759d24acac75162b8785103b6a86b0fc6d07e7f750b265e02633310da11",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_afb141ff-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b3-features/6bba_afb141ff-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b3-full-output/6bba_afb141ff-original/pre-postprocess.json"
+    },
+    "6bba_f8ffd5e7": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 639,
+        "partial_improvement": 1,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 637
+      },
+      "features_sha256": "5c887e846079d2738d4b780f36cfba7e81efa1f4c088a7a25ed6235a02b02d75",
+      "labels_sha256": "878535c2d235f1c51221178ccf879e7611e446c4b48305e06bd1f18457b6c69d",
+      "components_sha256": "b65b27939720657a79a363fa5c1535d762c7e9ac1c0a60d8f22fef2e1db6f4fc",
+      "baseline_sha256": "29dfc59b3168a2a0944cbb1380552cc702304f8acc437b3683a18e98fdefbc9f",
+      "candidate_sha256": "c796373f37574f531cfc6d01118e8da55394e0157962287430d8263255b8db04",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_f8ffd5e7-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_f8ffd5e7-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_f8ffd5e7-original/pre-postprocess.json"
+    },
+    "6bba_b204cac7": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 17,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 17
+      },
+      "features_sha256": "c1b5845ab1c7db6108109fb23ece9bf2d3c59afa5f86c9d1606bdef1341e4c63",
+      "labels_sha256": "bc4b88b604ccc3ca4dd085790a13085c9202bcb47d5c070fd5e5e3ec6917b9f9",
+      "components_sha256": "67d653b01858d2b490344ac4387d5437f3c5fff6069d29f4c0a73e15129a4a4e",
+      "baseline_sha256": "7b751488ae05ed2537aabefde67e560f761d9062044aeb6ecfef9ed6608551e3",
+      "candidate_sha256": "037c9c8e655dc112a44bdc74ce55f05bc264600af76d992ea0c29966e1381d05",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_b204cac7-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_b204cac7-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_b204cac7-original/pre-postprocess.json"
+    },
+    "6bba_f20478e9": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 105,
+        "partial_improvement": 8,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 97
+      },
+      "features_sha256": "b013121db7bf0210abb53bbb596636c838ba9bc4baa94814479aca44e4581939",
+      "labels_sha256": "75940a5139f2675bf8e90a12597f51ffa9bc63f9b73cf0c335b3a3dc30d61264",
+      "components_sha256": "e4b4d0c5ed5e825e23539ce39549231fb4b62d2add535b02181f053c1245fdcc",
+      "baseline_sha256": "223192b8064f45342cb75a717398a1c94a1df7e38a1f7f0c2a08dd5fac395707",
+      "candidate_sha256": "9353db961116993fbad726681ff1b69d788366f86d25db012616ac83dae70fe9",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_f20478e9-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_f20478e9-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_f20478e9-original/pre-postprocess.json"
+    },
+    "6bba_c328f2fd": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 313,
+        "partial_improvement": 3,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 309
+      },
+      "features_sha256": "a1d4dc3b6cf3bd5ae65b11b8a769e0363966b1470cd35daffc301de4c93ba666",
+      "labels_sha256": "b5625a0228adf197499455f765e20fe02f0bc2c899b0abbf0e1b9f759387eb4e",
+      "components_sha256": "cc5152a7b5faf8a901849dcc80c99a691a93f8da244f21d20fb1834895e13c62",
+      "baseline_sha256": "c6c624b038eb62a049a4a95cc6fd454bf3eed747801b4e926eb94aea5efd2f56",
+      "candidate_sha256": "688b906d8d518f6e139bce54f0acb097cd3d0e52fd0c5783cfb7d362052a8dc9",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_c328f2fd-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_c328f2fd-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_c328f2fd-original/pre-postprocess.json"
+    },
+    "6bba_268e1230": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 91,
+        "partial_improvement": 1,
+        "partial_regression": 3,
+        "unlabeled_or_neutral": 87
+      },
+      "features_sha256": "35adac42cb90107c601e123a5c873e60e83687543054b784ada81ac32cd7c1f7",
+      "labels_sha256": "a01cb2ad8c695e9003e2ce9efe42905c0ccfd6c218ebb7099a7203740dc6d3a4",
+      "components_sha256": "b313fb4e48f602fa0ad2626eee56661311bd57a2667e15062e6862243fc0d002",
+      "baseline_sha256": "b6af36a1c406fd93d80ad81485e1477008e8db75ee2dbc32a2080d4e5a73ad3a",
+      "candidate_sha256": "3ee2e1bb31bcaa30fcb22b91d334d2eb908fb4b99687a6e848c69c23d42f288f",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_268e1230-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_268e1230-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_268e1230-original/pre-postprocess.json"
+    },
+    "6bba_085bf656": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 12,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 12
+      },
+      "features_sha256": "d8640bbd7fc4e1cbeb72697a074230a46bd6cd830fdfdd9e5c84d06f30469247",
+      "labels_sha256": "f202edf58241fa4b104e638658c5c74b3b187f6df123ecfd8d259e19f755f4a2",
+      "components_sha256": "bba7be371fdab6ce67e2d07d6ad718316f4bb1bc95f4b01de76a4b6c69578948",
+      "baseline_sha256": "7802ea0a995f2757fba268df287e017c5d142d2397c4cd6cc8cf60f3be8ca7c6",
+      "candidate_sha256": "55f9ca2cc2197742566d0ebac2be262792bc5c0733b424f3f30bf96337ffdc1b",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_085bf656-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_085bf656-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_085bf656-original/pre-postprocess.json"
+    },
+    "44b6_eb2880fc": {
+      "batch": 4,
+      "embryo": "44b6",
+      "counts": {
+        "components": 206,
+        "partial_improvement": 1,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 205
+      },
+      "features_sha256": "b16aa1bdbd583109e0e8d098710f4ab7e4591c97627a3f11744325afd5c85b41",
+      "labels_sha256": "cdf276e79fd4f61b721828d5bf1d71c699aba53f13513df23a6ae1389ed147d6",
+      "components_sha256": "e7697378d33f8b623ecfdbd7602b054d8d7bae05f4ce4072ade4e5250398fb45",
+      "baseline_sha256": "cbe3d899e242bb81dbdb535b34acf8225b59bfd7123f87bbcc5b646c7c17d1be",
+      "candidate_sha256": "642ecb86408543c09b2e4894805524a8481a4a7bbcbf263d43008d81118d5ab2",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_eb2880fc-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/44b6_eb2880fc-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/44b6_eb2880fc-original/pre-postprocess.json"
+    },
+    "6bba_fe670320": {
+      "batch": 4,
+      "embryo": "6bba",
+      "counts": {
+        "components": 205,
+        "partial_improvement": 5,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 200
+      },
+      "features_sha256": "3b70a43685ec4ba1ffac6f6dfc7c66c41558fc6b8e5ad795254e721efa28eb45",
+      "labels_sha256": "19517fe343a0bbc29d984a9b4d8c97f3e6614703eaf6cc6b417082e1c38d1ce9",
+      "components_sha256": "af4903ffeb6388207d5148ba331684480f4b633f11bb756c3ff5f77f4be6ab25",
+      "baseline_sha256": "51ae36e72b685207eea85f2fb47beefabc9f6c3fac00fce281f4c23b219167a3",
+      "candidate_sha256": "9a33a3b7096ecdc92807a1693527003fe79f66a35b1c6d0d7dca967f937a97c5",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_fe670320-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b4-features/6bba_fe670320-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b4-full-output/6bba_fe670320-original/pre-postprocess.json"
+    },
+    "6bba_48816121": {
+      "batch": 5,
+      "embryo": "6bba",
+      "counts": {
+        "components": 94,
+        "partial_improvement": 2,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 91
+      },
+      "features_sha256": "effd26c5be2c6e6dd63fddab9b2cfa42c46fd32a8c4048a3f45a33298463efb2",
+      "labels_sha256": "e5e9a72574c2d4d99ad9263fb3f1f18d4895874a4edf111d1b997ea0e4dd2d28",
+      "components_sha256": "e48d94b65edbab250dd14876a4578af13c4aa7c33630547db928861563468c5a",
+      "baseline_sha256": "aebec1cc9c8728dbb52eb47c3838e07ec863b06a71222ac85b5611b7cc9c92e1",
+      "candidate_sha256": "bb76f7ea3ef6f8b6ca8e3179cab32384a4c7c8fc071886a030b6e223af2b91c1",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_48816121-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/6bba_48816121-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/6bba_48816121-original/pre-postprocess.json"
+    },
+    "6bba_1d0d8384": {
+      "batch": 5,
+      "embryo": "6bba",
+      "counts": {
+        "components": 230,
+        "partial_improvement": 11,
+        "partial_regression": 4,
+        "unlabeled_or_neutral": 215
+      },
+      "features_sha256": "e6de694c4c7f067b2202ca83135f7117feb2219782c814a38c9a47297cfb4228",
+      "labels_sha256": "11826cd15d7afeef51e9aeb5cb2343b1a75c6a3b443dddc67176401a37b219fb",
+      "components_sha256": "ecf324d0440bd198d83f4d2aa8a90013809e8a5cbf60865046817385504a1955",
+      "baseline_sha256": "80e6cd8909b1cfda25830b94da37019ba39f163a4a39952f27ebb5114e0e75e4",
+      "candidate_sha256": "8ebd567f9b838bc8eac2feffd6d33f6bbc7b9b51c49276b6732ad00bb613a1a1",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_1d0d8384-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/6bba_1d0d8384-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/6bba_1d0d8384-original/pre-postprocess.json"
+    },
+    "44b6_c8e2a523": {
+      "batch": 5,
+      "embryo": "44b6",
+      "counts": {
+        "components": 143,
+        "partial_improvement": 2,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 141
+      },
+      "features_sha256": "56e32dfa73932e79418b5da6d2673cdfa0df2a341968772346b64a1df873e5f9",
+      "labels_sha256": "cef332d02bda0509161a1d26bce64a0b9282e41054eb4d728da791b423920269",
+      "components_sha256": "b3ebcb9cd17127492b4bd45ac6cfd2150842ab8b5d0fd7742cd75b9b080aa207",
+      "baseline_sha256": "c0879754ccb6dfe17d65905cc1a211684b5896c98df22f1a972716374494781a",
+      "candidate_sha256": "91afdcdce0fee4426218187f16d414d9aaf64ac5be951212f02e8d2fa2e8a999",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_c8e2a523-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/44b6_c8e2a523-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/44b6_c8e2a523-original/pre-postprocess.json"
+    },
+    "44b6_d2f34f90": {
+      "batch": 5,
+      "embryo": "44b6",
+      "counts": {
+        "components": 112,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 112
+      },
+      "features_sha256": "0eaa1daa0e26c2c17e183f10f4c4d90a75fbeb0ae1fd12b657fcb49c006ad234",
+      "labels_sha256": "6949199ea1a634e543a80be8a513abc9808b3b86ffd043bc9f877d7f6d365b5c",
+      "components_sha256": "ade4733c0a85340024200870626d6781068bb4fd2a98dde8379dbe7e1fdd7a7c",
+      "baseline_sha256": "6dee0790b3e92ffc7354104b55849dc5159b6043b8d9430e17d557c5e43d3e30",
+      "candidate_sha256": "7df4fc6a49eb3fb016744b505ea9eacc3c346fa9390d902c6803a2cb5a4eefae",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_d2f34f90-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/44b6_d2f34f90-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/44b6_d2f34f90-original/pre-postprocess.json"
+    },
+    "44b6_7a302da0": {
+      "batch": 5,
+      "embryo": "44b6",
+      "counts": {
+        "components": 291,
+        "partial_improvement": 1,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 289
+      },
+      "features_sha256": "f13e4b7001d0f31c6790639b82d47b51611adff4075a9bd933c727cc57448663",
+      "labels_sha256": "301c2c427dec4bdda076a9d6894c9b52bc3245d3c8fcf95db5971a9585607b9c",
+      "components_sha256": "0c61931d0456bc1a4b582b19c3466ec2f1e3eb8b3be73a99b8903da62358e6d8",
+      "baseline_sha256": "218ca28b2f6d6e88227395fae9ff9b2f2a03eb741f690c5a5e28b1a5803f1001",
+      "candidate_sha256": "de71526763f8fc472555b9bac8449777f03ad108d235bf205412e1eb68406330",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_7a302da0-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/44b6_7a302da0-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/44b6_7a302da0-original/pre-postprocess.json"
+    },
+    "44b6_587a1e22": {
+      "batch": 5,
+      "embryo": "44b6",
+      "counts": {
+        "components": 201,
+        "partial_improvement": 3,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 198
+      },
+      "features_sha256": "a0c8f7957556cffa1a5a943e73a689578ea5d81331e9a8311e9001b90f71979a",
+      "labels_sha256": "168fea6c1997667443c4eb905ee8b118f037d3c540234887670f80c2f6e41fea",
+      "components_sha256": "79dd80053949586b0570a444e233981dabb0d4434e3fe353bd12047420cc5d4a",
+      "baseline_sha256": "45b1e08fd82f90d84a6575c024fcdefdf671769cc581ec573d0a0775802cc42d",
+      "candidate_sha256": "0453219e3172172965e3a849ac058b0abba3e023f0009e60aa112d67b16ab82d",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_587a1e22-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/44b6_587a1e22-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/44b6_587a1e22-original/pre-postprocess.json"
+    },
+    "6bba_ab78413d": {
+      "batch": 5,
+      "embryo": "6bba",
+      "counts": {
+        "components": 149,
+        "partial_improvement": 2,
+        "partial_regression": 4,
+        "unlabeled_or_neutral": 143
+      },
+      "features_sha256": "e887579a2ee1f167e25c8a50cf9369eaf64e45516aee7c0ca7ca0829d2a766ba",
+      "labels_sha256": "d1e865c931021342ce3ab81ceeb2d055ba00855eab59042a2f2b229da5c86b98",
+      "components_sha256": "d99d7a4cb0b950c2028c5c6c0fe7882c68da2f96afffac59053b4b1b2438965b",
+      "baseline_sha256": "347fea5428c69ffa508627d89a76bdc7f902911e6e6490b79a0d04c40f141364",
+      "candidate_sha256": "8c200c60edda7a23dc2ff1fa9146640e6ae34f297530821f5280ae59079e2da7",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_ab78413d-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/6bba_ab78413d-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/6bba_ab78413d-original/pre-postprocess.json"
+    },
+    "44b6_9be80b04": {
+      "batch": 5,
+      "embryo": "44b6",
+      "counts": {
+        "components": 145,
+        "partial_improvement": 0,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 143
+      },
+      "features_sha256": "5775c0369cac61d786f8a2a9c0517afe3bff06f4116841599c2ad21b98d78357",
+      "labels_sha256": "1321c65cc2f9c53d747ff0e5f02aa506ba23ad8d13f5adab8f3365f44a162ce2",
+      "components_sha256": "6d6edab0f82d46cc72cbf2208ae53c2068346f4647524d983ad61ad4a56a679b",
+      "baseline_sha256": "b57369712a961321045bad8be0c935b2b9ecb8c4adceb8e3e1cf0f1f6197fe1d",
+      "candidate_sha256": "6480593ae41072b6a7699f3c7bba50febdf2c3e021c4775ff60e20daa84a8efc",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_9be80b04-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b5-features/44b6_9be80b04-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b5-full-output/44b6_9be80b04-original/pre-postprocess.json"
+    },
+    "6bba_e16ffc58": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 42,
+        "partial_improvement": 8,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 34
+      },
+      "features_sha256": "0541a13a216f531ca5630ac88bd74da11cb06ad9f141613de8ddd9cb91fe4723",
+      "labels_sha256": "d9873b28fd7f97906711c273db7836325e5cc01756ad50c7cc3e4ae19de50731",
+      "components_sha256": "ac9f7552cc5a029449ada188b2f3cfdf68bbfc0f23ed4d1dded6666ebf82f338",
+      "baseline_sha256": "acebd918e053a54902aab25ed4ed9d3bb0c46915a2b46303a612676f5f501f01",
+      "candidate_sha256": "0e9db09e4b00a9fad94420b01dc5fe1cda1029c016851e3229d036f64fade168",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_e16ffc58-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_e16ffc58-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_e16ffc58-original/pre-postprocess.json"
+    },
+    "6bba_9e23430b": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 60,
+        "partial_improvement": 4,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 56
+      },
+      "features_sha256": "7738ce3c39f20dda77224e41f8f21d4c64dd1ff1811d3edd60743db2437644dc",
+      "labels_sha256": "55da6813061437aaaf298e44c04505f8fae23344d987c279ed8ead26efc1671c",
+      "components_sha256": "94ea68fda6abf56411934779ee97c697d03979b53c489edf394e8753e454f7d3",
+      "baseline_sha256": "0dfaebc8c0408e7b3aa236e4e207e92ddb6d6ca5d60901729be0d81cc61ae30d",
+      "candidate_sha256": "c95da76847c09bd5647a8b736d66b5ce3bb476bdc31f2b882a802e5c22e4c52c",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_9e23430b-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_9e23430b-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_9e23430b-original/pre-postprocess.json"
+    },
+    "6bba_61ecbe65": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 116,
+        "partial_improvement": 10,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 106
+      },
+      "features_sha256": "d7b55e62bac5e10e0d1e3b398d215e66f02596f9c8ddd8513e0566c58af7638f",
+      "labels_sha256": "0612fecea90a7deae39201d1d9f486bba6df404b1f211d570e35db50445da2bf",
+      "components_sha256": "a84d9ee4191e06b8874e338eafaa47dbff23991c37712db242a98d7be946c6bd",
+      "baseline_sha256": "67f531472b638d9960ff3e675f90d61e122d52ae2ca798551fd1a075bc4fcdcc",
+      "candidate_sha256": "92459a49cbbc94afd3f9bc3f2173a13f9ac7e5624448c3f86999f74ecc34dc1e",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_61ecbe65-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_61ecbe65-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_61ecbe65-original/pre-postprocess.json"
+    },
+    "6bba_7af54fde": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 105,
+        "partial_improvement": 0,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 103
+      },
+      "features_sha256": "90e6a44bface85626f1351f294f62bca6f9fd9ce84ddc64563658e8d8f994a08",
+      "labels_sha256": "8e5423d27150c9b1e65b5c1e48036a4ff320726666a0a1a346e32e914437fec8",
+      "components_sha256": "86a7132b0f26b36158a02c8b2ae94564bb218b3dba20aa5e7775256de3348157",
+      "baseline_sha256": "d2c82bbd635c11e456ff84a7326f2961e16f2b2fa15b4c57b54f416b4de0b947",
+      "candidate_sha256": "890385c856527566eb7a8db65ae86359174224f5a762eeaf0149b53fb145d382",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_7af54fde-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_7af54fde-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_7af54fde-original/pre-postprocess.json"
+    },
+    "6bba_3db54e20": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 874,
+        "partial_improvement": 10,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 863
+      },
+      "features_sha256": "f506c9eea80292d12f28b5ffa2722b27b72a2912a3135d2aa8c0116eab4c0eb3",
+      "labels_sha256": "5084fd99f252ccfbc2414a1c1c1750e487ccb099f584c3d5c29aad3c3e62165d",
+      "components_sha256": "d3291b63c2223c2fbd4cf994dc2a0e8891e9ff110c05c19460b1067188a7919b",
+      "baseline_sha256": "befbbfd2935fac99f1d15b93593d7f6eef14cb89a0f14175a058c320c66cce18",
+      "candidate_sha256": "fd784a58b0c7c8b5774bc9d344c59ae8dd3b5cb925622713826c95f6147a0baf",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_3db54e20-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_3db54e20-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_3db54e20-original/pre-postprocess.json"
+    },
+    "6bba_20852818": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 145,
+        "partial_improvement": 6,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 137
+      },
+      "features_sha256": "a4dcf080020d1ed4946e6ea92e3674ca511ebf290e453909af0ed73cfd0503d5",
+      "labels_sha256": "8221709a75e3e6f8d736aed1eeed59a1d4e97cffb10de77221d990cf8188edb7",
+      "components_sha256": "bd580018735caf0efb49c5275720de0bc8ee7da1018d1dcfd41af576de39089c",
+      "baseline_sha256": "80c93cbf2d9a924b968b285f1bbbf3802ba9b08ca53e966856e36e2eb6069d74",
+      "candidate_sha256": "5c7ab9077e5de4438db092e663f83bec1f610cfddacbbf75ead4f278aac5e886",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_20852818-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_20852818-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_20852818-original/pre-postprocess.json"
+    },
+    "6bba_55b7eebe": {
+      "batch": 6,
+      "embryo": "6bba",
+      "counts": {
+        "components": 15,
+        "partial_improvement": 1,
+        "partial_regression": 1,
+        "unlabeled_or_neutral": 13
+      },
+      "features_sha256": "480ceac5ee58276fc0ae363e572f993855baa8b8331a49d383ab433406ebd31d",
+      "labels_sha256": "0df5b4857d4987053f6958ac9bef83ed8877228dbca6a46ba558d14ac2a79577",
+      "components_sha256": "3469228437c084064962b94fd5ac948e449556136bd07ef3a9e1f7a36194667f",
+      "baseline_sha256": "71be3d8eb061c3802d273142d24c34fe59c32785b7191b250cdf7499f182fce4",
+      "candidate_sha256": "03cdfc110f685538998f98faffdee3a8bad3bf2fdc7007f8fab19354f74ce9a6",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_55b7eebe-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/6bba_55b7eebe-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/6bba_55b7eebe-original/pre-postprocess.json"
+    },
+    "44b6_74d0c52e": {
+      "batch": 6,
+      "embryo": "44b6",
+      "counts": {
+        "components": 42,
+        "partial_improvement": 0,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 42
+      },
+      "features_sha256": "89959a046841431c4cc91c36fa5bf8e3dd03d2fa691b034ddffe4483f2519fce",
+      "labels_sha256": "9e95368a55b4b492a06879cdc1691d352e72a4d27a3e98a05db236329c32e8c2",
+      "components_sha256": "2f029d12c2ecec022aa4877a03fcf6e3300044e37db8f79aa8d5f1913790b6db",
+      "baseline_sha256": "f2469788babdb08d8bfd8c873fda7fb64e51d1c2bc1c0d4089fd5a56b3122c7a",
+      "candidate_sha256": "df23ad8631acbcbe36fd9c11e53d83d38b8e2623eeee35790e278c0d88d1f8a2",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_74d0c52e-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b6-features/44b6_74d0c52e-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b6-full-output/44b6_74d0c52e-original/pre-postprocess.json"
+    },
+    "6bba_aeee7805": {
+      "batch": 7,
+      "embryo": "6bba",
+      "counts": {
+        "components": 16,
+        "partial_improvement": 2,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 14
+      },
+      "features_sha256": "ff076a0caaa414f7d4a1c94bd3643c922e5c6ff05047d1013e75021faf2b4e82",
+      "labels_sha256": "4b886a0718bd436306dfc8d3ade6d90df5383f410ddc9f05ee79fc1a62d436df",
+      "components_sha256": "fa92b2cbd645c0e5f2510cf6717f0478226a436481bd4d80470df2fe1fe49e6c",
+      "baseline_sha256": "c4fb4aa1672211f62698fb60690254cfd2abfa0837cc2096872b2c3d55501d8b",
+      "candidate_sha256": "ded22406e49754ad872947a05097e330d78df6ccf4bdf4dfd1ffa2a100a87275",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_aeee7805-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b7-features/6bba_aeee7805-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b7-full-output/6bba_aeee7805-original/pre-postprocess.json"
+    },
+    "44b6_5f15d135": {
+      "batch": 7,
+      "embryo": "44b6",
+      "counts": {
+        "components": 189,
+        "partial_improvement": 0,
+        "partial_regression": 2,
+        "unlabeled_or_neutral": 187
+      },
+      "features_sha256": "8d41a27f8b5b17a1a66e644c7d8944d66c057197d59b66fedeb7b72a0fbd445f",
+      "labels_sha256": "2e4a49514120bc7702384c2d3a083c360633e0ac10330b5d67ab235736d7d5a6",
+      "components_sha256": "b731d5d6804721ab9aac3dff48ee86c0600456e94824597d005abce66dcb171d",
+      "baseline_sha256": "7d1ab6bdddc2615037d2f88dd375745a55cc885a495221fb369aef40dbdda70f",
+      "candidate_sha256": "dabd1c5c073b23a59a640758044c048346590a6cb91dfc18d2739a6c9780ad0e",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_5f15d135-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b7-features/44b6_5f15d135-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b7-full-output/44b6_5f15d135-original/pre-postprocess.json"
+    },
+    "6bba_337b1b3a": {
+      "batch": 7,
+      "embryo": "6bba",
+      "counts": {
+        "components": 275,
+        "partial_improvement": 9,
+        "partial_regression": 0,
+        "unlabeled_or_neutral": 266
+      },
+      "features_sha256": "f2ddff92e176ee1e4935d313aa6c06c9710e136f9595ed0bace881a30bc195dc",
+      "labels_sha256": "027f68e133c9f75cf867631a1bc70dc62d364ac3f94e0760bdab41d3ee7cfcd3",
+      "components_sha256": "b472663ad6bc4660d56c46e93b23741f509b04b1d5d0dfbc29900ea5d503be1c",
+      "baseline_sha256": "7bdde2f442e79f088952d8562cf4f160b821cc1b0b8b0ad692059985f09b8084",
+      "candidate_sha256": "f22d1a80ce397e7f720a58950c38d791d824a70151d56edf2733cbfe99f37ff1",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/6bba_337b1b3a-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b7-features/6bba_337b1b3a-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b7-full-output/6bba_337b1b3a-original/pre-postprocess.json"
+    },
+    "44b6_d5e7d891": {
+      "batch": 7,
+      "embryo": "44b6",
+      "counts": {
+        "components": 445,
+        "partial_improvement": 2,
+        "partial_regression": 10,
+        "unlabeled_or_neutral": 433
+      },
+      "features_sha256": "5263dddaa003b73e324f0a60da260dc6228b1f87ddf6e9d53676c1adf9901a21",
+      "labels_sha256": "2ab10d5bdb3a9b7c3b468ec9bf205ecca96fe563e63e33e31997d167ce8a4f7c",
+      "components_sha256": "cc4ff74f19c004140c942356078a24c752ca1082a57dc437e744ecb05a2b5918",
+      "baseline_sha256": "c049eb021aaf2dadf371e720618cb764c6e058d94b5a1c07671e9cbe6c9a9dd8",
+      "candidate_sha256": "5c6938fe992ecfa12cf57c31288067790943576497a2e55f66aaf7adcb50d856",
+      "candidate_path": ".biohub/cache/trajectory-event-anchor-expanded-source-v1/44b6_d5e7d891-prediction.json",
+      "baseline_path": ".biohub/cache/trajectory-event-source-v1-b7-features/44b6_d5e7d891-prediction.json",
+      "initial_path": ".biohub/cache/trajectory-event-source-v1-b7-full-output/44b6_d5e7d891-original/pre-postprocess.json"
+    }
+  },
+  "totals": {
+    "components": 14561,
+    "partial_improvement": 301,
+    "partial_regression": 107,
+    "unlabeled_or_neutral": 14153
+  },
+  "seconds": 119.79599999997299
+}

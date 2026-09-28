@@ -1,0 +1,198 @@
+{
+  "status": "complete_source_corpus_prepared",
+  "controller_pid": 23664,
+  "cpu_workers": 2,
+  "gpu_used": false,
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "production_candidate_changed": false,
+  "full_source_audit_sha256": "9fbc9e46be3cb30383cfa44d397ac2dbd640a885b9a00ac11bcb56b40e952259",
+  "small_learning_smoke_sha256": "7aa49cd51459fa4c095e65ac55de7aa1d4539a30dcafcafa36cbb07562d20fb9",
+  "case_builder_sha256": "6cf7659708e20630e9782d7f539ba198cadcf486c2cf811591e7032835c6bf15",
+  "source_sha256": "4c7249833f2672460e37c52f35bcd95cd821597b798e94ac62d23e98c4d9dbd7",
+  "active": {},
+  "completed": {
+    "4": {
+      "receipt_sha256": "a18d3041a2afe7dc3957aa6057f94eb4d5edb0ab8fdf2841ba62519bbc254b3d",
+      "totals": {
+        "known_constraints_retained": 5320,
+        "known_constraints_outside_editable_scope": 2,
+        "prepared": 775,
+        "case_bytes": 428104372,
+        "known_frames_outside_editable_scope": 0,
+        "no_known_parent_constraints": 1
+      },
+      "movies": [
+        "6bba_f8ffd5e7",
+        "6bba_b204cac7",
+        "6bba_f20478e9",
+        "6bba_c328f2fd",
+        "6bba_268e1230",
+        "6bba_085bf656",
+        "44b6_eb2880fc",
+        "6bba_fe670320"
+      ],
+      "seconds": 282.14100000000326,
+      "log_sha256": "dde22586f2246a2b9da11691fe69aaa6dbc934bc21ea7ad77e76235cde405f77"
+    },
+    "5": {
+      "receipt_sha256": "8faaa9b8c7545db2110c17a9f521d2142609de4d9cef39b8ee290bc7367b0d7e",
+      "totals": {
+        "known_constraints_retained": 4625,
+        "known_constraints_outside_editable_scope": 7,
+        "prepared": 768,
+        "case_bytes": 605404011,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "6bba_48816121",
+        "6bba_1d0d8384",
+        "44b6_c8e2a523",
+        "44b6_d2f34f90",
+        "44b6_7a302da0",
+        "44b6_587a1e22",
+        "6bba_ab78413d",
+        "44b6_9be80b04"
+      ],
+      "seconds": 408.26600000000326,
+      "log_sha256": "abbaa8509f424024031e7355b28b5875841d11a097ecdc8a9c17ab6d3bc18f61"
+    },
+    "0": {
+      "receipt_sha256": "da53728355f193c0df325cb8be4dadeadf79aeacfe67c137adbdc792d2d6d532",
+      "totals": {
+        "known_constraints_retained": 6251,
+        "known_constraints_outside_editable_scope": 10,
+        "prepared": 772,
+        "case_bytes": 313698471,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "6bba_6ca87370",
+        "6bba_2819ca14",
+        "6bba_67ebd073",
+        "6bba_3abfe10a",
+        "44b6_996155de",
+        "6bba_5c039895",
+        "6bba_705ec2c9",
+        "6bba_12665c0e"
+      ],
+      "seconds": 230.23500000004424,
+      "log_sha256": "3469e55209088637bb3a40c2474ad13f5bf6cf401035774c2f3523044f9383fc"
+    },
+    "2": {
+      "receipt_sha256": "f956f2c797e497b5202bc25dbf6812d5a6a0922b8116cae117cba3594c0a6c1d",
+      "totals": {
+        "known_constraints_retained": 6775,
+        "known_constraints_outside_editable_scope": 3,
+        "prepared": 774,
+        "case_bytes": 589053762,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "6bba_ebdf3b34",
+        "6bba_74686d6a",
+        "6bba_80d12824",
+        "44b6_a21120c2",
+        "6bba_d1acb6ff",
+        "6bba_907271db",
+        "6bba_784a78c9",
+        "6bba_9a41d029"
+      ],
+      "seconds": 500.2179999999935,
+      "log_sha256": "25cb6ee6b8b0a8d7fdea0d0e17119b12eac9d7eda272744f79692dfba0ff2c6d"
+    },
+    "1": {
+      "receipt_sha256": "c1ebcb326e0d41b4961f35e012d72fcf3b78749396bf913a7a313b0bd4a00107",
+      "totals": {
+        "known_constraints_retained": 8478,
+        "known_constraints_outside_editable_scope": 16,
+        "prepared": 787,
+        "case_bytes": 783666241,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "6bba_d2b9fc0c",
+        "6bba_09961292",
+        "6bba_7f87b3d8",
+        "6bba_d3da753b",
+        "6bba_57b7cc1e",
+        "44b6_e28840c6",
+        "6bba_ef7b4f7e",
+        "6bba_5c824876"
+      ],
+      "seconds": 626.4530000000377,
+      "log_sha256": "1b6ca9ee36dabedd032a0ca4234fd91826f0388c5ad8680f3865bdf1ea0fdd99"
+    },
+    "6": {
+      "receipt_sha256": "88d793f55c039ef4d5f99a7a195a4255dbe1aaefbc00beb3678690f2fcaf52f8",
+      "totals": {
+        "known_constraints_retained": 5592,
+        "known_constraints_outside_editable_scope": 2,
+        "prepared": 781,
+        "case_bytes": 160599595,
+        "known_frames_outside_editable_scope": 0,
+        "no_known_parent_constraints": 2
+      },
+      "movies": [
+        "6bba_e16ffc58",
+        "6bba_9e23430b",
+        "6bba_61ecbe65",
+        "6bba_7af54fde",
+        "6bba_3db54e20",
+        "6bba_20852818",
+        "6bba_55b7eebe",
+        "44b6_74d0c52e"
+      ],
+      "seconds": 130.07800000003772,
+      "log_sha256": "49abc52f4c3808d71fa22cebf6bcfe06c9506df57accf4234369f3de119fd1c0"
+    },
+    "3": {
+      "receipt_sha256": "a716e2c5e0b9c2a028f99ff9ace0997e02b60e5273e3932d09e0af4784ad5a7d",
+      "totals": {
+        "known_constraints_retained": 7824,
+        "known_constraints_outside_editable_scope": 10,
+        "prepared": 747,
+        "case_bytes": 491779207,
+        "no_known_parent_constraints": 3,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "44b6_deabac95",
+        "6bba_786893ac",
+        "6bba_cdcfe533",
+        "6bba_7d3058ae",
+        "6bba_6321a359",
+        "6bba_bb9f20c3",
+        "6bba_3c5691b6",
+        "6bba_afb141ff"
+      ],
+      "seconds": 366.3279999999795,
+      "log_sha256": "c03ac74f2e5752e68405933e212b82d3056f1c9515281e4ae24dce9721451510"
+    },
+    "7": {
+      "receipt_sha256": "254f4d7df6681c5036eae8736564dd171f0ba1dc86119101e5c550bbe808cd86",
+      "totals": {
+        "known_constraints_retained": 3071,
+        "known_constraints_outside_editable_scope": 3,
+        "prepared": 376,
+        "case_bytes": 368073474,
+        "known_frames_outside_editable_scope": 0
+      },
+      "movies": [
+        "6bba_aeee7805",
+        "44b6_5f15d135",
+        "6bba_337b1b3a",
+        "44b6_d5e7d891"
+      ],
+      "seconds": 278.18700000003446,
+      "log_sha256": "3a531e45b079b8680d633933165df54a58cac4dcbae460a70cdabbe4f90cdf86"
+    }
+  },
+  "failed": {},
+  "pending": [],
+  "updated_utc": "2026-09-14T19:12:21.849513+00:00",
+  "seconds": 1449.2030000000377,
+  "total_case_bytes": 3740379133,
+  "total_cases": 5780
+}

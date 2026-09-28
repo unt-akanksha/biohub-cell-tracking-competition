@@ -1,0 +1,216 @@
+{
+  "per_movie": {
+    "control": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27121,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.029142792091981937,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8952556897313156,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11300,
+        "node_recall": 1,
+        "total_node_ratio": 0.12415439713489852,
+        "edge_jaccard": 1,
+        "adj_edge_jaccard": 0.9875845602865101,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 1,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4176,
+        "node_recall": 1,
+        "total_node_ratio": -0.06157303370786517,
+        "edge_jaccard": 0.996,
+        "adj_edge_jaccard": 1.0021326741573033,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 30,
+        "edge_fn": 27,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8143,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.09922566371681416,
+        "edge_jaccard": 0.8802521008403361,
+        "adj_edge_jaccard": 0.8889864607347363,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ],
+    "raw_linker": [
+      {
+        "edge_tp": 196,
+        "edge_fp": 10,
+        "edge_fn": 25,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 34665,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.31541001024551285,
+        "edge_jaccard": 0.8484848484848485,
+        "adj_edge_jaccard": 0.8217227870094717,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 13726,
+        "node_recall": 1,
+        "total_node_ratio": 0.3654994031038599,
+        "edge_jaccard": 1,
+        "adj_edge_jaccard": 0.9634500596896141,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 486,
+        "edge_fp": 7,
+        "edge_fn": 13,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 5692,
+        "node_recall": 0.9824561403508771,
+        "total_node_ratio": 0.2791011235955056,
+        "edge_jaccard": 0.9604743083003953,
+        "adj_edge_jaccard": 0.9336673624372697,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 395,
+        "edge_fp": 27,
+        "edge_fn": 51,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11008,
+        "node_recall": 0.9915966386554622,
+        "total_node_ratio": 0.2176991150442478,
+        "edge_jaccard": 0.8350951374207188,
+        "adj_edge_jaccard": 0.8169151901812943,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "control": {
+      "n": 4,
+      "edge_jaccard": 0.9410511363636364,
+      "division_jaccard": 0,
+      "division_tp": 0,
+      "division_fp": 2,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9440079104060284,
+      "n_adj": 4,
+      "score": 0.9440079104060284
+    },
+    "raw_linker": {
+      "n": 4,
+      "edge_jaccard": 0.9054726368159204,
+      "division_jaccard": null,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 0,
+      "node_recall": 0.9913392817081066,
+      "adj_edge_jaccard": 0.8802090944613025,
+      "n_adj": 4,
+      "score": 0.8802090944613025
+    }
+  },
+  "by_embryo": {
+    "control": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9373593644983835,
+        "n_adj": 2,
+        "score": 0.9373593644983835
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9395491803278688,
+        "division_jaccard": 0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9469507094143301,
+        "n_adj": 2,
+        "score": 0.9469507094143301
+      }
+    },
+    "raw_linker": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9182242990654206,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.8869570690608456,
+        "n_adj": 2,
+        "score": 0.8869570690608456
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.8998978549540347,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9870263895031697,
+        "adj_edge_jaccard": 0.8772590095495512,
+        "n_adj": 2,
+        "score": 0.8772590095495512
+      }
+    }
+  },
+  "score_delta": -0.06379881594472592,
+  "raw_terminal_sha256": "0609934b1e2a40473763acf521cfcf7120e418f5857c24d6f28c0e662638bd41",
+  "all_raw_nodes_preserved": true,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "validation_scope": "base-training diagnostic",
+  "authorized_for_submission": false,
+  "authorized_for_production_promotion": false,
+  "nonfinite_serialization": "Undefined division Jaccards are stored as null; there are no ground-truth divisions in this diagnostic."
+}

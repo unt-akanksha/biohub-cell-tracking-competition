@@ -1,0 +1,457 @@
+{
+  "status": "source_neutral_label_coverage_audited",
+  "source_only": true,
+  "new_ground_truth_opened": false,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "counts_are_audit_candidates_not_verified_metric_labels": true,
+  "dataset_sha256": "e279e24348d17e60e07b8e6bb964ffab95490e502a3f70ac67ecd35928dfa1db",
+  "source_sha256": "ca58f9360cd4500c2f6738b191843073f1ab71b6ec795fc530e2ea84b442cd64",
+  "movies": {
+    "6bba_6ca87370": {
+      "total": 102,
+      "ignored": 87,
+      "existing_positive": 15,
+      "ignored_with_known_children": 2,
+      "ignored_known_unequal_edge_counts": 2,
+      "fully_known_candidates": 2,
+      "fully_known_net_removal": 2
+    },
+    "6bba_2819ca14": {
+      "total": 61,
+      "ignored": 48,
+      "existing_negative": 1,
+      "existing_positive": 12,
+      "ignored_with_known_children": 2,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_67ebd073": {
+      "total": 442,
+      "ignored": 430,
+      "existing_positive": 9,
+      "existing_negative": 3,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 3,
+      "mixed_unknown_candidates": 1,
+      "fully_known_candidates": 2,
+      "fully_known_net_removal": 2
+    },
+    "6bba_3abfe10a": {
+      "total": 1396,
+      "ignored": 1391,
+      "existing_positive": 3,
+      "ignored_with_known_children": 5,
+      "ignored_known_unequal_edge_counts": 4,
+      "fully_known_candidates": 4,
+      "fully_known_net_removal": 4,
+      "existing_negative": 2
+    },
+    "44b6_996155de": {
+      "total": 30,
+      "ignored": 30
+    },
+    "6bba_5c039895": {
+      "total": 9,
+      "ignored": 9
+    },
+    "6bba_705ec2c9": {
+      "total": 115,
+      "ignored": 111,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1,
+      "existing_positive": 3,
+      "existing_negative": 1
+    },
+    "6bba_12665c0e": {
+      "total": 117,
+      "ignored": 98,
+      "existing_positive": 18,
+      "existing_negative": 1
+    },
+    "6bba_d2b9fc0c": {
+      "total": 44,
+      "ignored": 44
+    },
+    "6bba_09961292": {
+      "total": 294,
+      "ignored": 282,
+      "existing_negative": 6,
+      "existing_positive": 6,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_7f87b3d8": {
+      "total": 416,
+      "ignored": 379,
+      "existing_positive": 33,
+      "ignored_with_known_children": 2,
+      "ignored_known_unequal_edge_counts": 2,
+      "mixed_unknown_candidates": 2,
+      "existing_negative": 4
+    },
+    "6bba_d3da753b": {
+      "total": 256,
+      "ignored": 234,
+      "existing_positive": 22,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "mixed_unknown_candidates": 1
+    },
+    "6bba_57b7cc1e": {
+      "total": 1650,
+      "ignored": 1626,
+      "existing_negative": 16,
+      "existing_positive": 8,
+      "ignored_with_known_children": 6,
+      "ignored_known_unequal_edge_counts": 5,
+      "fully_known_candidates": 5,
+      "fully_known_net_removal": 5
+    },
+    "44b6_e28840c6": {
+      "total": 104,
+      "ignored": 103,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1,
+      "existing_negative": 1
+    },
+    "6bba_ef7b4f7e": {
+      "total": 30,
+      "ignored": 27,
+      "existing_positive": 2,
+      "existing_negative": 1
+    },
+    "6bba_5c824876": {
+      "total": 153,
+      "ignored": 152,
+      "existing_negative": 1
+    },
+    "6bba_ebdf3b34": {
+      "total": 997,
+      "ignored": 977,
+      "existing_positive": 14,
+      "existing_negative": 6,
+      "ignored_with_known_children": 2,
+      "ignored_known_unequal_edge_counts": 2,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1,
+      "mixed_unknown_candidates": 1
+    },
+    "6bba_74686d6a": {
+      "total": 296,
+      "ignored": 289,
+      "existing_negative": 4,
+      "existing_positive": 3,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 2,
+      "fully_known_candidates": 2,
+      "fully_known_net_removal": 2
+    },
+    "6bba_80d12824": {
+      "total": 158,
+      "ignored": 153,
+      "existing_negative": 1,
+      "existing_positive": 4
+    },
+    "44b6_a21120c2": {
+      "total": 200,
+      "ignored": 197,
+      "existing_positive": 3
+    },
+    "6bba_d1acb6ff": {
+      "total": 324,
+      "ignored": 315,
+      "ignored_with_known_children": 2,
+      "ignored_known_unequal_edge_counts": 2,
+      "fully_known_candidates": 2,
+      "fully_known_net_removal": 2,
+      "existing_positive": 8,
+      "existing_negative": 1
+    },
+    "6bba_907271db": {
+      "total": 18,
+      "ignored": 18
+    },
+    "6bba_784a78c9": {
+      "total": 20,
+      "ignored": 20,
+      "ignored_with_known_children": 1
+    },
+    "6bba_9a41d029": {
+      "total": 219,
+      "ignored": 208,
+      "existing_negative": 2,
+      "existing_positive": 9,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "mixed_unknown_candidates": 1
+    },
+    "44b6_deabac95": {
+      "total": 60,
+      "ignored": 60
+    },
+    "6bba_786893ac": {
+      "total": 1130,
+      "ignored": 1108,
+      "existing_negative": 17,
+      "ignored_with_known_children": 8,
+      "ignored_known_unequal_edge_counts": 5,
+      "fully_known_candidates": 5,
+      "fully_known_net_removal": 5,
+      "existing_positive": 5
+    },
+    "6bba_cdcfe533": {
+      "total": 261,
+      "ignored": 247,
+      "existing_positive": 14,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 3,
+      "fully_known_candidates": 3,
+      "fully_known_net_removal": 3
+    },
+    "6bba_7d3058ae": {
+      "total": 38,
+      "ignored": 34,
+      "existing_positive": 4
+    },
+    "6bba_6321a359": {
+      "total": 36,
+      "ignored": 35,
+      "existing_positive": 1
+    },
+    "6bba_bb9f20c3": {
+      "total": 151,
+      "ignored": 142,
+      "existing_positive": 6,
+      "ignored_with_known_children": 1,
+      "existing_negative": 3
+    },
+    "6bba_3c5691b6": {
+      "total": 25,
+      "ignored": 23,
+      "existing_positive": 2
+    },
+    "6bba_afb141ff": {
+      "total": 132,
+      "ignored": 126,
+      "existing_positive": 5,
+      "existing_negative": 1
+    },
+    "6bba_f8ffd5e7": {
+      "total": 639,
+      "ignored": 637,
+      "existing_positive": 1,
+      "ignored_with_known_children": 1,
+      "existing_negative": 1
+    },
+    "6bba_b204cac7": {
+      "total": 17,
+      "ignored": 17,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_f20478e9": {
+      "total": 105,
+      "ignored": 97,
+      "existing_positive": 8
+    },
+    "6bba_c328f2fd": {
+      "total": 313,
+      "ignored": 309,
+      "existing_positive": 3,
+      "existing_negative": 1
+    },
+    "6bba_268e1230": {
+      "total": 91,
+      "ignored": 87,
+      "existing_negative": 3,
+      "existing_positive": 1
+    },
+    "6bba_085bf656": {
+      "total": 12,
+      "ignored": 12
+    },
+    "44b6_eb2880fc": {
+      "total": 206,
+      "ignored": 205,
+      "existing_positive": 1
+    },
+    "6bba_fe670320": {
+      "total": 205,
+      "ignored": 200,
+      "existing_positive": 5
+    },
+    "6bba_48816121": {
+      "total": 94,
+      "ignored": 91,
+      "existing_negative": 1,
+      "existing_positive": 2,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_1d0d8384": {
+      "total": 230,
+      "ignored": 215,
+      "existing_negative": 4,
+      "ignored_with_known_children": 2,
+      "existing_positive": 11,
+      "ignored_known_unequal_edge_counts": 1,
+      "mixed_unknown_candidates": 1
+    },
+    "44b6_c8e2a523": {
+      "total": 143,
+      "ignored": 141,
+      "existing_positive": 2
+    },
+    "44b6_d2f34f90": {
+      "total": 112,
+      "ignored": 112
+    },
+    "44b6_7a302da0": {
+      "total": 291,
+      "ignored": 289,
+      "existing_positive": 1,
+      "existing_negative": 1,
+      "ignored_with_known_children": 1
+    },
+    "44b6_587a1e22": {
+      "total": 201,
+      "ignored": 198,
+      "existing_positive": 3,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_ab78413d": {
+      "total": 149,
+      "ignored": 143,
+      "existing_negative": 4,
+      "existing_positive": 2
+    },
+    "44b6_9be80b04": {
+      "total": 145,
+      "ignored": 143,
+      "existing_negative": 2
+    },
+    "6bba_e16ffc58": {
+      "total": 42,
+      "ignored": 34,
+      "existing_positive": 8,
+      "ignored_with_known_children": 1
+    },
+    "6bba_9e23430b": {
+      "total": 60,
+      "ignored": 56,
+      "existing_positive": 4
+    },
+    "6bba_61ecbe65": {
+      "total": 116,
+      "ignored": 106,
+      "existing_positive": 10,
+      "ignored_with_known_children": 1
+    },
+    "6bba_7af54fde": {
+      "total": 105,
+      "ignored": 103,
+      "existing_negative": 2
+    },
+    "6bba_3db54e20": {
+      "total": 874,
+      "existing_positive": 10,
+      "ignored": 863,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "mixed_unknown_candidates": 1,
+      "existing_negative": 1
+    },
+    "6bba_20852818": {
+      "total": 145,
+      "ignored": 137,
+      "existing_negative": 2,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 3,
+      "mixed_unknown_candidates": 2,
+      "existing_positive": 6,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_55b7eebe": {
+      "total": 15,
+      "ignored": 13,
+      "ignored_with_known_children": 1,
+      "existing_positive": 1,
+      "existing_negative": 1
+    },
+    "44b6_74d0c52e": {
+      "total": 42,
+      "ignored": 42,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    },
+    "6bba_aeee7805": {
+      "total": 16,
+      "ignored": 14,
+      "existing_positive": 2
+    },
+    "44b6_5f15d135": {
+      "total": 189,
+      "ignored": 187,
+      "existing_negative": 2
+    },
+    "6bba_337b1b3a": {
+      "total": 275,
+      "ignored": 266,
+      "existing_positive": 9,
+      "ignored_with_known_children": 3,
+      "ignored_known_unequal_edge_counts": 2,
+      "mixed_unknown_candidates": 2
+    },
+    "44b6_d5e7d891": {
+      "total": 445,
+      "ignored": 433,
+      "existing_negative": 10,
+      "existing_positive": 2,
+      "ignored_with_known_children": 1,
+      "ignored_known_unequal_edge_counts": 1,
+      "fully_known_candidates": 1,
+      "fully_known_net_removal": 1
+    }
+  },
+  "by_embryo": {
+    "44b6": {
+      "total": 2168,
+      "ignored": 2140,
+      "ignored_with_known_children": 5,
+      "ignored_known_unequal_edge_counts": 4,
+      "fully_known_candidates": 4,
+      "fully_known_net_removal": 4,
+      "existing_negative": 16,
+      "existing_positive": 12
+    },
+    "6bba": {
+      "total": 12393,
+      "ignored": 12013,
+      "existing_positive": 289,
+      "ignored_with_known_children": 61,
+      "ignored_known_unequal_edge_counts": 44,
+      "fully_known_candidates": 32,
+      "fully_known_net_removal": 32,
+      "existing_negative": 91,
+      "mixed_unknown_candidates": 12
+    }
+  }
+}

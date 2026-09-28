@@ -1,0 +1,15 @@
+{
+  "status": "staged_not_launched",
+  "kernel": "indarkarhana/biohub-event-anchor-acceptance",
+  "notebook_sha256": "c0cc7810a06f4c9b54f5ff23b0ca6f62f3e13d421769a40cc41f309ef6416084",
+  "contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "overlay_sha256": "d975ea7e7579edc185d463c7dc43bc9def4de6e6f543ea842685dfb097b5f623",
+  "required_gpus": 2,
+  "maximum_workers": 4,
+  "acceptance_wall_cap_seconds": 3600,
+  "event_portable_proof_sha256": "da428b0f52c4255d463e684e04856f192c00541b4587aff437427a0daa353ab1",
+  "quality_failures_preserved": true,
+  "fresh_quota_and_pending_reservation_check_required": true,
+  "kernel_pushed": false,
+  "submission_performed": false
+}

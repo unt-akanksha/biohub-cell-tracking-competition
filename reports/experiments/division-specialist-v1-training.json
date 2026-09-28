@@ -1,0 +1,77 @@
+{
+  "status": "verified_training_receipts_not_selection",
+  "steps": 100,
+  "checkpoint_sha256": "47f8ed25dd4ac543b882eceefb5462d1440603bb385d9ac5cac075b53215bc86",
+  "known_null_columns": 23,
+  "positive_links": 1652,
+  "confident_null_columns": 5,
+  "detector_unchanged": true,
+  "launcher_seconds": 210.944045402,
+  "optimization_seconds": 46.30406589099999,
+  "before": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 0,
+    "checkpoint_sha256": "4379e09455060d7a31e3f9d4b41508fbd372b86ce696345c3afc554698544534",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 292,
+    "predicted_edges": 182,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 8,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 4,
+      "division_fn": 0,
+      "num_pred_nodes": 292
+    },
+    "elapsed_seconds": 2.401364177000005,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null
+  },
+  "after": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 100,
+    "checkpoint_sha256": "47f8ed25dd4ac543b882eceefb5462d1440603bb385d9ac5cac075b53215bc86",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 292,
+    "predicted_edges": 183,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 8,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 4,
+      "division_fn": 0,
+      "num_pred_nodes": 292
+    },
+    "elapsed_seconds": 0.822071984000047,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null
+  },
+  "probe_inputs_replayed": false,
+  "authorized_for_submission": false,
+  "division_columns": 128,
+  "division_sampling": {
+    "division_windows": 114,
+    "ordinary_windows": 11509,
+    "division_mass": 0.5,
+    "replacement": true,
+    "weights_sha256": "05390c6f1050f5d6e4a269f9e975ebaf104806d49f68a8d8afc854535b85c106"
+  },
+  "correct_division_columns": 93,
+  "profile": "Frozen detector; case-balanced divisions and retained annotated nulls",
+  "source_sha256": {
+    "result": "dfcded17444804f17c18bcdb29995162e5ae9a1ccaf948ce7e771e87cf0cae17",
+    "terminal": "65641960f76a4311291843a9240254eba08f76a43297130759f5e30d863d7757"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "status": "exact_graph_identity_passed",
+  "contract_sha256": "cb3a8e74a63f69ac270ea5c6995c7260dcd80ea15dcbd1faefa95586681cef1c",
+  "terminal_sha256": "acccae6c68fea1044689a04e0774fc0518c9dc9c698bc824eeb375f61971c4cb",
+  "records": [
+    {
+      "movie": "44b6_12dfb391",
+      "filename": "prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "58626d60ae746e0263ff65719bce7bfc36cfec97d07f0fe4b39de74f552d304b"
+    },
+    {
+      "movie": "44b6_12dfb391",
+      "filename": "repaired-prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "58626d60ae746e0263ff65719bce7bfc36cfec97d07f0fe4b39de74f552d304b"
+    },
+    {
+      "movie": "6bba_062c8d37",
+      "filename": "prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "c6ccc47a0e7146515cd8cd5f1c06a01f3609e06d3e02aa8a446d4ede27d0a046"
+    },
+    {
+      "movie": "6bba_062c8d37",
+      "filename": "repaired-prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "4a6ac574523c567fc242be86941a1f378dee33e12c24bb354a3b2ac2d6edff22"
+    },
+    {
+      "movie": "44b6_267148e4",
+      "filename": "prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "5a0bc0617692c6c9a1ba01d8ac6402034339ec10aba03aa697a501f13fea5e32"
+    },
+    {
+      "movie": "44b6_267148e4",
+      "filename": "repaired-prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "5a0bc0617692c6c9a1ba01d8ac6402034339ec10aba03aa697a501f13fea5e32"
+    },
+    {
+      "movie": "6bba_07e24132",
+      "filename": "prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "e73fe4b94bae5d3542ff8f823e6f8925d75244246b309561077842fee650ee88"
+    },
+    {
+      "movie": "6bba_07e24132",
+      "filename": "repaired-prediction.json",
+      "exact_graph_identity": true,
+      "sha256": "4024da047074defa7b41a6e2303b290cf571a896ad4708b7e025ca878f51adc6"
+    }
+  ],
+  "ground_truth_opened": false,
+  "score_reused_without_reopening_truth": true,
+  "baseline_seconds": 642.8738508440001,
+  "overlap_seconds": 471.2510916249994,
+  "walltime_reduction_fraction": 0.2669617981718885,
+  "speedup": 1.3641853828437822,
+  "two_t4_acceptance_required": true,
+  "authorized_for_submission": false,
+  "total_cpu_threads": 2,
+  "aggregate_cuda_allocator_fraction": 0.7
+}

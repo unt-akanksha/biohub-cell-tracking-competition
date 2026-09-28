@@ -1,0 +1,21 @@
+{
+  "status": "source_collection_staged",
+  "contract_sha256": "ba27bfeb00ab800507275e0d9e5864e53033cb4350505a41331f574e7f9ab80c",
+  "archive_sha256": "edf07a0233a6d37487efde6b39bf3c188314fd3d84ea79fc1413f4b5dd5a0fa1",
+  "bytes": 54927360,
+  "images_sha256": "8d7bb65e42d87488ea6b8023b78118ab45e4b43b3fc21cb6122e7a7f72f4c779",
+  "movies": [
+    "44b6_cf8fed6b",
+    "44b6_f28707c6",
+    "44b6_c50204e0",
+    "44b6_cf2536e8",
+    "6bba_78a7bd97",
+    "6bba_5dfe9ad1",
+    "6bba_acd782a8",
+    "6bba_969618f6"
+  ],
+  "smoke_required_before_full": true,
+  "full_wall_cap_seconds": 3600,
+  "model_training_performed": false,
+  "authorized_for_submission": false
+}

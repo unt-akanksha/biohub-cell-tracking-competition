@@ -1,0 +1,17 @@
+{
+  "status": "authenticated_submission_confirmed_pending",
+  "competition": "biohub-cell-tracking-during-development",
+  "kernel": "indarkarhana/biohub-structured-trajectory-candidate",
+  "kernel_version": 1,
+  "submission_ref": 56231458,
+  "submission_date_utc": "2026-09-14T13:02:07.997000",
+  "observed_status": "SubmissionStatus.PENDING",
+  "description": "Clean licensed image ensemble plus our source-trained AR2 repair and structured assignment; 18 complete-movie checks; offline two-T4",
+  "public_score": null,
+  "private_score": null,
+  "previous_submission_ref": 56219125,
+  "previous_public_score": 0.946,
+  "evidence": "Authenticated Kaggle CLI competitions submissions, page size 5, immediately after the one-shot submit call",
+  "top_five_achieved": false,
+  "do_not_resubmit_while_pending": true
+}

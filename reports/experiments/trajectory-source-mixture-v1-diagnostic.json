@@ -1,0 +1,146 @@
+{
+  "status": "identical_diagnostic_pass",
+  "receipts": {
+    "44b6_24264f12": {
+      "path": "44b6_24264f12.json",
+      "sha256": "cd135abd68e73243de025458c9062fbd941f2542aef21f0c25adf418755b7c63",
+      "identical_to_scored_graph": true,
+      "added_nodes": 0,
+      "added_edges": 0,
+      "expert_added_edges": [
+        0,
+        0
+      ],
+      "links": [],
+      "movie_identifier_used": false,
+      "ground_truth_used": false
+    },
+    "44b6_81c256f0": {
+      "path": "44b6_81c256f0.json",
+      "sha256": "94a8621b863de62929a0ec4224bcaeeddf18f2246597608cead78be205b235ae",
+      "identical_to_scored_graph": true,
+      "added_nodes": 0,
+      "added_edges": 0,
+      "expert_added_edges": [
+        0,
+        0
+      ],
+      "links": [],
+      "movie_identifier_used": false,
+      "ground_truth_used": false
+    },
+    "6bba_23af9eeb": {
+      "path": "6bba_23af9eeb.json",
+      "sha256": "8c75c80ec83255a1bdedbf44493de1fe47cb9db427d3cebf1f023b4d1b0504f6",
+      "identical_to_scored_graph": true,
+      "added_nodes": 0,
+      "added_edges": 0,
+      "expert_added_edges": [
+        0,
+        0
+      ],
+      "links": [],
+      "movie_identifier_used": false,
+      "ground_truth_used": false
+    },
+    "6bba_f1fde7e0": {
+      "path": "6bba_f1fde7e0.json",
+      "sha256": "6d7444d486b8cfd1be14735cb53b88e68a3096690f1f79ecf68f8c79466db007",
+      "identical_to_scored_graph": true,
+      "added_nodes": 0,
+      "added_edges": 9,
+      "expert_added_edges": [
+        9,
+        0
+      ],
+      "links": [
+        {
+          "source_id": 5988,
+          "target_id": 6062,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 6003,
+          "target_id": 6080,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 6836,
+          "target_id": 6895,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 7199,
+          "target_id": 7257,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 8315,
+          "target_id": 8387,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 8714,
+          "target_id": 8783,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 8721,
+          "target_id": 8799,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 8734,
+          "target_id": 8807,
+          "supporting_experts": [
+            0
+          ]
+        },
+        {
+          "source_id": 9458,
+          "target_id": 9522,
+          "supporting_experts": [
+            0
+          ]
+        }
+      ],
+      "movie_identifier_used": false,
+      "ground_truth_used": false
+    }
+  },
+  "source_sha256": "3d610bd1e341865085f958a3fb5d239b7dc3d81fe2649311976973a3b56fa770",
+  "mixture_sha256": "87b096cf2ebf17330955cbca8e16a0f5936429f778e4aee3f7af88d3efa5fe01",
+  "motion_sha256": "2373629f8adc2720551cba3c7995c934e59a4efd4cc7678186e85942b6a52715",
+  "design_sha256": "05634f0336c783458bca357faf19c1cf0aaa5f3c632837ea310abff8609e0909",
+  "reused_score_receipt_sha256": "f48299001d0733c601b8356c2977dffd2ac79c9cd829252d7b504d0741e0a8d1",
+  "verified_identical_graph_summary": {
+    "n": 4,
+    "edge_jaccard": 0.9431414356787491,
+    "division_jaccard": 0.0,
+    "division_tp": 0,
+    "division_fp": 1,
+    "division_fn": 0,
+    "node_recall": 0.9930991962002192,
+    "adj_edge_jaccard": 0.946274834648933,
+    "n_adj": 4,
+    "score": 0.946274834648933
+  },
+  "ground_truth_opened": false,
+  "authorized_for_submission": false,
+  "independently_held_out": false,
+  "elapsed_seconds": 18.46899999998277
+}

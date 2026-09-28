@@ -1,0 +1,122 @@
+{
+  "status": "source_partial_correction_labels_audited",
+  "records": {
+    "6bba_6ca87370": {
+      "counts": {
+        "unlabeled_or_neutral": 87,
+        "unknown_children": 136,
+        "partial_improvement": 15,
+        "known_children": 17,
+        "delta_correct_links": 15,
+        "improved_children": 15,
+        "worsened_children": 0,
+        "ambiguous_children": 2
+      },
+      "labels_sha256": "e4c3c9f1d59ecf762ef2c9c4caac4db51163c3907e4ef137223957a4eb58f7a3"
+    },
+    "6bba_2819ca14": {
+      "counts": {
+        "unlabeled_or_neutral": 48,
+        "unknown_children": 85,
+        "partial_regression": 1,
+        "known_children": 16,
+        "delta_correct_links": 12,
+        "improved_children": 13,
+        "worsened_children": 1,
+        "partial_improvement": 12
+      },
+      "labels_sha256": "f0bb17640ffd900b846567cd6e52e75348dcf64970ff7cf98f654d925164bb09"
+    },
+    "6bba_67ebd073": {
+      "counts": {
+        "unlabeled_or_neutral": 430,
+        "unknown_children": 644,
+        "partial_improvement": 9,
+        "known_children": 15,
+        "delta_correct_links": 6,
+        "improved_children": 9,
+        "worsened_children": 3,
+        "ambiguous_children": 5,
+        "partial_regression": 3
+      },
+      "labels_sha256": "a87afdbaf61bf939af3a0166e8bd661b0c64731e3551cf616a39d1ec7609081f"
+    },
+    "6bba_3abfe10a": {
+      "counts": {
+        "unlabeled_or_neutral": 1391,
+        "unknown_children": 1842,
+        "partial_improvement": 3,
+        "known_children": 10,
+        "delta_correct_links": 1,
+        "improved_children": 3,
+        "worsened_children": 2,
+        "partial_regression": 2,
+        "ambiguous_children": 1
+      },
+      "labels_sha256": "e874b86af70d68d480ce01515496cfcb1201fba0fe9ace215eac8c7a60b07847"
+    },
+    "44b6_996155de": {
+      "counts": {
+        "unlabeled_or_neutral": 30,
+        "unknown_children": 34
+      },
+      "labels_sha256": "165863c3590a20fc51927f4e1fecd8d4367048261072450e4e97a1f71fa04fc1"
+    },
+    "6bba_5c039895": {
+      "counts": {
+        "unlabeled_or_neutral": 9,
+        "unknown_children": 12
+      },
+      "labels_sha256": "9dc8222d8225cecf9d57c004233187eeef62abbc54a61304b6148fdb78e21530"
+    },
+    "6bba_705ec2c9": {
+      "counts": {
+        "unlabeled_or_neutral": 111,
+        "unknown_children": 146,
+        "known_children": 5,
+        "delta_correct_links": 2,
+        "improved_children": 3,
+        "worsened_children": 1,
+        "partial_improvement": 3,
+        "partial_regression": 1
+      },
+      "labels_sha256": "2e7b9010624dbdcd805fa0908fc83f43cfffbcab39fd9e2ae542e03eddc7862b"
+    },
+    "6bba_12665c0e": {
+      "counts": {
+        "unlabeled_or_neutral": 98,
+        "unknown_children": 186,
+        "partial_improvement": 18,
+        "known_children": 20,
+        "delta_correct_links": 18,
+        "improved_children": 19,
+        "worsened_children": 1,
+        "partial_regression": 1
+      },
+      "labels_sha256": "6ff7fa4e3f27bca653958974e8f0171f9d3a06a69afb91005a2fd2e5a2ae131a"
+    }
+  },
+  "pooled": {
+    "unlabeled_or_neutral": 2204,
+    "unknown_children": 3085,
+    "partial_improvement": 60,
+    "known_children": 83,
+    "delta_correct_links": 54,
+    "improved_children": 62,
+    "worsened_children": 8,
+    "ambiguous_children": 8,
+    "partial_regression": 8
+  },
+  "components_sha256": "034b501de18d4707a717e0c49b67296146b125c909304aa11cc8962160d89b73",
+  "supervision_sha256": "b66ce1af41ce1d89767cd01787fd9b24443f23964cef0a4f399eef1a5946cd04",
+  "helper_sha256": "7ded49045191d0d2cfdac7f91dde840d0eb9c844a8877a6e492ecc7f1bf6aa53",
+  "source_sha256": "6f03a7849cfd9ebbc809f0eb7ccbf9dd829410f11f121c7d14c9a659ccc356e7",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "labels_measure_known_links_not_full_component_score": true,
+  "unknown_children_are_not_negatives": true,
+  "ambiguous_matches_excluded": true,
+  "seconds": 3.3290000000270084,
+  "candidate_changed": false
+}

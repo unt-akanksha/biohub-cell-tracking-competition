@@ -1,0 +1,130 @@
+{
+  "status": "submitted",
+  "utc": "2026-09-14T18:38:35.167363+00:00",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "kernel_version": 2,
+  "build_sha256": "45a17f948e8c548f8da39e6c6014b85e95f793b7bdf610cf467f1a96b062369c",
+  "launch_sha256": "c53c5f0837be31af49da9ee15408c58e6dfe83a045ddd7c06e23252df67aad9b",
+  "public_verification_sha256": "8634e199e58327c849ec4204a80076d1ea5743abd94853e38613db9c29e39583",
+  "harvest_sha256": "11e8b61d76d1777888913a04e88090daa8d959b831f1a8d9cfda32a091402def",
+  "notebook_sha256": "362f3e6288177ef187ddc431022d94a30f64cca10a6142f5b475cdd3f861a1c2",
+  "contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "csv_sha256": "b940d465aafbe62270caaab5dbd8803f6c679781c50763679b4a2a85533ae0df",
+  "rows": 240305,
+  "records": [
+    {
+      "mode": "smoke",
+      "stem": "6bba_05db0fb1",
+      "frames": 8,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "a851d4bd8b7ea2fe3f72b82786132d73d6636515f30e4cfb529e5fa0a6a3197d",
+      "event_seconds": 5.60778739899996
+    },
+    {
+      "mode": "smoke",
+      "stem": "6bba_05b6850b",
+      "frames": 8,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "6dae7e376e243c93bb4e76786c88a3e53d59a3c130c7e8ca81d846869c765338",
+      "event_seconds": 0.41109861000001047
+    },
+    {
+      "mode": "smoke",
+      "stem": "44b6_0b24845f",
+      "frames": 8,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "fa4fd264d073b2c57cb2e96c6a2b3aa353d7e7c63aa24660711340c65c3a938e",
+      "event_seconds": 1.0720973069999786
+    },
+    {
+      "mode": "smoke",
+      "stem": "44b6_0113de3b",
+      "frames": 8,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "6e3e2cb97d17e262590e43c804cecf94b59df1bcb3d4810498052a707661a793",
+      "event_seconds": 2.4975362839999775
+    },
+    {
+      "mode": "production",
+      "stem": "44b6_0b24845f",
+      "frames": 100,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "d5d4cad322fbab55ddd807b26d2aadd1fc3f998fdc8a51dc7f3161d14bf21789",
+      "event_seconds": 15.429181245999985
+    },
+    {
+      "mode": "production",
+      "stem": "6bba_05b6850b",
+      "frames": 100,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "c57e9b52f4ab5fa8c5ad6c198d327d8e2165044bac415dc902d5f94ba8f6eb3d",
+      "event_seconds": 5.215714888999969
+    },
+    {
+      "mode": "production",
+      "stem": "6bba_05db0fb1",
+      "frames": 100,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "d1b10492b96ac550a5c75e0d4c17c17595f13f2b7c70293b7888148d9b332c4a",
+      "event_seconds": 78.44034548699983
+    },
+    {
+      "mode": "production",
+      "stem": "44b6_0113de3b",
+      "frames": 100,
+      "all_stages_equal_independently_replayed_version1": true,
+      "final_sha256": "fdcee9a1fcad6c8486c279f52ab20208104e13d8366381e0ce8597b4e7c61e5c",
+      "event_seconds": 36.73088377800002
+    }
+  ],
+  "runtime_risk": {
+    "validation_cohort_projection_hours": 7.504155394838402,
+    "validation_calibrated_public_work_projection_hours": 9.13491918689665,
+    "combined_twelve_movie_makespan_projection_hours": 8.699138342292848,
+    "public_four_movie_makespan_projection_hours": 11.089104237201736,
+    "effective_workers_measured_on_two_gpus": 3.3651238205248584,
+    "runtime_policy_revision": 3,
+    "assumes_validation_scheduling_efficiency_transfers": true,
+    "worker_times_include_overlap_and_waiting": true,
+    "hidden_inference_cutoff_hours": 10,
+    "hidden_movie_count_projection_assumption": 199,
+    "dense_movie_and_static_shard_imbalance_timeout_risk": true,
+    "hidden_runtime_guaranteed": false
+  },
+  "public_wall_seconds": 802.427643295,
+  "remote_source_sha256": "81912ee49e441ba832fcdbc8a5b5f426951b059c40f1f4d5bc00edcd9196cb02",
+  "strict_quality_gates_pass": false,
+  "strict_quality_failures_preserved": true,
+  "exploratory_entry_only": true,
+  "final_selection_performed": false,
+  "submission_performed": true,
+  "public_leaderboard_score": null,
+  "source_sha256": "426bc0db939a158546a07693a11056d9ddf458dd5c94400fcc12658e606323fd",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "2.74h",
+      "remaining": "27.26h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "budget": {
+    "remaining_hours": 27.26,
+    "pending_reservations_hours": {},
+    "new_run_reserved_hours": 12.0,
+    "remaining_after_all_reservations": 15.260000000000002,
+    "reserve_hours": 8.0,
+    "t4x2_quota_hours_per_notebook_hour": 1.0,
+    "hidden_evaluation_assumed_free": false
+  },
+  "daily_submissions_before": 2,
+  "kaggle_response": ""
+}

@@ -1,0 +1,26 @@
+{
+    "status":  "comparison_completed_no_automatic_promotion",
+    "pid":  24616,
+    "training_pid":  36456,
+    "training_start_utc":  "2026-09-14T21:14:46.2234127Z",
+    "started_utc":  "2026-09-14T22:35:45.1769155Z",
+    "contract_sha256":  "57dde40d18ceadf25dcaf4bca9de1631c0663d751aa83b31914e8a1ed7dfae20",
+    "gpu_used":  false,
+    "existing_held_evaluation_controller_unchanged":  true,
+    "submission_allowed":  false,
+    "restart_allowed":  false,
+    "stages":  [
+                   {
+                       "stage":  "smoke",
+                       "status":  "selection_inference_smoke_passed",
+                       "sha256":  "25e07642064d833707fc6e203538109f7bad84e9d46db9564f965f7abecf45c1"
+                   },
+                   {
+                       "stage":  "full",
+                       "status":  "fixed_ensemble_selection_scoring_complete",
+                       "sha256":  "357d5fa7e8e9bd1c2a5360a8df8309a107c040e3375c593c3dac46411ba2c197"
+                   }
+               ],
+    "updated_utc":  "2026-09-14T23:19:38.8428908Z",
+    "final_fit_sha256":  "9bb0ef61d09c13fa871f6f9b61870d837aea5a798b534e0a019a9112a53a62cd"
+}

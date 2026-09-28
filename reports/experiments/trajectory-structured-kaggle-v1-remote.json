@@ -1,0 +1,13 @@
+{
+  "status": "remote_source_verified",
+  "kernel": "indarkarhana/biohub-structured-trajectory-acceptance",
+  "kernel_id": 134327465,
+  "local_notebook_sha256": "1bc396d39faf65afb84fa331c672b05778ce1a6cd75b59957f48cfb1bf58e858",
+  "remote_notebook_sha256": "298227a7da7e794062f0ad3cb7a961fab4e8a3f2671ac8c353c0d35cb5f74913",
+  "remote_metadata_sha256": "6ff44f08fc745e355b1d69d10f94d6e570924105ff1364922e93d39ae035879d",
+  "code_cells_exact": true,
+  "private": true,
+  "internet_disabled": true,
+  "gpu_enabled": true,
+  "actual_two_t4_execution_still_requires_runtime_result": true
+}

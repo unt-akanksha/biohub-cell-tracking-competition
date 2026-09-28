@@ -1,0 +1,27 @@
+{
+  "status": "verified_source_models",
+  "manifest_sha256": "57236f97756e7287204c1db32b084e0bbbe48315012b3117af444ddfa7296aa3",
+  "verifier_sha256": "7fe2563fb5835f76644c6ae66b0c5a57e7950b8d8b86edf05670340b7d08b8d4",
+  "models": {
+    "6bba": {
+      "source_embryo": "44b6",
+      "optimization_windows": 14165,
+      "calibration_windows": 957,
+      "calibration_threshold": 67.69321730204005,
+      "minimum_covariance_eigenvalue": 0.19751287177255067,
+      "weighted_least_squares_replay": true,
+      "source_exclusion_verified": true
+    },
+    "44b6": {
+      "source_embryo": "6bba",
+      "optimization_windows": 67624,
+      "calibration_windows": 7540,
+      "calibration_threshold": 43.1483943926082,
+      "minimum_covariance_eigenvalue": 0.21401987677997455,
+      "weighted_least_squares_replay": true,
+      "source_exclusion_verified": true
+    }
+  },
+  "candidate_quality_evaluated": false,
+  "authorized_for_submission": false
+}

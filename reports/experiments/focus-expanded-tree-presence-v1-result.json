@@ -1,0 +1,59 @@
+{
+  "status": "completed_twelve_movie_tree_presence_fit",
+  "run_id": "focus-expanded-tree-presence-v1",
+  "settings": {
+    "loss": "log_loss",
+    "n_estimators": 100,
+    "learning_rate": 0.05,
+    "max_depth": 2,
+    "min_samples_leaf": 20,
+    "subsample": 1.0,
+    "random_state": 244691,
+    "n_iter_no_change": null
+  },
+  "fitting_metrics": {
+    "loss_sum": 6811.388058211553,
+    "known_parent": 10754,
+    "known_absent": 161,
+    "correct_parent": 9902,
+    "correct_absent": 39,
+    "nll": 0.6240392174266196
+  },
+  "diagnostic_metrics": {
+    "loss_sum": 496.29081022468444,
+    "known_parent": 2645,
+    "known_absent": 27,
+    "correct_parent": 2603,
+    "correct_absent": 6,
+    "nll": 0.18573757867690285
+  },
+  "diagnostic_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": true,
+      "parent_correct_not_lower": true,
+      "null_correct_not_lower": false
+    },
+    "scope": "Training-domain feasibility only; no tracking-score promotion"
+  },
+  "model_sha256": "7e4adeb894981ad8ab3d6677e1e7aeae8ba73f6e201dd5c9a5383695237acbfa",
+  "fitting_file_sha256": "feb8b03aef500f793f9b16f0800fc592bf65cc42145ece7529f95a393dfaae23",
+  "summary_result_sha256": "ad1a546a0c903358c37ab20aee206cd0c617b093a1aa122254721f178ca70dd0",
+  "original_tree_result_sha256": "ed2013cb85fc4111591fab357a7456163e59799c3313887d9c05d290061a2d02",
+  "source_hashes": {
+    "research/focus_presence_trees.py": "f2850356543bdcb6fc4c521728d85101947f7dd6a67e39c75e002680cbf07214",
+    "scripts/train-focus-presence-trees.py": "ea79bfc7dbb4f856801f2b16cee210ddee527c6c9e17cc01d53a523ba09e12d6",
+    "scripts/fit-focus-expanded-tree-presence.py": "38b620917b1ce700bf333fad394924a93b220b421412ca88dfc5731433d3df0d",
+    "reports/experiments/focus-expanded-tree-presence-v1-design.md": "78c060dad19838cae178e3b430d9a7964778fed2886d36010cf64d88191ea427"
+  },
+  "fitted_model_persisted_before_diagnostic": true,
+  "native_export_replay_max_abs": 2.6645352591003757e-15,
+  "sklearn_version": "1.9.0",
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "eligible_for_source_tracking_evaluation": false,
+  "authorized_for_submission": false,
+  "gpu_seconds": 0,
+  "elapsed_seconds": 32.39100000000326,
+  "caveat": "Same exposed training-domain diagnostic; not independent or a tracking score"
+}

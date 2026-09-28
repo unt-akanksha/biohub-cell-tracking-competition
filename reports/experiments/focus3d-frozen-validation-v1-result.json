@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "run_id": "focus3d-frozen-validation-v1",
+  "status": "rejected_as_standalone",
+  "kernel_ref": "indarkarhana/biohub-focus3d-frozen-validation-v1",
+  "kernel_version": 1,
+  "elapsed_seconds": 1356.405522108078,
+  "complete_movie_count": 4,
+  "summary": {
+    "score": 0.8172891771243621,
+    "adjusted_edge_jaccard": 0.8081982680334531,
+    "edge_jaccard": 0.8196465696465697,
+    "node_recall": 0.9563917042321508,
+    "division_jaccard": 0.09090909090909091,
+    "division_tp": 1,
+    "division_fp": 3,
+    "division_fn": 7
+  },
+  "by_embryo": {
+    "44b6": {
+      "score": 0.7844298703368136,
+      "node_recall": 0.9654392764857881,
+      "division_jaccard": 0.0
+    },
+    "6bba": {
+      "score": 0.834610715837861,
+      "node_recall": 0.9473441319785136,
+      "division_jaccard": 0.14285714285714285
+    }
+  },
+  "decision": {
+    "standalone_gate_passed": false,
+    "retire_physical_linker": true,
+    "retain_detector_for_frozen_rescue_research": true,
+    "reason": "Strong node recall does not compensate for materially weak edge and division reconstruction on complete movies."
+  },
+  "provenance": {
+    "source_notebook_sha256": "459cedbe2068fff6b4dfc57e20a9103a14bbc059baa4612c9f7693433a618de4",
+    "focus3d_code_license": "BSD-3-Clause",
+    "focus3d_weights_license": "Apache-2.0",
+    "public_predictions_copied": false,
+    "leaderboard_used_for_selection": false,
+    "metric_hack_used": false,
+    "competition_test_data_read": false,
+    "submission_created": false
+  },
+  "authorized_for_submission": false
+}

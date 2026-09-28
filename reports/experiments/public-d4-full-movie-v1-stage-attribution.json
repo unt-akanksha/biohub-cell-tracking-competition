@@ -1,0 +1,220 @@
+{
+  "run_id": "public-d4-full-movie-v1-stage-attribution",
+  "status": "complete",
+  "source_sha256": "97aba835271a966e0c0341fe4f71d43a1309b31e2faaa100532aec03023728d6",
+  "per_movie": {
+    "44b6_24264f12": {
+      "original": {
+        "raw_detector": {
+          "predicted_nodes": 29040,
+          "matched_truth_nodes": 230,
+          "annotated_nodes": 230,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 27198,
+          "matched_truth_nodes": 228,
+          "annotated_nodes": 230,
+          "recall": 0.991304347826087
+        },
+        "final": {
+          "predicted_nodes": 27090,
+          "matched_truth_nodes": 228,
+          "annotated_nodes": 230,
+          "recall": 0.991304347826087
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 2,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      },
+      "corrected": {
+        "raw_detector": {
+          "predicted_nodes": 29151,
+          "matched_truth_nodes": 230,
+          "annotated_nodes": 230,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 27363,
+          "matched_truth_nodes": 228,
+          "annotated_nodes": 230,
+          "recall": 0.991304347826087
+        },
+        "final": {
+          "predicted_nodes": 27206,
+          "matched_truth_nodes": 228,
+          "annotated_nodes": 230,
+          "recall": 0.991304347826087
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 2,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      }
+    },
+    "44b6_81c256f0": {
+      "original": {
+        "raw_detector": {
+          "predicted_nodes": 11849,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 11306,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "final": {
+          "predicted_nodes": 11284,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 0,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      },
+      "corrected": {
+        "raw_detector": {
+          "predicted_nodes": 11781,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 11219,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "final": {
+          "predicted_nodes": 11157,
+          "matched_truth_nodes": 199,
+          "annotated_nodes": 199,
+          "recall": 1.0
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 0,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      }
+    },
+    "6bba_23af9eeb": {
+      "original": {
+        "raw_detector": {
+          "predicted_nodes": 5116,
+          "matched_truth_nodes": 512,
+          "annotated_nodes": 513,
+          "recall": 0.9980506822612085
+        },
+        "post_ilp": {
+          "predicted_nodes": 4269,
+          "matched_truth_nodes": 511,
+          "annotated_nodes": 513,
+          "recall": 0.9961013645224172
+        },
+        "final": {
+          "predicted_nodes": 4175,
+          "matched_truth_nodes": 513,
+          "annotated_nodes": 513,
+          "recall": 1.0
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 1,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 2
+        }
+      },
+      "corrected": {
+        "raw_detector": {
+          "predicted_nodes": 5115,
+          "matched_truth_nodes": 513,
+          "annotated_nodes": 513,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 4276,
+          "matched_truth_nodes": 512,
+          "annotated_nodes": 513,
+          "recall": 0.9980506822612085
+        },
+        "final": {
+          "predicted_nodes": 4177,
+          "matched_truth_nodes": 512,
+          "annotated_nodes": 513,
+          "recall": 0.9980506822612085
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 1,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 0,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      }
+    },
+    "6bba_f1fde7e0": {
+      "original": {
+        "raw_detector": {
+          "predicted_nodes": 9999,
+          "matched_truth_nodes": 476,
+          "annotated_nodes": 476,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 8683,
+          "matched_truth_nodes": 475,
+          "annotated_nodes": 476,
+          "recall": 0.9978991596638656
+        },
+        "final": {
+          "predicted_nodes": 8109,
+          "matched_truth_nodes": 467,
+          "annotated_nodes": 476,
+          "recall": 0.9810924369747899
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 1,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 8,
+          "new_matches_after_repairs_pruning_smoothing": 0
+        }
+      },
+      "corrected": {
+        "raw_detector": {
+          "predicted_nodes": 9979,
+          "matched_truth_nodes": 476,
+          "annotated_nodes": 476,
+          "recall": 1.0
+        },
+        "post_ilp": {
+          "predicted_nodes": 8650,
+          "matched_truth_nodes": 473,
+          "annotated_nodes": 476,
+          "recall": 0.9936974789915967
+        },
+        "final": {
+          "predicted_nodes": 8093,
+          "matched_truth_nodes": 464,
+          "annotated_nodes": 476,
+          "recall": 0.9747899159663865
+        },
+        "stage_losses": {
+          "detector_matches_lost_after_ilp": 3,
+          "ilp_matches_lost_after_repairs_pruning_smoothing": 11,
+          "new_matches_after_repairs_pruning_smoothing": 2
+        }
+      }
+    }
+  },
+  "annotations_previously_exposed": true,
+  "purpose": "Explain failed embryo gate, not train or select an output",
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "new_gpu_hours": 0
+}

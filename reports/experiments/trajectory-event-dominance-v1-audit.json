@@ -1,0 +1,173 @@
+{
+  "status": "source_dominance_benchmark_complete",
+  "cases": [
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 70,
+      "options": 32125,
+      "reduction_seconds": 0.09299999999348074,
+      "allowed_before": 32125,
+      "dominated_forks": 19941,
+      "allowed_after": 12184,
+      "reference": {
+        "optimal": true,
+        "objective": 2462.752235514909,
+        "seconds": 2.0320000000065193
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2462.752235514909,
+        "seconds": 1.0310000000172295
+      },
+      "objective_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 64,
+      "options": 31905,
+      "reduction_seconds": 0.15600000001722947,
+      "allowed_before": 31905,
+      "dominated_forks": 19752,
+      "allowed_after": 12153,
+      "reference": {
+        "optimal": true,
+        "objective": 2501.940111136009,
+        "seconds": 1.9219999999622814
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2501.940111136009,
+        "seconds": 0.9220000000204891
+      },
+      "objective_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 65,
+      "options": 31789,
+      "reduction_seconds": 0.10899999999674037,
+      "allowed_before": 31789,
+      "dominated_forks": 19713,
+      "allowed_after": 12076,
+      "reference": {
+        "optimal": true,
+        "objective": 2494.344002191733,
+        "seconds": 1.797000000020489
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2494.344002191733,
+        "seconds": 0.8279999999795109
+      },
+      "objective_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 71,
+      "options": 31727,
+      "reduction_seconds": 0.10899999999674037,
+      "allowed_before": 31727,
+      "dominated_forks": 19704,
+      "allowed_after": 12023,
+      "reference": {
+        "optimal": true,
+        "objective": 2594.7270840397723,
+        "seconds": 2.0939999999827705
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2594.7270840397723,
+        "seconds": 0.9529999999795109
+      },
+      "objective_difference": 0.0
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 69,
+      "options": 31541,
+      "reduction_seconds": 0.125,
+      "allowed_before": 31541,
+      "dominated_forks": 19477,
+      "allowed_after": 12064,
+      "reference": {
+        "optimal": false,
+        "error": "Optimal event assignment unavailable, solver status 1",
+        "seconds": 2.3589999999967404
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2461.147794583019,
+        "seconds": 1.2969999999622814
+      }
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 72,
+      "options": 31477,
+      "reduction_seconds": 0.18699999997625127,
+      "allowed_before": 31477,
+      "dominated_forks": 19569,
+      "allowed_after": 11908,
+      "reference": {
+        "optimal": false,
+        "error": "Optimal event assignment unavailable, solver status 1",
+        "seconds": 2.1410000000032596
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2337.475663854612,
+        "seconds": 1.297000000020489
+      }
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 67,
+      "options": 31377,
+      "reduction_seconds": 0.17099999997299165,
+      "allowed_before": 31377,
+      "dominated_forks": 19495,
+      "allowed_after": 11882,
+      "reference": {
+        "optimal": false,
+        "error": "Optimal event assignment unavailable, solver status 1",
+        "seconds": 2.297000000020489
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2107.6385273214873,
+        "seconds": 1.0320000000065193
+      }
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "t": 68,
+      "options": 31339,
+      "reduction_seconds": 0.14100000000325963,
+      "allowed_before": 31339,
+      "dominated_forks": 19407,
+      "allowed_after": 11932,
+      "reference": {
+        "optimal": false,
+        "error": "Optimal event assignment unavailable, solver status 1",
+        "seconds": 2.297000000020489
+      },
+      "reduced": {
+        "optimal": true,
+        "objective": 2441.0029074945237,
+        "seconds": 1.1869999999762513
+      }
+    }
+  ],
+  "model_sha256": "508165d131dc0c2516cf91e0eafb5a88edf24358f6ced5b0436f29ccc6b733be",
+  "case_manifest_sha256": "50e6a1e69c806dae331eaab642508d6dbaa03a7ce036093fe2bbfaa1d3403618",
+  "source_sha256": "c9c44cb4f3262b6b487402dca231ef5d6c2077412a01a8620dc9d0e7834cfca3",
+  "reduction_sha256": "e8f7daa6b05ece8803c75313b743ce3a3d8ae1816e6203d1d54f530e381a5c3e",
+  "all_reduced_optimal": true,
+  "source_only": true,
+  "ground_truth_used": false,
+  "source_labels_used": false,
+  "model_changed": false,
+  "graph_predictions_exported": false,
+  "authorized_for_submission": false,
+  "seconds": 28.54700000002049
+}

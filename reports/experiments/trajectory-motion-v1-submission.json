@@ -1,0 +1,86 @@
+{
+  "status": "submitted",
+  "utc": "2026-09-14T02:05:39.805155+00:00",
+  "kernel": "indarkarhana/biohub-trajectory-motion-candidate",
+  "kernel_version": 1,
+  "contract_sha256": "d10d19b1e21b30e2eb5c6bf1c05161559f74594ce30e250e3c473f2d8b0379f2",
+  "notebook_sha256": "9e497e6b678460f58917bbb30dfdf48068284542b0295d56bb6f57ca5b7b591a",
+  "terminal_sha256": "24bd3adbb82a56fa5f056c78976b75a2a6d44b2ad45dc80c55484e8a568b7c18",
+  "acceptance_sha256": "4719aa024761b9045f431654b6f1718f96ca997a5d790af91c9482965171c169",
+  "csv_sha256": "ae121d9df70f118999479e3e0b02f5fbdb720115323e08181b9cdf9206e4730b",
+  "rows": 241192,
+  "movies": [
+    "44b6_0113de3b",
+    "44b6_0b24845f",
+    "6bba_05b6850b",
+    "6bba_05db0fb1"
+  ],
+  "added_edges": 3,
+  "frames": {
+    "44b6_0b24845f": 100,
+    "6bba_05b6850b": 100,
+    "6bba_05db0fb1": 100,
+    "44b6_0113de3b": 100
+  },
+  "official_validation_score": 0.9453907265031998,
+  "public_leaderboard_score": null,
+  "independently_held_out": false,
+  "public_backbone_training_overlap": true,
+  "public_leaderboard_used_for_selection": false,
+  "submission_performed": true,
+  "remote_state": {
+    "competition_sources": [
+      "biohub-cell-tracking-during-development"
+    ],
+    "current_version_number": 1,
+    "dataset_sources": [
+      "indarkarhana/biohub-trajectory-motion-runtime-v1"
+    ],
+    "enable_gpu": true,
+    "enable_internet": false,
+    "enable_tpu": false,
+    "is_private": true,
+    "kernel_slug": "indarkarhana/biohub-trajectory-motion-candidate",
+    "kernel_sources": [],
+    "kernel_type": "notebook",
+    "language": "python",
+    "model_sources": [],
+    "next_kernel_ref": "indarkarhana/biohub-trajectory-motion-candidate/2",
+    "next_version_number": 2,
+    "present": true,
+    "schema_version": "biohub.kaggle-kernel-state.v1"
+  },
+  "production_wall_seconds": 780.356786093,
+  "runtime_risk": {
+    "validation_cohort_projection_hours": 7.865928109733332,
+    "public_mean_movie_projection_hours": 9.023536775018993,
+    "combined_twelve_movie_projection_hours": 8.161946824383566,
+    "public_four_movie_makespan_projection_hours": 10.78409725225743,
+    "hidden_inference_cutoff_hours": 10,
+    "two_hour_planning_buffer_not_confirmed_by_new_public_timing": true,
+    "dense_movie_and_static_shard_imbalance_timeout_risk": true,
+    "user_informed_before_submission": true,
+    "hidden_runtime_guaranteed": false
+  },
+  "verifier_sha256": "90731a2227e0d79391ec78aca3b69130fc2e575c77560e6e970f38cf689eb6f7",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "1.03h",
+      "remaining": "28.97h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "worst_case_reserved_gpu_hours": 20,
+  "daily_submissions_before": 0,
+  "reserve_hours": 8,
+  "kaggle_response": ""
+}

@@ -1,0 +1,67 @@
+{
+  "status": "portable_inference_verified",
+  "code_sha256": "a07d605e09b375e973e4e56bf26faca4d1d4ce10390f40e5eb50d33077d5a661",
+  "model_sha256": "c8411cf313a62f3a7d0f3550f68ca84d4dc97970cf31eefe3ff24bfe810402d4",
+  "quality_sha256": "0469b99ccf3d347a72ec00afb7206ea8fa6bd6498a7c388e09b0d8cf667508ce",
+  "source_hashes": {
+    "trajectory_disagreement_data_v1.py": "e272b09ad2f3e6c7c5e6ffb0e0bcb16c0d47870240ebdaad7d967c06ded3123a",
+    "trajectory_candidate_inventory_v1.py": "1eeedb6f212cd7759834eb916c437f04a1833df9e62ab5f0ec08c1232ac03e8b",
+    "trajectory_candidate_ranker_v1.py": "aecd020ddad300472b1f5887bd898330074212e8f8541b8235959e050a26ef22",
+    "trajectory_joint_assignment_v1.py": "4d1cf75a28b7a051fddfd738430be8af8e41bc7c342cdcabfcc53a96dcc81b99"
+  },
+  "records": [
+    {
+      "stem": "44b6_12dfb391",
+      "exact_graph_identity": true,
+      "seconds": 6.4060000000172295,
+      "changed_edges": 10
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "exact_graph_identity": true,
+      "seconds": 0.26600000000325963,
+      "changed_edges": 2
+    },
+    {
+      "stem": "44b6_81c256f0",
+      "exact_graph_identity": true,
+      "seconds": 1.2030000000377186,
+      "changed_edges": 2
+    },
+    {
+      "stem": "6bba_f1fde7e0",
+      "exact_graph_identity": true,
+      "seconds": 0.8130000000237487,
+      "changed_edges": 289
+    },
+    {
+      "stem": "44b6_24264f12",
+      "exact_graph_identity": true,
+      "seconds": 3.73499999998603,
+      "changed_edges": 18
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "exact_graph_identity": true,
+      "seconds": 0.4059999999590218,
+      "changed_edges": 13
+    },
+    {
+      "stem": "6bba_07e24132",
+      "exact_graph_identity": true,
+      "seconds": 3.797000000020489,
+      "changed_edges": 144
+    },
+    {
+      "stem": "44b6_267148e4",
+      "exact_graph_identity": true,
+      "seconds": 2.9679999999934807,
+      "changed_edges": 427
+    }
+  ],
+  "model_parameters": 18,
+  "annotations_or_training_code_packaged": false,
+  "kaggle_runtime_acceptance_required": true,
+  "authorized_for_submission": false,
+  "seconds": 21.21899999998277
+}

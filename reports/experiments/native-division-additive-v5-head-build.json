@@ -1,0 +1,7 @@
+{
+  "status": "division_heads_packaged",
+  "archive_sha256": "2de93fc243054b432a4022f7be237052bc024d59b86d8c32e2e95d4309f50a3b",
+  "contract_sha256": "15ee3493c0f5acb5ac2fd1e94007297dd59966435d077538f31b170272da5b78",
+  "bytes": 71680,
+  "receipt_recovery": "Package archive completed before a local receipt-path naming error. All source files, data identity, archive member names and archive bytes independently verified before recovering this receipt."
+}

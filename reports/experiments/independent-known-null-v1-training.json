@@ -1,0 +1,67 @@
+{
+  "status": "verified_training_receipts_not_selection",
+  "steps": 100,
+  "checkpoint_sha256": "818eec794fe3c9c06c892af84e38cbdaf7b9a588151ab1fae63356a21751d3ce",
+  "known_null_columns": 14,
+  "positive_links": 1444,
+  "confident_null_columns": 8,
+  "detector_unchanged": true,
+  "launcher_seconds": 221.21711642000002,
+  "optimization_seconds": 51.296155236000004,
+  "before": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 0,
+    "checkpoint_sha256": "c4c1a6ba49851bc79a70b36a2d3961395b7e582b1661518431f4e2acfcb2b5ab",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 292,
+    "predicted_edges": 183,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 8,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 4,
+      "division_fn": 0,
+      "num_pred_nodes": 292
+    },
+    "elapsed_seconds": 2.915864940000006,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null
+  },
+  "after": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 100,
+    "checkpoint_sha256": "818eec794fe3c9c06c892af84e38cbdaf7b9a588151ab1fae63356a21751d3ce",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 292,
+    "predicted_edges": 181,
+    "scorer_counts": {
+      "edge_tp": 13,
+      "edge_fp": 7,
+      "edge_fn": 3,
+      "division_tp": 0,
+      "division_fp": 3,
+      "division_fn": 0,
+      "num_pred_nodes": 292
+    },
+    "elapsed_seconds": 0.8053809340000271,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null
+  },
+  "probe_inputs_replayed": false,
+  "authorized_for_submission": false,
+  "source_sha256": {
+    "result": "ab2602e9c6e59bc727a8dcb758895c877098b48d1f3002df727380ba2a750847",
+    "terminal": "36f97b7d1cb6975984897657d2fa39773b29b4d988543f4a30b7ebd64a2d1505"
+  }
+}

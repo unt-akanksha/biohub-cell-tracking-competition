@@ -1,0 +1,229 @@
+{
+  "row_result": {
+    "status": "scored_complete_selection",
+    "per_movie": [
+      {
+        "edge_tp": 1005,
+        "edge_fp": 286,
+        "edge_fn": 283,
+        "division_tp": 0,
+        "division_fp": 90,
+        "division_fn": 0,
+        "num_pred_nodes": 40475,
+        "node_recall": 0.96274217585693,
+        "total_node_ratio": 0.9402233833469152,
+        "edge_jaccard": 0.6385006353240152,
+        "adj_edge_jaccard": 0.5784673125626651,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 575,
+        "edge_fp": 278,
+        "edge_fn": 149,
+        "division_tp": 0,
+        "division_fp": 82,
+        "division_fn": 0,
+        "num_pred_nodes": 7570,
+        "node_recall": 1,
+        "total_node_ratio": 0.3047225094794898,
+        "edge_jaccard": 0.5738522954091816,
+        "adj_edge_jaccard": 0.5563657242564164,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 434,
+        "edge_fp": 265,
+        "edge_fn": 276,
+        "division_tp": 0,
+        "division_fp": 65,
+        "division_fn": 0,
+        "num_pred_nodes": 51665,
+        "node_recall": 0.8765264586160109,
+        "total_node_ratio": 2.1667177444069874,
+        "edge_jaccard": 0.4451282051282051,
+        "adj_edge_jaccard": 0.34868148706947355,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 322,
+        "edge_fp": 146,
+        "edge_fn": 116,
+        "division_tp": 0,
+        "division_fp": 23,
+        "division_fn": 1,
+        "num_pred_nodes": 24604,
+        "node_recall": 0.9502164502164502,
+        "total_node_ratio": 0.5319095946703194,
+        "edge_jaccard": 0.5513698630136986,
+        "adj_edge_jaccard": 0.522041970978794,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 918,
+        "edge_fp": 338,
+        "edge_fn": 227,
+        "division_tp": 1,
+        "division_fp": 95,
+        "division_fn": 2,
+        "num_pred_nodes": 21154,
+        "node_recall": 0.975298126064736,
+        "total_node_ratio": 1.4683780630105017,
+        "edge_jaccard": 0.6190155091031693,
+        "adj_edge_jaccard": 0.5281206296801322,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 389,
+        "edge_fp": 60,
+        "edge_fn": 69,
+        "division_tp": 0,
+        "division_fp": 21,
+        "division_fn": 2,
+        "num_pred_nodes": 24936,
+        "node_recall": 0.9575371549893843,
+        "total_node_ratio": 0.7786019971469329,
+        "edge_jaccard": 0.750965250965251,
+        "adj_edge_jaccard": 0.6924949465463018,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 560,
+        "edge_fp": 136,
+        "edge_fn": 139,
+        "division_tp": 0,
+        "division_fp": 34,
+        "division_fn": 1,
+        "num_pred_nodes": 25969,
+        "node_recall": 0.9972375690607734,
+        "total_node_ratio": 0.7351997861820125,
+        "edge_jaccard": 0.6706586826347305,
+        "adj_edge_jaccard": 0.6213518706273141,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1217,
+        "edge_fp": 115,
+        "edge_fn": 131,
+        "division_tp": 1,
+        "division_fp": 35,
+        "division_fn": 3,
+        "num_pred_nodes": 56318,
+        "node_recall": 0.9978858350951374,
+        "total_node_ratio": 0.8908175256001343,
+        "edge_jaccard": 0.8318523581681476,
+        "adj_edge_jaccard": 0.757749492231349,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ],
+    "summary": {
+      "n": 8,
+      "edge_jaccard": 0.6426369456959924,
+      "division_jaccard": 0.0043859649122807015,
+      "division_tp": 2,
+      "division_fp": 445,
+      "division_fn": 9,
+      "node_recall": 0.9646804712374277,
+      "adj_edge_jaccard": 0.5788658479793464,
+      "n_adj": 8,
+      "score": 0.5793044444705744
+    },
+    "by_embryo": {
+      "6bba": {
+        "n": 8,
+        "edge_jaccard": 0.6426369456959924,
+        "division_jaccard": 0.0043859649122807015,
+        "division_tp": 2,
+        "division_fp": 445,
+        "division_fn": 9,
+        "node_recall": 0.9646804712374277,
+        "adj_edge_jaccard": 0.5788658479793464,
+        "n_adj": 8,
+        "score": 0.5793044444705744
+      }
+    },
+    "checkpoint_sha256": "bff4626dd7277c62382d96a36cc20b294e4e211cda79e395d5e2c1d23c97c166",
+    "validation_scope": "Eight source-embryo selection movies excluded from this 120-movie fit",
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "baseline_summary": {
+    "n": 8,
+    "edge_jaccard": 0.6336572764177636,
+    "division_jaccard": 0.003424657534246575,
+    "division_tp": 1,
+    "division_fp": 281,
+    "division_fn": 10,
+    "node_recall": 0.9646804712374277,
+    "adj_edge_jaccard": 0.5710729020815496,
+    "n_adj": 8,
+    "score": 0.5714153678349743
+  },
+  "versus_motion": [
+    {
+      "stem": "6bba_283bf9f1",
+      "adjusted_edge_delta": 0.024313978091439314,
+      "edge_tp_delta": 82,
+      "edge_fp_delta": 65,
+      "division_fp_delta": 38
+    },
+    {
+      "stem": "6bba_5b28472a",
+      "adjusted_edge_delta": 0.00009547963245226665,
+      "edge_tp_delta": 11,
+      "edge_fp_delta": 19,
+      "division_fp_delta": 14
+    },
+    {
+      "stem": "6bba_c73a1d11",
+      "adjusted_edge_delta": 0.00705375874184877,
+      "edge_tp_delta": 38,
+      "edge_fp_delta": 67,
+      "division_fp_delta": 30
+    },
+    {
+      "stem": "6bba_67ebd073",
+      "adjusted_edge_delta": -0.002655046154929064,
+      "edge_tp_delta": 10,
+      "edge_fp_delta": 21,
+      "division_fp_delta": 7
+    },
+    {
+      "stem": "6bba_5c039895",
+      "adjusted_edge_delta": 0.0021419957006825197,
+      "edge_tp_delta": 29,
+      "edge_fp_delta": 41,
+      "division_fp_delta": 33
+    },
+    {
+      "stem": "6bba_fc5f39dc",
+      "adjusted_edge_delta": 0.012257697420651525,
+      "edge_tp_delta": 15,
+      "edge_fp_delta": 11,
+      "division_fp_delta": 8
+    },
+    {
+      "stem": "6bba_87289e13",
+      "adjusted_edge_delta": 0.019891681964972818,
+      "edge_tp_delta": 40,
+      "edge_fp_delta": 34,
+      "division_fp_delta": 13
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "adjusted_edge_delta": 0.0031540796274618366,
+      "edge_tp_delta": 44,
+      "edge_fp_delta": 47,
+      "division_fp_delta": 21
+    }
+  ],
+  "result_sha256": "f9523abfad3a2789735a79fc3d4c56b03720502c6229d2d1bee2ffe48ad6a99a",
+  "authorized_for_submission": false
+}

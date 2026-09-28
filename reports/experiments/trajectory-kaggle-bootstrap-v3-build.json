@@ -1,0 +1,11 @@
+{
+  "status": "staged_not_launched",
+  "bootstrap_revision": 3,
+  "contract_sha256": "d10d19b1e21b30e2eb5c6bf1c05161559f74594ce30e250e3c473f2d8b0379f2",
+  "archive_sha256": "a6bc494521cd93eabcad83abac2aaf040aab0f101078a2e1151b2ab2fe005e5a",
+  "notebook_sha256": "410061255f3888a031283be604c7b60bf1d5971bd48c5866327e7baf038bf3de",
+  "runtime_changed": false,
+  "model_or_inference_changed": false,
+  "cause": "Kaggle auto-expands dataset ZIP; recursive archive search had no match",
+  "submission_performed": false
+}

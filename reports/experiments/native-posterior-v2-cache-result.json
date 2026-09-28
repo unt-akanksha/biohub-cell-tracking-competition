@@ -1,0 +1,231 @@
+{
+  "status": "label_free_attribution_complete",
+  "movies": [
+    {
+      "stem": "44b6_12dfb391",
+      "counts": {
+        "queries": 44615,
+        "top_null": 725,
+        "top_probability_ge_099": 33902,
+        "top_agrees_existing_edge": 43446,
+        "confident_real_parent": 33751,
+        "confident_agrees_existing_edge": 33698,
+        "unlinked_child": 1127,
+        "confident_other_parent_occupied": 53,
+        "unlinked_child_with_free_candidate": 182
+      },
+      "quantile_levels": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1
+      ],
+      "top_probability_quantiles": [
+        0.3006848990917206,
+        0.9907383918762207,
+        0.9986344575881958,
+        0.9994351267814636,
+        0.999557375907898,
+        0.999615124464035,
+        1.0
+      ],
+      "null_probability_quantiles": [
+        0.00016613234765827656,
+        0.00042153222602792084,
+        0.0004659231344703585,
+        0.0005749009142164141,
+        0.0007884075865149498,
+        0.7181949067115785,
+        1.0
+      ],
+      "unlinked_child_free_parent_probability_quantiles": [
+        3.0186289023959034e-09,
+        9.630657018533384e-07,
+        4.816550244868267e-06,
+        3.660901165858377e-05,
+        0.000870326394215228,
+        0.026772652324288986,
+        0.2864985167980194
+      ],
+      "prediction_cache": {
+        "file": "44b6_12dfb391.npz",
+        "sha256": "78880fac286adf7d9f083af99e9b092821924682e4698d6e305f5c937d93cbf9",
+        "bytes": 3666278
+      }
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "counts": {
+        "queries": 5813,
+        "top_null": 191,
+        "top_probability_ge_099": 4977,
+        "top_agrees_existing_edge": 5574,
+        "confident_real_parent": 4906,
+        "confident_agrees_existing_edge": 4904,
+        "unlinked_child": 192,
+        "unlinked_child_with_free_candidate": 39,
+        "confident_other_parent_occupied": 2
+      },
+      "quantile_levels": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1
+      ],
+      "top_probability_quantiles": [
+        0.37589943408966064,
+        0.9979809522628784,
+        0.999288022518158,
+        0.9994885921478271,
+        0.9996210217475892,
+        0.999840304851532,
+        1.0
+      ],
+      "null_probability_quantiles": [
+        0.00013447253149934113,
+        0.00046818528790026903,
+        0.0006158229080028832,
+        0.0009990351973101497,
+        0.00519559243693948,
+        0.9979680442810058,
+        1.0
+      ],
+      "unlinked_child_free_parent_probability_quantiles": [
+        6.981660582994209e-09,
+        6.220021532499231e-06,
+        0.00015526854258496314,
+        0.2740049883723259,
+        0.4827084422111511,
+        0.8491937386989586,
+        0.9597465395927429
+      ],
+      "prediction_cache": {
+        "file": "6bba_062c8d37.npz",
+        "sha256": "9b90e1a1671870fe8ecfa83a82a526e75329d26d46ba629de130e71b112cf842",
+        "bytes": 172502
+      }
+    },
+    {
+      "stem": "44b6_267148e4",
+      "counts": {
+        "queries": 22103,
+        "top_null": 565,
+        "top_probability_ge_099": 16186,
+        "top_agrees_existing_edge": 21061,
+        "confident_real_parent": 16053,
+        "confident_agrees_existing_edge": 16015,
+        "unlinked_child": 783,
+        "confident_other_parent_occupied": 38,
+        "unlinked_child_with_free_candidate": 178
+      },
+      "quantile_levels": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1
+      ],
+      "top_probability_quantiles": [
+        0.31750765442848206,
+        0.9879732131958008,
+        0.9983662366867065,
+        0.9992817938327789,
+        0.9994616270065307,
+        0.9995833015441895,
+        1.0
+      ],
+      "null_probability_quantiles": [
+        0.00016851126565597951,
+        0.0005437967774923891,
+        0.0007038770127110183,
+        0.001246587373316288,
+        0.013174406252801418,
+        0.9192059135436992,
+        1.0
+      ],
+      "unlinked_child_free_parent_probability_quantiles": [
+        4.670142050855475e-09,
+        1.3267130611893663e-06,
+        9.636645245336695e-06,
+        6.586956442333758e-05,
+        0.0012215457158163195,
+        0.5117973393201828,
+        0.5253304839134216
+      ],
+      "prediction_cache": {
+        "file": "44b6_267148e4.npz",
+        "sha256": "a3a9f9ef3c2f0172befe256a344d02c5740a5b18dd481045cacad0a8252e523d",
+        "bytes": 1820380
+      }
+    },
+    {
+      "stem": "6bba_07e24132",
+      "counts": {
+        "queries": 28922,
+        "top_null": 541,
+        "top_probability_ge_099": 24193,
+        "top_agrees_existing_edge": 28080,
+        "confident_real_parent": 23990,
+        "confident_agrees_existing_edge": 23957,
+        "unlinked_child": 781,
+        "confident_other_parent_occupied": 33,
+        "unlinked_child_with_free_candidate": 145
+      },
+      "quantile_levels": [
+        0,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1
+      ],
+      "top_probability_quantiles": [
+        0.34055623412132263,
+        0.9959743171930313,
+        0.9992544651031494,
+        0.9995318651199341,
+        0.9995896697044373,
+        0.9996850430965424,
+        1.0
+      ],
+      "null_probability_quantiles": [
+        0.00010698892583604902,
+        0.0004173296329099685,
+        0.0004629742616089061,
+        0.0005675077409250662,
+        0.0009233360760845245,
+        0.9341861331462902,
+        1.0
+      ],
+      "unlinked_child_free_parent_probability_quantiles": [
+        8.552600405664634e-09,
+        1.3759037074123626e-06,
+        8.33214471640531e-06,
+        6.177464092615992e-05,
+        0.000287869235035032,
+        0.014431490190327185,
+        0.45693597197532654
+      ],
+      "prediction_cache": {
+        "file": "6bba_07e24132.npz",
+        "sha256": "191ebd9ceff7f5ecbe6808ea235d59a1aeaada0b40573f71de92d43e7dbfc503",
+        "bytes": 2222845
+      }
+    }
+  ],
+  "elapsed_seconds": 45.01850506100163,
+  "pilot_sha256": "70e52675a68f62b75f028164e2a8a31260d6365f275bebd4c115ec7af8e81ee6",
+  "source_sha256": "97ca6a475bc3202b25e1acea71370a07d0570633c43e271f4f407f9cdd00d014",
+  "ground_truth_opened": false,
+  "model_or_graph_changed": false,
+  "authorized_for_submission": false
+}

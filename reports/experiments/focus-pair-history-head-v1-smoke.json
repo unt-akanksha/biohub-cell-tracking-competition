@@ -1,0 +1,58 @@
+{
+  "status": "verified_real_history_head_optimizer_smoke",
+  "run_id": "focus-pair-history-head-v1",
+  "source_hashes": {
+    "scripts/smoke-focus-pair-history-head.py": "ad4894964094ad512813060833865ce0d1d86113e3881b0c235879144be37ba5",
+    "research/focus_pair_history_head.py": "4a54fcdb2a408af22ecd00a12ba74f942f99e114cbb507564ea48afb0bf859c8",
+    "research/focus_pair_history.py": "128b612f7d228a980f0daa4f8ec0355523915af75430d57f9b89a0ba7d6c6904",
+    "research/focus_candidate_ranker.py": "eefd5ec3dc2ddf273278715a993093ebfc6caf30121b244d270477d0592f316c",
+    "research/focus_balanced_candidate_ranker.py": "46251e65447e0724ccb4e2077d7bdeac101555fd23ce8d07430a95e3f9c3cca7",
+    "research/focus_pair_appearance_conditioning.py": "e94f5db3650a80154611855b495c3835b03de706eaed0819e92b8ca162f92d01",
+    "tests/test_focus_pair_history_head.py": "169b2db8258b0a1084266fc9ba3442e8892473865a23edf805a24370e0cecc1c",
+    "reports/experiments/focus-pair-history-head-v1-design.md": "5a744bf27bcd889f89e344189002ea4a87b34a825862c21df7aa3e40c5d57807"
+  },
+  "history_audit_sha256": "799102689148f65daeb557a1aaf8fc002f2524fa5ccb2c2efaf527c4ee81432d",
+  "current_packet_sha256": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e",
+  "previous_packet_sha256": "bb075cbb471fbbfde8e2684d2daa35066c5b9f26e985a5b37b05fb2b4ba108e9",
+  "groups": 20,
+  "parents": 19,
+  "absent": 1,
+  "choices": 23220,
+  "features": 15,
+  "gradient_relative_error": 1.1004760386981785e-11,
+  "hessian_relative_error": 2.9700830388321445e-10,
+  "original_objective_equivalent": true,
+  "model_sha256": "c3e42570a048c8aa984d56f47682f14d521842a4e72ca18b3bb7d00d67e3b0ee",
+  "initial_objective": 107.89802671199868,
+  "final_objective": 35.06342158906745,
+  "iterations": 45,
+  "evaluations": 54,
+  "training_metrics": {
+    "loss_sum": 30.868756490183923,
+    "nll": 1.5434378245091962,
+    "known_parent": 19,
+    "known_absent": 1,
+    "correct_parent": 12,
+    "correct_absent": 0
+  },
+  "execution": {
+    "coverage": {
+      "groups": 20,
+      "choices": 23220,
+      "nonzero_probability_choices": 10643
+    },
+    "initial_condition": 1123.404829992548,
+    "transformed_condition": 90.87076415043191
+  },
+  "fit_seconds": 0.14100000000325963,
+  "exact_model_prediction_reload": true,
+  "inputs_unchanged": true,
+  "quality_evaluated": false,
+  "gpu_seconds": 0,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 0.5,
+  "actual_worker_pid": 40248
+}

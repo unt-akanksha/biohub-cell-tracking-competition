@@ -1,0 +1,31 @@
+{
+  "status": "complete",
+  "started_utc": "2026-09-14T15:04:53.046722+00:00",
+  "active_batch": 7,
+  "through_batch": 7,
+  "completed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "maximum_new_gpu_hours": 3.0,
+  "source_plan_sha256": "d1a74c831392721525b6c60fb4bb6c55c2fdbc978d9ffd4df0710eac1d2a9843",
+  "model_fitting_or_submission_authorized": false,
+  "foreign_jobs_must_not_be_interrupted": true,
+  "resumed_observation_only": true,
+  "previous_controller_sha256": "3edee57ea969fc65782ef22cb960606b1fe0aded09bea4b9257c651c24f613f5",
+  "phase": "all_requested_source_batches_complete",
+  "updated_utc": "2026-09-14T16:27:50.695603+00:00",
+  "remote_root": "/dev/shm/biohub-event-source-v1-b7.rbZ61U",
+  "pid": 77097,
+  "terminal_status": "complete_prelabel_predictions",
+  "finished_movies": [
+    "6bba_aeee7805",
+    "44b6_5f15d135",
+    "6bba_337b1b3a"
+  ]
+}

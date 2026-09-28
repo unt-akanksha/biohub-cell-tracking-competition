@@ -1,0 +1,119 @@
+{
+  "status": "submitted",
+  "utc": "2026-09-14T13:02:01.272688+00:00",
+  "kernel": "indarkarhana/biohub-structured-trajectory-candidate",
+  "kernel_version": 1,
+  "contract_sha256": "4e13ec7dea134c2da7b13133d8ed5ba92d5bb392954f35e26c29288c446a4695",
+  "notebook_sha256": "fd9f8b908587de8f12676ed433962013ee5ede132618323590abf9269abcb2bd",
+  "terminal_sha256": "e06b1de4b9e5e753a1afed2afb3aca5727b037b15944bb4315a74d1486b89ccd",
+  "acceptance_sha256": "bc5ed56e529a5f89a603a69ebf2127fc39bc48f5c0db9179f2e8f9bfa171f776",
+  "csv_sha256": "ce7804333cb1c3172a22bbce480f526ddbced11c718f9ef294faaeea7e864f64",
+  "rows": 241192,
+  "records": [
+    {
+      "movie": "44b6_0b24845f",
+      "sha256": "7cc7aa92eb515caad65423f5e368d704803bf692240ba8e0e5d59a0ab4f12f07",
+      "added_edges": 0,
+      "swapped_edges": 50,
+      "exact_model_replay": true
+    },
+    {
+      "movie": "6bba_05b6850b",
+      "sha256": "1d7cc7daf1400eca4d95a0ecd365689784ff9311d3c58a0278bcde49f5fc8d14",
+      "added_edges": 3,
+      "swapped_edges": 8,
+      "exact_model_replay": true
+    },
+    {
+      "movie": "6bba_05db0fb1",
+      "sha256": "8dc4639859054cd80389fc07260b881f9afacd1c0ffa55a8f7b85591f9f00718",
+      "added_edges": 0,
+      "swapped_edges": 818,
+      "exact_model_replay": true
+    },
+    {
+      "movie": "44b6_0113de3b",
+      "sha256": "f1ef0e38ce709e750983ad42ae0a0c8319043c709ce4f6e1c79c4e11fd033d90",
+      "added_edges": 0,
+      "swapped_edges": 227,
+      "exact_model_replay": true
+    }
+  ],
+  "frames": {
+    "44b6_0b24845f": 100,
+    "6bba_05b6850b": 100,
+    "6bba_05db0fb1": 100,
+    "44b6_0113de3b": 100
+  },
+  "runtime_risk": {
+    "validation_cohort_projection_hours": 6.578351151475313,
+    "validation_calibrated_public_work_projection_hours": 7.928008093839209,
+    "combined_twelve_movie_makespan_projection_hours": 7.633825916961506,
+    "public_four_movie_makespan_projection_hours": 9.744775447933888,
+    "effective_workers_measured_on_two_gpus": 3.5523317940719252,
+    "runtime_policy_revision": 3,
+    "assumes_validation_scheduling_efficiency_transfers": true,
+    "worker_times_include_overlap_and_waiting": true,
+    "hidden_inference_cutoff_hours": 10,
+    "hidden_movie_count_projection_assumption": 199,
+    "dense_movie_and_static_shard_imbalance_timeout_risk": true,
+    "hidden_runtime_guaranteed": false,
+    "user_informed_before_submission": true
+  },
+  "remote_state": {
+    "competition_sources": [
+      "biohub-cell-tracking-during-development"
+    ],
+    "current_version_number": 1,
+    "dataset_sources": [
+      "indarkarhana/biohub-trajectory-motion-runtime-v1"
+    ],
+    "enable_gpu": true,
+    "enable_internet": false,
+    "enable_tpu": false,
+    "is_private": true,
+    "kernel_slug": "indarkarhana/biohub-structured-trajectory-candidate",
+    "kernel_sources": [],
+    "kernel_type": "notebook",
+    "language": "python",
+    "model_sources": [],
+    "next_kernel_ref": "indarkarhana/biohub-structured-trajectory-candidate/2",
+    "next_version_number": 2,
+    "present": true,
+    "schema_version": "biohub.kaggle-kernel-state.v1"
+  },
+  "remote_source": {
+    "notebook_sha256": "42dfc5b930f38c4bd619cef83d743135cd785f4f339d8b16592373259da5597c",
+    "metadata_sha256": "3935355c43191d2c3264f5d3996053d7952b3c3f56312c9441b3b23bac632c5f",
+    "code_cells_exact": true
+  },
+  "production_wall_seconds": 705.149580152,
+  "official_validation_score": 0.9483971160025522,
+  "public_leaderboard_score": null,
+  "source_prefilter_movie_regression_preserved": true,
+  "public_backbone_training_overlap": true,
+  "public_leaderboard_used_for_selection": false,
+  "submission_performed": true,
+  "verifier_sha256": "d24611f7e8d6c311b95c0d31d4c75f29f59c4cd4c81068900e8c4127e453c72d",
+  "invariant_module_sha256": "5860e6d271f108b7320438e7377a1e99fd612d08c6f37323a0bf6f831fd976b5",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "1.88h",
+      "remaining": "28.12h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "worst_case_reserved_gpu_hours": 20,
+  "reserve_hours": 8,
+  "daily_submissions_before": 1,
+  "kaggle_response": ""
+}

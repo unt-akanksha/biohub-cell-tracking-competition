@@ -1,0 +1,193 @@
+{
+  "status": "verified_flow_tta_exposed_transfer",
+  "result": {
+    "status": "scored_exposed_flow_transfer_diagnostic",
+    "per_movie": [
+      {
+        "edge_tp": 143,
+        "edge_fp": 28,
+        "edge_fn": 55,
+        "division_tp": 0,
+        "division_fp": 9,
+        "division_fn": 0,
+        "num_pred_nodes": 58677,
+        "node_recall": 0.87,
+        "total_node_ratio": 0.11320432555492317,
+        "edge_jaccard": 0.6327433628318584,
+        "adj_edge_jaccard": 0.6255804342679849,
+        "stem": "44b6_66f9292d",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 150,
+        "edge_fp": 50,
+        "edge_fn": 48,
+        "division_tp": 0,
+        "division_fp": 11,
+        "division_fn": 0,
+        "num_pred_nodes": 37652,
+        "node_recall": 0.935,
+        "total_node_ratio": 0.15210672868027295,
+        "edge_jaccard": 0.6048387096774194,
+        "adj_edge_jaccard": 0.5956387059265964,
+        "stem": "44b6_40c45f5a",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 258,
+        "edge_fp": 58,
+        "edge_fn": 138,
+        "division_tp": 0,
+        "division_fp": 11,
+        "division_fn": 0,
+        "num_pred_nodes": 40998,
+        "node_recall": 0.7975,
+        "total_node_ratio": 0.28371481353915523,
+        "edge_jaccard": 0.5682819383259912,
+        "adj_edge_jaccard": 0.5521589379090083,
+        "stem": "44b6_3bb3690f",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 42,
+        "edge_fp": 17,
+        "edge_fn": 28,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 0,
+        "num_pred_nodes": 39045,
+        "node_recall": 0.8309859154929577,
+        "total_node_ratio": 0.39655912440088703,
+        "edge_jaccard": 0.4827586206896552,
+        "adj_edge_jaccard": 0.4636143870978882,
+        "stem": "44b6_0c582fdc",
+        "embryo": "44b6"
+      }
+    ],
+    "source_manifest_run_id": "flow-tta-transfer-v1",
+    "summary": {
+      "n": 4,
+      "edge_jaccard": 0.5842364532019705,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 35,
+      "division_fn": 0,
+      "node_recall": 0.8583714788732395,
+      "adj_edge_jaccard": 0.5715410706429227,
+      "n_adj": 4,
+      "score": 0.5715410706429227
+    },
+    "by_embryo": {
+      "44b6": {
+        "n": 4,
+        "edge_jaccard": 0.5842364532019705,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 35,
+        "division_fn": 0,
+        "node_recall": 0.8583714788732395,
+        "adj_edge_jaccard": 0.5715410706429227,
+        "n_adj": 4,
+        "score": 0.5715410706429227
+      }
+    },
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "validation_scope": "Four previously exposed44b6 movies; fixed-node flowD4 transfer diagnostic, not independent confirmation",
+    "target_audit_opened": true,
+    "embryo_audit": null,
+    "flow_transfer_diagnostic": {
+      "version": 1,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "probe_report_sha256": "a6a26aafabcaaff8c775e4af37b779bf6959805948097dc0b147e8779b0c93fe",
+      "views": 8,
+      "flow_tensor_sha256": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+      "reference_manifest_sha256": "cbc49f2ba442b9ff1f8cfc276e7e6291d852bc22929f362e540bae486bd84ac5",
+      "skip_zero_neural": true,
+      "detector_coordinates": "exact retained parent D4 reference",
+      "flow_precision": "FP32 arithmetic mean",
+      "source_validation_only": false,
+      "authorized_for_submission": false,
+      "exposed_transfer_only": true,
+      "stems": [
+        "44b6_66f9292d",
+        "44b6_40c45f5a",
+        "44b6_3bb3690f",
+        "44b6_0c582fdc"
+      ],
+      "source_comparison_sha256": "624d0fce503dac81b93e6f2ff6f7113ad62ec4f3999c7200dc943a1afe64206f",
+      "new_target_movies_opened": 0,
+      "independent_confirmation": false
+    },
+    "owned_transfer_diagnostic": null,
+    "authorized_for_submission": false
+  },
+  "summary_deltas": {
+    "score": 0.0017010552659402212,
+    "edge_jaccard": 0.0017217184279036957,
+    "node_recall": 0.0
+  },
+  "per_movie_deltas": [
+    {
+      "stem": "44b6_66f9292d",
+      "adjusted_edge_delta": 0.00982386156131776
+    },
+    {
+      "stem": "44b6_40c45f5a",
+      "adjusted_edge_delta": 0.0023921233169742484
+    },
+    {
+      "stem": "44b6_3bb3690f",
+      "adjusted_edge_delta": -0.002140150922128048
+    },
+    {
+      "stem": "44b6_0c582fdc",
+      "adjusted_edge_delta": 0.0
+    }
+  ],
+  "worst_movie_delta": 0.0,
+  "diagnostic_conditions": {
+    "score_gain": true,
+    "raw_edge_gain": true,
+    "mean_recall_preserved": true,
+    "three_movies_improve": false,
+    "per_movie_loss_bounded": true,
+    "worst_movie_preserved": true
+  },
+  "diagnostic_transfer_supported": false,
+  "counts": {
+    "baseline": {
+      "edge_tp": 593,
+      "edge_fp": 156,
+      "edge_fn": 269,
+      "division_tp": 0,
+      "division_fp": 36,
+      "division_fn": 0,
+      "num_pred_nodes": 176372
+    },
+    "flow_d4": {
+      "edge_tp": 593,
+      "edge_fp": 153,
+      "edge_fn": 269,
+      "division_tp": 0,
+      "division_fp": 35,
+      "division_fn": 0,
+      "num_pred_nodes": 176372
+    }
+  },
+  "source_gate_passed": true,
+  "authorized_for_submission": false,
+  "new_target_movies_opened": 0,
+  "caveat": "Previously exposed target movies: transfer diagnostic only, not fresh independent confirmation or a leaderboard score.",
+  "cpu_kernel_ref": "indarkarhana/biohub-flow-tta-transfer-scoring-v1/1",
+  "cpu_status": "COMPLETE",
+  "source_sha256": {
+    "source": "624d0fce503dac81b93e6f2ff6f7113ad62ec4f3999c7200dc943a1afe64206f",
+    "probe": "a6a26aafabcaaff8c775e4af37b779bf6959805948097dc0b147e8779b0c93fe",
+    "split": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "baseline": "d59568f8f69b700a29af62f128cac27ca1b524b2a57f8cad1c7e403d6d6890fa",
+    "notebook": "76e3075c9b6868cc47408f8d6be4d7a4551000d2eeb448ac94776d0890668b80",
+    "manifest": "f670fe4e151ec05a4c4294eb72f62ffb73d1000617862242cebe86e16e6ae940",
+    "terminal": "d1b70da4ad785a4c08c9cda00222ff94963925a17859e5659a88ad3b304f44d7",
+    "score": "ecbfc1cd6affd837305067e8c1cbba4890120666348062914b7ae5fe83045950"
+  }
+}

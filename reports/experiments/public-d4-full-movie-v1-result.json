@@ -1,0 +1,1195 @@
+{
+  "run_id": "public-d4-full-movie-v1",
+  "status": "scored",
+  "scoring_wrapper_version": 2,
+  "source_sha256": "4165dbfb9b96d82e25aeaaa534ba0688a522a54b0723b7bb570e60da8db92667",
+  "original_scoring_source_sha256": "28c630797c7298da05be40376a4de7cb920ad6cfdd773e146e44ef552a676b93",
+  "comparison_source_sha256": "59b0090f8f68632faccdb7101c07ecbfc3f3a9077f96bf181bc80e595456bd36",
+  "terminal_sha256": "61429f28d6fa3c42ee761d38456f9daca66986bd5845e38162f8baefcaf45683",
+  "contract_sha256": "45af25de58dc146d0820dd705dde80cc5b7f678e285938fa349ed95363bff56f",
+  "truth_manifest_sha256": "744f06f75388a7c9199179e5a90bfae4fb3aac835d4e5181893f3745601a9cb9",
+  "verified_truth_files": [
+    {
+      "bytes": 886,
+      "relative_path": "44b6_24264f12.geff/edges/ids/c/0/0",
+      "sha256": "38564381b085d2e40247ff8fb9d91a86f66fdf657b194ad32736746c5508a08d"
+    },
+    {
+      "bytes": 636,
+      "relative_path": "44b6_24264f12.geff/edges/ids/zarr.json",
+      "sha256": "c5a96c2992496de85c681d543b7c44b7e051ce13d0431989e6c63a3ab5637591"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/edges/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/edges/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 644,
+      "relative_path": "44b6_24264f12.geff/nodes/ids/c/0",
+      "sha256": "ed3f0a23c8941f6f3a0f21d37368d972692874a39aead99b47bd5abf9eeb246f"
+    },
+    {
+      "bytes": 618,
+      "relative_path": "44b6_24264f12.geff/nodes/ids/zarr.json",
+      "sha256": "70f837d8884723561c48160365492865b6ed48242cf33cbf10207d0294404a6d"
+    },
+    {
+      "bytes": 143,
+      "relative_path": "44b6_24264f12.geff/nodes/props/t/values/c/0",
+      "sha256": "66bac00322742d24f813416f02551628a45781d9fbfe796a85511128980a2325"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_24264f12.geff/nodes/props/t/values/zarr.json",
+      "sha256": "c041da24b2530f0abf5ed49869dc8ea566814b5e6e3fbc9e70d959def741e38b"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/props/t/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 366,
+      "relative_path": "44b6_24264f12.geff/nodes/props/x/values/c/0",
+      "sha256": "33a16df0509d6c65847926bd1c6be692189d3e473265df8b5751c36e35fec89d"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_24264f12.geff/nodes/props/x/values/zarr.json",
+      "sha256": "c041da24b2530f0abf5ed49869dc8ea566814b5e6e3fbc9e70d959def741e38b"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/props/x/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 288,
+      "relative_path": "44b6_24264f12.geff/nodes/props/y/values/c/0",
+      "sha256": "1ca40aee41d0e64835672d491d5d8725df0b31bbfc10dfb93e19f93c8413873a"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_24264f12.geff/nodes/props/y/values/zarr.json",
+      "sha256": "c041da24b2530f0abf5ed49869dc8ea566814b5e6e3fbc9e70d959def741e38b"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/props/y/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 240,
+      "relative_path": "44b6_24264f12.geff/nodes/props/z/values/c/0",
+      "sha256": "06c6c58e0a45d397db115a2b103af756b4319eb5d217ed7d8f8ee3b1f9328e5e"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_24264f12.geff/nodes/props/z/values/zarr.json",
+      "sha256": "c041da24b2530f0abf5ed49869dc8ea566814b5e6e3fbc9e70d959def741e38b"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/props/z/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_24264f12.geff/nodes/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 2101,
+      "relative_path": "44b6_24264f12.geff/zarr.json",
+      "sha256": "36b7a6a112c7dd74718f2cdd260d532fbb4bbb11385c110cce6443e9f6c1151e"
+    },
+    {
+      "bytes": 759,
+      "relative_path": "44b6_81c256f0.geff/edges/ids/c/0/0",
+      "sha256": "7e8264ed3c088668eccd8ab4f974e3dadae00be0c4f67cca783cbe6f57aae707"
+    },
+    {
+      "bytes": 636,
+      "relative_path": "44b6_81c256f0.geff/edges/ids/zarr.json",
+      "sha256": "22d196fd94c20bf71c0cba99644f020e190576e23dfe99ec26805a2711d633a7"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/edges/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/edges/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 586,
+      "relative_path": "44b6_81c256f0.geff/nodes/ids/c/0",
+      "sha256": "b81527b4d3224da81826a4f0f180e67062446636ffb21f8436efb08b2468f915"
+    },
+    {
+      "bytes": 618,
+      "relative_path": "44b6_81c256f0.geff/nodes/ids/zarr.json",
+      "sha256": "0b6766d51cdec58978d6e8852f6f0063912e2c8b7c5024ae94480f747cd72ed1"
+    },
+    {
+      "bytes": 137,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/t/values/c/0",
+      "sha256": "6f2bb37d5657c17846c43340f3a44d3983d40060ba1b8a35ef8e4ca465329721"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/t/values/zarr.json",
+      "sha256": "7c554ac83ea0c4b6819a8a183a3a25322306da6c010707b7d1f7c0e330666e37"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/t/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 217,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/x/values/c/0",
+      "sha256": "f01007aa1d70de3cdb3af2ab8e26b026c230c4c6693ec7790c6d6b9235fa2adf"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/x/values/zarr.json",
+      "sha256": "7c554ac83ea0c4b6819a8a183a3a25322306da6c010707b7d1f7c0e330666e37"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/x/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 282,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/y/values/c/0",
+      "sha256": "64fcd9667e827658bdc65fbe4672826aa9eac232ebcb930719d22b9451f4140f"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/y/values/zarr.json",
+      "sha256": "7c554ac83ea0c4b6819a8a183a3a25322306da6c010707b7d1f7c0e330666e37"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/y/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 134,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/z/values/c/0",
+      "sha256": "f924670f6ef234906adf6c86b24e0e8071dc69cec653e5c717eb9b441bc70b80"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/z/values/zarr.json",
+      "sha256": "7c554ac83ea0c4b6819a8a183a3a25322306da6c010707b7d1f7c0e330666e37"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/z/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "44b6_81c256f0.geff/nodes/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 2102,
+      "relative_path": "44b6_81c256f0.geff/zarr.json",
+      "sha256": "f13fa1941133f9ef979a0020b1d6d686c978543b75a1f84c00cc5c1af5a15110"
+    },
+    {
+      "bytes": 1495,
+      "relative_path": "6bba_23af9eeb.geff/edges/ids/c/0/0",
+      "sha256": "9b19ba967bcc94d94801676ee43b65af0478dc578817fcb58f7825f3637fb75b"
+    },
+    {
+      "bytes": 636,
+      "relative_path": "6bba_23af9eeb.geff/edges/ids/zarr.json",
+      "sha256": "8bb720b0cd1fed144a3ff03e97a923eadd9d526693dcc701911d3c28ca982b0b"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/edges/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/edges/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 883,
+      "relative_path": "6bba_23af9eeb.geff/nodes/ids/c/0",
+      "sha256": "19324f95215d9ca53dea256edf1c20096bfdb978fd1c7d2a8d77a8dd610c846d"
+    },
+    {
+      "bytes": 618,
+      "relative_path": "6bba_23af9eeb.geff/nodes/ids/zarr.json",
+      "sha256": "2dca8fc5a0cf73a78d585fbb62cfb2916fcc504999f7c876ce5bfb6a189c2766"
+    },
+    {
+      "bytes": 201,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/t/values/c/0",
+      "sha256": "764463f6f04e1796cc18d2ae6d98c10a3214795c4cfa267f7bd2ef149ae7dece"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/t/values/zarr.json",
+      "sha256": "0944b4c0845348d206c6c3d4346bc0a55f2e6c9fe7d1a86b6f8cca7923dfde20"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/t/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 531,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/x/values/c/0",
+      "sha256": "254a8321c2e19c687ebf4f45d7b282341a0db393a8f8e9d8a20495e4c22f4c1d"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/x/values/zarr.json",
+      "sha256": "0944b4c0845348d206c6c3d4346bc0a55f2e6c9fe7d1a86b6f8cca7923dfde20"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/x/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 516,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/y/values/c/0",
+      "sha256": "f87be285ab2819fd389b7e0ed6f3009cc5e4dc5960518b0bd2491598de223d2c"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/y/values/zarr.json",
+      "sha256": "0944b4c0845348d206c6c3d4346bc0a55f2e6c9fe7d1a86b6f8cca7923dfde20"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/y/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 459,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/z/values/c/0",
+      "sha256": "f8d8c921892a2a7f115787fefefa3931a223c1df88875869e82a58db75d3e1dc"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/z/values/zarr.json",
+      "sha256": "0944b4c0845348d206c6c3d4346bc0a55f2e6c9fe7d1a86b6f8cca7923dfde20"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/z/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_23af9eeb.geff/nodes/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 2099,
+      "relative_path": "6bba_23af9eeb.geff/zarr.json",
+      "sha256": "72dcf4887256312159d6c8eafb5ac1273f6d9efd688a3791422a8cc5208214b1"
+    },
+    {
+      "bytes": 1406,
+      "relative_path": "6bba_f1fde7e0.geff/edges/ids/c/0/0",
+      "sha256": "f0115708811ff54235fc0439b3dc3573e93985bf7ef4717efc3f0ff672c77850"
+    },
+    {
+      "bytes": 636,
+      "relative_path": "6bba_f1fde7e0.geff/edges/ids/zarr.json",
+      "sha256": "a1443007b99a9aebc9d101b81a9de4be359ee48c139ac2d1e1f3733a4b304312"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/edges/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/edges/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 827,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/ids/c/0",
+      "sha256": "7151e28f30c1f357aae175b6d63b429e87d4b5cadd0257d3520b59b04be4e71a"
+    },
+    {
+      "bytes": 618,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/ids/zarr.json",
+      "sha256": "3d553e9a54ba0ae5771dbc267461dbe989fbdcbb81888b13f9b10c89529c723f"
+    },
+    {
+      "bytes": 194,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/t/values/c/0",
+      "sha256": "1913f804ca657d91b2fbd9f5ff830ad6352a9d6d959692e1373b249b8bf64006"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/t/values/zarr.json",
+      "sha256": "7b973370417051f457a7b6cb24c35ba27bc5839497a890408a347e23517793fa"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/t/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 531,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/x/values/c/0",
+      "sha256": "16a6686fdec441bce5b70d9052efec977cc809abb272fe5c8cc2fb8ee8ef123a"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/x/values/zarr.json",
+      "sha256": "7b973370417051f457a7b6cb24c35ba27bc5839497a890408a347e23517793fa"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/x/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 556,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/y/values/c/0",
+      "sha256": "0227307835164247e6f00011cd8274846ba3e62a498edfb071f3ba4dfd81eb16"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/y/values/zarr.json",
+      "sha256": "7b973370417051f457a7b6cb24c35ba27bc5839497a890408a347e23517793fa"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/y/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 392,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/z/values/c/0",
+      "sha256": "a5d9e716bf3b41ad30426007d9cc00a9a09a108daee10636ea276ed03b1dc65a"
+    },
+    {
+      "bytes": 617,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/z/values/zarr.json",
+      "sha256": "7b973370417051f457a7b6cb24c35ba27bc5839497a890408a347e23517793fa"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/z/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/props/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 99,
+      "relative_path": "6bba_f1fde7e0.geff/nodes/zarr.json",
+      "sha256": "b2aafe033afdbdd48a21781b27e1c90554817d19d1bd973137574d6e8cd0f711"
+    },
+    {
+      "bytes": 2099,
+      "relative_path": "6bba_f1fde7e0.geff/zarr.json",
+      "sha256": "aa0005b514ff1564e7b2b67ef8e9b0cdc4ad20be66a17d49d64d44d8affbb1b1"
+    }
+  ],
+  "annotation_coverage": {
+    "44b6_24264f12": {
+      "annotated_times": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86
+      ],
+      "annotated_nodes": 230,
+      "annotated_edges": 221,
+      "image_frames": 100,
+      "full_annotation_file_inventory_verified": true
+    },
+    "44b6_81c256f0": {
+      "annotated_times": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
+      ],
+      "annotated_nodes": 199,
+      "annotated_edges": 197,
+      "image_frames": 100,
+      "full_annotation_file_inventory_verified": true
+    },
+    "6bba_23af9eeb": {
+      "annotated_times": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
+      ],
+      "annotated_nodes": 513,
+      "annotated_edges": 499,
+      "image_frames": 100,
+      "full_annotation_file_inventory_verified": true
+    },
+    "6bba_f1fde7e0": {
+      "annotated_times": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
+      ],
+      "annotated_nodes": 476,
+      "annotated_edges": 446,
+      "image_frames": 100,
+      "full_annotation_file_inventory_verified": true
+    }
+  },
+  "per_movie": {
+    "original": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27090,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.027966455432019127,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8953613097463166,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11284,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.12256267409470752,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9877437325905293,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 0,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 4175,
+        "node_recall": 1.0,
+        "total_node_ratio": -0.06179775280898876,
+        "edge_jaccard": 0.9979959919839679,
+        "adj_edge_jaccard": 1.0041633829456666,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 30,
+        "edge_fn": 27,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8109,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.10298672566371682,
+        "edge_jaccard": 0.8802521008403361,
+        "adj_edge_jaccard": 0.8893175290027515,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ],
+    "corrected": [
+      {
+        "edge_tp": 213,
+        "edge_fp": 9,
+        "edge_fn": 8,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 27206,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.03236823132091223,
+        "edge_jaccard": 0.9260869565217391,
+        "adj_edge_jaccard": 0.9230893768385416,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11157,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.1099283724631914,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9890071627536808,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 497,
+        "edge_fp": 2,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4177,
+        "node_recall": 0.9980506822612085,
+        "total_node_ratio": -0.061348314606741575,
+        "edge_jaccard": 0.9920159680638723,
+        "adj_edge_jaccard": 0.9981018188342416,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 417,
+        "edge_fp": 28,
+        "edge_fn": 29,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8093,
+        "node_recall": 0.9747899159663865,
+        "total_node_ratio": -0.1047566371681416,
+        "edge_jaccard": 0.879746835443038,
+        "adj_edge_jaccard": 0.8889627674470707,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "original": {
+      "n": 4,
+      "edge_jaccard": 0.9417199715707179,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 1,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9448387313474883,
+      "n_adj": 4,
+      "score": 0.9448387313474883
+    },
+    "corrected": {
+      "n": 4,
+      "edge_jaccard": 0.9443651925820257,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 1,
+      "division_fn": 0,
+      "node_recall": 0.9910362365134205,
+      "adj_edge_jaccard": 0.9476193514559246,
+      "n_adj": 4,
+      "score": 0.9476193514559246
+    }
+  },
+  "by_embryo": {
+    "original": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9374894053488858,
+        "n_adj": 2,
+        "score": 0.9374894053488858
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9405128205128205,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9480950480976383,
+        "n_adj": 2,
+        "score": 0.9480950480976383
+      }
+    },
+    "corrected": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9601873536299765,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.953501095398922,
+        "n_adj": 2,
+        "score": 0.953501095398922
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9374358974358974,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9864202991137976,
+        "adj_edge_jaccard": 0.9450434492367862,
+        "n_adj": 2,
+        "score": 0.9450434492367862
+      }
+    }
+  },
+  "per_movie_summaries": {
+    "original": {
+      "44b6_24264f12": {
+        "n": 1,
+        "edge_jaccard": 0.8978723404255319,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.991304347826087,
+        "adj_edge_jaccard": 0.8953613097463166,
+        "n_adj": 1,
+        "score": 0.8953613097463166
+      },
+      "44b6_81c256f0": {
+        "n": 1,
+        "edge_jaccard": 1.0,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 0.9877437325905294,
+        "n_adj": 1,
+        "score": 0.9877437325905294
+      },
+      "6bba_23af9eeb": {
+        "n": 1,
+        "edge_jaccard": 0.9979959919839679,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 1.0041633829456666,
+        "n_adj": 1,
+        "score": 1.0041633829456666
+      },
+      "6bba_f1fde7e0": {
+        "n": 1,
+        "edge_jaccard": 0.8802521008403361,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9810924369747899,
+        "adj_edge_jaccard": 0.8893175290027515,
+        "n_adj": 1,
+        "score": 0.8893175290027515
+      }
+    },
+    "corrected": {
+      "44b6_24264f12": {
+        "n": 1,
+        "edge_jaccard": 0.9260869565217391,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.991304347826087,
+        "adj_edge_jaccard": 0.9230893768385416,
+        "n_adj": 1,
+        "score": 0.9230893768385416
+      },
+      "44b6_81c256f0": {
+        "n": 1,
+        "edge_jaccard": 1.0,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 1.0,
+        "adj_edge_jaccard": 0.9890071627536807,
+        "n_adj": 1,
+        "score": 0.9890071627536807
+      },
+      "6bba_23af9eeb": {
+        "n": 1,
+        "edge_jaccard": 0.9920159680638723,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9980506822612085,
+        "adj_edge_jaccard": 0.9981018188342416,
+        "n_adj": 1,
+        "score": 0.9981018188342416
+      },
+      "6bba_f1fde7e0": {
+        "n": 1,
+        "edge_jaccard": 0.879746835443038,
+        "division_jaccard": null,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "node_recall": 0.9747899159663865,
+        "adj_edge_jaccard": 0.8889627674470707,
+        "n_adj": 1,
+        "score": 0.8889627674470707
+      }
+    }
+  },
+  "comparison": {
+    "gates": {
+      "pooled_combined_strictly_improves": true,
+      "pooled_raw_edge_jaccard_strictly_improves": true,
+      "per_embryo_combined_nonregression": false,
+      "per_movie_combined_nonregression": false
+    },
+    "diagnostic_gate_passed": false,
+    "pooled_delta": {
+      "score": 0.0027806201084362714,
+      "edge_jaccard": 0.002645221011307819,
+      "adj_edge_jaccard": 0.0027806201084362714
+    },
+    "per_movie_combined_delta": {
+      "44b6_24264f12": 0.027728067092225084,
+      "44b6_81c256f0": 0.0012634301631513356,
+      "6bba_23af9eeb": -0.006061564111425,
+      "6bba_f1fde7e0": -0.0003547615556808159
+    },
+    "per_embryo_combined_delta": {
+      "44b6": 0.01601169005003622,
+      "6bba": -0.003051598860852156
+    },
+    "worst_movies": {
+      "original": "6bba_f1fde7e0",
+      "corrected": "6bba_f1fde7e0"
+    },
+    "independently_held_out": false,
+    "authorized_for_submission": false,
+    "limitation": "Public-checkpoint training overlap; diagnostic pass alone cannot authorize promotion"
+  },
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2"
+}

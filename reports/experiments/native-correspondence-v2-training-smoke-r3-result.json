@@ -1,0 +1,753 @@
+{
+  "run_id": "native-correspondence-v2",
+  "status": "smoke_passed",
+  "smoke": true,
+  "training_contract_sha256": "bda044511d3f37b33caa76d5f226fa64c4542d2705d304749e60f95c52869593",
+  "data_result_sha256": "f2861ce9f21307507ed521716ca3bf9a7adf3b76ce9f8216e4407233616c693a",
+  "members": [
+    {
+      "embryo": "6bba",
+      "family": "resnet3d",
+      "seed": 20260914,
+      "parameters": 9015138,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 50,
+          "optimizer_steps": 50,
+          "selection": {
+            "nll": 0.6356754899024963,
+            "correct": 2640,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 423,
+                "nll": 0.8914409875869751
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.24476931989192963
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 217,
+                "nll": 0.5908576846122742
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 389,
+                "nll": 0.5202077627182007
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.1597893089056015
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 765,
+                "nll": 0.8853496313095093
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 299,
+                "nll": 0.5206838250160217
+              }
+            }
+          },
+          "missing": {
+            "nll": 1.7748275995254517,
+            "correct": 660,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 13,
+                "nll": 2.3199028968811035
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 241,
+                "nll": 0.7728922367095947
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 33,
+                "nll": 1.7309249639511108
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 158,
+                "nll": 1.413587212562561
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 130,
+                "nll": 0.5163053870201111
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 14,
+                "nll": 2.4401774406433105
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 71,
+                "nll": 1.6386620998382568
+              }
+            }
+          },
+          "eval_seconds": 4.777539838003577
+        }
+      ],
+      "best_step": 50,
+      "selected": {
+        "nll": 0.6356754899024963,
+        "correct": 2640,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 423,
+            "nll": 0.8914409875869751
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 369,
+            "nll": 0.24476931989192963
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 217,
+            "nll": 0.5908576846122742
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.5202077627182007
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.1597893089056015
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 765,
+            "nll": 0.8853496313095093
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 299,
+            "nll": 0.5206838250160217
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 1.7748275995254517,
+        "correct": 660,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 13,
+            "nll": 2.3199028968811035
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 241,
+            "nll": 0.7728922367095947
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 33,
+            "nll": 1.7309249639511108
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 158,
+            "nll": 1.413587212562561
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 130,
+            "nll": 0.5163053870201111
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 14,
+            "nll": 2.4401774406433105
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 71,
+            "nll": 1.6386620998382568
+          }
+        }
+      },
+      "optimizer_steps": 50,
+      "elapsed_seconds": 24.536122882003838,
+      "weights_sha256": "5cea2e7ed911e1cf0aa3afbfe34a1343bd8ee077ba909f1125182b38c86e3069",
+      "source_gate": true,
+      "peak_gpu_bytes": 2186096640,
+      "status": "smoke_completed"
+    },
+    {
+      "embryo": "6bba",
+      "family": "token_transformer3d",
+      "seed": 20260915,
+      "parameters": 15850722,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 50,
+          "optimizer_steps": 50,
+          "selection": {
+            "nll": 0.7176491022109985,
+            "correct": 2632,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 421,
+                "nll": 0.9427421689033508
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 362,
+                "nll": 0.38946861028671265
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 223,
+                "nll": 0.6204777956008911
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 384,
+                "nll": 0.640356719493866
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.28457167744636536
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.9299129843711853
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 296,
+                "nll": 0.6352975964546204
+              }
+            }
+          },
+          "missing": {
+            "nll": 1.1461167335510254,
+            "correct": 1494,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 167,
+                "nll": 1.5699349641799927
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 331,
+                "nll": 0.3860962390899658
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 163,
+                "nll": 1.0659476518630981
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 277,
+                "nll": 0.8185620903968811
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 161,
+                "nll": 0.2648336589336395
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 202,
+                "nll": 1.707801342010498
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 193,
+                "nll": 0.9443367123603821
+              }
+            }
+          },
+          "eval_seconds": 5.429900164999708
+        }
+      ],
+      "best_step": 50,
+      "selected": {
+        "nll": 0.7176491022109985,
+        "correct": 2632,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 421,
+            "nll": 0.9427421689033508
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 362,
+            "nll": 0.38946861028671265
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 223,
+            "nll": 0.6204777956008911
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 384,
+            "nll": 0.640356719493866
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.28457167744636536
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 768,
+            "nll": 0.9299129843711853
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 296,
+            "nll": 0.6352975964546204
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 1.1461167335510254,
+        "correct": 1494,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 167,
+            "nll": 1.5699349641799927
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 331,
+            "nll": 0.3860962390899658
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 163,
+            "nll": 1.0659476518630981
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 277,
+            "nll": 0.8185620903968811
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 161,
+            "nll": 0.2648336589336395
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 202,
+            "nll": 1.707801342010498
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 193,
+            "nll": 0.9443367123603821
+          }
+        }
+      },
+      "optimizer_steps": 50,
+      "elapsed_seconds": 14.375255783001194,
+      "weights_sha256": "53fbc0ce141764dede19423f6ad2796b8af0121f819a91ad98ba29ad73847726",
+      "source_gate": false,
+      "peak_gpu_bytes": 2307464704,
+      "status": "smoke_completed"
+    }
+  ],
+  "environment": {
+    "torch": "2.5.1+cu121",
+    "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+    "gpu": "NVIDIA A10G"
+  },
+  "authorized_for_submission": false,
+  "timings": [
+    {
+      "family": "resnet3d",
+      "update_seconds": 0.05316095025300455,
+      "paired_eval_seconds": 4.777539838003577,
+      "steady_update_seconds": [
+        0.026605778002704028,
+        0.05298187299922574,
+        0.038195672001165804,
+        0.036366829997859895,
+        0.03441152600134956,
+        0.05247806399711408,
+        0.0292845549993217,
+        0.04137509899737779,
+        0.053307468006096315,
+        0.050899255998956505,
+        0.033363028000167105,
+        0.029449077999743167,
+        0.02802678399893921,
+        0.040681005993974395,
+        0.029295305997948162,
+        0.03760321199661121,
+        0.05238333199667977,
+        0.023196547997940797,
+        0.025667681999038905,
+        0.026741401001345366,
+        0.05416537300334312,
+        0.05282271000032779,
+        0.023455722999642603,
+        0.03846010700362967,
+        0.029481609002687037,
+        0.026199580999673344,
+        0.02788489100203151,
+        0.027642837005259935,
+        0.04341896400001133,
+        0.030384165002033114
+      ],
+      "warmup_updates": 20,
+      "timing_policy": "max(mean*1.25,p95), CUDA synchronized, excludes validation/checkpoint I/O"
+    },
+    {
+      "family": "token_transformer3d",
+      "update_seconds": 0.06283109644973592,
+      "paired_eval_seconds": 5.429900164999708,
+      "steady_update_seconds": [
+        0.04679319800197845,
+        0.06307547300093574,
+        0.05554344200209016,
+        0.048434958000143524,
+        0.045051497996610124,
+        0.04423977399710566,
+        0.04682378899451578,
+        0.05107512300310191,
+        0.06253241399826948,
+        0.051687675004359335,
+        0.04681890899519203,
+        0.04552758699719561,
+        0.03931327799364226,
+        0.03959974300232716,
+        0.03546553999331081,
+        0.06200982399604982,
+        0.038636075994872954,
+        0.038059266000345815,
+        0.052268463994550984,
+        0.048114432000147644,
+        0.042891179997241125,
+        0.03374373100086814,
+        0.03941152899642475,
+        0.03825047899590572,
+        0.036937516000762116,
+        0.035388208998483606,
+        0.06445364799583331,
+        0.04096153599675745,
+        0.04007725100382231,
+        0.04559546800010139
+      ],
+      "warmup_updates": 20,
+      "timing_policy": "max(mean*1.25,p95), CUDA synchronized, excludes validation/checkpoint I/O"
+    }
+  ],
+  "projected_full_seconds": 2422.510827339953,
+  "elapsed_seconds": 40.91582584599382
+}

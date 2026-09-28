@@ -1,0 +1,193 @@
+{
+  "status": "verified_focus_adaptation_feature_cache",
+  "run_id": "focus-adaptation-features-v1",
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "role": "replay",
+      "frames": 3,
+      "nodes": 785,
+      "pairs": 2,
+      "raw_sha256": "14425b393d47908756e52ccf98a010bb65fb4a5ad22272c59b839ea5b3236893",
+      "manifest_sha256": "da55fbeece20825e37878eacf3dac2ecf46b805e0bea53f4188aa38adb4b940d",
+      "counts": {
+        "known_parent": 0,
+        "known_absent": 0,
+        "unknown": 520
+      }
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "role": "replay",
+      "frames": 3,
+      "nodes": 285,
+      "pairs": 2,
+      "raw_sha256": "9f157968bf88118f806dfbf957d8d15e4f74e9514ac5c77eaa470cb188e42012",
+      "manifest_sha256": "e0426df6fed260abd54ae4fca0b903adfcdad860eebdceb608f6d84ae8b5d4aa",
+      "counts": {
+        "known_parent": 0,
+        "known_absent": 0,
+        "unknown": 185
+      }
+    },
+    {
+      "stem": "6bba_6479435d",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 39007,
+      "pairs": 99,
+      "raw_sha256": "3955602262a1dc2c19f7d1a6ab06f1df43232e1286943676be967208656a3832",
+      "manifest_sha256": "9e402ffc3d5d4642b0d03b1eb2ba908a97225d17e27da2e46ba56d5854a2dc80",
+      "counts": {
+        "known_parent": 492,
+        "known_absent": 20,
+        "unknown": 38019
+      }
+    },
+    {
+      "stem": "6bba_df673a83",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 25518,
+      "pairs": 99,
+      "raw_sha256": "5a18071352ea2365195617854da76e09350dc397a5580cbbd9cd9e2ca98d0cf4",
+      "manifest_sha256": "227dcca7082dbb07b9a11f37ec1371de0a0031f1457a433f06efff82d0c24192",
+      "counts": {
+        "known_parent": 631,
+        "known_absent": 8,
+        "unknown": 24621
+      }
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 62512,
+      "pairs": 99,
+      "raw_sha256": "44191f70f7384dad766844f37c619da2bcd121221fad05c4ed40351faf2a1232",
+      "manifest_sha256": "bbb0ea2bd58f74c92bb54550e57f39e08665833e2f05d26bc21b899322b7e850",
+      "counts": {
+        "known_parent": 587,
+        "known_absent": 15,
+        "unknown": 61498
+      }
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 15090,
+      "pairs": 99,
+      "raw_sha256": "e292bf199e94518e26eac3b2249d2401af4f9ae0637eea3b104cee8088c93f9e",
+      "manifest_sha256": "00f9eefa4e67e1e7f4421e5dca82e5f84a547829ff5732a6047fcf6cbe148aa2",
+      "counts": {
+        "known_parent": 1108,
+        "known_absent": 9,
+        "unknown": 13697
+      }
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "role": "diagnostic",
+      "frames": 100,
+      "nodes": 5576,
+      "pairs": 99,
+      "raw_sha256": "683bb2dd75b6ec87900efa287e77432a0ad02f10f2d424d9dd25ada0586d1d1f",
+      "manifest_sha256": "4706b287e51e7d3385b52826af32aa37874a4062249120f3842161ecd8f61c3e",
+      "counts": {
+        "known_parent": 742,
+        "known_absent": 15,
+        "unknown": 4755
+      }
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "role": "diagnostic",
+      "frames": 100,
+      "nodes": 7373,
+      "pairs": 99,
+      "raw_sha256": "f2d0b149dc6eaac60c1149c3e2c56a3e8ab27557e31fd0b1b8b8cbd376fdaab7",
+      "manifest_sha256": "70fd9ffd805e660590342e2b13b2abdcf8fc099278569ea63b37a0caa2971c25",
+      "counts": {
+        "known_parent": 700,
+        "known_absent": 6,
+        "unknown": 6605
+      }
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "role": "diagnostic",
+      "frames": 100,
+      "nodes": 7795,
+      "pairs": 99,
+      "raw_sha256": "c16991b4c5eb20a5d0cfcbce33d3d5e7d9d91971ec0ba1d9bb0cffad154889f2",
+      "manifest_sha256": "8473c1cceca50fa02d593fcb006429ef3e746decd1133f4b7ebe483ee7f88f43",
+      "counts": {
+        "known_parent": 721,
+        "known_absent": 2,
+        "unknown": 7013
+      }
+    },
+    {
+      "stem": "6bba_312f0dc3",
+      "role": "diagnostic",
+      "frames": 100,
+      "nodes": 11947,
+      "pairs": 99,
+      "raw_sha256": "15d603146cad53fa9098332ce10dea4231f015a216791397f4b5e7c67f15d523",
+      "manifest_sha256": "c036c400c8cce199d2e75050124c0a5cc8e264d725bf5d257b2ee06b76b09cba",
+      "counts": {
+        "known_parent": 482,
+        "known_absent": 4,
+        "unknown": 11312
+      }
+    }
+  ],
+  "contract": {
+    "fitting_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41"
+    ],
+    "diagnostic_stems": [
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "training_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41",
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "replay_stems": [
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "role_assignment": "Original fixed96/24 training partition, first four per role excluding replay movies",
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+  },
+  "notebook_sha256": "502bcc24048eb779210f00e3d4874087dd3f94a9c2c02fa966ca9cbbef9bc8df",
+  "worker_result_sha256": "3b7d190cf26dc171688ad175ac61c2983192df08e4cd941e2c72b6a71e7cf03e",
+  "launcher": {
+    "status": "completed",
+    "run_id": "focus-adaptation-features-v1",
+    "elapsed_seconds": 211.29949543399994,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "all_raw_nodes_and_sparse_labels_exact": true,
+  "optimizer_run": false,
+  "authorized_for_submission": false,
+  "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+}

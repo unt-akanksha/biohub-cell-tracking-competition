@@ -1,0 +1,27 @@
+{
+  "status": "passed_full_training_edgeless_matcher_replay",
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "windows_replayed": 88,
+      "nodes": 11008,
+      "label_sha256": "5dbe53c190778844ec6d4afeb82b777aaa65c2b7279fa8442b72b27ef643cd64"
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "windows_replayed": 88,
+      "nodes": 5692,
+      "label_sha256": "fb1137edb8855c8ef219b11cdcaa63b4dcbbf6d563724cd90251619eccc6c29c"
+    }
+  ],
+  "all_labels_and_statuses_exact": true,
+  "prior_label_receipt_sha256": "1ea573dfaa1e7075d4c2c486bcca8c7bd27e592ce233dc4afdcc844d8dedbbd1",
+  "new_source_or_target_data_opened": false,
+  "gpu_used": false,
+  "authorized_for_submission": false,
+  "source_hashes": {
+    "research/focus_adaptation_labels.py": "69ebaeae0dab39f1b9561f8fb8f5ce35c694fc83aa89a7fcbefd57eb775912dd",
+    "research/focus_predicted_training_labels.py": "48e90685b049ad0d388e08e7710fd2e5280a2a3ad9852fc6358f7e271dd050b2",
+    "scripts/verify-focus-adaptation-label-matcher.py": "3411023f2da57ec464fe31c0caf07a3cbc634a2f1e95af099d82dfd7ae4aa303"
+  }
+}

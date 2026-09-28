@@ -1,0 +1,288 @@
+{
+  "status": "verified_cached_focus_owned_flow_full_score",
+  "contract": {
+    "version": 1,
+    "stems": [
+      "44b6_81c256f0",
+      "44b6_24264f12",
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "probe_report_sha256": "645a7613cf8fc69e5fc8127d06f6a3ae2e2994d97dddf85e5e402a412d85ad05",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "raw_terminal_sha256": "0609934b1e2a40473763acf521cfcf7120e418f5857c24d6f28c0e662638bd41",
+    "flow_checkpoint_sha256": "3006ee0f904640b16dd988d6404a1b3ac4f933ca68ca912d69fe4598f96d4788",
+    "flow_tensor_sha256": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+    "probe_motion_sha256": "8546bb5ee020a52e1074afe2e1a337997ec6323ffbdd286154159caf46755eba",
+    "probe_stem": "6bba_23af9eeb",
+    "flow_views": 1,
+    "detector_inference": false,
+    "public_linker_loaded": false,
+    "coordinates": "exact raw centroids",
+    "sampling": "constant flow extension through trailing unsampled voxel centers",
+    "null_logit": -4.5,
+    "posterior_threshold": 0.5,
+    "max_parents": 1,
+    "max_children": 2,
+    "scope": "Four previously exposed diagnostic movies; two flow-training movies and two other-embryo movies",
+    "new_target_movies_opened": 0,
+    "independent_confirmation": false,
+    "authorized_for_submission": false
+  },
+  "per_movie": {
+    "control": [
+      {
+        "edge_tp": 196,
+        "edge_fp": 1,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 13726,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.3654994031038599,
+        "edge_jaccard": 0.98989898989899,
+        "adj_edge_jaccard": 0.9537182409048706,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 201,
+        "edge_fp": 17,
+        "edge_fn": 20,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 0,
+        "num_pred_nodes": 34665,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.31541001024551285,
+        "edge_jaccard": 0.8445378151260504,
+        "adj_edge_jaccard": 0.8179002470338874,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 288,
+        "edge_fp": 47,
+        "edge_fn": 158,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 0,
+        "num_pred_nodes": 11008,
+        "node_recall": 0.9915966386554622,
+        "total_node_ratio": 0.2176991150442478,
+        "edge_jaccard": 0.5841784989858012,
+        "adj_edge_jaccard": 0.5714609847600927,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 478,
+        "edge_fp": 10,
+        "edge_fn": 21,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 5692,
+        "node_recall": 0.9824561403508771,
+        "total_node_ratio": 0.2791011235955056,
+        "edge_jaccard": 0.9390962671905697,
+        "adj_edge_jaccard": 0.9128859848568465,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      }
+    ],
+    "candidate": [
+      {
+        "edge_tp": 197,
+        "edge_fp": 2,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 2,
+        "division_fn": 0,
+        "num_pred_nodes": 13726,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.3654994031038599,
+        "edge_jaccard": 0.9899497487437185,
+        "adj_edge_jaccard": 0.9537671445168541,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 204,
+        "edge_fp": 19,
+        "edge_fn": 17,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 0,
+        "num_pred_nodes": 34665,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.31541001024551285,
+        "edge_jaccard": 0.85,
+        "adj_edge_jaccard": 0.8231901491291314,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 326,
+        "edge_fp": 56,
+        "edge_fn": 120,
+        "division_tp": 0,
+        "division_fp": 13,
+        "division_fn": 0,
+        "num_pred_nodes": 11008,
+        "node_recall": 0.9915966386554622,
+        "total_node_ratio": 0.2176991150442478,
+        "edge_jaccard": 0.649402390438247,
+        "adj_edge_jaccard": 0.6352649578676445,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 483,
+        "edge_fp": 11,
+        "edge_fn": 16,
+        "division_tp": 0,
+        "division_fp": 2,
+        "division_fn": 0,
+        "num_pred_nodes": 5692,
+        "node_recall": 0.9824561403508771,
+        "total_node_ratio": 0.2791011235955056,
+        "edge_jaccard": 0.9470588235294117,
+        "adj_edge_jaccard": 0.9206263053536021,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "control": {
+      "n": 4,
+      "edge_jaccard": 0.8087621696801113,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 11,
+      "division_fn": 0,
+      "node_recall": 0.9913392817081066,
+      "adj_edge_jaccard": 0.7857341462253756,
+      "n_adj": 4,
+      "score": 0.7857341462253756
+    },
+    "candidate": {
+      "n": 4,
+      "edge_jaccard": 0.833907649896623,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 22,
+      "division_fn": 0,
+      "node_recall": 0.9913392817081066,
+      "adj_edge_jaccard": 0.8103292364781117,
+      "n_adj": 4,
+      "score": 0.8103292364781117
+    }
+  },
+  "by_embryo": {
+    "control": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9105504587155964,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 6,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.879579060764288,
+        "n_adj": 2,
+        "score": 0.879579060764288
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.7644710578842315,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 0,
+        "node_recall": 0.9870263895031697,
+        "adj_edge_jaccard": 0.7448994329130344,
+        "n_adj": 2,
+        "score": 0.7448994329130344
+      }
+    },
+    "candidate": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9134396355353075,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 7,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.88238108781286,
+        "n_adj": 2,
+        "score": 0.88238108781286
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.799407114624506,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 15,
+        "division_fn": 0,
+        "node_recall": 0.9870263895031697,
+        "adj_edge_jaccard": 0.7790735420749947,
+        "n_adj": 2,
+        "score": 0.7790735420749947
+      }
+    }
+  },
+  "comparison": {
+    "summary_deltas": {
+      "score": 0.024595090252736096,
+      "edge_jaccard": 0.02514548021651175,
+      "node_recall": 0.0
+    },
+    "per_movie_deltas": [
+      {
+        "stem": "44b6_81c256f0",
+        "adjusted_edge_delta": 4.8903611983508455e-05
+      },
+      {
+        "stem": "44b6_24264f12",
+        "adjusted_edge_delta": 0.005289902095243937
+      },
+      {
+        "stem": "6bba_f1fde7e0",
+        "adjusted_edge_delta": 0.06380397310755181
+      },
+      {
+        "stem": "6bba_23af9eeb",
+        "adjusted_edge_delta": 0.007740320496755659
+      }
+    ],
+    "per_embryo_score_deltas": {
+      "44b6": 0.002802027048571909,
+      "6bba": 0.03417410916196029
+    },
+    "worst_movie_delta": 0.06380397310755181,
+    "diagnostic_conditions": {
+      "score_gain": true,
+      "raw_edge_gain": true,
+      "recall_identical": true,
+      "three_movies_improve": true,
+      "neither_embryo_regresses": true,
+      "per_movie_loss_bounded": true,
+      "worst_movie_preserved": true
+    },
+    "diagnostic_gate_passed": true
+  },
+  "full_graph_and_motion_replay": true,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "source_sha256": {
+    "notebook": "5af97d02de71448af3d4f2367db307a77212fb59ae0d1389f0a6beffb7e3db9f",
+    "manifest": "1ffac0d0d0e70caeeafc28fcb676541fad00bf2b55f783f721afbf5f69b516c6"
+  },
+  "validation_scope": "Four previously exposed diagnostic movies; two flow-training movies and two other-embryo movies",
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "caveat": "Previously exposed complete-movie diagnostic; not fresh independent confirmation or public-best evidence."
+}

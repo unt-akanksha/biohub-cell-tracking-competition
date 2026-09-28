@@ -1,0 +1,49 @@
+{
+  "status": "portable_source_smoke_passed",
+  "code_sha256": "eac9ee4f7ed8b5192167e94a39910e8343ff1e1f90880f95dd54360ef9abc161",
+  "source_sha256": "41bd57e07af8500f5dfd3ff07f1ebcf869b6e4c90001ec45167a123fbd07c3dc",
+  "proofs": {
+    "44b6": {
+      "control_sha256": "a6c00589d1b596293f7c652012dd973ca47c3fa2cfe91c1b418d90ec4cb12fcc",
+      "vectorized_replay_sha256": "4abe237920bc5e6ba29a1379fb0e9ad7ca34d40a909fab0cce0dd51050265af0"
+    },
+    "6bba": {
+      "control_sha256": "142073e33f460e3ab0e741a556974d99db4c61e927a186cf5d27f1582176283f",
+      "vectorized_replay_sha256": "a68803933b402f3809159a401c9ecae2d9d38690fcd3e58cce2e5e1dc6779761"
+    }
+  },
+  "fit_contracts": {
+    "44b6": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+    "6bba": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111"
+  },
+  "records": [
+    {
+      "stem": "44b6_996155de",
+      "exact_graph": true,
+      "exact_features": true,
+      "exact_solver_records": true,
+      "processed_frames": 99,
+      "seconds": 7.0,
+      "reference_prediction_sha256": "8733f7e05575b7ba70c0bef4b0263370bd59f4eaa56f3e1f46988b08d322d486"
+    },
+    {
+      "stem": "6bba_55b7eebe",
+      "exact_graph": true,
+      "exact_features": true,
+      "exact_solver_records": true,
+      "processed_frames": 99,
+      "seconds": 3.5780000000377186,
+      "reference_prediction_sha256": "03cdfc110f685538998f98faffdee3a8bad3bf2fdc7007f8fab19354f74ce9a6"
+    }
+  ],
+  "smoke": true,
+  "max_fork_children": 16,
+  "learned_weights_included": false,
+  "training_data_in_bundle": false,
+  "annotations_in_bundle": false,
+  "ground_truth_opened": false,
+  "gpu_used": false,
+  "authorized_for_submission": false,
+  "kaggle_runtime_acceptance": false,
+  "seconds": 18.89100000000326
+}

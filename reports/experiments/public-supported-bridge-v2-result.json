@@ -1,0 +1,127 @@
+{
+  "run_id": "public-supported-bridge-v2",
+  "receipt": {
+    "pins": {
+      "research/public_supported_bridge_v2.py": "3467949806bfdde355f1bb51eedeaaadf517c33dbda5fc2f18bb23dd6291fa26",
+      "research/public_d4_quality.py": "59b0090f8f68632faccdb7101c07ecbfc3f3a9077f96bf181bc80e595456bd36",
+      "scripts/run-public-supported-bridge-v2.py": "9d1e16145c26e92600b043ffea7227cd903adf453c7c7cb5b4ed185caf71cdf6",
+      "reports/experiments/public-supported-bridge-v2-design.md": "5502400105804cb68579c329ae50a57fd5b561242b95c449f6b8aeca0b9d115e"
+    },
+    "records": {
+      "44b6_24264f12": {
+        "original": {
+          "path": "44b6_24264f12-original.json",
+          "sha256": "cd135abd68e73243de025458c9062fbd941f2542aef21f0c25adf418755b7c63",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 120,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "44b6_24264f12-corrected.json",
+          "sha256": "5cac0ebee31e2490a0ba5dc00eaef1f5b4262f0346e20c6b51f1166125008955",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 120,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "44b6_81c256f0": {
+        "original": {
+          "path": "44b6_81c256f0-original.json",
+          "sha256": "94a8621b863de62929a0ec4224bcaeeddf18f2246597608cead78be205b235ae",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 120,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "44b6_81c256f0-corrected.json",
+          "sha256": "39d532c7b5cabca414dbbad4ae90e477185e247b4f70e96b293452bad9c163d4",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 120,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "6bba_23af9eeb": {
+        "original": {
+          "path": "6bba_23af9eeb-original.json",
+          "sha256": "8c75c80ec83255a1bdedbf44493de1fe47cb9db427d3cebf1f023b4d1b0504f6",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 50,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "6bba_23af9eeb-corrected.json",
+          "sha256": "8965edd24c17b0fd4b51d5372ea56c0cf4be682bb07bfd1a56c378d1ec51a066",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 50,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      },
+      "6bba_f1fde7e0": {
+        "original": {
+          "path": "6bba_f1fde7e0-original.json",
+          "sha256": "0583d3af02cf4274abe3040553e92ab54f5231b1aaeff8fc902cb6819f7dc3d0",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 97,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        },
+        "corrected": {
+          "path": "6bba_f1fde7e0-corrected.json",
+          "sha256": "494bb54129cf933dbc2077c9412ca7f2afd4c25abab07aba4618265ed3713f4a",
+          "eligible_paths": 0,
+          "added_nodes": 0,
+          "added_edges": 0,
+          "paths": [],
+          "node_budget": 97,
+          "existing_output_unchanged": true,
+          "ground_truth_used": false,
+          "authorized_for_submission": false
+        }
+      }
+    },
+    "ground_truth_used": false
+  },
+  "manifest_sha256": "d642496fc8722c0c464f5c01e54a131d1f745c90e26234fadef816d2444a3c18",
+  "gpu_hours": 0,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "status": "rejected_no_paths",
+  "ground_truth_opened": false,
+  "diagnostic_gate_passed": false,
+  "elapsed_seconds": 190.01600000000326
+}

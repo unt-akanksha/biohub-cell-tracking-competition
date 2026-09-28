@@ -1,0 +1,24 @@
+{
+  "status": "verified_complete_no_reported_leaderboard_gain",
+  "observed_utc": "2026-09-15T01:35:17Z",
+  "evidence": "Authenticated kaggle competitions submissions CSV, successful exit code 0",
+  "submission_ref": 56237287,
+  "submitted_utc": "2026-09-14T18:38:48.027000Z",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "kernel_version": 2,
+  "submission_status": "COMPLETE",
+  "public_score_reported": "0.946",
+  "private_score_available": false,
+  "previous_completed_submissions": [
+    {"ref": 56231458, "public_score_reported": "0.946"},
+    {"ref": 56219125, "public_score_reported": "0.946"}
+  ],
+  "reported_public_score_improved": false,
+  "unrounded_score_equality_established": false,
+  "prediction_identity_established": false,
+  "exact_hidden_runtime_available": false,
+  "submitted_variant": "Fixed event-assignment anchor layered on licensed image ensemble and source-trained trajectory pipeline",
+  "later_learned_heads_or_checkpoint_averages_in_this_submission": false,
+  "final_submission_selection_changed": false,
+  "new_job_launched": false
+}

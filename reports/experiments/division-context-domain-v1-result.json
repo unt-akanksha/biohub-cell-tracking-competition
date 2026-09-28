@@ -1,0 +1,81 @@
+{
+  "status": "complete_input_domain_diagnostic",
+  "optimization": {
+    "44b6": {
+      "rows": 422,
+      "mean": 12.310426540284361,
+      "minimum": 5.0,
+      "maximum": 25.0,
+      "median": 10.0,
+      "p90": 17.0,
+      "p99": 20.0
+    },
+    "6bba": {
+      "rows": 1482,
+      "mean": 18.309041835357625,
+      "minimum": 5.0,
+      "maximum": 43.0,
+      "median": 16.0,
+      "p90": 31.0,
+      "p99": 43.0
+    }
+  },
+  "deployment": {
+    "44b6_81c256f0": {
+      "all_candidates": {
+        "rows": 328,
+        "mean": 42.33841463414634,
+        "minimum": 17.0,
+        "maximum": 43.0,
+        "median": 43.0,
+        "p90": 43.0,
+        "p99": 43.0
+      },
+      "geometry_eligible": {
+        "rows": 2,
+        "mean": 43.0,
+        "minimum": 43.0,
+        "maximum": 43.0,
+        "median": 43.0,
+        "p90": 43.0,
+        "p99": 43.0
+      },
+      "fraction_above_optimization_p99": 0.9939024390243902,
+      "prediction_sha256": "94a8621b863de62929a0ec4224bcaeeddf18f2246597608cead78be205b235ae",
+      "candidate_labels_opened": false
+    },
+    "6bba_f1fde7e0": {
+      "all_candidates": {
+        "rows": 548,
+        "mean": 41.69525547445255,
+        "minimum": 22.0,
+        "maximum": 43.0,
+        "median": 43.0,
+        "p90": 43.0,
+        "p99": 43.0
+      },
+      "geometry_eligible": {
+        "rows": 32,
+        "mean": 42.40625,
+        "minimum": 33.0,
+        "maximum": 43.0,
+        "median": 43.0,
+        "p90": 43.0,
+        "p99": 43.0
+      },
+      "fraction_above_optimization_p99": 0.0,
+      "prediction_sha256": "0583d3af02cf4274abe3040553e92ab54f5231b1aaeff8fc902cb6819f7dc3d0",
+      "candidate_labels_opened": false
+    }
+  },
+  "elapsed_seconds": 27.125,
+  "source_manifest_sha256": "2e5c4c46b11ff1480194c29e88c0e16b0ebf2f0fd65b2fc29548d26fee599bd9",
+  "source_sha256": "4c3becafbb79600bbccafe7426b724e061a2966a23fe27642717a4bfc621fe34",
+  "optimization_shards_read": 1443,
+  "selection_or_audit_shards_opened": false,
+  "division_targets_opened": false,
+  "models_fitted": false,
+  "gpu_hours": 0,
+  "authorized_for_submission": false,
+  "limitation": "Input distribution evidence, not proof of model reliance, causality, or improvement"
+}

@@ -1,0 +1,56 @@
+{
+  "run_id": "dense-warp-complete-movie-v1",
+  "status": "functionality_passed",
+  "authorized_for_submission": false,
+  "device": "NVIDIA A10G",
+  "torch_version": "2.5.1+cu121",
+  "contract_sha256": "e8a871ae5bd00dd4364c0b108c62adc4a5644023fcd27abd3808162de03a2791",
+  "numpy_version": "2.5.2",
+  "mode": "smoke",
+  "movies": {
+    "44b6_12dfb391": {
+      "original": {
+        "seconds": 12.764530120999552,
+        "inference_seconds": 7.093292992001807,
+        "peak_cuda_bytes": 742463488,
+        "frames": 8,
+        "nodes": 2761,
+        "edges": 2405,
+        "prediction_sha256": "a501adfda0144bdae39f963e9ac653959225fcf40cc2e7b2849b85a7c36af1c0",
+        "repaired_sha256": "a501adfda0144bdae39f963e9ac653959225fcf40cc2e7b2849b85a7c36af1c0",
+        "added_edges": 0,
+        "repair_seconds": 0.10957628899632255
+      },
+      "warp44": {
+        "seconds": 12.63125517899607,
+        "inference_seconds": 6.653184673996293,
+        "peak_cuda_bytes": 742463488,
+        "frames": 8,
+        "nodes": 2795,
+        "edges": 2435,
+        "prediction_sha256": "f3144262c70fffe37d76a0808de94b60e731d50d5b70201e2ed982bdab39a152",
+        "repaired_sha256": "f3144262c70fffe37d76a0808de94b60e731d50d5b70201e2ed982bdab39a152",
+        "added_edges": 0,
+        "repair_seconds": 0.11403266499837628
+      },
+      "warp6": {
+        "seconds": 12.650899118998495,
+        "inference_seconds": 6.646874990998185,
+        "peak_cuda_bytes": 742463488,
+        "frames": 8,
+        "nodes": 2794,
+        "edges": 2434,
+        "prediction_sha256": "73550b15858350f24a365ce16638e9c37ad5550c4ae4cd10338a5dbc77f2ad80",
+        "repaired_sha256": "73550b15858350f24a365ce16638e9c37ad5550c4ae4cd10338a5dbc77f2ad80",
+        "added_edges": 0,
+        "repair_seconds": 0.11351082700275583
+      }
+    }
+  },
+  "ground_truth_opened": false,
+  "independently_held_out": false,
+  "kaggle_gpu_hours": 0,
+  "quality_gain_established": false,
+  "inputs_unchanged": true,
+  "elapsed_seconds": 47.492963194003096
+}

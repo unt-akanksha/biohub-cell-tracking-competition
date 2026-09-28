@@ -1,0 +1,300 @@
+{
+  "status": "push_returned",
+  "utc": "2026-09-14T18:15:55.535889+00:00",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "expected_kernel_version": 2,
+  "build_sha256": "45a17f948e8c548f8da39e6c6014b85e95f793b7bdf610cf467f1a96b062369c",
+  "notebook_sha256": "362f3e6288177ef187ddc431022d94a30f64cca10a6142f5b475cdd3f861a1c2",
+  "contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "public_verification_sha256": "8634e199e58327c849ec4204a80076d1ea5743abd94853e38613db9c29e39583",
+  "platform_timeout_seconds": 43200,
+  "internal_watchdog_seconds": 36000,
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "2.48h",
+      "remaining": "27.52h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "budget": {
+    "remaining_hours": 27.52,
+    "pending_reservations_hours": {},
+    "new_run_reserved_hours": 12.0,
+    "remaining_after_all_reservations": 15.52,
+    "reserve_hours": 8.0,
+    "t4x2_quota_hours_per_notebook_hour": 1.0,
+    "hidden_evaluation_assumed_free": false
+  },
+  "submission_statuses": [
+    {
+      "ref": "56231458",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.946"
+    },
+    {
+      "ref": "56219125",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.946"
+    },
+    {
+      "ref": "55784044",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55364415",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.912"
+    },
+    {
+      "ref": "55191057",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55190985",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55190960",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55190946",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55190944",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "55155485",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55154131",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55154126",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55154124",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55151372",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55099266",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.912"
+    },
+    {
+      "ref": "55097917",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.912"
+    },
+    {
+      "ref": "55067327",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55067321",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55067317",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.912"
+    },
+    {
+      "ref": "55067313",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55067209",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55045561",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.911"
+    },
+    {
+      "ref": "55045560",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55045557",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.911"
+    },
+    {
+      "ref": "55045550",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55043293",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.913"
+    },
+    {
+      "ref": "55013181",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.912"
+    },
+    {
+      "ref": "55012552",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54982182",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54979905",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54975092",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "54969472",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "54969466",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "54948346",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "54941178",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54940777",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.908"
+    },
+    {
+      "ref": "54940556",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54939162",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54936504",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.907"
+    },
+    {
+      "ref": "54883784",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.905"
+    },
+    {
+      "ref": "54872847",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    },
+    {
+      "ref": "54860720",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.899"
+    },
+    {
+      "ref": "54837780",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.905"
+    },
+    {
+      "ref": "54823291",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.875"
+    },
+    {
+      "ref": "54817880",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.891"
+    },
+    {
+      "ref": "54811655",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.902"
+    },
+    {
+      "ref": "54799100",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.768"
+    },
+    {
+      "ref": "54795728",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.902"
+    },
+    {
+      "ref": "54795384",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": "0.877"
+    },
+    {
+      "ref": "54789697",
+      "status": "SubmissionStatus.COMPLETE",
+      "publicScore": ""
+    }
+  ],
+  "sequential": {
+    "live_biohub_gpu_processes": [],
+    "foreign_gpu_processes_untouched": []
+  },
+  "strict_quality_failures_preserved": true,
+  "kernel_pushed": true,
+  "submission_performed": false,
+  "source_sha256": "e259e1a5f6f93f5dcaedbd01a752884676b183431f80d5aeb8a3c7e01bd5d0fb",
+  "exit_code": 0,
+  "stdout": "Kernel version 2 successfully pushed.  Please check progress at https://www.kaggle.com/code/indarkarhana/biohub-event-anchor-candidate\n",
+  "stderr": ""
+}

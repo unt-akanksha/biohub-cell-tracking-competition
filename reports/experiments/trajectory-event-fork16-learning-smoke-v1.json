@@ -1,0 +1,77 @@
+{
+  "status": "expanded_vocabulary_learning_functionality_passed",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "production_candidate_changed": false,
+  "authorized_for_submission": false,
+  "max_fork_children": 16,
+  "small_feasibility_sha256": "0a9a6c3977bbcac6f5d95a4e654d3dc4801f71339d927b0033fe60b695f5c499",
+  "source_sha256": "8ca4c1e870b66bff038691ec270e0809616e6d522207572bb217b4f61cc70ae1",
+  "records": [
+    {
+      "stem": "44b6_eb2880fc",
+      "batch": 4,
+      "t": 73,
+      "path": "44b6_eb2880fc-t73.npz",
+      "sha256": "f5aa0c32b1451e253637cf5c40de9b6ee917878c89ee24ca9dc9c5233e6faaaa",
+      "n_constraints": 4,
+      "options": 26112,
+      "feature_elements": 783360,
+      "exact_reference_features": true,
+      "scope_sha256": "a5aceaec0801107412216d1140c8d5272599ca9fa24eb1b528cf76e6bee22f72",
+      "feature_receipt_sha256": "dd3e6951cd8376ab40ad80412f74de59265533494ca58b7d2022a2a64f0936f5",
+      "supervision_receipt_sha256": "dd5d09485ec85ea45e09938c55759f02c9133745531d605b97684420aea2b0d0",
+      "backup_sha256": "c43e690cb1bae2ac5c141b1724d4b38ec053cbef8caff6e679068f144140996e",
+      "known_constraints_retained": 4,
+      "known_constraints_outside_editable_scope": 0
+    },
+    {
+      "stem": "6bba_48816121",
+      "batch": 5,
+      "t": 17,
+      "path": "6bba_48816121-t17.npz",
+      "sha256": "4cd2f2f22fa843b1e950f9aa4dcaf13a389ea66944272ae4cdeeecaf9d491601",
+      "n_constraints": 7,
+      "options": 24913,
+      "feature_elements": 747390,
+      "exact_reference_features": true,
+      "scope_sha256": "ab0db158241847173ee682428bcf55ad1c6c8ba74ed5c102926414e0d6ec558a",
+      "feature_receipt_sha256": "85aa6d4eac293a77a93a582fe170ba0aa1136a18e622b82250037e30f0d91a86",
+      "supervision_receipt_sha256": "8ccfbd9bef2f2baf5d35dbaa040db69ba590fc925206429302bbc3cf8895fc62",
+      "backup_sha256": "7a7374eefd3f2f9535fd2e45c8e21634d1cdd7435e50c4a001fd8b461e6682a0",
+      "known_constraints_retained": 7,
+      "known_constraints_outside_editable_scope": 0
+    }
+  ],
+  "helper_sha256": {
+    "trajectory_event_candidates_v1.py": "b0140970917fe44c9d5f5599560406441c79a4488647eaf589c3a77495ac732d",
+    "trajectory_event_features_v1.py": "6091c871aabc55a5ee314a67d9be39f54616b641628f023e3088a41abf9acd19",
+    "trajectory_event_fast_features_v1.py": "2ddbfadf8e94680ca265f6b5db0b6adc549de1c1516d3b7c693c0f45fec5296f",
+    "trajectory_event_supervision_v1.py": "28a273f07ed0d2c95078058ea743fa941c97f9d036ff92dc20f5b139fd1b9f66",
+    "trajectory_event_fast_training_v1.py": "528a739e4a2d35c6d475bf1173c5ecce5aaaa6f5a6cb78d1ee6f3c1ff34cce28",
+    "trajectory_event_fast_case_store_v1.py": "369e16ae4c05afd74fbee31fef2fcb9ae89e62598f9797934b72e922af081078"
+  },
+  "seconds": 19.04699999996228,
+  "exact_saved_case_reconstructions": 2,
+  "anchor_sha256": "508165d131dc0c2516cf91e0eafb5a88edf24358f6ced5b0436f29ccc6b733be",
+  "before_hinge": [
+    3.094257755033084,
+    2.400965575145392
+  ],
+  "after_hinge": [
+    2.7999198846868865,
+    2.173154856298343
+  ],
+  "optimizer_history": [
+    {
+      "epoch": 1,
+      "steps": 2,
+      "cases": 2,
+      "online_objective_mean": 2.691161695064777,
+      "displacement_norm": 0.27288483028737603
+    }
+  ],
+  "coefficients_not_exported": true,
+  "model_selected": false,
+  "cache_bytes": 15853605
+}

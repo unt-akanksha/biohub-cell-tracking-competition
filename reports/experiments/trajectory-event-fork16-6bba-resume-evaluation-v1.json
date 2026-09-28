@@ -1,0 +1,60 @@
+{
+    "status":  "held_evaluation_completed_no_automatic_promotion",
+    "pid":  13476,
+    "original_training_pid":  43524,
+    "original_start_utc":  "2026-09-14T19:14:40.4598489Z",
+    "started_utc":  "2026-09-14T21:12:47.7070685Z",
+    "fit_contract_sha256":  "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111",
+    "trainer_sha256":  "d13c1798ad4327e2d095c392605d481fc546b02569ad201f88e672a9e2ab796f",
+    "evaluator_sha256":  "0d6716829382e06ae5e476d8e0789104cd9f3ac0663722c040f7f898f6390f37",
+    "gpu_used":  false,
+    "submission_allowed":  false,
+    "maximum_resumes":  1,
+    "stages":  [
+                   {
+                       "stage":  "smoke",
+                       "status":  "complete_movie_inference_smoke_passed",
+                       "sha256":  "c1ba4bc4fb41b74808dfc3f98ebbfb7f588df58fb4cf6f93b766a3df88f37e2b"
+                   },
+                   {
+                       "stage":  "full",
+                       "status":  "held_embryo_complete_movie_scoring_finished",
+                       "sha256":  "d4e04fc70e2c51815a6a54ed241f7c83db68df08ec4f9a81bd0fd286cc44b9ce"
+                   }
+               ],
+    "updated_utc":  "2026-09-14T23:19:55.8304552Z",
+    "paused_fit":  {
+                       "status":  "paused_at_wall_limit",
+                       "pid":  43524,
+                       "source_only":  true,
+                       "source_embryo":  "6bba",
+                       "contract_sha256":  "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111",
+                       "model_fitted":  false,
+                       "authorized_for_submission":  false,
+                       "selection_or_validation_opened":  false,
+                       "opposite_embryo_excluded_from_optimizer":  true,
+                       "resumed":  true,
+                       "control_smoke":  false,
+                       "invocation_start_step":  4,
+                       "invocation_wall_cap":  7200,
+                       "steps":  7688,
+                       "epochs_completed":  [
+                                                {
+                                                    "epoch":  1,
+                                                    "steps":  4557,
+                                                    "cases":  4557,
+                                                    "online_objective_mean":  0.11062441132632062,
+                                                    "displacement_norm":  0.5723401973573989
+                                                }
+                                            ],
+                       "checkpoint_sha256":  "0466a17bac8635a6edd6c5bf238e174955c076bedd9337382c5f2a08270b1dca",
+                       "seconds":  7203.734999999986,
+                       "cache_bytes":  1606612710
+                   },
+    "paused_fit_sha256":  "83aa9758a3e6175ba0c367342437821693f5f677e45c656b34a3e676503b7d45",
+    "resume_checkpoint":  {
+                              "path":  "checkpoint-0007688-e1-p3131.json",
+                              "sha256":  "0466a17bac8635a6edd6c5bf238e174955c076bedd9337382c5f2a08270b1dca"
+                          },
+    "completed_fit_sha256":  "9bb0ef61d09c13fa871f6f9b61870d837aea5a798b534e0a019a9112a53a62cd"
+}

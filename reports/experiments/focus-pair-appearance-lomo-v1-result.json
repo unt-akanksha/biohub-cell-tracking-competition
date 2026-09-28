@@ -1,0 +1,758 @@
+{
+  "status": "completed_sequential_pair_appearance_screen",
+  "run_id": "focus-pair-appearance-lomo-v1",
+  "source_hashes": {
+    "research/focus_pair_appearance_resident_fit.py": "88fc6a5c542f27c5e01ef318aad538b91bdee06b9d6628140990042b4b181346",
+    "scripts/fit-focus-pair-appearance-resident.py": "e48434cdd9e2cc9c9370ec8b065d1376906b22ae6504e0c26c4ffd11132f2e41",
+    "research/focus_pair_appearance_resident.py": "aa3565fc163b1d78daf71df5b12bd7bbdd4565efcc2e8e040cabd5d66b694596",
+    "research/focus_pair_appearance_prepared.py": "26ee93a840dd797ef3e9796f8b56e63a8355400acb5f62c1c5d82df2a2684739",
+    "research/focus_pair_appearance.py": "517abb24d3dc529760b0b3f7742b92ffd968e74089eddc79fe6a9f919a1adc4f",
+    "research/focus_pair_appearance_head.py": "5e15e08096b570019346aaeed1ad8fc42af8f20834304a51ebe3db0f32809276",
+    "research/focus_candidate_ranker.py": "eefd5ec3dc2ddf273278715a993093ebfc6caf30121b244d270477d0592f316c",
+    "scripts/fit-focus-candidate-ranker.py": "32e4a1f086079ef4f0ecc26ee49a01b3528899f2e1ec99d7860f433845b26921",
+    "scripts/profile-focus-pair-appearance-prepared.py": "6db18db9bd09438d9a47642d9014530f261d004987b7b961e54ea9808d7df1d5",
+    "reports/experiments/focus-pair-appearance-lomo-v1-design.md": "a3da341b034767a20907500b5e899b160bcd6c0e8d53b22d70e7442640029e1f"
+  },
+  "arms": [
+    {
+      "arm": "lda",
+      "status": "completed",
+      "folds": [
+        {
+          "held_out": "6bba_6479435d",
+          "training_stems": [
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "0a72041a4f2565b9297764cc142e75f7cdcdbb1430ecf852f0cbcaa971f219cf",
+          "physical": {
+            "loss_sum": 652.6634092535569,
+            "known_parent": 492,
+            "known_absent": 20,
+            "correct_parent": 401,
+            "correct_absent": 16,
+            "nll": 1.2747332211983533
+          },
+          "neural": {
+            "loss_sum": 581.1471284215985,
+            "known_parent": 492,
+            "known_absent": 20,
+            "correct_parent": 421,
+            "correct_absent": 14,
+            "nll": 1.1350529851984346
+          },
+          "weighted_ranker": {
+            "loss_sum": 279.093844007351,
+            "known_parent": 492,
+            "known_absent": 20,
+            "correct_parent": 426,
+            "correct_absent": 9,
+            "nll": 0.5451051640768574
+          },
+          "candidate": {
+            "loss_sum": 286.8536824198977,
+            "known_parent": 492,
+            "known_absent": 20,
+            "correct_parent": 416,
+            "correct_absent": 12,
+            "nll": 0.5602610984763627
+          },
+          "execution": {
+            "preparation_seconds": 8.062000000005355,
+            "fit_seconds": 30.75,
+            "mode": "ram",
+            "prepared_disk_bytes": 321126480
+          },
+          "elapsed_seconds": 40.280999999988126
+        },
+        {
+          "held_out": "6bba_df673a83",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "b67cca289a3c6a4642e2a1663fb5d9d7a62f97e450736788a9e3332ea587de5e",
+          "physical": {
+            "loss_sum": 163.98787554132088,
+            "known_parent": 631,
+            "known_absent": 8,
+            "correct_parent": 605,
+            "correct_absent": 5,
+            "nll": 0.2566320431006586
+          },
+          "neural": {
+            "loss_sum": 128.31565505545697,
+            "known_parent": 631,
+            "known_absent": 8,
+            "correct_parent": 609,
+            "correct_absent": 2,
+            "nll": 0.20080697191777305
+          },
+          "weighted_ranker": {
+            "loss_sum": 97.97966108833762,
+            "known_parent": 631,
+            "known_absent": 8,
+            "correct_parent": 615,
+            "correct_absent": 1,
+            "nll": 0.15333280295514495
+          },
+          "candidate": {
+            "loss_sum": 108.90373746580376,
+            "known_parent": 631,
+            "known_absent": 8,
+            "correct_parent": 618,
+            "correct_absent": 2,
+            "nll": 0.17042838414053796
+          },
+          "execution": {
+            "preparation_seconds": 7.26500000001397,
+            "fit_seconds": 35.625,
+            "mode": "ram",
+            "prepared_disk_bytes": 325940256
+          },
+          "elapsed_seconds": 44.0
+        },
+        {
+          "held_out": "6bba_767a1e17",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "ff4aca8aa4eff53c733dc37154d7d605d8b1f1ccdea43153268c8d71618a972e",
+          "physical": {
+            "loss_sum": 1298.9609573600203,
+            "known_parent": 587,
+            "known_absent": 15,
+            "correct_parent": 413,
+            "correct_absent": 11,
+            "nll": 2.1577424540864123
+          },
+          "neural": {
+            "loss_sum": 1114.4279897032775,
+            "known_parent": 587,
+            "known_absent": 15,
+            "correct_parent": 453,
+            "correct_absent": 2,
+            "nll": 1.8512092852213913
+          },
+          "weighted_ranker": {
+            "loss_sum": 467.5707286711395,
+            "known_parent": 587,
+            "known_absent": 15,
+            "correct_parent": 478,
+            "correct_absent": 5,
+            "nll": 0.7766955625766436
+          },
+          "candidate": {
+            "loss_sum": 453.5279021968376,
+            "known_parent": 587,
+            "known_absent": 15,
+            "correct_parent": 481,
+            "correct_absent": 7,
+            "nll": 0.7533686083003946
+          },
+          "execution": {
+            "preparation_seconds": 7.905999999988126,
+            "fit_seconds": 35.28200000000652,
+            "mode": "ram",
+            "prepared_disk_bytes": 304794864
+          },
+          "elapsed_seconds": 44.375
+        },
+        {
+          "held_out": "6bba_2312ac41",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "223c59d1e78dfd4cc76f0e8bd467215da2f88eced36081a7855cbaae744c66ff",
+          "physical": {
+            "loss_sum": 310.14486979324346,
+            "known_parent": 1108,
+            "known_absent": 9,
+            "correct_parent": 1057,
+            "correct_absent": 7,
+            "nll": 0.27765879122045073
+          },
+          "neural": {
+            "loss_sum": 202.1939597678404,
+            "known_parent": 1108,
+            "known_absent": 9,
+            "correct_parent": 1083,
+            "correct_absent": 5,
+            "nll": 0.1810151833194632
+          },
+          "weighted_ranker": {
+            "loss_sum": 139.5165211891633,
+            "known_parent": 1108,
+            "known_absent": 9,
+            "correct_parent": 1084,
+            "correct_absent": 5,
+            "nll": 0.12490288378618022
+          },
+          "candidate": {
+            "loss_sum": 121.14655257735792,
+            "known_parent": 1108,
+            "known_absent": 9,
+            "correct_parent": 1085,
+            "correct_absent": 4,
+            "nll": 0.10845707482305991
+          },
+          "execution": {
+            "preparation_seconds": 7.25,
+            "fit_seconds": 28.280999999988126,
+            "mode": "ram",
+            "prepared_disk_bytes": 324814896
+          },
+          "elapsed_seconds": 36.64100000000326
+        },
+        {
+          "held_out": "6bba_971fa5e0",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "fb75a3198ff0461d23e0e7d0bc0625338a2446685a5673afb2fb4b693e32d96b",
+          "physical": {
+            "loss_sum": 498.16611581967226,
+            "known_parent": 762,
+            "known_absent": 2,
+            "correct_parent": 724,
+            "correct_absent": 2,
+            "nll": 0.652049889816325
+          },
+          "neural": {
+            "loss_sum": 344.7879437291949,
+            "known_parent": 762,
+            "known_absent": 2,
+            "correct_parent": 737,
+            "correct_absent": 1,
+            "nll": 0.45129312006439126
+          },
+          "weighted_ranker": {
+            "loss_sum": 154.6685054795866,
+            "known_parent": 762,
+            "known_absent": 2,
+            "correct_parent": 742,
+            "correct_absent": 1,
+            "nll": 0.202445687800506
+          },
+          "candidate": {
+            "loss_sum": 88.21240270359623,
+            "known_parent": 762,
+            "known_absent": 2,
+            "correct_parent": 746,
+            "correct_absent": 1,
+            "nll": 0.11546126008324113
+          },
+          "execution": {
+            "preparation_seconds": 7.030999999988126,
+            "fit_seconds": 28.828000000008615,
+            "mode": "ram",
+            "prepared_disk_bytes": 334112040
+          },
+          "elapsed_seconds": 36.73399999999674
+        },
+        {
+          "held_out": "6bba_cf35214c",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "4eeb312327f3172dea5f69761a3d7bf06a6727dba930fee04ea79d6eccbded35",
+          "physical": {
+            "loss_sum": 361.03680984935835,
+            "known_parent": 804,
+            "known_absent": 5,
+            "correct_parent": 747,
+            "correct_absent": 4,
+            "nll": 0.4462754139052637
+          },
+          "neural": {
+            "loss_sum": 272.09500693823566,
+            "known_parent": 804,
+            "known_absent": 5,
+            "correct_parent": 765,
+            "correct_absent": 3,
+            "nll": 0.3363349900349019
+          },
+          "weighted_ranker": {
+            "loss_sum": 175.32260630120345,
+            "known_parent": 804,
+            "known_absent": 5,
+            "correct_parent": 764,
+            "correct_absent": 3,
+            "nll": 0.21671521174438005
+          },
+          "candidate": {
+            "loss_sum": 158.19799937315005,
+            "known_parent": 804,
+            "known_absent": 5,
+            "correct_parent": 769,
+            "correct_absent": 4,
+            "nll": 0.19554758884196546
+          },
+          "execution": {
+            "preparation_seconds": 6.610000000015134,
+            "fit_seconds": 28.671999999991385,
+            "mode": "ram",
+            "prepared_disk_bytes": 312641208
+          },
+          "elapsed_seconds": 36.344000000011874
+        },
+        {
+          "held_out": "6bba_cff5865f",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "1568d930e2ffd332dc231e4a298b3bec51ef8b0d9cb50611803b61f402f69d05",
+          "physical": {
+            "loss_sum": 637.3586147045219,
+            "known_parent": 1490,
+            "known_absent": 4,
+            "correct_parent": 1373,
+            "correct_absent": 4,
+            "nll": 0.42661219190396377
+          },
+          "neural": {
+            "loss_sum": 494.41701384762524,
+            "known_parent": 1490,
+            "known_absent": 4,
+            "correct_parent": 1414,
+            "correct_absent": 3,
+            "nll": 0.3309350828966702
+          },
+          "weighted_ranker": {
+            "loss_sum": 442.37869423421716,
+            "known_parent": 1490,
+            "known_absent": 4,
+            "correct_parent": 1396,
+            "correct_absent": 2,
+            "nll": 0.29610354366413466
+          },
+          "candidate": {
+            "loss_sum": 443.65345687101063,
+            "known_parent": 1490,
+            "known_absent": 4,
+            "correct_parent": 1392,
+            "correct_absent": 3,
+            "nll": 0.29695679844110484
+          },
+          "execution": {
+            "preparation_seconds": 5.5,
+            "fit_seconds": 26.405999999988126,
+            "mode": "ram",
+            "prepared_disk_bytes": 276357888
+          },
+          "elapsed_seconds": 33.639999999984866
+        },
+        {
+          "held_out": "6bba_edf14583",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "7d5a57436e6afdb5a1eea7a36064f1937a52a62001be672e76d866ff085b69d7",
+          "physical": {
+            "loss_sum": 561.0536910121327,
+            "known_parent": 736,
+            "known_absent": 9,
+            "correct_parent": 647,
+            "correct_absent": 6,
+            "nll": 0.7530922027008493
+          },
+          "neural": {
+            "loss_sum": 540.3230547292479,
+            "known_parent": 736,
+            "known_absent": 9,
+            "correct_parent": 644,
+            "correct_absent": 6,
+            "nll": 0.7252658452741583
+          },
+          "weighted_ranker": {
+            "loss_sum": 328.284965658483,
+            "known_parent": 736,
+            "known_absent": 9,
+            "correct_parent": 667,
+            "correct_absent": 6,
+            "nll": 0.44065096061541337
+          },
+          "candidate": {
+            "loss_sum": 328.4126611303172,
+            "known_parent": 736,
+            "known_absent": 9,
+            "correct_parent": 659,
+            "correct_absent": 3,
+            "nll": 0.44082236393331165
+          },
+          "execution": {
+            "preparation_seconds": 6.7810000000172295,
+            "fit_seconds": 22.437000000005355,
+            "mode": "ram",
+            "prepared_disk_bytes": 294375888
+          },
+          "elapsed_seconds": 30.5
+        },
+        {
+          "held_out": "6bba_1ebfb80d",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "92a72aa9ccb10c949b7bbd8b35336d947ba0e65d379aaeb2c5a239339e8ccb8a",
+          "physical": {
+            "loss_sum": 655.0157621756791,
+            "known_parent": 714,
+            "known_absent": 2,
+            "correct_parent": 628,
+            "correct_absent": 2,
+            "nll": 0.9148264834855854
+          },
+          "neural": {
+            "loss_sum": 543.461415235273,
+            "known_parent": 714,
+            "known_absent": 2,
+            "correct_parent": 653,
+            "correct_absent": 2,
+            "nll": 0.7590243229542919
+          },
+          "weighted_ranker": {
+            "loss_sum": 280.45936375150654,
+            "known_parent": 714,
+            "known_absent": 2,
+            "correct_parent": 651,
+            "correct_absent": 2,
+            "nll": 0.39170302199931084
+          },
+          "candidate": {
+            "loss_sum": 228.93680775940396,
+            "known_parent": 714,
+            "known_absent": 2,
+            "correct_parent": 656,
+            "correct_absent": 2,
+            "nll": 0.3197441449153687
+          },
+          "execution": {
+            "preparation_seconds": 6.14000000001397,
+            "fit_seconds": 23.89100000000326,
+            "mode": "ram",
+            "prepared_disk_bytes": 329181552
+          },
+          "elapsed_seconds": 30.76500000001397
+        },
+        {
+          "held_out": "6bba_7d3058ae",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_4f99ce20",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "21315a15913fe2c32980ac3eda63c12cec86f3099fa9a418290c8890e9cd460b",
+          "physical": {
+            "loss_sum": 527.4140455330587,
+            "known_parent": 1157,
+            "known_absent": 7,
+            "correct_parent": 1067,
+            "correct_absent": 5,
+            "nll": 0.4531048501143116
+          },
+          "neural": {
+            "loss_sum": 245.4009148614949,
+            "known_parent": 1157,
+            "known_absent": 7,
+            "correct_parent": 1120,
+            "correct_absent": 5,
+            "nll": 0.21082552823152484
+          },
+          "weighted_ranker": {
+            "loss_sum": 158.62720623855986,
+            "known_parent": 1157,
+            "known_absent": 7,
+            "correct_parent": 1134,
+            "correct_absent": 5,
+            "nll": 0.13627766858982807
+          },
+          "candidate": {
+            "loss_sum": 106.95721998488298,
+            "known_parent": 1157,
+            "known_absent": 7,
+            "correct_parent": 1131,
+            "correct_absent": 5,
+            "nll": 0.09188764603512284
+          },
+          "execution": {
+            "preparation_seconds": 5.98499999998603,
+            "fit_seconds": 21.375,
+            "mode": "ram",
+            "prepared_disk_bytes": 330326208
+          },
+          "elapsed_seconds": 28.10899999999674
+        },
+        {
+          "held_out": "6bba_4f99ce20",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_57b7cc1e"
+          ],
+          "model_sha256": "438cdd886c5b5e073862873dd954e961b881a6ab79f408e288a725c1db73e708",
+          "physical": {
+            "loss_sum": 441.26847517913313,
+            "known_parent": 965,
+            "known_absent": 14,
+            "correct_parent": 890,
+            "correct_absent": 10,
+            "nll": 0.4507338868019746
+          },
+          "neural": {
+            "loss_sum": 242.58111023900486,
+            "known_parent": 965,
+            "known_absent": 14,
+            "correct_parent": 937,
+            "correct_absent": 8,
+            "nll": 0.24778458655669547
+          },
+          "weighted_ranker": {
+            "loss_sum": 258.03943222810756,
+            "known_parent": 965,
+            "known_absent": 14,
+            "correct_parent": 904,
+            "correct_absent": 8,
+            "nll": 0.263574496657924
+          },
+          "candidate": {
+            "loss_sum": 237.46403400070562,
+            "known_parent": 965,
+            "known_absent": 14,
+            "correct_parent": 904,
+            "correct_absent": 9,
+            "nll": 0.24255774668100677
+          },
+          "execution": {
+            "preparation_seconds": 5.60999999998603,
+            "fit_seconds": 26.437999999994645,
+            "mode": "ram",
+            "prepared_disk_bytes": 333295992
+          },
+          "elapsed_seconds": 32.875
+        },
+        {
+          "held_out": "6bba_57b7cc1e",
+          "training_stems": [
+            "6bba_6479435d",
+            "6bba_df673a83",
+            "6bba_767a1e17",
+            "6bba_2312ac41",
+            "6bba_971fa5e0",
+            "6bba_cf35214c",
+            "6bba_cff5865f",
+            "6bba_edf14583",
+            "6bba_1ebfb80d",
+            "6bba_7d3058ae",
+            "6bba_4f99ce20"
+          ],
+          "model_sha256": "aac6c31ebb17c260bbef01135b44ef0321ce0a3586d09f862d17f25880ecb276",
+          "physical": {
+            "loss_sum": 2656.2716122802785,
+            "known_parent": 1308,
+            "known_absent": 66,
+            "correct_parent": 962,
+            "correct_absent": 43,
+            "nll": 1.9332398924892857
+          },
+          "neural": {
+            "loss_sum": 2575.596382030655,
+            "known_parent": 1308,
+            "known_absent": 66,
+            "correct_parent": 999,
+            "correct_absent": 21,
+            "nll": 1.8745242955099382
+          },
+          "weighted_ranker": {
+            "loss_sum": 1174.2752457686543,
+            "known_parent": 1308,
+            "known_absent": 66,
+            "correct_parent": 1030,
+            "correct_absent": 26,
+            "nll": 0.8546399168621938
+          },
+          "candidate": {
+            "loss_sum": 1178.314574017985,
+            "known_parent": 1308,
+            "known_absent": 66,
+            "correct_parent": 1023,
+            "correct_absent": 32,
+            "nll": 0.8575797481935844
+          },
+          "execution": {
+            "preparation_seconds": 4.01500000001397,
+            "fit_seconds": 19.594000000011874,
+            "mode": "ram",
+            "prepared_disk_bytes": 228558168
+          },
+          "elapsed_seconds": 26.46799999999348
+        }
+      ],
+      "failure": null,
+      "gate": {
+        "pooled": {
+          "physical": {
+            "loss_sum": 8763.342238501977,
+            "known_parent": 10754,
+            "known_absent": 161,
+            "correct_parent": 9514,
+            "correct_absent": 115,
+            "nll": 0.8028714831426456
+          },
+          "neural": {
+            "loss_sum": 7284.747574558905,
+            "known_parent": 10754,
+            "known_absent": 161,
+            "correct_parent": 9835,
+            "correct_absent": 72,
+            "nll": 0.6674070155344851
+          },
+          "candidate": {
+            "loss_sum": 3740.5810305009486,
+            "known_parent": 10754,
+            "known_absent": 161,
+            "correct_parent": 9880,
+            "correct_absent": 84,
+            "nll": 0.3427009647733347
+          }
+        },
+        "conditions": {
+          "nll_below_both": true,
+          "parent_not_lower": true,
+          "absent_not_lower": false,
+          "eight_movie_nll_wins": true,
+          "per_movie_nll_loss_bounded": true
+        },
+        "passed": false,
+        "scope": "New ranking correction LOMO only; original encoder used fitting movies"
+      },
+      "final_model": null,
+      "elapsed_seconds": 421.0
+    },
+    {
+      "arm": "full",
+      "status": "fit_failed",
+      "folds": [],
+      "failure": {
+        "held_out": "6bba_6479435d",
+        "error_type": "ValueError",
+        "error": "Frozen resident optimizer did not converge: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+        "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\scripts\\fit-focus-pair-appearance-resident.py\", line 91, in main\n    model, execution = fit([samples[s] for s in train], projection, arm,\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\research\\focus_pair_appearance_resident_fit.py\", line 40, in fit\n    raise ValueError(f'Frozen resident optimizer did not converge: {result.message}')\nValueError: Frozen resident optimizer did not converge: STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n",
+        "elapsed_seconds": 582.2969999999914
+      },
+      "gate": null,
+      "final_model": null,
+      "elapsed_seconds": 583.2809999999881
+    }
+  ],
+  "gpu_seconds": 0,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 1015.3909999999742,
+  "declared_cpu_seconds": 9000
+}

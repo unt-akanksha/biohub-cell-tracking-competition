@@ -1,0 +1,96 @@
+{
+  "status": "source_counterfactual_labels_audited",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "candidate_changed": false,
+  "oracle_graphs_exported": false,
+  "source_sha256": "de5fc76fb74ad051ae5268f87b88e831de2f9480fd1830db7a04557b1f3388d8",
+  "dataset_sha256": "e279e24348d17e60e07b8e6bb964ffab95490e502a3f70ac67ecd35928dfa1db",
+  "plan": [
+    {
+      "stem": "44b6_74d0c52e",
+      "indices": [
+        0
+      ]
+    }
+  ],
+  "records": {
+    "44b6_74d0c52e": {
+      "baseline": {
+        "counts": {
+          "edge_tp": 132,
+          "edge_fp": 8,
+          "edge_fn": 7,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "num_pred_nodes": 8695
+        },
+        "summary": {
+          "n": 1,
+          "edge_jaccard": 0.8979591836734694,
+          "division_jaccard": 0.0,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "node_recall": 1.0,
+          "adj_edge_jaccard": 0.936013848879512,
+          "n_adj": 1,
+          "score": 0.936013848879512
+        }
+      },
+      "baseline_exact_replay": true,
+      "components": [
+        {
+          "index": 0,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 132,
+              "edge_fp": 8,
+              "edge_fn": 7,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 8695
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8979591836734694,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 1.0,
+              "adj_edge_jaccard": 0.936013848879512,
+              "n_adj": 1,
+              "score": 0.936013848879512
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        }
+      ]
+    }
+  },
+  "seconds": 16.42200000002049,
+  "audited_components": 1,
+  "partial_neutral_but_official_score_nonzero": 0,
+  "tp_unchanged_fp_changed": 0,
+  "no_gate_failure_causality_claim": true
+}

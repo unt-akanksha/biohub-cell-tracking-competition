@@ -1,0 +1,54 @@
+{
+  "status": "verified_twelve_movie_quadratic_lomo",
+  "result_sha256": "2f5ccbef14fd2571fef6242473946b791f20904e3c8f6c300c844ecf44f53250",
+  "all_twelve_saved_models_replayed": true,
+  "fitting_only_normalization_replayed": true,
+  "screening_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": false,
+      "parent_not_lower": false,
+      "absent_not_lower": false,
+      "eight_movie_nll_wins": false,
+      "worst_nll_regression": false
+    },
+    "pooled": {
+      "original": {
+        "loss_sum": 7284.747574558905,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9835,
+        "correct_absent": 72,
+        "nll": 0.6674070155344851
+      },
+      "linear": {
+        "loss_sum": 6916.641878775795,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9894,
+        "correct_absent": 33,
+        "nll": 0.6336822609964081
+      },
+      "quadratic": {
+        "loss_sum": 7164.869301137885,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9889,
+        "correct_absent": 34,
+        "nll": 0.6564241228710842
+      }
+    },
+    "scope": "Fitting-domain correction LOMO only; not independent tracking validation"
+  },
+  "ranking_error_budget": {
+    "conditional_parent_nll_sum": 6317.875171327365,
+    "conditional_fraction_of_original_nll": 0.8672744122791263,
+    "original_joint_nll_sum": 7284.747574558905,
+    "oracle_presence_nll_lower_bound": 0.5788250271486363,
+    "parent_ranking_correct_ceiling": 9909,
+    "known_parent": 10754,
+    "caveat": "Analytical bound for the fixed original parent ranking only; fitting summaries, not tracking score"
+  },
+  "diagnostic_arrays_opened": false,
+  "authorized_for_submission": false
+}

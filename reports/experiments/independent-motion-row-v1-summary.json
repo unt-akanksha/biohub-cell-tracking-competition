@@ -1,0 +1,37 @@
+{
+  "kernel": "indarkarhana/biohub-independent-motion-row-v1/1",
+  "status": "completed",
+  "scope": "Matched 100-update training comparison and three-frame functionality checks; not held-out validation",
+  "numerical_tests_passed": 10,
+  "paired_input_samples": 200,
+  "inputs_identical": true,
+  "detector_unchanged": true,
+  "frozen_detector_sha256": "3c40f4c6f68e8b431d2029e7f7b2bb20af8425e2d12109a3aa2c03b4cb9046c0",
+  "control": {
+    "checkpoint_sha256": "705d73da3a955ae5e7fd4aa75ba7e41536d1f0b6c5c1e26cd4f532ae4e08a2fd",
+    "training_correct": 1174,
+    "training_positive_links": 1266,
+    "training_confident_correct": 1126,
+    "training_wrong_child_claims": 114,
+    "after_smoke_nodes": 408,
+    "after_smoke_edges": 236
+  },
+  "row": {
+    "checkpoint_sha256": "6a1a5fafffddffe97a922cce7bfb449eb36f2c651a791bb68882bffad716fde0",
+    "training_correct": 1173,
+    "training_positive_links": 1266,
+    "training_confident_correct": 1126,
+    "training_wrong_child_claims": 114,
+    "after_smoke_nodes": 408,
+    "after_smoke_edges": 234
+  },
+  "both_after_smoke_counts": {
+    "edge_tp": 13, "edge_fp": 7, "edge_fn": 3,
+    "division_tp": 0, "division_fp": 4, "division_fn": 0
+  },
+  "elapsed_launcher_seconds": 158.96691928,
+  "full_result_path": ".biohub/cache/kernel-outputs/independent-motion-row-v1/independent_motion_row/outputs/paired_result.json",
+  "full_result_sha256": "a97367150f756b1d735a62d97d00d3312cb17ba0d439ed5a209e909f376784e6",
+  "decision": "No demonstrated linking improvement; no promotion. Next compare both objectives on the existing frozen 120-movie training split with step-100 GPU gates before bounded extensions.",
+  "authorized_for_submission": false
+}

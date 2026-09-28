@@ -1,0 +1,23 @@
+{
+  "status": "authenticated_submission_confirmed_pending",
+  "competition": "biohub-cell-tracking-during-development",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "kernel_version": 2,
+  "submission_ref": 56237287,
+  "submission_date_utc": "2026-09-14T18:38:48.027000",
+  "observed_status": "SubmissionStatus.PENDING",
+  "description": "Clean licensed image ensemble plus our fixed event assignment; complete-movie pooled gains with disclosed movie regressions; no selector or metric hack; offline two-T4",
+  "submission_receipt_sha256": "1973c5c8e0df52db3a845c0ff6c01a2979c12a3a8049a1cdc30508d3a5787be9",
+  "public_score": null,
+  "private_score": null,
+  "previous_submission_ref": 56231458,
+  "previous_public_score": 0.946,
+  "evidence": "Authenticated Kaggle CLI competitions submissions, page size 5, immediately after successful one-shot submit call",
+  "strict_quality_failures_preserved": true,
+  "exploratory_entry_only": true,
+  "top_five_achieved": false,
+  "final_selection_performed": false,
+  "do_not_resubmit_while_pending": true,
+  "pending_run_reserved_hours": 12,
+  "kaggle_gpu_reserve_hours": 8
+}

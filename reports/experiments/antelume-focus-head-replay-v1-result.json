@@ -1,0 +1,76 @@
+{
+  "status": "verified_antelume_head_replay_comparison",
+  "worker": {
+    "status": "completed_antelume_frozen_head_replay",
+    "records": [
+      {
+        "stem": "6bba_f1fde7e0",
+        "frame": 0,
+        "shape": [
+          265,
+          269
+        ],
+        "exact_kaggle_replay": false,
+        "max_abs_error": 2.86102294921875e-06,
+        "real_parent_argmax_changes": 0
+      },
+      {
+        "stem": "6bba_f1fde7e0",
+        "frame": 1,
+        "shape": [
+          269,
+          251
+        ],
+        "exact_kaggle_replay": false,
+        "max_abs_error": 2.384185791015625e-06,
+        "real_parent_argmax_changes": 0
+      },
+      {
+        "stem": "6bba_23af9eeb",
+        "frame": 0,
+        "shape": [
+          100,
+          93
+        ],
+        "exact_kaggle_replay": false,
+        "max_abs_error": 1.9073486328125e-06,
+        "real_parent_argmax_changes": 0
+      },
+      {
+        "stem": "6bba_23af9eeb",
+        "frame": 1,
+        "shape": [
+          93,
+          92
+        ],
+        "exact_kaggle_replay": false,
+        "max_abs_error": 2.86102294921875e-06,
+        "real_parent_argmax_changes": 0
+      }
+    ],
+    "model_before": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+    "model_after": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+    "exact_kaggle_replay": false,
+    "torch_version": "2.5.1+cu121",
+    "numpy_version": "2.5.2",
+    "gpu": "NVIDIA A10G",
+    "peak_allocated_bytes": 35924480,
+    "gpu_memory_fraction_cap": 0.2,
+    "optimizer_run": false,
+    "new_training_data_opened": false,
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "elapsed_seconds": 10.76736078700003
+  },
+  "archive_sha256": "9582874aee6306d66359edf21faea2da0edf5d2455e719f9fed165bc510c48d9",
+  "worker_result_sha256": "67856abf43635e9cd6d95d6897d02093bc2abcb725d29bcad7ff59907344fa89",
+  "matrix_sha256": {
+    "actual_6bba_23af9eeb_0.npz": "708871f30e731ff92c56c1643a705216767d11abcb4e0df8f2691a501f9ce35f",
+    "actual_6bba_23af9eeb_1.npz": "3b6f677432dccb00a47f6980b3f9252fc3e7ab117c7b30ab1c57a84f5ac100e2",
+    "actual_6bba_f1fde7e0_0.npz": "103d06756b3c0650cc38c905c8c1be98b6293eda17c17f70b23ca97f91bcf4a0",
+    "actual_6bba_f1fde7e0_1.npz": "69e181e37fff8ea97f1b9a680e8ffab430b337dd3d68ffcab43bb4d47e65f83f"
+  },
+  "qualifies_for_original_exact_replay_protocol": false,
+  "authorized_for_submission": false
+}

@@ -1,0 +1,27 @@
+{
+  "status": "verified_exact_gt_dropout_sidecars",
+  "audit_sha256": "d27222f2c768105a149226b2b864fe3931a3f1ff5f4f4a415cd079c87c4afd2f",
+  "exact_augmented_pair_replays": 1121,
+  "counts": {
+    "eligible_pairs": 1121,
+    "eligible_retained_parent_labels": 9633,
+    "eligible_natural_nulls": 161,
+    "eligible_synthetic_nulls": 1121
+  },
+  "synthetic_difficulty": {
+    "examples": 1121,
+    "physical_correct_null": 1090,
+    "physical_correct_fraction": 0.9723461195361285,
+    "mean_null_nll": 0.07644379722264621,
+    "median_best_parent_minus_null": -11.759979048719952,
+    "parent_margin_quantiles": {
+      "q0": -158.61290893498506,
+      "q25": -23.410420889862518,
+      "q50": -11.759979048719952,
+      "q75": -6.062511209455561,
+      "q100": 4.26848462833453
+    }
+  },
+  "eligible_for_small_training_smoke": true,
+  "authorized_for_submission": false
+}

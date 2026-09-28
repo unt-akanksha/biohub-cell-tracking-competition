@@ -1,0 +1,27 @@
+{
+    "status":  "held_evaluation_completed_no_automatic_promotion",
+    "pid":  35260,
+    "fit_embryo":  "44b6",
+    "held_embryo":  "6bba",
+    "training_pid":  7572,
+    "training_start_utc":  "2026-09-14T19:14:30.2316389Z",
+    "started_utc":  "2026-09-14T20:06:49.8924205Z",
+    "evaluator_sha256":  "0d6716829382e06ae5e476d8e0789104cd9f3ac0663722c040f7f898f6390f37",
+    "fit_contract_sha256":  "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+    "gpu_used":  false,
+    "training_restart_allowed":  false,
+    "submission_allowed":  false,
+    "stages":  [
+                   {
+                       "stage":  "smoke",
+                       "status":  "complete_movie_inference_smoke_passed",
+                       "sha256":  "9975d1c49c5d9c48644be0d92df5fe540d025f0015f1c9f62ce0a0ff75115330"
+                   },
+                   {
+                       "stage":  "full",
+                       "status":  "held_embryo_complete_movie_scoring_finished",
+                       "sha256":  "c51da3b1261a9f33ab1f73810b9e9df0c7a7395c7183c8ead14dc73c7be90c01"
+                   }
+               ],
+    "updated_utc":  "2026-09-14T22:08:31.3283140Z"
+}

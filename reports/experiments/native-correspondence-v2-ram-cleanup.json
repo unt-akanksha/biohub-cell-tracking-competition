@@ -1,0 +1,12 @@
+{
+  "status": "verified_biohub_ram_duplicate_removed",
+  "remote_root": "/dev/shm/biohub-native-correspondence-v2-full",
+  "bytes": 1218965320,
+  "free_before": 6853181440,
+  "free_after": 8076480512,
+  "rsna_touched": false,
+  "gpu_reset": false,
+  "local_recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-correspondence-v2-data",
+  "manifest_sha256": "f2861ce9f21307507ed521716ca3bf9a7adf3b76ce9f8216e4407233616c693a",
+  "local_packets_verified": 2103
+}

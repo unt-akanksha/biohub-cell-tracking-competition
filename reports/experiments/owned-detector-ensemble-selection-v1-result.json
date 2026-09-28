@@ -1,0 +1,261 @@
+{
+  "status": "verified_owned_detector_ensemble_source_comparison",
+  "result": {
+    "status": "scored_complete_selection",
+    "per_movie": [
+      {
+        "edge_tp": 1019,
+        "edge_fp": 361,
+        "edge_fn": 269,
+        "division_tp": 0,
+        "division_fp": 111,
+        "division_fn": 0,
+        "num_pred_nodes": 57928,
+        "node_recall": 1.0,
+        "total_node_ratio": 1.7768563347874022,
+        "edge_jaccard": 0.6179502728926622,
+        "adj_edge_jaccard": 0.5081493871953692,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 582,
+        "edge_fp": 296,
+        "edge_fn": 142,
+        "division_tp": 0,
+        "division_fp": 89,
+        "division_fn": 0,
+        "num_pred_nodes": 8907,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.5351602895553258,
+        "edge_jaccard": 0.5705882352941176,
+        "adj_edge_jaccard": 0.5400526187724314,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 442,
+        "edge_fp": 345,
+        "edge_fn": 268,
+        "division_tp": 0,
+        "division_fp": 70,
+        "division_fn": 0,
+        "num_pred_nodes": 83493,
+        "node_recall": 0.994572591587517,
+        "total_node_ratio": 4.11756052712228,
+        "edge_jaccard": 0.418957345971564,
+        "adj_edge_jaccard": 0.2464491229395215,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 321,
+        "edge_fp": 197,
+        "edge_fn": 117,
+        "division_tp": 0,
+        "division_fp": 50,
+        "division_fn": 1,
+        "num_pred_nodes": 33226,
+        "node_recall": 0.9956709956709957,
+        "total_node_ratio": 1.068737936616649,
+        "edge_jaccard": 0.5055118110236221,
+        "adj_edge_jaccard": 0.4514858460387489,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 891,
+        "edge_fp": 522,
+        "edge_fn": 254,
+        "division_tp": 2,
+        "division_fp": 135,
+        "division_fn": 1,
+        "num_pred_nodes": 30719,
+        "node_recall": 1.0,
+        "total_node_ratio": 2.5844807467911317,
+        "edge_jaccard": 0.5344931013797241,
+        "adj_edge_jaccard": 0.39635438839886633,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 415,
+        "edge_fp": 73,
+        "edge_fn": 43,
+        "division_tp": 1,
+        "division_fp": 39,
+        "division_fn": 1,
+        "num_pred_nodes": 31567,
+        "node_recall": 0.9957537154989384,
+        "total_node_ratio": 1.2515691868758916,
+        "edge_jaccard": 0.7815442561205274,
+        "adj_edge_jaccard": 0.6837285852064982,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 577,
+        "edge_fp": 161,
+        "edge_fn": 122,
+        "division_tp": 0,
+        "division_fp": 66,
+        "division_fn": 1,
+        "num_pred_nodes": 33531,
+        "node_recall": 0.9986187845303868,
+        "total_node_ratio": 1.240478417746893,
+        "edge_jaccard": 0.6709302325581395,
+        "adj_edge_jaccard": 0.587702785227912,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1240,
+        "edge_fp": 108,
+        "edge_fn": 108,
+        "division_tp": 2,
+        "division_fp": 55,
+        "division_fn": 2,
+        "num_pred_nodes": 87569,
+        "node_recall": 1.0,
+        "total_node_ratio": 1.940036931341279,
+        "edge_jaccard": 0.8516483516483516,
+        "adj_edge_jaccard": 0.686425426176979,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ],
+    "source_manifest_run_id": "owned-detector-ensemble-selection-v1",
+    "summary": {
+      "n": 8,
+      "edge_jaccard": 0.6183928772681168,
+      "division_jaccard": 0.007987220447284345,
+      "division_tp": 5,
+      "division_fp": 615,
+      "division_fn": 6,
+      "node_recall": 0.9980770109109798,
+      "adj_edge_jaccard": 0.5031141448871961,
+      "n_adj": 8,
+      "score": 0.5039128669319245
+    },
+    "by_embryo": {
+      "6bba": {
+        "n": 8,
+        "edge_jaccard": 0.6183928772681168,
+        "division_jaccard": 0.007987220447284345,
+        "division_tp": 5,
+        "division_fp": 615,
+        "division_fn": 6,
+        "node_recall": 0.9980770109109798,
+        "adj_edge_jaccard": 0.5031141448871961,
+        "n_adj": 8,
+        "score": 0.5039128669319245
+      }
+    },
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "validation_scope": "Eight source-embryo selection movies excluded from this 120-movie fit",
+    "target_audit_opened": false,
+    "embryo_audit": null,
+    "owned_transfer_diagnostic": null,
+    "authorized_for_submission": false
+  },
+  "cpu_execution": "kaggle_cpu_scorer",
+  "cpu_kernel_ref": "indarkarhana/biohub-owned-detector-ensemble-scoring-v1/1",
+  "verified_cpu_state": {
+    "kernel_ref": "indarkarhana/biohub-owned-detector-ensemble-scoring-v1/1",
+    "status": "COMPLETE",
+    "version": 1
+  },
+  "versus_frozen_d4": {
+    "summary_deltas": {
+      "score": -0.12592666588890689,
+      "edge_jaccard": -0.06143716522126086,
+      "node_recall": 0.040481704300930565,
+      "division_jaccard": 0.0007408436356901417
+    },
+    "per_movie": [
+      {
+        "stem": "6bba_283bf9f1",
+        "adjusted_edge_delta": -0.10351517940304533,
+        "recall_delta": 0.04023845007451565
+      },
+      {
+        "stem": "6bba_5b28472a",
+        "adjusted_edge_delta": -0.03528869029846793,
+        "recall_delta": 0.005427408412483015
+      },
+      {
+        "stem": "6bba_c73a1d11",
+        "adjusted_edge_delta": -0.13875583265807048,
+        "recall_delta": 0.13025780189959302
+      },
+      {
+        "stem": "6bba_67ebd073",
+        "adjusted_edge_delta": -0.14146492156482576,
+        "recall_delta": 0.03679653679653683
+      },
+      {
+        "stem": "6bba_5c039895",
+        "adjusted_edge_delta": -0.21499917879736724,
+        "recall_delta": 0.008517887563884163
+      },
+      {
+        "stem": "6bba_fc5f39dc",
+        "adjusted_edge_delta": -0.02003014022827243,
+        "recall_delta": 0.10191082802547768
+      },
+      {
+        "stem": "6bba_87289e13",
+        "adjusted_edge_delta": -0.11639184793380253,
+        "recall_delta": 0.0
+      },
+      {
+        "stem": "6bba_cdcfe533",
+        "adjusted_edge_delta": -0.11466722139213081,
+        "recall_delta": 0.0007047216349541641
+      }
+    ],
+    "worst_movie_score_delta": -0.13875583265807048,
+    "regressions": [
+      "6bba_283bf9f1",
+      "6bba_5b28472a",
+      "6bba_c73a1d11",
+      "6bba_67ebd073",
+      "6bba_5c039895",
+      "6bba_fc5f39dc",
+      "6bba_87289e13",
+      "6bba_cdcfe533"
+    ],
+    "passes_predeclared_source_gate": false
+  },
+  "counts": {
+    "baseline": {
+      "edge_tp": 5440,
+      "edge_fp": 1192,
+      "edge_fn": 1370,
+      "division_tp": 2,
+      "division_fp": 265,
+      "division_fn": 9,
+      "num_pred_nodes": 219373
+    },
+    "ensemble": {
+      "edge_tp": 5487,
+      "edge_fp": 2063,
+      "edge_fn": 1323,
+      "division_tp": 5,
+      "division_fp": 615,
+      "division_fn": 6,
+      "num_pred_nodes": 366940
+    }
+  },
+  "authorized_for_submission": false,
+  "new_target_movies_opened": 0,
+  "source_sha256": {
+    "score": "c4cafd3bbdb4f696d23be1973e7b3ad3f34026c621180dec3ce4a653f5be643b",
+    "manifest": "7dc253ce0f1234ab2225496d3c6a23e83aa18286d362f69cf988a7d9ae5308a2",
+    "terminal": "0dcde46375a1a03a8e48ec0ebf52ecd3b8cda5db39d104dd1ccd706d227a46c0",
+    "baseline": "db9d75ad43a9bc74d3f38f3aef48e5e617510a6abb93205a0387e726415d080f",
+    "notebook": "5dde4d126d150fb9c861df451e2b813f361b052c6bcaed93948df3aa4ee03bc1",
+    "probe": "b73d85733b238d09401744dfbebeb6f1e6b39201001836ad6638d875ca36abe8"
+  },
+  "caveat": "Repeated source-selection development evidence, not an independent private-test estimate. No new target access or submission authorized by this report."
+}

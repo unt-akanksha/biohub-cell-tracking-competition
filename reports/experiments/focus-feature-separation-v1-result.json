@@ -1,0 +1,140 @@
+{
+  "status": "completed_fitting_only_feature_separation_audit",
+  "run_id": "focus-feature-separation-v1",
+  "records": [
+    {
+      "stem": "6bba_6479435d",
+      "pairs": 492,
+      "mean_true_cosine": 0.9995204242868763,
+      "mean_wrong_cosine": 0.9979314918343738,
+      "raw_cosine_pairwise_accuracy": 0.758130081300813,
+      "centered_cosine_pairwise_accuracy": 0.7073170731707317,
+      "l2_pairwise_accuracy": 0.717479674796748,
+      "physical_pairwise_accuracy": 0.8638211382113821,
+      "raw_cosine_margin_quantiles": [
+        -0.02270154152845416,
+        9.37592427815992e-06,
+        0.00033052775538083834,
+        0.0012346260370678097,
+        0.13047287934560614
+      ],
+      "centered_cosine_margin_quantiles": [
+        -1.9916226080527624,
+        -0.0036974754316847214,
+        0.038032786531451424,
+        1.5703306704974351,
+        1.9984013930061457
+      ]
+    },
+    {
+      "stem": "6bba_df673a83",
+      "pairs": 631,
+      "mean_true_cosine": 0.9996374582339626,
+      "mean_wrong_cosine": 0.9981484522996521,
+      "raw_cosine_pairwise_accuracy": 0.8415213946117274,
+      "centered_cosine_pairwise_accuracy": 0.716323296354992,
+      "l2_pairwise_accuracy": 0.768621236133122,
+      "physical_pairwise_accuracy": 0.971473851030111,
+      "raw_cosine_margin_quantiles": [
+        -0.003898982727246425,
+        0.00012200732404771264,
+        0.0005459829733354127,
+        0.0013056250752569443,
+        0.1760057807234997
+      ],
+      "centered_cosine_margin_quantiles": [
+        -1.9663508502898082,
+        -0.001272018280662257,
+        0.031202948124968377,
+        1.7169986252675475,
+        1.9980783738571288
+      ]
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "pairs": 587,
+      "mean_true_cosine": 0.9996810747266086,
+      "mean_wrong_cosine": 0.9990583158080314,
+      "raw_cosine_pairwise_accuracy": 0.7597955706984668,
+      "centered_cosine_pairwise_accuracy": 0.7359454855195912,
+      "l2_pairwise_accuracy": 0.7410562180579217,
+      "physical_pairwise_accuracy": 0.7836456558773425,
+      "raw_cosine_margin_quantiles": [
+        -0.010969654846503474,
+        8.913304492152996e-06,
+        0.00022544843163097017,
+        0.0007500122561481248,
+        0.013156130018224799
+      ],
+      "centered_cosine_margin_quantiles": [
+        -1.9951165933380697,
+        -0.00036963315163474064,
+        0.07600429240739304,
+        1.77043508623423,
+        1.9981993094963335
+      ]
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "pairs": 1108,
+      "mean_true_cosine": 0.9994755394747501,
+      "mean_wrong_cosine": 0.9959205774060114,
+      "raw_cosine_pairwise_accuracy": 0.8077617328519856,
+      "centered_cosine_pairwise_accuracy": 0.7581227436823105,
+      "l2_pairwise_accuracy": 0.7879061371841155,
+      "physical_pairwise_accuracy": 0.9792418772563177,
+      "raw_cosine_margin_quantiles": [
+        -0.008964859799807878,
+        0.00012200298704473367,
+        0.0007496465186855317,
+        0.002895377100155222,
+        0.14460479199395804
+      ],
+      "centered_cosine_margin_quantiles": [
+        -1.9680314236985046,
+        0.0009015364100664891,
+        0.11358628325826248,
+        1.4209637447117893,
+        1.9986184967172405
+      ]
+    }
+  ],
+  "pooled": {
+    "pairs": 2818,
+    "mean_true_cosine": 0.9995624462375146,
+    "mean_wrong_cosine": 0.9974241300669864,
+    "raw_cosine_pairwise_accuracy": 0.7966643009226402,
+    "centered_cosine_pairwise_accuracy": 0.7352732434350603,
+    "l2_pairwise_accuracy": 0.7615330021291696,
+    "physical_pairwise_accuracy": 0.9166075230660042,
+    "raw_cosine_margin_quantiles": [
+      -0.02270154152845416,
+      5.894414971635564e-05,
+      0.0004613309647945596,
+      0.001629014313876631,
+      0.1760057807234997
+    ],
+    "centered_cosine_margin_quantiles": [
+      -1.9951165933380697,
+      -0.0009214900515999991,
+      0.06983209752045644,
+      1.6013358669440934,
+      1.9986184967172405
+    ]
+  },
+  "source_hashes": {
+    "research/focus_feature_separation.py": "c6da79be7ce2c6ee7f11269fb0d27253254aa7339c03995b22247bd7858eebcb",
+    "scripts/audit-focus-feature-separation.py": "174d100f723d29b2c064c072a6470c55f550161a1e3bd580de4c1c6ff45c94be",
+    "reports/experiments/focus-feature-separation-v1-design.md": "50506465226498cd36ff6cfd3b52ac86f2ab6a4e2d6b09d6867fd3a44db3c2fd"
+  },
+  "feature_receipt_sha256": "c0f5482b29f6861bc879dce25f35db9faf97298fc409dbb28efdcdb0c3e6e3e7",
+  "diagnostic_representation_statistics_computed": false,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "predictions_changed": false,
+  "optimizer_run": false,
+  "gpu_seconds": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 21.25,
+  "caveat": "Pairwise cosine/L2 versus closest incorrect physical candidate; not the transformer, tracking metric, or proof of feature collapse"
+}

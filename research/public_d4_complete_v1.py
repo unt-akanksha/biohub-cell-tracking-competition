@@ -174,6 +174,20 @@ ENV_OVERRIDABLE = {
     # Fusion weight on the bidirectional edge pass. Never probed in either
     # direction; guarded, so its expectation moves in lockstep.
     "BIOHUB_BIDIRECTIONAL_EDGE_WEIGHT": (0.0, 1.0),
+    # Safe-division gates. Added 2026-09-28 after decomposing the proxy: the
+    # edge term is saturated at 0.9165 while division_jaccard sits at 0.1558,
+    # contributing 0.0156 of a possible 0.1000. Ranges bracket both v3's shipped
+    # values and the looser settings that amanatar/optimized-biohub-max-score,
+    # the top-sorting public notebook, reached independently.
+    "BIOHUB_SAFE_DIV_MAX_UM": (4.0, 14.0),
+    "BIOHUB_SAFE_DIV_SISTER_MAX_UM": (6.0, 20.0),
+    "BIOHUB_SAFE_DIV_DIVERGE_UM": (0.5, 4.0),
+    "BIOHUB_SAFE_DIV_SISTER_SYMMETRY_TAU": (0.0, 1.0),
+    "BIOHUB_SAFE_DIV_EXISTING_CHILD_MAX_UM": (5.0, 16.0),
+    "BIOHUB_SAFE_DIV_FRAME_FRAC_CAP": (0.0, 0.05),
+    "BIOHUB_SAFE_DIV_GLOBAL_FRAC_CAP": (0.0, 0.03),
+    "BIOHUB_DEEPCENTER_SAFE_DIV_THRESHOLD": (0.02, 0.60),
+    "BIOHUB_ILP_DIVISION_WEIGHT": (0.5, 4.0),
 }
 
 _PP_CANDIDATES_ANCHOR = "PP_CANDIDATES: dict[str, dict] = {"

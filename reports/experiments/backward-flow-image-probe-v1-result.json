@@ -1,0 +1,40 @@
+{
+  "status": "verified_image_motion_probe_not_tracking_validation",
+  "checkpoint_sha256": "3061581564e837bff9125ed8dad089497eae4d72ccb0b52cf6dcfc5c4af136bc",
+  "parameters": 1488019,
+  "fitting_windows": 9273,
+  "steps": 100,
+  "diagnostic_links": 172,
+  "launcher_seconds": 193.403199459,
+  "optimization_seconds": 30.496385264999958,
+  "small_fit_gate_passed": true,
+  "errors": {
+    "mae_um": 0.9974909953830778,
+    "endpoint_um": 2.1084036043910093,
+    "zero_mae_um": 1.0022407945736433,
+    "zero_endpoint_um": 2.122800939304884,
+    "median_mae_um": 1.0022407945736433,
+    "median_endpoint_um": 2.122800939304884
+  },
+  "observed_training_links": 1765,
+  "authorized_for_submission": false,
+  "caveat": "24 short training-only diagnostic windows; not complete movies, embryo audit or tracking score",
+  "errors_vs_sparse_probe": {
+    "mae_um": 0.00225446858378342,
+    "endpoint_um": 0.0021826793807884215
+  },
+  "input_replay_identical": true,
+  "decision": "no_paired_probe_gain",
+  "image_profile": {
+    "image_weight": 0.25,
+    "smoothness_weight": 0.01
+  },
+  "control_checkpoint_sha256": "c1203ffb03ac98b4aa5b332ec26b4469ba5b9e784e6e095f03a41c533bba5884",
+  "source_sha256": {
+    "result": "3ccd3d2316d789270cfcb6e39455fd7116c8d670c8047454e27ac607ef182e6f",
+    "terminal": "71cbe0b8aaf6695d4efc7cee43c76f0a63b9290f54e3efa16dc925ca82817974",
+    "control": "4dddfaf9f8bb14e90056e0ecf6dd3b65dfb4ed2fa001d8f9ae3ff3f12f2feb38",
+    "control_terminal": "50c72cb152b191f53580b58956fdb92581f76c8b5ddaa353c17717c0b63c3f63"
+  },
+  "notebook_sha256": "2ce5a2410f38667ecddda09c0a2ad218c06bcf355fe1d8a5419901916f86e843"
+}

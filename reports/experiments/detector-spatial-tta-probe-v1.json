@@ -1,0 +1,86 @@
+{
+  "status": "verified_detector_tta_probe_not_selection",
+  "result": {
+    "status": "passed_detector_tta_functionality",
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "control": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 292,
+      "predicted_edges": 172,
+      "scorer_counts": {
+        "edge_tp": 12,
+        "edge_fp": 6,
+        "edge_fn": 4,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 292
+      },
+      "elapsed_seconds": 5.556169325000042,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": null,
+      "pre_motion_patch_receipt": null,
+      "standalone_image_flow": true
+    },
+    "candidate": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 269,
+      "predicted_edges": 160,
+      "scorer_counts": {
+        "edge_tp": 14,
+        "edge_fp": 5,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 269
+      },
+      "elapsed_seconds": 2.366140945999973,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": null,
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "encode_calls": 2,
+        "features": "native unchanged",
+        "logits": "inverse-aligned XY D4 arithmetic mean",
+        "maximum_mean_absolute_logit_delta": 0.2008494883775711
+      },
+      "standalone_image_flow": true
+    },
+    "detector_coordinates_may_change": true,
+    "linking_policy": {
+      "neural_weight": 0.0,
+      "spatial_weight": 1.0,
+      "null_logit": -4.5
+    },
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "launcher_seconds": 64.41357184500009,
+  "authorized_for_submission": false,
+  "source_sha256": {
+    "result": "f837172fa6d628ef6cffc8843c1de26686a12c31926518325261cfb983071fe1",
+    "terminal": "044f6cbf4690caf40bb68a3eeddd71d39ec8363408cf41dd2c67f477b2b66924"
+  }
+}

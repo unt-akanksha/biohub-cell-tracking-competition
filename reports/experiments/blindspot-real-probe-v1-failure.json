@@ -1,0 +1,17 @@
+{
+  "status": "failed_functional_assertion_after_training",
+  "kernel_ref": "indarkarhana/biohub-blindspot-real-probe-v1/1",
+  "notebook_sha256": "4aab44d86d15688621f2cc983e39604e609de28b31751522fc109754412f3063",
+  "launcher_elapsed_seconds": 82.018471041,
+  "observed_training_steps": 100,
+  "error": "Real trained model failed nontrivial blind spot check",
+  "assertion": "center gradient must be zero AND total input gradient at one chosen output must be positive",
+  "interpretation": "The assertion combines two conditions. Without saved derivatives its exact failing branch is unknown. An inactive local ReLU can have zero total gradient without global model collapse; this assertion was too narrow for that case.",
+  "recoverable_outputs": ["identity.json", "patch_inventory.json"],
+  "checkpoint_recoverable": false,
+  "diagnostic_score_saved": false,
+  "repair": "Keep center-exclusion requirements; assess actual full-input response separately across three training samples and15 center probes. Save resumable snapshots every20 steps, final checkpoint and diagnostic scores before functional audit.",
+  "model_or_optimizer_settings_changed": false,
+  "proxy_acceptance_thresholds_changed": false,
+  "authorized_for_submission": false
+}

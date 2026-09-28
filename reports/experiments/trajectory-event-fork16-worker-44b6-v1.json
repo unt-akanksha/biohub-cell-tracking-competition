@@ -1,0 +1,43 @@
+{
+  "status": "local_worker_overlay_draft_only",
+  "fit_embryo": "44b6",
+  "source_sha256": "48f29c0c0f0fcbcb5e37cbb97a037190e039d5e1fa3d34266fde926ec7e272fe",
+  "adapter_sha256": "d5a98a454c7c56ed88227de09b1554f10e8730b705d4c56bce8e700704133d20",
+  "overlays_sha256": "4e1bebb0c1f27b626fc4b3cb0c26e86e9c08d7eef195c646476c8d7091cbaa2b",
+  "overlay_file_sha256": {
+    "portable-worker.py": "9152744f047b01b0e53339e11aae84de4c1d35a253cad0ee992fb77cd3c92092",
+    "run-trajectory-two-gpu-v1.py": "c9f56022f50126608dc335627214edc27bc78c5d37d4ae652d76a48f60bb65f7",
+    "trajectory_work_slots_v1.py": "95d9a909d46dcef9bc3289d3b7536a17252438e4ddde30c8b94268731d053da2",
+    "NOTICE.txt": "dff8a9a85b8de90a91cdb8a13284b1e5ae3ec733fe1f58c7a5f8beacfce4725b",
+    "public-predictor-original.py": "ad168912af87e8d41b85f56d8e265b6a1d3af128f8e06eb1010846f3a3963807",
+    "structured-trajectory.py": "a07d605e09b375e973e4e56bf26faca4d1d4ce10390f40e5eb50d33077d5a661",
+    "structured-trajectory-model.json": "c8411cf313a62f3a7d0f3550f68ca84d4dc97970cf31eefe3ff24bfe810402d4",
+    "event-trajectory.py": "eac9ee4f7ed8b5192167e94a39910e8343ff1e1f90880f95dd54360ef9abc161",
+    "event-trajectory-model.json": "caf390485927481c11f965df64edba7614f94b95dfe82dc601e4ab05d272ec12"
+  },
+  "changed_overlay_files": [
+    "NOTICE.txt",
+    "event-trajectory-model.json",
+    "event-trajectory.py",
+    "portable-worker.py"
+  ],
+  "parent_contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "parent_overlay_sha256": "d975ea7e7579edc185d463c7dc43bc9def4de6e6f543ea842685dfb097b5f623",
+  "fit_sha256": "db22184988a00299c0f5827ec860277831705efeb363fa74af72429e46582c31",
+  "portable_smoke_sha256": "0f35ed01f9aa14b1fd3856aacc2e3e61a86d74c7b9f95bf2185a4b41073525a2",
+  "exact_model_weights_preserved": true,
+  "inference_deadlines_match_frozen_evaluator": true,
+  "event_per_frame_seconds": 10.0,
+  "event_max_seconds": 600.0,
+  "max_fork_children": 16,
+  "full_quality_decision": "pending_separate_evaluation",
+  "global_runtime_projection_required": true,
+  "notebook_created": false,
+  "platform_runtime_accepted": false,
+  "fresh_quota_check_required": true,
+  "required_kaggle_gpu_reserve_hours": 8,
+  "gpu_launched": false,
+  "authorized_for_submission": false,
+  "input_parent_runtime_required": true,
+  "pending_submission_changed": false
+}

@@ -1,0 +1,79 @@
+{
+  "status": "fitted_training_only_residual_gaussian",
+  "training_stems": [
+    "6bba_f1fde7e0",
+    "6bba_23af9eeb"
+  ],
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "residuals": 438,
+      "sample_sha256": "cf970302a726434df62ed45a55b2ef47648aaacd7d56c1b33b65b27faae2b5df",
+      "mean_um": [
+        0.5856035805733776,
+        1.1729167251862036,
+        1.5239005938467898
+      ],
+      "variance_um2": [
+        3.3862360826517386,
+        3.5619943677458172,
+        5.894311495287286
+      ],
+      "matched_training_counts_replayed": true
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "residuals": 490,
+      "sample_sha256": "6531abde5b1b10c1aa76552a9b1b2a7250ad3497db7a806796a4035398e6944b",
+      "mean_um": [
+        0.7733932354316234,
+        -0.11022156072039233,
+        -0.19011629142476857
+      ],
+      "variance_um2": [
+        1.8310612109393263,
+        0.5355708061125509,
+        0.33321294896587045
+      ],
+      "matched_training_counts_replayed": true
+    }
+  ],
+  "parameters": {
+    "mean_um": [
+      0.6847597560912013,
+      0.49539758715362603,
+      0.6188701264081437
+    ],
+    "variance_um2": [
+      2.573865493861958,
+      2.3743091105305036,
+      3.6901129377029953
+    ],
+    "unconstrained_variance_um2": [
+      2.573865493861958,
+      2.3743091105305036,
+      3.6901129377029953
+    ],
+    "variance_floor_um2": [
+      0.4401041666666667,
+      0.027506510416666668,
+      0.027506510416666668
+    ],
+    "observations": 928,
+    "method": "Pooled diagonal Gaussian maximum likelihood with native-voxel variance floor"
+  },
+  "source_hashes": {
+    "research/focus_residual_calibration.py": "72beb76ae18c77da58f0535445fb12ca1a4bbd1aedda41fb69832b15c12044e9",
+    "scripts/score-focus-residual-calibration.py": "67493d5d2d6c9a8f155c3dae8052f8d3877296ecb1c40f3ad267859e7a49419c",
+    "scripts/score-focus-source-flow.py": "c5e84dd08c02238810150938e1280a178f9e5b993362d9b9787454d221a6610e",
+    "scripts/score-focus-owned-flow-full.py": "ee96594f4d8013e8dbad0f484e9d753af834f652913b577a6ce3f5fe503ddb2c",
+    "scripts/score-focus-division-preserving-assignment.py": "3e1370a206ce8e8e414e007179ca7c6edac567c91a58e19378289c6b712dfd39",
+    "research/focus_source_flow_comparison.py": "e591536221950213b73d937a44b316494881e0ae6aba937f933dd2b33fde4fed",
+    "reports/experiments/focus-residual-calibration-v1-design.md": "837d3bf619e2c737b8a6fd872be859321fa940a4ddf972598999b1b23c2dec62"
+  },
+  "source_selection_labels_used": false,
+  "target_embryo_labels_used": false,
+  "model_checkpoint_sha256": "3006ee0f904640b16dd988d6404a1b3ac4f933ca68ca912d69fe4598f96d4788",
+  "raw_detector_checkpoint_sha256": "b14a7bd272f824adb1a1073bc3f2af17a95919d5a0c3f1d9011a8d82378d8f3a",
+  "authorized_for_submission": false
+}

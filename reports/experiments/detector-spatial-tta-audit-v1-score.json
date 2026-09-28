@@ -1,0 +1,143 @@
+{
+  "status": "verified_initial_embryo_audit",
+  "result": {
+    "status": "scored_complete_embryo_audit",
+    "per_movie": [
+      {
+        "edge_tp": 142,
+        "edge_fp": 30,
+        "edge_fn": 56,
+        "division_tp": 0,
+        "division_fp": 9,
+        "division_fn": 0,
+        "num_pred_nodes": 58677,
+        "node_recall": 0.87,
+        "total_node_ratio": 0.11320432555492317,
+        "edge_jaccard": 0.6228070175438597,
+        "adj_edge_jaccard": 0.6157565727066672,
+        "stem": "44b6_66f9292d",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 150,
+        "edge_fp": 51,
+        "edge_fn": 48,
+        "division_tp": 0,
+        "division_fp": 12,
+        "division_fn": 0,
+        "num_pred_nodes": 37652,
+        "node_recall": 0.935,
+        "total_node_ratio": 0.15210672868027295,
+        "edge_jaccard": 0.6024096385542169,
+        "adj_edge_jaccard": 0.5932465826096222,
+        "stem": "44b6_40c45f5a",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 259,
+        "edge_fp": 58,
+        "edge_fn": 137,
+        "division_tp": 0,
+        "division_fp": 11,
+        "division_fn": 0,
+        "num_pred_nodes": 40998,
+        "node_recall": 0.7975,
+        "total_node_ratio": 0.28371481353915523,
+        "edge_jaccard": 0.5704845814977973,
+        "adj_edge_jaccard": 0.5542990888311363,
+        "stem": "44b6_3bb3690f",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 42,
+        "edge_fp": 17,
+        "edge_fn": 28,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 0,
+        "num_pred_nodes": 39045,
+        "node_recall": 0.8309859154929577,
+        "total_node_ratio": 0.39655912440088703,
+        "edge_jaccard": 0.4827586206896552,
+        "adj_edge_jaccard": 0.4636143870978882,
+        "stem": "44b6_0c582fdc",
+        "embryo": "44b6"
+      }
+    ],
+    "source_manifest_run_id": "detector-spatial-tta-selection-v1",
+    "summary": {
+      "n": 4,
+      "edge_jaccard": 0.5825147347740668,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 36,
+      "division_fn": 0,
+      "node_recall": 0.8583714788732395,
+      "adj_edge_jaccard": 0.5698400153769825,
+      "n_adj": 4,
+      "score": 0.5698400153769825
+    },
+    "by_embryo": {
+      "44b6": {
+        "n": 4,
+        "edge_jaccard": 0.5825147347740668,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 36,
+        "division_fn": 0,
+        "node_recall": 0.8583714788732395,
+        "adj_edge_jaccard": 0.5698400153769825,
+        "n_adj": 4,
+        "score": 0.5698400153769825
+      }
+    },
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "validation_scope": "First four complete44b6 movies: embryo excluded from training and source selection; frozen candidate audit, not tuning",
+    "target_audit_opened": true,
+    "embryo_audit": {
+      "version": 1,
+      "stems": [
+        "44b6_66f9292d",
+        "44b6_40c45f5a",
+        "44b6_3bb3690f",
+        "44b6_0c582fdc"
+      ],
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "selection_report_sha256": "db9d75ad43a9bc74d3f38f3aef48e5e617510a6abb93205a0387e726415d080f",
+      "use": "One frozen candidate audit; not fitting, threshold tuning or submission authorization"
+    },
+    "authorized_for_submission": false
+  },
+  "counts": {
+    "edge_tp": 593,
+    "edge_fp": 156,
+    "edge_fn": 269,
+    "division_tp": 0,
+    "division_fp": 36,
+    "division_fn": 0,
+    "num_pred_nodes": 176372
+  },
+  "worst_movie": {
+    "edge_tp": 42,
+    "edge_fp": 17,
+    "edge_fn": 28,
+    "division_tp": 0,
+    "division_fp": 4,
+    "division_fn": 0,
+    "num_pred_nodes": 39045,
+    "node_recall": 0.8309859154929577,
+    "total_node_ratio": 0.39655912440088703,
+    "edge_jaccard": 0.4827586206896552,
+    "adj_edge_jaccard": 0.4636143870978882,
+    "stem": "44b6_0c582fdc",
+    "embryo": "44b6"
+  },
+  "unaudited_target_movies": 65,
+  "authorized_for_submission": false,
+  "caveat": "Frozen first-four complete embryo-held-out audit, not full target69, reciprocal fold, public-best comparison or hidden-test runtime verification",
+  "source_sha256": {
+    "result": "1a95947dd4e37a2e914d04990ac829a71609a3b66ee002fc6bf8f9640b085ee4",
+    "manifest": "cbc49f2ba442b9ff1f8cfc276e7e6291d852bc22929f362e540bae486bd84ac5"
+  }
+}

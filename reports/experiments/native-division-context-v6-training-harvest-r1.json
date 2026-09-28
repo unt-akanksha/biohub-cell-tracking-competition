@@ -1,0 +1,40 @@
+{
+  "status": "verified_backup",
+  "archive_sha256": "69c096c85b7704156c005bb9e8b2ba8668b614c58956d1ac14d8ae4d58ef95d7",
+  "records": [
+    {
+      "group": "native-division-context-v6-training-full",
+      "path": "44b6-resnet3d-control/HISTORY.json",
+      "bytes": 167,
+      "sha256": "912cbde23ce71510edd94bf1beadefcd3cc7c5a4479881e4e4ebf41e15b695b0"
+    },
+    {
+      "group": "native-division-context-v6-training-full",
+      "path": "PROGRESS.json",
+      "bytes": 319,
+      "sha256": "01894adc5d542f2267c276345111f37bb70e886507f0f368bf4b50a85c80321f"
+    },
+    {
+      "group": "native-division-context-v6-training-full",
+      "path": "RESULT.json",
+      "bytes": 383,
+      "sha256": "8877fe60184e494ca652c2b37c032e772d6d45ac83b055abac4da089c4d9899c"
+    },
+    {
+      "group": "native-division-context-v6-training-full",
+      "path": "resume.pt",
+      "bytes": 116118693,
+      "sha256": "1164835459e3e8c754e19dee80896e5fd059018503bbc8e3ec9b4d50a0df473e"
+    },
+    {
+      "group": "native-division-context-v6-numeric-diagnostic",
+      "path": "RESULT.json",
+      "bytes": 707,
+      "sha256": "ea0bbc5370543b49547dce70dc3839473fbfca4e4573edce4fac9cc88e37b41d"
+    }
+  ],
+  "bytes": 116120269,
+  "new_or_recovered_files": 5,
+  "replaced_incomplete_files": 0,
+  "remote_files_deleted": false
+}

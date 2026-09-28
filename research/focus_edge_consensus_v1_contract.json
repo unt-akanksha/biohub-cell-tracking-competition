@@ -1,0 +1,19 @@
+{
+  "run_id": "focus-edge-consensus-v1",
+  "status": "frozen_before_repair_scores",
+  "hypothesis": "External learned links can fill unambiguous baseline track breaks without replacing its detector or existing links.",
+  "coordinate_matching": "Mutual nearest neighbors within each frame, uniquely nearest in both directions, at most 3.0 micrometers; reject ties",
+  "radius_provenance": "Reuse the earlier frozen FOCUS bridge 3.0 micrometer duplicate-exclusion radius; no radius sweep",
+  "edge_rule": "One-frame external nondivision link, both endpoints matched to baseline nodes; baseline source has no outgoing edge, target has no incoming edge; reject proposal conflicts",
+  "node_changes_allowed": false,
+  "existing_edge_changes_allowed": false,
+  "division_additions_allowed": false,
+  "labels_read_during_repair": false,
+  "estimated_node_counts_read_during_repair": false,
+  "promotion_gate": "Diagnostic positive pooled score delta, no per-movie adjusted-edge regression, at least one correct added link and zero added false links; passing does not authorize submission",
+  "validation_scope": "Four already-open base-training diagnostic movies only",
+  "independent_validation_required": true,
+  "authorized_for_submission": false,
+  "authorized_for_production_promotion": false,
+  "gpu_budget_hours": 0
+}

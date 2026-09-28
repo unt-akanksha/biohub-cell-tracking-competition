@@ -1,0 +1,186 @@
+{
+  "status": "verified_exposed_target_transfer_diagnostic",
+  "result": {
+    "status": "scored_exposed_transfer_diagnostic",
+    "per_movie": [
+      {
+        "edge_tp": 157,
+        "edge_fp": 30,
+        "edge_fn": 41,
+        "division_tp": 0,
+        "division_fp": 10,
+        "division_fn": 0,
+        "num_pred_nodes": 59465,
+        "node_recall": 0.91,
+        "total_node_ratio": 0.12815405046480743,
+        "edge_jaccard": 0.6885964912280702,
+        "adj_edge_jaccard": 0.6797718482793971,
+        "stem": "44b6_66f9292d",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 156,
+        "edge_fp": 38,
+        "edge_fn": 42,
+        "division_tp": 0,
+        "division_fp": 6,
+        "division_fn": 0,
+        "num_pred_nodes": 34117,
+        "node_recall": 0.915,
+        "total_node_ratio": 0.0439399039197087,
+        "edge_jaccard": 0.6610169491525424,
+        "adj_edge_jaccard": 0.6581124470290363,
+        "stem": "44b6_40c45f5a",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 241,
+        "edge_fp": 70,
+        "edge_fn": 155,
+        "division_tp": 0,
+        "division_fp": 13,
+        "division_fn": 0,
+        "num_pred_nodes": 29887,
+        "node_recall": 0.78,
+        "total_node_ratio": -0.06418887184143783,
+        "edge_jaccard": 0.5171673819742489,
+        "adj_edge_jaccard": 0.5204870210544607,
+        "stem": "44b6_3bb3690f",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 39,
+        "edge_fp": 22,
+        "edge_fn": 31,
+        "division_tp": 0,
+        "division_fp": 3,
+        "division_fn": 0,
+        "num_pred_nodes": 30423,
+        "node_recall": 0.8309859154929577,
+        "total_node_ratio": 0.08816796623506688,
+        "edge_jaccard": 0.42391304347826086,
+        "adj_edge_jaccard": 0.4201754883878613,
+        "stem": "44b6_0c582fdc",
+        "embryo": "44b6"
+      }
+    ],
+    "source_manifest_run_id": "owned-detector-pu-selection-v1",
+    "summary": {
+      "n": 4,
+      "edge_jaccard": 0.5802348336594912,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 32,
+      "division_fn": 0,
+      "node_recall": 0.8589964788732395,
+      "adj_edge_jaccard": 0.5787726180524628,
+      "n_adj": 4,
+      "score": 0.5787726180524628
+    },
+    "by_embryo": {
+      "44b6": {
+        "n": 4,
+        "edge_jaccard": 0.5802348336594912,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 32,
+        "division_fn": 0,
+        "node_recall": 0.8589964788732395,
+        "adj_edge_jaccard": 0.5787726180524628,
+        "n_adj": 4,
+        "score": 0.5787726180524628
+      }
+    },
+    "checkpoint_sha256": "b07f39a930855c1493e43ad16626643d6b666dc8c4dcc1426a4145cdcaff2cdf",
+    "validation_scope": "Four previously exposed44b6 movies; frozen PU transfer diagnostic, NOT independent confirmation or promotion",
+    "target_audit_opened": true,
+    "embryo_audit": null,
+    "owned_transfer_diagnostic": {
+      "version": 1,
+      "stems": [
+        "44b6_66f9292d",
+        "44b6_40c45f5a",
+        "44b6_3bb3690f",
+        "44b6_0c582fdc"
+      ],
+      "checkpoint_sha256": "b07f39a930855c1493e43ad16626643d6b666dc8c4dcc1426a4145cdcaff2cdf",
+      "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "source_comparison_sha256": "a75307ffc45f2302bf96db5329924835df7a4827768ada48e4a5a9c2e8bec2f5",
+      "diagnostic_only": true,
+      "previously_exposed": true,
+      "new_target_movies_opened": 0,
+      "source_combined_gate_passed": false,
+      "authorized_for_submission": false,
+      "use": "Frozen transfer diagnostic, not independent confirmation, tuning or promotion"
+    },
+    "authorized_for_submission": false
+  },
+  "summary_deltas": {
+    "score": 0.00893260267548035,
+    "edge_jaccard": -0.0022799011145755443,
+    "node_recall": 0.0006249999999999867
+  },
+  "per_movie_deltas": [
+    {
+      "stem": "44b6_66f9292d",
+      "adjusted_edge_delta": 0.0640152755727299,
+      "recall_delta": 0.040000000000000036
+    },
+    {
+      "stem": "44b6_40c45f5a",
+      "adjusted_edge_delta": 0.06486586441941411,
+      "recall_delta": -0.020000000000000018
+    },
+    {
+      "stem": "44b6_3bb3690f",
+      "adjusted_edge_delta": -0.03381206777667567,
+      "recall_delta": -0.01749999999999996
+    },
+    {
+      "stem": "44b6_0c582fdc",
+      "adjusted_edge_delta": -0.04343889871002693,
+      "recall_delta": 0.0
+    }
+  ],
+  "worst_movie_delta": -0.04343889871002693,
+  "diagnostic_conditions": {
+    "score_gain": true,
+    "raw_edge_gain": false,
+    "mean_recall_preserved": true,
+    "three_movies_improve": false,
+    "per_movie_loss_bounded": false,
+    "worst_movie_preserved": false
+  },
+  "diagnostic_transfer_supported": false,
+  "counts": {
+    "baseline": {
+      "edge_tp": 593,
+      "edge_fp": 156,
+      "edge_fn": 269,
+      "division_tp": 0,
+      "division_fp": 36,
+      "division_fn": 0,
+      "num_pred_nodes": 176372
+    },
+    "pu": {
+      "edge_tp": 593,
+      "edge_fp": 160,
+      "edge_fn": 269,
+      "division_tp": 0,
+      "division_fp": 32,
+      "division_fn": 0,
+      "num_pred_nodes": 153892
+    }
+  },
+  "source_combined_gate_passed": false,
+  "authorized_for_submission": false,
+  "new_target_movies_opened": 0,
+  "caveat": "These four target movies were previously exposed. This diagnostic cannot establish independent generalization, reverse the failed source paired gate, or authorize submission.",
+  "source_sha256": {
+    "score": "db7b5e59806ec7a477e04000e306c566592e297303b658e683710c9b69d346bc",
+    "manifest": "131976267c4b83084c70e8c21125841f768037d326b3baa7a981b9b04e4654f0",
+    "baseline": "d59568f8f69b700a29af62f128cac27ca1b524b2a57f8cad1c7e403d6d6890fa",
+    "split": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "source": "a75307ffc45f2302bf96db5329924835df7a4827768ada48e4a5a9c2e8bec2f5"
+  }
+}

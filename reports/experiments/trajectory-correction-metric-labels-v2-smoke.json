@@ -1,0 +1,22 @@
+{
+  "status": "failed_requires_inspection",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "candidate_changed": false,
+  "oracle_graphs_exported": false,
+  "source_sha256": "a001683aece8f65a39416d650e9b5395b154563cb6038573c444f26fdcbbc23b",
+  "dataset_sha256": "e279e24348d17e60e07b8e6bb964ffab95490e502a3f70ac67ecd35928dfa1db",
+  "plan": [
+    {
+      "stem": "44b6_74d0c52e",
+      "indices": [
+        0
+      ]
+    }
+  ],
+  "records": {},
+  "seconds": 24.42099999997299,
+  "error": "TypeError('asdict() should be called on dataclass instances')"
+}

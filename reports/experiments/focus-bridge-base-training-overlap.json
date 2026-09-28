@@ -1,0 +1,14 @@
+{
+  "run_id": "focus-bridge-official-paired-v2",
+  "status": "training_overlap_verified",
+  "model": "public secondary TemporalUNet3D seed314159",
+  "checkpoint_sha256": "9bac2fa0dadc4a6fc1899e0caf187f4b553e0a7cd90ba1261a68b35ffe9e305f",
+  "split_manifest_sha256": "cbe8ace34ffc157172280538441454b60250f0188faa063d1a9eadfb1ac55c0b",
+  "split_hash_matches_snapshot": true,
+  "training_overlap": ["44b6_24264f12", "44b6_81c256f0", "6bba_23af9eeb", "6bba_f1fde7e0"],
+  "interpretation": "Paired correction diagnostic on base-training movies; not held-out generalization evidence",
+  "thresholds_changed": false,
+  "requires_independent_generalization_evidence": true,
+  "authorized_for_production_promotion": false,
+  "authorized_for_submission": false
+}

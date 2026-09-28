@@ -1,0 +1,161 @@
+{
+  "status": "dense_warp_training_complete",
+  "contract_sha256": "3fbb35d9964a8ea3d7c0329ef2d2be6b77755a6cb0e806e8658b560f860c5573",
+  "plan_sha256": "7935b70e460d57dcb63c6d9a67b6b468bb008aaf49ce9c5304e1f8f881224c92",
+  "public_backbone_training_overlap": true,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "folds": [
+    {
+      "source": "44b6",
+      "before": {
+        "correct": 18,
+        "total": 18,
+        "ce": 0.12918197156654465,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "correct": 7,
+            "total": 7,
+            "annotated": 7
+          },
+          "44b6_341df25f": {
+            "correct": 8,
+            "total": 8,
+            "annotated": 9
+          },
+          "44b6_706092f0": {
+            "correct": 3,
+            "total": 3,
+            "annotated": 5
+          }
+        }
+      },
+      "after": {
+        "correct": 18,
+        "total": 18,
+        "ce": 0.01197275814067527,
+        "per_movie": {
+          "44b6_2a2eff9f": {
+            "correct": 7,
+            "total": 7,
+            "annotated": 7
+          },
+          "44b6_341df25f": {
+            "correct": 8,
+            "total": 8,
+            "annotated": 9
+          },
+          "44b6_706092f0": {
+            "correct": 3,
+            "total": 3,
+            "annotated": 5
+          }
+        }
+      },
+      "source_pass": false,
+      "opposite_opened": false,
+      "steps": 2000,
+      "sha256": "bbb447a02c7ae096de9cbfc5e0d98e1c6f16db20341cb32b36d466aa7718eb96"
+    },
+    {
+      "source": "6bba",
+      "before": {
+        "correct": 181,
+        "total": 185,
+        "ce": 0.1499996835516917,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "correct": 26,
+            "total": 27,
+            "annotated": 37
+          },
+          "6bba_4f99ce20": {
+            "correct": 33,
+            "total": 34,
+            "annotated": 45
+          },
+          "6bba_4ffd3da3": {
+            "correct": 22,
+            "total": 22,
+            "annotated": 29
+          },
+          "6bba_87289e13": {
+            "correct": 20,
+            "total": 20,
+            "annotated": 23
+          },
+          "6bba_8b7818bf": {
+            "correct": 24,
+            "total": 24,
+            "annotated": 26
+          },
+          "6bba_b329af44": {
+            "correct": 37,
+            "total": 38,
+            "annotated": 45
+          },
+          "6bba_debd7bfa": {
+            "correct": 19,
+            "total": 20,
+            "annotated": 23
+          }
+        }
+      },
+      "after": {
+        "correct": 181,
+        "total": 185,
+        "ce": 0.05499660536340859,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "correct": 26,
+            "total": 27,
+            "annotated": 37
+          },
+          "6bba_4f99ce20": {
+            "correct": 33,
+            "total": 34,
+            "annotated": 45
+          },
+          "6bba_4ffd3da3": {
+            "correct": 22,
+            "total": 22,
+            "annotated": 29
+          },
+          "6bba_87289e13": {
+            "correct": 20,
+            "total": 20,
+            "annotated": 23
+          },
+          "6bba_8b7818bf": {
+            "correct": 24,
+            "total": 24,
+            "annotated": 26
+          },
+          "6bba_b329af44": {
+            "correct": 36,
+            "total": 38,
+            "annotated": 45
+          },
+          "6bba_debd7bfa": {
+            "correct": 20,
+            "total": 20,
+            "annotated": 23
+          }
+        }
+      },
+      "source_pass": false,
+      "opposite_opened": false,
+      "steps": 2000,
+      "sha256": "ebece605a713211d06aa69f4df6b1635ce955f69d81ed26f23cf2053eba2452d"
+    }
+  ],
+  "stage": "terminal",
+  "extracted_movies": 101,
+  "training_pairs": 364,
+  "selection_pairs": 40,
+  "features_sha256": "f9ef89f3cd2875704d7782774f47217e0e7ab47d3b4fd8025b556a0af1ad8c6f",
+  "individual_experts_qualified": 0,
+  "ensemble_evaluated": false,
+  "successful_updates": 4000,
+  "seconds": 318.13274806599657
+}

@@ -1,0 +1,24 @@
+{
+  "status": "standalone_exact_replay_passed",
+  "source_sha256": "2ec6470444db92903ac2a17387695c3fefcbe640fcd7351022b0ccaee2e96f56",
+  "code_sha256": "ffef91dea26d2c12c47d74d7a2846c78a9099b9b62e09afeb8470e1cf16dca4d",
+  "helper_sha256": "a9973cc31785f17ff0140c073ebef11e516bda4497b426084c3e984feda56f5f",
+  "paired_proof_sha256": "a0dca4c1993f709482f2d98fc3462e0cf159cf27dccb2cffc4042306fb0fcd2e",
+  "model_sha256": "86bf9109f5d5021dc446ff2712e127136d5ccccf0dcd82601ccb8900f560f652",
+  "records": {
+    "6bba_05b6850b": {
+      "exact_graph": true,
+      "exact_solver_records": true,
+      "processed_frames": 99,
+      "seconds": 5.64000000001397
+    }
+  },
+  "ground_truth_opened": false,
+  "gpu_used": false,
+  "staged_worker_changed": false,
+  "live_jobs_changed": false,
+  "authorized_for_submission": false,
+  "kaggle_runtime_accepted": false,
+  "score_improvement_not_established": true,
+  "seconds": 8.421999999962281
+}

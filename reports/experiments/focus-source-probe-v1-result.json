@@ -1,0 +1,60 @@
+{
+  "status": "verified_six_frame_focus_source_probe",
+  "terminal": {
+    "authorized_for_submission": false,
+    "competition_test_data_read": false,
+    "declared_budget_seconds": 3600,
+    "elapsed_seconds": 437.5078155994415,
+    "exact_raw_replay": true,
+    "frozen_stems": [
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "ground_truth_opened": false,
+    "leaderboard_used_for_selection": false,
+    "metric_hack_used": false,
+    "model_sha256": "b14a7bd272f824adb1a1073bc3f2af17a95919d5a0c3f1d9011a8d82378d8f3a",
+    "public_predictions_copied": false,
+    "records": [
+      {
+        "exact_replay": true,
+        "frames": 3,
+        "nodes": 785,
+        "sha256": "14425b393d47908756e52ccf98a010bb65fb4a5ad22272c59b839ea5b3236893",
+        "stem": "6bba_f1fde7e0"
+      },
+      {
+        "exact_replay": true,
+        "frames": 3,
+        "nodes": 285,
+        "sha256": "9f157968bf88118f806dfbf957d8d15e4f74e9514ac5c77eaa470cb188e42012",
+        "stem": "6bba_23af9eeb"
+      }
+    ],
+    "run_id": "focus-source-probe-v1",
+    "schema_version": 1,
+    "status": "completed",
+    "submission_created": false
+  },
+  "records": [
+    {
+      "exact_replay": true,
+      "frames": 3,
+      "nodes": 785,
+      "sha256": "14425b393d47908756e52ccf98a010bb65fb4a5ad22272c59b839ea5b3236893",
+      "stem": "6bba_f1fde7e0"
+    },
+    {
+      "exact_replay": true,
+      "frames": 3,
+      "nodes": 285,
+      "sha256": "9f157968bf88118f806dfbf957d8d15e4f74e9514ac5c77eaa470cb188e42012",
+      "stem": "6bba_23af9eeb"
+    }
+  ],
+  "notebook_sha256": "1ad40fc75748219cc9f6b6b5a1deb8f14cfd67dfd8242ad18dcc0135cc85a6e7",
+  "runtime_identity_sha256": "244277de3bee34ae4198da5d48deb6da2e747fb5c42bcb359d912815ef49a020",
+  "cpu_exact_replay": true,
+  "independent_accuracy_established": false,
+  "authorized_for_submission": false
+}

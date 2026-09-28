@@ -1,0 +1,157 @@
+{
+  "run_id": "public-d4-correction-v1",
+  "status": "source_geometry_audit_passed",
+  "source_url": "https://www.kaggle.com/code/sjlee101/biohub-lf-dctta",
+  "source_version": 1,
+  "source_notebook_sha256": "95f08bb82388e9206f45c86daf926bb3d7a7fff9889c89b5fa9596f8e13c3bd4",
+  "source_code_sha256": "81bd21d826c222acd22c241b81d75931695ac222db9b70b32faaa5d21745f950",
+  "runner_sha256": "67dcb1f0bc199c897c3d73254620b770c24051ab4e89cb326eaeb6e2adc8aa75",
+  "support_sha256": "c44e771ba5980b820f93091e03a303c25dfe8f3232e501f54dc9565731c234b9",
+  "artifact_root": ".biohub/cache/public-d4-correction-v1",
+  "artifacts": {
+    "public-predictor-original.py": {
+      "sha256": "ddca518b0e838b2123f30cfcb31819fb159b4e68fc20ef6b3a42003cc2d528ed",
+      "bytes": 51316
+    },
+    "public-predictor-d4-corrected.py": {
+      "sha256": "ef6fc4f8335ec799f7229dc880b2247fb776394821c382a2f113906f6b9b0c6a",
+      "bytes": 51316
+    },
+    "public-postprocess-d4-corrected.py": {
+      "sha256": "f5122587381f17a451547327abff3948734e455a2ae8cfc9d09e0e506c1e974d",
+      "bytes": 72059
+    },
+    "biohub-public-d4-research-only.ipynb": {
+      "sha256": "847d56961887e9161370f9a9857c8a47ecfc04992a13380e212966549f3b7b3d",
+      "bytes": 296791
+    }
+  },
+  "predictor_edits": [
+    {
+      "start": 14833,
+      "end": 14834,
+      "value": "2",
+      "direction": "forward",
+      "line": 415
+    },
+    {
+      "start": 15039,
+      "end": 15041,
+      "value": "-2",
+      "direction": "inverse",
+      "line": 418
+    },
+    {
+      "start": 15161,
+      "end": 15163,
+      "value": "-2",
+      "direction": "inverse",
+      "line": 420
+    },
+    {
+      "start": 19083,
+      "end": 19084,
+      "value": "2",
+      "direction": "forward",
+      "line": 491
+    },
+    {
+      "start": 19507,
+      "end": 19509,
+      "value": "-2",
+      "direction": "inverse",
+      "line": 499
+    },
+    {
+      "start": 19768,
+      "end": 19770,
+      "value": "-2",
+      "direction": "inverse",
+      "line": 504
+    }
+  ],
+  "deepcenter_edits": [
+    {
+      "start": 15220,
+      "end": 15221,
+      "value": "2",
+      "direction": "forward",
+      "line": 366
+    },
+    {
+      "start": 15329,
+      "end": 15331,
+      "value": "-2",
+      "direction": "inverse",
+      "line": 367
+    }
+  ],
+  "geometry": {
+    "passed": true,
+    "records": [
+      {
+        "shape": [
+          3,
+          4,
+          4
+        ],
+        "unique_views": {
+          "legacy": 7,
+          "corrected": 8
+        },
+        "equivariance_max_error": {
+          "legacy": 9.25,
+          "corrected": 7.105427357601002e-15
+        }
+      },
+      {
+        "shape": [
+          2,
+          3,
+          5
+        ],
+        "unique_views": {
+          "legacy": 7,
+          "corrected": 8
+        },
+        "equivariance_max_error": {
+          "legacy": 8.875000000000007,
+          "corrected": 7.105427357601002e-15
+        }
+      },
+      {
+        "shape": [
+          1,
+          2,
+          3,
+          6,
+          6
+        ],
+        "unique_views": {
+          "legacy": 7,
+          "corrected": 8
+        },
+        "equivariance_max_error": {
+          "legacy": 21.25,
+          "corrected": 5.684341886080802e-14
+        }
+      }
+    ],
+    "model_calls_per_arm": 8,
+    "labels_opened": false,
+    "gpu_seconds": 0,
+    "quality_gain_established": false
+  },
+  "notebook_executed": false,
+  "public_predictions_downloaded": false,
+  "ground_truth_opened": false,
+  "new_target_movies_opened": 0,
+  "public_current_best_score_verified": false,
+  "runtime_license_audit_complete": false,
+  "real_model_preflight_passed": false,
+  "official_complete_movie_scoring_passed": false,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "gpu_seconds": 0,
+  "elapsed_seconds": 0.46799999999348074
+}

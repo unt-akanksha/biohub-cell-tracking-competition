@@ -1,0 +1,83 @@
+{
+  "status": "functionality_passed",
+  "contract": {
+    "source_sha256": "9d6e7d86d6f94b29a4dd59ad08c915a9d3f7ddee2ef467a1e17b1083a1521a74",
+    "helper_sha256": "916ff685b700bdcea4a616d16bb99dcb7ff0a382124221f804eeb1d24909eea7",
+    "feasibility_helper_sha256": "04de81e20ec6d74faff9c51a78469246b527ce5e55732d1ca12b8b11615eea1f",
+    "initial_weight_sha256": "83eaa7c4e65da964f49618bd8bafd0c0910cad9d347f7afa53590e1ee6c2ad96",
+    "source_scope_sha256": "5c4b64793068565598537db6bb3af439513bde3d46e357ffeab59164bda020bf",
+    "steps": 300,
+    "batch": 4,
+    "learning_rate": 0.05,
+    "regularization": 0.01,
+    "seed": 1729,
+    "training_objective": "partial-label latent structured hinge over feasible assignments",
+    "source_only": true,
+    "selection_or_validation_read": false
+  },
+  "coverage": {
+    "44b6_cf8fed6b": {
+      "no_unique_reachable_constraints": 7,
+      "prepared": 92
+    },
+    "44b6_f28707c6": {
+      "no_unique_reachable_constraints": 62,
+      "prepared": 37
+    },
+    "44b6_c50204e0": {
+      "prepared": 95,
+      "no_unique_reachable_constraints": 4
+    },
+    "44b6_cf2536e8": {
+      "prepared": 55,
+      "no_unique_reachable_constraints": 44
+    },
+    "6bba_78a7bd97": {
+      "no_unique_reachable_constraints": 21,
+      "prepared": 78
+    },
+    "6bba_5dfe9ad1": {
+      "prepared": 99
+    },
+    "6bba_acd782a8": {
+      "no_unique_reachable_constraints": 17,
+      "prepared": 82
+    },
+    "6bba_969618f6": {
+      "prepared": 98,
+      "no_unique_reachable_constraints": 1
+    }
+  },
+  "fit": {
+    "updates": 2,
+    "seed": 1729,
+    "history": [
+      {
+        "step": 1,
+        "mean_sampled_hinge": 0.0,
+        "parameter_shift": 0.0
+      }
+    ],
+    "training_movies": [
+      "44b6_c50204e0",
+      "44b6_cf2536e8",
+      "44b6_f28707c6"
+    ],
+    "cases": 187
+  },
+  "held": {
+    "queries": 178,
+    "learned_correct": 173,
+    "current_correct": 173,
+    "initial_correct": 177,
+    "learned_repairs": 0,
+    "learned_breaks": 0,
+    "all_queries": 41029,
+    "changed_current_choices": 28,
+    "annotation_mask_used_for_inference": false,
+    "initial_joint_correct": 173,
+    "prediction_sha256": "4deff81900f887cf04a359a6c39f2f7d26e0f05bfe5baed2b4b596e3ed317199"
+  },
+  "quality_gain_established": false,
+  "seconds": 7.75
+}

@@ -1,0 +1,73 @@
+{
+  "status": "exact_event_optima_verified",
+  "source_sha256": "2e1c75a2980977b9a6ef1bba383e3477f79774c32ee989d64d68718c866efeb4",
+  "helper_sha256": "a9973cc31785f17ff0140c073ebef11e516bda4497b426084c3e984feda56f5f",
+  "fit_contracts": {
+    "44b6": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+    "6bba": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111"
+  },
+  "model_sha256": "17f60597888c426aba77992d50bd6dfecd1547c3f4356d4bdd2bf1755c731f01",
+  "cases": [
+    0
+  ],
+  "records": [
+    {
+      "case_index": 0,
+      "stem": "6bba_6ca87370",
+      "t": 1,
+      "case_sha256": "908026ab20315f7e54a0218265753c546b42575a68cd88344e24ae80ed565e00",
+      "model": "anchor",
+      "original": {
+        "allowed_before": 1219,
+        "dominated_forks": 880,
+        "allowed_after": 339
+      },
+      "pruned": {
+        "allowed_before": 1219,
+        "dominated_forks": 880,
+        "allowed_after": 121,
+        "null_dominated_continuations": 218,
+        "null_dominated_forks": 0
+      },
+      "objective_delta": 0.0,
+      "exact_assignment": true,
+      "original_seconds": 0.042941899970173836,
+      "pruned_seconds": 0.011439200025051832
+    },
+    {
+      "case_index": 0,
+      "stem": "6bba_6ca87370",
+      "t": 1,
+      "case_sha256": "908026ab20315f7e54a0218265753c546b42575a68cd88344e24ae80ed565e00",
+      "model": "final44",
+      "original": {
+        "allowed_before": 1219,
+        "dominated_forks": 880,
+        "allowed_after": 339
+      },
+      "pruned": {
+        "allowed_before": 1219,
+        "dominated_forks": 880,
+        "allowed_after": 127,
+        "null_dominated_continuations": 212,
+        "null_dominated_forks": 0
+      },
+      "objective_delta": 0.0,
+      "exact_assignment": true,
+      "original_seconds": 0.03703409997979179,
+      "pruned_seconds": 0.01683819998288527
+    }
+  ],
+  "source_labels_loaded": false,
+  "optimizer_or_live_jobs_changed": false,
+  "gpu_used": false,
+  "production_changed": false,
+  "complete_movie_graph_parity_established": false,
+  "no_end_to_end_speedup_claim": true,
+  "authorized_for_submission": false,
+  "seconds": 0.7820000000065193,
+  "all_assignments_exact": true,
+  "original_seconds": 0.07997599994996563,
+  "pruned_seconds": 0.028277400007937104,
+  "stage_speed_ratio": 2.82826567957158
+}

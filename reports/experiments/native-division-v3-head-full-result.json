@@ -1,0 +1,170 @@
+{
+  "status": "division_head_screen_complete",
+  "seconds": 14.916010015993379,
+  "contract_sha256": "e263730431b25c681218f21d2af1673f6f5be3c85f33266aa86986a0904a3e96",
+  "feature_manifest_sha256": "50173b81c2798f8524a14ff9b8d11752a7ea714694184f26e943846db5722130",
+  "folds": [
+    {
+      "source": "44b6",
+      "members": [
+        {
+          "family": "geometry",
+          "source": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 0.8075444064594786,
+            "threshold": 0.9770013093948364
+          },
+          "path": "44b6-geometry.pt",
+          "sha256": "2fe74a51009becf35ce710b9f154081f5780c11f67aa8483d5761ee44e4dff5e",
+          "source_pass": false,
+          "opposite_opened": false
+        },
+        {
+          "family": "cnn_origin",
+          "source": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 0.5485709226717465,
+            "threshold": 0.9797537326812744
+          },
+          "path": "44b6-cnn_origin.pt",
+          "sha256": "a685e9b36235078610ffb3fe4989dea1e78127dbed18ad5024b1c2effaa60d5e",
+          "source_pass": false,
+          "opposite_opened": false
+        },
+        {
+          "family": "transformer_origin",
+          "source": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 0.3552735884052878,
+            "threshold": 0.987582266330719
+          },
+          "path": "44b6-transformer_origin.pt",
+          "sha256": "a2553aae1a57b94fd70f7096a74897458c98a6271df5b4b8078525939f65fdde",
+          "source_pass": false,
+          "opposite_opened": false
+        }
+      ],
+      "ensemble": {
+        "status": "not_eligible_individual_gates"
+      }
+    },
+    {
+      "source": "6bba",
+      "members": [
+        {
+          "family": "geometry",
+          "source": {
+            "positive": 6,
+            "negative": 580,
+            "tp": 3,
+            "fp": 0,
+            "fn": 3,
+            "recall": 0.5,
+            "balanced_nll": 0.18220406784619664,
+            "threshold": 0.9767624139785767
+          },
+          "path": "6bba-geometry.pt",
+          "sha256": "6246e624c25f6c511468f55519a94cb617ca244ef0fb272aa3d66d9667c78ac8",
+          "source_pass": false,
+          "opposite_opened": false
+        },
+        {
+          "family": "cnn_origin",
+          "source": {
+            "positive": 6,
+            "negative": 580,
+            "tp": 4,
+            "fp": 0,
+            "fn": 2,
+            "recall": 0.6666666666666666,
+            "balanced_nll": 0.1069924533701827,
+            "threshold": 0.976300060749054
+          },
+          "path": "6bba-cnn_origin.pt",
+          "sha256": "1b0925c19b27712890697425580ae00a5214358cf4f12aeb3ac8a0807a1d61b0",
+          "source_pass": true,
+          "opposite_opened": true,
+          "opposite": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 1.2871435397661044,
+            "threshold": 0.976300060749054
+          },
+          "opposite_geometry": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 0.5004866582795787,
+            "threshold": 0.9767624139785767
+          },
+          "opposite_pass": false
+        },
+        {
+          "family": "transformer_origin",
+          "source": {
+            "positive": 6,
+            "negative": 580,
+            "tp": 5,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.8333333333333334,
+            "balanced_nll": 0.08742398284402537,
+            "threshold": 0.9827588796615601
+          },
+          "path": "6bba-transformer_origin.pt",
+          "sha256": "1e091347aeec758457b301150bd0b69b7b9698ccbb0e21a22a34546e9b4c5aef",
+          "source_pass": true,
+          "opposite_opened": true,
+          "opposite": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 1.428621935552389,
+            "threshold": 0.9827588796615601
+          },
+          "opposite_geometry": {
+            "positive": 1,
+            "negative": 151,
+            "tp": 0,
+            "fp": 0,
+            "fn": 1,
+            "recall": 0.0,
+            "balanced_nll": 0.5004866582795787,
+            "threshold": 0.9767624139785767
+          },
+          "opposite_pass": false
+        }
+      ],
+      "ensemble": {
+        "status": "not_eligible_individual_gates"
+      }
+    }
+  ],
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false
+}

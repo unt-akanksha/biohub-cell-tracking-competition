@@ -1,0 +1,14 @@
+{
+  "status": "staged_not_launched",
+  "kernel": "indarkarhana/biohub-trajectory-overlap-acceptance",
+  "notebook_sha256": "d09ed351a1250bbedb6afd5084022e9a3cd9f7101f79ebe3bd1f1181de8acae9",
+  "contract_sha256": "851908fa5aa8ba628aad456afa94badc6ae9e10c6f9f3e36cf43147386ef8d55",
+  "base_contract_sha256": "d10d19b1e21b30e2eb5c6bf1c05161559f74594ce30e250e3c473f2d8b0379f2",
+  "overlap_identity_sha256": "c5a603951bc6d6ab97a88ee5f800e6483d96a616493ef9942a9184ee4017cfe5",
+  "overlay_sha256": "3f36bbbf6dc1f8d7915ff00c2746ee15940275283028532e5916b00719e61121",
+  "required_gpus": 2,
+  "maximum_workers": 4,
+  "acceptance_wall_cap_seconds": 3600,
+  "no_new_dataset_upload": true,
+  "submission_performed": false
+}

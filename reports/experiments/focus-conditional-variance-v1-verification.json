@@ -1,0 +1,28 @@
+{
+  "status": "verified_conditional_variance_training_folds",
+  "result_sha256": "f23d0004527b06d0401083a37ae0c9312c5c3b1646633ad1c74a9d2decc52a85",
+  "final_model_sha256": "9ee9937ac60f0abc9d6127ac07e9696399cbbbe0e94eb9e2e6498a35fee27e25",
+  "exact_fold_replays": 14,
+  "gate": {
+    "pooled": {
+      "baseline": {
+        "observations": 11661,
+        "nll": 5.741789847991003,
+        "mse_um2": 8.51668218066724
+      },
+      "candidate": {
+        "observations": 11661,
+        "nll": 5.698240759761799,
+        "mse_um2": 8.51668218066724
+      }
+    },
+    "conditions": {
+      "pooled_nll_improves": true,
+      "eight_movie_nll_gains": true,
+      "worst_movie_nll_not_higher": true,
+      "mean_squared_error_exactly_unchanged": true
+    },
+    "passed": true
+  },
+  "authorized_for_submission": false
+}

@@ -1,0 +1,733 @@
+{
+  "scope": "Frozen fold-zero train list only",
+  "movies": 120,
+  "per_movie": [
+    {
+      "stem": "6bba_b204cac7",
+      "annotated_nodes": 826,
+      "divisions": 2,
+      "single_child": 807
+    },
+    {
+      "stem": "6bba_6479435d",
+      "annotated_nodes": 617,
+      "divisions": 0,
+      "single_child": 580
+    },
+    {
+      "stem": "6bba_df673a83",
+      "annotated_nodes": 668,
+      "divisions": 4,
+      "single_child": 646
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "annotated_nodes": 718,
+      "divisions": 0,
+      "single_child": 658
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "annotated_nodes": 1156,
+      "divisions": 2,
+      "single_child": 1128
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "annotated_nodes": 738,
+      "divisions": 0,
+      "single_child": 721
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "annotated_nodes": 792,
+      "divisions": 0,
+      "single_child": 767
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "annotated_nodes": 842,
+      "divisions": 0,
+      "single_child": 817
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "annotated_nodes": 1571,
+      "divisions": 0,
+      "single_child": 1501
+    },
+    {
+      "stem": "6bba_edf14583",
+      "annotated_nodes": 801,
+      "divisions": 0,
+      "single_child": 760
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "annotated_nodes": 741,
+      "divisions": 2,
+      "single_child": 721
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "annotated_nodes": 745,
+      "divisions": 0,
+      "single_child": 719
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "annotated_nodes": 1200,
+      "divisions": 2,
+      "single_child": 1169
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "annotated_nodes": 1057,
+      "divisions": 2,
+      "single_child": 1006
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "annotated_nodes": 1659,
+      "divisions": 3,
+      "single_child": 1586
+    },
+    {
+      "stem": "6bba_312f0dc3",
+      "annotated_nodes": 520,
+      "divisions": 0,
+      "single_child": 500
+    },
+    {
+      "stem": "6bba_b693381b",
+      "annotated_nodes": 983,
+      "divisions": 0,
+      "single_child": 935
+    },
+    {
+      "stem": "6bba_2540cd90",
+      "annotated_nodes": 529,
+      "divisions": 0,
+      "single_child": 523
+    },
+    {
+      "stem": "6bba_09961292",
+      "annotated_nodes": 1950,
+      "divisions": 4,
+      "single_child": 1863
+    },
+    {
+      "stem": "6bba_78a7bd97",
+      "annotated_nodes": 886,
+      "divisions": 2,
+      "single_child": 828
+    },
+    {
+      "stem": "6bba_207c6aaf",
+      "annotated_nodes": 475,
+      "divisions": 1,
+      "single_child": 448
+    },
+    {
+      "stem": "6bba_d1acb6ff",
+      "annotated_nodes": 681,
+      "divisions": 1,
+      "single_child": 641
+    },
+    {
+      "stem": "6bba_268e1230",
+      "annotated_nodes": 641,
+      "divisions": 1,
+      "single_child": 607
+    },
+    {
+      "stem": "6bba_ae82a791",
+      "annotated_nodes": 1495,
+      "divisions": 0,
+      "single_child": 1471
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "annotated_nodes": 654,
+      "divisions": 4,
+      "single_child": 618
+    },
+    {
+      "stem": "6bba_372c8cb8",
+      "annotated_nodes": 1036,
+      "divisions": 0,
+      "single_child": 1007
+    },
+    {
+      "stem": "6bba_f1fde7e0",
+      "annotated_nodes": 476,
+      "divisions": 0,
+      "single_child": 446
+    },
+    {
+      "stem": "6bba_1f58c2f6",
+      "annotated_nodes": 317,
+      "divisions": 0,
+      "single_child": 299
+    },
+    {
+      "stem": "6bba_ab78413d",
+      "annotated_nodes": 1179,
+      "divisions": 2,
+      "single_child": 1134
+    },
+    {
+      "stem": "6bba_ef7b4f7e",
+      "annotated_nodes": 1234,
+      "divisions": 2,
+      "single_child": 1197
+    },
+    {
+      "stem": "6bba_6feb10f0",
+      "annotated_nodes": 1368,
+      "divisions": 0,
+      "single_child": 1343
+    },
+    {
+      "stem": "6bba_d2b9fc0c",
+      "annotated_nodes": 944,
+      "divisions": 2,
+      "single_child": 917
+    },
+    {
+      "stem": "6bba_7af54fde",
+      "annotated_nodes": 1131,
+      "divisions": 2,
+      "single_child": 1088
+    },
+    {
+      "stem": "6bba_05db0fb1",
+      "annotated_nodes": 1229,
+      "divisions": 3,
+      "single_child": 1177
+    },
+    {
+      "stem": "6bba_61ecbe65",
+      "annotated_nodes": 640,
+      "divisions": 1,
+      "single_child": 612
+    },
+    {
+      "stem": "6bba_1d0d8384",
+      "annotated_nodes": 1438,
+      "divisions": 1,
+      "single_child": 1363
+    },
+    {
+      "stem": "6bba_20852818",
+      "annotated_nodes": 952,
+      "divisions": 3,
+      "single_child": 903
+    },
+    {
+      "stem": "6bba_474be664",
+      "annotated_nodes": 292,
+      "divisions": 1,
+      "single_child": 284
+    },
+    {
+      "stem": "6bba_4ffd3da3",
+      "annotated_nodes": 706,
+      "divisions": 3,
+      "single_child": 683
+    },
+    {
+      "stem": "6bba_6db0e9b4",
+      "annotated_nodes": 449,
+      "divisions": 0,
+      "single_child": 440
+    },
+    {
+      "stem": "6bba_825bd1c6",
+      "annotated_nodes": 968,
+      "divisions": 0,
+      "single_child": 930
+    },
+    {
+      "stem": "6bba_ebdf3b34",
+      "annotated_nodes": 847,
+      "divisions": 2,
+      "single_child": 799
+    },
+    {
+      "stem": "6bba_f4ae811c",
+      "annotated_nodes": 1001,
+      "divisions": 0,
+      "single_child": 965
+    },
+    {
+      "stem": "6bba_fc83837d",
+      "annotated_nodes": 957,
+      "divisions": 0,
+      "single_child": 923
+    },
+    {
+      "stem": "6bba_c328f2fd",
+      "annotated_nodes": 511,
+      "divisions": 2,
+      "single_child": 496
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "annotated_nodes": 1000,
+      "divisions": 3,
+      "single_child": 928
+    },
+    {
+      "stem": "6bba_7b5d3b2c",
+      "annotated_nodes": 565,
+      "divisions": 0,
+      "single_child": 555
+    },
+    {
+      "stem": "6bba_4aa14c89",
+      "annotated_nodes": 707,
+      "divisions": 0,
+      "single_child": 681
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "annotated_nodes": 1925,
+      "divisions": 3,
+      "single_child": 1873
+    },
+    {
+      "stem": "6bba_55b7eebe",
+      "annotated_nodes": 705,
+      "divisions": 1,
+      "single_child": 686
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "annotated_nodes": 1081,
+      "divisions": 1,
+      "single_child": 1050
+    },
+    {
+      "stem": "6bba_32db13fc",
+      "annotated_nodes": 862,
+      "divisions": 1,
+      "single_child": 809
+    },
+    {
+      "stem": "6bba_f8ffd5e7",
+      "annotated_nodes": 389,
+      "divisions": 2,
+      "single_child": 366
+    },
+    {
+      "stem": "6bba_80d12824",
+      "annotated_nodes": 680,
+      "divisions": 1,
+      "single_child": 652
+    },
+    {
+      "stem": "6bba_3c5691b6",
+      "annotated_nodes": 765,
+      "divisions": 2,
+      "single_child": 742
+    },
+    {
+      "stem": "6bba_13f19531",
+      "annotated_nodes": 737,
+      "divisions": 0,
+      "single_child": 704
+    },
+    {
+      "stem": "6bba_3fda6b25",
+      "annotated_nodes": 1207,
+      "divisions": 1,
+      "single_child": 1177
+    },
+    {
+      "stem": "6bba_debd7bfa",
+      "annotated_nodes": 766,
+      "divisions": 4,
+      "single_child": 721
+    },
+    {
+      "stem": "6bba_d82a4fc6",
+      "annotated_nodes": 545,
+      "divisions": 0,
+      "single_child": 530
+    },
+    {
+      "stem": "6bba_337b1b3a",
+      "annotated_nodes": 1272,
+      "divisions": 2,
+      "single_child": 1209
+    },
+    {
+      "stem": "6bba_e5e44988",
+      "annotated_nodes": 666,
+      "divisions": 0,
+      "single_child": 634
+    },
+    {
+      "stem": "6bba_48816121",
+      "annotated_nodes": 935,
+      "divisions": 5,
+      "single_child": 908
+    },
+    {
+      "stem": "6bba_ed9377fd",
+      "annotated_nodes": 531,
+      "divisions": 0,
+      "single_child": 508
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "annotated_nodes": 513,
+      "divisions": 0,
+      "single_child": 499
+    },
+    {
+      "stem": "6bba_b329af44",
+      "annotated_nodes": 1316,
+      "divisions": 1,
+      "single_child": 1266
+    },
+    {
+      "stem": "6bba_705ec2c9",
+      "annotated_nodes": 596,
+      "divisions": 1,
+      "single_child": 560
+    },
+    {
+      "stem": "6bba_784a78c9",
+      "annotated_nodes": 1788,
+      "divisions": 1,
+      "single_child": 1737
+    },
+    {
+      "stem": "6bba_718b21f9",
+      "annotated_nodes": 661,
+      "divisions": 0,
+      "single_child": 652
+    },
+    {
+      "stem": "6bba_969618f6",
+      "annotated_nodes": 679,
+      "divisions": 3,
+      "single_child": 652
+    },
+    {
+      "stem": "6bba_55c70843",
+      "annotated_nodes": 490,
+      "divisions": 0,
+      "single_child": 467
+    },
+    {
+      "stem": "6bba_d0fc38b5",
+      "annotated_nodes": 835,
+      "divisions": 0,
+      "single_child": 813
+    },
+    {
+      "stem": "6bba_d6ecebbb",
+      "annotated_nodes": 886,
+      "divisions": 0,
+      "single_child": 862
+    },
+    {
+      "stem": "6bba_ebff6e76",
+      "annotated_nodes": 1318,
+      "divisions": 0,
+      "single_child": 1264
+    },
+    {
+      "stem": "6bba_0e7c0d07",
+      "annotated_nodes": 209,
+      "divisions": 1,
+      "single_child": 196
+    },
+    {
+      "stem": "6bba_5dfe9ad1",
+      "annotated_nodes": 1542,
+      "divisions": 0,
+      "single_child": 1487
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "annotated_nodes": 930,
+      "divisions": 1,
+      "single_child": 896
+    },
+    {
+      "stem": "6bba_0c7fa718",
+      "annotated_nodes": 704,
+      "divisions": 0,
+      "single_child": 659
+    },
+    {
+      "stem": "6bba_07e24132",
+      "annotated_nodes": 359,
+      "divisions": 2,
+      "single_child": 341
+    },
+    {
+      "stem": "6bba_3a1849c2",
+      "annotated_nodes": 1173,
+      "divisions": 0,
+      "single_child": 1142
+    },
+    {
+      "stem": "6bba_c27cba08",
+      "annotated_nodes": 517,
+      "divisions": 0,
+      "single_child": 493
+    },
+    {
+      "stem": "6bba_a5e926bb",
+      "annotated_nodes": 741,
+      "divisions": 0,
+      "single_child": 698
+    },
+    {
+      "stem": "6bba_74686d6a",
+      "annotated_nodes": 586,
+      "divisions": 2,
+      "single_child": 572
+    },
+    {
+      "stem": "6bba_6321a359",
+      "annotated_nodes": 827,
+      "divisions": 1,
+      "single_child": 796
+    },
+    {
+      "stem": "6bba_d5eae175",
+      "annotated_nodes": 528,
+      "divisions": 0,
+      "single_child": 519
+    },
+    {
+      "stem": "6bba_9e23430b",
+      "annotated_nodes": 914,
+      "divisions": 1,
+      "single_child": 889
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "annotated_nodes": 986,
+      "divisions": 1,
+      "single_child": 947
+    },
+    {
+      "stem": "6bba_9a41d029",
+      "annotated_nodes": 1401,
+      "divisions": 2,
+      "single_child": 1349
+    },
+    {
+      "stem": "6bba_eebc57a5",
+      "annotated_nodes": 1026,
+      "divisions": 0,
+      "single_child": 989
+    },
+    {
+      "stem": "6bba_6feeb0b1",
+      "annotated_nodes": 1389,
+      "divisions": 0,
+      "single_child": 1343
+    },
+    {
+      "stem": "6bba_3db54e20",
+      "annotated_nodes": 502,
+      "divisions": 1,
+      "single_child": 472
+    },
+    {
+      "stem": "6bba_96833384",
+      "annotated_nodes": 758,
+      "divisions": 0,
+      "single_child": 721
+    },
+    {
+      "stem": "6bba_61dd1e0d",
+      "annotated_nodes": 558,
+      "divisions": 0,
+      "single_child": 543
+    },
+    {
+      "stem": "6bba_07477033",
+      "annotated_nodes": 613,
+      "divisions": 0,
+      "single_child": 602
+    },
+    {
+      "stem": "6bba_085bf656",
+      "annotated_nodes": 1198,
+      "divisions": 1,
+      "single_child": 1166
+    },
+    {
+      "stem": "6bba_907271db",
+      "annotated_nodes": 945,
+      "divisions": 1,
+      "single_child": 919
+    },
+    {
+      "stem": "6bba_fc516dc6",
+      "annotated_nodes": 788,
+      "divisions": 0,
+      "single_child": 762
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "annotated_nodes": 997,
+      "divisions": 1,
+      "single_child": 933
+    },
+    {
+      "stem": "6bba_aeee7805",
+      "annotated_nodes": 795,
+      "divisions": 1,
+      "single_child": 766
+    },
+    {
+      "stem": "6bba_43fea39d",
+      "annotated_nodes": 910,
+      "divisions": 0,
+      "single_child": 880
+    },
+    {
+      "stem": "6bba_f17befbc",
+      "annotated_nodes": 1078,
+      "divisions": 0,
+      "single_child": 1015
+    },
+    {
+      "stem": "6bba_5f89039d",
+      "annotated_nodes": 904,
+      "divisions": 0,
+      "single_child": 885
+    },
+    {
+      "stem": "6bba_af149c94",
+      "annotated_nodes": 1350,
+      "divisions": 0,
+      "single_child": 1317
+    },
+    {
+      "stem": "6bba_789f8168",
+      "annotated_nodes": 713,
+      "divisions": 0,
+      "single_child": 681
+    },
+    {
+      "stem": "6bba_a90a0b9c",
+      "annotated_nodes": 1147,
+      "divisions": 0,
+      "single_child": 1112
+    },
+    {
+      "stem": "6bba_91951b3a",
+      "annotated_nodes": 1188,
+      "divisions": 0,
+      "single_child": 1148
+    },
+    {
+      "stem": "6bba_fbc898dc",
+      "annotated_nodes": 655,
+      "divisions": 0,
+      "single_child": 639
+    },
+    {
+      "stem": "6bba_d3da753b",
+      "annotated_nodes": 887,
+      "divisions": 1,
+      "single_child": 855
+    },
+    {
+      "stem": "6bba_15403b9a",
+      "annotated_nodes": 758,
+      "divisions": 0,
+      "single_child": 729
+    },
+    {
+      "stem": "6bba_786893ac",
+      "annotated_nodes": 1465,
+      "divisions": 3,
+      "single_child": 1389
+    },
+    {
+      "stem": "6bba_76db78c1",
+      "annotated_nodes": 617,
+      "divisions": 0,
+      "single_child": 604
+    },
+    {
+      "stem": "6bba_fe670320",
+      "annotated_nodes": 716,
+      "divisions": 2,
+      "single_child": 676
+    },
+    {
+      "stem": "6bba_acd782a8",
+      "annotated_nodes": 356,
+      "divisions": 0,
+      "single_child": 330
+    },
+    {
+      "stem": "6bba_b1ae37b9",
+      "annotated_nodes": 612,
+      "divisions": 0,
+      "single_child": 579
+    },
+    {
+      "stem": "6bba_5c824876",
+      "annotated_nodes": 1170,
+      "divisions": 1,
+      "single_child": 1128
+    },
+    {
+      "stem": "6bba_e16ffc58",
+      "annotated_nodes": 964,
+      "divisions": 1,
+      "single_child": 940
+    },
+    {
+      "stem": "6bba_bbb708ca",
+      "annotated_nodes": 892,
+      "divisions": 0,
+      "single_child": 861
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "annotated_nodes": 1036,
+      "divisions": 3,
+      "single_child": 992
+    },
+    {
+      "stem": "6bba_f20478e9",
+      "annotated_nodes": 1003,
+      "divisions": 1,
+      "single_child": 961
+    },
+    {
+      "stem": "6bba_05b6850b",
+      "annotated_nodes": 861,
+      "divisions": 0,
+      "single_child": 845
+    },
+    {
+      "stem": "6bba_5a4d9360",
+      "annotated_nodes": 747,
+      "divisions": 0,
+      "single_child": 722
+    }
+  ],
+  "division_events": 114,
+  "movies_with_divisions": 61,
+  "single_child_events": 102019,
+  "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+  "selection_opened": false,
+  "target_audit_opened": false,
+  "model_changed": false
+}

@@ -1,0 +1,253 @@
+{
+  "status": "push_returned",
+  "utc": "2026-09-14T17:25:00.117042+00:00",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "notebook_sha256": "fa3e4e365d80e0b32c74e5d18384dee2e0d0ef4b84fb8b4d9b74db5248738a35",
+  "contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "2.21h",
+      "remaining": "27.79h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "budget": {
+    "remaining_hours": 27.79,
+    "pending_reservations_hours": {
+      "56231458": 12.0
+    },
+    "new_acceptance_reserved_hours": 2.0,
+    "remaining_after_all_reservations": 13.79,
+    "reserve_hours": 8.0,
+    "t4x2_quota_hours_per_notebook_hour": 1.0,
+    "hidden_evaluation_assumed_free": false
+  },
+  "sequential": {
+    "last_source_status": "complete_prelabel_predictions",
+    "last_source_pid": 77097,
+    "live_biohub_gpu_processes": [],
+    "foreign_gpu_processes_untouched": []
+  },
+  "controller_sha256": "58c56204d0e38ea2def803773f98e8d1d0ea4dd7712baef5508d77b293778ae5",
+  "quota_policy_sha256": "6674b30f42937cd4b0c4a6fddbb1ce442028a4231441cbb2ed31420a6209cc37",
+  "submission_statuses": [
+    {
+      "ref": "56231458",
+      "status": "SubmissionStatus.PENDING"
+    },
+    {
+      "ref": "56219125",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55784044",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55364415",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55191057",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190985",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190960",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190946",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55190944",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55155485",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154131",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154126",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55154124",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55151372",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55099266",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55097917",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067327",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067321",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067317",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067313",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55067209",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045561",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045560",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045557",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55045550",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55043293",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55013181",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "55012552",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54982182",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54979905",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54975092",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54969472",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54969466",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54948346",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54941178",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54940777",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54940556",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54939162",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54936504",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54883784",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54872847",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54860720",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54837780",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54823291",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54817880",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54811655",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54799100",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54795728",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54795384",
+      "status": "SubmissionStatus.COMPLETE"
+    },
+    {
+      "ref": "54789697",
+      "status": "SubmissionStatus.COMPLETE"
+    }
+  ],
+  "quality_failures_preserved": true,
+  "submission_performed": false,
+  "kernel_pushed": true,
+  "public_test_only": true,
+  "platform_timeout_seconds": 3600,
+  "final_submission_version_requires_twelve_hour_timeout_review": true,
+  "exit_code": 0,
+  "stdout": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/indarkarhana/biohub-event-anchor-candidate\n",
+  "stderr": ""
+}

@@ -1,0 +1,112 @@
+{
+  "status": "verified_training_receipts",
+  "elapsed_seconds": 1044.728367076,
+  "input_samples": 2000,
+  "inputs_identical": true,
+  "detector_unchanged": true,
+  "arms": {
+    "control": {
+      "checkpoint_sha256": "3b54d1669d93a5a7e2b5d01b51b10b0b62c08e2ccf941abe0dbabb52121f3cea",
+      "loss": "sparse_parent_classification_with_null_v1",
+      "training_totals": {
+        "correct": 12433,
+        "positive_links": 13945,
+        "confident_correct": 12186,
+        "wrong_child_claims": 2376
+      },
+      "first_block": {
+        "step": 10,
+        "parent_loss": 0.63497896194458,
+        "detector_loss": 0.1120780436322093,
+        "correct": 122,
+        "positive_links": 133,
+        "confident_correct": 114,
+        "max_nodes": 894,
+        "wrong_child_claims": 15,
+        "elapsed_seconds": 6.7729269189999854
+      },
+      "last_block": {
+        "step": 1000,
+        "parent_loss": 2.220540578388318,
+        "detector_loss": 0.30131511292420327,
+        "correct": 111,
+        "positive_links": 123,
+        "confident_correct": 110,
+        "max_nodes": 821,
+        "wrong_child_claims": 21,
+        "elapsed_seconds": 462.89053028899997
+      },
+      "before_smoke_counts": {
+        "edge_tp": 13,
+        "edge_fp": 7,
+        "edge_fn": 3,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 0,
+        "num_pred_nodes": 408
+      },
+      "after_smoke_counts": {
+        "edge_tp": 14,
+        "edge_fp": 9,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 7,
+        "division_fn": 0,
+        "num_pred_nodes": 408
+      }
+    },
+    "row": {
+      "checkpoint_sha256": "bff4626dd7277c62382d96a36cc20b294e4e211cda79e395d5e2c1d23c97c166",
+      "loss": "sparse_parent_and_row_hard_negative_v1",
+      "training_totals": {
+        "correct": 12433,
+        "positive_links": 13945,
+        "confident_correct": 11970,
+        "wrong_child_claims": 1967
+      },
+      "first_block": {
+        "step": 10,
+        "parent_loss": 0.7024116173386574,
+        "detector_loss": 0.1120780436322093,
+        "correct": 122,
+        "positive_links": 133,
+        "confident_correct": 114,
+        "max_nodes": 894,
+        "wrong_child_claims": 15,
+        "elapsed_seconds": 4.773202748999893
+      },
+      "last_block": {
+        "step": 1000,
+        "parent_loss": 2.4865162717411295,
+        "detector_loss": 0.30131511292420327,
+        "correct": 111,
+        "positive_links": 123,
+        "confident_correct": 109,
+        "max_nodes": 821,
+        "wrong_child_claims": 17,
+        "elapsed_seconds": 359.9268474159999
+      },
+      "before_smoke_counts": {
+        "edge_tp": 13,
+        "edge_fp": 7,
+        "edge_fn": 3,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 0,
+        "num_pred_nodes": 408
+      },
+      "after_smoke_counts": {
+        "edge_tp": 13,
+        "edge_fp": 8,
+        "edge_fn": 3,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 0,
+        "num_pred_nodes": 408
+      }
+    }
+  },
+  "full_result_sha256": "4cafacb8eb0507f609e695275049ddf8edae5a744a01e5a096ba463a7ca4ee66",
+  "scope": "Training evidence only; complete-movie and embryo-held-out validation still required",
+  "authorized_for_submission": false
+}

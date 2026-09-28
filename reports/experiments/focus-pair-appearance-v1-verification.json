@@ -1,0 +1,155 @@
+{
+  "status": "verified_complete_pair_appearance_replay",
+  "data_smoke_sha256": "4e2eb70fa910025184a53cc2549293658496ad77803bc403a82137254af9c22f",
+  "verifier_sha256": "cf6161ddb07943e46b2a713b9f320c7484441a1173b06db16a7d77337cc12474",
+  "rows": [
+    {
+      "stem": "6bba_6479435d",
+      "descriptor_sha256": "a3c5bcfda40ed36b8d55938fb617643a2ab723b076ed179c0a3741344d7a4e84",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_df673a83",
+      "descriptor_sha256": "0c6f3c739522aa4369c2547f0e525aa8a68fd8b39e945e72bee57db384f5e563",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "descriptor_sha256": "27da68d33eea54ce7839197eafd7c81cc041c198635bafa87328e628c4b255f2",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "descriptor_sha256": "f6a861f24bb5fdd8f1f5e8b39e4364ba38bc9f69d4e596e51c9064fc34256d5c",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "descriptor_sha256": "1487aa27c1616cfb138bbd6dc7773344817de0b7d8710820edf961804d195ea9",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "descriptor_sha256": "85baa7ee4bc672e8873ffabfd8bad31c316a9d0c368d3fbd8a7309dc334adfb4",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "descriptor_sha256": "a49f9f31220b38c88c45572c1ca7fb196aa1747ecd32b251e7686c3876119648",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_edf14583",
+      "descriptor_sha256": "5b504632eacae208ff1e4b6e38609019921d3fa560b3a90178e7d0838f552534",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "descriptor_sha256": "9de13325b33e7cc8a05cd1ea929f05ec0d2e414d2d796b8069049c40b82e73fa",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "descriptor_sha256": "c92eff567c8604f051b36e10649fcef3e465e56d697df99c291729c485325930",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "descriptor_sha256": "c12d13103c586dcf1b525027b1fad0e04a660858fd19c9230e869e36057e73eb",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "descriptor_sha256": "39990aa30f6146a6dcd17b8288ed03f7afb30039b5b9e258b36646e3963a9002",
+      "moment_max_errors": {
+        "count": 0.0,
+        "sums": 0.0,
+        "seconds": 0.0
+      }
+    }
+  ],
+  "smoke": [
+    {
+      "arm": "full",
+      "objective": 19.35268135514909,
+      "independent_group_objective": 19.352681355149087,
+      "gradient_inf_norm": 6.784742988047432e-05,
+      "fitting_metrics": {
+        "loss_sum": 12.6549181753972,
+        "known_parent": 19,
+        "known_absent": 1,
+        "correct_parent": 17,
+        "correct_absent": 1,
+        "nll": 0.6327459087698599
+      }
+    },
+    {
+      "arm": "lda",
+      "objective": 27.174657162168128,
+      "independent_group_objective": 27.17465716216814,
+      "gradient_inf_norm": 6.173908134976536e-05,
+      "fitting_metrics": {
+        "loss_sum": 22.22934084275865,
+        "known_parent": 19,
+        "known_absent": 1,
+        "correct_parent": 14,
+        "correct_absent": 0,
+        "nll": 1.1114670421379325
+      }
+    }
+  ],
+  "complete_descriptors_rebuilt": true,
+  "independent_moments_replayed": true,
+  "actual_smoke_projection_refit": true,
+  "smoke_optimizers_refit": false,
+  "complete_choices": 4691320,
+  "complete_groups": 10915,
+  "authorized_for_submission": false,
+  "quality_evaluated": false,
+  "gpu_seconds": 0,
+  "elapsed_seconds": 65.60899999999674
+}

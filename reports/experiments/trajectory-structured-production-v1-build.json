@@ -1,0 +1,16 @@
+{
+  "status": "production_staged_not_launched",
+  "kernel": "indarkarhana/biohub-structured-trajectory-candidate",
+  "acceptance_sha256": "bc5ed56e529a5f89a603a69ebf2127fc39bc48f5c0db9179f2e8f9bfa171f776",
+  "contract_sha256": "4e13ec7dea134c2da7b13133d8ed5ba92d5bb392954f35e26c29288c446a4695",
+  "notebook_sha256": "fd9f8b908587de8f12676ed433962013ee5ede132618323590abf9269abcb2bd",
+  "runtime_projection_hours": 6.578351151475313,
+  "runtime_budget_policy_revision": 2,
+  "minimum_runtime_headroom_hours": 2,
+  "observed_runtime_headroom_hours": 3.421648848524687,
+  "inference_watchdog_seconds": 36000,
+  "notebook_wall_cap_seconds": 43200,
+  "public_test_run_required": true,
+  "candidate_is_not_exact_public_replica": true,
+  "submission_performed": false
+}

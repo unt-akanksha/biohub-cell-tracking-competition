@@ -1,0 +1,63 @@
+{
+  "status": "known_source_incompatibilities_audited",
+  "records": [
+    {
+      "batch": 4,
+      "stem": "44b6_eb2880fc",
+      "t": 73,
+      "max_fork_children": 8,
+      "options": 12464,
+      "feasible": false,
+      "reason": "incompatible_partial_constraints",
+      "known_constraints_retained": 4,
+      "known_constraints_outside_editable_scope": 0
+    },
+    {
+      "batch": 4,
+      "stem": "44b6_eb2880fc",
+      "t": 73,
+      "max_fork_children": 16,
+      "options": 26112,
+      "feasible": true,
+      "reason": "prepared",
+      "known_constraints_retained": 4,
+      "known_constraints_outside_editable_scope": 0
+    },
+    {
+      "batch": 5,
+      "stem": "6bba_48816121",
+      "t": 17,
+      "max_fork_children": 8,
+      "options": 12131,
+      "feasible": false,
+      "reason": "incompatible_partial_constraints",
+      "known_constraints_retained": 7,
+      "known_constraints_outside_editable_scope": 0
+    },
+    {
+      "batch": 5,
+      "stem": "6bba_48816121",
+      "t": 17,
+      "max_fork_children": 16,
+      "options": 24913,
+      "feasible": true,
+      "reason": "prepared",
+      "known_constraints_retained": 7,
+      "known_constraints_outside_editable_scope": 0
+    }
+  ],
+  "all_known_cases_feasible_at_16": true,
+  "complete_source_vocabulary_audit": false,
+  "expanded_vocabulary_adopted": false,
+  "training_guards_unchanged": true,
+  "labels_changed": false,
+  "predictions_changed": false,
+  "candidate_changed": false,
+  "source_case_receipts": {
+    "4": "0bacb620fb9aa70645e9ecc751704bfaa1a6f92c9c31cd0bc289652a3f3b22e7",
+    "5": "816af5ce1e2f34e4bae058871a818b62ce44d67760dbb5b4b9d2b4fcba2041ca"
+  },
+  "source_sha256": "aa21d33a182f07277071d951b4e8c22066a3976a2fa1cc73b4aa85675a87a38b",
+  "seconds": 3.39000000001397,
+  "authorized_for_submission": false
+}

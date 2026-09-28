@@ -1,0 +1,2183 @@
+{
+  "status": "fast_full_movie_replay_complete",
+  "source_only": true,
+  "ground_truth_opened": false,
+  "model_changed": false,
+  "authorized_for_submission": false,
+  "source_sha256": "428235e82a204bd79f8384c15740ae95238911998bd4a32bd92f4111896899b0",
+  "feature_audit_sha256": "ec5acdd93b2fef0536c3e711b4460447a1a0227115edb1ed41b4bdc79c9d681f",
+  "reference_receipt_sha256": "b8f8b88c03a6eb2bdfc4274cd79de30b7bf4e917350af4952d30eb525e0c9725",
+  "fast_inference_sha256": "eb98c3537308cfe255b261b1a0be5f0c21846359e92e85ac6da7c5f43e4e663c",
+  "model_sha256": "508165d131dc0c2516cf91e0eafb5a88edf24358f6ced5b0436f29ccc6b733be",
+  "per_movie": {
+    "6bba_6ca87370": {
+      "frames": [
+        {
+          "t": 1,
+          "options": 1022,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 2,
+          "options": 1007,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 3,
+          "options": 984,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 4,
+          "options": 1022,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 5,
+          "options": 1056,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 6,
+          "options": 1010,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 7,
+          "options": 1033,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 8,
+          "options": 930,
+          "changed": true,
+          "fallback": false,
+          "gain": 6.335821979385983,
+          "removed_edges": 4,
+          "added_edges": 4
+        },
+        {
+          "t": 9,
+          "options": 849,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 10,
+          "options": 802,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 11,
+          "options": 848,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 12,
+          "options": 765,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 13,
+          "options": 618,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.827115397691375,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 14,
+          "options": 587,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 15,
+          "options": 565,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 16,
+          "options": 614,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 17,
+          "options": 705,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 18,
+          "options": 731,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 19,
+          "options": 682,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 20,
+          "options": 633,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 21,
+          "options": 703,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 22,
+          "options": 819,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 23,
+          "options": 827,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 24,
+          "options": 827,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 25,
+          "options": 744,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.020576888043536,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 26,
+          "options": 679,
+          "changed": true,
+          "fallback": false,
+          "gain": 3.0228703786599205,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 27,
+          "options": 692,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 28,
+          "options": 865,
+          "changed": true,
+          "fallback": false,
+          "gain": 28.587717158910415,
+          "removed_edges": 12,
+          "added_edges": 19
+        },
+        {
+          "t": 29,
+          "options": 899,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.271749597969622,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 30,
+          "options": 941,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 31,
+          "options": 925,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 32,
+          "options": 943,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 33,
+          "options": 1006,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.1039690371853124,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 34,
+          "options": 1084,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 35,
+          "options": 1044,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 36,
+          "options": 1003,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 37,
+          "options": 922,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 38,
+          "options": 886,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 39,
+          "options": 884,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 40,
+          "options": 842,
+          "changed": true,
+          "fallback": false,
+          "gain": 4.296481228829037,
+          "removed_edges": 3,
+          "added_edges": 3
+        },
+        {
+          "t": 41,
+          "options": 925,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 42,
+          "options": 934,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.383182090960098,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 43,
+          "options": 973,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.1646552614129912,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 44,
+          "options": 970,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 45,
+          "options": 892,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.731359583393247,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 46,
+          "options": 827,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 47,
+          "options": 934,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 48,
+          "options": 1118,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 49,
+          "options": 1126,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 50,
+          "options": 1128,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 51,
+          "options": 1029,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 52,
+          "options": 1215,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.866736190752991,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 53,
+          "options": 1395,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 54,
+          "options": 1498,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.8482082434103841,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 55,
+          "options": 1625,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 56,
+          "options": 1850,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.186422850512057,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 57,
+          "options": 1862,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 58,
+          "options": 1681,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.1602903353148077,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 59,
+          "options": 1625,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 60,
+          "options": 1437,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 61,
+          "options": 1334,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 62,
+          "options": 1503,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 63,
+          "options": 1577,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.3018348806264672,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 64,
+          "options": 1628,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 65,
+          "options": 1712,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.09720184903675394,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 66,
+          "options": 1815,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 67,
+          "options": 1861,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 68,
+          "options": 1902,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 69,
+          "options": 1943,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 70,
+          "options": 2008,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 71,
+          "options": 1786,
+          "changed": true,
+          "fallback": false,
+          "gain": 74.01453193859064,
+          "removed_edges": 21,
+          "added_edges": 33
+        },
+        {
+          "t": 72,
+          "options": 1891,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 73,
+          "options": 1922,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 74,
+          "options": 1946,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.6867948578015515,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 75,
+          "options": 2245,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 76,
+          "options": 2379,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 77,
+          "options": 2383,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 78,
+          "options": 2352,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 79,
+          "options": 2343,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 80,
+          "options": 2344,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 81,
+          "options": 2104,
+          "changed": true,
+          "fallback": false,
+          "gain": 56.570339487333584,
+          "removed_edges": 19,
+          "added_edges": 24
+        },
+        {
+          "t": 82,
+          "options": 2109,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 83,
+          "options": 2300,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 84,
+          "options": 2412,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.18435929010134583,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 85,
+          "options": 2500,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 86,
+          "options": 2360,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 87,
+          "options": 2356,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 88,
+          "options": 2418,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 89,
+          "options": 2151,
+          "changed": true,
+          "fallback": false,
+          "gain": 23.41555094681333,
+          "removed_edges": 8,
+          "added_edges": 9
+        },
+        {
+          "t": 90,
+          "options": 2018,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 91,
+          "options": 1847,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.14185701477084103,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 92,
+          "options": 1850,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 93,
+          "options": 1820,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 94,
+          "options": 1772,
+          "changed": true,
+          "fallback": false,
+          "gain": 24.873085510254295,
+          "removed_edges": 4,
+          "added_edges": 11
+        },
+        {
+          "t": 95,
+          "options": 1742,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 96,
+          "options": 1826,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 97,
+          "options": 1613,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 98,
+          "options": 1575,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 99,
+          "options": 1597,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        }
+      ],
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0,
+      "added_edges": 124,
+      "removed_edges": 88,
+      "nodes_and_coordinates_unchanged": true,
+      "seconds": 8.422000000020489,
+      "reference_seconds": 11.84399999998277,
+      "matched_reference_frames": 99,
+      "differing_reference_frames": [],
+      "reference_coverage": 99,
+      "prediction_sha256": "22782f282e20a40eb379c9ae84a5d32b94f8ee52a600bf97ce3bd20f3823a11c",
+      "whole_graph_exact": true
+    },
+    "6bba_2819ca14": {
+      "frames": [
+        {
+          "t": 1,
+          "options": 1249,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 2,
+          "options": 1300,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 3,
+          "options": 1357,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.1555379824726484,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 4,
+          "options": 1425,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 5,
+          "options": 1479,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 6,
+          "options": 1473,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 7,
+          "options": 1368,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 8,
+          "options": 1313,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 9,
+          "options": 1222,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 10,
+          "options": 1209,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 11,
+          "options": 1121,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 12,
+          "options": 1021,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 13,
+          "options": 980,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 14,
+          "options": 945,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 15,
+          "options": 809,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 16,
+          "options": 708,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.5367315827570387,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 17,
+          "options": 736,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 18,
+          "options": 675,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 19,
+          "options": 665,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 20,
+          "options": 678,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 21,
+          "options": 691,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 22,
+          "options": 698,
+          "changed": true,
+          "fallback": false,
+          "gain": 64.42193048186907,
+          "removed_edges": 22,
+          "added_edges": 28
+        },
+        {
+          "t": 23,
+          "options": 660,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 24,
+          "options": 639,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 25,
+          "options": 637,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 26,
+          "options": 577,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 27,
+          "options": 573,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 28,
+          "options": 634,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 29,
+          "options": 605,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 30,
+          "options": 565,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 31,
+          "options": 554,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 32,
+          "options": 588,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.22794803198389146,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 33,
+          "options": 642,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 34,
+          "options": 663,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 35,
+          "options": 682,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 36,
+          "options": 664,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 37,
+          "options": 690,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 38,
+          "options": 682,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 39,
+          "options": 682,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 40,
+          "options": 636,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 41,
+          "options": 625,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 42,
+          "options": 539,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 43,
+          "options": 513,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 44,
+          "options": 500,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 45,
+          "options": 531,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 46,
+          "options": 524,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 47,
+          "options": 481,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 48,
+          "options": 479,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 49,
+          "options": 462,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 50,
+          "options": 433,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 51,
+          "options": 399,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.6087301808768868,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 52,
+          "options": 407,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 53,
+          "options": 416,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 54,
+          "options": 494,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 55,
+          "options": 506,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.24891137680485112,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 56,
+          "options": 503,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 57,
+          "options": 459,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 58,
+          "options": 411,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 59,
+          "options": 398,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 60,
+          "options": 372,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 61,
+          "options": 426,
+          "changed": true,
+          "fallback": false,
+          "gain": 51.81721290380716,
+          "removed_edges": 12,
+          "added_edges": 21
+        },
+        {
+          "t": 62,
+          "options": 520,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.088156417114029,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 63,
+          "options": 525,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 64,
+          "options": 570,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 65,
+          "options": 578,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 66,
+          "options": 561,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 67,
+          "options": 518,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 68,
+          "options": 489,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 69,
+          "options": 518,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.21919440895839123,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 70,
+          "options": 537,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 71,
+          "options": 524,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 72,
+          "options": 528,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 73,
+          "options": 506,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 74,
+          "options": 501,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 75,
+          "options": 494,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.1891109259114927,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 76,
+          "options": 446,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 77,
+          "options": 458,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 78,
+          "options": 425,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 79,
+          "options": 422,
+          "changed": true,
+          "fallback": false,
+          "gain": 53.76535146064643,
+          "removed_edges": 9,
+          "added_edges": 20
+        },
+        {
+          "t": 80,
+          "options": 357,
+          "changed": true,
+          "fallback": false,
+          "gain": 3.1385447746392905,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 81,
+          "options": 382,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 82,
+          "options": 365,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.9982996799514172,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 83,
+          "options": 395,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 84,
+          "options": 431,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 85,
+          "options": 442,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 86,
+          "options": 454,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 87,
+          "options": 469,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.9454145802589073,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 88,
+          "options": 432,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 89,
+          "options": 426,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 90,
+          "options": 462,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 91,
+          "options": 411,
+          "changed": true,
+          "fallback": false,
+          "gain": 12.471019931676883,
+          "removed_edges": 4,
+          "added_edges": 5
+        },
+        {
+          "t": 92,
+          "options": 432,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 93,
+          "options": 369,
+          "changed": true,
+          "fallback": false,
+          "gain": 17.788136633967945,
+          "removed_edges": 3,
+          "added_edges": 6
+        },
+        {
+          "t": 94,
+          "options": 377,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 95,
+          "options": 373,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 96,
+          "options": 378,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 97,
+          "options": 383,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 98,
+          "options": 357,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 99,
+          "options": 364,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        }
+      ],
+      "processed_frames": 99,
+      "budget_exhausted": false,
+      "solver_fallbacks": 0,
+      "added_edges": 92,
+      "removed_edges": 59,
+      "nodes_and_coordinates_unchanged": true,
+      "seconds": 3.485000000044238,
+      "reference_seconds": 6.467999999993481,
+      "matched_reference_frames": 99,
+      "differing_reference_frames": [],
+      "reference_coverage": 99,
+      "prediction_sha256": "fb266a2f525e7f23959d3fd9b9edd917aeee74b5c3f4e4e4975dcbf0ef47690a",
+      "whole_graph_exact": true
+    },
+    "6bba_3abfe10a": {
+      "frames": [
+        {
+          "t": 1,
+          "options": 6160,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.9802056290711421,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 2,
+          "options": 6797,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.581117879830816,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 3,
+          "options": 7330,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 4,
+          "options": 7805,
+          "changed": true,
+          "fallback": false,
+          "gain": 16.72396675970508,
+          "removed_edges": 8,
+          "added_edges": 8
+        },
+        {
+          "t": 5,
+          "options": 8662,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.0102686634835876,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 6,
+          "options": 8899,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 7,
+          "options": 8648,
+          "changed": true,
+          "fallback": false,
+          "gain": 17.087735909978118,
+          "removed_edges": 9,
+          "added_edges": 10
+        },
+        {
+          "t": 8,
+          "options": 8594,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.1369654429964005,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 9,
+          "options": 9099,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.43380570753793,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 10,
+          "options": 9798,
+          "changed": true,
+          "fallback": false,
+          "gain": 49.48149817018365,
+          "removed_edges": 25,
+          "added_edges": 27
+        },
+        {
+          "t": 11,
+          "options": 10647,
+          "changed": true,
+          "fallback": false,
+          "gain": 3.4183479183243852,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 12,
+          "options": 11470,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.1887756433053642,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 13,
+          "options": 11812,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.21067225261424638,
+          "removed_edges": 0,
+          "added_edges": 3
+        },
+        {
+          "t": 14,
+          "options": 12070,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 15,
+          "options": 12645,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.569322641532386,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 16,
+          "options": 13250,
+          "changed": true,
+          "fallback": false,
+          "gain": 6.501563941215039,
+          "removed_edges": 4,
+          "added_edges": 6
+        },
+        {
+          "t": 17,
+          "options": 13634,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 18,
+          "options": 13912,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.16910676176975736,
+          "removed_edges": 0,
+          "added_edges": 2
+        },
+        {
+          "t": 19,
+          "options": 13986,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 20,
+          "options": 14268,
+          "changed": true,
+          "fallback": false,
+          "gain": 19.314968284885374,
+          "removed_edges": 9,
+          "added_edges": 13
+        },
+        {
+          "t": 21,
+          "options": 14805,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.431678553081081,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 22,
+          "options": 14993,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.2342150303231514,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 23,
+          "options": 14868,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.22468338706462632,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 24,
+          "options": 14532,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 25,
+          "options": 14696,
+          "changed": true,
+          "fallback": false,
+          "gain": 164.56980843658346,
+          "removed_edges": 109,
+          "added_edges": 119
+        },
+        {
+          "t": 26,
+          "options": 15642,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.7367659797242817,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 27,
+          "options": 16711,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.9560947619812493,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 28,
+          "options": 17550,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.230305846121321,
+          "removed_edges": 3,
+          "added_edges": 4
+        },
+        {
+          "t": 29,
+          "options": 18372,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.262513635802592,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 30,
+          "options": 19248,
+          "changed": true,
+          "fallback": false,
+          "gain": 4.376662221929638,
+          "removed_edges": 2,
+          "added_edges": 3
+        },
+        {
+          "t": 31,
+          "options": 20103,
+          "changed": true,
+          "fallback": false,
+          "gain": 8.410237229055815,
+          "removed_edges": 4,
+          "added_edges": 5
+        },
+        {
+          "t": 32,
+          "options": 20993,
+          "changed": true,
+          "fallback": false,
+          "gain": 8.3277942873227,
+          "removed_edges": 4,
+          "added_edges": 4
+        },
+        {
+          "t": 33,
+          "options": 19867,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.11633977574792667,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 34,
+          "options": 19211,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 35,
+          "options": 19565,
+          "changed": true,
+          "fallback": false,
+          "gain": 73.5639399023583,
+          "removed_edges": 48,
+          "added_edges": 68
+        },
+        {
+          "t": 36,
+          "options": 21243,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 37,
+          "options": 22693,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.5438291829436985,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 38,
+          "options": 23495,
+          "changed": true,
+          "fallback": false,
+          "gain": 4.9191212537200055,
+          "removed_edges": 3,
+          "added_edges": 5
+        },
+        {
+          "t": 39,
+          "options": 24254,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.864633615481978,
+          "removed_edges": 2,
+          "added_edges": 2
+        },
+        {
+          "t": 40,
+          "options": 24602,
+          "changed": true,
+          "fallback": false,
+          "gain": 6.844055778687018,
+          "removed_edges": 3,
+          "added_edges": 4
+        },
+        {
+          "t": 41,
+          "options": 25352,
+          "changed": true,
+          "fallback": false,
+          "gain": 205.22425987813503,
+          "removed_edges": 98,
+          "added_edges": 93
+        },
+        {
+          "t": 42,
+          "options": 26356,
+          "changed": true,
+          "fallback": false,
+          "gain": 10.412901287418325,
+          "removed_edges": 5,
+          "added_edges": 7
+        },
+        {
+          "t": 43,
+          "options": 27246,
+          "changed": true,
+          "fallback": false,
+          "gain": 83.40346861063833,
+          "removed_edges": 35,
+          "added_edges": 44
+        },
+        {
+          "t": 44,
+          "options": 27803,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.0374164806283015,
+          "removed_edges": 2,
+          "added_edges": 3
+        },
+        {
+          "t": 45,
+          "options": 26683,
+          "changed": true,
+          "fallback": false,
+          "gain": 10.731424303205081,
+          "removed_edges": 4,
+          "added_edges": 5
+        },
+        {
+          "t": 46,
+          "options": 26931,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.123715982602728,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 47,
+          "options": 27557,
+          "changed": true,
+          "fallback": false,
+          "gain": 161.09147208955216,
+          "removed_edges": 127,
+          "added_edges": 160
+        },
+        {
+          "t": 48,
+          "options": 29459,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 49,
+          "options": 30174,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 50,
+          "options": 29673,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 51,
+          "options": 28205,
+          "changed": true,
+          "fallback": false,
+          "gain": 97.19225321327207,
+          "removed_edges": 71,
+          "added_edges": 106
+        },
+        {
+          "t": 52,
+          "options": 26946,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.3818978434485416,
+          "removed_edges": 0,
+          "added_edges": 2
+        },
+        {
+          "t": 53,
+          "options": 27536,
+          "changed": true,
+          "fallback": false,
+          "gain": 114.09899909751043,
+          "removed_edges": 58,
+          "added_edges": 70
+        },
+        {
+          "t": 54,
+          "options": 28710,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.0556346620913684,
+          "removed_edges": 1,
+          "added_edges": 1
+        },
+        {
+          "t": 55,
+          "options": 29726,
+          "changed": true,
+          "fallback": false,
+          "gain": 10.358250770897897,
+          "removed_edges": 5,
+          "added_edges": 11
+        },
+        {
+          "t": 56,
+          "options": 30586,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 57,
+          "options": 30954,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.6785370475607382,
+          "removed_edges": 0,
+          "added_edges": 3
+        },
+        {
+          "t": 58,
+          "options": 30783,
+          "changed": true,
+          "fallback": false,
+          "gain": 7.559997626148451,
+          "removed_edges": 3,
+          "added_edges": 6
+        },
+        {
+          "t": 59,
+          "options": 30703,
+          "changed": true,
+          "fallback": false,
+          "gain": 5.857680629205516,
+          "removed_edges": 5,
+          "added_edges": 6
+        },
+        {
+          "t": 60,
+          "options": 30863,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 61,
+          "options": 30901,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 62,
+          "options": 30874,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 63,
+          "options": 31141,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 64,
+          "options": 31905,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 65,
+          "options": 31789,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 66,
+          "options": 31214,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 67,
+          "options": 31377,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        },
+        {
+          "t": 68,
+          "options": 31339,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.05301427937091463,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 69,
+          "options": 31541,
+          "changed": true,
+          "fallback": false,
+          "gain": 1.5581845528456189,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 70,
+          "options": 32125,
+          "changed": true,
+          "fallback": false,
+          "gain": 3.334206807200992,
+          "removed_edges": 2,
+          "added_edges": 5
+        },
+        {
+          "t": 71,
+          "options": 31727,
+          "changed": false,
+          "fallback": false,
+          "gain": 0.0
+        },
+        {
+          "t": 72,
+          "options": 31477,
+          "changed": true,
+          "fallback": false,
+          "gain": 10.335233691655429,
+          "removed_edges": 4,
+          "added_edges": 12
+        },
+        {
+          "t": 73,
+          "options": 30836,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.8436547146366395,
+          "removed_edges": 0,
+          "added_edges": 3
+        },
+        {
+          "t": 74,
+          "options": 29887,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.291100576430072,
+          "removed_edges": 1,
+          "added_edges": 2
+        },
+        {
+          "t": 75,
+          "options": 29386,
+          "changed": true,
+          "fallback": false,
+          "gain": 2.207450862618533,
+          "removed_edges": 2,
+          "added_edges": 8
+        },
+        {
+          "t": 76,
+          "options": 29072,
+          "changed": true,
+          "fallback": false,
+          "gain": 0.35392258575138513,
+          "removed_edges": 0,
+          "added_edges": 1
+        },
+        {
+          "t": 77,
+          "options": 28813,
+          "changed": false,
+          "fallback": true,
+          "reason": "Optimal event assignment unavailable, solver status 1"
+        }
+      ],
+      "processed_frames": 77,
+      "budget_exhausted": true,
+      "solver_fallbacks": 9,
+      "added_edges": 858,
+      "removed_edges": 675,
+      "nodes_and_coordinates_unchanged": true,
+      "seconds": 120.73399999999674,
+      "reference_seconds": 121.18800000002375,
+      "matched_reference_frames": 57,
+      "differing_reference_frames": [],
+      "reference_coverage": 58,
+      "prediction_sha256": "41fa998d5871b44f6d8c977049f8757173bccad726572e4d1401ee8cee723507",
+      "whole_graph_exact": false
+    }
+  },
+  "seconds": 134.48399999999674,
+  "exact_on_shared_nonfallback_frames": true,
+  "all_transitions_completed_without_fallback": false
+}

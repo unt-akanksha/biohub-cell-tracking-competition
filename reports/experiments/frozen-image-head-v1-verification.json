@@ -1,0 +1,612 @@
+{
+  "status": "verified_rejection",
+  "run_id": "frozen-image-head-v1",
+  "terminal_sha256": "6206f476c9eec7fb335098e97b9e0df1db88874ee94ca691bd9d7937d91954bd",
+  "held_out_embryo_scores_opened": false,
+  "authorized_for_submission": false,
+  "source_normalization_replay": true,
+  "source_scores_replay": true,
+  "image_morphology_replay": true,
+  "source_exclusion_verified": true,
+  "actual_leaderboard_score": null,
+  "evidence": {
+    "44b6": {
+      "source_metrics": {
+        "rows": 4,
+        "positives": 2,
+        "average_precision": 0.75,
+        "zero_fp_tp": 1,
+        "source_threshold": null,
+        "binary_cross_entropy": 0.6681183304785301,
+        "source_gate_passed": false
+      },
+      "source_movie_counts": [
+        30,
+        3
+      ],
+      "penalty": 0.1,
+      "head_parameters": 1347,
+      "eligible_source_ranking": [
+        {
+          "row": 13,
+          "stem": "44b6_5f15d135",
+          "embryo": "44b6",
+          "role": "selection",
+          "source_path": "selection/44b6/44b6_5f15d135-t036.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.5070983583891028
+        },
+        {
+          "row": 31,
+          "stem": "44b6_a2bb48bb",
+          "embryo": "44b6",
+          "role": "selection",
+          "source_path": "selection/44b6/44b6_a2bb48bb-t020.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.1844431911229013
+        },
+        {
+          "row": 50,
+          "stem": "44b6_a2bb48bb",
+          "embryo": "44b6",
+          "role": "selection",
+          "source_path": "selection/44b6/44b6_a2bb48bb-t088.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.07432199764085412
+        },
+        {
+          "row": 0,
+          "stem": "44b6_587a1e22",
+          "embryo": "44b6",
+          "role": "selection",
+          "source_path": "selection/44b6/44b6_587a1e22-t019.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.025544130847358015
+        }
+      ]
+    },
+    "6bba": {
+      "source_metrics": {
+        "rows": 52,
+        "positives": 13,
+        "average_precision": 0.9095571095571096,
+        "zero_fp_tp": 9,
+        "source_threshold": 0.7779628422664069,
+        "binary_cross_entropy": 0.48687726053845615,
+        "source_gate_passed": true
+      },
+      "source_movie_counts": [
+        79,
+        9
+      ],
+      "penalty": 0.01,
+      "head_parameters": 1347,
+      "eligible_source_ranking": [
+        {
+          "row": 193,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t072.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.9840004251472707
+        },
+        {
+          "row": 105,
+          "stem": "6bba_48816121",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_48816121-t057.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.6645719637518601
+        },
+        {
+          "row": 103,
+          "stem": "6bba_48816121",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_48816121-t011.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.658204518431036
+        },
+        {
+          "row": 82,
+          "stem": "6bba_32db13fc",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_32db13fc-t005.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.640292625721799
+        },
+        {
+          "row": 58,
+          "stem": "6bba_09961292",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_09961292-t052.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.1578797548826585
+        },
+        {
+          "row": 101,
+          "stem": "6bba_48816121",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_48816121-t005.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.0108139688240687
+        },
+        {
+          "row": 255,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t086.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 1.009172225538637
+        },
+        {
+          "row": 93,
+          "stem": "6bba_474be664",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_474be664-t063.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.8168032555670668
+        },
+        {
+          "row": 134,
+          "stem": "6bba_57b7cc1e",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_57b7cc1e-t012.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.7779628422664069
+        },
+        {
+          "row": 102,
+          "stem": "6bba_48816121",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_48816121-t006.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.7746293753908762
+        },
+        {
+          "row": 174,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t040.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.6355170476271341
+        },
+        {
+          "row": 172,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t037.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.5669967486228444
+        },
+        {
+          "row": 288,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t032.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.4562502727262352
+        },
+        {
+          "row": 151,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t001.npz",
+          "source_row": 2,
+          "target": 0.0,
+          "score": 0.42520488848823046
+        },
+        {
+          "row": 43,
+          "stem": "6bba_09961292",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_09961292-t024.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.3836405339028772
+        },
+        {
+          "row": 201,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t031.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.38205161595030024
+        },
+        {
+          "row": 253,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t085.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.29041047406398035
+        },
+        {
+          "row": 283,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t026.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": 0.2656820507351978
+        },
+        {
+          "row": 296,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t038.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.1894306130338359
+        },
+        {
+          "row": 298,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t039.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.16755313210237954
+        },
+        {
+          "row": 183,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t053.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": 0.09764502245535511
+        },
+        {
+          "row": 138,
+          "stem": "6bba_57b7cc1e",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_57b7cc1e-t023.npz",
+          "source_row": 0,
+          "target": 1.0,
+          "score": -0.01668315293609246
+        },
+        {
+          "row": 337,
+          "stem": "6bba_f17befbc",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_f17befbc-t092.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.06117827792454822
+        },
+        {
+          "row": 245,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t075.npz",
+          "source_row": 2,
+          "target": 0.0,
+          "score": -0.15128880273273526
+        },
+        {
+          "row": 185,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t055.npz",
+          "source_row": 1,
+          "target": 0.0,
+          "score": -0.23119932190922432
+        },
+        {
+          "row": 160,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t022.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.2415455375526332
+        },
+        {
+          "row": 149,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t001.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.3009163445483555
+        },
+        {
+          "row": 231,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t065.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.3365344850872932
+        },
+        {
+          "row": 107,
+          "stem": "6bba_48816121",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_48816121-t061.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.33751251264221127
+        },
+        {
+          "row": 150,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t001.npz",
+          "source_row": 1,
+          "target": 0.0,
+          "score": -0.4040111487802821
+        },
+        {
+          "row": 243,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t075.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.411822837172063
+        },
+        {
+          "row": 184,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t055.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.414450711426101
+        },
+        {
+          "row": 204,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t035.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.4752861153970198
+        },
+        {
+          "row": 343,
+          "stem": "6bba_f17befbc",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_f17befbc-t098.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.4791393390333186
+        },
+        {
+          "row": 186,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t060.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.4825932154888096
+        },
+        {
+          "row": 290,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t034.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.5826342514305902
+        },
+        {
+          "row": 244,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t075.npz",
+          "source_row": 1,
+          "target": 0.0,
+          "score": -0.634253717323769
+        },
+        {
+          "row": 177,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t047.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.6413535853149929
+        },
+        {
+          "row": 165,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t028.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.6531381140785183
+        },
+        {
+          "row": 270,
+          "stem": "6bba_debd7bfa",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_debd7bfa-t006.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.685567319337958
+        },
+        {
+          "row": 200,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t029.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.7419100076738234
+        },
+        {
+          "row": 188,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t061.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.7810831573862516
+        },
+        {
+          "row": 154,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t004.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -0.8483033358241987
+        },
+        {
+          "row": 195,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t077.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.0063260992035008
+        },
+        {
+          "row": 152,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t002.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.0166391416171776
+        },
+        {
+          "row": 158,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t008.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.1106760665825388
+        },
+        {
+          "row": 246,
+          "stem": "6bba_cdcfe533",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_cdcfe533-t075.npz",
+          "source_row": 3,
+          "target": 0.0,
+          "score": -1.1192792188785825
+        },
+        {
+          "row": 166,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t029.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.1413356015110643
+        },
+        {
+          "row": 153,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t003.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.1491297719169062
+        },
+        {
+          "row": 196,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t078.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.4020985545191325
+        },
+        {
+          "row": 83,
+          "stem": "6bba_32db13fc",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_32db13fc-t006.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.504134219009375
+        },
+        {
+          "row": 155,
+          "stem": "6bba_7f87b3d8",
+          "embryo": "6bba",
+          "role": "selection",
+          "source_path": "selection/6bba/6bba_7f87b3d8-t005.npz",
+          "source_row": 0,
+          "target": 0.0,
+          "score": -1.6552764206456745
+        }
+      ]
+    }
+  }
+}

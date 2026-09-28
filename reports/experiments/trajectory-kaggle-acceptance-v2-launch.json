@@ -1,0 +1,30 @@
+{
+  "status": "push_returned",
+  "utc": "2026-09-14T00:07:28.413897+00:00",
+  "kernel": "indarkarhana/biohub-trajectory-motion-acceptance",
+  "notebook_sha256": "c6b6081e6f7472eef5a4793a596a45dd2caf0d694d4b1e5bb28b0cecb9a91c77",
+  "contract_sha256": "d10d19b1e21b30e2eb5c6bf1c05161559f74594ce30e250e3c473f2d8b0379f2",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "0.00h",
+      "remaining": "30.00h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "worst_case_reserved_gpu_hours": 2,
+  "notebook_wall_cap_seconds": 3600,
+  "reserve_hours": 8,
+  "submission_performed": false,
+  "exit_code": 0,
+  "stdout": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/indarkarhana/biohub-trajectory-motion-acceptance\n",
+  "stderr": ""
+}

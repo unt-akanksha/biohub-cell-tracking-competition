@@ -1,0 +1,28 @@
+{
+  "status": "verified",
+  "movies": [
+    "44b6_12dfb391",
+    "44b6_267148e4",
+    "6bba_062c8d37",
+    "6bba_07e24132"
+  ],
+  "csv": {
+    "rows": 200804,
+    "movie_rows": {
+      "44b6_12dfb391": 88441,
+      "44b6_267148e4": 43567,
+      "6bba_062c8d37": 11474,
+      "6bba_07e24132": 57322
+    },
+    "sha256": "ef4281d92b408408666784c0174876e537e339367f08f4fb343e70be8874c3bc"
+  },
+  "official_converter_sha256": {
+    "csv_to_geffs.py": "6ff289b978549c0745588a9f0fb455ae9d6507a3f1e570f3c3b77da36b853c20",
+    "geffs_to_csv.py": "c3a9a3f2fdf8cac622221dce5ee1427c0e46157974ca37358e46ec318e7a421a"
+  },
+  "node_and_edge_coordinate_multisets_identical": true,
+  "ground_truth_opened": false,
+  "gpu_hours": 0,
+  "elapsed_seconds": 10.327999999979511,
+  "submission_performed": false
+}

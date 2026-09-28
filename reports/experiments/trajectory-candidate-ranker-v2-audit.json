@@ -1,0 +1,260 @@
+{
+  "status": "unmasked_source_ranker_audit_complete",
+  "source": {
+    "44b6": {
+      "queries": 476,
+      "learned_correct": 472,
+      "current_correct": 470,
+      "initial_correct": 471,
+      "learned_repairs": 4,
+      "learned_breaks": 2,
+      "passed": false
+    },
+    "6bba": {
+      "queries": 2395,
+      "learned_correct": 2384,
+      "current_correct": 2374,
+      "initial_correct": 2383,
+      "learned_repairs": 10,
+      "learned_breaks": 0,
+      "passed": true
+    }
+  },
+  "lomo": {
+    "44b6_cf8fed6b": {
+      "queries": 178,
+      "learned_correct": 176,
+      "current_correct": 173,
+      "initial_correct": 177,
+      "learned_repairs": 3,
+      "learned_breaks": 0,
+      "all_queries": 41029,
+      "changed_current_choices": 1639,
+      "annotation_mask_used_for_inference": false
+    },
+    "44b6_f28707c6": {
+      "queries": 37,
+      "learned_correct": 37,
+      "current_correct": 37,
+      "initial_correct": 37,
+      "learned_repairs": 0,
+      "learned_breaks": 0,
+      "all_queries": 21106,
+      "changed_current_choices": 1231,
+      "annotation_mask_used_for_inference": false
+    },
+    "44b6_c50204e0": {
+      "queries": 206,
+      "learned_correct": 204,
+      "current_correct": 205,
+      "initial_correct": 202,
+      "learned_repairs": 1,
+      "learned_breaks": 2,
+      "all_queries": 37505,
+      "changed_current_choices": 1603,
+      "annotation_mask_used_for_inference": false
+    },
+    "44b6_cf2536e8": {
+      "queries": 55,
+      "learned_correct": 55,
+      "current_correct": 55,
+      "initial_correct": 55,
+      "learned_repairs": 0,
+      "learned_breaks": 0,
+      "all_queries": 21622,
+      "changed_current_choices": 898,
+      "annotation_mask_used_for_inference": false
+    },
+    "6bba_78a7bd97": {
+      "queries": 403,
+      "learned_correct": 398,
+      "current_correct": 394,
+      "initial_correct": 398,
+      "learned_repairs": 4,
+      "learned_breaks": 0,
+      "all_queries": 39219,
+      "changed_current_choices": 2405,
+      "annotation_mask_used_for_inference": false
+    },
+    "6bba_5dfe9ad1": {
+      "queries": 1298,
+      "learned_correct": 1296,
+      "current_correct": 1296,
+      "initial_correct": 1293,
+      "learned_repairs": 0,
+      "learned_breaks": 0,
+      "all_queries": 29421,
+      "changed_current_choices": 906,
+      "annotation_mask_used_for_inference": false
+    },
+    "6bba_acd782a8": {
+      "queries": 209,
+      "learned_correct": 205,
+      "current_correct": 200,
+      "initial_correct": 208,
+      "learned_repairs": 5,
+      "learned_breaks": 0,
+      "all_queries": 19635,
+      "changed_current_choices": 710,
+      "annotation_mask_used_for_inference": false
+    },
+    "6bba_969618f6": {
+      "queries": 485,
+      "learned_correct": 485,
+      "current_correct": 484,
+      "initial_correct": 484,
+      "learned_repairs": 1,
+      "learned_breaks": 0,
+      "all_queries": 15355,
+      "changed_current_choices": 386,
+      "annotation_mask_used_for_inference": false
+    }
+  },
+  "cross_embryo": {
+    "44b6": {
+      "summary": {
+        "queries": 2395,
+        "learned_correct": 2390,
+        "current_correct": 2374,
+        "initial_correct": 2383,
+        "learned_repairs": 16,
+        "learned_breaks": 0,
+        "passed": true
+      },
+      "per_movie": {
+        "6bba_78a7bd97": {
+          "queries": 403,
+          "learned_correct": 401,
+          "current_correct": 394,
+          "initial_correct": 398,
+          "learned_repairs": 7,
+          "learned_breaks": 0,
+          "all_queries": 39219,
+          "changed_current_choices": 2791,
+          "annotation_mask_used_for_inference": false
+        },
+        "6bba_5dfe9ad1": {
+          "queries": 1298,
+          "learned_correct": 1296,
+          "current_correct": 1296,
+          "initial_correct": 1293,
+          "learned_repairs": 0,
+          "learned_breaks": 0,
+          "all_queries": 29421,
+          "changed_current_choices": 906,
+          "annotation_mask_used_for_inference": false
+        },
+        "6bba_acd782a8": {
+          "queries": 209,
+          "learned_correct": 208,
+          "current_correct": 200,
+          "initial_correct": 208,
+          "learned_repairs": 8,
+          "learned_breaks": 0,
+          "all_queries": 19635,
+          "changed_current_choices": 887,
+          "annotation_mask_used_for_inference": false
+        },
+        "6bba_969618f6": {
+          "queries": 485,
+          "learned_correct": 485,
+          "current_correct": 484,
+          "initial_correct": 484,
+          "learned_repairs": 1,
+          "learned_breaks": 0,
+          "all_queries": 15355,
+          "changed_current_choices": 398,
+          "annotation_mask_used_for_inference": false
+        }
+      }
+    },
+    "6bba": {
+      "summary": {
+        "queries": 476,
+        "learned_correct": 473,
+        "current_correct": 470,
+        "initial_correct": 471,
+        "learned_repairs": 3,
+        "learned_breaks": 0,
+        "passed": true
+      },
+      "per_movie": {
+        "44b6_cf8fed6b": {
+          "queries": 178,
+          "learned_correct": 176,
+          "current_correct": 173,
+          "initial_correct": 177,
+          "learned_repairs": 3,
+          "learned_breaks": 0,
+          "all_queries": 41029,
+          "changed_current_choices": 1745,
+          "annotation_mask_used_for_inference": false
+        },
+        "44b6_f28707c6": {
+          "queries": 37,
+          "learned_correct": 37,
+          "current_correct": 37,
+          "initial_correct": 37,
+          "learned_repairs": 0,
+          "learned_breaks": 0,
+          "all_queries": 21106,
+          "changed_current_choices": 981,
+          "annotation_mask_used_for_inference": false
+        },
+        "44b6_c50204e0": {
+          "queries": 206,
+          "learned_correct": 205,
+          "current_correct": 205,
+          "initial_correct": 202,
+          "learned_repairs": 0,
+          "learned_breaks": 0,
+          "all_queries": 37505,
+          "changed_current_choices": 1584,
+          "annotation_mask_used_for_inference": false
+        },
+        "44b6_cf2536e8": {
+          "queries": 55,
+          "learned_correct": 55,
+          "current_correct": 55,
+          "initial_correct": 55,
+          "learned_repairs": 0,
+          "learned_breaks": 0,
+          "all_queries": 21622,
+          "changed_current_choices": 891,
+          "annotation_mask_used_for_inference": false
+        }
+      }
+    }
+  },
+  "qualified_for_independent_selection": [
+    "6bba"
+  ],
+  "prior_sha256": "436615679565a2207b5bcfbbe71dc7b7f27a1688b0751735fe33282c4c5b7cf5",
+  "prediction_sha256": {
+    "44b6_cf8fed6b-lomo.npy": "390e20b3a995bd07371fcd15f341c37cc6c415e3bf3ddc9a4adac0f09db68abe",
+    "44b6_f28707c6-lomo.npy": "807daf24431000cab95f81ff369900fe22c073c9df7cbd34da62b2f59f2f0ada",
+    "44b6_c50204e0-lomo.npy": "27172e9789a208c384785dcabbd60164dd4842a270be3a571bb2786b6f7db475",
+    "44b6_cf2536e8-lomo.npy": "e725897289cf2c3fd8f760df95b83604e89f9d6a32ec9e7266bc1eb1d231e9e3",
+    "6bba_78a7bd97-cross.npy": "a3a2bb77d9934a92bdbb0445e16cfbd8aa0b0cd54c80a7a2872319d62b7b5116",
+    "6bba_5dfe9ad1-cross.npy": "7e68b7e0df290b1e5298f014adf2d6337b4f2264d802d90fa51f8e57548143e0",
+    "6bba_acd782a8-cross.npy": "9f1b272781dbdde084d91193fc41901660cc6ec368f5ebf50e1280aef4ffb3eb",
+    "6bba_969618f6-cross.npy": "44a77a0417b254b553ba122d80680fdc3bdf0ab85e01292e5edd07cec3542dde",
+    "6bba_78a7bd97-lomo.npy": "19d229e4c838bc5345808fe8455a240ceabde2b54af738bd5273e35ae26d0926",
+    "6bba_5dfe9ad1-lomo.npy": "cc222a82ff0534bf64bfa69e667ce3547a3745187093cec568955f7ac20d554f",
+    "6bba_acd782a8-lomo.npy": "a898f7209dca71f0bed10e8f14d279796aa8b58cc3430af47daa7e8b98b1a763",
+    "6bba_969618f6-lomo.npy": "4bdadfa680b7ca20a524705c3f124ac7587ac5e0e682f49cdca961ffd18cbd3a",
+    "44b6_cf8fed6b-cross.npy": "4e3e2259f59cd37a48ffa991f698a5b5e89238ae458b390d739bc203fe433f0e",
+    "44b6_f28707c6-cross.npy": "c154c4a05e4b25f17f4ede6bc89e2f52f3f9b10913c41df1a05fa3634a223272",
+    "44b6_c50204e0-cross.npy": "6eb2be8597c470899fdc1d4977457529f963db66477fc44b84a9722a4303dffb",
+    "44b6_cf2536e8-cross.npy": "ab36cd1f47d53d9855a924d47cdd39a3d2a9121dc9121471dbcc47644d37d4ba"
+  },
+  "weights_sha256": "83eaa7c4e65da964f49618bd8bafd0c0910cad9d347f7afa53590e1ee6c2ad96",
+  "helper_sha256": "c4e69d913402a6309356116cef1b9b982b738e0f8c6ff00a408e561fd34ce964",
+  "source_sha256": "23731903a99f4e2ca49f686a32639aae8ececc98de824a50e9e99201f824dd84",
+  "unchanged_fit_weights": true,
+  "annotation_mask_used_for_inference": false,
+  "graph_assignment_tested": false,
+  "authorized_for_submission": false,
+  "selection_or_validation_opened": false,
+  "seconds": 3.375
+}

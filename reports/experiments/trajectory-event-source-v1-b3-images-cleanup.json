@@ -1,0 +1,10 @@
+{
+  "status": "retired_completed_recoverable_image_cache",
+  "path": "/dev/shm/biohub-event-source-v1-b3.hpf9EX/images",
+  "bytes": 3205574785,
+  "raw_images_locally_backed_up": false,
+  "recovery": "Kaggle competition archive with saved member CRC and SHA256 manifest",
+  "experiment_outputs_preserved": true,
+  "foreign_jobs_untouched": true,
+  "utc": "2026-09-14T15:07:21Z"
+}

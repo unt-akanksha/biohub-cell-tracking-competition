@@ -1,0 +1,33 @@
+{
+  "status": "complete_control_graph_replay_exact",
+  "rows": [
+    {
+      "stem": "44b6_996155de",
+      "reference_seconds": 10.453000000037719,
+      "vectorized_seconds": 10.719000000040978,
+      "prediction_sha256": "8733f7e05575b7ba70c0bef4b0263370bd59f4eaa56f3e1f46988b08d322d486",
+      "processed_frames": 99
+    },
+    {
+      "stem": "44b6_d5e7d891",
+      "reference_seconds": 210.5779999999795,
+      "vectorized_seconds": 162.375,
+      "prediction_sha256": "5c6938fe992ecfa12cf57c31288067790943576497a2e55f66aaf7adcb50d856",
+      "processed_frames": 99
+    }
+  ],
+  "source_preflight_sha256": "a6c00589d1b596293f7c652012dd973ca47c3fa2cfe91c1b418d90ec4cb12fcc",
+  "benchmark_sha256": "e273cc28892b1fcb6d053eb1447f0b01fcaf2a351173eab7912a27adc914d777",
+  "fit_contracts": {
+    "44b6": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+    "6bba": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111"
+  },
+  "source_sha256": "537b6165803335e12019af34e45939a218f1a01ce0d767002ff7a40fcf26ff8f",
+  "adapter_sha256": "f54b51c30fa0bac8983d647c55c124d7532ac128f4306721fee4b92e78f2b71b",
+  "seconds": 177.73499999998603,
+  "ground_truth_opened": false,
+  "model_changed": false,
+  "live_training_changed": false,
+  "kaggle_runtime_acceptance": false,
+  "authorized_for_submission": false
+}

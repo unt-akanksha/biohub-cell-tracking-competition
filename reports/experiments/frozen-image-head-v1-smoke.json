@@ -1,0 +1,21 @@
+{
+  "run_id": "frozen-image-head-v1",
+  "mode": "smoke",
+  "status": "functionality_passed",
+  "contract_sha256": "a80e0e80bcf6103f78f10bdda658a737b00b90a839797c03f4941617f62db48f",
+  "authorized_for_submission": false,
+  "kaggle_gpu_hours": 0,
+  "competition_test_data_read": false,
+  "held_out_embryo_scores_opened": false,
+  "backbone_trainable": false,
+  "public_predictions_used": false,
+  "encoder_reload_exact": true,
+  "saved_head_predictions_exact": true,
+  "smoke_rows": 8,
+  "head_parameters": 1347,
+  "source_models": {},
+  "encoder_stage_seconds": 1.4945668999998816,
+  "head_stage_seconds": 0.015688763999605726,
+  "peak_cuda_bytes": 343742464,
+  "elapsed_seconds": 7.87211806400046
+}

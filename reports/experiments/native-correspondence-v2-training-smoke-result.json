@@ -1,0 +1,685 @@
+{
+  "run_id": "native-correspondence-v2",
+  "status": "smoke_passed",
+  "smoke": true,
+  "training_contract_sha256": "dd71155624ed7a3c627e1218720b8d8a639602349a62142b5498ae89f34310bf",
+  "data_result_sha256": "f2861ce9f21307507ed521716ca3bf9a7adf3b76ce9f8216e4407233616c693a",
+  "members": [
+    {
+      "embryo": "6bba",
+      "family": "resnet3d",
+      "seed": 20260914,
+      "parameters": 9015138,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 30,
+          "optimizer_steps": 30,
+          "selection": {
+            "nll": 0.6926413774490356,
+            "correct": 2642,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 425,
+                "nll": 0.933191180229187
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 366,
+                "nll": 0.33090484142303467
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 221,
+                "nll": 0.6154062747955322
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 387,
+                "nll": 0.5975599884986877
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.24112355709075928
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.9249916076660156
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 297,
+                "nll": 0.5940467119216919
+              }
+            }
+          },
+          "missing": {
+            "nll": 1.2232451438903809,
+            "correct": 1315,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 138,
+                "nll": 1.6247812509536743
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 305,
+                "nll": 0.4849947988986969
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 144,
+                "nll": 1.1307581663131714
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 234,
+                "nll": 0.9519791603088379
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 147,
+                "nll": 0.329730749130249
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 191,
+                "nll": 1.73447585105896
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 156,
+                "nll": 1.1010515689849854
+              }
+            }
+          },
+          "eval_seconds": 6.93796112700511
+        }
+      ],
+      "best_step": 30,
+      "selected": {
+        "nll": 0.6926413774490356,
+        "correct": 2642,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 425,
+            "nll": 0.933191180229187
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 366,
+            "nll": 0.33090484142303467
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 221,
+            "nll": 0.6154062747955322
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 387,
+            "nll": 0.5975599884986877
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.24112355709075928
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 768,
+            "nll": 0.9249916076660156
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.5940467119216919
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 1.2232451438903809,
+        "correct": 1315,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 138,
+            "nll": 1.6247812509536743
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 305,
+            "nll": 0.4849947988986969
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 144,
+            "nll": 1.1307581663131714
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 234,
+            "nll": 0.9519791603088379
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 147,
+            "nll": 0.329730749130249
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 191,
+            "nll": 1.73447585105896
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 156,
+            "nll": 1.1010515689849854
+          }
+        }
+      },
+      "optimizer_steps": 30,
+      "elapsed_seconds": 38.06605114499689,
+      "weights_sha256": "0a1bb52598a0df19c48489e0f468594e2a8ca9ca23b92a301fd7f37c25632026",
+      "source_gate": false,
+      "peak_gpu_bytes": 6004357632,
+      "status": "smoke_completed"
+    },
+    {
+      "embryo": "6bba",
+      "family": "token_transformer3d",
+      "seed": 20260915,
+      "parameters": 15850722,
+      "baseline": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "missing_baseline": {
+        "nll": 6.715789794921875,
+        "correct": 112,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 7.814556121826172
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 25,
+            "nll": 4.685353755950928
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 7.067713260650635
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 2,
+            "nll": 6.268485069274902
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 85,
+            "nll": 2.8342444896698
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 7.976563453674316
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 6.720390796661377
+          }
+        }
+      },
+      "initial": {
+        "nll": 0.696593701839447,
+        "correct": 2629,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 416,
+            "nll": 1.0388367176055908
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 368,
+            "nll": 0.1727118045091629
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.9403042197227478
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 389,
+            "nll": 0.4528404474258423
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09200235456228256
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 766,
+            "nll": 0.9985126852989197
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.502631664276123
+          }
+        }
+      },
+      "history": [
+        {
+          "step": 30,
+          "optimizer_steps": 30,
+          "selection": {
+            "nll": 0.6465709209442139,
+            "correct": 2633,
+            "total": 2837,
+            "present": 2776,
+            "null": 61,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 418,
+                "nll": 0.954564094543457
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 369,
+                "nll": 0.17700360715389252
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 215,
+                "nll": 0.7547106146812439
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 388,
+                "nll": 0.45632514357566833
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 178,
+                "nll": 0.09571968019008636
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 768,
+                "nll": 0.9312428832054138
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 297,
+                "nll": 0.4836324155330658
+              }
+            }
+          },
+          "missing": {
+            "nll": 4.402769088745117,
+            "correct": 182,
+            "total": 2837,
+            "present": 0,
+            "null": 2837,
+            "per_movie": {
+              "6bba_32db13fc": {
+                "total": 484,
+                "correct": 0,
+                "nll": 5.360506057739258
+              },
+              "6bba_4f99ce20": {
+                "total": 378,
+                "correct": 79,
+                "nll": 2.580615758895874
+              },
+              "6bba_4ffd3da3": {
+                "total": 235,
+                "correct": 0,
+                "nll": 4.62135124206543
+              },
+              "6bba_87289e13": {
+                "total": 422,
+                "correct": 9,
+                "nll": 3.885223150253296
+              },
+              "6bba_8b7818bf": {
+                "total": 179,
+                "correct": 94,
+                "nll": 1.6327593326568604
+              },
+              "6bba_b329af44": {
+                "total": 821,
+                "correct": 0,
+                "nll": 5.525478839874268
+              },
+              "6bba_debd7bfa": {
+                "total": 318,
+                "correct": 0,
+                "nll": 4.296963214874268
+              }
+            }
+          },
+          "eval_seconds": 5.234672235004837
+        }
+      ],
+      "best_step": 30,
+      "selected": {
+        "nll": 0.6465709209442139,
+        "correct": 2633,
+        "total": 2837,
+        "present": 2776,
+        "null": 61,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 418,
+            "nll": 0.954564094543457
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 369,
+            "nll": 0.17700360715389252
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 215,
+            "nll": 0.7547106146812439
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 388,
+            "nll": 0.45632514357566833
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 178,
+            "nll": 0.09571968019008636
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 768,
+            "nll": 0.9312428832054138
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 297,
+            "nll": 0.4836324155330658
+          }
+        }
+      },
+      "selected_missing": {
+        "nll": 4.402769088745117,
+        "correct": 182,
+        "total": 2837,
+        "present": 0,
+        "null": 2837,
+        "per_movie": {
+          "6bba_32db13fc": {
+            "total": 484,
+            "correct": 0,
+            "nll": 5.360506057739258
+          },
+          "6bba_4f99ce20": {
+            "total": 378,
+            "correct": 79,
+            "nll": 2.580615758895874
+          },
+          "6bba_4ffd3da3": {
+            "total": 235,
+            "correct": 0,
+            "nll": 4.62135124206543
+          },
+          "6bba_87289e13": {
+            "total": 422,
+            "correct": 9,
+            "nll": 3.885223150253296
+          },
+          "6bba_8b7818bf": {
+            "total": 179,
+            "correct": 94,
+            "nll": 1.6327593326568604
+          },
+          "6bba_b329af44": {
+            "total": 821,
+            "correct": 0,
+            "nll": 5.525478839874268
+          },
+          "6bba_debd7bfa": {
+            "total": 318,
+            "correct": 0,
+            "nll": 4.296963214874268
+          }
+        }
+      },
+      "optimizer_steps": 30,
+      "elapsed_seconds": 16.56644420500379,
+      "weights_sha256": "d08114a0f9f79fceeee30dba303f1101403bb842379931c4db54aad1b220046c",
+      "source_gate": true,
+      "peak_gpu_bytes": 6383396352,
+      "status": "smoke_completed"
+    }
+  ],
+  "environment": {
+    "torch": "2.5.1+cu121",
+    "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+    "gpu": "NVIDIA A10G"
+  },
+  "authorized_for_submission": false,
+  "timings": [
+    {
+      "family": "resnet3d",
+      "update_seconds": 0.23781236396656216,
+      "paired_eval_seconds": 6.93796112700511
+    },
+    {
+      "family": "token_transformer3d",
+      "update_seconds": 0.18375239276647334,
+      "paired_eval_seconds": 5.234672235004837
+    }
+  ],
+  "projected_full_seconds": 7374.560375312887,
+  "elapsed_seconds": 56.58538369300368
+}

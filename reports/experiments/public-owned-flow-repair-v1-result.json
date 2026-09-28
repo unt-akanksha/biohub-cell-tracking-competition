@@ -1,0 +1,489 @@
+{
+  "run_id": "public-owned-flow-repair-v1",
+  "status": "completed",
+  "contract": {
+    "run_id": "public-owned-flow-repair-v1",
+    "status": "frozen_before_scores",
+    "hypothesis": "Our image-derived backward flow can corroborate missing continuations in the stronger public graph without replacing its detector or existing links.",
+    "candidate": "Apply the unchanged focus_edge_consensus.repair rule to the public control and the cached FOCUS plus owned native-flow graph. No sequential stacking or threshold search.",
+    "comparators": [
+      "unchanged public control",
+      "previous public-neural FOCUS edge-consensus repair"
+    ],
+    "scope": "The same four previously exposed base-training diagnostic movies only; not independent validation",
+    "stems": [
+      "44b6_24264f12",
+      "44b6_81c256f0",
+      "6bba_23af9eeb",
+      "6bba_f1fde7e0"
+    ],
+    "gate": "Against BOTH controls: strictly positive combined score and raw edge Jaccard gain, at least one additional correct edge, no additional false edges, no movie regression, identical nodes and recall. Passing remains diagnostic only.",
+    "node_changes_allowed": false,
+    "existing_edge_changes_allowed": false,
+    "division_additions_allowed": false,
+    "labels_or_estimated_counts_used_in_repair": false,
+    "new_target_movies_opened": 0,
+    "gpu_hours": 0,
+    "authorized_for_submission": false,
+    "pins": {
+      "research/focus_edge_consensus.py": "7848de5aa087483e4f06c90e264ee83e1dfdcaa1436fc1e0cdbf4bd026250123",
+      "reports/experiments/focus-owned-flow-full-v1-result.json": "079abeeccec5f7a76e27b40c88063fae30bca4a155f3dae3bf3bc0311e4f6685",
+      "reports/experiments/focus-edge-consensus-v1-result.json": "9a513c12ac1dad49f268ec3083af7da4bdd74df11b89d6843571dced2c7ac896",
+      ".biohub/cache/kernel-outputs/focus-bridge-cached-control-v2/prelabel_graph_manifest.json": "3429172cb35da36903c219d7ff50465edb90c24ed9ac996366c5383b88222a0a",
+      "kaggle/biohub-focus-owned-flow-full-v1/biohub-focus-owned-flow-full-v1.ipynb": "5af97d02de71448af3d4f2367db307a77212fb59ae0d1389f0a6beffb7e3db9f"
+    }
+  },
+  "per_movie": {
+    "public_control": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27121,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.029142792091981937,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8952556897313156,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11300,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.12415439713489852,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9875845602865101,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 1,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4176,
+        "node_recall": 1.0,
+        "total_node_ratio": -0.06157303370786517,
+        "edge_jaccard": 0.996,
+        "adj_edge_jaccard": 1.0021326741573033,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 30,
+        "edge_fn": 27,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8143,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.09922566371681416,
+        "edge_jaccard": 0.8802521008403361,
+        "adj_edge_jaccard": 0.8889864607347363,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ],
+    "prior_consensus": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27121,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.029142792091981937,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8952556897313156,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11300,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.12415439713489852,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9875845602865101,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 1,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4176,
+        "node_recall": 1.0,
+        "total_node_ratio": -0.06157303370786517,
+        "edge_jaccard": 0.996,
+        "adj_edge_jaccard": 1.0021326741573033,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 420,
+        "edge_fp": 30,
+        "edge_fn": 26,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8143,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.09922566371681416,
+        "edge_jaccard": 0.8823529411764706,
+        "adj_edge_jaccard": 0.8911081467985423,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ],
+    "candidate": [
+      {
+        "edge_tp": 211,
+        "edge_fp": 14,
+        "edge_fn": 10,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 27121,
+        "node_recall": 0.991304347826087,
+        "total_node_ratio": 0.029142792091981937,
+        "edge_jaccard": 0.8978723404255319,
+        "adj_edge_jaccard": 0.8952556897313156,
+        "stem": "44b6_24264f12",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 197,
+        "edge_fp": 0,
+        "edge_fn": 0,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 11300,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.12415439713489852,
+        "edge_jaccard": 1.0,
+        "adj_edge_jaccard": 0.9875845602865101,
+        "stem": "44b6_81c256f0",
+        "embryo": "44b6"
+      },
+      {
+        "edge_tp": 498,
+        "edge_fp": 1,
+        "edge_fn": 1,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 4176,
+        "node_recall": 1.0,
+        "total_node_ratio": -0.06157303370786517,
+        "edge_jaccard": 0.996,
+        "adj_edge_jaccard": 1.0021326741573033,
+        "stem": "6bba_23af9eeb",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 30,
+        "edge_fn": 27,
+        "division_tp": 0,
+        "division_fp": 0,
+        "division_fn": 0,
+        "num_pred_nodes": 8143,
+        "node_recall": 0.9810924369747899,
+        "total_node_ratio": -0.09922566371681416,
+        "edge_jaccard": 0.8802521008403361,
+        "adj_edge_jaccard": 0.8889864607347363,
+        "stem": "6bba_f1fde7e0",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "public_control": {
+      "n": 4,
+      "edge_jaccard": 0.9410511363636364,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 2,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9440079104060284,
+      "n_adj": 4,
+      "score": 0.9440079104060284
+    },
+    "prior_consensus": {
+      "n": 4,
+      "edge_jaccard": 0.9417613636363636,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 2,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9447251849560082,
+      "n_adj": 4,
+      "score": 0.9447251849560082
+    },
+    "candidate": {
+      "n": 4,
+      "edge_jaccard": 0.9410511363636364,
+      "division_jaccard": 0.0,
+      "division_tp": 0,
+      "division_fp": 2,
+      "division_fn": 0,
+      "node_recall": 0.9930991962002192,
+      "adj_edge_jaccard": 0.9440079104060284,
+      "n_adj": 4,
+      "score": 0.9440079104060284
+    }
+  },
+  "by_embryo": {
+    "public_control": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9373593644983835,
+        "n_adj": 2,
+        "score": 0.9373593644983835
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9395491803278688,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9469507094143301,
+        "n_adj": 2,
+        "score": 0.9469507094143301
+      }
+    },
+    "prior_consensus": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9373593644983835,
+        "n_adj": 2,
+        "score": 0.9373593644983835
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9405737704918032,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9479854661421698,
+        "n_adj": 2,
+        "score": 0.9479854661421698
+      }
+    },
+    "candidate": {
+      "44b6": {
+        "n": 2,
+        "edge_jaccard": 0.9444444444444444,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.9956521739130435,
+        "adj_edge_jaccard": 0.9373593644983835,
+        "n_adj": 2,
+        "score": 0.9373593644983835
+      },
+      "6bba": {
+        "n": 2,
+        "edge_jaccard": 0.9395491803278688,
+        "division_jaccard": 0.0,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "node_recall": 0.990546218487395,
+        "adj_edge_jaccard": 0.9469507094143301,
+        "n_adj": 2,
+        "score": 0.9469507094143301
+      }
+    }
+  },
+  "receipts": {
+    "44b6_24264f12": {
+      "repair": {
+        "matched_nodes": 24673,
+        "proposed_edges": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "existing_edges_changed": 0,
+        "coordinate_changes": 0
+      },
+      "graphs": {
+        "public_control": {
+          "path": "44b6_24264f12-public_control.json",
+          "sha256": "1fb542c4b2b93d6888f55c1871fb42a08577e58e4cc3397909f4dda3021ebe65"
+        },
+        "prior_consensus": {
+          "path": "44b6_24264f12-prior_consensus.json",
+          "sha256": "1fb542c4b2b93d6888f55c1871fb42a08577e58e4cc3397909f4dda3021ebe65"
+        },
+        "candidate": {
+          "path": "44b6_24264f12-candidate.json",
+          "sha256": "1fb542c4b2b93d6888f55c1871fb42a08577e58e4cc3397909f4dda3021ebe65"
+        }
+      }
+    },
+    "44b6_81c256f0": {
+      "repair": {
+        "matched_nodes": 10321,
+        "proposed_edges": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "existing_edges_changed": 0,
+        "coordinate_changes": 0
+      },
+      "graphs": {
+        "public_control": {
+          "path": "44b6_81c256f0-public_control.json",
+          "sha256": "911766f2df7f96fc65da11e85c871647f7021e0bcb9bb73de3944a668f68f0e1"
+        },
+        "prior_consensus": {
+          "path": "44b6_81c256f0-prior_consensus.json",
+          "sha256": "911766f2df7f96fc65da11e85c871647f7021e0bcb9bb73de3944a668f68f0e1"
+        },
+        "candidate": {
+          "path": "44b6_81c256f0-candidate.json",
+          "sha256": "911766f2df7f96fc65da11e85c871647f7021e0bcb9bb73de3944a668f68f0e1"
+        }
+      }
+    },
+    "6bba_23af9eeb": {
+      "repair": {
+        "matched_nodes": 3334,
+        "proposed_edges": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "existing_edges_changed": 0,
+        "coordinate_changes": 0
+      },
+      "graphs": {
+        "public_control": {
+          "path": "6bba_23af9eeb-public_control.json",
+          "sha256": "a8c4eadd577582d95b692ee31053d4542db2d7250293bb136f9376e708a8ff28"
+        },
+        "prior_consensus": {
+          "path": "6bba_23af9eeb-prior_consensus.json",
+          "sha256": "4d8954cadce60b6bf3c4d8717d4394de30899041a824d541135a7fe8daf8cf27"
+        },
+        "candidate": {
+          "path": "6bba_23af9eeb-candidate.json",
+          "sha256": "a8c4eadd577582d95b692ee31053d4542db2d7250293bb136f9376e708a8ff28"
+        }
+      }
+    },
+    "6bba_f1fde7e0": {
+      "repair": {
+        "matched_nodes": 6021,
+        "proposed_edges": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "existing_edges_changed": 0,
+        "coordinate_changes": 0
+      },
+      "graphs": {
+        "public_control": {
+          "path": "6bba_f1fde7e0-public_control.json",
+          "sha256": "5bac81304a4ba2a98ab2bc4c975aeda511abe8eb501768b9109745645d8223e2"
+        },
+        "prior_consensus": {
+          "path": "6bba_f1fde7e0-prior_consensus.json",
+          "sha256": "126adbfaa0c48b99d48b6d33b6064cbe3dfc7489f834232fa37c851817ef2758"
+        },
+        "candidate": {
+          "path": "6bba_f1fde7e0-candidate.json",
+          "sha256": "5bac81304a4ba2a98ab2bc4c975aeda511abe8eb501768b9109745645d8223e2"
+        }
+      }
+    }
+  },
+  "comparison": {
+    "comparisons": {
+      "public_control": {
+        "delta": {
+          "score": 0.0,
+          "edge_jaccard": 0.0
+        },
+        "count_delta": {
+          "edge_tp": 0,
+          "edge_fp": 0,
+          "edge_fn": 0
+        },
+        "per_movie_adjusted_delta": {
+          "44b6_24264f12": 0.0,
+          "44b6_81c256f0": 0.0,
+          "6bba_23af9eeb": 0.0,
+          "6bba_f1fde7e0": 0.0
+        },
+        "passed": false
+      },
+      "prior_consensus": {
+        "delta": {
+          "score": -0.0007172745499798294,
+          "edge_jaccard": -0.0007102272727272929
+        },
+        "count_delta": {
+          "edge_tp": -1,
+          "edge_fp": 0,
+          "edge_fn": 1
+        },
+        "per_movie_adjusted_delta": {
+          "44b6_24264f12": 0.0,
+          "44b6_81c256f0": 0.0,
+          "6bba_23af9eeb": 0.0,
+          "6bba_f1fde7e0": -0.0021216860638060275
+        },
+        "passed": false
+      }
+    },
+    "diagnostic_gate_passed": false,
+    "authorized_for_submission": false
+  },
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "source_sha256": "235459fdca61a9ef81fc6f583b777e4c74afdb6f7f83b12141627665a02a4fde",
+  "contract_sha256": "1ab90e44b0554cc44b5e6144048674607f99bac7c861052abd800279fd372af2",
+  "gpu_hours": 0,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "validation_scope": "The same four previously exposed base-training diagnostic movies only; not independent validation"
+}

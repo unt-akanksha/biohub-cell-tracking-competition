@@ -1,0 +1,10 @@
+{
+  "authorized_for_full_candidate_evaluation": false,
+  "authorized_for_submission": false,
+  "completed_model_count": 4,
+  "reason": "fresh_audit_gate_failed",
+  "run_id": "competition-graph-context-fresh-ensemble-v3",
+  "schema_version": 1,
+  "status": "verified_rejection",
+  "terminal_sha256": "92f1150d5579cdbec41c92e3a04525a67d284975d911e42fb1ed29c54c8cf5dd"
+}

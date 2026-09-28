@@ -1,0 +1,74 @@
+{
+  "run_id": "trajectory-event-source-v1-batch-7",
+  "status": "complete_prelabel_predictions",
+  "authorized_for_submission": false,
+  "device": "NVIDIA A10G",
+  "torch_version": "2.5.1+cu121",
+  "contract_sha256": "dd52369476c773877dc4851c0e5a9a333d02981e950a0211d5bd39d768d55721",
+  "numpy_version": "2.5.2",
+  "mode": "full",
+  "movies": {
+    "6bba_aeee7805": {
+      "original": {
+        "seconds": 90.16472266800702,
+        "inference_seconds": 82.58370093800477,
+        "peak_cuda_bytes": 738434048,
+        "frames": 100,
+        "nodes": 4990,
+        "edges": 4857,
+        "prediction_sha256": "bb20cccca988f526f42db366ad63e2374bb29e5d278853018cb5181525644a11",
+        "repaired_sha256": "c4fb4aa1672211f62698fb60690254cfd2abfa0837cc2096872b2c3d55501d8b",
+        "added_edges": 1,
+        "repair_seconds": 0.2043533770047361
+      }
+    },
+    "44b6_5f15d135": {
+      "original": {
+        "seconds": 150.22145636400091,
+        "inference_seconds": 85.08201985500637,
+        "peak_cuda_bytes": 742025728,
+        "frames": 100,
+        "nodes": 22004,
+        "edges": 21031,
+        "prediction_sha256": "6aa5164d6799c3a68bb8084c27575e1469b0c35e907778df1c1a1c9c25ffb5ed",
+        "repaired_sha256": "6aa5164d6799c3a68bb8084c27575e1469b0c35e907778df1c1a1c9c25ffb5ed",
+        "added_edges": 0,
+        "repair_seconds": 0.9688860199967166
+      }
+    },
+    "6bba_337b1b3a": {
+      "original": {
+        "seconds": 159.55270581100194,
+        "inference_seconds": 85.09843367000576,
+        "peak_cuda_bytes": 740955136,
+        "frames": 100,
+        "nodes": 29397,
+        "edges": 28397,
+        "prediction_sha256": "e6b8f0d41f7f89088cd831d8f60d1c82f9dbe5afb33c351d3201df7ae7c6ba12",
+        "repaired_sha256": "e6b8f0d41f7f89088cd831d8f60d1c82f9dbe5afb33c351d3201df7ae7c6ba12",
+        "added_edges": 0,
+        "repair_seconds": 1.2667505130084464
+      }
+    },
+    "44b6_d5e7d891": {
+      "original": {
+        "seconds": 232.1652341070003,
+        "inference_seconds": 90.45821669799625,
+        "peak_cuda_bytes": 750532608,
+        "frames": 100,
+        "nodes": 43670,
+        "edges": 42073,
+        "prediction_sha256": "cd3debc8294bf9eb05c6daf2d12415f981926a24f7a7ee3734d2d0ab24264fb8",
+        "repaired_sha256": "cd3debc8294bf9eb05c6daf2d12415f981926a24f7a7ee3734d2d0ab24264fb8",
+        "added_edges": 0,
+        "repair_seconds": 1.9398589589982294
+      }
+    }
+  },
+  "ground_truth_opened": false,
+  "independently_held_out": false,
+  "kaggle_gpu_hours": 0,
+  "quality_gain_established": false,
+  "inputs_unchanged": true,
+  "elapsed_seconds": 642.3151717329893
+}

@@ -1,0 +1,78 @@
+{
+  "run_id": "public-ordinary-edge-coverage-v1",
+  "status": "complete_diagnostic",
+  "elapsed_seconds": 5.562228800030425,
+  "source_sha256": "225eb70ff9fdd5ce71b4121cf1bed530c73b3b9ffbcf83de20f45c86a2b70ca4",
+  "helper_sha256": "7cfbe4a593c80267babf956195ba66141e3cbf5184fc2bd842429d4a7179fadb",
+  "per_movie": {
+    "44b6_24264f12": {
+      "raw_edges": 27333,
+      "genuine_retained_candidate_edges": 25929,
+      "supervision": {
+        "-1": 25716,
+        "0": 0,
+        "1": 213
+      },
+      "official_baseline_edge_tp": 211,
+      "official_baseline_edge_fn": 10,
+      "missing_truth_edges_both_final_endpoints_matched": 7,
+      "missing_truth_edges_supported_by_genuine_raw_edge": 2,
+      "missing_ordinary_truth_edges_supported_by_genuine_raw_edge": 2,
+      "missing_truth_edges_with_unmatched_endpoint": 3,
+      "raw_positive_alternatives_not_in_final": 2
+    },
+    "44b6_81c256f0": {
+      "raw_edges": 11325,
+      "genuine_retained_candidate_edges": 10945,
+      "supervision": {
+        "-1": 10748,
+        "0": 0,
+        "1": 197
+      },
+      "official_baseline_edge_tp": 197,
+      "official_baseline_edge_fn": 0,
+      "missing_truth_edges_both_final_endpoints_matched": 0,
+      "missing_truth_edges_supported_by_genuine_raw_edge": 0,
+      "missing_ordinary_truth_edges_supported_by_genuine_raw_edge": 0,
+      "missing_truth_edges_with_unmatched_endpoint": 0,
+      "raw_positive_alternatives_not_in_final": 0
+    },
+    "6bba_23af9eeb": {
+      "raw_edges": 4482,
+      "genuine_retained_candidate_edges": 4000,
+      "supervision": {
+        "-1": 3501,
+        "0": 0,
+        "1": 499
+      },
+      "official_baseline_edge_tp": 498,
+      "official_baseline_edge_fn": 1,
+      "missing_truth_edges_both_final_endpoints_matched": 1,
+      "missing_truth_edges_supported_by_genuine_raw_edge": 1,
+      "missing_ordinary_truth_edges_supported_by_genuine_raw_edge": 1,
+      "missing_truth_edges_with_unmatched_endpoint": 0,
+      "raw_positive_alternatives_not_in_final": 1
+    },
+    "6bba_f1fde7e0": {
+      "raw_edges": 8705,
+      "genuine_retained_candidate_edges": 7367,
+      "supervision": {
+        "-1": 6935,
+        "0": 0,
+        "1": 432
+      },
+      "official_baseline_edge_tp": 419,
+      "official_baseline_edge_fn": 27,
+      "missing_truth_edges_both_final_endpoints_matched": 18,
+      "missing_truth_edges_supported_by_genuine_raw_edge": 15,
+      "missing_ordinary_truth_edges_supported_by_genuine_raw_edge": 15,
+      "missing_truth_edges_with_unmatched_endpoint": 9,
+      "raw_positive_alternatives_not_in_final": 15
+    }
+  },
+  "gpu_hours": 0,
+  "candidate_generated": false,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "warning": "Previously exposed training movies; public model training overlaps. Coverage is not validation gain."
+}

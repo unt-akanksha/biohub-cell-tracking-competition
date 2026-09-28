@@ -1,0 +1,28 @@
+{
+  "status": "staged_requires_smoke",
+  "pilot_sha256": "70e52675a68f62b75f028164e2a8a31260d6365f275bebd4c115ec7af8e81ee6",
+  "archive_sha256": "53615424f9e8eee60e075d4b87f466a108f478c8db2dc4e1bdfc5a1051c656f1",
+  "archive_bytes": 10885120,
+  "models": [
+    {
+      "embryo": "6bba",
+      "family": "resnet3d",
+      "weights_sha256": "6fbd68f59d68cb7970f8e11c87d3e171243bdfd447c70a9fe13ce15dd2500f73",
+      "weight": 0.5,
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/6bba-resnet3d/best.pt"
+    },
+    {
+      "embryo": "6bba",
+      "family": "token_transformer3d",
+      "weights_sha256": "401df7cd2c43211c96b3caf05666615e99a73bcb59d6630c92de4130baa38cdb",
+      "weight": 0.5,
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/6bba-token_transformer3d/best.pt"
+    }
+  ],
+  "movies": [
+    "44b6_12dfb391",
+    "6bba_062c8d37",
+    "44b6_267148e4",
+    "6bba_07e24132"
+  ]
+}

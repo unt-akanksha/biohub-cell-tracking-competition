@@ -1,0 +1,17 @@
+{
+  "status": "registered_pending",
+  "submission_ref": 56219125,
+  "submission_date_utc": "2026-09-14T02:05:48.173000",
+  "observed_after_utc": "2026-09-14T02:06:22Z",
+  "kernel": "indarkarhana/biohub-trajectory-motion-candidate",
+  "kernel_version": 1,
+  "competition": "biohub-cell-tracking-during-development",
+  "file_name": "submission.csv",
+  "description": "Clean LF-DCTTA plus source-trained trajectory endpoint repair; exact 8-movie paired gate; offline two-T4",
+  "api_status": "SubmissionStatus.PENDING",
+  "public_score": null,
+  "private_score": null,
+  "submission_receipt_sha256": "f69aef23b44840819d2e15bfd32441bdec74f161557fa4caae295ab40ec4b5e1",
+  "independently_observed_in_competition_submission_history": true,
+  "selected_as_final_submission": false
+}

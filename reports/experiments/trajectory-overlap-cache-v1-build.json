@@ -1,0 +1,10 @@
+{
+  "status": "staged",
+  "contract_sha256": "1b0124fd435802c47fffd072ed323d4bfde3aa95785db05d7a7eb9610fbdb7d1",
+  "archive_sha256": "41a6f855cf7277a92e4d09d268d0d4446c32537874bdc95fb14d6b3e0793c1a8",
+  "archive_bytes": 50564880,
+  "full_run_cap_seconds": 1800,
+  "smoke_required": true,
+  "fp32_baseline_preserved": true,
+  "submission_performed": false
+}

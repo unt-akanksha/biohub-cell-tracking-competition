@@ -1,0 +1,31 @@
+{
+  "status": "removed_verified_ram_outputs",
+  "utc": "2026-09-14T14:16:51.029259+00:00",
+  "targets": [
+    {
+      "remote": "/dev/shm/biohub-disagreement-source-v1.nRsU8k/full",
+      "backup": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\trajectory-disagreement-source-v1-full-output",
+      "bytes": 84600205,
+      "files": 74
+    },
+    {
+      "remote": "/dev/shm/biohub-ranker-selection-v1.LJ0JSl/full",
+      "backup": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\trajectory-ranker-selection-v1-full-output",
+      "bytes": 90246284,
+      "files": 92
+    },
+    {
+      "remote": "/dev/shm/biohub-dense-warp-movie-v1-smoke",
+      "backup": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-movie-v1-smoke-output",
+      "bytes": 2892491,
+      "files": 29
+    }
+  ],
+  "bytes": 177738980,
+  "free_before": 3763851264,
+  "free_after": 3942068224,
+  "active_run_untouched": true,
+  "foreign_jobs_untouched": true,
+  "gpu_reset": false,
+  "system_cache_dropped": false
+}

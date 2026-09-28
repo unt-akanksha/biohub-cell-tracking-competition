@@ -1,0 +1,33 @@
+{
+  "status": "verified_full_motion_fit_not_tracking_validation",
+  "checkpoint_sha256": "3006ee0f904640b16dd988d6404a1b3ac4f933ca68ca912d69fe4598f96d4788",
+  "parameters": 1488019,
+  "fitting_windows": 9273,
+  "steps": 1000,
+  "diagnostic_links": 172,
+  "launcher_seconds": 642.649658676,
+  "optimization_seconds": 422.143728755,
+  "small_fit_gate_passed": true,
+  "errors": {
+    "mae_um": 0.7186274750288143,
+    "endpoint_um": 1.5841983653778253,
+    "zero_mae_um": 1.0022407945736433,
+    "zero_endpoint_um": 2.122800939304884,
+    "median_mae_um": 1.0022407945736433,
+    "median_endpoint_um": 2.122800939304884
+  },
+  "observed_training_links": 17809,
+  "authorized_for_submission": false,
+  "caveat": "24 short training-only diagnostic windows; not complete movies, embryo audit or tracking score",
+  "probe_inputs_replayed": true,
+  "step100_errors": {
+    "mae_um": 0.9952369173483331,
+    "endpoint_um": 2.1062218401321147
+  },
+  "source_sha256": {
+    "result": "ba07538744382c52cfe827407edb9006a08794e9f55c5e90afa496917f9f8064",
+    "terminal": "18645682d5aa4fdc337918c5c83af1aa8031fd57877c9aa9e5c02a8bb2c5ad4d",
+    "probe": "4dddfaf9f8bb14e90056e0ecf6dd3b65dfb4ed2fa001d8f9ae3ff3f12f2feb38"
+  },
+  "notebook_sha256": "3859df37eec785d95ec0e7d3a8869acb28cdc6e26f255b710a75644beef22be3"
+}

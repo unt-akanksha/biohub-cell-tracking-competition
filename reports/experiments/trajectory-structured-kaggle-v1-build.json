@@ -1,0 +1,14 @@
+{
+  "status": "staged_not_launched",
+  "kernel": "indarkarhana/biohub-structured-trajectory-acceptance",
+  "notebook_sha256": "1bc396d39faf65afb84fa331c672b05778ce1a6cd75b59957f48cfb1bf58e858",
+  "contract_sha256": "4e13ec7dea134c2da7b13133d8ed5ba92d5bb392954f35e26c29288c446a4695",
+  "overlay_sha256": "798bbd2124ac2bdcab64c485dbe6c3754ac75212cb2f03c4183a6ae72ab58df6",
+  "required_gpus": 2,
+  "maximum_workers": 4,
+  "acceptance_wall_cap_seconds": 3600,
+  "structured_portable_proof_sha256": "5138524c7b4b06f255e24392b692d8a0647ff693e2c64adc666b257a7d6f4a91",
+  "fresh_quota_and_pending_reservation_check_required": true,
+  "kernel_pushed": false,
+  "submission_performed": false
+}

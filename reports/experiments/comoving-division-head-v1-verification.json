@@ -1,0 +1,66 @@
+{
+  "status": "verified_rejection",
+  "candidate_id_triples_verified": 2480,
+  "base_features_byte_equal": true,
+  "old_inference_masks_unchanged": true,
+  "source_only_normalization_replayed": true,
+  "source_scores_replayed": true,
+  "head_stationarity_verified": true,
+  "held_out_embryo_scores_opened": false,
+  "authorized_for_submission": false,
+  "terminal_sha256": "30418e78f4288c18e8cc6be6fb324c54d28f910923414bf26aba6825815cd41f",
+  "evidence": {
+    "44b6": {
+      "control": {
+        "metrics": {
+          "rows": 4,
+          "positives": 2,
+          "average_precision": 0.75,
+          "zero_fp_tp": 1,
+          "source_threshold": null,
+          "binary_cross_entropy": 0.7116606910342694,
+          "source_gate_passed": false
+        },
+        "maximum_absolute_objective_gradient": 2.9666064107428808e-08
+      },
+      "motion": {
+        "metrics": {
+          "rows": 4,
+          "positives": 2,
+          "average_precision": 0.8333333333333333,
+          "zero_fp_tp": 1,
+          "source_threshold": null,
+          "binary_cross_entropy": 1.1042079585012543,
+          "source_gate_passed": false
+        },
+        "maximum_absolute_objective_gradient": 7.177898816383005e-08
+      }
+    },
+    "6bba": {
+      "control": {
+        "metrics": {
+          "rows": 52,
+          "positives": 13,
+          "average_precision": 0.9095571095571096,
+          "zero_fp_tp": 9,
+          "source_threshold": 0.7779628422664069,
+          "binary_cross_entropy": 0.48687726053845615,
+          "source_gate_passed": true
+        },
+        "maximum_absolute_objective_gradient": 4.7962337223345086e-08
+      },
+      "motion": {
+        "metrics": {
+          "rows": 52,
+          "positives": 13,
+          "average_precision": 0.863293353070681,
+          "zero_fp_tp": 4,
+          "source_threshold": 1.3097128923695323,
+          "binary_cross_entropy": 0.4562473988568749,
+          "source_gate_passed": true
+        },
+        "maximum_absolute_objective_gradient": 4.1094860642881814e-08
+      }
+    }
+  }
+}

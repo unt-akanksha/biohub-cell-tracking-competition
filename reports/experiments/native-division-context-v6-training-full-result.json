@@ -1,0 +1,11 @@
+{
+  "status": "failed",
+  "contract_sha256": "9998ed86bfd51274083e361889e0896150096aa88b3bc6aa5849a8627599846c",
+  "data_sha256": "933fab6898ae726168614d28494b963a2f79c844fa400bfed608e3fe2bf0b61c",
+  "folds": [],
+  "successful_updates": 428,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "error_type": "RuntimeError",
+  "seconds": 10.881617167004151
+}

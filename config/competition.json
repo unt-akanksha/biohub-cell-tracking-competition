@@ -13,7 +13,7 @@
   "daily_submission_limit": 5,
   "final_submission_slots": 2,
   "notebook_runtime_limit_hours": "12.00",
-  "gpu_reserve_hours": "8.00",
+  "gpu_reserve_hours": "2.00",
   "submission_execution_policy": {
     "required_machine_shape": "NvidiaTeslaT4",
     "required_cuda_devices": 2,
@@ -33,10 +33,10 @@
     "running_kernel_status_checks_do_not_count_as_research": true
   },
   "current_status": {
-    "best_clean_public_score": "0.913",
-    "best_clean_score_evidence": "Best completed personal submission in the 2026-08-23 live audit; retain exact experiment lineage in the seeded ledger.",
+    "best_clean_public_score": "0.953",
+    "best_clean_score_evidence": "56558622, reproduction of raunakdey07/biohub-harmonic-fusion-v3 (pinned sha 9ab32885, audited clean 2026-09-25) run unmodified on our account. Beats our previous best of 0.950 (det93 on the harmonic base).",
     "active_hypothesis": "Two independently trained LSM-FM localization voters can improve the clean attributed 948TTA2 control only where their final integer coordinates agree, without changing graph topology.",
-    "next_gate": "Run only clean, source-audited candidates through complete-movie validation; every Kaggle launch must preserve the eight-hour GPU reserve."
+    "next_gate": "GPU reserve restored to 2.00 after the 2026-09-26 refresh, as committed when it was dropped to 0.00 for the 09-25 session on operator instruction. 30h available against 3.9 days remaining; final selection needs no GPU, so 2h is ample cover for one production run at the measured 0.45-0.65h."
   },
   "official_sources": {
     "competition": "https://www.kaggle.com/competitions/biohub-cell-tracking-during-development/overview",

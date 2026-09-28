@@ -1,0 +1,175 @@
+{
+  "status": "verified_balanced_candidate_ranker_lomo",
+  "result_sha256": "dba19c4210c29941ca8056f49089ebac9d25eae8151c47931282af8366f5fe7c",
+  "verifier_sha256": "d2d7da76e26c1e6357008d04b885bd86e8f97549a0a7bc58901515df038bd5aa",
+  "smoke_sha256": "4c69554002fbf68ac3918ecf59aced3bbef87cf730aab275dfde309246b2db6d",
+  "complete_groups": 10915,
+  "complete_choices": 4691320,
+  "smoke_fit": {
+    "objective": 35.18646893537048,
+    "independent_group_objective": 35.18646893537048,
+    "gradient_inf_norm": 2.1206939176121598e-05,
+    "absent_weight": 4.358898943540674,
+    "fitting_parent": 19,
+    "fitting_absent": 1
+  },
+  "fitting_objectives": [
+    {
+      "held_out": "6bba_6479435d",
+      "objective": 4892.998670455498,
+      "independent_group_objective": 4892.99867045551,
+      "gradient_inf_norm": 0.011905986338987096,
+      "absent_weight": 8.531127817819378,
+      "fitting_parent": 10262,
+      "fitting_absent": 141
+    },
+    {
+      "held_out": "6bba_df673a83",
+      "objective": 5031.593142073313,
+      "independent_group_objective": 5031.59314207331,
+      "gradient_inf_norm": 0.002163573130053109,
+      "absent_weight": 8.134088682379266,
+      "fitting_parent": 10123,
+      "fitting_absent": 153
+    },
+    {
+      "held_out": "6bba_767a1e17",
+      "objective": 4697.930722537945,
+      "independent_group_objective": 4697.930722537928,
+      "gradient_inf_norm": 0.001455893345725101,
+      "absent_weight": 8.344877848199449,
+      "fitting_parent": 10167,
+      "fitting_absent": 146
+    },
+    {
+      "held_out": "6bba_2312ac41",
+      "objective": 4989.982048248284,
+      "independent_group_objective": 4989.982048248291,
+      "gradient_inf_norm": 0.0016735069231504363,
+      "absent_weight": 7.966211540989197,
+      "fitting_parent": 9646,
+      "fitting_absent": 152
+    },
+    {
+      "held_out": "6bba_971fa5e0",
+      "objective": 5030.179360050455,
+      "independent_group_objective": 5030.17936005047,
+      "gradient_inf_norm": 0.0030765849719524563,
+      "absent_weight": 7.927343016143396,
+      "fitting_parent": 9992,
+      "fitting_absent": 159
+    },
+    {
+      "held_out": "6bba_cf35214c",
+      "objective": 5004.412329289106,
+      "independent_group_objective": 5004.4123292891045,
+      "gradient_inf_norm": 0.008773982717853457,
+      "absent_weight": 7.986366588258473,
+      "fitting_parent": 9950,
+      "fitting_absent": 156
+    },
+    {
+      "held_out": "6bba_cff5865f",
+      "objective": 4695.026430451317,
+      "independent_group_objective": 4695.026430451308,
+      "gradient_inf_norm": 0.0002533736248354346,
+      "absent_weight": 7.681560351045326,
+      "fitting_parent": 9264,
+      "fitting_absent": 157
+    },
+    {
+      "held_out": "6bba_edf14583",
+      "objective": 4838.916043543977,
+      "independent_group_objective": 4838.916043543984,
+      "gradient_inf_norm": 0.004157139069571547,
+      "absent_weight": 8.118367738458398,
+      "fitting_parent": 10018,
+      "fitting_absent": 152
+    },
+    {
+      "held_out": "6bba_1ebfb80d",
+      "objective": 4924.6414602670575,
+      "independent_group_objective": 4924.641460267045,
+      "gradient_inf_norm": 0.002174785557068404,
+      "absent_weight": 7.94636105950707,
+      "fitting_parent": 10040,
+      "fitting_absent": 159
+    },
+    {
+      "held_out": "6bba_7d3058ae",
+      "objective": 4991.649979494488,
+      "independent_group_objective": 4991.649979494477,
+      "gradient_inf_norm": 0.0032739966478979587,
+      "absent_weight": 7.894186583694474,
+      "fitting_parent": 9597,
+      "fitting_absent": 154
+    },
+    {
+      "held_out": "6bba_4f99ce20",
+      "objective": 4914.722786161007,
+      "independent_group_objective": 4914.7227861610045,
+      "gradient_inf_norm": 0.0022313148243008896,
+      "absent_weight": 8.160382143912985,
+      "fitting_parent": 9789,
+      "fitting_absent": 147
+    },
+    {
+      "held_out": "6bba_57b7cc1e",
+      "objective": 3535.5926986019435,
+      "independent_group_objective": 3535.5926986019354,
+      "gradient_inf_norm": 0.0006991189324070529,
+      "absent_weight": 9.97153844436095,
+      "fitting_parent": 9446,
+      "fitting_absent": 95
+    }
+  ],
+  "final_fit": null,
+  "all_saved_held_out_predictions_replayed": true,
+  "independent_weighted_group_losses_replayed": true,
+  "error_counts": {
+    "parent_ranking_ceiling": 9982,
+    "parent_rejected": 133,
+    "parent_wrong_source": 730,
+    "absent_linked": 88
+  },
+  "gate": {
+    "pooled": {
+      "physical": {
+        "loss_sum": 8763.342238501977,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9514,
+        "correct_absent": 115,
+        "nll": 0.8028714831426456
+      },
+      "neural": {
+        "loss_sum": 7284.747574558905,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9835,
+        "correct_absent": 72,
+        "nll": 0.6674070155344851
+      },
+      "candidate": {
+        "loss_sum": 3956.21677461631,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9891,
+        "correct_absent": 73,
+        "nll": 0.36245687353333117
+      }
+    },
+    "conditions": {
+      "nll_below_both": true,
+      "parent_not_lower": true,
+      "absent_not_lower": false,
+      "eight_movie_nll_wins": true,
+      "per_movie_nll_loss_bounded": true
+    },
+    "passed": false,
+    "scope": "New ranking correction LOMO only; original encoder used fitting movies"
+  },
+  "final_model": null,
+  "authorized_for_submission": false,
+  "scope": "Actual stored parameters and objectives; no independent optimizer refit or global optimum claim"
+}

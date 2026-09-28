@@ -1,0 +1,67 @@
+{
+  "status": "verified_prepared_cpu_equivalence_and_first_fold_profile",
+  "source_hashes": {
+    "research/focus_pair_appearance_prepared.py": "26ee93a840dd797ef3e9796f8b56e63a8355400acb5f62c1c5d82df2a2684739",
+    "scripts/profile-focus-pair-appearance-prepared.py": "6db18db9bd09438d9a47642d9014530f261d004987b7b961e54ea9808d7df1d5",
+    "reports/experiments/focus-pair-appearance-prepared-v1-design.md": "88ffbbc89671cbfd413397b490e2874f5441e38de3023c767c74b21c739393d7"
+  },
+  "smoke": [
+    {
+      "arm": "full",
+      "exact_array_objective_gradient_and_fitted_theta": true,
+      "elapsed_seconds": 4.9539999999979045,
+      "iterations": 291
+    },
+    {
+      "arm": "lda",
+      "exact_array_objective_gradient_and_fitted_theta": true,
+      "elapsed_seconds": 0.5320000000065193,
+      "iterations": 86
+    }
+  ],
+  "trials": [
+    {
+      "arm": "full",
+      "preparation_seconds": 29.905999999988126,
+      "bytes": 2569011840,
+      "objective_seconds": [
+        8.125,
+        3.062999999994645,
+        2.9219999999913853
+      ],
+      "zero_objective": 9174.180132778369,
+      "gradient_norm": 12511.007119549158
+    },
+    {
+      "arm": "lda",
+      "preparation_seconds": 10.812000000005355,
+      "bytes": 321126480,
+      "objective_seconds": [
+        1.922000000020489,
+        2.515999999974156,
+        1.297000000020489
+      ],
+      "zero_objective": 9174.180132778369,
+      "gradient_norm": 12370.871822262914
+    }
+  ],
+  "held_out_not_evaluated": "6bba_6479435d",
+  "training_stems": [
+    "6bba_df673a83",
+    "6bba_767a1e17",
+    "6bba_2312ac41",
+    "6bba_971fa5e0",
+    "6bba_cf35214c",
+    "6bba_cff5865f",
+    "6bba_edf14583",
+    "6bba_1ebfb80d",
+    "6bba_7d3058ae",
+    "6bba_4f99ce20",
+    "6bba_57b7cc1e"
+  ],
+  "head_quality_evaluated": false,
+  "authorized_for_submission": false,
+  "gpu_seconds": 0,
+  "data_sha256": "4e2eb70fa910025184a53cc2549293658496ad77803bc403a82137254af9c22f",
+  "elapsed_seconds": 74.45299999997951
+}

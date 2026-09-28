@@ -1,0 +1,44 @@
+{
+  "status": "source_event_training_complete",
+  "pid": 7572,
+  "source_only": true,
+  "source_embryo": "44b6",
+  "contract_sha256": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+  "model_fitted": true,
+  "authorized_for_submission": false,
+  "selection_or_validation_opened": false,
+  "opposite_embryo_excluded_from_optimizer": true,
+  "resumed": true,
+  "control_smoke": false,
+  "invocation_start_step": 4,
+  "invocation_wall_cap": 7200,
+  "steps": 3669,
+  "epochs_completed": [
+    {
+      "epoch": 1,
+      "steps": 1223,
+      "cases": 1223,
+      "online_objective_mean": 0.12231066136824029,
+      "displacement_norm": 0.607826794691233
+    },
+    {
+      "epoch": 2,
+      "steps": 2446,
+      "cases": 1223,
+      "online_objective_mean": 0.11787093708643787,
+      "displacement_norm": 2.1971485057410933
+    },
+    {
+      "epoch": 3,
+      "steps": 3669,
+      "cases": 1223,
+      "online_objective_mean": 0.12589539826289414,
+      "displacement_norm": 1.6298292158222247
+    }
+  ],
+  "checkpoint_sha256": "bed34d7e998e175862e4e9313a969093c5c9e6fdbb698434ab154116a4aa2457",
+  "seconds": 5377.5779999999795,
+  "cache_bytes": 1605490153,
+  "weights_sha256": "17f60597888c426aba77992d50bd6dfecd1547c3f4356d4bdd2bf1755c731f01",
+  "quality_gain_established": false
+}

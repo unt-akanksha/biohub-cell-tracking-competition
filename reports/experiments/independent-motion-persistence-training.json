@@ -1,0 +1,752 @@
+{
+  "scope": "96 fitting and24 diagnostic movies inside original120 training movies",
+  "fitting_stems": [
+    "6bba_6479435d",
+    "6bba_df673a83",
+    "6bba_767a1e17",
+    "6bba_2312ac41",
+    "6bba_971fa5e0",
+    "6bba_cf35214c",
+    "6bba_cff5865f",
+    "6bba_edf14583",
+    "6bba_1ebfb80d",
+    "6bba_7d3058ae",
+    "6bba_4f99ce20",
+    "6bba_57b7cc1e",
+    "6bba_b693381b",
+    "6bba_2540cd90",
+    "6bba_09961292",
+    "6bba_78a7bd97",
+    "6bba_d1acb6ff",
+    "6bba_268e1230",
+    "6bba_ae82a791",
+    "6bba_afb141ff",
+    "6bba_f1fde7e0",
+    "6bba_1f58c2f6",
+    "6bba_ab78413d",
+    "6bba_ef7b4f7e",
+    "6bba_d2b9fc0c",
+    "6bba_7af54fde",
+    "6bba_05db0fb1",
+    "6bba_61ecbe65",
+    "6bba_20852818",
+    "6bba_474be664",
+    "6bba_4ffd3da3",
+    "6bba_6db0e9b4",
+    "6bba_ebdf3b34",
+    "6bba_f4ae811c",
+    "6bba_fc83837d",
+    "6bba_c328f2fd",
+    "6bba_7b5d3b2c",
+    "6bba_4aa14c89",
+    "6bba_bb9f20c3",
+    "6bba_55b7eebe",
+    "6bba_32db13fc",
+    "6bba_f8ffd5e7",
+    "6bba_80d12824",
+    "6bba_3c5691b6",
+    "6bba_3fda6b25",
+    "6bba_debd7bfa",
+    "6bba_d82a4fc6",
+    "6bba_337b1b3a",
+    "6bba_48816121",
+    "6bba_ed9377fd",
+    "6bba_23af9eeb",
+    "6bba_b329af44",
+    "6bba_784a78c9",
+    "6bba_718b21f9",
+    "6bba_969618f6",
+    "6bba_55c70843",
+    "6bba_d6ecebbb",
+    "6bba_ebff6e76",
+    "6bba_0e7c0d07",
+    "6bba_5dfe9ad1",
+    "6bba_0c7fa718",
+    "6bba_07e24132",
+    "6bba_3a1849c2",
+    "6bba_c27cba08",
+    "6bba_74686d6a",
+    "6bba_6321a359",
+    "6bba_d5eae175",
+    "6bba_9e23430b",
+    "6bba_9a41d029",
+    "6bba_eebc57a5",
+    "6bba_6feeb0b1",
+    "6bba_3db54e20",
+    "6bba_61dd1e0d",
+    "6bba_07477033",
+    "6bba_085bf656",
+    "6bba_907271db",
+    "6bba_3abfe10a",
+    "6bba_aeee7805",
+    "6bba_43fea39d",
+    "6bba_f17befbc",
+    "6bba_af149c94",
+    "6bba_789f8168",
+    "6bba_a90a0b9c",
+    "6bba_91951b3a",
+    "6bba_d3da753b",
+    "6bba_15403b9a",
+    "6bba_786893ac",
+    "6bba_76db78c1",
+    "6bba_acd782a8",
+    "6bba_b1ae37b9",
+    "6bba_5c824876",
+    "6bba_e16ffc58",
+    "6bba_12665c0e",
+    "6bba_f20478e9",
+    "6bba_05b6850b",
+    "6bba_5a4d9360"
+  ],
+  "diagnostic_stems": [
+    "6bba_b204cac7",
+    "6bba_2646afc7",
+    "6bba_8b7818bf",
+    "6bba_312f0dc3",
+    "6bba_207c6aaf",
+    "6bba_372c8cb8",
+    "6bba_6feb10f0",
+    "6bba_1d0d8384",
+    "6bba_825bd1c6",
+    "6bba_7f87b3d8",
+    "6bba_6ca87370",
+    "6bba_13f19531",
+    "6bba_e5e44988",
+    "6bba_705ec2c9",
+    "6bba_d0fc38b5",
+    "6bba_062c8d37",
+    "6bba_a5e926bb",
+    "6bba_2819ca14",
+    "6bba_96833384",
+    "6bba_fc516dc6",
+    "6bba_5f89039d",
+    "6bba_fbc898dc",
+    "6bba_fe670320",
+    "6bba_bbb708ca"
+  ],
+  "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+  "model": {
+    "alpha": [
+      0.07410413898045796,
+      0.44736707608450044,
+      0.4677109861918691
+    ],
+    "intercept_um": [
+      -0.4060528422599097,
+      0.06662230431480043,
+      -0.1575182205721985
+    ],
+    "residual_variance_um2": [
+      3.2196184207894816,
+      1.5231353902595468,
+      1.81592263870359
+    ],
+    "fit_triplets": 79156
+  },
+  "diagnostic": {
+    "zero": {
+      "n": 18835,
+      "mae_per_coordinate_um": 1.0759711529953102,
+      "rmse_per_coordinate_um": 1.737675261748551,
+      "median_endpoint_um": 1.86167137607581,
+      "p90_endpoint_um": 4.667457150312148
+    },
+    "velocity": {
+      "n": 18835,
+      "mae_per_coordinate_um": 1.2350488894788072,
+      "rmse_per_coordinate_um": 1.9069814565710097,
+      "median_endpoint_um": 2.03125,
+      "p90_endpoint_um": 5.008586377412294
+    },
+    "shrinkage": {
+      "n": 18835,
+      "mae_per_coordinate_um": 1.0291091697422678,
+      "rmse_per_coordinate_um": 1.5559614617179804,
+      "median_endpoint_um": 1.5885587985230334,
+      "p90_endpoint_um": 4.002507217761661
+    }
+  },
+  "per_movie": [
+    {
+      "stem": "6bba_b204cac7",
+      "zero": {
+        "n": 788,
+        "mae_per_coordinate_um": 0.6640228426395939,
+        "rmse_per_coordinate_um": 1.1277066636153377,
+        "median_endpoint_um": 1.284675299443404,
+        "p90_endpoint_um": 2.9823102377903012
+      },
+      "velocity": {
+        "n": 788,
+        "mae_per_coordinate_um": 1.0128754230118444,
+        "rmse_per_coordinate_um": 1.5949056060587825,
+        "median_endpoint_um": 1.8168052317185792,
+        "p90_endpoint_um": 4.0827619710803615
+      },
+      "shrinkage": {
+        "n": 788,
+        "mae_per_coordinate_um": 0.7996735642316553,
+        "rmse_per_coordinate_um": 1.20496404756898,
+        "median_endpoint_um": 1.2888662462312577,
+        "p90_endpoint_um": 2.9803863884769126
+      }
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "zero": {
+        "n": 704,
+        "mae_per_coordinate_um": 0.7176698626893939,
+        "rmse_per_coordinate_um": 1.2714994213284896,
+        "median_endpoint_um": 1.284675299443404,
+        "p90_endpoint_um": 3.350023320814349
+      },
+      "velocity": {
+        "n": 704,
+        "mae_per_coordinate_um": 1.0229344223484849,
+        "rmse_per_coordinate_um": 1.6726774085130134,
+        "median_endpoint_um": 1.8168052317185792,
+        "p90_endpoint_um": 4.629823929007443
+      },
+      "shrinkage": {
+        "n": 704,
+        "mae_per_coordinate_um": 0.790101565578383,
+        "rmse_per_coordinate_um": 1.229439104415477,
+        "median_endpoint_um": 1.2617825546086348,
+        "p90_endpoint_um": 2.9482483647583484
+      }
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "zero": {
+        "n": 701,
+        "mae_per_coordinate_um": 0.7481722539229672,
+        "rmse_per_coordinate_um": 1.263331083886669,
+        "median_endpoint_um": 1.6750116604071745,
+        "p90_endpoint_um": 3.447145558284419
+      },
+      "velocity": {
+        "n": 701,
+        "mae_per_coordinate_um": 1.0937648597242036,
+        "rmse_per_coordinate_um": 1.7362297669073086,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 4.0827619710803615
+      },
+      "shrinkage": {
+        "n": 701,
+        "mae_per_coordinate_um": 0.8290716436456422,
+        "rmse_per_coordinate_um": 1.2359367499777716,
+        "median_endpoint_um": 1.293012246720034,
+        "p90_endpoint_um": 3.1576284590080266
+      }
+    },
+    {
+      "stem": "6bba_312f0dc3",
+      "zero": {
+        "n": 480,
+        "mae_per_coordinate_um": 1.5815538194444445,
+        "rmse_per_coordinate_um": 2.065381641194848,
+        "median_endpoint_um": 3.040096626753827,
+        "p90_endpoint_um": 4.943911422169755
+      },
+      "velocity": {
+        "n": 480,
+        "mae_per_coordinate_um": 1.1885633680555556,
+        "rmse_per_coordinate_um": 1.655776801178583,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 4.492661429838738
+      },
+      "shrinkage": {
+        "n": 480,
+        "mae_per_coordinate_um": 1.228065871211665,
+        "rmse_per_coordinate_um": 1.6109186947768415,
+        "median_endpoint_um": 2.150588052618251,
+        "p90_endpoint_um": 3.9651366825128362
+      }
+    },
+    {
+      "stem": "6bba_207c6aaf",
+      "zero": {
+        "n": 421,
+        "mae_per_coordinate_um": 1.6385095011876485,
+        "rmse_per_coordinate_um": 2.308252730648685,
+        "median_endpoint_um": 2.9575446425202108,
+        "p90_endpoint_um": 6.09375
+      },
+      "velocity": {
+        "n": 421,
+        "mae_per_coordinate_um": 1.6089172604908948,
+        "rmse_per_coordinate_um": 2.352383642912903,
+        "median_endpoint_um": 2.7252078475778685,
+        "p90_endpoint_um": 6.2541392543258905
+      },
+      "shrinkage": {
+        "n": 421,
+        "mae_per_coordinate_um": 1.4005948410107065,
+        "rmse_per_coordinate_um": 1.9771626528908757,
+        "median_endpoint_um": 2.3829853310231277,
+        "p90_endpoint_um": 5.234576797272764
+      }
+    },
+    {
+      "stem": "6bba_372c8cb8",
+      "zero": {
+        "n": 978,
+        "mae_per_coordinate_um": 0.6477292092706203,
+        "rmse_per_coordinate_um": 1.1174297837144123,
+        "median_endpoint_um": 1.1490485194281397,
+        "p90_endpoint_um": 3.2752922102462856
+      },
+      "velocity": {
+        "n": 978,
+        "mae_per_coordinate_um": 1.0232404567143831,
+        "rmse_per_coordinate_um": 1.6307360843516059,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 4.162823748671087
+      },
+      "shrinkage": {
+        "n": 978,
+        "mae_per_coordinate_um": 0.7609657992139638,
+        "rmse_per_coordinate_um": 1.1257915089929638,
+        "median_endpoint_um": 1.222941874087517,
+        "p90_endpoint_um": 3.0039039722338035
+      }
+    },
+    {
+      "stem": "6bba_6feb10f0",
+      "zero": {
+        "n": 1318,
+        "mae_per_coordinate_um": 0.5919085103692463,
+        "rmse_per_coordinate_um": 0.9671763298549753,
+        "median_endpoint_um": 1.21875,
+        "p90_endpoint_um": 2.333728575156074
+      },
+      "velocity": {
+        "n": 1318,
+        "mae_per_coordinate_um": 0.982438669701568,
+        "rmse_per_coordinate_um": 1.4747800148660668,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 3.65625
+      },
+      "shrinkage": {
+        "n": 1318,
+        "mae_per_coordinate_um": 0.7569056162886093,
+        "rmse_per_coordinate_um": 1.0669924718139159,
+        "median_endpoint_um": 1.3332028612635964,
+        "p90_endpoint_um": 2.6109184777499177
+      }
+    },
+    {
+      "stem": "6bba_1d0d8384",
+      "zero": {
+        "n": 1288,
+        "mae_per_coordinate_um": 0.9530683876811594,
+        "rmse_per_coordinate_um": 1.5567110184269755,
+        "median_endpoint_um": 1.7235727791422095,
+        "p90_endpoint_um": 3.9804208320226646
+      },
+      "velocity": {
+        "n": 1288,
+        "mae_per_coordinate_um": 1.3095885093167703,
+        "rmse_per_coordinate_um": 1.9927197749836842,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 5.104818896328619
+      },
+      "shrinkage": {
+        "n": 1288,
+        "mae_per_coordinate_um": 1.0254266072822686,
+        "rmse_per_coordinate_um": 1.5445459424306938,
+        "median_endpoint_um": 1.623531561939609,
+        "p90_endpoint_um": 3.9812658866745707
+      }
+    },
+    {
+      "stem": "6bba_825bd1c6",
+      "zero": {
+        "n": 892,
+        "mae_per_coordinate_um": 0.898577634529148,
+        "rmse_per_coordinate_um": 1.4541271939013916,
+        "median_endpoint_um": 1.7235727791422095,
+        "p90_endpoint_um": 4.235497041798015
+      },
+      "velocity": {
+        "n": 892,
+        "mae_per_coordinate_um": 1.234993927503737,
+        "rmse_per_coordinate_um": 1.8075653188575673,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 4.89189779763437
+      },
+      "shrinkage": {
+        "n": 892,
+        "mae_per_coordinate_um": 0.9833559946749728,
+        "rmse_per_coordinate_um": 1.456167533891585,
+        "median_endpoint_um": 1.659508739942656,
+        "p90_endpoint_um": 4.106479289010842
+      }
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "zero": {
+        "n": 857,
+        "mae_per_coordinate_um": 1.8361046285492026,
+        "rmse_per_coordinate_um": 2.5646743426616645,
+        "median_endpoint_um": 3.0671202393287422,
+        "p90_endpoint_um": 7.482044339070395
+      },
+      "velocity": {
+        "n": 857,
+        "mae_per_coordinate_um": 1.7534641190198366,
+        "rmse_per_coordinate_um": 2.4076770559083402,
+        "median_endpoint_um": 2.8145825622994254,
+        "p90_endpoint_um": 6.972802215039312
+      },
+      "shrinkage": {
+        "n": 857,
+        "mae_per_coordinate_um": 1.5301546128399846,
+        "rmse_per_coordinate_um": 2.11878915746176,
+        "median_endpoint_um": 2.2050602619049275,
+        "p90_endpoint_um": 6.4242278117561815
+      }
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "zero": {
+        "n": 1019,
+        "mae_per_coordinate_um": 0.945657507360157,
+        "rmse_per_coordinate_um": 1.670477070073736,
+        "median_endpoint_um": 1.6750116604071745,
+        "p90_endpoint_um": 4.405461649523287
+      },
+      "velocity": {
+        "n": 1019,
+        "mae_per_coordinate_um": 1.2332351979064442,
+        "rmse_per_coordinate_um": 1.9851856872215827,
+        "median_endpoint_um": 2.03125,
+        "p90_endpoint_um": 4.895265723462056
+      },
+      "shrinkage": {
+        "n": 1019,
+        "mae_per_coordinate_um": 0.9993493929472679,
+        "rmse_per_coordinate_um": 1.6273940887427152,
+        "median_endpoint_um": 1.4642959258745878,
+        "p90_endpoint_um": 4.164887293128497
+      }
+    },
+    {
+      "stem": "6bba_13f19531",
+      "zero": {
+        "n": 671,
+        "mae_per_coordinate_um": 1.48050173869846,
+        "rmse_per_coordinate_um": 1.9069867430782534,
+        "median_endpoint_um": 2.7252078475778685,
+        "p90_endpoint_um": 4.685103554085011
+      },
+      "velocity": {
+        "n": 671,
+        "mae_per_coordinate_um": 1.1311630650769995,
+        "rmse_per_coordinate_um": 1.5768348585399035,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 3.917733121653388
+      },
+      "shrinkage": {
+        "n": 671,
+        "mae_per_coordinate_um": 1.1057392274144928,
+        "rmse_per_coordinate_um": 1.4599046745987998,
+        "median_endpoint_um": 1.8645246115313225,
+        "p90_endpoint_um": 3.75210155373274
+      }
+    },
+    {
+      "stem": "6bba_e5e44988",
+      "zero": {
+        "n": 602,
+        "mae_per_coordinate_um": 1.8467954042081949,
+        "rmse_per_coordinate_um": 2.8053139324046876,
+        "median_endpoint_um": 3.350023320814349,
+        "p90_endpoint_um": 6.214430032191206
+      },
+      "velocity": {
+        "n": 602,
+        "mae_per_coordinate_um": 1.6040801495016612,
+        "rmse_per_coordinate_um": 2.7374366363073355,
+        "median_endpoint_um": 2.2980970388562794,
+        "p90_endpoint_um": 6.344379483132642
+      },
+      "shrinkage": {
+        "n": 602,
+        "mae_per_coordinate_um": 1.4514852572855215,
+        "rmse_per_coordinate_um": 2.341468939725245,
+        "median_endpoint_um": 2.2276157689824503,
+        "p90_endpoint_um": 4.8821872235900425
+      }
+    },
+    {
+      "stem": "6bba_705ec2c9",
+      "zero": {
+        "n": 524,
+        "mae_per_coordinate_um": 0.8665116094147582,
+        "rmse_per_coordinate_um": 1.5227051091512869,
+        "median_endpoint_um": 1.6750116604071745,
+        "p90_endpoint_um": 4.2237420869042275
+      },
+      "velocity": {
+        "n": 524,
+        "mae_per_coordinate_um": 1.1776598282442747,
+        "rmse_per_coordinate_um": 1.8999913224762504,
+        "median_endpoint_um": 2.03125,
+        "p90_endpoint_um": 4.953912619984463
+      },
+      "shrinkage": {
+        "n": 524,
+        "mae_per_coordinate_um": 0.9489457338516128,
+        "rmse_per_coordinate_um": 1.486454127960436,
+        "median_endpoint_um": 1.4787855582444287,
+        "p90_endpoint_um": 4.19063774022021
+      }
+    },
+    {
+      "stem": "6bba_d0fc38b5",
+      "zero": {
+        "n": 791,
+        "mae_per_coordinate_um": 0.6570533080488833,
+        "rmse_per_coordinate_um": 1.1245770497731702,
+        "median_endpoint_um": 1.284675299443404,
+        "p90_endpoint_um": 2.9295104113144914
+      },
+      "velocity": {
+        "n": 791,
+        "mae_per_coordinate_um": 0.9367888748419722,
+        "rmse_per_coordinate_um": 1.4627833983508767,
+        "median_endpoint_um": 1.7235727791422095,
+        "p90_endpoint_um": 3.6336104634371584
+      },
+      "shrinkage": {
+        "n": 791,
+        "mae_per_coordinate_um": 0.7227609220308688,
+        "rmse_per_coordinate_um": 1.068027333938013,
+        "median_endpoint_um": 1.2391818994341581,
+        "p90_endpoint_um": 2.7946745526384764
+      }
+    },
+    {
+      "stem": "6bba_062c8d37",
+      "zero": {
+        "n": 862,
+        "mae_per_coordinate_um": 1.0347906999226604,
+        "rmse_per_coordinate_um": 1.6225828527987827,
+        "median_endpoint_um": 1.8168052317185792,
+        "p90_endpoint_um": 4.536529562690034
+      },
+      "velocity": {
+        "n": 862,
+        "mae_per_coordinate_um": 1.1694218870843,
+        "rmse_per_coordinate_um": 1.6902967643539581,
+        "median_endpoint_um": 1.9902104160113323,
+        "p90_endpoint_um": 4.890208017870933
+      },
+      "shrinkage": {
+        "n": 862,
+        "mae_per_coordinate_um": 1.0434829295177628,
+        "rmse_per_coordinate_um": 1.5204921015288555,
+        "median_endpoint_um": 1.6890300531668059,
+        "p90_endpoint_um": 4.108266671205384
+      }
+    },
+    {
+      "stem": "6bba_a5e926bb",
+      "zero": {
+        "n": 655,
+        "mae_per_coordinate_um": 1.720308524173028,
+        "rmse_per_coordinate_um": 2.391215298447744,
+        "median_endpoint_um": 2.9295104113144914,
+        "p90_endpoint_um": 6.558135533414135
+      },
+      "velocity": {
+        "n": 655,
+        "mae_per_coordinate_um": 1.5346533078880407,
+        "rmse_per_coordinate_um": 2.2297043045620293,
+        "median_endpoint_um": 2.333728575156074,
+        "p90_endpoint_um": 5.903902292280037
+      },
+      "shrinkage": {
+        "n": 655,
+        "mae_per_coordinate_um": 1.3795534807783432,
+        "rmse_per_coordinate_um": 1.9634207011269047,
+        "median_endpoint_um": 2.011499266943946,
+        "p90_endpoint_um": 5.4300754954681185
+      }
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "zero": {
+        "n": 908,
+        "mae_per_coordinate_um": 1.5390969162995596,
+        "rmse_per_coordinate_um": 2.30830360507954,
+        "median_endpoint_um": 2.8726212985703494,
+        "p90_endpoint_um": 5.450415695155737
+      },
+      "velocity": {
+        "n": 908,
+        "mae_per_coordinate_um": 1.5541597834067549,
+        "rmse_per_coordinate_um": 2.415439705865882,
+        "median_endpoint_um": 2.4375,
+        "p90_endpoint_um": 6.080193253507654
+      },
+      "shrinkage": {
+        "n": 908,
+        "mae_per_coordinate_um": 1.2882277539707303,
+        "rmse_per_coordinate_um": 1.9676058542198436,
+        "median_endpoint_um": 2.0659683563698796,
+        "p90_endpoint_um": 4.605143617204735
+      }
+    },
+    {
+      "stem": "6bba_96833384",
+      "zero": {
+        "n": 684,
+        "mae_per_coordinate_um": 1.2553758528265107,
+        "rmse_per_coordinate_um": 1.7590226571317593,
+        "median_endpoint_um": 2.1877232028983924,
+        "p90_endpoint_um": 4.614113030962723
+      },
+      "velocity": {
+        "n": 684,
+        "mae_per_coordinate_um": 1.1033290692007798,
+        "rmse_per_coordinate_um": 1.6197202697639974,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 4.1429533547941375
+      },
+      "shrinkage": {
+        "n": 684,
+        "mae_per_coordinate_um": 1.0331584699734984,
+        "rmse_per_coordinate_um": 1.4455087659977475,
+        "median_endpoint_um": 1.5766981833256022,
+        "p90_endpoint_um": 3.78050801202821
+      }
+    },
+    {
+      "stem": "6bba_fc516dc6",
+      "zero": {
+        "n": 736,
+        "mae_per_coordinate_um": 1.434386322463768,
+        "rmse_per_coordinate_um": 2.232601301103662,
+        "median_endpoint_um": 2.2980970388562794,
+        "p90_endpoint_um": 5.9775337211190465
+      },
+      "velocity": {
+        "n": 736,
+        "mae_per_coordinate_um": 1.6906844429347827,
+        "rmse_per_coordinate_um": 2.5630737395934444,
+        "median_endpoint_um": 2.4375,
+        "p90_endpoint_um": 7.272787806124111
+      },
+      "shrinkage": {
+        "n": 736,
+        "mae_per_coordinate_um": 1.331875570190831,
+        "rmse_per_coordinate_um": 2.0228084229730974,
+        "median_endpoint_um": 1.970014290800561,
+        "p90_endpoint_um": 5.323402610763814
+      }
+    },
+    {
+      "stem": "6bba_5f89039d",
+      "zero": {
+        "n": 866,
+        "mae_per_coordinate_um": 0.7998340069284064,
+        "rmse_per_coordinate_um": 1.284007569462977,
+        "median_endpoint_um": 1.6750116604071745,
+        "p90_endpoint_um": 3.6336104634371584
+      },
+      "velocity": {
+        "n": 866,
+        "mae_per_coordinate_um": 1.0853661470361817,
+        "rmse_per_coordinate_um": 1.6463798153717828,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 4.162823748671087
+      },
+      "shrinkage": {
+        "n": 866,
+        "mae_per_coordinate_um": 0.8565523013080641,
+        "rmse_per_coordinate_um": 1.2586017092658408,
+        "median_endpoint_um": 1.3979668472154367,
+        "p90_endpoint_um": 3.3218560961565538
+      }
+    },
+    {
+      "stem": "6bba_fbc898dc",
+      "zero": {
+        "n": 623,
+        "mae_per_coordinate_um": 0.5947030497592295,
+        "rmse_per_coordinate_um": 1.027069845187785,
+        "median_endpoint_um": 1.284675299443404,
+        "p90_endpoint_um": 2.3618050808559397
+      },
+      "velocity": {
+        "n": 623,
+        "mae_per_coordinate_um": 0.9163991439272338,
+        "rmse_per_coordinate_um": 1.4378928703375933,
+        "median_endpoint_um": 1.7235727791422095,
+        "p90_endpoint_um": 3.6198542272253413
+      },
+      "shrinkage": {
+        "n": 623,
+        "mae_per_coordinate_um": 0.7059123763543445,
+        "rmse_per_coordinate_um": 1.0346788506650926,
+        "median_endpoint_um": 1.244423486751488,
+        "p90_endpoint_um": 2.673206664132775
+      }
+    },
+    {
+      "stem": "6bba_fe670320",
+      "zero": {
+        "n": 637,
+        "mae_per_coordinate_um": 1.431547619047619,
+        "rmse_per_coordinate_um": 2.0578823798885546,
+        "median_endpoint_um": 2.9575446425202108,
+        "p90_endpoint_um": 5.2718610904738314
+      },
+      "velocity": {
+        "n": 637,
+        "mae_per_coordinate_um": 1.2612670068027212,
+        "rmse_per_coordinate_um": 1.847468290325575,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 5.015165818935985
+      },
+      "shrinkage": {
+        "n": 637,
+        "mae_per_coordinate_um": 1.1792390042617777,
+        "rmse_per_coordinate_um": 1.6191488578668223,
+        "median_endpoint_um": 1.9845717910234595,
+        "p90_endpoint_um": 4.151363136151458
+      }
+    },
+    {
+      "stem": "6bba_bbb708ca",
+      "zero": {
+        "n": 830,
+        "mae_per_coordinate_um": 1.0836596385542168,
+        "rmse_per_coordinate_um": 1.758784383824561,
+        "median_endpoint_um": 1.86167137607581,
+        "p90_endpoint_um": 4.908737426772795
+      },
+      "velocity": {
+        "n": 830,
+        "mae_per_coordinate_um": 1.2836847389558232,
+        "rmse_per_coordinate_um": 1.92079451171251,
+        "median_endpoint_um": 2.0714766773970688,
+        "p90_endpoint_um": 5.008586377412294
+      },
+      "shrinkage": {
+        "n": 830,
+        "mae_per_coordinate_um": 1.0723084199770303,
+        "rmse_per_coordinate_um": 1.6302476908225247,
+        "median_endpoint_um": 1.6202959481336974,
+        "p90_endpoint_um": 4.424791803367608
+      }
+    }
+  ],
+  "selection_opened": false,
+  "target_audit_opened": false,
+  "model_changed": false,
+  "caveat": "True past links and GT coordinates; detection noise and wrong past links are absent",
+  "authorized_for_submission": false
+}

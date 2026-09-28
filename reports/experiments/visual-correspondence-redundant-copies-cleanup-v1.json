@@ -1,0 +1,34 @@
+{
+  "status": "removed_verified_redundant_copies",
+  "records": [
+    {
+      "relative": "visual-correspondence-smoke-v1-r2/resume.pt",
+      "local_recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-smoke-v1-r2-output\\resume.pt",
+      "sha256": "608801c1cf6bcf72256e2b061ca6eabc4eeb478b96b644e57be078d1d6ceef5d",
+      "bytes": 190329357
+    },
+    {
+      "relative": "visual-correspondence-smoke-v1-r2/6bba-resnet3d/best.pt",
+      "local_recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-smoke-v1-r2-output\\6bba-resnet3d\\best.pt",
+      "sha256": "11394af9285c5272bbddf193f70be57ad9ba280d30466ed5f02e2914ef0dceb5",
+      "bytes": 36073034
+    },
+    {
+      "relative": "visual-correspondence-smoke-v1-r2/6bba-token_transformer3d/best.pt",
+      "local_recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-smoke-v1-r2-output\\6bba-token_transformer3d\\best.pt",
+      "sha256": "f9eeb2b042f41a06328bb942ab3035e31c0196eec701ebe6f93941d13a17a104",
+      "bytes": 63427436
+    },
+    {
+      "relative": "visual-correspondence-train-v1-r2/resume.pt",
+      "local_recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-train-v1-r2-output\\resume.pt",
+      "sha256": "d5918c36e90035faa3152298fd827aa49cfc3ca7c87e40164393b446636578a8",
+      "bytes": 190329357
+    }
+  ],
+  "recovered_bytes": 480159184,
+  "free_bytes_before": 827387904,
+  "free_bytes_after": 1307578368,
+  "all_full_training_best_weights_retained": true,
+  "rsna_files_or_processes_touched": false
+}

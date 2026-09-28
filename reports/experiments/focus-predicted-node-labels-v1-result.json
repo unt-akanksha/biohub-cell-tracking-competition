@@ -1,0 +1,92 @@
+{
+  "status": "completed_focus_specific_training_label_inventory",
+  "run_id": "focus-predicted-node-labels-v1",
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "motion_sha256": "cf970302a726434df62ed45a55b2ef47648aaacd7d56c1b33b65b27faae2b5df",
+      "label_sha256": "5dbe53c190778844ec6d4afeb82b777aaa65c2b7279fa8442b72b27ef643cd64",
+      "nodes": 11008,
+      "windows": 88,
+      "counts": {
+        "fitting": {
+          "unknown_target": 8423,
+          "known_parent": 317,
+          "no_unique_adjacent_annotated_parent": 18,
+          "known_parent_absent": 3
+        },
+        "diagnostic": {
+          "unknown_target": 1165,
+          "known_parent": 63,
+          "no_unique_adjacent_annotated_parent": 4
+        },
+        "embargo": {
+          "unknown_target": 688,
+          "known_parent": 58,
+          "no_unique_adjacent_annotated_parent": 3,
+          "known_parent_absent": 1
+        }
+      },
+      "control_counts_replayed": true
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "motion_sha256": "6531abde5b1b10c1aa76552a9b1b2a7250ad3497db7a806796a4035398e6944b",
+      "label_sha256": "fb1137edb8855c8ef219b11cdcaa63b4dcbbf6d563724cd90251619eccc6c29c",
+      "nodes": 5692,
+      "windows": 88,
+      "counts": {
+        "fitting": {
+          "unknown_target": 4483,
+          "known_parent": 391,
+          "no_unique_adjacent_annotated_parent": 5
+        },
+        "diagnostic": {
+          "known_parent": 49,
+          "unknown_target": 350
+        },
+        "embargo": {
+          "unknown_target": 261,
+          "known_parent": 50,
+          "no_unique_adjacent_annotated_parent": 2,
+          "ambiguous_or_unmatched_near_parent": 1
+        }
+      },
+      "control_counts_replayed": true
+    }
+  ],
+  "totals": {
+    "fitting": {
+      "unknown_target": 12906,
+      "known_parent": 708,
+      "no_unique_adjacent_annotated_parent": 23,
+      "known_parent_absent": 3
+    },
+    "diagnostic": {
+      "unknown_target": 1515,
+      "known_parent": 112,
+      "no_unique_adjacent_annotated_parent": 4
+    },
+    "embargo": {
+      "unknown_target": 949,
+      "known_parent": 108,
+      "no_unique_adjacent_annotated_parent": 5,
+      "known_parent_absent": 1,
+      "ambiguous_or_unmatched_near_parent": 1
+    }
+  },
+  "source_hashes": {
+    "research/focus_predicted_training_labels.py": "48e90685b049ad0d388e08e7710fd2e5280a2a3ad9852fc6358f7e271dd050b2",
+    "scripts/audit-focus-predicted-training-labels.py": "db14fe9624a69398996bec79bb8b686b4a9376d1d4c6da3b21a34f66f36ab80c",
+    "reports/experiments/focus-predicted-node-labels-v1-design.md": "27495444a5156e731764cf3c4a5e8b4484349dc2dd3f7a60eefe8539b629d063"
+  },
+  "elapsed_seconds": 12.203999999997905,
+  "gpu_seconds": 0,
+  "predictions_changed": false,
+  "optimizer_run": false,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "automatic_training_launch": false,
+  "caveat": "Original model already trained on native predicted detections. This cache changes proposal domain to FOCUS; temporal diagnostics are not independent model validation."
+}

@@ -1,0 +1,27 @@
+{
+  "policy": "Check before every public notebook pull. Do not download, execute, adopt predictions from, or select configurations using these explicit metric-exploit sources. This registry is a policy record, not an installed Kaggle CLI interceptor.",
+  "updated_utc": "2026-09-10 18:33 UTC",
+  "excluded": [
+    {
+      "ref": "anvithpothula/biohub-0-95",
+      "reason": "Fabricated nodes and divisions",
+      "evidence": "research/EXPERIMENT_LOG.md"
+    },
+    {
+      "ref": "kaiwalyaatulraut/biohub-solution",
+      "reason": "Negative-time fabricated graph augmentation",
+      "evidence": "research/EXPERIMENT_LOG.md"
+    },
+    {
+      "ref": "sushanthtiruvaipati/biohub-xiaoleilian-divaug-fork-v1",
+      "reason": "Negative-time fabricated divisions",
+      "evidence": "research/EXPERIMENT_LOG.md"
+    },
+    {
+      "ref": "dhiaalhemdani/biohub-competition-solution",
+      "reason": "18:27 Sept10 revision adds negative-time hub and five fabricated forks outside image geometry",
+      "evidence": "reports/experiments/public-refresh-20260910-1831.md",
+      "inspected_notebook_sha256": "59e34e3b61d1508278f1883a8e580522470c7e245c60a5778fda0836096c7c22"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "authorized_for_submission": false,
+  "candidate_base": "redoctopusk/biohub-948tta2",
+  "focus3d_role": "detector proposal only; physical-linker edges are local support, never copied into the candidate",
+  "hypothesis": "A FOCUS detection confirmed by DeepCenter can safely fill one missing single-frame node between two unlinked base endpoints.",
+  "leaderboard_used_for_selection": false,
+  "metric_hack_used": false,
+  "policy": {
+    "base_endpoint_step_max_um": 5.0,
+    "base_endpoint_total_distance_max_um": 10.0,
+    "base_same_frame_exclusion_radius_um": 3.0,
+    "candidate_ranking": "minimum physical interpolation residual, then node id",
+    "deepcenter_minimum_probability": 0.25,
+    "focus_to_linear_interpolation_max_um": 1.5,
+    "forbid_division_endpoint_mutation": true,
+    "gap_frames": 2,
+    "maximum_added_edges_per_movie": 2,
+    "maximum_added_nodes_per_movie": 1,
+    "require_base_predecessor_out_degree_zero": true,
+    "require_base_successor_in_degree_zero": true,
+    "require_focus_incoming_and_outgoing_support": true
+  },
+  "promotion_gate": {
+    "complete_movie_count": 4,
+    "division_jaccard_must_not_decrease": true,
+    "minimum_movie_adjusted_edge_delta": 0.0,
+    "node_count_penalty_must_not_increase": true,
+    "patched_proxy_delta_strictly_positive": true,
+    "production_must_add_at_least_one_bridge": true
+  },
+  "public_predictions_copied": false,
+  "run_id": "focus3d-bridge-rescue-v1",
+  "schema_version": 1,
+  "status": "frozen_before_focus_or_base_predictions_on_validation_stems",
+  "validation_selection": {
+    "excluded_prior_evaluation_stems": [
+      "44b6_12dfb391",
+      "44b6_267148e4",
+      "44b6_7a302da0",
+      "44b6_d754aa59",
+      "6bba_062c8d37",
+      "6bba_07e24132",
+      "6bba_debd7bfa",
+      "6bba_fc5f39dc"
+    ],
+    "labels_used": false,
+    "leaderboard_used": false,
+    "model_outputs_used": false,
+    "rule": "first two SHA-256 ordered non-prior-evaluation stems per embryo",
+    "salt": "biohub-focus3d-bridge-rescue-v1"
+  },
+  "validation_stems": [
+    "44b6_81c256f0",
+    "44b6_24264f12",
+    "6bba_f1fde7e0",
+    "6bba_23af9eeb"
+  ]
+}

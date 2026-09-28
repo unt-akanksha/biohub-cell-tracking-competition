@@ -1,0 +1,55 @@
+{
+  "model": {
+    "features": [
+      "best_physical",
+      "physical_logsumexp",
+      "best_joint",
+      "joint_margin",
+      "conditional_entropy",
+      "nearest_feature_cosine",
+      "ranking_disagreement_um"
+    ],
+    "mean": [
+      -1.4826758079207665,
+      -1.4540450881777072,
+      3.939693775721128,
+      15.989210966219055,
+      0.009470723473238423,
+      0.9995331925065826,
+      0.15377452206466927
+    ],
+    "std": [
+      2.434711218126843,
+      2.3933662567580893,
+      2.8817214143106162,
+      12.077862435333653,
+      0.02729600274818201,
+      0.0009689624239090151,
+      1.2358587213470167
+    ],
+    "theta": [
+      -3.384919442543405,
+      0.10227879687448825,
+      -0.01882563043662193,
+      -1.5831024355703411,
+      -0.10571464330469504,
+      0.42830366506271217,
+      0.07323663975856498,
+      0.0566319382122431
+    ],
+    "fitting_examples": 2870,
+    "fitting_present": 2818,
+    "ridge": 1.0,
+    "intercept_penalized": false,
+    "optimizer": "L-BFGS-B",
+    "iterations": 34,
+    "objective": 162.19085297701304,
+    "role": "fitting"
+  },
+  "source_hashes": {
+    "research/focus_parent_presence.py": "9c6c473adf8f2f4b595a71e94ea6009cf0a006bd0573021fcecefa6b71151539",
+    "scripts/fit-focus-parent-presence.py": "7b079588d9b8aaf01c50d14dce5ada1b8c6e2d5866b3dc892a180141ce8a16f9",
+    "reports/experiments/focus-parent-presence-v1-design.md": "e3bc1c3e2b613bae3d21fb692e168638e10edd56e6d1da314ef2c554cbea46a3"
+  },
+  "summary_worker_sha256": "4993810152196f08268f15e4a8c5a22f449c5ce3f3e1d042738745f479f06d55"
+}

@@ -1,0 +1,16 @@
+{
+  "run_id": "visual-correspondence-ensemble-v1",
+  "mode": "smoke",
+  "bundle_sha256": "096abae5977aa95d68091cea49bafcdeed98bb879578b056e421b0472c291d4a",
+  "environment": {
+    "torch": "2.5.1+cu121",
+    "gpu": "NVIDIA A10G",
+    "python": "3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]",
+    "gpu_memory_fraction": 0.9,
+    "cpu_threads": 2
+  },
+  "status": "error",
+  "error_type": "AttributeError",
+  "message": "'NoneType' object has no attribute 'eval'",
+  "elapsed_seconds": 8.860711028999503
+}

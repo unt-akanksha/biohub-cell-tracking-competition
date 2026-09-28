@@ -1,0 +1,111 @@
+{
+  "status": "source_physical_label_coverage_audited",
+  "per_movie": {
+    "44b6_cf8fed6b": {
+      "no_unique_known_parent": 40841,
+      "official_positive_groups": 188,
+      "new_positive_groups": 10,
+      "same_positive_identity": 178,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 6,
+      "current_correct": 180,
+      "prior_positive_groups": 178
+    },
+    "44b6_f28707c6": {
+      "no_unique_known_parent": 21050,
+      "official_positive_groups": 55,
+      "new_positive_groups": 18,
+      "same_positive_identity": 37,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 11,
+      "current_correct": 52,
+      "matched_parent_outside_candidate_set": 1,
+      "prior_positive_groups": 37
+    },
+    "44b6_c50204e0": {
+      "no_unique_known_parent": 37190,
+      "official_positive_groups": 311,
+      "new_positive_groups": 105,
+      "same_positive_identity": 206,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 74,
+      "current_correct": 287,
+      "matched_parent_outside_candidate_set": 4,
+      "prior_positive_groups": 206
+    },
+    "44b6_cf2536e8": {
+      "no_unique_known_parent": 21547,
+      "official_positive_groups": 75,
+      "new_positive_groups": 20,
+      "same_positive_identity": 55,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 13,
+      "current_correct": 70,
+      "prior_positive_groups": 55
+    },
+    "6bba_78a7bd97": {
+      "no_unique_known_parent": 38412,
+      "official_positive_groups": 797,
+      "new_positive_groups": 394,
+      "same_positive_identity": 403,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 288,
+      "current_correct": 740,
+      "matched_parent_outside_candidate_set": 10,
+      "prior_positive_groups": 403
+    },
+    "6bba_5dfe9ad1": {
+      "no_unique_known_parent": 27974,
+      "official_positive_groups": 1442,
+      "new_positive_groups": 144,
+      "same_positive_identity": 1298,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 93,
+      "current_correct": 1430,
+      "matched_parent_outside_candidate_set": 5,
+      "prior_positive_groups": 1298
+    },
+    "6bba_acd782a8": {
+      "no_unique_known_parent": 19313,
+      "official_positive_groups": 321,
+      "new_positive_groups": 112,
+      "same_positive_identity": 209,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 72,
+      "current_correct": 290,
+      "matched_parent_outside_candidate_set": 1,
+      "prior_positive_groups": 209
+    },
+    "6bba_969618f6": {
+      "no_unique_known_parent": 14704,
+      "official_positive_groups": 649,
+      "new_positive_groups": 164,
+      "same_positive_identity": 485,
+      "changed_positive_identity": 0,
+      "positive_parent_distance_above_3_25um": 107,
+      "current_correct": 648,
+      "matched_parent_outside_candidate_set": 2,
+      "prior_positive_groups": 485
+    }
+  },
+  "label_sha256": {
+    "44b6_cf8fed6b": "2b9c6439ddcc5623f652db4ab0dccd9927cf5d4bc6a6ea9069a005f837e6683e",
+    "44b6_f28707c6": "5cf120842e907dfdbebdf4ef9d222658c2cbeac05feb74cc5c0ab20d3cba246f",
+    "44b6_c50204e0": "4f100259ff6565e524b69462dbc083370511901d8d75efa9bb9d88765ed69891",
+    "44b6_cf2536e8": "782ccc180217aa6369f4b5244954f61ba45eb829f23bf6202250564fe5446263",
+    "6bba_78a7bd97": "ae98294d88c7bcb8d552d29858c2ac8a13f0ee9155675375d3e83ac50de206cc",
+    "6bba_5dfe9ad1": "5f349580b56fa9a8364237bbdb2843e07c5d7c578059edd74fa938582131101d",
+    "6bba_acd782a8": "5d7df5059eec8a5d3a7aa2ae9be110ccd40b77c333e109ef5582b333d932f661",
+    "6bba_969618f6": "9fb47652b2d9a84022decc1e6c092ad8634298f7b09cd18b84d290a87c97fb6d"
+  },
+  "source_sha256": "f08009c012affca6fba4785c03754016abbcaee920ec2503ee9c4709d19142a9",
+  "source_scope_sha256": "5c4b64793068565598537db6bb3af439513bde3d46e357ffeab59164bda020bf",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "node_positions_changed": false,
+  "graph_predictions_changed": false,
+  "authorized_for_submission": false,
+  "geometry_rule": "Official unique physical distance matching; safe negatives still require >7um",
+  "seconds": 15.030999999959022
+}

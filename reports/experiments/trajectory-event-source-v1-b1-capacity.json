@@ -1,0 +1,150 @@
+{
+  "status": "source_division_capacity_audited",
+  "per_movie": {
+    "6bba_d2b9fc0c": {
+      "annotated_forks": 2,
+      "consecutive_forks": 2,
+      "all_three_cells_matched": 2,
+      "final_missing_one_or_both_fork_edges": 2,
+      "both_edges_in_joint_candidate_set": 2,
+      "candidate_reachable_missing_forks": 2,
+      "official_division_tp": 0,
+      "official_division_fp": 1,
+      "official_division_fn": 2
+    },
+    "6bba_09961292": {
+      "annotated_forks": 4,
+      "consecutive_forks": 4,
+      "missing_at_least_one_matched_cell": 1,
+      "all_three_cells_matched": 3,
+      "final_missing_one_or_both_fork_edges": 3,
+      "both_edges_in_neural_proposals": 1,
+      "both_edges_in_joint_candidate_set": 3,
+      "candidate_reachable_missing_forks": 3,
+      "official_division_tp": 0,
+      "official_division_fp": 0,
+      "official_division_fn": 4
+    },
+    "6bba_7f87b3d8": {
+      "annotated_forks": 3,
+      "consecutive_forks": 3,
+      "all_three_cells_matched": 1,
+      "final_missing_one_or_both_fork_edges": 1,
+      "both_edges_in_joint_candidate_set": 1,
+      "candidate_reachable_missing_forks": 1,
+      "missing_at_least_one_matched_cell": 2,
+      "official_division_tp": 0,
+      "official_division_fp": 1,
+      "official_division_fn": 3
+    },
+    "6bba_d3da753b": {
+      "annotated_forks": 1,
+      "consecutive_forks": 1,
+      "missing_at_least_one_matched_cell": 1,
+      "official_division_tp": 0,
+      "official_division_fp": 1,
+      "official_division_fn": 1
+    },
+    "6bba_57b7cc1e": {
+      "annotated_forks": 3,
+      "consecutive_forks": 3,
+      "all_three_cells_matched": 2,
+      "final_missing_one_or_both_fork_edges": 2,
+      "both_edges_in_joint_candidate_set": 2,
+      "candidate_reachable_missing_forks": 2,
+      "missing_at_least_one_matched_cell": 1,
+      "official_division_tp": 0,
+      "official_division_fp": 0,
+      "official_division_fn": 3
+    },
+    "44b6_e28840c6": {
+      "annotated_forks": 2,
+      "consecutive_forks": 2,
+      "missing_at_least_one_matched_cell": 1,
+      "all_three_cells_matched": 1,
+      "final_missing_one_or_both_fork_edges": 1,
+      "both_edges_in_joint_candidate_set": 1,
+      "candidate_reachable_missing_forks": 1,
+      "official_division_tp": 0,
+      "official_division_fp": 0,
+      "official_division_fn": 2
+    },
+    "6bba_ef7b4f7e": {
+      "annotated_forks": 2,
+      "consecutive_forks": 2,
+      "all_three_cells_matched": 2,
+      "final_missing_one_or_both_fork_edges": 2,
+      "both_edges_in_joint_candidate_set": 1,
+      "candidate_reachable_missing_forks": 1,
+      "both_edges_in_neural_proposals": 1,
+      "official_division_tp": 0,
+      "official_division_fp": 0,
+      "official_division_fn": 2
+    },
+    "6bba_5c824876": {
+      "annotated_forks": 1,
+      "consecutive_forks": 1,
+      "all_three_cells_matched": 1,
+      "final_exact_fork": 1,
+      "both_edges_in_neural_proposals": 1,
+      "both_edges_in_joint_candidate_set": 1,
+      "official_division_tp": 1,
+      "official_division_fp": 0,
+      "official_division_fn": 0
+    }
+  },
+  "pooled": {
+    "annotated_forks": 18,
+    "consecutive_forks": 18,
+    "all_three_cells_matched": 12,
+    "final_missing_one_or_both_fork_edges": 11,
+    "both_edges_in_joint_candidate_set": 11,
+    "candidate_reachable_missing_forks": 10,
+    "official_division_tp": 1,
+    "official_division_fp": 3,
+    "official_division_fn": 17,
+    "missing_at_least_one_matched_cell": 6,
+    "both_edges_in_neural_proposals": 3,
+    "final_exact_fork": 1
+  },
+  "by_embryo": {
+    "6bba": {
+      "annotated_forks": 16,
+      "consecutive_forks": 16,
+      "all_three_cells_matched": 11,
+      "final_missing_one_or_both_fork_edges": 10,
+      "both_edges_in_joint_candidate_set": 10,
+      "candidate_reachable_missing_forks": 9,
+      "official_division_tp": 1,
+      "official_division_fp": 3,
+      "official_division_fn": 15,
+      "missing_at_least_one_matched_cell": 5,
+      "both_edges_in_neural_proposals": 3,
+      "final_exact_fork": 1
+    },
+    "44b6": {
+      "annotated_forks": 2,
+      "consecutive_forks": 2,
+      "missing_at_least_one_matched_cell": 1,
+      "all_three_cells_matched": 1,
+      "final_missing_one_or_both_fork_edges": 1,
+      "both_edges_in_joint_candidate_set": 1,
+      "candidate_reachable_missing_forks": 1,
+      "official_division_tp": 0,
+      "official_division_fp": 0,
+      "official_division_fn": 2
+    }
+  },
+  "source_scope_sha256": "3faae3ec7154ed4c02fb39423b6ec1aa1c89b4afe2d8eda43e8fd1d392ff5ac2",
+  "source_sha256": "33951685cb54c48cc3bc1a9b415915a3ccfd3a42e7a33d155eeb271a143fb8cf",
+  "effective_source_sha256": "b3e446fe471cd61ece4fc2bfac337bd61e9d49bc3f4504f88ab12b16964f4d21",
+  "paired_baseline_score_reproduction_required": false,
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "graph_predictions_changed": false,
+  "oracle_graphs_exported": false,
+  "exact_time_coverage_is_not_official_plus_minus_one_frame_division_recall": true,
+  "note": "Capacity inventory is not a trained model or evidence for relaxing division thresholds.",
+  "elapsed_seconds": 20.15600000001723
+}

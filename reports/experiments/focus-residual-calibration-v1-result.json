@@ -1,0 +1,606 @@
+{
+  "status": "completed_training_calibrated_focus_motion_comparison",
+  "run_id": "focus-residual-calibration-v1",
+  "parameters": {
+    "mean_um": [
+      0.6847597560912013,
+      0.49539758715362603,
+      0.6188701264081437
+    ],
+    "variance_um2": [
+      2.573865493861958,
+      2.3743091105305036,
+      3.6901129377029953
+    ],
+    "unconstrained_variance_um2": [
+      2.573865493861958,
+      2.3743091105305036,
+      3.6901129377029953
+    ],
+    "variance_floor_um2": [
+      0.4401041666666667,
+      0.027506510416666668,
+      0.027506510416666668
+    ],
+    "observations": 928,
+    "method": "Pooled diagonal Gaussian maximum likelihood with native-voxel variance floor"
+  },
+  "per_movie": {
+    "parent": [
+      {
+        "edge_tp": 990,
+        "edge_fp": 224,
+        "edge_fn": 298,
+        "division_tp": 0,
+        "division_fp": 57,
+        "division_fn": 0,
+        "num_pred_nodes": 34592,
+        "node_recall": 0.9597615499254843,
+        "total_node_ratio": 0.6582138919514884,
+        "edge_jaccard": 0.6547619047619048,
+        "adj_edge_jaccard": 0.6116645665984145,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 577,
+        "edge_fp": 257,
+        "edge_fn": 147,
+        "division_tp": 0,
+        "division_fp": 74,
+        "division_fn": 0,
+        "num_pred_nodes": 7068,
+        "node_recall": 0.994572591587517,
+        "total_node_ratio": 0.21820062047569805,
+        "edge_jaccard": 0.5881753312945973,
+        "adj_edge_jaccard": 0.5753413090708993,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 388,
+        "edge_fp": 160,
+        "edge_fn": 322,
+        "division_tp": 0,
+        "division_fp": 36,
+        "division_fn": 0,
+        "num_pred_nodes": 38547,
+        "node_recall": 0.864314789687924,
+        "total_node_ratio": 1.3626723873735826,
+        "edge_jaccard": 0.4459770114942529,
+        "adj_edge_jaccard": 0.385204955597592,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 336,
+        "edge_fp": 115,
+        "edge_fn": 102,
+        "division_tp": 0,
+        "division_fp": 17,
+        "division_fn": 1,
+        "num_pred_nodes": 19932,
+        "node_recall": 0.9588744588744589,
+        "total_node_ratio": 0.24101861652450035,
+        "edge_jaccard": 0.6075949367088608,
+        "adj_edge_jaccard": 0.5929507676035747,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 956,
+        "edge_fp": 266,
+        "edge_fn": 189,
+        "division_tp": 1,
+        "division_fp": 46,
+        "division_fn": 2,
+        "num_pred_nodes": 16941,
+        "node_recall": 0.9914821124361158,
+        "total_node_ratio": 0.976779463243874,
+        "edge_jaccard": 0.6775336640680368,
+        "adj_edge_jaccard": 0.6113535671962336,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 352,
+        "edge_fp": 29,
+        "edge_fn": 106,
+        "division_tp": 0,
+        "division_fp": 5,
+        "division_fn": 2,
+        "num_pred_nodes": 17712,
+        "node_recall": 0.8938428874734607,
+        "total_node_ratio": 0.26333808844507844,
+        "edge_jaccard": 0.7227926078028748,
+        "adj_edge_jaccard": 0.7037587254347706,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 595,
+        "edge_fp": 87,
+        "edge_fn": 104,
+        "division_tp": 0,
+        "division_fp": 18,
+        "division_fn": 1,
+        "num_pred_nodes": 25425,
+        "node_recall": 0.9986187845303868,
+        "total_node_ratio": 0.6988507283175197,
+        "edge_jaccard": 0.7569974554707379,
+        "adj_edge_jaccard": 0.7040946331617145,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1246,
+        "edge_fp": 54,
+        "edge_fn": 102,
+        "division_tp": 1,
+        "division_fp": 12,
+        "division_fn": 3,
+        "num_pred_nodes": 59156,
+        "node_recall": 0.9992952783650458,
+        "total_node_ratio": 0.9861003861003861,
+        "edge_jaccard": 0.8887303851640513,
+        "adj_edge_jaccard": 0.8010926475691098,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ],
+    "control": [
+      {
+        "edge_tp": 1111,
+        "edge_fp": 160,
+        "edge_fn": 177,
+        "division_tp": 0,
+        "division_fp": 47,
+        "division_fn": 0,
+        "num_pred_nodes": 25616,
+        "node_recall": 0.9918032786885246,
+        "total_node_ratio": 0.227937299266574,
+        "edge_jaccard": 0.7672651933701657,
+        "adj_edge_jaccard": 0.7497763577703617,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 701,
+        "edge_fp": 16,
+        "edge_fn": 23,
+        "division_tp": 0,
+        "division_fp": 9,
+        "division_fn": 0,
+        "num_pred_nodes": 7988,
+        "node_recall": 0.9932157394843962,
+        "total_node_ratio": 0.37676663219579454,
+        "edge_jaccard": 0.9472972972972973,
+        "adj_edge_jaccard": 0.9116062960582092,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 410,
+        "edge_fp": 158,
+        "edge_fn": 300,
+        "division_tp": 0,
+        "division_fp": 33,
+        "division_fn": 0,
+        "num_pred_nodes": 29330,
+        "node_recall": 0.8127544097693351,
+        "total_node_ratio": 0.7977321483297579,
+        "edge_jaccard": 0.47235023041474655,
+        "adj_edge_jaccard": 0.4346693340074653,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 340,
+        "edge_fp": 132,
+        "edge_fn": 98,
+        "division_tp": 0,
+        "division_fp": 23,
+        "division_fn": 1,
+        "num_pred_nodes": 27279,
+        "node_recall": 0.9761904761904762,
+        "total_node_ratio": 0.69846211319345,
+        "edge_jaccard": 0.5964912280701754,
+        "adj_edge_jaccard": 0.5548285757042504,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1080,
+        "edge_fp": 38,
+        "edge_fn": 65,
+        "division_tp": 0,
+        "division_fp": 12,
+        "division_fn": 3,
+        "num_pred_nodes": 9169,
+        "node_recall": 0.9829642248722317,
+        "total_node_ratio": 0.06989498249708284,
+        "edge_jaccard": 0.9129332206255283,
+        "adj_edge_jaccard": 0.9065522754778657,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 402,
+        "edge_fp": 37,
+        "edge_fn": 56,
+        "division_tp": 1,
+        "division_fp": 13,
+        "division_fn": 1,
+        "num_pred_nodes": 22140,
+        "node_recall": 0.9596602972399151,
+        "total_node_ratio": 0.579172610556348,
+        "edge_jaccard": 0.8121212121212121,
+        "adj_edge_jaccard": 0.7650853758699694,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 624,
+        "edge_fp": 43,
+        "edge_fn": 75,
+        "division_tp": 0,
+        "division_fp": 15,
+        "division_fn": 1,
+        "num_pred_nodes": 15965,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.06675130295336096,
+        "edge_jaccard": 0.8409703504043127,
+        "adj_edge_jaccard": 0.8353567637408494,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1258,
+        "edge_fp": 72,
+        "edge_fn": 90,
+        "division_tp": 2,
+        "division_fp": 34,
+        "division_fn": 2,
+        "num_pred_nodes": 31099,
+        "node_recall": 0.9985905567300916,
+        "total_node_ratio": 0.04411616585529629,
+        "edge_jaccard": 0.8859154929577465,
+        "adj_edge_jaccard": 0.8820071734756365,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ],
+    "candidate": [
+      {
+        "edge_tp": 1109,
+        "edge_fp": 140,
+        "edge_fn": 179,
+        "division_tp": 0,
+        "division_fp": 45,
+        "division_fn": 0,
+        "num_pred_nodes": 25616,
+        "node_recall": 0.9918032786885246,
+        "total_node_ratio": 0.227937299266574,
+        "edge_jaccard": 0.7766106442577031,
+        "adj_edge_jaccard": 0.7589087909743256,
+        "stem": "6bba_283bf9f1",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 685,
+        "edge_fp": 9,
+        "edge_fn": 39,
+        "division_tp": 0,
+        "division_fp": 7,
+        "division_fn": 0,
+        "num_pred_nodes": 7988,
+        "node_recall": 0.9932157394843962,
+        "total_node_ratio": 0.37676663219579454,
+        "edge_jaccard": 0.9345156889495225,
+        "adj_edge_jaccard": 0.8993062560635582,
+        "stem": "6bba_5b28472a",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 419,
+        "edge_fp": 140,
+        "edge_fn": 291,
+        "division_tp": 0,
+        "division_fp": 27,
+        "division_fn": 0,
+        "num_pred_nodes": 29330,
+        "node_recall": 0.8127544097693351,
+        "total_node_ratio": 0.7977321483297579,
+        "edge_jaccard": 0.4929411764705882,
+        "adj_edge_jaccard": 0.4536176740999801,
+        "stem": "6bba_c73a1d11",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 336,
+        "edge_fp": 112,
+        "edge_fn": 102,
+        "division_tp": 1,
+        "division_fp": 12,
+        "division_fn": 0,
+        "num_pred_nodes": 27279,
+        "node_recall": 0.9761904761904762,
+        "total_node_ratio": 0.69846211319345,
+        "edge_jaccard": 0.610909090909091,
+        "adj_edge_jaccard": 0.5682394054485457,
+        "stem": "6bba_67ebd073",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1068,
+        "edge_fp": 33,
+        "edge_fn": 77,
+        "division_tp": 0,
+        "division_fp": 13,
+        "division_fn": 3,
+        "num_pred_nodes": 9169,
+        "node_recall": 0.9829642248722317,
+        "total_node_ratio": 0.06989498249708284,
+        "edge_jaccard": 0.9066213921901528,
+        "adj_edge_jaccard": 0.9002845635562916,
+        "stem": "6bba_5c039895",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 396,
+        "edge_fp": 38,
+        "edge_fn": 62,
+        "division_tp": 1,
+        "division_fp": 12,
+        "division_fn": 1,
+        "num_pred_nodes": 22140,
+        "node_recall": 0.9596602972399151,
+        "total_node_ratio": 0.579172610556348,
+        "edge_jaccard": 0.7983870967741935,
+        "adj_edge_jaccard": 0.7521467028668722,
+        "stem": "6bba_fc5f39dc",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 629,
+        "edge_fp": 36,
+        "edge_fn": 70,
+        "division_tp": 0,
+        "division_fp": 11,
+        "division_fn": 1,
+        "num_pred_nodes": 15965,
+        "node_recall": 1.0,
+        "total_node_ratio": 0.06675130295336096,
+        "edge_jaccard": 0.85578231292517,
+        "adj_edge_jaccard": 0.8500698544819505,
+        "stem": "6bba_87289e13",
+        "embryo": "6bba"
+      },
+      {
+        "edge_tp": 1257,
+        "edge_fp": 67,
+        "edge_fn": 91,
+        "division_tp": 1,
+        "division_fp": 27,
+        "division_fn": 3,
+        "num_pred_nodes": 31099,
+        "node_recall": 0.9985905567300916,
+        "total_node_ratio": 0.04411616585529629,
+        "edge_jaccard": 0.888339222614841,
+        "adj_edge_jaccard": 0.8844202105667769,
+        "stem": "6bba_cdcfe533",
+        "embryo": "6bba"
+      }
+    ]
+  },
+  "summaries": {
+    "parent": {
+      "n": 8,
+      "edge_jaccard": 0.6798300424893776,
+      "division_jaccard": 0.007246376811594203,
+      "division_tp": 2,
+      "division_fp": 265,
+      "division_fn": 9,
+      "node_recall": 0.9575953066100492,
+      "adj_edge_jaccard": 0.629114895139672,
+      "n_adj": 8,
+      "score": 0.6298395328208314
+    },
+    "control": {
+      "n": 8,
+      "edge_jaccard": 0.7937315831770694,
+      "division_jaccard": 0.015228426395939087,
+      "division_tp": 3,
+      "division_fp": 186,
+      "division_fn": 8,
+      "node_recall": 0.9643973728718713,
+      "adj_edge_jaccard": 0.7738097512967487,
+      "n_adj": 8,
+      "score": 0.7753325939363426
+    },
+    "candidate": {
+      "n": 8,
+      "edge_jaccard": 0.7987813134732566,
+      "division_jaccard": 0.01818181818181818,
+      "division_tp": 3,
+      "division_fp": 154,
+      "division_fn": 8,
+      "node_recall": 0.9643973728718713,
+      "adj_edge_jaccard": 0.7787238803893177,
+      "n_adj": 8,
+      "score": 0.7805420622074996
+    }
+  },
+  "by_embryo": {
+    "parent": {
+      "6bba": {
+        "n": 8,
+        "edge_jaccard": 0.6798300424893776,
+        "division_jaccard": 0.007246376811594203,
+        "division_tp": 2,
+        "division_fp": 265,
+        "division_fn": 9,
+        "node_recall": 0.9575953066100492,
+        "adj_edge_jaccard": 0.629114895139672,
+        "n_adj": 8,
+        "score": 0.6298395328208314
+      }
+    },
+    "control": {
+      "6bba": {
+        "n": 8,
+        "edge_jaccard": 0.7937315831770694,
+        "division_jaccard": 0.015228426395939087,
+        "division_tp": 3,
+        "division_fp": 186,
+        "division_fn": 8,
+        "node_recall": 0.9643973728718713,
+        "adj_edge_jaccard": 0.7738097512967487,
+        "n_adj": 8,
+        "score": 0.7753325939363426
+      }
+    },
+    "candidate": {
+      "6bba": {
+        "n": 8,
+        "edge_jaccard": 0.7987813134732566,
+        "division_jaccard": 0.01818181818181818,
+        "division_tp": 3,
+        "division_fp": 154,
+        "division_fn": 8,
+        "node_recall": 0.9643973728718713,
+        "adj_edge_jaccard": 0.7787238803893177,
+        "n_adj": 8,
+        "score": 0.7805420622074996
+      }
+    }
+  },
+  "comparison": {
+    "source_comparison": {
+      "parent_deltas": {
+        "score": 0.15070252938666817,
+        "edge_jaccard": 0.11895127098387903,
+        "node_recall": 0.006802066261822115
+      },
+      "static_deltas": {
+        "score": 0.030901244491084,
+        "edge_jaccard": 0.029623191508874602,
+        "node_recall": 0.0
+      },
+      "per_movie_deltas": [
+        {
+          "stem": "6bba_283bf9f1",
+          "adjusted_edge_delta": 0.14724422437591111
+        },
+        {
+          "stem": "6bba_5b28472a",
+          "adjusted_edge_delta": 0.3239649469926589
+        },
+        {
+          "stem": "6bba_c73a1d11",
+          "adjusted_edge_delta": 0.06841271850238811
+        },
+        {
+          "stem": "6bba_67ebd073",
+          "adjusted_edge_delta": -0.024711362155029004
+        },
+        {
+          "stem": "6bba_5c039895",
+          "adjusted_edge_delta": 0.28893099636005803
+        },
+        {
+          "stem": "6bba_fc5f39dc",
+          "adjusted_edge_delta": 0.04838797743210166
+        },
+        {
+          "stem": "6bba_87289e13",
+          "adjusted_edge_delta": 0.145975221320236
+        },
+        {
+          "stem": "6bba_cdcfe533",
+          "adjusted_edge_delta": 0.08332756299766708
+        }
+      ],
+      "worst_movie_delta": 0.06841271850238811,
+      "conditions": {
+        "score_gain_over_parent": true,
+        "raw_edge_gain_over_parent": true,
+        "recall_guard": true,
+        "five_movies_improve": true,
+        "per_movie_loss_bounded": false,
+        "worst_movie_preserved": true,
+        "score_gain_over_static": true,
+        "raw_edge_gain_over_static": true
+      },
+      "source_gate_passed": false,
+      "authorized_for_submission": false,
+      "caveat": "Owned flow excludes these movies; FOCUS pretraining overlap remains unverified."
+    },
+    "focus_flow_deltas": {
+      "score": 0.005209468271156981,
+      "edge_jaccard": 0.005049730296187271,
+      "node_recall": 0.0
+    },
+    "focus_flow_per_movie_deltas": [
+      {
+        "stem": "6bba_283bf9f1",
+        "adjusted_edge_delta": 0.009132433203963952
+      },
+      {
+        "stem": "6bba_5b28472a",
+        "adjusted_edge_delta": -0.012300039994651013
+      },
+      {
+        "stem": "6bba_c73a1d11",
+        "adjusted_edge_delta": 0.01894834009251478
+      },
+      {
+        "stem": "6bba_67ebd073",
+        "adjusted_edge_delta": 0.013410829744295305
+      },
+      {
+        "stem": "6bba_5c039895",
+        "adjusted_edge_delta": -0.0062677119215740484
+      },
+      {
+        "stem": "6bba_fc5f39dc",
+        "adjusted_edge_delta": -0.012938673003097145
+      },
+      {
+        "stem": "6bba_87289e13",
+        "adjusted_edge_delta": 0.014713090741101054
+      },
+      {
+        "stem": "6bba_cdcfe533",
+        "adjusted_edge_delta": 0.00241303709114038
+      }
+    ],
+    "conditions": {
+      "original_source_gate": false,
+      "score_gain_over_focus_flow": true,
+      "raw_edge_gain_over_focus_flow": true,
+      "recall_identical": true,
+      "per_movie_loss_bounded": true,
+      "true_divisions_preserved": true
+    },
+    "source_gate_passed": false,
+    "authorized_for_submission": false
+  },
+  "fit_sha256": "fcef805eabaa616102a4588437d0ea7cdcd5ef1cb7a7eeaa6d77138a7834c066",
+  "prelabel_manifest_sha256": "c22c00be03ee2b826fab623f4518009ce5f9e5ffc958f8638aa67a5df828d74e",
+  "source_hashes": {
+    "research/focus_residual_calibration.py": "72beb76ae18c77da58f0535445fb12ca1a4bbd1aedda41fb69832b15c12044e9",
+    "scripts/score-focus-residual-calibration.py": "67493d5d2d6c9a8f155c3dae8052f8d3877296ecb1c40f3ad267859e7a49419c",
+    "scripts/score-focus-source-flow.py": "c5e84dd08c02238810150938e1280a178f9e5b993362d9b9787454d221a6610e",
+    "scripts/score-focus-owned-flow-full.py": "ee96594f4d8013e8dbad0f484e9d753af834f652913b577a6ce3f5fe503ddb2c",
+    "scripts/score-focus-division-preserving-assignment.py": "3e1370a206ce8e8e414e007179ca7c6edac567c91a58e19378289c6b712dfd39",
+    "research/focus_source_flow_comparison.py": "e591536221950213b73d937a44b316494881e0ae6aba937f933dd2b33fde4fed",
+    "reports/experiments/focus-residual-calibration-v1-design.md": "837d3bf619e2c737b8a6fd872be859321fa940a4ddf972598999b1b23c2dec62"
+  },
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "elapsed_seconds": 75.7039999999979,
+  "gpu_seconds": 0,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "caveat": "Parameters fit only two original training movies. Eight-source comparison is exposed development, not independent confirmation or leaderboard evidence."
+}

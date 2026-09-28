@@ -1,0 +1,38 @@
+{
+  "status": "verified_cpu_null_weighted_loss_smoke",
+  "wrapper_sha256": "2a4572f7a7f2de7c1ea147796514260d0f3bd98fb25e4bb6004a40f3b61bbbb2",
+  "worker_result_sha256": "a0c6d5eda316ec72e63cf987f2b4c1495b45cf8cbcaa1d008def4b419823af72",
+  "source_hashes": {
+    "probe.py": "3a88498519254b3c1b13a2bae57d7ea6fbe275012017b807959b845f4d4e1c49",
+    "focus_null_balanced_loss.py": "a17d0c33a2eab536e4b3e5ade3d543ea29e2478e0420bf0179ed5b988ed36c4b",
+    "focus_indexed_parent_loss.py": "804d096dd49224cb2360676e45c4818184cab0e53293428134c04d4d1066f48d",
+    "sparse_parent_loss.py": "e3cb38e4abf0650e8f9dbd64e3c006715ed5288cb4f41e36ff2c13d16c02df53",
+    "sparse_parent_missing_null.py": "1cc65c652f4b7c9e669c5ff75299e30515cac680af48f952dddc6fe643db834a"
+  },
+  "terminal": {
+    "status": "completed",
+    "error": null,
+    "elapsed_seconds": 12.010393429000032,
+    "declared_budget_seconds": 900,
+    "gpu_used": false
+  },
+  "worker": {
+    "status": "passed_cpu_null_weighted_loss_smoke",
+    "null_weight": 8.172822710416556,
+    "unit_weight_loss_delta": 0.0,
+    "unknown_gradient_exact_zero": true,
+    "known_null_gradient_direction": true,
+    "same_parent_daughters_supported": true,
+    "integer_labels_guarded": true,
+    "empty_source_null_loss": 0.0,
+    "synthetic_initial": 4.313976110934684,
+    "synthetic_final": 0.3512254556578233,
+    "torch_version": "2.10.0+cpu",
+    "cuda_initialized": false,
+    "real_training_performed": false,
+    "authorized_for_submission": false,
+    "elapsed_seconds": 11.048137531000009
+  },
+  "real_gpu_four_step_smoke_still_required": true,
+  "authorized_for_submission": false
+}

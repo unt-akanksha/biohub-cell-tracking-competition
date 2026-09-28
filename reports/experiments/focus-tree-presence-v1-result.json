@@ -1,0 +1,58 @@
+{
+  "status": "completed_training_only_tree_presence_fit",
+  "run_id": "focus-tree-presence-v1",
+  "settings": {
+    "loss": "log_loss",
+    "n_estimators": 100,
+    "learning_rate": 0.05,
+    "max_depth": 2,
+    "min_samples_leaf": 20,
+    "subsample": 1.0,
+    "random_state": 244691,
+    "n_iter_no_change": null
+  },
+  "fitting_metrics": {
+    "loss_sum": 1904.9925565985052,
+    "known_parent": 2818,
+    "known_absent": 52,
+    "correct_parent": 2578,
+    "correct_absent": 23,
+    "nll": 0.663760472682406
+  },
+  "diagnostic_metrics": {
+    "loss_sum": 520.2520764170094,
+    "known_parent": 2645,
+    "known_absent": 27,
+    "correct_parent": 2590,
+    "correct_absent": 8,
+    "nll": 0.19470511841953947
+  },
+  "diagnostic_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": true,
+      "parent_correct_not_lower": true,
+      "null_correct_not_lower": false
+    },
+    "scope": "Training-domain feasibility only; no tracking-score promotion"
+  },
+  "model_sha256": "5f53282a3df99257db96c71872efa7c5e03ef91fca46725f42639d08412c9c14",
+  "fitting_file_sha256": "2fd716e081948c8d9244a0db0fe98989ab833ede9cd7f05017e8d129967a7f43",
+  "summary_result_sha256": "89a6f4fe7d9b2e1642c3c852ecd17aed15b89080511ecd489ec594a96b954da6",
+  "source_hashes": {
+    "research/focus_presence_trees.py": "f2850356543bdcb6fc4c521728d85101947f7dd6a67e39c75e002680cbf07214",
+    "scripts/train-focus-presence-trees.py": "ea79bfc7dbb4f856801f2b16cee210ddee527c6c9e17cc01d53a523ba09e12d6",
+    "scripts/fit-focus-tree-presence.py": "5a8109cd7bcf51b6817ba95ae20b68c0155adf8ec995dd412564191b7f902e47",
+    "reports/experiments/focus-tree-presence-v1-design.md": "66fe0b7c92b82cd6a83f0383823e5314e51826d029272e015b9914eaeba48e08"
+  },
+  "fitted_model_persisted_before_diagnostic": true,
+  "native_export_replay_max_abs": 8.881784197001252e-16,
+  "sklearn_version": "1.9.0",
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "eligible_for_source_tracking_evaluation": false,
+  "authorized_for_submission": false,
+  "gpu_seconds": 0,
+  "elapsed_seconds": 8.406000000002678,
+  "caveat": "Training-domain diagnostic only; not independent or a tracking score"
+}

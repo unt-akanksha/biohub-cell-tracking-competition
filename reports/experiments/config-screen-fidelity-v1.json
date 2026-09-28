@@ -1,0 +1,21 @@
+{
+  "offline_pooled": 0.9474283224362559,
+  "in_pipeline_pooled": 0.9448387313,
+  "delta": 0.0025895911362558977,
+  "abs_delta": 0.0025895911362558977,
+  "per_movie": {
+    "44b6_24264f12": 0.9403273770887964,
+    "44b6_81c256f0": 0.9877437325905294,
+    "6bba_23af9eeb": 1.004073675440769,
+    "6bba_f1fde7e0": 0.8755174047430684
+  },
+  "image_stages_disabled": [
+    "DEEPCENTER_GAP_VETO",
+    "DEEPCENTER_SAFE_DIV_VETO",
+    "GAP_REFINE_SYNTHETIC",
+    "REQUIRE_DEEPCENTER_VETO",
+    "USE_DEEPCENTER_VETO"
+  ],
+  "screen_is_a_reproduction": false,
+  "note": "A small delta means the disabled image stages barely move the base configuration, which is weak evidence the screen may rank nearby configurations correctly. It is not proof; ranking agreement against a known in-kernel sweep is the real test."
+}

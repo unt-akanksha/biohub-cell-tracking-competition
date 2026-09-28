@@ -1,0 +1,547 @@
+{
+  "fit": {
+    "annotated_nodes": 149,
+    "parent_matched": 140,
+    "candidate_baseline_matched": 143,
+    "required_matched": 140,
+    "parent_recall": 0.9395973154362416,
+    "candidate_baseline_recall": 0.959731543624161,
+    "baseline_threshold": 0.5744425058364868,
+    "maximum_recall_loss": 0.005,
+    "authorized_for_submission": false,
+    "independent_recall_guarantee": false,
+    "status": "fitted_training_only_threshold",
+    "threshold": 0.9942006468772888,
+    "candidate_retained_matched": 140,
+    "candidate_retained_recall": 0.9395973154362416,
+    "scope": "Training annotations only; independent complete-movie validation still required"
+  },
+  "per_frame": [
+    {
+      "stem": "6bba_6479435d",
+      "t": 27,
+      "group": "fitting",
+      "annotations": 13,
+      "parent_matched": 11,
+      "candidate_baseline_matched": 13,
+      "candidate_calibrated_matched": 12
+    },
+    {
+      "stem": "6bba_6479435d",
+      "t": 29,
+      "group": "fitting",
+      "annotations": 10,
+      "parent_matched": 8,
+      "candidate_baseline_matched": 9,
+      "candidate_calibrated_matched": 8
+    },
+    {
+      "stem": "6bba_6479435d",
+      "t": 40,
+      "group": "fitting",
+      "annotations": 5,
+      "parent_matched": 5,
+      "candidate_baseline_matched": 5,
+      "candidate_calibrated_matched": 4
+    },
+    {
+      "stem": "6bba_df673a83",
+      "t": 71,
+      "group": "fitting",
+      "annotations": 9,
+      "parent_matched": 9,
+      "candidate_baseline_matched": 9,
+      "candidate_calibrated_matched": 9
+    },
+    {
+      "stem": "6bba_df673a83",
+      "t": 76,
+      "group": "fitting",
+      "annotations": 8,
+      "parent_matched": 8,
+      "candidate_baseline_matched": 8,
+      "candidate_calibrated_matched": 8
+    },
+    {
+      "stem": "6bba_df673a83",
+      "t": 77,
+      "group": "fitting",
+      "annotations": 7,
+      "parent_matched": 7,
+      "candidate_baseline_matched": 7,
+      "candidate_calibrated_matched": 7
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "t": 64,
+      "group": "fitting",
+      "annotations": 2,
+      "parent_matched": 2,
+      "candidate_baseline_matched": 2,
+      "candidate_calibrated_matched": 2
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "t": 93,
+      "group": "fitting",
+      "annotations": 31,
+      "parent_matched": 27,
+      "candidate_baseline_matched": 29,
+      "candidate_calibrated_matched": 29
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "t": 97,
+      "group": "fitting",
+      "annotations": 30,
+      "parent_matched": 29,
+      "candidate_baseline_matched": 28,
+      "candidate_calibrated_matched": 28
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "t": 10,
+      "group": "fitting",
+      "annotations": 14,
+      "parent_matched": 14,
+      "candidate_baseline_matched": 13,
+      "candidate_calibrated_matched": 13
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "t": 26,
+      "group": "fitting",
+      "annotations": 12,
+      "parent_matched": 12,
+      "candidate_baseline_matched": 12,
+      "candidate_calibrated_matched": 12
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "t": 85,
+      "group": "fitting",
+      "annotations": 8,
+      "parent_matched": 8,
+      "candidate_baseline_matched": 8,
+      "candidate_calibrated_matched": 8
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "t": 18,
+      "group": "diagnostic",
+      "annotations": 8,
+      "parent_matched": 8,
+      "candidate_baseline_matched": 8,
+      "candidate_calibrated_matched": 8
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "t": 86,
+      "group": "diagnostic",
+      "annotations": 8,
+      "parent_matched": 8,
+      "candidate_baseline_matched": 8,
+      "candidate_calibrated_matched": 8
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "t": 97,
+      "group": "diagnostic",
+      "annotations": 9,
+      "parent_matched": 9,
+      "candidate_baseline_matched": 9,
+      "candidate_calibrated_matched": 9
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "t": 19,
+      "group": "diagnostic",
+      "annotations": 9,
+      "parent_matched": 9,
+      "candidate_baseline_matched": 9,
+      "candidate_calibrated_matched": 9
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "t": 51,
+      "group": "diagnostic",
+      "annotations": 6,
+      "parent_matched": 6,
+      "candidate_baseline_matched": 6,
+      "candidate_calibrated_matched": 6
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "t": 54,
+      "group": "diagnostic",
+      "annotations": 6,
+      "parent_matched": 6,
+      "candidate_baseline_matched": 6,
+      "candidate_calibrated_matched": 6
+    }
+  ],
+  "per_movie": [
+    {
+      "stem": "6bba_6479435d",
+      "group": "fitting",
+      "annotations": 28,
+      "parent_matched": 24,
+      "candidate_calibrated_matched": 24,
+      "recall_delta": 0.0,
+      "recall_preserved": true
+    },
+    {
+      "stem": "6bba_df673a83",
+      "group": "fitting",
+      "annotations": 24,
+      "parent_matched": 24,
+      "candidate_calibrated_matched": 24,
+      "recall_delta": 0.0,
+      "recall_preserved": true
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "group": "fitting",
+      "annotations": 63,
+      "parent_matched": 58,
+      "candidate_calibrated_matched": 59,
+      "recall_delta": 0.015873015873015872,
+      "recall_preserved": true
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "group": "fitting",
+      "annotations": 34,
+      "parent_matched": 34,
+      "candidate_calibrated_matched": 33,
+      "recall_delta": -0.029411764705882353,
+      "recall_preserved": false
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "group": "diagnostic",
+      "annotations": 25,
+      "parent_matched": 25,
+      "candidate_calibrated_matched": 25,
+      "recall_delta": 0.0,
+      "recall_preserved": true
+    },
+    {
+      "stem": "6bba_2646afc7",
+      "group": "diagnostic",
+      "annotations": 21,
+      "parent_matched": 21,
+      "candidate_calibrated_matched": 21,
+      "recall_delta": 0.0,
+      "recall_preserved": true
+    }
+  ],
+  "probe_diagnostic_recall_preserved": true,
+  "authorized_for_submission": false,
+  "independent_validation": false,
+  "full_calibration_completed": false,
+  "status": "verified_training_calibration_collection_probe",
+  "collection": {
+    "status": "completed_training_calibration_collection_probe",
+    "groups": {
+      "fitting": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41"
+      ],
+      "diagnostic": [
+        "6bba_b204cac7",
+        "6bba_2646afc7"
+      ]
+    },
+    "records": [
+      {
+        "stem": "6bba_6479435d",
+        "group": "fitting",
+        "t": 27,
+        "context": [
+          26,
+          27
+        ],
+        "annotation_count": 13,
+        "input_sha256": "ffa27930b2f6289cc6f33a2a115da3ce3b2336e24498f04cb1cdefcba110898c",
+        "parent_peaks": 476,
+        "candidate_peaks": 838,
+        "artifact": "6bba_6479435d_027.npz",
+        "sha256": "8069dc5f9c545052cc49200742ec47f8459b179d49423e845e08c9d183b1b4bd"
+      },
+      {
+        "stem": "6bba_6479435d",
+        "group": "fitting",
+        "t": 29,
+        "context": [
+          28,
+          29
+        ],
+        "annotation_count": 10,
+        "input_sha256": "2110fbed5ea42b567f8a8ce2cfd29b8a476b2e131f41e1fcb31bdb076664d411",
+        "parent_peaks": 439,
+        "candidate_peaks": 807,
+        "artifact": "6bba_6479435d_029.npz",
+        "sha256": "cdf71acf22d38f0d129d640ba00348a26d1e1b9a2a3013043e79dd1f5a11257a"
+      },
+      {
+        "stem": "6bba_6479435d",
+        "group": "fitting",
+        "t": 40,
+        "context": [
+          39,
+          40
+        ],
+        "annotation_count": 5,
+        "input_sha256": "6a6edcaf6edbc44eb8894155cb550d1d38b86d5029c75d5810b6afc79aff2e24",
+        "parent_peaks": 447,
+        "candidate_peaks": 833,
+        "artifact": "6bba_6479435d_040.npz",
+        "sha256": "6f123b858f47c1e9ee6293935369ee033826b25896bc90fa8abac845ff977147"
+      },
+      {
+        "stem": "6bba_df673a83",
+        "group": "fitting",
+        "t": 71,
+        "context": [
+          70,
+          71
+        ],
+        "annotation_count": 9,
+        "input_sha256": "81a7bc6dc4dfc61a82e01d2b3a0cfe22baac9243cdb38582fda61ce91195fd25",
+        "parent_peaks": 233,
+        "candidate_peaks": 936,
+        "artifact": "6bba_df673a83_071.npz",
+        "sha256": "af951f14b092d7bd688723d741bfd749cf265b5754bd34ec763ecd80c0665ccd"
+      },
+      {
+        "stem": "6bba_df673a83",
+        "group": "fitting",
+        "t": 76,
+        "context": [
+          75,
+          76
+        ],
+        "annotation_count": 8,
+        "input_sha256": "436250312bfc2fde37150fbf8d26d5b8cb96fa63a43570856839bafc58696a06",
+        "parent_peaks": 225,
+        "candidate_peaks": 923,
+        "artifact": "6bba_df673a83_076.npz",
+        "sha256": "0cd1eb625c549f5ecb3d4ebd1903356403e9ebcc8b503f3567e739309641f43d"
+      },
+      {
+        "stem": "6bba_df673a83",
+        "group": "fitting",
+        "t": 77,
+        "context": [
+          76,
+          77
+        ],
+        "annotation_count": 7,
+        "input_sha256": "8d06be24886ff94ed5d9003ff905af07136a8e7313fb87a96781101ca9fddd72",
+        "parent_peaks": 218,
+        "candidate_peaks": 912,
+        "artifact": "6bba_df673a83_077.npz",
+        "sha256": "becd4bffc14da2f159b2ae8d043ecb63b4124774b987e85e1cbe92771f263365"
+      },
+      {
+        "stem": "6bba_767a1e17",
+        "group": "fitting",
+        "t": 64,
+        "context": [
+          63,
+          64
+        ],
+        "annotation_count": 2,
+        "input_sha256": "91763077e27661fb61698daf91d7c5735ea6769a1c61df5dfc9e500ee262e14b",
+        "parent_peaks": 601,
+        "candidate_peaks": 715,
+        "artifact": "6bba_767a1e17_064.npz",
+        "sha256": "870c19a52d4be673c6bf237ffb9b2b886c96c92495b08af9e93dfb6d110d7413"
+      },
+      {
+        "stem": "6bba_767a1e17",
+        "group": "fitting",
+        "t": 93,
+        "context": [
+          92,
+          93
+        ],
+        "annotation_count": 31,
+        "input_sha256": "bdf626acb6c3a30c7d3e143de531a9693bc85cf452843ae91a2c6fc92565fa64",
+        "parent_peaks": 671,
+        "candidate_peaks": 797,
+        "artifact": "6bba_767a1e17_093.npz",
+        "sha256": "14dec2c39b7e468541e9e55b0553e9f650a0adb1dab84e815b42c7f904c72020"
+      },
+      {
+        "stem": "6bba_767a1e17",
+        "group": "fitting",
+        "t": 97,
+        "context": [
+          96,
+          97
+        ],
+        "annotation_count": 30,
+        "input_sha256": "f1d8889076c1d3a675873572a87e2aa34f30d830f44dfb2c47d8f2f9dcf88664",
+        "parent_peaks": 671,
+        "candidate_peaks": 815,
+        "artifact": "6bba_767a1e17_097.npz",
+        "sha256": "770d4174a1e674bb0b2b8dc7c86748f1bb71a36b0e697e57d6c6ac84999f0423"
+      },
+      {
+        "stem": "6bba_2312ac41",
+        "group": "fitting",
+        "t": 10,
+        "context": [
+          9,
+          10
+        ],
+        "annotation_count": 14,
+        "input_sha256": "81a06127f7f0b0c21a0b4414c9b3f3f433ac3b689b4547443742a654273bf3d5",
+        "parent_peaks": 329,
+        "candidate_peaks": 1066,
+        "artifact": "6bba_2312ac41_010.npz",
+        "sha256": "3bb22577d707c0a811ecd227202451a8a61c13b75961cd7e6e76b271ea072a94"
+      },
+      {
+        "stem": "6bba_2312ac41",
+        "group": "fitting",
+        "t": 26,
+        "context": [
+          25,
+          26
+        ],
+        "annotation_count": 12,
+        "input_sha256": "401251d8635ffed87fde555d5d6dfdee3327e6307caf53a4a1117b682eeb4ecb",
+        "parent_peaks": 224,
+        "candidate_peaks": 1178,
+        "artifact": "6bba_2312ac41_026.npz",
+        "sha256": "56fd0ba4fc539a2ff6f05f0f3e3522eff555ae32f56932bfcd2da2a39bac12c1"
+      },
+      {
+        "stem": "6bba_2312ac41",
+        "group": "fitting",
+        "t": 85,
+        "context": [
+          84,
+          85
+        ],
+        "annotation_count": 8,
+        "input_sha256": "87aeaeff68ade895d7772be6e603b3f9d257331c351868567f375f7d489b962b",
+        "parent_peaks": 82,
+        "candidate_peaks": 1474,
+        "artifact": "6bba_2312ac41_085.npz",
+        "sha256": "1a6b8ac443b28b9c57d22af88b38656482d94b55cad4b31f7f92c044ebae953e"
+      },
+      {
+        "stem": "6bba_b204cac7",
+        "group": "diagnostic",
+        "t": 18,
+        "context": [
+          17,
+          18
+        ],
+        "annotation_count": 8,
+        "input_sha256": "f7c7540ee6ea9a6252ce7cd49f9f05683232e5e26237d263745d1bfb141235c3",
+        "parent_peaks": 80,
+        "candidate_peaks": 1273,
+        "artifact": "6bba_b204cac7_018.npz",
+        "sha256": "18280be30d874d423c273507cb43274506fe32d63c7df5e8f34ec57d3dcd365c"
+      },
+      {
+        "stem": "6bba_b204cac7",
+        "group": "diagnostic",
+        "t": 86,
+        "context": [
+          85,
+          86
+        ],
+        "annotation_count": 8,
+        "input_sha256": "8ee15e548c7e3b356bfcb8683b48544f096487a8bb6c42fdf383b597d5696d12",
+        "parent_peaks": 77,
+        "candidate_peaks": 1650,
+        "artifact": "6bba_b204cac7_086.npz",
+        "sha256": "472daaae354d2568692b847b9b7fbb6191d06cf8697d22396e8646980d76dfa3"
+      },
+      {
+        "stem": "6bba_b204cac7",
+        "group": "diagnostic",
+        "t": 97,
+        "context": [
+          96,
+          97
+        ],
+        "annotation_count": 9,
+        "input_sha256": "c26a12a20ed26fd58bcd7f67f737018aae57f14743993aaee2b2039f00b95422",
+        "parent_peaks": 64,
+        "candidate_peaks": 1743,
+        "artifact": "6bba_b204cac7_097.npz",
+        "sha256": "c26c354d080f60457dd30d0697d9fe69c48e2e39564288567b63cd3e0b538eea"
+      },
+      {
+        "stem": "6bba_2646afc7",
+        "group": "diagnostic",
+        "t": 19,
+        "context": [
+          18,
+          19
+        ],
+        "annotation_count": 9,
+        "input_sha256": "e27455726c1cb2e8f48523ec1bf03d3586fac41d6b30ea65421aa4fc88248399",
+        "parent_peaks": 68,
+        "candidate_peaks": 1147,
+        "artifact": "6bba_2646afc7_019.npz",
+        "sha256": "b7cefabe48d8fc6ac78c6454a0df327faf9e5029bdbb3f6b344803d7f1ab369f"
+      },
+      {
+        "stem": "6bba_2646afc7",
+        "group": "diagnostic",
+        "t": 51,
+        "context": [
+          50,
+          51
+        ],
+        "annotation_count": 6,
+        "input_sha256": "11bc53b88062d21ec6163674c59dcfdce487c517a70b5fe30c422c0dd0da2932",
+        "parent_peaks": 80,
+        "candidate_peaks": 1119,
+        "artifact": "6bba_2646afc7_051.npz",
+        "sha256": "8a10b6f063d7c9c801f01c60e30c3004154f29c5fb5a6094b61d59117100f2b6"
+      },
+      {
+        "stem": "6bba_2646afc7",
+        "group": "diagnostic",
+        "t": 54,
+        "context": [
+          53,
+          54
+        ],
+        "annotation_count": 6,
+        "input_sha256": "ee35e70d76a0a83b6eec391778fa674eb1f57087e1f56daaf94b6d951c6ec050",
+        "parent_peaks": 79,
+        "candidate_peaks": 1116,
+        "artifact": "6bba_2646afc7_054.npz",
+        "sha256": "e884b8612ec869fd0cc4c4686c2e88d83bc2ff14093998891694764959370b47"
+      }
+    ],
+    "baseline_threshold": 0.5744425058364868,
+    "parent_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "candidate_sha256": "0f441c6e8f1e649bd1549ef519af5ada43d4b01122b96934685d28cbb53b2aa7",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "elapsed_seconds": 37.52092478099999,
+    "models_unchanged": true,
+    "precision": "FP32 exact inference",
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false,
+    "diagnostic_only": true,
+    "calibration_fitted": false,
+    "caveat": "Six neural-training movies only; functionality records, not independent validation or full calibration"
+  },
+  "notebook_sha256": "d3ba9d43f0daeedd3eef086c63665ae3b525bca694173536e8a31630a32021d1",
+  "selection_opened": false,
+  "target_audit_opened": false
+}

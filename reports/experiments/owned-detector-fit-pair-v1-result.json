@@ -1,0 +1,115 @@
+{
+  "status": "verified_detector_fit_pair_not_selection",
+  "arms": {
+    "sparse": {
+      "arm": "sparse",
+      "checkpoint_sha256": "0f441c6e8f1e649bd1549ef519af5ada43d4b01122b96934685d28cbb53b2aa7",
+      "steps": 1000,
+      "optimization_seconds": 773.4819647090001,
+      "last_loss": 0.020307160913944244,
+      "observed_annotations": 36010,
+      "generated_consensus": 714193,
+      "strict_reload_identical": true,
+      "first10_gate_passed": true,
+      "frozen_components_unchanged": true,
+      "final_training_frame_smoke": {
+        "status": "passed",
+        "device": "cuda",
+        "checkpoint_step": 1000,
+        "checkpoint_sha256": "0f441c6e8f1e649bd1549ef519af5ada43d4b01122b96934685d28cbb53b2aa7",
+        "movie": "6bba_b204cac7",
+        "frames": 3,
+        "strict_reload": true,
+        "geff_round_trip": true,
+        "predicted_nodes": 3891,
+        "predicted_edges": 1920,
+        "scorer_counts": {
+          "edge_tp": 13,
+          "edge_fp": 4,
+          "edge_fn": 3,
+          "division_tp": 0,
+          "division_fp": 1,
+          "division_fn": 0,
+          "num_pred_nodes": 3891
+        },
+        "elapsed_seconds": 3.72042961000011,
+        "scope": "Training-movie functionality only",
+        "authorized_for_submission": false,
+        "encode_patch_receipt": {
+          "maximum_nodes_per_frame": 2048,
+          "action": "abort_without_truncation"
+        },
+        "pre_motion_patch_receipt": {
+          "version": 1,
+          "views": 8,
+          "encode_calls": 2,
+          "features": "native unchanged",
+          "logits": "inverse-aligned XY D4 arithmetic mean",
+          "maximum_mean_absolute_logit_delta": 0.39949363470077515
+        },
+        "standalone_image_flow": true
+      }
+    },
+    "pu": {
+      "arm": "pu",
+      "checkpoint_sha256": "b07f39a930855c1493e43ad16626643d6b666dc8c4dcc1426a4145cdcaff2cdf",
+      "steps": 1000,
+      "optimization_seconds": 638.577929132,
+      "last_loss": 0.5918355584144592,
+      "observed_annotations": 36010,
+      "generated_consensus": 714193,
+      "strict_reload_identical": true,
+      "first10_gate_passed": true,
+      "frozen_components_unchanged": true,
+      "final_training_frame_smoke": {
+        "status": "passed",
+        "device": "cuda",
+        "checkpoint_step": 1000,
+        "checkpoint_sha256": "b07f39a930855c1493e43ad16626643d6b666dc8c4dcc1426a4145cdcaff2cdf",
+        "movie": "6bba_b204cac7",
+        "frames": 3,
+        "strict_reload": true,
+        "geff_round_trip": true,
+        "predicted_nodes": 208,
+        "predicted_edges": 125,
+        "scorer_counts": {
+          "edge_tp": 14,
+          "edge_fp": 4,
+          "edge_fn": 2,
+          "division_tp": 0,
+          "division_fp": 1,
+          "division_fn": 0,
+          "num_pred_nodes": 208
+        },
+        "elapsed_seconds": 2.7526391290000447,
+        "scope": "Training-movie functionality only",
+        "authorized_for_submission": false,
+        "encode_patch_receipt": {
+          "maximum_nodes_per_frame": 2048,
+          "action": "abort_without_truncation"
+        },
+        "pre_motion_patch_receipt": {
+          "version": 1,
+          "views": 8,
+          "encode_calls": 2,
+          "features": "native unchanged",
+          "logits": "inverse-aligned XY D4 arithmetic mean",
+          "maximum_mean_absolute_logit_delta": 0.10170000791549683
+        },
+        "standalone_image_flow": true
+      }
+    }
+  },
+  "launcher_seconds": 1644.197152831,
+  "paired_inputs_identical": true,
+  "paired_targets_identical": true,
+  "authorized_for_submission": false,
+  "caveat": "Training loss and three-frame checks are not independent tracking evidence; compare complete source-selection movies before further audit",
+  "source_sha256": {
+    "pair": "65361801122363ad34364868add4642996e68b3f7bb55bfaccb167c87f29552f",
+    "terminal": "c5a44739b21dd54fa5ebd33074d1256bf635b4c47869654f37262ab8044d289b",
+    "sparse": "7aea44c6497c3dd04183e3dac3a3bbc364991d7cfe79d2687a87fdc37ff6f8c1",
+    "pu": "28292c6f8c7de5795b249e5b86ae5764bf6597318fceb702c650bfc89f3cc627"
+  },
+  "notebook_sha256": "50d676051fe9d258b3828e99a774d6ee533b6a2b5b8dc69d656750ca0c7e5ac5"
+}

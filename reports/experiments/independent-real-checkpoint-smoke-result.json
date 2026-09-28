@@ -1,0 +1,16 @@
+{
+  "status": "cpu_functionality_smoke_passed",
+  "checkpoint_sha256": "30da7d5e348f56fea206984007e2188512a830fd30a0021182bc5c70aa5aa44d",
+  "strict_reload": true,
+  "inference_frames": 3,
+  "predicted_nodes": 0,
+  "predicted_edges": 0,
+  "geff_round_trip": true,
+  "organizer_scorer_executed": true,
+  "scorer_counts": {"edge_tp":0,"edge_fp":0,"edge_fn":4,"division_tp":0,"division_fp":0,"division_fn":0,"num_pred_nodes":0},
+  "empty_schema_restored": ["z","y","x"],
+  "data_scope": "Artificial fixture, not competition data",
+  "coverage": "CPU reload/inference/serialization/scoring; does not prove GPU inference or complete-movie accuracy",
+  "authorized_for_submission": false,
+  "larger_training_authorized": false
+}

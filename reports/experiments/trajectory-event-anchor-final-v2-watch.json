@@ -1,0 +1,10 @@
+{
+  "status": "evidence_downloaded_requires_verification",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "version": 2,
+  "observer_pid": 30832,
+  "submission_performed": false,
+  "updated_utc": "2026-09-14T18:37:47.967872+00:00",
+  "observed_kernel_status": "COMPLETE",
+  "harvest_status": "required_production_evidence_downloaded"
+}

@@ -1,0 +1,168 @@
+{
+  "status": "verified_owned_detector_ensemble_probe_not_selection",
+  "result": {
+    "status": "passed_owned_detector_ensemble_functionality",
+    "parent_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "secondary_sha256": "b07f39a930855c1493e43ad16626643d6b666dc8c4dcc1426a4145cdcaff2cdf",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "control": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 269,
+      "predicted_edges": 160,
+      "scorer_counts": {
+        "edge_tp": 14,
+        "edge_fp": 5,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 269
+      },
+      "elapsed_seconds": 7.244252500000016,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": {
+        "maximum_nodes": 95,
+        "limit": 2048,
+        "truncation": false
+      },
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "encode_calls": 2,
+        "features": "native unchanged",
+        "logits": "inverse-aligned XY D4 arithmetic mean",
+        "maximum_mean_absolute_logit_delta": 0.2008494883775711
+      },
+      "standalone_image_flow": true
+    },
+    "candidate": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 303,
+      "predicted_edges": 185,
+      "scorer_counts": {
+        "edge_tp": 13,
+        "edge_fp": 10,
+        "edge_fn": 3,
+        "division_tp": 0,
+        "division_fp": 4,
+        "division_fn": 0,
+        "num_pred_nodes": 303
+      },
+      "elapsed_seconds": 4.119695568999987,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": {
+        "maximum_nodes": 106,
+        "limit": 2048,
+        "truncation": false
+      },
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "weights": [
+          0.5,
+          0.5
+        ],
+        "probability_mixture": true,
+        "features": "parent native unchanged",
+        "parent_d4": {
+          "version": 1,
+          "views": 8,
+          "encode_calls": 2,
+          "features": "native unchanged",
+          "logits": "inverse-aligned XY D4 arithmetic mean",
+          "maximum_mean_absolute_logit_delta": 0.2008494883775711
+        },
+        "secondary_d4": {
+          "version": 1,
+          "views": 8,
+          "encode_calls": 2,
+          "features": "native unchanged",
+          "logits": "inverse-aligned XY D4 arithmetic mean",
+          "maximum_mean_absolute_logit_delta": 0.10170000791549683
+        },
+        "encode_calls": 2,
+        "maximum_mean_absolute_logit_delta": 0.5647361278533936
+      },
+      "standalone_image_flow": true
+    },
+    "frozen_hashes": [
+      {
+        "before": "4e98ed02733b23982455130a84c2ef191fad9f3d01afcf585f3e81755c21efce",
+        "after": "4e98ed02733b23982455130a84c2ef191fad9f3d01afcf585f3e81755c21efce"
+      },
+      {
+        "before": "4e98ed02733b23982455130a84c2ef191fad9f3d01afcf585f3e81755c21efce",
+        "after": "4e98ed02733b23982455130a84c2ef191fad9f3d01afcf585f3e81755c21efce"
+      },
+      {
+        "before": "817137e384ce1ddfd6ad29ee876e7a3c944075a4c0a26b710732894c388765e9",
+        "after": "817137e384ce1ddfd6ad29ee876e7a3c944075a4c0a26b710732894c388765e9"
+      }
+    ],
+    "secondary_provenance": {
+      "version": 1,
+      "objective": "pu",
+      "steps": 1000,
+      "initialization_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "target_contract": {
+        "version": 2,
+        "high_threshold": 0.96875,
+        "low_support_threshold": 0.1,
+        "consensus_radius_um": 2.5,
+        "annotation_merge_radius_um": 2.5,
+        "positive_sigma_voxels": 1.0,
+        "positive_weight_floor": 0.05,
+        "support_dilation_voxels": 2,
+        "background_weight": 0.01,
+        "voxel_size_um": [
+          1.625,
+          1.625,
+          1.625
+        ],
+        "teachers": "Two inverse-aligned views of the same owned source-trained detector",
+        "uncertainty": "View support is unknown; not a negative label",
+        "graph_count_or_selection_score_used": false,
+        "peak_order": "raw_logits_before_sigmoid",
+        "high_logit": 3.4339872044851463,
+        "low_logit": -2.197224577336219
+      },
+      "frozen_modules": [
+        "transformer",
+        "flow",
+        "batchnorm_statistics"
+      ],
+      "probe_result_sha256": "889a94d0a7bb60d40bde3a42a1343072a33cc68a0680dd0d083c41814efaf2ba"
+    },
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "terminal": {
+    "status": "completed",
+    "run_id": "owned-detector-ensemble-probe-v1",
+    "elapsed_seconds": 73.11621825599997,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "source_sha256": {
+    "notebook": "7196f42ad6a11af897388893fac305bca414420499f3be13915f41941bc23666",
+    "result": "914cc598e4feb1c4265e842e84a82789784e1b3734317fc84852fd720d54eb92"
+  }
+}

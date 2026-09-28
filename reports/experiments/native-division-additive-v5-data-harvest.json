@@ -1,0 +1,155 @@
+{
+  "status": "verified_backup",
+  "groups": [
+    {
+      "name": "native-division-additive-v5-smoke-r2",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-smoke-r2-output",
+      "remote_root": "/dev/shm/biohub-native-division-additive-v5-smoke-r2",
+      "records": [
+        {
+          "path": "DATA.json",
+          "bytes": 2240,
+          "sha256": "2c1d1367302ddc2e09835ebce44ced83bb80b4067d8a04d04a0569b8f2cb4d62"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 2240,
+          "sha256": "2c1d1367302ddc2e09835ebce44ced83bb80b4067d8a04d04a0569b8f2cb4d62"
+        },
+        {
+          "path": "data/44b6_996155de-019.npz",
+          "bytes": 47321,
+          "sha256": "f34fc19561eb6d3f0a9bdd06a8efc6033b91056978b7b8780f1b2b998b56c831"
+        },
+        {
+          "path": "data/6bba_085bf656-018.npz",
+          "bytes": 40988,
+          "sha256": "f43f097c56044c6ecb9fca137039e18897f5cd622b6caef9d9ec225606d53642"
+        }
+      ]
+    },
+    {
+      "name": "native-division-additive-v5-full",
+      "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-division-additive-v5-full-output",
+      "remote_root": "/dev/shm/biohub-native-division-additive-v5-full",
+      "records": [
+        {
+          "path": "DATA.json",
+          "bytes": 8955,
+          "sha256": "e358a984eade85b96fbf2d77937ba0d57307f4813f44fb6c339346024d17df87"
+        },
+        {
+          "path": "RESULT.json",
+          "bytes": 8955,
+          "sha256": "e358a984eade85b96fbf2d77937ba0d57307f4813f44fb6c339346024d17df87"
+        },
+        {
+          "path": "data/44b6_996155de-019.npz",
+          "bytes": 47321,
+          "sha256": "f34fc19561eb6d3f0a9bdd06a8efc6033b91056978b7b8780f1b2b998b56c831"
+        },
+        {
+          "path": "data/44b6_9be80b04-077.npz",
+          "bytes": 46025,
+          "sha256": "23c04cd0f6a6c86b6c8b49244f1898bb041d8e984c0ef80f8968b1a7a2ac5f54"
+        },
+        {
+          "path": "data/44b6_c50204e0-028.npz",
+          "bytes": 43726,
+          "sha256": "f02b991b7b1b3b17783fa718f77bbf5e8e05041382a5500fb59979019b68c93d"
+        },
+        {
+          "path": "data/6bba_085bf656-018.npz",
+          "bytes": 40988,
+          "sha256": "f43f097c56044c6ecb9fca137039e18897f5cd622b6caef9d9ec225606d53642"
+        },
+        {
+          "path": "data/6bba_12665c0e-039.npz",
+          "bytes": 49182,
+          "sha256": "780e0d86004b32fa86d7e242340302946f8bc043deebde634e6fd2cde74698ac"
+        },
+        {
+          "path": "data/6bba_20852818-082.npz",
+          "bytes": 47413,
+          "sha256": "edf9d8f2c5e6a7c9f24159544a1883fefc10e791f337f6d4403873c33a34cbb8"
+        },
+        {
+          "path": "data/6bba_3abfe10a-081.npz",
+          "bytes": 40773,
+          "sha256": "1a2fabd0bd32751214d2d3a52647911971358c4469f775a1cd531844b705addf"
+        },
+        {
+          "path": "data/6bba_55b7eebe-048.npz",
+          "bytes": 44346,
+          "sha256": "a72c3679a0411a2a202eec5b5fcf3ecd920c0f69419a3ef8843316ac89b3592c"
+        },
+        {
+          "path": "data/6bba_57b7cc1e-077.npz",
+          "bytes": 39206,
+          "sha256": "b5881bf7ef4e63e401d0a577a09f043a2e850b2649cfbf0c1a06d32238e12276"
+        },
+        {
+          "path": "data/6bba_61ecbe65-034.npz",
+          "bytes": 46196,
+          "sha256": "ca6729dc8bfbe0e7e382db1f138593e84e5639ef601120cda67ae81a354263c8"
+        },
+        {
+          "path": "data/6bba_907271db-096.npz",
+          "bytes": 37233,
+          "sha256": "7aab1eaaa4e654840fc7d5894fdbe241ee28a322e4e91d01b4e25f2ba6caa7f5"
+        },
+        {
+          "path": "data/6bba_9e23430b-089.npz",
+          "bytes": 44340,
+          "sha256": "27bbb471d77b2ee7bc0b310cfc38c67682769f432e94c9246d78ab93920a0920"
+        },
+        {
+          "path": "data/6bba_aeee7805-013.npz",
+          "bytes": 40999,
+          "sha256": "04fc845229c8da53dafa87913829e603729d8188f56d7afd207354b4b307c7e7"
+        },
+        {
+          "path": "data/6bba_afb141ff-047.npz",
+          "bytes": 45020,
+          "sha256": "4be905027b35b3450736633220b4e44787f2b3e3eb320e5e60ed88dcd83fb8bf"
+        },
+        {
+          "path": "data/6bba_afb141ff-048.npz",
+          "bytes": 41073,
+          "sha256": "68ef4b0e8914a77d9fef6969a1627e6ce44f30825a09a074030b7170a9d45a97"
+        },
+        {
+          "path": "data/6bba_bb9f20c3-031.npz",
+          "bytes": 48525,
+          "sha256": "af3aff8969f174fea5d9442e60d215218242c1497b4880362df7c7444f27b45c"
+        },
+        {
+          "path": "data/6bba_cdcfe533-028.npz",
+          "bytes": 46266,
+          "sha256": "1e98614d24a14448c992de117427ffc31f82d982de2462ed5a37e9c59460fd8a"
+        },
+        {
+          "path": "data/6bba_cdcfe533-048.npz",
+          "bytes": 48258,
+          "sha256": "95b67788928f709dcf69402d9868dbbc8e4f4f957aab89adc78889a2a37ab07c"
+        },
+        {
+          "path": "data/6bba_cdcfe533-052.npz",
+          "bytes": 43279,
+          "sha256": "265e7e2b8458142687a6d9121afe4a6d9e1f7e4b0f1520c8cbb9b99eb22328f0"
+        },
+        {
+          "path": "data/6bba_ebdf3b34-084.npz",
+          "bytes": 42306,
+          "sha256": "217953901fff8185082a6294f5df029ab5a185bae24f148e8ab029a18f0651cb"
+        },
+        {
+          "path": "data/6bba_fe670320-066.npz",
+          "bytes": 40049,
+          "sha256": "6be53bfde7123711f17e7e6558cc3cc67f1ecf6b43e772f04d5e1498957a74a7"
+        }
+      ]
+    }
+  ],
+  "remote_files_deleted": false
+}

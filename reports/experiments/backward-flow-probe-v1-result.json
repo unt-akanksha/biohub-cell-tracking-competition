@@ -1,0 +1,27 @@
+{
+  "status": "verified_motion_probe_not_tracking_validation",
+  "checkpoint_sha256": "c1203ffb03ac98b4aa5b332ec26b4469ba5b9e784e6e095f03a41c533bba5884",
+  "parameters": 1488019,
+  "fitting_windows": 9273,
+  "steps": 100,
+  "diagnostic_links": 172,
+  "launcher_seconds": 205.63208297100005,
+  "optimization_seconds": 40.94061404900003,
+  "small_fit_gate_passed": true,
+  "errors": {
+    "mae_um": 0.9952365267992944,
+    "endpoint_um": 2.106220925010221,
+    "zero_mae_um": 1.0022407945736433,
+    "zero_endpoint_um": 2.122800939304884,
+    "median_mae_um": 1.0022407945736433,
+    "median_endpoint_um": 2.122800939304884
+  },
+  "observed_training_links": 1765,
+  "authorized_for_submission": false,
+  "caveat": "24 short training-only diagnostic windows; not complete movies, embryo audit or tracking score",
+  "source_sha256": {
+    "result": "4dddfaf9f8bb14e90056e0ecf6dd3b65dfb4ed2fa001d8f9ae3ff3f12f2feb38",
+    "terminal": "50c72cb152b191f53580b58956fdb92581f76c8b5ddaa353c17717c0b63c3f63"
+  },
+  "notebook_sha256": "a5f47b7ee0eb069d4d4d710031fea6579a02cc4078ca985fb2e1e08681462ff2"
+}

@@ -1,0 +1,73 @@
+{
+  "status": "host_verified_pair_appearance_gpu_smoke",
+  "kernel": "indarkarhana/biohub-focus-pair-appearance-gpu-smoke-v1",
+  "kernel_version": 1,
+  "staged_identity": {
+    "run_id": "focus-pair-appearance-gpu-smoke-v1",
+    "status": "staged_not_launched",
+    "notebook_sha256": "8db5c665d4fbd16a548bdf48bb88a618a4f8abb60116b6633387b7bccb7e0dd4",
+    "metadata_sha256": "071b9816abf636674f538796e38b0ef3f33ddc9e89eefe7ad5788e58e4eefad2",
+    "builder_sha256": "e72852ce88b383f2a74b5818405b699513f73fe1d592f46612b6a205c0057756"
+  },
+  "result_sha256": "e6d8045515a97eaf43e7ba289eee8270efadd4390255db29f30420a9aacb0288",
+  "verifier_sha256": "0eb83e1bb99c4d884c370ea493187a1dff310b839d2274fb76656a9f532fb99b",
+  "source_hashes": {
+    "research/focus_candidate_ranker.py": "eefd5ec3dc2ddf273278715a993093ebfc6caf30121b244d270477d0592f316c",
+    "research/focus_pair_appearance.py": "517abb24d3dc529760b0b3f7742b92ffd968e74089eddc79fe6a9f919a1adc4f",
+    "research/focus_pair_appearance_head.py": "5e15e08096b570019346aaeed1ad8fc42af8f20834304a51ebe3db0f32809276",
+    "research/focus_pair_appearance_cuda.py": "cf20c8ef2ed8f43823845c0f94f27b88774e3b1e49b0277f82c009498faabcdc",
+    "research/focus_pair_appearance_gpu_smoke.py": "8d70e6512dc79ce1ac65fb44b6809f90beb7c7dae2465688c483fcf3ec91ae4a",
+    "research/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "full-cpu-model.json": "760c4af100278bc5431d20039f20d73963f078228cd3310dec7843fb29e5a32e",
+    "lda-cpu-model.json": "10345f8fa3070a01bec7698037ad2bbec4386f28f4e7571e444d96dd2910a5a0",
+    "spec.json": "f4396f55b8ddbf705235072af09521798b4f10d78c1c1d30b84c88dbe21fa668",
+    "pair.npz": "100604bec0eef3d4a3b9eac36b70de24d221d80f238d90318706286c27dc844e"
+  },
+  "records": [
+    {
+      "arm": "full",
+      "objective": 19.352681355492887,
+      "gradient_inf_norm": 0.00018434160352365225,
+      "metrics": {
+        "loss_sum": 12.65492437013691,
+        "known_parent": 19,
+        "known_absent": 1,
+        "correct_parent": 17,
+        "correct_absent": 1,
+        "nll": 0.6327462185068455
+      },
+      "all_target_choices_replayed": true,
+      "model_sha256": "ef7728f6c300803b8a350aa20bb8f0058b8023c8e8f9face6bf26d19ebae4033"
+    },
+    {
+      "arm": "lda",
+      "objective": 27.174657162168124,
+      "gradient_inf_norm": 6.173480024695976e-05,
+      "metrics": {
+        "loss_sum": 22.229340842485254,
+        "known_parent": 19,
+        "known_absent": 1,
+        "correct_parent": 14,
+        "correct_absent": 0,
+        "nll": 1.1114670421242627
+      },
+      "all_target_choices_replayed": true,
+      "model_sha256": "81e7ce0f7097d153e8717caf6b969ebd4d7716f91c074531a85d814fb4ed9848"
+    }
+  ],
+  "launcher": {
+    "status": "completed",
+    "declared_budget_seconds": 300,
+    "elapsed_seconds": 9.040939726000005,
+    "submission_performed": false
+  },
+  "worker_elapsed_seconds": 6.0573958889999915,
+  "gpu_fit_seconds": [
+    0.4269797599999947,
+    0.11017554099998961
+  ],
+  "peak_allocated_bytes": 23200256,
+  "quality_evaluated": false,
+  "authorized_for_submission": false,
+  "host_optimizer_refit": false
+}

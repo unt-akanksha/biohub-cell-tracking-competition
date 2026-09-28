@@ -1,0 +1,105 @@
+{
+  "status": "eight_event_inputs_frozen_no_new_labels",
+  "per_movie": {
+    "44b6_12dfb391": {
+      "groups_sha256": "040e24ff5ddc746ba41dabc0172f8312a4854ea32840f8f45836e0d64ed9e8da",
+      "features_sha256": "4f4e74306b85b26ba797266f10762692c74041efc2437f3bafdbba83196e1427",
+      "prediction_sha256": "ed01672650dc4e000e0f2f78b66e643e40fcaba8a62e6d62ba627e8c5bb78c8d",
+      "previous_prediction_sha256": "1add17414a6e204d25363765b7ab7214973beecf81d6fd7101024b5cee919c48",
+      "initial_sha256": "fff7d072a3aea38285d71253369621b347d789ba92d6d6661da8e4fae4771f33",
+      "raw_sha256": "2c5ecf4064d8f77ee6edc9903980cdd767cd0ee0388ea857f35a4cee9ffef921",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-0/44b6_12dfb391-original/pre-postprocess.json",
+      "queries": 43375,
+      "candidate_edges": 585851
+    },
+    "6bba_23af9eeb": {
+      "groups_sha256": "f20841db8ad124c8db044401827fe344352f29041014405d8c681732d53b9658",
+      "features_sha256": "afbdac18cd8889553e39d5822c8cfc5f5e854ac9c392446dbf0cf66611f5af8b",
+      "prediction_sha256": "bf04b1947715a36344e90fec663e779ab2b94d3622ef5197c657739a2acd4f81",
+      "previous_prediction_sha256": "d4e80ba41e8212b9789968f02a386e25410281471943ef15d6359d37c764fcd4",
+      "initial_sha256": "d57ab54b02695c96b40577d11ea56ccd19423b1d87ec5d3c8ebe868d80515e7b",
+      "raw_sha256": "1b97d5418156ca38163fb5ee8cf869f027009d7098cb63c6707721669300ec0c",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-0/6bba_23af9eeb-original/pre-postprocess.json",
+      "queries": 4077,
+      "candidate_edges": 14313
+    },
+    "44b6_81c256f0": {
+      "groups_sha256": "00cbb4f6314fefe965c7e55e0ded37a5f67337864fdc789fd7c9dedbf69898f0",
+      "features_sha256": "ac5e35259ab6e7c991e14547850086b9d44c582ec8e0c20cdb8e7d2e5d60fd06",
+      "prediction_sha256": "684a271a07902211e1f3d3b1a5fd28030cc1a193f50033b41770b9137d154947",
+      "previous_prediction_sha256": "4bc8ed912f6b9edfbf35979a9504079c3564ab1a336e65a49e93bb95356f1992",
+      "initial_sha256": "7af9e90a36423ba35873e34358f86a13763a303bd4432b2f9f12ac67bfa2fe5c",
+      "raw_sha256": "1ec267d4c9e570979af647457f8da21a8c8caa8382991833a0c7347b369bb614",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-1/44b6_81c256f0-original/pre-postprocess.json",
+      "queries": 11066,
+      "candidate_edges": 89735
+    },
+    "6bba_f1fde7e0": {
+      "groups_sha256": "58356169df112e7adda8bb4ff9291d9e660f630758c258b34d3dad7621255610",
+      "features_sha256": "fd47bf3628be965e9be72af90cdeec56c69d15de42fd6e9f2f6696e6f8f6d33d",
+      "prediction_sha256": "88a32da9ee8093fa59466f4765234b4a2b527b7353108d8bf49a1b650f2026db",
+      "previous_prediction_sha256": "58607056f2eaf827ef666da3df89299b0edf6dadea0f6c1eb371b28ac99a93ff",
+      "initial_sha256": "e39f9c54c059c657b4c83a71d162a6e41c2f2a51603b0fee761158225fb27647",
+      "raw_sha256": "0c0ae97d67495e9a29a07b377f3ae989686af824b371f83a400d64495fbd370c",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-1/6bba_f1fde7e0-original/pre-postprocess.json",
+      "queries": 7754,
+      "candidate_edges": 61998
+    },
+    "44b6_24264f12": {
+      "groups_sha256": "af3d42786d901d8455ed5be5672205e050defa91abb10aba884a43374f7d702a",
+      "features_sha256": "8bf7db89ab527e4c6836138385c3de693cacce62a915d1f073a44923f332780f",
+      "prediction_sha256": "115fa703df494dc642fdc9909995251d1e835eb36d24223464702892602452f2",
+      "previous_prediction_sha256": "becd8cf994d64b9713bb847744bc14616f006bfa55462e523ed2b0aed59bbe79",
+      "initial_sha256": "c039f9dc5769cc1957536112c3161ce4f6cacdea4b706f421b3b1bc1e2305bba",
+      "raw_sha256": "cedb3d3653a078c9a67999ab776d7bbe29e8f914eb8b520e7656d312fec66274",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-2/44b6_24264f12-original/pre-postprocess.json",
+      "queries": 26502,
+      "candidate_edges": 363011
+    },
+    "6bba_062c8d37": {
+      "groups_sha256": "560fdda2d1e1de564b00e0d095500bb6fd382818de46460093726b3f1e63ea82",
+      "features_sha256": "ef6c9a61f8041f078452fd38095ad138e18ba6dfb42db9d44b09daba31f1d68f",
+      "prediction_sha256": "4d5afd78c5b34e6f2bc1a0d0b4e73c3541664e01ac56c53f7bc5ba7e7699464a",
+      "previous_prediction_sha256": "4240f5768d6573749318c6bd532ed9aa8aeb0bb64bb99c1e2d73076ace131368",
+      "initial_sha256": "6637ca695a143f39d4c2ebe7a703c013326de97b79f55ec1ed1b9c569b7f2af9",
+      "raw_sha256": "503593dd0499a5e67d4292cb49b9579c120a286c44462bc0999b627903e3d3f5",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-2/6bba_062c8d37-original/pre-postprocess.json",
+      "queries": 5704,
+      "candidate_edges": 21628
+    },
+    "6bba_07e24132": {
+      "groups_sha256": "4ff8fa5e77e1aac12211b7637d5ac88f7a012297cee648d14c9c3a2ae55d22ce",
+      "features_sha256": "21515df1d413827760fcacd992fd8deb79db4e6bc297e3e028369071fc954e00",
+      "prediction_sha256": "8e1e6a5811e81be2321ab5a1053af98cbe4f4ee96fbab527b45622d9d40b4f52",
+      "previous_prediction_sha256": "6ebf8037fb328369a31ee63fcbb424d6a6508c0c3861331095169c58b2f358f4",
+      "initial_sha256": "eeb9f0878a8fca672a67b206c5dc46b5b5fa8eb19bf5f7626f25e8025a8d36b9",
+      "raw_sha256": "b0a65705a751b526a8dd7e780b33afd0394563ae312f1f71ed191beb57a0ef7b",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-3/6bba_07e24132-original/pre-postprocess.json",
+      "queries": 28296,
+      "candidate_edges": 360335
+    },
+    "44b6_267148e4": {
+      "groups_sha256": "3cfa943bc30468bfbef934cecd2912e0ca432e77b844206b5cb2817fbffe0bb4",
+      "features_sha256": "c554d94d2dcc2c648f78ed3d0da99b4f66a274f4728919e664bd6d00779529e0",
+      "prediction_sha256": "be020f775dd9f62b3ac5e76bdfef25707eb448fa5ece92f25ddde2554838470d",
+      "previous_prediction_sha256": "2c61a0b97b632af3c2c1ba55d15826fe956cc8e1c4bd485eba238dfe7ff5494a",
+      "initial_sha256": "a5d838f20d1673dc3d2c4e81689e99f4155fad8fb73eb25aacbcdf99c12b3955",
+      "raw_sha256": "a8eb59ae5fd6b17aa0c74410347b39c981fa9e8fdcf00c4c5b11ac11c351df6e",
+      "initial_path": ".biohub/cache/trajectory-overlap-cache-kaggle-v1-output/trajectory-complete/shard-3/44b6_267148e4-original/pre-postprocess.json",
+      "queries": 21666,
+      "candidate_edges": 302657
+    }
+  },
+  "native_role_plan_sha256": "60300fbc7251f842e80b3ae1687e78d097b7dcda876908f3832b34174c0a0ef6",
+  "baseline_score_receipt_sha256": "0469b99ccf3d347a72ec00afb7206ea8fa6bd6498a7c388e09b0d8cf667508ce",
+  "accepted_T4_cache_sha256": "2934de829c237906f214f7c6e4583b961b6e59aeb73c8a8adde05c52d69a1ede",
+  "source_sha256": "9b621519caa0b3b6fe47a9a76523fa6053cc8fbf6d2d340d07376b998cd26c12",
+  "source_and_selection_role_disjoint": true,
+  "model_fitted": false,
+  "ground_truth_opened": false,
+  "validation_labels_used": false,
+  "prior_pipeline_validation_exposure_disclosed": true,
+  "public_backbone_independence_not_established": true,
+  "authorized_for_submission": false,
+  "seconds": 76.04700000002049
+}

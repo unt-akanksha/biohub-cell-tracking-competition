@@ -1,0 +1,22 @@
+{
+  "status": "selection_collection_staged",
+  "contract_sha256": "286b0eb2d0e2632e9914e3edfbb8c31f74a5429c9fa04f0a99e396a9e123dfab",
+  "archive_sha256": "ad4f4accaddfad9f70fc3c5495b99d2ab9bd50fc212c25e9fea0eb6ab7c18b5e",
+  "images_sha256": "18a13bbe5c582fd58cbc48687339a1ee33cef88a94ecd2299f99f5c6310fce2f",
+  "bytes": 54927360,
+  "movies": [
+    "44b6_2a2eff9f",
+    "44b6_341df25f",
+    "44b6_706092f0",
+    "6bba_32db13fc",
+    "6bba_4f99ce20",
+    "6bba_4ffd3da3",
+    "6bba_87289e13",
+    "6bba_8b7818bf",
+    "6bba_b329af44",
+    "6bba_debd7bfa"
+  ],
+  "full_wall_cap_seconds": 3600,
+  "smoke_required": true,
+  "authorized_for_submission": false
+}

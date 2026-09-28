@@ -1,0 +1,17 @@
+{
+  "status": "temporal_model_smoke_passed",
+  "contract_sha256": "f9a76a29ff60092a91d4c26f3329a09c25d871ec7bdefc59bbad45f87217d283",
+  "steps": 25,
+  "batch_size": 8,
+  "parameters": 9669985,
+  "encoder_parameters_with_gradient": 8288608,
+  "median_step_seconds": 0.027800483996543335,
+  "last_loss": 0.6927230358123779,
+  "exact_reload": true,
+  "daughter_swap_max_error": 0.0,
+  "boundary_mask_exact": true,
+  "weights_sha256": "d17f5aa38c141676fd67a49327019ec0d4d12ed3a57d65bae45d9f88b3d75dd4",
+  "source_only_training": false,
+  "authorized_for_training_initialization": false,
+  "authorized_for_submission": false
+}

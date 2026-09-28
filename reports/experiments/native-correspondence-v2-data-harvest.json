@@ -1,0 +1,10 @@
+{
+  "status": "verified_local_backup",
+  "packets": 2103,
+  "bytes": 1216826026,
+  "result_sha256": "f2861ce9f21307507ed521716ca3bf9a7adf3b76ce9f8216e4407233616c693a",
+  "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-correspondence-v2-data",
+  "remote_root": "/dev/shm/biohub-native-correspondence-v2-full",
+  "remote_files_deleted": false,
+  "seconds": 740.234999999986
+}

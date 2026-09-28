@@ -1,0 +1,79 @@
+{
+  "run_id": "public-reciprocal-endpoint-v1",
+  "receipt": {
+    "pins": {
+      "research/public_reciprocal_endpoint_v1.py": "853ec348561b48d56632333aa76677f29c5488bf03de19580293f519650cb835",
+      "research/public_d4_quality.py": "59b0090f8f68632faccdb7101c07ecbfc3f3a9077f96bf181bc80e595456bd36",
+      "scripts/run-public-reciprocal-endpoint-v1.py": "9c188c174d55de4119a2851303390c69dfe61c9d631e984ef49aac0e02663209",
+      "reports/experiments/public-reciprocal-endpoint-v1-design.md": "77b7b69f0ef910e3e511f19b4ffe70fcf3815d03fd1d210513fae5450748c558"
+    },
+    "records": {
+      "44b6_24264f12": {
+        "path": "44b6_24264f12.json",
+        "sha256": "cd135abd68e73243de025458c9062fbd941f2542aef21f0c25adf418755b7c63",
+        "reciprocal_raw": 17978,
+        "genuine_endpoint_pairs": 0,
+        "distance_pass": 0,
+        "two_sided_history": 0,
+        "added_nodes": 0,
+        "added_edges": 0,
+        "links": [],
+        "ground_truth_used": false,
+        "existing_output_unchanged": true,
+        "authorized_for_submission": false
+      },
+      "44b6_81c256f0": {
+        "path": "44b6_81c256f0.json",
+        "sha256": "94a8621b863de62929a0ec4224bcaeeddf18f2246597608cead78be205b235ae",
+        "reciprocal_raw": 8384,
+        "genuine_endpoint_pairs": 0,
+        "distance_pass": 0,
+        "two_sided_history": 0,
+        "added_nodes": 0,
+        "added_edges": 0,
+        "links": [],
+        "ground_truth_used": false,
+        "existing_output_unchanged": true,
+        "authorized_for_submission": false
+      },
+      "6bba_23af9eeb": {
+        "path": "6bba_23af9eeb.json",
+        "sha256": "8c75c80ec83255a1bdedbf44493de1fe47cb9db427d3cebf1f023b4d1b0504f6",
+        "reciprocal_raw": 2578,
+        "genuine_endpoint_pairs": 1,
+        "distance_pass": 0,
+        "two_sided_history": 0,
+        "added_nodes": 0,
+        "added_edges": 0,
+        "links": [],
+        "ground_truth_used": false,
+        "existing_output_unchanged": true,
+        "authorized_for_submission": false
+      },
+      "6bba_f1fde7e0": {
+        "path": "6bba_f1fde7e0.json",
+        "sha256": "0583d3af02cf4274abe3040553e92ab54f5231b1aaeff8fc902cb6819f7dc3d0",
+        "reciprocal_raw": 5497,
+        "genuine_endpoint_pairs": 15,
+        "distance_pass": 0,
+        "two_sided_history": 0,
+        "added_nodes": 0,
+        "added_edges": 0,
+        "links": [],
+        "ground_truth_used": false,
+        "existing_output_unchanged": true,
+        "authorized_for_submission": false
+      }
+    },
+    "ground_truth_used": false
+  },
+  "manifest_sha256": "040953a8683b1045de447884d2bf653898b672acce86b7063401118392103b26",
+  "gpu_hours": 0,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "status": "rejected_no_links",
+  "ground_truth_opened": false,
+  "diagnostic_gate_passed": false,
+  "elapsed_seconds": 103.875
+}

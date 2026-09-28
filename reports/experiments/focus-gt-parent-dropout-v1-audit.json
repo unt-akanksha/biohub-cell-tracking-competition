@@ -1,0 +1,159 @@
+{
+  "status": "completed_exact_gt_parent_dropout_audit",
+  "run_id": "focus-gt-parent-dropout-v1",
+  "training_stems": [
+    "6bba_6479435d",
+    "6bba_df673a83",
+    "6bba_767a1e17",
+    "6bba_2312ac41",
+    "6bba_971fa5e0",
+    "6bba_cf35214c",
+    "6bba_cff5865f",
+    "6bba_edf14583",
+    "6bba_1ebfb80d",
+    "6bba_7d3058ae",
+    "6bba_4f99ce20",
+    "6bba_57b7cc1e"
+  ],
+  "source_hashes": {
+    "scripts/audit-focus-gt-parent-dropout.py": "fe4255c73526a2d739deb79b8c35e73019ce392944ec7420d6145e5900f22882",
+    "research/focus_gt_parent_dropout.py": "c9519d8b2a3a6ea8d5408b89f1b517304d13741befb795fd22332b19e544332a",
+    "research/focus_parent_dropout.py": "ef9d31fd3a1e5f732c6123274752c0555da55f343516c304fe16a94a849c9de6",
+    "research/focus_adaptation_labels.py": "69ebaeae0dab39f1b9561f8fb8f5ce35c694fc83aa89a7fcbefd57eb775912dd",
+    "research/focus_predicted_training_labels.py": "48e90685b049ad0d388e08e7710fd2e5280a2a3ad9852fc6358f7e271dd050b2",
+    "reports/experiments/focus-gt-parent-dropout-v1-design.md": "3f8efa45dde1e0b97dcba7b2eb12f80110d9d422ea79ec20cc414c03d26881e4"
+  },
+  "previous_difficulty_sha256": "686ba7bc396c23740f1bf273c243b3d22d11dc22cdac22ad33a182d0248a433a",
+  "prior_dropout_audit_sha256": "dd75e5643a84645e0bef2b6d7a3f80d09347b646fdcb61794d887437ca115225",
+  "per_movie": [
+    {
+      "stem": "6bba_6479435d",
+      "records": 92,
+      "label_replays": 99,
+      "sha256": "d99abe49e390f9e4500040eb5cc3a223e13222aa3e13cf07e0bc6ed6e8a9952a",
+      "raw_sha256": "3955602262a1dc2c19f7d1a6ab06f1df43232e1286943676be967208656a3832"
+    },
+    {
+      "stem": "6bba_df673a83",
+      "records": 98,
+      "label_replays": 99,
+      "sha256": "3f6f7d95df5f93ee96d085a320f8ee88225a66db896951b7c9e0295b3fe372ff",
+      "raw_sha256": "5a18071352ea2365195617854da76e09350dc397a5580cbbd9cd9e2ca98d0cf4"
+    },
+    {
+      "stem": "6bba_767a1e17",
+      "records": 45,
+      "label_replays": 99,
+      "sha256": "8375f006a0963f32ec3008ab431b0a099a04bd78b75f95c248f09d1856930180",
+      "raw_sha256": "44191f70f7384dad766844f37c619da2bcd121221fad05c4ed40351faf2a1232"
+    },
+    {
+      "stem": "6bba_2312ac41",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "15dd4945be0e40b8fd84f9aa11ea96ac0e6f4dbc0342f64d0428bf2bd42dea5a",
+      "raw_sha256": "e292bf199e94518e26eac3b2249d2401af4f9ae0637eea3b104cee8088c93f9e"
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "7ec5dfca5aef83a84d172244d4d800e767c79a44e45205905664e96ff5916470",
+      "raw_sha256": "3d56cb90637c99da0c90c90ac8137664575ef0d339814b6692ff61a5c49f57ef"
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "33a7ef8ea55ccb9b1388852478b30f2e08c8b30521afed60d1531be145353344",
+      "raw_sha256": "62fc0fdf143ddbf5a5c21770f97d410c127d3af14f2949e47c1dc183bef0ffbe"
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "records": 96,
+      "label_replays": 99,
+      "sha256": "429ba4342a8137b6d80970fdb62772dafd4ec1b9dd24c8f3591ba540a45660e3",
+      "raw_sha256": "c12f0b2a4cc3ec8ea156f2ba9814b71755794c6434b0f7bcef88592171648e0a"
+    },
+    {
+      "stem": "6bba_edf14583",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "6f17261071ab7dd188a16ac6ed5a4cbc331b7643083522ec9fe4bcb48e4bb034",
+      "raw_sha256": "8de1d8bd9196b4e9b087bc1b4c104b21efcc113ae1c791d4ff7b066282527ac5"
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "d8a74bcac4d2570aa7cdbc0dd5f2207ee6f5a11c9025da10535bc91217225639",
+      "raw_sha256": "9b801f95e068373c42dd9e08cc479d72c8ed0590f98012d9ca1d814f0e7cc9a6"
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "64c91cc7f145059ede770757e53e260fa33854165c8dd7fee51c4425127611c8",
+      "raw_sha256": "27c3e94cd6899f0fb6b25ee59c240260574f47c6484729bcc8f2f9cb37aabff4"
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "records": 97,
+      "label_replays": 99,
+      "sha256": "152bdc42adcc2571547c1805acb6eb90120ff57830a99b57a85e1b53c8de182b",
+      "raw_sha256": "90c7e9929fdade9c56a17f97b760101ab85ad46ddbf06a1de330b883248e6a19"
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "records": 99,
+      "label_replays": 99,
+      "sha256": "9ea66f684fb4902df712da70f5d80b628436aba1afaacfcdf45e0c5f9d476c44",
+      "raw_sha256": "5859e0566de5638a6c97270523de1d4914090c510865a8c9864a1e8e7016e442"
+    }
+  ],
+  "eligible_pairs": 1121,
+  "eligible_retained_parent_labels": 9633,
+  "eligible_natural_nulls": 161,
+  "eligible_synthetic_nulls": 1121,
+  "synthetic_difficulty": {
+    "examples": 1121,
+    "physical_correct_null": 1090,
+    "physical_correct_fraction": 0.9723461195361285,
+    "mean_null_nll": 0.07644379722264621,
+    "median_best_parent_minus_null": -11.759979048719952,
+    "parent_margin_quantiles": {
+      "q0": -158.61290893498506,
+      "q25": -23.410420889862518,
+      "q50": -11.759979048719952,
+      "q75": -6.062511209455561,
+      "q100": 4.26848462833453
+    }
+  },
+  "previous_synthetic_difficulty": {
+    "examples": 1136,
+    "physical_correct_null": 1135,
+    "physical_correct_fraction": 0.9991197183098591,
+    "mean_null_nll": 0.004479186428474192,
+    "median_best_parent_minus_null": -31.195830211563646,
+    "parent_margin_quantiles": {
+      "q0": -158.61290893498506,
+      "q25": -40.56789328636964,
+      "q50": -31.195830211563646,
+      "q75": -25.76491394387243,
+      "q100": 4.241275544654814
+    }
+  },
+  "feasibility_conditions": {
+    "eligible_pairs_over100": true,
+    "more_wrong_parent_cases": true,
+    "higher_mean_null_nll": true
+  },
+  "eligible_for_small_training_smoke": true,
+  "original_label_replays": 1188,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "gpu_seconds": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 61.84399999999732
+}

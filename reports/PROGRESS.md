@@ -64,6 +64,16 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 | `temporal-contextual-pair-fusion-processed-acceptance-v3` | temporal-contextual-pair-fusion-blend-v3 | Frozen contextual reciprocal evidence that passes transfer and clean calibration improves exact processed graph topology over the public comparator while preserving its detector nodes. | registered | not recorded | — | unknown / 6 | — | — | — |
 | `temporal-contextual-pair-fusion-candidate-v3` | temporal-contextual-pair-fusion-processed-acceptance-v3 | A contextual v3 model that passes external, reciprocal, calibration, and exact processed gates improves test associations while retaining frozen detector nodes. | registered | not recorded | — | unknown / 12 | — | — | — |
 | `zebrahub-contextual-pretrain-v1-mp-repair` | zebrahub-contextual-pretrain-v1 | With only the mixed-precision scatter defect repaired, unchanged contextual pretraining improves both fixed ZSNS005 reciprocal folds and their disjoint one-shot audits over seeded initialization. | completed | {"actual_gpu_hours":"2.34","appearance_family":"temporal_contextual_pair_fusion_v3","authorized_for_acceptance":true,"authorized_for_submission":false,"both_folds_improved":true,"by_embryo":{},"by_fold":{"target_44b6":{"audit_composite_gain":"0.8107801365851739","audit_division_top2_gain":"0.6603773613021058","audit_mrr_gain":"0.7837600171149609","audit_top1_gain":"0.8443113787326508","best_step":1500,"model_sha256":"c817a4ab00fd1318c086d4b5619ba7a8d861fd2ef721492be091c9b3c03a9e14","selection_composite_gain":"0.8427821552788195","selection_division_top2_gain":"0.6393442627836446","selection_mrr_gain":"0.7707936688525738","selection_top1_gain":"0.9017681719804794","training_config_sha256":"d2889c4bbb66140199dbc36b4c20679a7e60934f9ed94c7791754de581bff3a1","worker_terminal_sha256":"40c4a755181f24f1881d16156b5909cc33ed53ae8da61a238fda848b445b3304"},"target_6bba":{"audit_composite_gain":"0.27377627565275486","audit_division_top2_gain":"0.5094339577656872","audit_mrr_gain":"0.19592233879599497","audit_top1_gain":"0.26746506950336535","best_step":3500,"model_sha256":"633f9600b53e345d412053ea925fd5b37ea0447e9f77aa89ea568562cbde9014","selection_composite_gain":"0.20064446582136197","selection_division_top2_gain":"0.5573770482032026","selection_mrr_gain":"0.10968596270135911","selection_top1_gain":"0.1807465697318491","training_config_sha256":"ffcffe9ebc698172e9ccadc5eab3505503306ae1f5f49c4da24e0aa521bc2b74","worker_terminal_sha256":"6a44f38346cd1b130401f28db30fc627df46b72126f80e95b38db5dc745819d3"}},"competition_data_read":false,"decision":"retain_and_authorize_frozen_zsns001_acceptance","division_counts":{"fn":null,"fp":null,"tp":null},"gpu_count":2,"kaggle_kernel_ref":"indarkarhana/biohub-zebrahub-contextual-pretrain-v1/2","launcher_elapsed_seconds":"4306.222","launcher_terminal_sha256":"173639354f113029b71eb8d2c86827915f50d1e057aa3ea7ba1a504921e42834","metric_scope":"fixed disjoint ZSNS005 selection and one-shot audit association ranking only; ZSNS001 acceptance remained unopened","official_metric_evaluated":false,"pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":null},"pretraining_terminal_sha256":"bbe504907186af058d14f1287492b64e9b83b8c890cb620519ce1536265a618f","public_code_copied":false,"public_leaderboard_used_for_selection":false,"public_predictions_copied":false,"quota_after_hours":"15.09","quota_before_hours":"17.43","run_id":"zebrahub-contextual-pretrain-v1-mp-repair","schema_version":1,"status":"completed_verified","submission_created":false,"terminal_scientific_run_id":"zebrahub-contextual-pretrain-v1","trainer_elapsed_seconds":"4280.145869497","validation_partition_policy":"ZSNS005 disjoint developmental windows: t0096-0099/t0376-0379 checkpoint selection; t0236-0239/t0516-0519 one-shot audit","worst_movie_delta":null} | — | 2.34 / 6.67 | retain | — | — |
+| `temporal-multiscale-contextual-pair-fusion-candidate-v4` | — | A project-authored 46.4M-parameter axial multiscale residual branch, warm-started from accepted contextual v3, will improve clean external and reciprocal Biohub association quality without public prediction reuse or leaderboard selection. | registered | not recorded | — | unknown / 12 | — | — | — |
+| `d4-complete-harmonic-production-v1` | — | Completing the public eight-pass D4 TTA group from seven unique views to eight, by replacing the duplicated horizontal-flip anti-diagonal view with the true R180+transpose view and its exact inverse, improves the clean licensed public base. Eight rotation arguments change; no model, checkpoint, threshold, fusion weight, post-process constant or call count changes, and no proxy sweep or leaderboard feedback selects anything. | failed | not recorded | — | 0.18 / 4.00 | — | Kernel ERROR before inference, caught by the project-authored on-kernel SHA-256 guard. Root cause is the push path, not the pipeline: kaggle kernels push from this Windows host re-read the UTF-8 notebook with the system code page and re-serialized it, mojibaking the embedded predictor literal (U+00B5 -> U+00C2 U+00B5). Pushed cell 4 carried 16 non-ASCII characters where the local build had 6; the predictor written on the kernel hashed to 2988f4cb instead of ef6fc4f8, so the guard refused to run a corrupted predictor. No inference, submission, scoring or leaderboard claim. Fix: the artifact is now pure ASCII end to end and a regression test simulates the corruption path. | — |
+| `d4-complete-harmonic-production-v2` | d4-complete-harmonic-production-v1 | Completing the public eight-pass D4 TTA group from seven unique views to eight, by replacing the duplicated horizontal-flip anti-diagonal view with the true R180+transpose view and its exact inverse, improves the clean licensed public base. Eight rotation arguments change; no model, checkpoint, threshold, fusion weight, post-process constant or call count changes, and no proxy sweep or leaderboard feedback selects anything. Identical science to v1; v2 differs only in that the artifact is pure ASCII so the Windows push path cannot corrupt the embedded predictor. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `d4-recovery-harmonic-production-v1` | d4-complete-harmonic-production-v2 | On top of the complete-D4 correction, restoring genuine strong short motion components that output pruning discarded improves the clean public base. The recovery implementation is research/public_pruned_track_recovery.py embedded verbatim and SHA-pinned to 68827c90, the exact file the 2026-09-10 four-movie run pinned when it scored 0.9493103203140519 locally. All six rescue constants are the notebook's own and equal the frozen values; nothing is retuned. Local diagnostic only: that run FAILED the movie and embryo non-regression gates, regressing 0.0062 on 6bba_23af9eeb, and added 241 nodes across four movies with measured edge benefit in one. No leaderboard claim. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `stock-sweep-harmonic-v1` | — | Reference arm. The public harmonic-fusion base run exactly as published, with its held-out TRAIN validator and post-process sweep enabled, establishes the real 0.947-class baseline. Our three sweep-disabled submissions all scored 0.938, matching the notebook's own BIOHUB_SCORE_AXIS label of 'public 0.939 base + holdout-selected post-process configuration', so the sweep, not the base, carries roughly 0.009. No numerical change of ours is applied here; only the two-device guard. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `d4-sweep-harmonic-v1` | stock-sweep-harmonic-v1 | Treatment arm paired with stock-sweep-harmonic-v1. Identical stock public notebook with its validator and post-process sweep enabled, plus only the eight complete-D4 rotation-argument corrections. Measuring the correction against a genuine 0.947-class baseline instead of the 0.939 base config, because our three sweep-disabled submissions all returned 0.938 and could not separate the correction from the missing sweep override. The correction previously measured +0.002781 on a four-movie local diagnostic that failed the embryo gate; that diagnostic has now failed to predict the leaderboard three times. | running | not recorded | — | unknown / 4.00 | — | — | — |
+| `config-harvest-n60-v1` | — | Harvest raw prediction graphs for 60 held-out TRAIN movies (30 per embryo prefix) so post-process configuration selection can move off the submission kernel. The published notebook selects on 8 movies because the validator and sweep cost ~75 minutes inside the 12-hour competition cap; that step is nonetheless worth about +0.009 on the leaderboard, an order of magnitude more than anything measured on the 4-movie diagnostic. Moving selection offline allows far more movies, more than 7 candidates, and genuine embryo-held-out evaluation, which an in-kernel sweep structurally cannot do. No configuration is scored or selected in this kernel; the sweep table is emptied and the run only persists evidence. | running | not recorded | — | unknown / 5.00 | — | — | — |
+| `config-widesweep-n40-v1` | — | Hold the front end fixed at the stock public pipeline, which scores 0.947, and re-run the post-process selection on 40 held-out TRAIN movies (20 per embryo) instead of the published notebook's 8. The stock sweep showed MOTION_RELINK_TIGHT_UM is the one sensitive axis: every other candidate clustered at 0.9490-0.9491 while 5.5 reached 0.9511 and is the configuration now earning 0.947. This probes 5.0, 5.25, 5.5, 5.75 plus RELAXED_UM 9.0 against base, so the winner rests on five times the evidence and can be checked with an embryo held out. The proxy is contaminated - the public checkpoints saw these movies - and it got D4's sign wrong across front ends, so this is only valid within a fixed front end, which is the regime where it has actually worked. No D4: that correction was rejected at 0.940 against 0.947. | running | not recorded | — | unknown / 7.00 | — | — | — |
+| `config-loosesweep-n40-v1` | config-widesweep-n40-v1 | The 40-movie deficit is a tail of ten movies below 0.85 edge Jaccard, seven of them 6bba, not an embryo effect: medians are 0.9070 and 0.9009. Detector node counts on those movies are already correct (6bba_474be664 at 0.98x truth still scores 0.7508) and corr(detector ratio, edgeJ) is only -0.221, so detection is not the cause. The best predictor is edges per node, +0.489, meaning the linker fragments tracks there. The first wide sweep tested only thresholds TIGHTER than the defaults and found everything within 0.0009 of base, so if links are dropped for exceeding a distance gate none of it could have helped. This probes the untested looser direction: OUTPUT_EDGE_MAX_UM 16/18 against 14, TIGHT_UM 7.0 against 6.0, RELAXED_UM 12/14 against 10. If the tail reached the 0.93 median, pooled edgeJ moves about +0.046. Front end stays stock. | registered | not recorded | — | unknown / 7.00 | — | — | — |
+| `density-adaptive-harmonic-v1` | config-widesweep-n40-v1 | Condition the motion-relink gates on measured cell density instead of one global constant. Our 40-movie decomposition found the deficit is a fragmented tail (edges per node 0.93-0.95 vs 0.99) with correct node counts, and density correlates -0.32 with edge Jaccard. Mechanism from public notebook haideptry/biohub-sota-0-948-density-adaptive-2xt4-22m: bands at 120 and 400 nodes per frame, computed from the movie's own predicted graph, never from its name, so it generalises and is not movie-identity routing. On our 40 movies five of the six worst fall in the middle band, where the change is tight 6.0->6.5, relaxed 10.0->9.0, velocity 0.5->0.0 and learned_bonus 1.0->6.0, i.e. trust the learned linker far more where geometric extrapolation is unreliable. Source screened: no negative-time nodes, no out-of-volume coordinates, no node-count targeting. Its advertised score is not evidence. Stock front end; D4 rejected at 0.940. | registered | not recorded | — | unknown / 4.00 | — | — | — |
 
 ## Exact Evidence Details
 
@@ -430,6 +440,76 @@ Public leaderboard score is non-authoritative and cannot independently promote a
 - Imported audit: `false`
 - Evidence: `{"actual_gpu_hours":"2.34","appearance_family":"temporal_contextual_pair_fusion_v3","authorized_for_acceptance":true,"authorized_for_submission":false,"both_folds_improved":true,"by_embryo":{},"by_fold":{"target_44b6":{"audit_composite_gain":"0.8107801365851739","audit_division_top2_gain":"0.6603773613021058","audit_mrr_gain":"0.7837600171149609","audit_top1_gain":"0.8443113787326508","best_step":1500,"model_sha256":"c817a4ab00fd1318c086d4b5619ba7a8d861fd2ef721492be091c9b3c03a9e14","selection_composite_gain":"0.8427821552788195","selection_division_top2_gain":"0.6393442627836446","selection_mrr_gain":"0.7707936688525738","selection_top1_gain":"0.9017681719804794","training_config_sha256":"d2889c4bbb66140199dbc36b4c20679a7e60934f9ed94c7791754de581bff3a1","worker_terminal_sha256":"40c4a755181f24f1881d16156b5909cc33ed53ae8da61a238fda848b445b3304"},"target_6bba":{"audit_composite_gain":"0.27377627565275486","audit_division_top2_gain":"0.5094339577656872","audit_mrr_gain":"0.19592233879599497","audit_top1_gain":"0.26746506950336535","best_step":3500,"model_sha256":"633f9600b53e345d412053ea925fd5b37ea0447e9f77aa89ea568562cbde9014","selection_composite_gain":"0.20064446582136197","selection_division_top2_gain":"0.5573770482032026","selection_mrr_gain":"0.10968596270135911","selection_top1_gain":"0.1807465697318491","training_config_sha256":"ffcffe9ebc698172e9ccadc5eab3505503306ae1f5f49c4da24e0aa521bc2b74","worker_terminal_sha256":"6a44f38346cd1b130401f28db30fc627df46b72126f80e95b38db5dc745819d3"}},"competition_data_read":false,"decision":"retain_and_authorize_frozen_zsns001_acceptance","division_counts":{"fn":null,"fp":null,"tp":null},"gpu_count":2,"kaggle_kernel_ref":"indarkarhana/biohub-zebrahub-contextual-pretrain-v1/2","launcher_elapsed_seconds":"4306.222","launcher_terminal_sha256":"173639354f113029b71eb8d2c86827915f50d1e057aa3ea7ba1a504921e42834","metric_scope":"fixed disjoint ZSNS005 selection and one-shot audit association ranking only; ZSNS001 acceptance remained unopened","official_metric_evaluated":false,"pooled":{"adjusted_edge_jaccard":null,"division_jaccard":null,"edge_jaccard":null,"node_recall":null},"pretraining_terminal_sha256":"bbe504907186af058d14f1287492b64e9b83b8c890cb620519ce1536265a618f","public_code_copied":false,"public_leaderboard_used_for_selection":false,"public_predictions_copied":false,"quota_after_hours":"15.09","quota_before_hours":"17.43","run_id":"zebrahub-contextual-pretrain-v1-mp-repair","schema_version":1,"status":"completed_verified","submission_created":false,"terminal_scientific_run_id":"zebrahub-contextual-pretrain-v1","trainer_elapsed_seconds":"4280.145869497","validation_partition_policy":"ZSNS005 disjoint developmental windows: t0096-0099/t0376-0379 checkpoint selection; t0236-0239/t0516-0519 one-shot audit","worst_movie_delta":null}`
 - Decision evidence: `["reports/experiments/zebrahub-contextual-pretrain-v1-mp-repair-result.json"]`
+
+### temporal-multiscale-contextual-pair-fusion-candidate-v4
+
+- Authorized for submission: `true`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### d4-complete-harmonic-production-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### d4-complete-harmonic-production-v2
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### d4-recovery-harmonic-production-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### stock-sweep-harmonic-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### d4-sweep-harmonic-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### config-harvest-n60-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### config-widesweep-n40-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### config-loosesweep-n40-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
+
+### density-adaptive-harmonic-v1
+
+- Authorized for submission: `false`
+- Imported audit: `false`
+- Evidence: `not recorded`
+- Decision evidence: `not recorded`
 
 
 ## CPU Acceptance Controls

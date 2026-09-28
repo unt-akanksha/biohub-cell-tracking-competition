@@ -1,0 +1,2336 @@
+{
+  "status": "verified_division_coverage_inventory",
+  "totals": {
+    "44b6-optimization": {
+      "movies": 27,
+      "movies_with_divisions": 14,
+      "total_events": 19,
+      "v2_events": 2,
+      "additional_event_transitions": 17
+    },
+    "44b6-selection": {
+      "movies": 3,
+      "movies_with_divisions": 3,
+      "total_events": 3,
+      "v2_events": 3,
+      "additional_event_transitions": 0
+    },
+    "6bba-optimization": {
+      "movies": 64,
+      "movies_with_divisions": 49,
+      "total_events": 93,
+      "v2_events": 17,
+      "additional_event_transitions": 76
+    },
+    "6bba-selection": {
+      "movies": 7,
+      "movies_with_divisions": 7,
+      "total_events": 14,
+      "v2_events": 14,
+      "additional_event_transitions": 0
+    }
+  },
+  "movies": [
+    {
+      "stem": "44b6_1d530831",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_2a2eff9f",
+      "embryo": "44b6",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 160000000048,
+          "children": [
+            161000000048,
+            161000000049
+          ],
+          "time": 11,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_341df25f",
+      "embryo": "44b6",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 79000000000,
+          "children": [
+            80000000000,
+            80000000001
+          ],
+          "time": 4,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_3a861e03",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_415c0a3a",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_587a1e22",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 21000000052,
+          "children": [
+            22000000052,
+            22000000053
+          ],
+          "time": 19,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        19
+      ]
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 125000000011,
+          "children": [
+            126000000011,
+            126000000012
+          ],
+          "time": 36,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        36
+      ]
+    },
+    {
+      "stem": "44b6_668e0cc7",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_706092f0",
+      "embryo": "44b6",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 446000000015,
+          "children": [
+            447000000015,
+            447000000016
+          ],
+          "time": 49,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_71a4179f",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_74d0c52e",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 296000000021,
+          "children": [
+            297000000021,
+            297000000022
+          ],
+          "time": 58,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        58
+      ]
+    },
+    {
+      "stem": "44b6_7a302da0",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 263000000019,
+          "children": [
+            264000000019,
+            264000000020
+          ],
+          "time": 90,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        90
+      ]
+    },
+    {
+      "stem": "44b6_949adeb1",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_97725144",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_996155de",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 438000000002,
+          "children": [
+            439000000002,
+            439000000003
+          ],
+          "time": 19,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        19
+      ]
+    },
+    {
+      "stem": "44b6_9be80b04",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 476000000008,
+          "children": [
+            477000000008,
+            477000000009
+          ],
+          "time": 77,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        77
+      ]
+    },
+    {
+      "stem": "44b6_a21120c2",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 68000000011,
+          "children": [
+            69000000011,
+            69000000012
+          ],
+          "time": 52,
+          "in_native_v2": false
+        },
+        {
+          "parent": 76000000019,
+          "children": [
+            77000000019,
+            77000000020
+          ],
+          "time": 60,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        52,
+        60
+      ]
+    },
+    {
+      "stem": "44b6_b2c44266",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_c15fded2",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_c50204e0",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 171000000043,
+          "children": [
+            172000000043,
+            172000000044
+          ],
+          "time": 28,
+          "in_native_v2": false
+        },
+        {
+          "parent": 208000000033,
+          "children": [
+            209000000033,
+            209000000034
+          ],
+          "time": 65,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 1,
+      "missing_event_times": [
+        28
+      ]
+    },
+    {
+      "stem": "44b6_c8e2a523",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 128000000004,
+          "children": [
+            129000000004,
+            129000000005
+          ],
+          "time": 72,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        72
+      ]
+    },
+    {
+      "stem": "44b6_c96cfa10",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_cf2536e8",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_cf8fed6b",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_d2f34f90",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 275000000002,
+          "children": [
+            276000000002,
+            276000000003
+          ],
+          "time": 51,
+          "in_native_v2": false
+        },
+        {
+          "parent": 286000000004,
+          "children": [
+            287000000004,
+            287000000005
+          ],
+          "time": 62,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        51,
+        62
+      ]
+    },
+    {
+      "stem": "44b6_d5e7d891",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 173000000010,
+          "children": [
+            174000000010,
+            174000000011
+          ],
+          "time": 12,
+          "in_native_v2": false
+        },
+        {
+          "parent": 208000000033,
+          "children": [
+            209000000033,
+            209000000034
+          ],
+          "time": 47,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        12,
+        47
+      ]
+    },
+    {
+      "stem": "44b6_deabac95",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 120000000018,
+          "children": [
+            121000000018,
+            121000000019
+          ],
+          "time": 28,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        28
+      ]
+    },
+    {
+      "stem": "44b6_e28840c6",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 381000000009,
+          "children": [
+            382000000009,
+            382000000010
+          ],
+          "time": 23,
+          "in_native_v2": false
+        },
+        {
+          "parent": 419000000009,
+          "children": [
+            420000000009,
+            420000000010
+          ],
+          "time": 61,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        23,
+        61
+      ]
+    },
+    {
+      "stem": "44b6_eb2880fc",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 160000000048,
+          "children": [
+            161000000048,
+            161000000049
+          ],
+          "time": 72,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "44b6_f28707c6",
+      "embryo": "44b6",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_085bf656",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 19000327,
+          "children": [
+            20000345,
+            20000346
+          ],
+          "time": 18,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        18
+      ]
+    },
+    {
+      "stem": "6bba_09961292",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 25000920,
+          "children": [
+            26000956,
+            26000987
+          ],
+          "time": 24,
+          "in_native_v2": false
+        },
+        {
+          "parent": 45001493,
+          "children": [
+            46001530,
+            46001531
+          ],
+          "time": 44,
+          "in_native_v2": false
+        },
+        {
+          "parent": 53001680,
+          "children": [
+            54001733,
+            54001734
+          ],
+          "time": 52,
+          "in_native_v2": true
+        },
+        {
+          "parent": 49001609,
+          "children": [
+            50001629,
+            50001630
+          ],
+          "time": 48,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 4,
+      "v2_events": 1,
+      "missing_event_times": [
+        24,
+        44,
+        48
+      ]
+    },
+    {
+      "stem": "6bba_12665c0e",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 40000830,
+          "children": [
+            41000850,
+            41000856
+          ],
+          "time": 39,
+          "in_native_v2": true
+        },
+        {
+          "parent": 98001485,
+          "children": [
+            99001495,
+            99001497
+          ],
+          "time": 97,
+          "in_native_v2": false
+        },
+        {
+          "parent": 21000472,
+          "children": [
+            22000494,
+            22000495
+          ],
+          "time": 20,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 2,
+      "missing_event_times": [
+        97
+      ]
+    },
+    {
+      "stem": "6bba_13f19531",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_15403b9a",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_1d0d8384",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 15000455,
+          "children": [
+            16000515,
+            16000516
+          ],
+          "time": 14,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        14
+      ]
+    },
+    {
+      "stem": "6bba_20852818",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 40000487,
+          "children": [
+            41000500,
+            41000513
+          ],
+          "time": 39,
+          "in_native_v2": true
+        },
+        {
+          "parent": 42000516,
+          "children": [
+            43000541,
+            43000542
+          ],
+          "time": 41,
+          "in_native_v2": false
+        },
+        {
+          "parent": 83001034,
+          "children": [
+            84001041,
+            84001044
+          ],
+          "time": 82,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 1,
+      "missing_event_times": [
+        41,
+        82
+      ]
+    },
+    {
+      "stem": "6bba_268e1230",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 25000170,
+          "children": [
+            26000179,
+            26000180
+          ],
+          "time": 24,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        24
+      ]
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 62000719,
+          "children": [
+            63000734,
+            63000735
+          ],
+          "time": 61,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        61
+      ]
+    },
+    {
+      "stem": "6bba_283bf9f1",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_32db13fc",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 6000204,
+          "children": [
+            7000244,
+            7000281
+          ],
+          "time": 5,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_337b1b3a",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 39000297,
+          "children": [
+            40000311,
+            40000324
+          ],
+          "time": 38,
+          "in_native_v2": false
+        },
+        {
+          "parent": 59000663,
+          "children": [
+            60000685,
+            60000686
+          ],
+          "time": 58,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        38,
+        58
+      ]
+    },
+    {
+      "stem": "6bba_3a1849c2",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_3abfe10a",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 82001296,
+          "children": [
+            83001334,
+            83001350
+          ],
+          "time": 81,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        81
+      ]
+    },
+    {
+      "stem": "6bba_3c5691b6",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 7000054,
+          "children": [
+            8000066,
+            8000067
+          ],
+          "time": 6,
+          "in_native_v2": false
+        },
+        {
+          "parent": 23000172,
+          "children": [
+            24000178,
+            24000183
+          ],
+          "time": 22,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        6,
+        22
+      ]
+    },
+    {
+      "stem": "6bba_3db54e20",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 83000724,
+          "children": [
+            84000737,
+            84000738
+          ],
+          "time": 82,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        82
+      ]
+    },
+    {
+      "stem": "6bba_48816121",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 6000026,
+          "children": [
+            7000035,
+            7000036
+          ],
+          "time": 5,
+          "in_native_v2": false
+        },
+        {
+          "parent": 12000059,
+          "children": [
+            13000062,
+            13000063
+          ],
+          "time": 11,
+          "in_native_v2": false
+        },
+        {
+          "parent": 17000095,
+          "children": [
+            18000098,
+            18000100
+          ],
+          "time": 16,
+          "in_native_v2": false
+        },
+        {
+          "parent": 58000508,
+          "children": [
+            59000522,
+            59000533
+          ],
+          "time": 57,
+          "in_native_v2": false
+        },
+        {
+          "parent": 61000553,
+          "children": [
+            62000570,
+            62000571
+          ],
+          "time": 60,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 5,
+      "v2_events": 0,
+      "missing_event_times": [
+        5,
+        11,
+        16,
+        57,
+        60
+      ]
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 31000364,
+          "children": [
+            32000377,
+            32000378
+          ],
+          "time": 30,
+          "in_native_v2": true
+        },
+        {
+          "parent": 95001258,
+          "children": [
+            96001271,
+            96001280
+          ],
+          "time": 94,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 2,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_4ffd3da3",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 46000256,
+          "children": [
+            47000265,
+            47000266
+          ],
+          "time": 45,
+          "in_native_v2": true
+        },
+        {
+          "parent": 55000321,
+          "children": [
+            56000329,
+            56000330
+          ],
+          "time": 54,
+          "in_native_v2": true
+        },
+        {
+          "parent": 94000737,
+          "children": [
+            95000752,
+            95000758
+          ],
+          "time": 93,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 3,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_55b7eebe",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 49000351,
+          "children": [
+            50000359,
+            50000360
+          ],
+          "time": 48,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        48
+      ]
+    },
+    {
+      "stem": "6bba_55c70843",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 13000378,
+          "children": [
+            14000412,
+            14000426
+          ],
+          "time": 12,
+          "in_native_v2": false
+        },
+        {
+          "parent": 78002270,
+          "children": [
+            79002293,
+            79002316
+          ],
+          "time": 77,
+          "in_native_v2": false
+        },
+        {
+          "parent": 24000720,
+          "children": [
+            25000750,
+            25000751
+          ],
+          "time": 23,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 0,
+      "missing_event_times": [
+        12,
+        23,
+        77
+      ]
+    },
+    {
+      "stem": "6bba_5c039895",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 59000855,
+          "children": [
+            60000873,
+            60000878
+          ],
+          "time": 58,
+          "in_native_v2": false
+        },
+        {
+          "parent": 53000762,
+          "children": [
+            54000765,
+            54000776
+          ],
+          "time": 52,
+          "in_native_v2": true
+        },
+        {
+          "parent": 11000170,
+          "children": [
+            12000185,
+            12000186
+          ],
+          "time": 10,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 1,
+      "missing_event_times": [
+        10,
+        58
+      ]
+    },
+    {
+      "stem": "6bba_5c824876",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 3000057,
+          "children": [
+            4000073,
+            4000074
+          ],
+          "time": 2,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        2
+      ]
+    },
+    {
+      "stem": "6bba_5dfe9ad1",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_5f89039d",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_61ecbe65",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 35000328,
+          "children": [
+            36000339,
+            36000340
+          ],
+          "time": 34,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        34
+      ]
+    },
+    {
+      "stem": "6bba_6321a359",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 9000094,
+          "children": [
+            10000105,
+            10000106
+          ],
+          "time": 8,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        8
+      ]
+    },
+    {
+      "stem": "6bba_67ebd073",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 87000772,
+          "children": [
+            88000778,
+            88000779
+          ],
+          "time": 86,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        86
+      ]
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 67000540,
+          "children": [
+            68000569,
+            68000570
+          ],
+          "time": 66,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        66
+      ]
+    },
+    {
+      "stem": "6bba_6feb10f0",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_705ec2c9",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 43000460,
+          "children": [
+            44000474,
+            44000477
+          ],
+          "time": 42,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        42
+      ]
+    },
+    {
+      "stem": "6bba_74686d6a",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 9000037,
+          "children": [
+            10000042,
+            10000043
+          ],
+          "time": 8,
+          "in_native_v2": false
+        },
+        {
+          "parent": 25000128,
+          "children": [
+            26000134,
+            26000135
+          ],
+          "time": 24,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        8,
+        24
+      ]
+    },
+    {
+      "stem": "6bba_784a78c9",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 26000566,
+          "children": [
+            27000585,
+            27000586
+          ],
+          "time": 25,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        25
+      ]
+    },
+    {
+      "stem": "6bba_786893ac",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 64002179,
+          "children": [
+            65002214,
+            65002215
+          ],
+          "time": 63,
+          "in_native_v2": false
+        },
+        {
+          "parent": 18000797,
+          "children": [
+            19000842,
+            19000843
+          ],
+          "time": 17,
+          "in_native_v2": false
+        },
+        {
+          "parent": 2000105,
+          "children": [
+            3000158,
+            3000159
+          ],
+          "time": 1,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 0,
+      "missing_event_times": [
+        1,
+        17,
+        63
+      ]
+    },
+    {
+      "stem": "6bba_78a7bd97",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 65000803,
+          "children": [
+            66000836,
+            66000837
+          ],
+          "time": 64,
+          "in_native_v2": false
+        },
+        {
+          "parent": 57000619,
+          "children": [
+            58000644,
+            58000647
+          ],
+          "time": 56,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 1,
+      "missing_event_times": [
+        64
+      ]
+    },
+    {
+      "stem": "6bba_7af54fde",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 53000865,
+          "children": [
+            54000876,
+            54000877
+          ],
+          "time": 52,
+          "in_native_v2": true
+        },
+        {
+          "parent": 56000905,
+          "children": [
+            57000916,
+            57000917
+          ],
+          "time": 55,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 1,
+      "missing_event_times": [
+        55
+      ]
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 33000475,
+          "children": [
+            34000492,
+            34000493
+          ],
+          "time": 32,
+          "in_native_v2": false
+        },
+        {
+          "parent": 84001401,
+          "children": [
+            85001403,
+            85001421
+          ],
+          "time": 83,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        32,
+        83
+      ]
+    },
+    {
+      "stem": "6bba_7f87b3d8",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 28000723,
+          "children": [
+            29000761,
+            29000762
+          ],
+          "time": 27,
+          "in_native_v2": false
+        },
+        {
+          "parent": 38000925,
+          "children": [
+            39000938,
+            39000942
+          ],
+          "time": 37,
+          "in_native_v2": false
+        },
+        {
+          "parent": 73001556,
+          "children": [
+            74001569,
+            74001570
+          ],
+          "time": 72,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 0,
+      "missing_event_times": [
+        27,
+        37,
+        72
+      ]
+    },
+    {
+      "stem": "6bba_80d12824",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 60000533,
+          "children": [
+            61000541,
+            61000542
+          ],
+          "time": 59,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_87289e13",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 78001026,
+          "children": [
+            79001049,
+            79001050
+          ],
+          "time": 77,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_8b7818bf",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 4000023,
+          "children": [
+            5000029,
+            5000030
+          ],
+          "time": 3,
+          "in_native_v2": true
+        },
+        {
+          "parent": 34000238,
+          "children": [
+            35000244,
+            35000245
+          ],
+          "time": 33,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 2,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_907271db",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 97001173,
+          "children": [
+            98001189,
+            98001190
+          ],
+          "time": 96,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        96
+      ]
+    },
+    {
+      "stem": "6bba_96833384",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_969618f6",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 57000466,
+          "children": [
+            58000482,
+            58000483
+          ],
+          "time": 56,
+          "in_native_v2": false
+        },
+        {
+          "parent": 72000614,
+          "children": [
+            73000624,
+            73000633
+          ],
+          "time": 71,
+          "in_native_v2": false
+        },
+        {
+          "parent": 40000345,
+          "children": [
+            41000358,
+            41000359
+          ],
+          "time": 39,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 1,
+      "missing_event_times": [
+        56,
+        71
+      ]
+    },
+    {
+      "stem": "6bba_9a41d029",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 50000865,
+          "children": [
+            51000896,
+            51000897
+          ],
+          "time": 49,
+          "in_native_v2": false
+        },
+        {
+          "parent": 53000912,
+          "children": [
+            54000928,
+            54000950
+          ],
+          "time": 52,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 1,
+      "missing_event_times": [
+        49
+      ]
+    },
+    {
+      "stem": "6bba_9e23430b",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 90001032,
+          "children": [
+            91001045,
+            91001046
+          ],
+          "time": 89,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        89
+      ]
+    },
+    {
+      "stem": "6bba_ab78413d",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 68001291,
+          "children": [
+            69001319,
+            69001320
+          ],
+          "time": 67,
+          "in_native_v2": false
+        },
+        {
+          "parent": 78001460,
+          "children": [
+            79001493,
+            79001494
+          ],
+          "time": 77,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        67,
+        77
+      ]
+    },
+    {
+      "stem": "6bba_acd782a8",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_aeee7805",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 14000155,
+          "children": [
+            15000176,
+            15000177
+          ],
+          "time": 13,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_afb141ff",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 48000452,
+          "children": [
+            49000469,
+            49000477
+          ],
+          "time": 47,
+          "in_native_v2": false
+        },
+        {
+          "parent": 33000277,
+          "children": [
+            34000290,
+            34000291
+          ],
+          "time": 32,
+          "in_native_v2": false
+        },
+        {
+          "parent": 49000478,
+          "children": [
+            50000486,
+            50000487
+          ],
+          "time": 48,
+          "in_native_v2": false
+        },
+        {
+          "parent": 29000239,
+          "children": [
+            30000252,
+            30000253
+          ],
+          "time": 28,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 4,
+      "v2_events": 0,
+      "missing_event_times": [
+        28,
+        32,
+        47,
+        48
+      ]
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 74000810,
+          "children": [
+            75000817,
+            75000821
+          ],
+          "time": 73,
+          "in_native_v2": false
+        },
+        {
+          "parent": 95001023,
+          "children": [
+            96001033,
+            96001038
+          ],
+          "time": 94,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        73,
+        94
+      ]
+    },
+    {
+      "stem": "6bba_b329af44",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 83001755,
+          "children": [
+            84001784,
+            84001785
+          ],
+          "time": 82,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_bb9f20c3",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 32000835,
+          "children": [
+            33000858,
+            33000860
+          ],
+          "time": 31,
+          "in_native_v2": false
+        },
+        {
+          "parent": 47001238,
+          "children": [
+            48001265,
+            48001293
+          ],
+          "time": 46,
+          "in_native_v2": false
+        },
+        {
+          "parent": 86002188,
+          "children": [
+            87002233,
+            87002234
+          ],
+          "time": 85,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 3,
+      "v2_events": 1,
+      "missing_event_times": [
+        31,
+        46
+      ]
+    },
+    {
+      "stem": "6bba_c27cba08",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_c328f2fd",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 67000304,
+          "children": [
+            68000311,
+            68000314
+          ],
+          "time": 66,
+          "in_native_v2": false
+        },
+        {
+          "parent": 29000074,
+          "children": [
+            30000074,
+            30000075
+          ],
+          "time": 28,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        28,
+        66
+      ]
+    },
+    {
+      "stem": "6bba_cdcfe533",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 29000464,
+          "children": [
+            30000479,
+            30000480
+          ],
+          "time": 28,
+          "in_native_v2": false
+        },
+        {
+          "parent": 49000935,
+          "children": [
+            50000962,
+            50000963
+          ],
+          "time": 48,
+          "in_native_v2": false
+        },
+        {
+          "parent": 53001039,
+          "children": [
+            54001078,
+            54001079
+          ],
+          "time": 52,
+          "in_native_v2": false
+        },
+        {
+          "parent": 87002049,
+          "children": [
+            88002083,
+            88002084
+          ],
+          "time": 86,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 4,
+      "v2_events": 0,
+      "missing_event_times": [
+        28,
+        48,
+        52,
+        86
+      ]
+    },
+    {
+      "stem": "6bba_d1acb6ff",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 68000881,
+          "children": [
+            69000897,
+            69000898
+          ],
+          "time": 67,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        67
+      ]
+    },
+    {
+      "stem": "6bba_d2b9fc0c",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 73000666,
+          "children": [
+            74000680,
+            74000687
+          ],
+          "time": 72,
+          "in_native_v2": true
+        },
+        {
+          "parent": 79000759,
+          "children": [
+            80000776,
+            80000779
+          ],
+          "time": 78,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 2,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_d3da753b",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 64000722,
+          "children": [
+            65000738,
+            65000748
+          ],
+          "time": 63,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        63
+      ]
+    },
+    {
+      "stem": "6bba_d82a4fc6",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_debd7bfa",
+      "embryo": "6bba",
+      "role": "selection",
+      "events": [
+        {
+          "parent": 38000863,
+          "children": [
+            39000897,
+            39000898
+          ],
+          "time": 37,
+          "in_native_v2": true
+        },
+        {
+          "parent": 13000353,
+          "children": [
+            14000376,
+            14000377
+          ],
+          "time": 12,
+          "in_native_v2": true
+        },
+        {
+          "parent": 27000673,
+          "children": [
+            28000692,
+            28000693
+          ],
+          "time": 26,
+          "in_native_v2": true
+        },
+        {
+          "parent": 37000853,
+          "children": [
+            38000871,
+            38000872
+          ],
+          "time": 36,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 4,
+      "v2_events": 4,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_e16ffc58",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 27000395,
+          "children": [
+            28000419,
+            28000420
+          ],
+          "time": 26,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 1,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_e5e44988",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_ebdf3b34",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 14000412,
+          "children": [
+            15000432,
+            15000433
+          ],
+          "time": 13,
+          "in_native_v2": false
+        },
+        {
+          "parent": 85001151,
+          "children": [
+            86001164,
+            86001165
+          ],
+          "time": 84,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        13,
+        84
+      ]
+    },
+    {
+      "stem": "6bba_ed9377fd",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_ef7b4f7e",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 15000245,
+          "children": [
+            16000264,
+            16000265
+          ],
+          "time": 14,
+          "in_native_v2": false
+        },
+        {
+          "parent": 90001375,
+          "children": [
+            91001391,
+            91001392
+          ],
+          "time": 89,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        14,
+        89
+      ]
+    },
+    {
+      "stem": "6bba_f20478e9",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 24000334,
+          "children": [
+            25000352,
+            25000353
+          ],
+          "time": 23,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 1,
+      "v2_events": 0,
+      "missing_event_times": [
+        23
+      ]
+    },
+    {
+      "stem": "6bba_f8ffd5e7",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 11000111,
+          "children": [
+            12000123,
+            12000124
+          ],
+          "time": 10,
+          "in_native_v2": false
+        },
+        {
+          "parent": 64000650,
+          "children": [
+            65000662,
+            65000663
+          ],
+          "time": 63,
+          "in_native_v2": false
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 0,
+      "missing_event_times": [
+        10,
+        63
+      ]
+    },
+    {
+      "stem": "6bba_fc83837d",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [],
+      "total_events": 0,
+      "v2_events": 0,
+      "missing_event_times": []
+    },
+    {
+      "stem": "6bba_fe670320",
+      "embryo": "6bba",
+      "role": "optimization",
+      "events": [
+        {
+          "parent": 1000014,
+          "children": [
+            2000029,
+            2000030
+          ],
+          "time": 0,
+          "in_native_v2": true
+        },
+        {
+          "parent": 67000712,
+          "children": [
+            68000720,
+            68000721
+          ],
+          "time": 66,
+          "in_native_v2": true
+        }
+      ],
+      "total_events": 2,
+      "v2_events": 2,
+      "missing_event_times": []
+    }
+  ],
+  "movie_plan_sha256": "60300fbc7251f842e80b3ae1687e78d097b7dcda876908f3832b34174c0a0ef6",
+  "source_sha256": "a1dce44d93ec7439d3b34e15b10578957c65c2adbc6784c553281fdd5cb31f05",
+  "optimization_and_existing_selection_only": true,
+  "sealed_audit_opened": false,
+  "additional_images_downloaded": false,
+  "training_launched": false,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 19.21799999999348
+}

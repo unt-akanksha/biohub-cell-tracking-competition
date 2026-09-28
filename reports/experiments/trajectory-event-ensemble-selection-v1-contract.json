@@ -1,0 +1,121 @@
+{
+  "contract": {
+    "fit_contracts": {
+      "44b6": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+      "6bba": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111"
+    },
+    "movies": [
+      "44b6_2a2eff9f",
+      "44b6_341df25f",
+      "44b6_706092f0",
+      "6bba_32db13fc",
+      "6bba_4f99ce20",
+      "6bba_4ffd3da3",
+      "6bba_87289e13",
+      "6bba_8b7818bf",
+      "6bba_b329af44",
+      "6bba_debd7bfa"
+    ],
+    "smoke_movies": [
+      "44b6_341df25f",
+      "6bba_4f99ce20"
+    ],
+    "input_hashes": {
+      "44b6_2a2eff9f": {
+        "prediction": "d0beaef4809b6adffafe3516bafd57cd5c4b849bc631102d604baf9275e954ca",
+        "features": "80031435981d602f00bad924154c930b6677332c69af49de6eb34837c88aee70",
+        "groups": "472d738402fc113ebcfd31d68fbb174c172e42ad7fbe856473f94cb915ae9777",
+        "initial": "e9dac4b9f2ac3f045a0301b58eccb2512de4dd815d1e2c39f79d2cefe74c0467",
+        "submitted8": "047b48ad51fbc9090fb50302f1565d37d30c010acc0bb74019d070c7c663dc84"
+      },
+      "44b6_341df25f": {
+        "prediction": "32973cd40fd1e22b35c3c51c0d9b8e908b7b343563c49a1421b9daf2e15d0998",
+        "features": "29639f7e55adb19e769ae3c6013410e8924e7a5c822fe97de9979814d31608a9",
+        "groups": "20c491ecc06cad4cbf7ad6d1f5099049b2252d099574c1407c14ef71f1166cb4",
+        "initial": "8bbfb9e4f5cfd24264bcbb4882b5f061648a5eb105e95920ccabe80840c979ce",
+        "submitted8": "4e76988a82a3ef2777c3adb65b3070a2b5333a327c079e17cbcf38cce677de8f"
+      },
+      "44b6_706092f0": {
+        "prediction": "445a9d38cc7e5bd59c085dbf662d7c11a49c8d5e8865b44b53476ea92a24fc19",
+        "features": "bb392e67b4354f62c7c3a997b321bb6dbc6ac179154a5198af4b4bcd04e3c7f3",
+        "groups": "b065ee12e94cfee239f5186360f17c4904d9917382005dac369bf1b4ee1115d2",
+        "initial": "6ef2c75f43d8661c6f211bf6d2808a669c7905a8c8624faaa1b39d4f379526c5",
+        "submitted8": "8fff327410b7a40623d792f512d39b34dca0abfeb1e70d70d671e9e0fbc9da8f"
+      },
+      "6bba_32db13fc": {
+        "prediction": "be2ed9f63cb82a42412b28f6c128b83776288348c3f1fcb92a93a53532704481",
+        "features": "0c52450f6650ab4711783f8a16ef405910ec5e793851fe84ea5656c1a0d8e906",
+        "groups": "107172ac5f63fc6a460aaea6a838ed0055d90a627f21a11c66c9c5678bbe03bb",
+        "initial": "6ac8a48f210dadbf51b7a67122903fbb29b27b21c24826711ed8dda9f30b4ab7",
+        "submitted8": "7ec0e3dd5eb98e17790f756e8291301f38ff4317aa4d08204fc6e2185dfcf0aa"
+      },
+      "6bba_4f99ce20": {
+        "prediction": "da3de3e889fe4c549192217932403213029387d25bc0447eb345026b722bb9f8",
+        "features": "9d1dc5a92e421e5dc46dd00cb529b86ecd9facc636411caacc957200ddc382cb",
+        "groups": "6986ab6def3269b067f45e3aea0ef6d6da99f0f487f91938e38ca6d7370554e2",
+        "initial": "fe994221b197df99c6b3af6648b4a3c2c3fdb2d61280f28c041f630011775fdd",
+        "submitted8": "175b333b69d8c8486d212724127c8edd45232023d65104f66fb5482d85b03e95"
+      },
+      "6bba_4ffd3da3": {
+        "prediction": "5378144ea367a300c0a60afba636a376bf07cef912f5994ec4e400d61e7d5578",
+        "features": "df34b42a93b5a794666155de56c717b2d7fa94fc9e1ea1a9af8d5c648f5bd03b",
+        "groups": "0033469c9442aefbde7fe2d310b828762eb2d9091f15bc2b10da73b089099d24",
+        "initial": "1abf60baf2d5a662129ce49ec30cf51e6db50a55ca1c8eb7f956c0fc815426eb",
+        "submitted8": "04ef8e50e90f3e9e1399be1da8b4d6fafc75502f159ec8fbbfaa0edd9a816ae6"
+      },
+      "6bba_87289e13": {
+        "prediction": "8aaed0662a6d1348e1f2a80113fe1b374f9e6c1f401ffc8e96be12b3e8e932b4",
+        "features": "8ca50ceb06647ef5286088c7bddb0e79f12bb6e207be3ef7a9886b99d68d4142",
+        "groups": "c69af0ec49b5adb7910160ad3d4e6cdcca9e382e4dcb9f1affe3b18f3ff93950",
+        "initial": "920862d5df45933c07f0dd1d268cdd710ed3bd5f9c461261056589667bc3c383",
+        "submitted8": "1051bc383dc29978c916e0549f53417aad3a8cc99879954898a5ea2bf368bf55"
+      },
+      "6bba_8b7818bf": {
+        "prediction": "8f6ea861956ecebb41ef3a06da3eed5b742c813fe5567d26fa82d00cde93f81d",
+        "features": "96d874af14f4619af9bdc381379a5b142d8f41d316b699170a893a48012a1411",
+        "groups": "775dee0741f0513784507b5dcd394c4597db4e95366b686910a25b1a412a0eb7",
+        "initial": "51ce8bd9b9996920b395f2efc8ca46b3b473f4ee930a4641bf0bf828bf520f52",
+        "submitted8": "f87bfb29d88d69b9eba02e6957a0c6e32a33ff5d6817761fb5aa3d6d10bb66e7"
+      },
+      "6bba_b329af44": {
+        "prediction": "f6206a0d6d971774ce388411cd8554c11fd1595d24ca31b52c13bd25a8cc07bb",
+        "features": "2f3acdd09c2a264224fd7f28bb9c2b9eb94708b804efafa8176288ac2b9dc9e0",
+        "groups": "ca12deaa867b23340bb1fb7344dbd9225d245bd56e49987e2f913ebaf7b0a131",
+        "initial": "154e21d6727128a3513b1557d6dc52dce87ac802b267cdd30ccedca21c69a0e1",
+        "submitted8": "8d9316be9e36cbcbb47ab00b8f2fad11e7a79f554734f8f3f104b8ec65e74000"
+      },
+      "6bba_debd7bfa": {
+        "prediction": "9a05644850ef779d77cca29a9a61ae559bedb4bdd8bfb9a73d91fc3d00b2d8df",
+        "features": "28e7ff093879acd57e778cce148f180caaceefea69caa6a4e4451f7a9c759993",
+        "groups": "3316e0d7c49bd064235559f0ae37aa683c1947ce7ea0f0b5dac92c80dda92558",
+        "initial": "b52f7c6d483248a865f078c80b5835729482021efc18115befcdbe4ea4d109a9",
+        "submitted8": "0d707ac78072ea50b240dea83aa4b91c0bdf1331b30e1503f6d0494626dce824"
+      }
+    },
+    "source_sha256": "5f127d093f8b6c8b7626b835147d70bee9ba7c30a48d365dca56d4460901626c",
+    "design_sha256": "bcb2f20b4c885bc954667e55962f889dfe61af28d2728a88dd9086ec36b83d57",
+    "helper_sha256": "f26d41358e3e4005c87a3fd083a7095014474cb461c72391a47c48b18a6b77d7",
+    "graph_checker_sha256": "940c3433febe7c10108b01208ac361c830403ba8de80c7083616b9142749638c",
+    "runtime_sha256": "ffef91dea26d2c12c47d74d7a2846c78a9099b9b62e09afeb8470e1cf16dca4d",
+    "arms": [
+      "source44",
+      "source6",
+      "equal_mean"
+    ],
+    "mean_coefficients": [
+      0.5,
+      0.5
+    ],
+    "per_frame_seconds": 10.0,
+    "per_movie_seconds": 600.0,
+    "source_role_disjoint": true,
+    "prior_pipeline_selection_exposure_disclosed": true,
+    "source44_failed_transfer_disclosed": true,
+    "movie_id_routing": false,
+    "training_schedule_changed": false,
+    "authorized_for_submission": false
+  },
+  "source6_fit_status_at_freeze": "running",
+  "source6_steps_at_freeze": 13000,
+  "source6_report_sha256_at_freeze": "f50ec663a7cf14fc9113f9ab3d9e4893a9e5102338cf6c60c34f6b583d860dfe"
+}

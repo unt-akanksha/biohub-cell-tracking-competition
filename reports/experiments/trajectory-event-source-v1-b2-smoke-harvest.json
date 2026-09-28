@@ -1,0 +1,62 @@
+{
+  "status": "verified_backup",
+  "bytes": 1067515,
+  "records": [
+    {
+      "path": "6bba_ebdf3b34-original/detector_coordinates_harmonic_association_production_single.jsonl",
+      "bytes": 324,
+      "sha256": "d3e34158b0f32366d42aee6a8b60a47b7be784b1f0fca6cfb89975c2a7549d62"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/inference.log",
+      "bytes": 1916,
+      "sha256": "eb82be0ac743946886241c29eb749a4e04a1398e793bf83a5d0aa37ab11be612"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/postprocess-stats.json",
+      "bytes": 1986,
+      "sha256": "d925e0f05bf7acda0b41f44e6b858bb1382aa24c943236627d80da6c676311db"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/pre-postprocess.json",
+      "bytes": 502288,
+      "sha256": "e9c341c111135bab34d2dc2ec4a90b15a2a2dddb737dc8ce6c940f872215a363"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/prediction.json",
+      "bytes": 253234,
+      "sha256": "04502c7c33a0d1d1d05f34204ccd7fb66b6db3824ffadef47e97509bf5aaec5c"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/raw-candidates.npz",
+      "bytes": 50977,
+      "sha256": "8d1eaac5b86acf2f06e8bcc4c5e341e65a954e6a1eff06ef10f288cf06aacfed"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/repair-details.json",
+      "bytes": 165,
+      "sha256": "1b095b5063b69b812cd44af0fdd4a9b45c54fc95fab31f8f0a5fdff8c75fb272"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/repaired-prediction.json",
+      "bytes": 253234,
+      "sha256": "04502c7c33a0d1d1d05f34204ccd7fb66b6db3824ffadef47e97509bf5aaec5c"
+    },
+    {
+      "path": "6bba_ebdf3b34-original/retention_guard_single.jsonl",
+      "bytes": 1408,
+      "sha256": "fd2712d89018eab979255ef0559a88f91ed57d345baff3767c24000ba4719260"
+    },
+    {
+      "path": "prelabel-progress.json",
+      "bytes": 932,
+      "sha256": "f6f4b8b7f42c598cab0f4ed6edd4fbc6b7730f25d10bdd8c32224bb69ae5ec18"
+    },
+    {
+      "path": "result.json",
+      "bytes": 1051,
+      "sha256": "17f9d31524b354f51eaebcd9b95e796cc9ed75e0eba678e6ffc85600f517a0aa"
+    }
+  ],
+  "remote_files_deleted": false
+}

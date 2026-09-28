@@ -1,0 +1,269 @@
+{
+  "status": "real_source_event_training_smoke_complete",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "authorized_for_submission": false,
+  "quality_gain_established": false,
+  "graph_predictions_exported": false,
+  "seconds": 1.9219999999622814,
+  "stems": [
+    "6bba_6ca87370",
+    "6bba_2819ca14"
+  ],
+  "cases": [
+    {
+      "stem": "6bba_6ca87370",
+      "t": 51,
+      "event_frame": false,
+      "options": 1029,
+      "reason": "prepared",
+      "known_constraints_retained": 9,
+      "known_constraints_outside_editable_scope": 0,
+      "case_sha256": "708b5347d73ba5081fad0acde87801af4dc86c6d987bb5ee807b7a02510aafac",
+      "path": "6bba_6ca87370-t51.npz",
+      "n_constraints": 9
+    },
+    {
+      "stem": "6bba_6ca87370",
+      "t": 67,
+      "event_frame": true,
+      "options": 1861,
+      "reason": "prepared",
+      "known_constraints_retained": 15,
+      "known_constraints_outside_editable_scope": 0,
+      "case_sha256": "a2f7fd5b52bf2b06a8c2a9b555be658bea3ac09ec9ab739e6c25b324c66605e8",
+      "path": "6bba_6ca87370-t67.npz",
+      "n_constraints": 15
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "t": 62,
+      "event_frame": true,
+      "options": 520,
+      "reason": "prepared",
+      "known_constraints_retained": 13,
+      "known_constraints_outside_editable_scope": 0,
+      "case_sha256": "404c5928d555e1dbb8408464d2dc9a7c4880e3fd521986e7953402bd07c94ed8",
+      "path": "6bba_2819ca14-t62.npz",
+      "n_constraints": 13
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "t": 96,
+      "event_frame": false,
+      "options": 378,
+      "reason": "prepared",
+      "known_constraints_retained": 5,
+      "known_constraints_outside_editable_scope": 0,
+      "case_sha256": "e9149b6c25febe1f682efbfe75faf731baf35f7aac46ef53b09b1c2eeebd090d",
+      "path": "6bba_2819ca14-t96.npz",
+      "n_constraints": 5
+    }
+  ],
+  "source_scope_sha256": "122c2d590ea6be0100a71946ec801937693e1b7a5cce7779b254d4f914143711",
+  "feature_receipt_sha256": "de47e4ecda79dbfa2491474a51b8954a271762f2a6ca3aa0a53c4b2dab97f863",
+  "supervision_receipt_sha256": "b66ce1af41ce1d89767cd01787fd9b24443f23964cef0a4f399eef1a5946cd04",
+  "source_prior_counts": {
+    "divisions": 2,
+    "opportunities": 1999
+  },
+  "anchor": [
+    -0.26540776266506394,
+    -0.3523759582399263,
+    -0.26984152813269136,
+    -0.33164199399216104,
+    -0.2771555255447123,
+    -0.3363211785961408,
+    0.004340230197789596,
+    -1.1180881118653333e-16,
+    0.21843348681970334,
+    0.0633182277307003,
+    -4.773420273734864e-16,
+    0.05744035946910009,
+    0.5001013415289373,
+    0.5978788403764924,
+    1.2110677178256881,
+    1.2213384455587493,
+    -0.019906790147567768,
+    -2.6889347215816318e-17,
+    0.0,
+    -6.683360945766275,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "regularization": [
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.1,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02,
+    0.02
+  ],
+  "epochs": 3,
+  "learning_rate": 0.03,
+  "seed": 20260914,
+  "feature_names": [
+    "final_distance",
+    "raw_distance",
+    "half_history_residual",
+    "full_history_residual",
+    "half_future_residual",
+    "full_future_residual",
+    "history_speed",
+    "future_speed",
+    "velocity_disagreement",
+    "history_known",
+    "future_known",
+    "both_known",
+    "raw_probability",
+    "raw_log_odds",
+    "raw_probability_known",
+    "initial_edge",
+    "parent_localization_shift",
+    "child_localization_shift",
+    "continuation_bias",
+    "division_bias",
+    "birth_bias",
+    "death_bias",
+    "sister_distance",
+    "parent_distance_asymmetry",
+    "daughter_midpoint_motion_residual",
+    "mother_history_known",
+    "daughter_future_separation_change",
+    "daughter_future_known",
+    "birth_boundary_distance",
+    "death_boundary_distance"
+  ],
+  "inherited_model_sha256": "e33fe1b79291ed89697db7a5ee6a839bc2ef34e23f504b27f1f29e44290107ba",
+  "source_sha256": "11740bf14fe06ca7746468d1b0bee1132da1b6932e422e0a420759e53598af21",
+  "modules_sha256": {
+    "trajectory_event_training_v1.py": "0a8545259196eb4e2de4b7fdb58ad3911cff43e9d375e1217a1233c3d9a21dc8",
+    "trajectory_event_assignment_v1.py": "f554fc5ff2e3b4e4d39693244e96fa226db5295e74274965cf8a771f447fcded",
+    "trajectory_event_candidates_v1.py": "b0140970917fe44c9d5f5599560406441c79a4488647eaf589c3a77495ac732d",
+    "trajectory_event_features_v1.py": "6091c871aabc55a5ee314a67d9be39f54616b641628f023e3088a41abf9acd19",
+    "trajectory_event_supervision_v1.py": "28a273f07ed0d2c95078058ea743fa941c97f9d036ff92dc20f5b139fd1b9f66"
+  },
+  "before": {
+    "cases": [
+      {
+        "hinge": 0.0,
+        "known": 9,
+        "wrong_parent_or_birth": 0,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 1.005349289906667,
+        "known": 15,
+        "wrong_parent_or_birth": 2,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 0.5529530382610736,
+        "known": 13,
+        "wrong_parent_or_birth": 1,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 0.0,
+        "known": 5,
+        "wrong_parent_or_birth": 0,
+        "selected_forks": 0
+      }
+    ],
+    "mean_hinge": 0.3895755820419351,
+    "known": 42,
+    "wrong_parent_or_birth": 3
+  },
+  "epochs_completed": [
+    {
+      "epoch": 1,
+      "steps": 4,
+      "cases": 4,
+      "online_objective_mean": 0.3845147364575188,
+      "displacement_norm": 0.31550773454437075,
+      "weights_sha256": "cf0c2d39fd5a89e9e070cf55f745a71a42a23df416b0624459b712efe6122326"
+    },
+    {
+      "epoch": 2,
+      "steps": 8,
+      "cases": 4,
+      "online_objective_mean": 0.33346158289570593,
+      "displacement_norm": 0.6647491290343572,
+      "weights_sha256": "4493f726c469ccd2d31721d0cc6ac96d3777c43e3ba7b03ad1fdf8f6c78d6a2c"
+    },
+    {
+      "epoch": 3,
+      "steps": 12,
+      "cases": 4,
+      "online_objective_mean": 0.2947682123149707,
+      "displacement_norm": 0.9806396503679476,
+      "weights_sha256": "508165d131dc0c2516cf91e0eafb5a88edf24358f6ced5b0436f29ccc6b733be"
+    }
+  ],
+  "after": {
+    "cases": [
+      {
+        "hinge": 0.0,
+        "known": 9,
+        "wrong_parent_or_birth": 0,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 0.7168999225935522,
+        "known": 15,
+        "wrong_parent_or_birth": 2,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 0.2669530127334339,
+        "known": 13,
+        "wrong_parent_or_birth": 1,
+        "selected_forks": 0
+      },
+      {
+        "hinge": 0.0,
+        "known": 5,
+        "wrong_parent_or_birth": 0,
+        "selected_forks": 0
+      }
+    ],
+    "mean_hinge": 0.2459632338317465,
+    "known": 42,
+    "wrong_parent_or_birth": 3
+  },
+  "model_fitted": true,
+  "weights_changed": true,
+  "final_weights_sha256": "508165d131dc0c2516cf91e0eafb5a88edf24358f6ced5b0436f29ccc6b733be"
+}

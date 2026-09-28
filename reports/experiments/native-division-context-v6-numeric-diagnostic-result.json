@@ -1,0 +1,21 @@
+{
+  "status": "failed",
+  "contract_sha256": "36d024261fa71f38ff6b273c3fcb94ec48fff0272cfd7f4d8374e0036f796150",
+  "data_sha256": "933fab6898ae726168614d28494b963a2f79c844fa400bfed608e3fe2bf0b61c",
+  "folds": [],
+  "successful_updates": 428,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "diagnostic": {
+    "arm": "44b6-resnet3d-control",
+    "attempt": 179,
+    "successful_step": 428,
+    "grad_norm": "inf",
+    "loss": 0.3422820568084717,
+    "amp_scale": 65536.0
+  },
+  "numerical_overflow_confirmed": true,
+  "error_type": "RuntimeError",
+  "error_message": "Diagnostic confirmed nonfinite scaled gradient; no optimizer update applied",
+  "seconds": 8.00635777500429
+}

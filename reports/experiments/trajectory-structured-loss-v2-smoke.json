@@ -1,0 +1,85 @@
+{
+  "status": "functionality_passed",
+  "contract": {
+    "physical_label_proof_sha256": "28bc878d35be1989c2c34f8bd54cc0d098f20d8b237a6a0c00562fde27d4a2e1",
+    "base_runner_sha256": "9d6e7d86d6f94b29a4dd59ad08c915a9d3f7ddee2ef467a1e17b1083a1521a74",
+    "effective_runner_sha256": "e571a5b39725f573e51286f0e11a5728cc3bb194024336de8df25cc6b14a5d34",
+    "source_sha256": "d5e6a1f398039de81e43b77fcb1a7c4f3f8f46afea0d6441d171ed3accd99bde",
+    "helper_sha256": "916ff685b700bdcea4a616d16bb99dcb7ff0a382124221f804eeb1d24909eea7",
+    "feasibility_helper_sha256": "04de81e20ec6d74faff9c51a78469246b527ce5e55732d1ca12b8b11615eea1f",
+    "initial_weight_sha256": "83eaa7c4e65da964f49618bd8bafd0c0910cad9d347f7afa53590e1ee6c2ad96",
+    "source_scope_sha256": "5c4b64793068565598537db6bb3af439513bde3d46e357ffeab59164bda020bf",
+    "steps": 300,
+    "batch": 4,
+    "learning_rate": 0.05,
+    "regularization": 0.01,
+    "seed": 1729,
+    "training_objective": "partial-label latent structured hinge over feasible assignments",
+    "source_only": true,
+    "selection_or_validation_read": false
+  },
+  "coverage": {
+    "44b6_cf8fed6b": {
+      "no_unique_reachable_constraints": 7,
+      "prepared": 92
+    },
+    "44b6_f28707c6": {
+      "no_unique_reachable_constraints": 45,
+      "prepared": 54
+    },
+    "44b6_c50204e0": {
+      "prepared": 97,
+      "no_unique_reachable_constraints": 2
+    },
+    "44b6_cf2536e8": {
+      "prepared": 73,
+      "no_unique_reachable_constraints": 26
+    },
+    "6bba_78a7bd97": {
+      "no_unique_reachable_constraints": 9,
+      "prepared": 90
+    },
+    "6bba_5dfe9ad1": {
+      "prepared": 99
+    },
+    "6bba_acd782a8": {
+      "no_unique_reachable_constraints": 12,
+      "prepared": 87
+    },
+    "6bba_969618f6": {
+      "prepared": 99
+    }
+  },
+  "fit": {
+    "updates": 2,
+    "seed": 1729,
+    "history": [
+      {
+        "step": 1,
+        "mean_sampled_hinge": 0.0,
+        "parameter_shift": 0.0
+      }
+    ],
+    "training_movies": [
+      "44b6_c50204e0",
+      "44b6_cf2536e8",
+      "44b6_f28707c6"
+    ],
+    "cases": 224
+  },
+  "held": {
+    "queries": 188,
+    "learned_correct": 180,
+    "current_correct": 180,
+    "initial_correct": 186,
+    "learned_repairs": 0,
+    "learned_breaks": 0,
+    "all_queries": 41029,
+    "changed_current_choices": 36,
+    "annotation_mask_used_for_inference": false,
+    "initial_joint_correct": 180,
+    "prediction_sha256": "0bfad73557a6c38135ff07913574e04f2d43a136101e6988a87c6e8d8219a44b"
+  },
+  "quality_gain_established": false,
+  "seconds": 6.577999999979511
+}

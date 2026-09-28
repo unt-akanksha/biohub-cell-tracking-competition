@@ -1,0 +1,171 @@
+{
+  "status": "read_only_recent_submission_audit",
+  "checked_at_utc": "2026-09-10T08:25:18.925581+00:00",
+  "page_size": 20,
+  "records": [
+    {
+      "ref": 55784044,
+      "file_name": "submission.csv",
+      "date": "2026-08-26 03:03:22.783000",
+      "description": "clean-0927-repro-v2 dual-seed harmonic centroid+division",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55364415,
+      "file_name": "submission.csv",
+      "date": "2026-08-09 01:40:24.200000",
+      "description": "Exploratory dense top4 three-seed temporal topology handoff; exact OOF +0.002925; dynamic notebook; no public output or metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.912"
+    },
+    {
+      "ref": 55191057,
+      "file_name": "submission.csv",
+      "date": "2026-08-02 16:58:55.107000",
+      "description": "Owned collective-flow balanced exploratory probe; exact OOF -0.00001277, 21 hidden rewires; unchanged nodes/topology/hash verified; no metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55190985,
+      "file_name": "submission.csv",
+      "date": "2026-08-02 16:55:45.013000",
+      "description": "Owned constant-velocity balanced diversity probe; exact OOF neutral, 3 hidden rewires; unchanged nodes/topology/hash verified; no metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55190960,
+      "file_name": "submission.csv",
+      "date": "2026-08-02 16:54:25.557000",
+      "description": "Owned nonconflicting velocity plus collective-flow union; 23 hidden rewires; broad exact validation complete; topology/hash verified; no metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55190946,
+      "file_name": "submission.csv",
+      "date": "2026-08-02 16:53:43.637000",
+      "description": "Owned constant-velocity strict diversity probe; exact OOF neutral, 2 hidden rewires; unchanged nodes/topology/hash verified; no metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55190944,
+      "file_name": "submission.csv",
+      "date": "2026-08-02 16:53:41.743000",
+      "description": "Owned collective-flow strict probe; exact 24-movie OOF +0.00005708, no negative movie, 4 hidden rewires; topology/hash verified; no metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": ""
+    },
+    {
+      "ref": 55155485,
+      "file_name": "submission.csv",
+      "date": "2026-08-01 06:16:23.057000",
+      "description": "Attributed 0.914 calibration plus owned spatial collapse rescue; 58 collapse frames 27 consensus rescues 31 primary fallbacks; 4 movies topology sha f54bfc9c verified",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55154131,
+      "file_name": "submission.csv",
+      "date": "2026-08-01 05:00:00.537000",
+      "description": "Owned exact order-statistic candidate retention; 49 adapted frames 18 exact targets max excess 4; healthy movies invariant, topology sha 6a9b94fa verified",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55154126,
+      "file_name": "submission.csv",
+      "date": "2026-08-01 04:59:50.630000",
+      "description": "Owned causal temporal-persistent detector rescue; 56 union frames, healthy movies invariant, topology and sha 7b4caedb verified; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55154124,
+      "file_name": "submission.csv",
+      "date": "2026-08-01 04:59:36.693000",
+      "description": "Owned spatial cross-seed consensus rescue; 28 affected frames, healthy movies invariant, topology and sha 2c615b42 verified; no public output or metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55151372,
+      "file_name": "submission.csv",
+      "date": "2026-08-01 01:57:25.500000",
+      "description": "Attributed reproduction of public 0.914 control; exact public config, independently audited topology and coverage",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55099266,
+      "file_name": "submission.csv",
+      "date": "2026-07-30 04:19:02.230000",
+      "description": "Owned rank-retention plus reciprocal local-flow parent arbiter; 49 adapted frames 1472 flow disagreements 1008 authorized targets; verified topology sha e461df30; no public output or metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.912"
+    },
+    {
+      "ref": 55097917,
+      "file_name": "submission.csv",
+      "date": "2026-07-30 03:02:55.697000",
+      "description": "Owned reciprocal local-flow parent arbiter; 936 flow-consistent target rewires on clean dual-seed backbone; independently verified topology/hash; no public output or metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.912"
+    },
+    {
+      "ref": 55067327,
+      "file_name": "submission.csv",
+      "date": "2026-07-29 00:02:41.963000",
+      "description": "Owned collapse-localized detector plus reciprocal-flow parent hybrid; 60 fallback frames 74 adjacent pairs 395 authorized targets; verified shadd645731; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55067321,
+      "file_name": "submission.csv",
+      "date": "2026-07-29 00:02:36.843000",
+      "description": "Owned temporally supported peak-union rescue; 42 temporal plus 18 primary fallback frames; healthy movies identical; verified sha67c608ab; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55067317,
+      "file_name": "submission.csv",
+      "date": "2026-07-29 00:02:31.797000",
+      "description": "Owned collapse-conditioned detector-tail calibration; 31 calibrated plus 29 primary fallback frames; affected movie only; verified sha621bae6f; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.912"
+    },
+    {
+      "ref": 55067313,
+      "file_name": "submission.csv",
+      "date": "2026-07-29 00:02:26.630000",
+      "description": "Owned persistent detector-retention guard; 60 binary plus 14 causal persistence frames; affected movie only; verified sha02ebdad7; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55067209,
+      "file_name": "submission.csv",
+      "date": "2026-07-29 00:00:56.787000",
+      "description": "Owned localized high-confidence peak union on clean two-seed backbone; 53 localized rescue plus 7 primary fallback frames; only affected movie changed; verified sha13782bbd; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.913"
+    },
+    {
+      "ref": 55045561,
+      "file_name": "submission.csv",
+      "date": "2026-07-28 04:56:01.737000",
+      "description": "Owned rank-retention plus reciprocal-parent hybrid; frozen component gates; 49 adapted frames and 1348 authorized targets; verified shae ad5bd808; no labels/public output/metric hack",
+      "status": "SubmissionStatus.COMPLETE",
+      "public_score": "0.911"
+    }
+  ],
+  "model_selection_from_public_scores": false,
+  "submissions_created": false,
+  "kernels_modified": false,
+  "caveat": "Missing scores are unknown, not zero or a notebook-title score. This date-ordered history audit does not promote a model or execute any older notebook."
+}

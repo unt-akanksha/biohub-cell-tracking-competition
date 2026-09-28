@@ -1,7 +1,5 @@
 {
-  "schema_version": 1,
-  "audited_at": "2026-09-08T03:35:21.6974441Z",
-  "discussions_audited_at": "2026-09-08T03:35:21.6974441Z",
+  "audited_at": "2026-09-28T16:00:12.222681Z",
   "discussion_refs": [
     "730160",
     "734604",
@@ -17,293 +15,454 @@
     "736937",
     "735531",
     "734330",
-    "727154"
+    "727154",
+    "741242",
+    "741651",
+    "741446",
+    "741749",
+    "741868",
+    "hikaggler/model-changes-dont-move-the-lb-above-the-public-plateau",
+    "mikelou1/possible-big-leaderboard-shakeup"
   ],
+  "discussions_audited_at": "2026-09-28T16:00:12.222681Z",
+  "last_scan": {
+    "note": "Deadline-window refresh, 32h remaining. Listed 100 public notebooks by score descending; the frontier is the 0.947/0.953 chain which our 0.960 stack already exceeds, so nothing was adopted wholesale. Three previously unaudited notebooks sorting at or above v3 were source reviewed. The material finding is that amanatar/optimized-biohub-max-score independently loosens the same safe-division gates our own division decomposition identified, which is corroboration from a second direction rather than folklore.",
+    "notebooks_listed": 100,
+    "scan_limit": 100,
+    "scanned_at": "2026-09-28T16:00:12.222681Z",
+    "source_reviewed_this_refresh": [
+      "amanatar/optimized-biohub-max-score",
+      "amanatar/biohub-geometric-fusion",
+      "anvithpothula/biohub-0-953-lb-original"
+    ]
+  },
   "notebooks": [
     {
-      "ref": "anvithpothula/biohub-0-95",
       "classification": "explicit_metric_hack",
       "disposition": "excluded_metric_hack",
       "evidence": "Manual source audit found out-of-volume synthetic hub and division nodes. Permanent pre-download exclusion; source, predictions, constants, and mechanism are forbidden.",
+      "ref": "anvithpothula/biohub-0-95",
       "score_reproduced": false
     },
     {
-      "ref": "kaiwalyaatulraut/biohub-solution",
       "classification": "explicit_metric_hack",
       "disposition": "excluded_metric_hack",
       "evidence": "Manual source audit found an explicitly labeled metric-hack cell that inserts negative-time nodes. Permanent pre-download exclusion; source, predictions, constants, and mechanism are forbidden.",
+      "ref": "kaiwalyaatulraut/biohub-solution",
       "score_reproduced": false
     },
     {
-      "ref": "redoctopusk/biohub-948base",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "September 8 source audit found no known exploit. It is the attributed clean shared-stack control; its advertised leaderboard score is not validation or selection evidence.",
+      "ref": "redoctopusk/biohub-948base",
       "reviewed_sha256": "d55e7a13de9319f26b9d1acd952262fe4fea437775d9f244d1f0823c04c4d500",
       "score_reproduced": false
     },
     {
-      "ref": "redoctopusk/biohub-948tta2",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "September 8 source audit found no known exploit. It reuses detector D4 passes for edge-feature TTA and is admissible only as an attributed control under independent complete-movie validation.",
+      "ref": "redoctopusk/biohub-948tta2",
       "reviewed_sha256": "7878a2739fae22b72c31598a324310eeb708cf4946bb2eeb68ffc4960a3e0051",
       "score_reproduced": false
     },
     {
-      "ref": "rishabhr0y/biohub-948-sew20",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "September 8 audit found its notebook source byte-identical to the clean 948base notebook; metadata differences do not make it an independent candidate.",
+      "ref": "rishabhr0y/biohub-948-sew20",
       "reviewed_sha256": "390b3a66ede24d039e31147538e10ef1c1d8d33a611828891340b3143b790e02",
       "score_reproduced": false
     },
     {
-      "ref": "sjlee101/biohub-lb942-divboth-12-16",
       "classification": "reported_post_patch",
       "disposition": "leaderboard_selected_comparator_only",
       "evidence": "Mechanically clean September 8 source, but its division radii are documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "ref": "sjlee101/biohub-lb942-divboth-12-16",
       "reviewed_sha256": "7938a00692682b8f55d6ab7a4411165a4c6a40f0fd2a8c84640c3cce6a98bfbd",
       "score_reproduced": false
     },
     {
-      "ref": "sjlee101/biohub-lb942-divmax-14-18",
       "classification": "reported_post_patch",
       "disposition": "leaderboard_selected_comparator_only",
       "evidence": "Mechanically clean September 8 source, but its division radii are documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "ref": "sjlee101/biohub-lb942-divmax-14-18",
       "reviewed_sha256": "64613c2cd0007d1c1cae926fb01647846bed8636451f70d5bb0e7a4873b5c621",
       "score_reproduced": false
     },
     {
-      "ref": "sjlee101/biohub-lb942-divparent12",
       "classification": "reported_post_patch",
       "disposition": "leaderboard_selected_comparator_only",
       "evidence": "Mechanically clean September 8 source, but its division radius is documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "ref": "sjlee101/biohub-lb942-divparent12",
       "reviewed_sha256": "9017db72aa89e503b4f4b1aa35723c25c2fb4590ef9d9e77d35d343d4f95e74d",
       "score_reproduced": false
     },
     {
-      "ref": "sjlee101/biohub-lb942-divsister16",
       "classification": "reported_post_patch",
       "disposition": "leaderboard_selected_comparator_only",
       "evidence": "Mechanically clean September 8 source, but its division radius is documented as a public-leaderboard sweep. Parameters are excluded from project selection.",
+      "ref": "sjlee101/biohub-lb942-divsister16",
       "reviewed_sha256": "15f28ff11b8f393932ce6996698fcb8e510cb2de95ed666f88147d799a57cd37",
       "score_reproduced": false
     },
     {
-      "ref": "xiaoleilian/biohub-ct-mix-divaug",
       "classification": "explicit_metric_hack",
       "disposition": "excluded_metric_hack",
       "evidence": "Manual source audit found explicit patched-metric division exploit logic.",
+      "ref": "xiaoleilian/biohub-ct-mix-divaug",
       "score_reproduced": false
     },
     {
-      "ref": "evgendvorkin/biohub-0-923-lb",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "No known exploit found in manual source audit; displayed score is not reproduced evidence.",
+      "ref": "evgendvorkin/biohub-0-923-lb",
       "score_reproduced": false
     },
     {
-      "ref": "evgendvorkin/biohub-0-927-lb",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no metric exploit: test submission generation is label-free; held-out training labels are accessed only by a post-submission validator with explicit train/test stem exclusion. Completed output has valid indegree/outdegree topology and no sentinel coordinates. The reported public score is not yet reproduced under our account.",
+      "ref": "evgendvorkin/biohub-0-927-lb",
       "reviewed_sha256": "08507f9123d9f40e185d0db8eda3dd21cb405e50febb720827c2e655f68d5ec1",
       "score_reproduced": false
     },
     {
-      "ref": "evgendvorkin/biohub-0-931-lb",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.952 with the pinned 0.940 EMA public lineage. Its bidirectional and secondary-detection settings are a public-lineage configuration comparator, not an independent model candidate; the displayed score is not selection evidence.",
+      "ref": "evgendvorkin/biohub-0-931-lb",
       "reviewed_sha256": "0515d95b68b1e17f369d5239c929518ce20e6ab2d4af3661ecad1e059bf756d1",
       "score_reproduced": false
     },
     {
-      "ref": "grafael/biohub-ct-0940-ema",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no known exploit. This is the pinned clean public control lineage used only for attributed baseline inference and frozen validator comparison; no leaderboard value authorizes promotion.",
+      "ref": "grafael/biohub-ct-0940-ema",
       "reviewed_sha256": "3c6e691f476712d8750466a3961e88289b88c5721c7714d84c6159407dac14ba",
       "score_reproduced": false
     },
     {
-      "ref": "shienzhang/biohub-c33-ema-velocity-094plus",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.935 with the pinned 0.940 EMA public lineage and 0.965-0.967 with the C34/C35 notebooks. Its EMA-velocity and public dual-seed configuration changes are public-lineage comparators, not an independent model candidate; the displayed result is not selection evidence.",
+      "ref": "shienzhang/biohub-c33-ema-velocity-094plus",
       "reviewed_sha256": "608017f9d7ebe847b927759ac3cb718f34cd36e6160f988443a58df87acb0154",
       "score_reproduced": false
     },
     {
-      "ref": "tangai1/biohub-c34-linking-cleanroom-20260831",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.928 with the pinned 0.940 EMA public lineage and 0.996 with C35. The differences are public-lineage configuration and guard changes, not a distinct learned architecture; the displayed result is not selection evidence.",
+      "ref": "tangai1/biohub-c34-linking-cleanroom-20260831",
       "reviewed_sha256": "84b152ae203bae01fc5a9f8ca28deccc20640554e3f50ff1514702a8bb67c5f8",
       "score_reproduced": false
     },
     {
-      "ref": "tangai1/biohub-c35-fallback-detection-cleanroom-20260831",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.927 with the pinned 0.940 EMA public lineage and 0.996 with C34. The source differs from C34 by only a small set of configuration, label, and guard lines and contains no new detector architecture; the displayed result is not selection evidence.",
+      "ref": "tangai1/biohub-c35-fallback-detection-cleanroom-20260831",
       "reviewed_sha256": "8a04b3c967ea68e91abb56b5718567d29621a8fc6b4412f673a9fe86dd62d86f",
       "score_reproduced": false
     },
     {
-      "ref": "sleepymegacat/the-metric-decides-your-architecture-8-measured",
       "classification": "reported_post_patch",
       "disposition": "analysis_only_not_candidate",
       "evidence": "Manual source audit found no enabled submission exploit. Only its measured geometry, sparsity, duplicate, and embryo-split observations are admissible research inputs; metric edge cases, count bonuses, and any leaderboard-oriented construction are explicitly excluded from candidate design and selection.",
+      "ref": "sleepymegacat/the-metric-decides-your-architecture-8-measured",
       "reviewed_sha256": "8b45385b5794e65fb478f20a7475c99077bdc039080881e411821541660857a8",
       "score_reproduced": false
     },
     {
-      "ref": "notoverkil/biohub-base0931-edgebar040",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found no known exploit, but normalized code-line overlap is 0.954 with the 0.931 public notebook and 0.924 with the pinned 0.940 EMA lineage. The edge-threshold change is a configuration comparator, not a new model family.",
+      "ref": "notoverkil/biohub-base0931-edgebar040",
       "reviewed_sha256": "b5c06aa91e0f24c86ab23498a5e8dccbcc3d4d317bfdedd48938f1277abb80dc",
       "score_reproduced": false
     },
     {
-      "ref": "aagneye/biohub-detector3d-submission-aug-30",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Manual notebook and embedded-source audit found no known exploit. It is an independent temporal 3D U-Net detector with four-view Y/X flip TTA, but its private fold-1 checkpoint and displayed result are unverified; detection replacement remains deprioritized because the frozen control audit found only three truly absent nearby predictions.",
+      "ref": "aagneye/biohub-detector3d-submission-aug-30",
       "reviewed_sha256": "7b592d66017f4831a6dc18cdc9b4630ac6a8c240a66ce47b0b1b7fd411f15c81",
       "score_reproduced": false
     },
     {
-      "ref": "indarkarhana/biohub-clean-0927-repro-v1",
       "classification": "reproduced_post_patch",
       "disposition": "research_candidate",
       "evidence": "Owned private version completed label-free inference and produced a byte-identical match to the audited public submission and held-out validator. All 240126 graph rows passed topology and coordinate integrity checks; Kaggle submission 55784044 is pending scoring.",
+      "ref": "indarkarhana/biohub-clean-0927-repro-v1",
       "reviewed_sha256": "6d1219c5bbaabff08272e17846f4fdcbb21bd69b60e9ce0acde58ad0a184d719",
       "score_reproduced": true
     },
     {
-      "ref": "yunusgmsoy/kimi-notebook-v17",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "No known exploit found in the current source; it has 0.944 normalized code-line Jaccard with the current 0.927 public lineage, so it is a comparator rather than an independent model candidate.",
+      "ref": "yunusgmsoy/kimi-notebook-v17",
       "reviewed_sha256": "4c5bfa1f9dd8ffc10bf05afb3f341caf0f8ce45726f69ed286e6ad3a571e2648",
       "score_reproduced": false
     },
     {
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "ref": "yunusgmsoy/lb-0-920-biohub-cell-tracking-2-seed-ensemble",
-      "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "score_reproduced": false
     },
     {
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "ref": "kunaldesale2408/biohub-cell-tracking",
-      "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "score_reproduced": false
     },
     {
-      "ref": "anhadmahajan06/biohub-track-your-cells-development",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "No known exploit found in the current source; it has 0.965 normalized code-line Jaccard with the current 0.927 public lineage, so it is not an independent heavy-model lead.",
+      "ref": "anhadmahajan06/biohub-track-your-cells-development",
       "reviewed_sha256": "650127deb79de7536bf99906dd6d176b47d0061379881e91c3799d4fe62a41f6",
       "score_reproduced": false
     },
     {
-      "ref": "flexonafft/biohub-harmonic-fusion",
       "classification": "reported_post_patch",
       "disposition": "comparator_not_independent_candidate",
-      "evidence": "2026-09-08 source review found the public 0.939 lineage plus edge-feature TTA and a holdout-selected post-processing sweep. No known metric-hack signature was present, but the notebook is a leaderboard-reported public-lineage comparator without reproduced clean independent evidence and cannot select project experiments.",
-      "reviewed_sha256": "3846edc001baf46a93d246e8546dec157bca2592ded858ff05fb4f2f96a9ba5b",
+      "evidence": "2026-09-16 source review of raw notebook e378e723...fb44a. Materialized the public predictor through the pinned patch chain and confirmed it is configuration-identical to the 2026-09-10 lf-dctta reference on all three constants. Confirmed the eight-pass D4 group builds its anti-diagonal view as rot90(x,1).transpose(), which equals the horizontal flip already in the list, so the group carries seven unique views. No known metric-hack signature. It remains a leaderboard-reported public-lineage comparator that declares leaderboard_feedback_used_for_configuration=True; its advertised score is not project validation or selection evidence, and its in-notebook proxy sweep is not our selection procedure.",
+      "ref": "flexonafft/biohub-harmonic-fusion",
+      "reviewed_sha256": "c0c6e449c4d13fa5d02326d630623eef7038cac8132e1eaad7f9105e17fe39d3",
       "score_reproduced": false
     },
     {
-      "ref": "rockerritesh/0-926-biohub-divsub",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Current source sets metric_hack_used false and retains the public dual-seed TemporalUNet, DeepCenter, and graph-repair pipeline; its score claim remains unverified.",
+      "ref": "rockerritesh/0-926-biohub-divsub",
       "reviewed_sha256": "a0c44e988ca4eadfddb6022f933c128042eaf51b9f74c12e5aa4e6c62f0c18cf",
       "score_reproduced": false
     },
     {
-      "ref": "salemali7/biohub-cell-tracking-92-6",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Current source sets metric_hack_used false and is 0.983 code-line-Jaccard similar to both harmonic-fusion and divsub; it is not a new model family.",
+      "ref": "salemali7/biohub-cell-tracking-92-6",
       "reviewed_sha256": "164d9c79cb95126bf24da62b7d95c83db9173d55266cdf7bff8581c831bbacd6",
       "score_reproduced": false
     },
     {
-      "ref": "yusuketogashi/no-hack-biohub-cell-tracking-submission",
       "classification": "reported_post_patch",
       "disposition": "research_candidate",
       "evidence": "Manual source audit found no known exploit; title alone is not evidence and score is unverified.",
+      "ref": "yusuketogashi/no-hack-biohub-cell-tracking-submission",
       "score_reproduced": false
     },
     {
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "ref": "pilkwang/biohub-cell-tracking-two-seeds-logit-blend",
-      "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "score_reproduced": false
     },
     {
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "ref": "xiaoleilian/biohub-m001-ens3-sm6-sim2",
-      "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "score_reproduced": false
     },
     {
+      "classification": "reported_post_patch",
+      "disposition": "research_candidate",
+      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "ref": "reyhanksatria/graph-patches-biohub-cell-tracking",
-      "classification": "reported_post_patch",
-      "disposition": "research_candidate",
-      "evidence": "No known exploit found in manual source audit; score claim remains unverified.",
       "score_reproduced": false
     },
     {
-      "ref": "reyhanksatria/biohub-cell-tracking-0-946-lb",
       "classification": "reported_post_patch",
       "disposition": "leaderboard_selected_comparator_only",
       "evidence": "2026-09-08 source review found no known metric exploit. The notebook explicitly records leaderboard feedback in its cumulative 0.934-to-0.946 configuration lineage; its edge-feature D4 TTA is therefore comparator context, not project selection evidence.",
+      "ref": "reyhanksatria/biohub-cell-tracking-0-946-lb",
       "reviewed_sha256": "210f2ed9c6906e492cae32acb83965abb4c265608e4e75f937a72aae91222ca5",
       "score_reproduced": false
     },
     {
-      "ref": "rockerritesh/0-926-biohub-cell-tracking",
       "classification": "stale_or_ghost_risk",
       "disposition": "needs_source_review",
       "evidence": "Notebook title/page score conflicts with source-reported clean score near 0.913.",
+      "ref": "rockerritesh/0-926-biohub-cell-tracking",
       "score_reproduced": false
     },
     {
-      "ref": "kaiwalyaatulraut/biohub-competition-solution",
       "classification": "public_temporalunet_50ep_lineage",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found the public 50-epoch TemporalUNet3D plus SimpleNodeTransformer checkpoint and standard ILP path; no distinct heavy model or clean independent evidence was present.",
+      "ref": "kaiwalyaatulraut/biohub-competition-solution",
       "reviewed_sha256": "85008780c00f57a9cd8e1a8d8e2bdc41c72eb5279b43130ffd2f37edc04cc43a",
       "score_reproduced": false
     },
     {
-      "ref": "muhammaddanyalmalik/cell-tracking",
       "classification": "public_temporalunet_50ep_lineage",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found the same public 50-epoch TemporalUNet3D, SimpleNodeTransformer, and ILP pipeline with configuration wrappers; it is not a new model family.",
+      "ref": "muhammaddanyalmalik/cell-tracking",
       "reviewed_sha256": "37571585795c96f3ba0f6bcf937a14b2d90cff2316e9811a0018859f0cf54790",
       "score_reproduced": false
     },
     {
-      "ref": "ravi123a321at/dark-agi-biohub-cell-tracking-solution",
       "classification": "public_temporalunet_50ep_lineage",
       "disposition": "comparator_not_independent_candidate",
       "evidence": "Manual source audit found the same public 50-epoch TemporalUNet3D, SimpleNodeTransformer, and ILP inference lineage; the branding does not correspond to an independent architecture.",
+      "ref": "ravi123a321at/dark-agi-biohub-cell-tracking-solution",
       "reviewed_sha256": "8c8baa3abb179d1dd1bb2830cd392f5b71ce43e8f2860198773abf5fd96624fe",
       "score_reproduced": false
+    },
+    {
+      "classification": "reported_post_patch",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "2026-09-16 source review of raw notebook 998b7bc9...9cdb. Same materialized predictor and same three attached CC0 model datasets as biohub-harmonic-fusion; differs only in SAFE_DIV_SISTER_MAX_UM 16.0, DEEPCENTER_SAFE_DIV_THRESHOLD 0.20 and SECONDARY_EDGE_FEATURE_TTA_WEIGHT 1.0. Carries the same seven-unique-view D4 defect. No known metric-hack signature. Public-lineage comparator that declares leaderboard_feedback_used_for_configuration=True; not an independent model family and not selection evidence.",
+      "ref": "sjlee101/biohub-lf-dctta020-sectta1-sister16",
+      "reviewed_sha256": "63317832392a6d618ad73e12e43cbfbe00aabfb65b838b4b6ace76a11df62bc6",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_method",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-19. Trains an MLP to separate true from false candidate edges using impostor hard negatives, and injects synthetic duplicate nodes (~3 um offset) to simulate detector duplicates that sit closer than the true successor. No negative-time nodes, no out-of-volume geometry, no lineage hub, no t_pred or estimated_number_of_nodes manipulation; writes no submission.csv. Independent corroboration of our own false-positive decomposition; used as a method reference only, no code, constants or predictions taken.",
+      "ref": "noisyislands/biohub-linker-association-mlp",
+      "reviewed_sha256": "d16ea53b850d4f276043e49c8a157760e545a17d13c0849e059b73a2fe98e9d8",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_training_code",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-19. Detector training code. Exploit screen clean. Reference only.",
+      "ref": "xiaoleilian/biohub-unet3d-v2models-training-code",
+      "reviewed_sha256": "cb4407f92eefb524c01a3cb6214079e30d35cad18bcf1e61fbe500ca81fe8af5",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_baseline_stack",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Source reviewed 2026-09-19. Host baseline stack (UNet + transformer + ILP) with gap recovery. Exploit screen clean. Advertised score is not validation evidence.",
+      "ref": "binasalama/biohub-learned-unet-transformer-ilp-gap-recovery",
+      "reviewed_sha256": "bcb1bd98df91a23bdf6afc749a160479a51e8e1bdaab681b4bea5c1e8447c89a",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "comparator_not_independent_candidate",
+      "evidence": "Source reviewed 2026-09-19 after a 0.95 claim. Exploit screen clean. Advertised score is not validation or selection evidence.",
+      "ref": "codezzzsleep/biohub-095-owned-validation",
+      "reviewed_sha256": "6a9c42fcdb3b1ab13f24698db2884d8a49330e6b8803a1d45cb91b233e7c4451",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_method",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-20, v2 of the association MLP. Zero exploit-pattern hits. Same approach: hard-negative training against detector duplicates. Method reference only.",
+      "ref": "noisyislands/biohub-linker-association-mlp-v2",
+      "reviewed_sha256": "2c1ef4345f794b8d5282786e8b29a4172282df1a5c3194d1e8ca5742b29576c2",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-20. Its estimated_number_of_nodes references are documentation of the official metric and of read_estimated_true_node_count, not manipulation. Notable for independently tracking proxy against LB: it records proxy 0.9511 with PPSWEEP tight55 against LB 0.942-0.947, consistent with our own finding that the proxy runs optimistic.",
+      "ref": "evgendvorkin/biohub-0-942-lb-proxy-score-0-9417",
+      "reviewed_sha256": "72ace1da5d9cecd906effb92c796643950194c1ab16eeb61900cf43a8842ad27",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-20. Division ablation on a 0.947 fork. Exploit screen clean. Advertised score is not validation or selection evidence.",
+      "ref": "pawanmali/biohub-zhincez947-nodiv-ablation-v1",
+      "reviewed_sha256": "cbba60482b07cd27f8c7b7d5bca246e0c07180a96b119dca8412738bd49c8538",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-21. Zero exploit-pattern hits. Ships constants IDENTICAL to our base (DET_THRESHOLD 0.965, ILP disappearance 2, appearance 0.0, edge 0.48, GAP_CLOSE 5.0, OUTPUT_MIN_TRACK_LEN 6) plus the density-adaptive mechanism, so its advertised 0.951 comes from a structural change (fast ILP) and not constant tuning. Two independent confirmations for us: the constants are not where gain lives, and a stronger competitor saw no reason to move the detector off 0.965, which weighs against our det93 0.950 being real signal. Method reference only; advertised score is not validation evidence.",
+      "ref": "haideptry/biohub-0-951-sota-deepcenter-fast-ilp-19m",
+      "reviewed_sha256": "fb2b1cd4d9612d333eb2e8ad6c0106646ac2429c05ccfce5997179135a228734",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_metric_analysis",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-21. Metric sensitivity analysis, zero exploit-pattern hits. Directly relevant to our own division-sampling noise estimate. Reference only.",
+      "ref": "busyaprime/biohub-what-one-link-node-and-division-are-worth",
+      "reviewed_sha256": "08aa00c58ed401263829f898c5d880cae326924de8e9e38babd19f863c3b5873",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-21. Mutual-rank association variant on a 0.947 fork. Screen clean.",
+      "ref": "andnyu/biohub-947-mutual-rank",
+      "reviewed_sha256": "18a0b52dbe95eeed65f1ac4d8b4308d227ca1933b56a14faf7388187222480d9",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-23. New notebook from the author of our pinned harmonic base. Exploit screen clean. Advertised score is not validation evidence.",
+      "ref": "flexonafft/biohub-lineage-forge-precision-tracking",
+      "reviewed_sha256": "b522e41e91e011b9f22d7648b7b288aed1eb4eb5e326c1fc34623d968f5d42aa",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-23. Density-adaptive author, mutual-best association variant. Exploit screen clean. Advertised score is not validation evidence.",
+      "ref": "haideptry/biohub-sota-0-948-mutual-best-density-2xt4",
+      "reviewed_sha256": "306d802d8fa5509c996bfa5564311c0fd685043e0f73a5455efab63605e2600c",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_no_exploit_found",
+      "disposition": "method_reference_not_candidate",
+      "evidence": "Source reviewed 2026-09-23. Records proxy 0.9490 against LB 0.947, another datapoint that this proxy runs optimistic. Advertised score is not validation evidence.",
+      "ref": "evgendvorkin/biohub-0-947-lb-proxy-score-0-9490",
+      "reviewed_sha256": "72ace1da5d9cecd906effb92c796643950194c1ab16eeb61900cf43a8842ad27",
+      "score_reproduced": false
+    },
+    {
+      "classification": "clean_superset_of_approved_base",
+      "disposition": "approved_base_candidate",
+      "evidence": "Source reviewed 2026-09-25. Self-describes as \"0.953 Record Edition\". Integrity screen clean: zero negative-time node assignments, zero hub/FORKS/MAX_COMPONENTS tokens, zero out-of-volume coordinates, and it never writes estimated_number_of_nodes. The single \"t\": -1 occurrence is the mandated edge-row placeholder (\"row_type\": \"edge\", node_id -1, t -1, z/y/x -1), identical to what our own pipeline emits; it also raises AssertionError on dangling edges, which is an integrity check rather than an exploit. NOTE: an earlier screen of this file reported a negative-time flag; that was a false positive caused by an unquoted shell heredoc eating the regex escapes, and was retracted after a clean re-run. Structurally it is a STRICT SUPERSET of our pinned harmonic base: of 54 BIOHUB_* constants our base sets, zero differ in value and zero are absent; v3 adds 31 more across 8 extra cells, on the same three pilkwang model datasets. New mechanisms are MOTION_RELINK_FLOW_* (12 constants, mode=seed K=12 radius=40um tight=7.0), GAPFILL_* (8, allow_synthetic=0, max_added_frac=0.03), READMIT_* (2) and LOWDET_THRESHOLD. Advertised score is not treated as validation evidence; it must be reproduced on the leaderboard before promotion.",
+      "ref": "raunakdey07/biohub-harmonic-fusion-v3",
+      "reviewed_sha256": "9ab32885574092ab46a8d90bfa96393332c6e5a6249d33c92a9051efbc9779ca",
+      "score_reproduced": false
+    },
+    {
+      "classification": "v3_family_division_tuned",
+      "disposition": "allowed",
+      "evidence": "Sorts above v3 on the public score listing. Source reviewed: a harmonic-fusion-v3 derivative that independently loosens exactly the safe-division gates our own 40-movie decomposition identified -- FRAME_FRAC_CAP 0.0076->0.012, GLOBAL_FRAC_CAP 0.00375->0.006, DIVERGE_UM 2.25->1.50, MAX_UM 9.0->10.5, SISTER_MAX_UM 14.0->15.0, plus DET_THRESHOLD 0.965->0.960. No out-of-volume or synthetic-hub construction. The estimated_number_of_nodes and t_pred occurrences are the validator computing the official metric, matching our own base. Corroborates our division hypothesis from an independent direction.",
+      "ref": "amanatar/optimized-biohub-max-score",
+      "score_reproduced": false
+    },
+    {
+      "classification": "v3_family_unmodified_divisions",
+      "disposition": "allowed",
+      "evidence": "Source reviewed. v3 derivative carrying v3's safe-division constants unchanged; differs from the tuned sibling above only in leaving the division gates at stock. No metric-hack construction found.",
+      "ref": "amanatar/biohub-geometric-fusion",
+      "score_reproduced": false
+    },
+    {
+      "classification": "v3_reproduction",
+      "disposition": "allowed_with_caution",
+      "evidence": "Source reviewed. Reproduces v3 at its published 0.953 with safe-division constants unchanged. Same author as anvithpothula/biohub-0-95, which is permanently excluded for out-of-volume synthetic hub and division nodes; that construction is NOT present here. Not adopted -- it is strictly dominated by our 0.960 stack -- so the caution is recorded rather than acted on.",
+      "ref": "anvithpothula/biohub-0-953-lb-original",
+      "score_reproduced": false
     }
-  ]
+  ],
+  "schema_version": 1
 }

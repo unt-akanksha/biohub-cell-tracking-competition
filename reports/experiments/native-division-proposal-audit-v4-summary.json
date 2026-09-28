@@ -1,0 +1,88 @@
+{
+  "status": "verified_source_proposal_audit",
+  "result_sha256": "0f12f8a011c0575f63f9160e97db2dcc2dc8ccab6cb8c898e3963cc18e6a2d4e",
+  "totals": {
+    "44b6-baseline": {
+      "missing_parent_only": 5,
+      "events": 19,
+      "parent_matched": 11,
+      "daughters_matched": 28,
+      "nearest_all_within_7um": 19,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 9919,
+      "child_proposals": 9942,
+      "eligible": 6,
+      "missing_parent_and_daughter": 3,
+      "missing_daughter_only": 5
+    },
+    "44b6-xy2": {
+      "eligible": 9,
+      "events": 19,
+      "parent_matched": 12,
+      "daughters_matched": 28,
+      "nearest_all_within_7um": 19,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 10076,
+      "child_proposals": 10164,
+      "missing_parent_and_daughter": 4,
+      "missing_parent_only": 3,
+      "missing_daughter_only": 3
+    },
+    "6bba-baseline": {
+      "missing_parent_only": 15,
+      "events": 93,
+      "parent_matched": 60,
+      "daughters_matched": 126,
+      "nearest_all_within_7um": 87,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 25146,
+      "child_proposals": 25342,
+      "eligible": 38,
+      "missing_daughter_only": 22,
+      "missing_parent_and_daughter": 18
+    },
+    "6bba-xy2": {
+      "eligible": 40,
+      "events": 93,
+      "parent_matched": 61,
+      "daughters_matched": 128,
+      "nearest_all_within_7um": 87,
+      "one_to_one_conflicts": 0,
+      "parent_proposals": 25842,
+      "child_proposals": 25908,
+      "missing_parent_only": 15,
+      "missing_daughter_only": 21,
+      "missing_parent_and_daughter": 17
+    }
+  },
+  "comparison": {
+    "44b6": {
+      "gained_xy2": 4,
+      "both_eligible": 5,
+      "neither_eligible": 9,
+      "lost_xy2": 1,
+      "prior_v3_positives": 6,
+      "prior_v3_preserved_xy2": 5
+    },
+    "6bba": {
+      "gained_xy2": 4,
+      "both_eligible": 36,
+      "lost_xy2": 2,
+      "neither_eligible": 51,
+      "prior_v3_positives": 38,
+      "prior_v3_preserved_xy2": 36
+    }
+  },
+  "frame_summary": {
+    "frames": 223,
+    "baseline_points": 70263,
+    "xy2_points": 71903,
+    "xy2_additional_seconds": 133.9240955670466,
+    "point_count_increase_fraction": 0.02334087642144511
+  },
+  "seconds": 181.12793503300054,
+  "prior_optimization_positives": 44,
+  "selection_opened": false,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false
+}

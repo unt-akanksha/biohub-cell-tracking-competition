@@ -1,0 +1,74 @@
+{
+  "status": "verified_cached_focus_owned_flow_probe_not_accuracy",
+  "result": {
+    "status": "passed_cached_centroid_flow_functionality",
+    "movie": "6bba_23af9eeb",
+    "frames": 3,
+    "processed_pairs": 2,
+    "checkpoint_sha256": "3006ee0f904640b16dd988d6404a1b3ac4f933ca68ca912d69fe4598f96d4788",
+    "frozen_flow_tensor_sha256": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "raw_terminal_sha256": "0609934b1e2a40473763acf521cfcf7120e418f5857c24d6f28c0e662638bd41",
+    "raw_checkpoint_sha256": "7d62559975797b50f9390ba68d2c76be358cd9c303b74459d1d871570111c7b2",
+    "coordinate_sha256": "014d4875f5be7b994c6f35ecda1fa5819a96171a923518ddd15585fb2b8feb15",
+    "sample_sha256": "8546bb5ee020a52e1074afe2e1a337997ec6323ffbdd286154159caf46755eba",
+    "sampler_receipts": [
+      {
+        "frame": 1,
+        "sampled_nodes": 93,
+        "trailing_border_extended_nodes": 7,
+        "policy": "constant flow extension through trailing unsampled voxel centers",
+        "coordinates_modified": false,
+        "nodes_deleted": false
+      },
+      {
+        "frame": 2,
+        "sampled_nodes": 92,
+        "trailing_border_extended_nodes": 9,
+        "policy": "constant flow extension through trailing unsampled voxel centers",
+        "coordinates_modified": false,
+        "nodes_deleted": false
+      }
+    ],
+    "maximum_interior_parity_error_um": 1.2516975402832031e-06,
+    "static_zero_flow_topology_identical": true,
+    "graphs": {
+      "control": {
+        "nodes": 285,
+        "edges": 174,
+        "exact_coordinate_round_trip": true
+      },
+      "candidate": {
+        "nodes": 285,
+        "edges": 174,
+        "exact_coordinate_round_trip": true
+      }
+    },
+    "elapsed_seconds": 3.3913437999999587,
+    "ground_truth_opened": false,
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false,
+    "scope": "Three recorded training frames; functionality, not accuracy"
+  },
+  "terminal": {
+    "status": "completed",
+    "run_id": "focus-owned-flow-probe-v1",
+    "elapsed_seconds": 57.022765848999995,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "cpu_replay": {
+    "raw_coordinates_exact": true,
+    "static_control_replayed": true,
+    "flow_links_replayed": true,
+    "complete_training_frames": 3,
+    "labels_opened": false
+  },
+  "source_sha256": {
+    "notebook": "36c761d95cb598f743d6ff6cd9172b228b2c37404ac3d5621329314bb2722abb",
+    "result": "68a8d0c0029df2e842b458ee3f9592651ab436b73da3848845ad81fb5915f2e9"
+  },
+  "authorized_for_submission": false,
+  "caveat": "Three training frames verify functionality only; no detector or tracking accuracy gain established."
+}

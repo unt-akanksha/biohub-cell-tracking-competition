@@ -1,0 +1,9 @@
+{
+  "status": "conditional_cross_embryo_diagnostic_queued",
+  "pid": 32305,
+  "epoch": 1789361940.5488732,
+  "training_pid": 31430,
+  "successor_manifest_sha256": "1a4d5663cc15e4ccaad1cc402afbcc024c71fb3f829b859e800739f56f005065",
+  "foreign_gpu_protected": true,
+  "submissions_authorized_by_queue": false
+}

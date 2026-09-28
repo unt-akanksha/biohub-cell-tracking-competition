@@ -1,0 +1,16 @@
+{
+  "status": "head_smoke_passed",
+  "contract_sha256": "15ee3493c0f5acb5ac2fd1e94007297dd59966435d077538f31b170272da5b78",
+  "seconds": 2.750004057001206,
+  "metrics": {
+    "positive": 2,
+    "negative": 2,
+    "tp": 2,
+    "fp": 0,
+    "fn": 0,
+    "recall": 1.0,
+    "balanced_nll": 0.23061307959449945,
+    "threshold": 0.2769688665866852
+  },
+  "exact_reload": true
+}

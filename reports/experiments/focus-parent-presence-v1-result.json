@@ -1,0 +1,232 @@
+{
+  "status": "completed_training_only_parent_presence_fit",
+  "run_id": "focus-parent-presence-v1",
+  "evidence": {
+    "notebook_sha256": "d298b10947a73d96a693175dcca49937ba52567fe85678d66e4fc1e1fec6a8e1",
+    "worker_result_sha256": "4993810152196f08268f15e4a8c5a22f449c5ce3f3e1d042738745f479f06d55",
+    "launcher": {
+      "status": "completed",
+      "run_id": "focus-presence-summary-v1",
+      "elapsed_seconds": 112.93310171400003,
+      "declared_budget_seconds": 3600,
+      "submission_performed": false
+    },
+    "worker": {
+      "status": "completed_focus_presence_summaries",
+      "records": [
+        {
+          "stem": "6bba_6479435d",
+          "role": "fitting",
+          "sha256": "1f2e2bb127f7af6ac9c20064b0a60b048c565b1362a74410f9659f9b4dfe75f0",
+          "rows": 512,
+          "baseline": {
+            "loss_sum": 581.1471284215985,
+            "known_parent": 492,
+            "known_absent": 20,
+            "correct_parent": 421,
+            "correct_absent": 14,
+            "nll": 1.1350529851984346
+          }
+        },
+        {
+          "stem": "6bba_df673a83",
+          "role": "fitting",
+          "sha256": "f974831fa3c4b4d2ae7eb88a69568200664e01f59ba366c8abd12bcb145af7ee",
+          "rows": 639,
+          "baseline": {
+            "loss_sum": 128.31565505545697,
+            "known_parent": 631,
+            "known_absent": 8,
+            "correct_parent": 609,
+            "correct_absent": 2,
+            "nll": 0.20080697191777305
+          }
+        },
+        {
+          "stem": "6bba_767a1e17",
+          "role": "fitting",
+          "sha256": "c4adff5648ea5a554c16246d038003f53da34770c1768f4f6a8654eaf8794951",
+          "rows": 602,
+          "baseline": {
+            "loss_sum": 1114.4279897032775,
+            "known_parent": 587,
+            "known_absent": 15,
+            "correct_parent": 453,
+            "correct_absent": 2,
+            "nll": 1.8512092852213913
+          }
+        },
+        {
+          "stem": "6bba_2312ac41",
+          "role": "fitting",
+          "sha256": "2aaeb2dd68c2c0229ee0fb27f816927295a42e13a4a8be9876e4c56bce911eae",
+          "rows": 1117,
+          "baseline": {
+            "loss_sum": 202.1939597678404,
+            "known_parent": 1108,
+            "known_absent": 9,
+            "correct_parent": 1083,
+            "correct_absent": 5,
+            "nll": 0.1810151833194632
+          }
+        },
+        {
+          "stem": "6bba_b204cac7",
+          "role": "diagnostic",
+          "sha256": "a119e177d8273f9d6784a8b605c5116b9e19f071890f9583ced38c4ce465a53d",
+          "rows": 757,
+          "baseline": {
+            "loss_sum": 183.77002080529252,
+            "known_parent": 742,
+            "known_absent": 15,
+            "correct_parent": 719,
+            "correct_absent": 10,
+            "nll": 0.2427609257665687
+          }
+        },
+        {
+          "stem": "6bba_2646afc7",
+          "role": "diagnostic",
+          "sha256": "8f0d62c553901cbae35fa29a3a23c35b7855a04d452b4a6b016f72bce67040bc",
+          "rows": 706,
+          "baseline": {
+            "loss_sum": 205.17530231077828,
+            "known_parent": 700,
+            "known_absent": 6,
+            "correct_parent": 686,
+            "correct_absent": 0,
+            "nll": 0.2906165755110174
+          }
+        },
+        {
+          "stem": "6bba_8b7818bf",
+          "role": "diagnostic",
+          "sha256": "81dece376a38eb9236c943b614a2c7d22a2013edfa0d721c55f5d044fee3f39f",
+          "rows": 723,
+          "baseline": {
+            "loss_sum": 35.59628435143382,
+            "known_parent": 721,
+            "known_absent": 2,
+            "correct_parent": 713,
+            "correct_absent": 2,
+            "nll": 0.04923414156491539
+          }
+        },
+        {
+          "stem": "6bba_312f0dc3",
+          "role": "diagnostic",
+          "sha256": "71798812d0f7da6ea535e206cf069e824a8a8a8cadbf1ab27dfa2359acf0abc2",
+          "rows": 486,
+          "baseline": {
+            "loss_sum": 160.65017746219354,
+            "known_parent": 482,
+            "known_absent": 4,
+            "correct_parent": 467,
+            "correct_absent": 0,
+            "nll": 0.33055592070410195
+          }
+        }
+      ],
+      "physical_diagnostic": {
+        "loss_sum": 892.2207538979128,
+        "known_parent": 2645,
+        "known_absent": 27,
+        "correct_parent": 2500,
+        "correct_absent": 18,
+        "nll": 0.3339149528061051
+      },
+      "initial_diagnostic": {
+        "loss_sum": 585.1917770872515,
+        "known_parent": 2645,
+        "known_absent": 27,
+        "correct_parent": 2585,
+        "correct_absent": 12,
+        "nll": 0.2190088986104983
+      },
+      "summary_replay": {
+        "loss_sum": 585.1917849296981,
+        "known_parent": 2645,
+        "known_absent": 27,
+        "correct_parent": 2585,
+        "correct_absent": 12,
+        "nll": 0.2190089015455457
+      },
+      "model_before": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+      "model_after": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+      "source_hashes": {
+        "run_pilot.py": "eb5a874db78c870053b84d681e8e18762c215749703be9823331501d3a7ce0d5",
+        "split.json": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+        "focus_cached_pair.py": "05c62d9ebd9ff9bfc7a402685e93b47672edb91528a241e3e149f8245acb5172",
+        "focus_adaptation_training.py": "4ff7b3be234e753839928889bda580d1fd239196515e7d523376fd0c4a564507",
+        "focus_indexed_parent_loss.py": "804d096dd49224cb2360676e45c4818184cab0e53293428134c04d4d1066f48d",
+        "sparse_parent_loss.py": "e3cb38e4abf0650e8f9dbd64e3c006715ed5288cb4f41e36ff2c13d16c02df53",
+        "sparse_parent_missing_null.py": "1cc65c652f4b7c9e669c5ff75299e30515cac680af48f952dddc6fe643db834a",
+        "independent_real_baseline.py": "fc823784fb2dcb6caf2097446859bfac027048b7b635c4de292725377140876c",
+        "training_spec.json": "0d373546cd087201471de8a39e38aad4d795590d62f62d93c1f35cc9d2677ac9",
+        "focus_parent_presence.py": "9c6c473adf8f2f4b595a71e94ea6009cf0a006bd0573021fcecefa6b71151539",
+        "presence_reference.json": "f09308cbbba5b357efd2612610f927fd0fd056d460a74a5213f4d0179984a932"
+      },
+      "training_spec_sha256": "0d373546cd087201471de8a39e38aad4d795590d62f62d93c1f35cc9d2677ac9",
+      "optimizer_run": false,
+      "source_selection_opened": false,
+      "new_target_movies_opened": 0,
+      "authorized_for_submission": false,
+      "elapsed_seconds": 32.442271902000016
+    },
+    "baseline": {
+      "loss_sum": 585.1917849296981,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2585,
+      "correct_absent": 12,
+      "nll": 0.2190089015455457
+    },
+    "physical": {
+      "loss_sum": 892.2207538979128,
+      "known_parent": 2645,
+      "known_absent": 27,
+      "correct_parent": 2500,
+      "correct_absent": 18,
+      "nll": 0.3339149528061051
+    }
+  },
+  "fitting_metrics": {
+    "loss_sum": 1934.4837433382938,
+    "known_parent": 2818,
+    "known_absent": 52,
+    "correct_parent": 2577,
+    "correct_absent": 17,
+    "nll": 0.674036147504632
+  },
+  "diagnostic_metrics": {
+    "loss_sum": 516.8791274435196,
+    "known_parent": 2645,
+    "known_absent": 27,
+    "correct_parent": 2589,
+    "correct_absent": 12,
+    "nll": 0.19344278721688607
+  },
+  "diagnostic_gate": {
+    "passed": false,
+    "gates": {
+      "nll_below_both": true,
+      "parent_correct_not_lower": true,
+      "null_correct_not_lower": false
+    },
+    "scope": "Training-domain feasibility only; no tracking-score promotion"
+  },
+  "fit_sha256": "f0752ddf15f3de54ea8cc8234cf3f7919e25b14571ee3892573058ea5cac973a",
+  "source_hashes": {
+    "research/focus_parent_presence.py": "9c6c473adf8f2f4b595a71e94ea6009cf0a006bd0573021fcecefa6b71151539",
+    "scripts/fit-focus-parent-presence.py": "7b079588d9b8aaf01c50d14dce5ada1b8c6e2d5866b3dc892a180141ce8a16f9",
+    "reports/experiments/focus-parent-presence-v1-design.md": "e3bc1c3e2b613bae3d21fb692e168638e10edd56e6d1da314ef2c554cbea46a3"
+  },
+  "coefficients_persisted_before_diagnostic": true,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "eligible_for_source_tracking_evaluation": false,
+  "authorized_for_submission": false,
+  "gpu_fit_seconds": 0,
+  "elapsed_seconds": 5.077999999994063,
+  "caveat": "Training-domain diagnostic only; no independent or leaderboard score"
+}

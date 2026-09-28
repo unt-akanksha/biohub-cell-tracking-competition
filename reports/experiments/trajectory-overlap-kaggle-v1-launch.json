@@ -1,0 +1,30 @@
+{
+  "status": "push_returned",
+  "utc": "2026-09-14T01:23:21.065013+00:00",
+  "kernel": "indarkarhana/biohub-trajectory-overlap-acceptance",
+  "notebook_sha256": "d09ed351a1250bbedb6afd5084022e9a3cd9f7101f79ebe3bd1f1181de8acae9",
+  "contract_sha256": "851908fa5aa8ba628aad456afa94badc6ae9e10c6f9f3e36cf43147386ef8d55",
+  "quota": [
+    {
+      "resource": "GPU",
+      "used": "0.46h",
+      "remaining": "29.54h",
+      "total": "30.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    },
+    {
+      "resource": "TPU",
+      "used": "0.00h",
+      "remaining": "20.00h",
+      "total": "20.00h",
+      "refreshAt": "2026-09-19T00:00:00"
+    }
+  ],
+  "worst_case_reserved_gpu_hours": 2,
+  "notebook_wall_cap_seconds": 3600,
+  "reserve_hours": 8,
+  "submission_performed": false,
+  "exit_code": 0,
+  "stdout": "Kernel version 1 successfully pushed.  Please check progress at https://www.kaggle.com/code/indarkarhana/biohub-trajectory-overlap-acceptance\n",
+  "stderr": ""
+}

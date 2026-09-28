@@ -1,0 +1,114 @@
+{
+  "run_id": "native-division-v3-extra",
+  "status": "enrichment_smoke_passed",
+  "smoke": true,
+  "contract_sha256": "060582eeca701afbbf560c0a7c49e7c4889669e2602d8c4ba7b9136742b092a4",
+  "records": [
+    {
+      "path": "data/6bba_09961292-024.npz",
+      "sha256": "8361ff9a453574bfd2f3361dcab9d3d2766d4edec3e6f1c85bb2e072f63350b9",
+      "bytes": 249694,
+      "stem": "6bba_09961292",
+      "embryo": "6bba",
+      "role": "optimization",
+      "transition": 24,
+      "patches": 21,
+      "triples": 24,
+      "positive": 1,
+      "negative": 23,
+      "ambiguous_pairs_omitted": 0
+    }
+  ],
+  "processed": [
+    {
+      "stem": "44b6_587a1e22",
+      "transition": 19,
+      "counts": {
+        "input_known_edges": 4,
+        "bound_edges": 2,
+        "identity_omitted": 2,
+        "triples": 0,
+        "positive": 0,
+        "negative": 0,
+        "ambiguous_pairs_omitted": 0,
+        "available_divisions": 1,
+        "transitions": 1
+      }
+    },
+    {
+      "stem": "44b6_5f15d135",
+      "transition": 36,
+      "counts": {
+        "input_known_edges": 3,
+        "bound_edges": 1,
+        "identity_omitted": 2,
+        "triples": 0,
+        "positive": 0,
+        "negative": 0,
+        "ambiguous_pairs_omitted": 0,
+        "available_divisions": 1,
+        "transitions": 1
+      }
+    },
+    {
+      "stem": "6bba_085bf656",
+      "transition": 18,
+      "counts": {
+        "input_known_edges": 14,
+        "bound_edges": 3,
+        "identity_omitted": 11,
+        "triples": 0,
+        "positive": 0,
+        "negative": 0,
+        "ambiguous_pairs_omitted": 0,
+        "available_divisions": 1,
+        "transitions": 1
+      }
+    },
+    {
+      "stem": "6bba_09961292",
+      "transition": 24,
+      "counts": {
+        "input_known_edges": 25,
+        "bound_edges": 18,
+        "identity_omitted": 7,
+        "triples": 24,
+        "positive": 1,
+        "negative": 23,
+        "ambiguous_pairs_omitted": 0,
+        "available_divisions": 1,
+        "transitions": 1
+      }
+    }
+  ],
+  "totals": {
+    "44b6-optimization": {
+      "input_known_edges": 7,
+      "bound_edges": 3,
+      "identity_omitted": 4,
+      "triples": 0,
+      "positive": 0,
+      "negative": 0,
+      "ambiguous_pairs_omitted": 0,
+      "available_divisions": 2,
+      "transitions": 2
+    },
+    "6bba-optimization": {
+      "input_known_edges": 39,
+      "bound_edges": 21,
+      "identity_omitted": 18,
+      "triples": 24,
+      "positive": 1,
+      "negative": 23,
+      "ambiguous_pairs_omitted": 0,
+      "available_divisions": 2,
+      "transitions": 2
+    }
+  },
+  "sealed_audit_opened": false,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false,
+  "geometry_max_error": 0.0004799365997314453,
+  "elapsed_seconds": 2.408840349999082,
+  "bytes": 249694
+}

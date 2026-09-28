@@ -1,0 +1,44 @@
+{
+  "run_id": "image-division-context-v2",
+  "mode": "smoke",
+  "status": "functionality_passed",
+  "bundle_sha256": "467076cacc2587444267f6e14f4edb93dd578c27fb1eff76ffbc06cbb290bdb6",
+  "authorized_for_submission": false,
+  "kaggle_gpu_hours": 0,
+  "competition_test_data_read": false,
+  "public_predictions_used": false,
+  "held_out_embryo_scores_opened": false,
+  "checkpoint_roundtrip_sha256": "548b12c28259f23f5f91739cd5bbf343db3ef6ab5e0f90dd1b5383c5a8778c0e",
+  "checkpoint_logits_exact": true,
+  "optimizer_steps": 20,
+  "parameter_count": 74732308,
+  "steady_step_p90_seconds": 0.1076383083998735,
+  "estimated_pilot_seconds_with_margin": 797.4877335832425,
+  "pilot_runtime_gate_passed": true,
+  "source_models": {
+    "44b6": {
+      "source_embryo": "44b6",
+      "held_out_embryo": "6bba",
+      "steps": 20,
+      "best": {
+        "step": 20,
+        "metrics": {
+          "rows": 4,
+          "positives": 2,
+          "average_precision": 0.5833333333333333,
+          "zero_fp_tp": 0,
+          "source_threshold": null,
+          "binary_cross_entropy": 0.6942514788064705,
+          "source_gate_passed": false
+        }
+      },
+      "checkpoint_sha256": "b67ac284196a6d249ccddedb460baaabefa8096216a3c84a7c8fb397b694d540",
+      "warm_start_sha256": "9e8af9aeb247297d3ed09bda3bcc2b5af413d78c6bf2546eff5f4898667e074d",
+      "elapsed_seconds": 8.178230053000334,
+      "source_gate_passed": false
+    }
+  },
+  "verified_temporary_checkpoint_files_removed": true,
+  "peak_cuda_bytes": 2188046336,
+  "elapsed_seconds": 16.569073477999154
+}

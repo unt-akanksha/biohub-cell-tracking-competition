@@ -1,0 +1,680 @@
+{
+  "status": "source_counterfactual_labels_audited",
+  "source_only": true,
+  "selection_or_validation_opened": false,
+  "model_fitted": false,
+  "authorized_for_submission": false,
+  "candidate_changed": false,
+  "oracle_graphs_exported": false,
+  "source_sha256": "a275d4c8e1f0eebd447dd9aa3990c6ad03a252957f8230ec12de71d91d753f2e",
+  "dataset_sha256": "e279e24348d17e60e07b8e6bb964ffab95490e502a3f70ac67ecd35928dfa1db",
+  "plan": [
+    {
+      "stem": "44b6_74d0c52e",
+      "indices": [
+        27,
+        0,
+        1
+      ]
+    },
+    {
+      "stem": "44b6_587a1e22",
+      "indices": [
+        162,
+        3,
+        5
+      ]
+    },
+    {
+      "stem": "6bba_2819ca14",
+      "indices": [
+        6,
+        4,
+        5
+      ]
+    },
+    {
+      "stem": "6bba_b204cac7",
+      "indices": [
+        16,
+        2,
+        3
+      ]
+    }
+  ],
+  "records": {
+    "44b6_74d0c52e": {
+      "baseline": {
+        "counts": {
+          "edge_tp": 132,
+          "edge_fp": 8,
+          "edge_fn": 7,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "num_pred_nodes": 8695
+        },
+        "summary": {
+          "n": 1,
+          "edge_jaccard": 0.8979591836734694,
+          "division_jaccard": 0.0,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "node_recall": 1.0,
+          "adj_edge_jaccard": 0.936013848879512,
+          "n_adj": 1,
+          "score": 0.936013848879512
+        }
+      },
+      "baseline_exact_replay": true,
+      "components": [
+        {
+          "index": 27,
+          "old_label": {
+            "known_children": 1,
+            "delta_correct_links": 0,
+            "improved_children": 0,
+            "worsened_children": 0,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 132,
+              "edge_fp": 7,
+              "edge_fn": 7,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 8695
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9041095890410958,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 1.0,
+              "adj_edge_jaccard": 0.9424249026389607,
+              "n_adj": 1,
+              "score": 0.9424249026389607
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": -1,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.006411053759448726
+        },
+        {
+          "index": 0,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 132,
+              "edge_fp": 8,
+              "edge_fn": 7,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 8695
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8979591836734694,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 1.0,
+              "adj_edge_jaccard": 0.936013848879512,
+              "n_adj": 1,
+              "score": 0.936013848879512
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        },
+        {
+          "index": 1,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 132,
+              "edge_fp": 8,
+              "edge_fn": 7,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 8695
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8979591836734694,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 1.0,
+              "adj_edge_jaccard": 0.936013848879512,
+              "n_adj": 1,
+              "score": 0.936013848879512
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        }
+      ]
+    },
+    "44b6_587a1e22": {
+      "baseline": {
+        "counts": {
+          "edge_tp": 354,
+          "edge_fp": 24,
+          "edge_fn": 17,
+          "division_tp": 1,
+          "division_fp": 2,
+          "division_fn": 0,
+          "num_pred_nodes": 18831
+        },
+        "summary": {
+          "n": 1,
+          "edge_jaccard": 0.8962025316455696,
+          "division_jaccard": 0.3333333333333333,
+          "division_tp": 1,
+          "division_fp": 2,
+          "division_fn": 0,
+          "node_recall": 0.9921259842519685,
+          "adj_edge_jaccard": 0.8927732734608531,
+          "n_adj": 1,
+          "score": 0.9261066067941864
+        }
+      },
+      "baseline_exact_replay": true,
+      "components": [
+        {
+          "index": 162,
+          "old_label": {
+            "known_children": 1,
+            "delta_correct_links": 0,
+            "improved_children": 0,
+            "worsened_children": 0,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 354,
+              "edge_fp": 23,
+              "edge_fn": 17,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "num_pred_nodes": 18831
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8984771573604061,
+              "division_jaccard": 0.3333333333333333,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "node_recall": 0.9921259842519685,
+              "adj_edge_jaccard": 0.8950391954747132,
+              "n_adj": 1,
+              "score": 0.9283725288080465
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": -1,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.002265922013860111
+        },
+        {
+          "index": 3,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 354,
+              "edge_fp": 24,
+              "edge_fn": 17,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "num_pred_nodes": 18831
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8962025316455696,
+              "division_jaccard": 0.3333333333333333,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "node_recall": 0.9921259842519685,
+              "adj_edge_jaccard": 0.8927732734608531,
+              "n_adj": 1,
+              "score": 0.9261066067941864
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        },
+        {
+          "index": 5,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 354,
+              "edge_fp": 24,
+              "edge_fn": 17,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "num_pred_nodes": 18831
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.8962025316455696,
+              "division_jaccard": 0.3333333333333333,
+              "division_tp": 1,
+              "division_fp": 2,
+              "division_fn": 0,
+              "node_recall": 0.9921259842519685,
+              "adj_edge_jaccard": 0.8927732734608531,
+              "n_adj": 1,
+              "score": 0.9261066067941864
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        }
+      ]
+    },
+    "6bba_2819ca14": {
+      "baseline": {
+        "counts": {
+          "edge_tp": 925,
+          "edge_fp": 16,
+          "edge_fn": 24,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "num_pred_nodes": 4968
+        },
+        "summary": {
+          "n": 1,
+          "edge_jaccard": 0.9585492227979274,
+          "division_jaccard": 0.0,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 1,
+          "node_recall": 0.9959432048681541,
+          "adj_edge_jaccard": 0.9683529607831753,
+          "n_adj": 1,
+          "score": 0.9683529607831753
+        }
+      },
+      "baseline_exact_replay": true,
+      "components": [
+        {
+          "index": 6,
+          "old_label": {
+            "known_children": 1,
+            "delta_correct_links": 0,
+            "improved_children": 0,
+            "worsened_children": 0,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 925,
+              "edge_fp": 15,
+              "edge_fn": 24,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 4968
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9595435684647303,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 0.9959432048681541,
+              "adj_edge_jaccard": 0.9693574763026601,
+              "n_adj": 1,
+              "score": 0.9693574763026601
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": -1,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0010045155194847721
+        },
+        {
+          "index": 4,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 0,
+          "added": 1,
+          "result": {
+            "counts": {
+              "edge_tp": 925,
+              "edge_fp": 16,
+              "edge_fn": 24,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 4968
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9585492227979274,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 0.9959432048681541,
+              "adj_edge_jaccard": 0.9683529607831753,
+              "n_adj": 1,
+              "score": 0.9683529607831753
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        },
+        {
+          "index": 5,
+          "old_label": {
+            "unknown_children": 2,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 2,
+          "result": {
+            "counts": {
+              "edge_tp": 925,
+              "edge_fp": 16,
+              "edge_fn": 24,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "num_pred_nodes": 4968
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9585492227979274,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 1,
+              "node_recall": 0.9959432048681541,
+              "adj_edge_jaccard": 0.9683529607831753,
+              "n_adj": 1,
+              "score": 0.9683529607831753
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        }
+      ]
+    },
+    "6bba_b204cac7": {
+      "baseline": {
+        "counts": {
+          "edge_tp": 799,
+          "edge_fp": 7,
+          "edge_fn": 12,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 2,
+          "num_pred_nodes": 5411
+        },
+        "summary": {
+          "n": 1,
+          "edge_jaccard": 0.9767726161369193,
+          "division_jaccard": 0.0,
+          "division_tp": 0,
+          "division_fp": 0,
+          "division_fn": 2,
+          "node_recall": 0.9915254237288136,
+          "adj_edge_jaccard": 0.9706534004152446,
+          "n_adj": 1,
+          "score": 0.9706534004152446
+        }
+      },
+      "baseline_exact_replay": true,
+      "components": [
+        {
+          "index": 16,
+          "old_label": {
+            "known_children": 1,
+            "delta_correct_links": 0,
+            "improved_children": 0,
+            "worsened_children": 0,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 799,
+              "edge_fp": 6,
+              "edge_fn": 12,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "num_pred_nodes": 5411
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.97796817625459,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "node_recall": 0.9915254237288136,
+              "adj_edge_jaccard": 0.9718414706727908,
+              "n_adj": 1,
+              "score": 0.9718414706727908
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": -1,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0011880702575461921
+        },
+        {
+          "index": 2,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 799,
+              "edge_fp": 7,
+              "edge_fn": 12,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "num_pred_nodes": 5411
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9767726161369193,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "node_recall": 0.9915254237288136,
+              "adj_edge_jaccard": 0.9706534004152446,
+              "n_adj": 1,
+              "score": 0.9706534004152446
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        },
+        {
+          "index": 3,
+          "old_label": {
+            "unknown_children": 1,
+            "label": -1
+          },
+          "removed": 1,
+          "added": 0,
+          "result": {
+            "counts": {
+              "edge_tp": 799,
+              "edge_fp": 7,
+              "edge_fn": 12,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "num_pred_nodes": 5411
+            },
+            "summary": {
+              "n": 1,
+              "edge_jaccard": 0.9767726161369193,
+              "division_jaccard": 0.0,
+              "division_tp": 0,
+              "division_fp": 0,
+              "division_fn": 2,
+              "node_recall": 0.9915254237288136,
+              "adj_edge_jaccard": 0.9706534004152446,
+              "n_adj": 1,
+              "score": 0.9706534004152446
+            }
+          },
+          "delta_counts": {
+            "edge_tp": 0,
+            "edge_fp": 0,
+            "edge_fn": 0,
+            "division_tp": 0,
+            "division_fp": 0,
+            "division_fn": 0,
+            "num_pred_nodes": 0
+          },
+          "delta_score": 0.0
+        }
+      ]
+    }
+  },
+  "seconds": 47.68699999997625,
+  "audited_components": 12,
+  "partial_neutral_but_official_score_nonzero": 4,
+  "tp_unchanged_fp_changed": 4,
+  "no_gate_failure_causality_claim": true
+}

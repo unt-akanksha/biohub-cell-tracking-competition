@@ -1,0 +1,26 @@
+{
+  "status": "completed_first_fold_native_verifier_smoke",
+  "held_out": "6bba_6479435d",
+  "model_sha256": "a8bc79d23e2c3f9546351ac1bbd05d111e836ab66969bbd5180e9ddd4ba596b0",
+  "result_sha256": "a211c4c7775284d976cd425703c28eb1d4fa6f77b584dd54538088e0a90b24a4",
+  "source_sha256": "cf2f8058406b251617aea3c28f43196e3e81ffcecc41d8ed9ebc1798f805a2ed",
+  "complete_choices": 231230,
+  "independent_metrics": {
+    "loss_sum": 281.0841852673583,
+    "known_parent": 492,
+    "known_absent": 20,
+    "correct_parent": 417,
+    "correct_absent": 11,
+    "nll": 0.5489925493503092
+  },
+  "native_portable_max_error": 0.0,
+  "full_twelve_fold_verification_completed": false,
+  "training_objective_replayed": false,
+  "optimizer_run": false,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "gpu_seconds": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 3.0309999999881256
+}

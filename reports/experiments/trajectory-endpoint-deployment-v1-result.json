@@ -1,0 +1,64 @@
+{
+  "run_id": "trajectory-endpoint-deployment-v1",
+  "receipt": {
+    "pins": {
+      "research/learned_trajectory_endpoint_v1.py": "2373629f8adc2720551cba3c7995c934e59a4efd4cc7678186e85942b6a52715",
+      "research/public_d4_quality.py": "59b0090f8f68632faccdb7101c07ecbfc3f3a9077f96bf181bc80e595456bd36",
+      "scripts/run-trajectory-endpoint-deployment-v1.py": "1b87a93704bf1747993cd326ab658e8cb47461a0071435f7531404a1668236a9",
+      "reports/experiments/trajectory-endpoint-deployment-v1-design.md": "9de9fe39311f472161786b0079f9b421b4805fb1eae51893ab61b885b45574ee"
+    },
+    "model_manifest_sha256": "92da6d7204e3a6ebe754922689710a3f147871257cd220b65259ab6a2d186441",
+    "records": {
+      "44b6_24264f12": {
+        "path": "44b6_24264f12.json",
+        "sha256": "cd135abd68e73243de025458c9062fbd941f2542aef21f0c25adf418755b7c63",
+        "eligible_endpoint_pairs": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "links": [],
+        "existing_output_unchanged": true,
+        "ground_truth_used": false
+      },
+      "44b6_81c256f0": {
+        "path": "44b6_81c256f0.json",
+        "sha256": "94a8621b863de62929a0ec4224bcaeeddf18f2246597608cead78be205b235ae",
+        "eligible_endpoint_pairs": 0,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "links": [],
+        "existing_output_unchanged": true,
+        "ground_truth_used": false
+      },
+      "6bba_23af9eeb": {
+        "path": "6bba_23af9eeb.json",
+        "sha256": "8c75c80ec83255a1bdedbf44493de1fe47cb9db427d3cebf1f023b4d1b0504f6",
+        "eligible_endpoint_pairs": 1,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "links": [],
+        "existing_output_unchanged": true,
+        "ground_truth_used": false
+      },
+      "6bba_f1fde7e0": {
+        "path": "6bba_f1fde7e0.json",
+        "sha256": "0583d3af02cf4274abe3040553e92ab54f5231b1aaeff8fc902cb6819f7dc3d0",
+        "eligible_endpoint_pairs": 15,
+        "added_edges": 0,
+        "added_nodes": 0,
+        "links": [],
+        "existing_output_unchanged": true,
+        "ground_truth_used": false
+      }
+    },
+    "ground_truth_used": false
+  },
+  "manifest_sha256": "7e6d2012623de125f1d953e62d1ceb7b333171e028b7f3e169926c84810d2e95",
+  "gpu_hours": 0,
+  "independently_held_out": false,
+  "authorized_for_submission": false,
+  "authoritative_scorer_commit": "075fc5f5a52d11077f9dc2b074644618f26939e2",
+  "status": "rejected_no_links",
+  "ground_truth_opened": false,
+  "diagnostic_gate_passed": false,
+  "elapsed_seconds": 139.09399999998277
+}

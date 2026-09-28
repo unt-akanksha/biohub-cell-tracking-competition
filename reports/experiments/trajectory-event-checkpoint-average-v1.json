@@ -1,0 +1,1163 @@
+{
+  "status": "fixed_checkpoint_averages_constructed_not_validated",
+  "source_sha256": "4353642096fabde9103f0f6aca96cd3babf90c8d424bfb9056ef95ee73c591a4",
+  "design_sha256": "46b6bdc1afa6361527dcde3d33eccf18877bc15e47c1e6d843336c085167f2d2",
+  "helper_sha256": "2b914dcb054048632eede7f0b08dc7848054fc9bb7d82ed9968a69eb68898afb",
+  "source_only": true,
+  "new_ground_truth_opened": false,
+  "metric_based_snapshot_selection": false,
+  "previous_failures_preserved": true,
+  "prior_source_and_selection_exposure_disclosed": true,
+  "training_restarted": false,
+  "gpu_used": false,
+  "authorized_for_submission": false,
+  "models": {
+    "44b6": {
+      "snapshots": [
+        {
+          "step": 2450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002450-e2-p4.json",
+          "sha256": "5d83df2fa2fd7f7f57954e9e3b9dcdd9b3eed19069d57e4d12d5e196644660dc"
+        },
+        {
+          "step": 2500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002500-e2-p54.json",
+          "sha256": "1b527a6fdca8de5c9654dd4ad110152f5af79d9d7845f24a6b40ec61120e2a6f"
+        },
+        {
+          "step": 2550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002550-e2-p104.json",
+          "sha256": "da8e35df1a894324006921b7a8e193f5d9de91c35c52f77dc81826b584748d41"
+        },
+        {
+          "step": 2600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002600-e2-p154.json",
+          "sha256": "f847598350e00620990eaf1b3de7513aa2b8a0de684070fcab42467499cc8e68"
+        },
+        {
+          "step": 2650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002650-e2-p204.json",
+          "sha256": "1d95d1e90aa95e1b87a8e7adc0999a4233185bb10b0b4db6fa585b5b6544d220"
+        },
+        {
+          "step": 2700,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002700-e2-p254.json",
+          "sha256": "15e7cb5b8b24c1f68aa1514cbf8d3f1a25f92f167b92da35192a5f6395b0bee1"
+        },
+        {
+          "step": 2750,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002750-e2-p304.json",
+          "sha256": "9f2e5a42b35c701c4bb543d7dd6d20dddefcf090c9fc4036e426b46e4a7b7c8d"
+        },
+        {
+          "step": 2800,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002800-e2-p354.json",
+          "sha256": "912fd3080a70d951de306823a98ef74a0a1050265186530e41a0e4b4f7231dae"
+        },
+        {
+          "step": 2850,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002850-e2-p404.json",
+          "sha256": "62f9342eebf9beb912a0089a00c02e19c4c9a515d3764c380ec045736af63233"
+        },
+        {
+          "step": 2900,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002900-e2-p454.json",
+          "sha256": "602b3c1dd4b1ecf5dfbfb0b005196b90238bc9ae3a353cdf4ef41b67aec10602"
+        },
+        {
+          "step": 2950,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0002950-e2-p504.json",
+          "sha256": "02acc131f4c78ae34c372074078e711c2cd23ee7e89794506ae6ce1cccbd60aa"
+        },
+        {
+          "step": 3000,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003000-e2-p554.json",
+          "sha256": "258d73cf43a1ea18c6cac8e60b8b908f411570561527c840bdd2081b3104b454"
+        },
+        {
+          "step": 3050,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003050-e2-p604.json",
+          "sha256": "0708f55dd3143bf44b8275b50ec45108e985432509acc218196e67b55c8f0419"
+        },
+        {
+          "step": 3100,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003100-e2-p654.json",
+          "sha256": "ebe1bf48488480bf92399e1ade7983dccd7019cf495764b17521548bd82b07a6"
+        },
+        {
+          "step": 3150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003150-e2-p704.json",
+          "sha256": "d23e90fe981927964662cd07aeb705ac117fde0ae06cccac43f419d978275815"
+        },
+        {
+          "step": 3200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003200-e2-p754.json",
+          "sha256": "b5565073a96f8e6d866fe278d634beb920ea2cc5e4182124cb3ecdcaf14dda54"
+        },
+        {
+          "step": 3250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003250-e2-p804.json",
+          "sha256": "7df53f5671c883f49e99ba4b28ffef3bd7b47e10cf868d89437f939bad5bd53b"
+        },
+        {
+          "step": 3300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003300-e2-p854.json",
+          "sha256": "a821e95cfb75bfbf37a0df5b0009b5a63674065b9d7c263ece43218d79ae9e7f"
+        },
+        {
+          "step": 3350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003350-e2-p904.json",
+          "sha256": "877ac0b3329a5d477140785823997a862c60fc08fb4f82df0a48c89f64ea781c"
+        },
+        {
+          "step": 3400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003400-e2-p954.json",
+          "sha256": "4087ba954adfbed4448210780914dd2d102f78807cfdb75a83a683361f871abd"
+        },
+        {
+          "step": 3450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003450-e2-p1004.json",
+          "sha256": "364a52e33e04e03291ef325ef9b0be1e5bde7b50c7ec22a624342b131ff31791"
+        },
+        {
+          "step": 3500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003500-e2-p1054.json",
+          "sha256": "99b0cf501d20ca44f775c129b379cea1cfb0e69527ab82b98dc9ed62ff306dd8"
+        },
+        {
+          "step": 3550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003550-e2-p1104.json",
+          "sha256": "7f7ff9bd72c7cd61a974b55311497fafa9f3868a4f92b634c5373fcd3492c371"
+        },
+        {
+          "step": 3600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003600-e2-p1154.json",
+          "sha256": "67fc5ea961447287801a77a86288461cdb9cd9b0da657dafd13c6aee1b156997"
+        },
+        {
+          "step": 3650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-44b6-v1/checkpoint-0003650-e2-p1204.json",
+          "sha256": "7a92e3a3b8855409aac6a8c6d3ea53d322411968943b266bd42cb90ce5bad0d9"
+        }
+      ],
+      "trajectory": [
+        {
+          "step": 2450,
+          "geometry_norm": 1.2198558712520644
+        },
+        {
+          "step": 2500,
+          "geometry_norm": 1.013512238550749
+        },
+        {
+          "step": 2550,
+          "geometry_norm": 0.932167227478528
+        },
+        {
+          "step": 2600,
+          "geometry_norm": 0.8214720433160231
+        },
+        {
+          "step": 2650,
+          "geometry_norm": 0.8207883954639326
+        },
+        {
+          "step": 2700,
+          "geometry_norm": 1.313760958670443
+        },
+        {
+          "step": 2750,
+          "geometry_norm": 1.027480440995936
+        },
+        {
+          "step": 2800,
+          "geometry_norm": 1.0291303502472853
+        },
+        {
+          "step": 2850,
+          "geometry_norm": 0.7545508320798912
+        },
+        {
+          "step": 2900,
+          "geometry_norm": 0.517224625930592
+        },
+        {
+          "step": 2950,
+          "geometry_norm": 0.41557550393203785
+        },
+        {
+          "step": 3000,
+          "geometry_norm": 0.20705492808503081
+        },
+        {
+          "step": 3050,
+          "geometry_norm": 0.1006384836618185
+        },
+        {
+          "step": 3100,
+          "geometry_norm": 0.048074591313656954
+        },
+        {
+          "step": 3150,
+          "geometry_norm": 0.02255154116138194
+        },
+        {
+          "step": 3200,
+          "geometry_norm": 0.2838669185603811
+        },
+        {
+          "step": 3250,
+          "geometry_norm": 0.8670398173987711
+        },
+        {
+          "step": 3300,
+          "geometry_norm": 0.7189256482034798
+        },
+        {
+          "step": 3350,
+          "geometry_norm": 0.8994790342070694
+        },
+        {
+          "step": 3400,
+          "geometry_norm": 0.4322613696898797
+        },
+        {
+          "step": 3450,
+          "geometry_norm": 0.19448511190762272
+        },
+        {
+          "step": 3500,
+          "geometry_norm": 0.7333205224035586
+        },
+        {
+          "step": 3550,
+          "geometry_norm": 1.6912995391466048
+        },
+        {
+          "step": 3600,
+          "geometry_norm": 1.4137754957993391
+        },
+        {
+          "step": 3650,
+          "geometry_norm": 1.033800238345798
+        }
+      ],
+      "snapshot_count": 25,
+      "model_sha256": "65f8b8874ba2939bdfe460cdf76984579639e10a870c5f9c428a10a61df1266f",
+      "final_weights_sha256": "17f60597888c426aba77992d50bd6dfecd1547c3f4356d4bdd2bf1755c731f01",
+      "fit_contract_sha256": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+      "fit_report_sha256": "db22184988a00299c0f5827ec860277831705efeb363fa74af72429e46582c31",
+      "geometry_norm_final": 0.9348415843963325,
+      "geometry_norm_average": 0.7243436448460582,
+      "weights": [
+        -0.14769000505964222,
+        -0.23138673508467617,
+        -0.14756656210736016,
+        -0.2096105007254563,
+        -0.16387681997942313,
+        -0.22527136771671985,
+        0.029327075735063563,
+        0.02411435865899384,
+        0.24974469866090296,
+        0.1438585257338995,
+        0.08284378367434572,
+        0.1444077646410099,
+        0.5057064512579453,
+        0.5626134985626513,
+        1.0768207590723757,
+        1.0368815345819977,
+        -0.013247146204833188,
+        0.004724083961830715,
+        -0.5032189568836818,
+        -5.064315275660165,
+        -0.31163254776358046,
+        0.09711768147479863,
+        0.30753201483407067,
+        0.22712735026763842,
+        0.1583275746945202,
+        0.43740929842338816,
+        0.04110154979829405,
+        0.40053350645065855,
+        -0.5428354721990721,
+        0.1310808969880802
+      ],
+      "tail_regularization_only_control": {
+        "initial_checkpoint_sha256": "4087ba954adfbed4448210780914dd2d102f78807cfdb75a83a683361f871abd",
+        "start": 3400,
+        "end": 3669,
+        "geometry_max_abs_discrepancy": 0.5586187571164283
+      }
+    },
+    "6bba": {
+      "snapshots": [
+        {
+          "step": 9150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009150-e2-p36.json",
+          "sha256": "8a8d74759b1564a39c0d4bb82ce4413dcf520ee2543c3443df28c9b24609d644"
+        },
+        {
+          "step": 9200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009200-e2-p86.json",
+          "sha256": "715ac7c345536e7b6fed4a9a5ed32620d9bb9eb4a801af19e557111647dfb5bb"
+        },
+        {
+          "step": 9250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009250-e2-p136.json",
+          "sha256": "2133fedde741edca281fa822f649cfdd52cbb0a68d313fb04584090110cb0532"
+        },
+        {
+          "step": 9300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009300-e2-p186.json",
+          "sha256": "a6db78d1dc834c57c785df89c3ac8f21a6b93dac829be79c4790dd306fc73126"
+        },
+        {
+          "step": 9350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009350-e2-p236.json",
+          "sha256": "f98955af7ca61342aaff0334a6070f6b52b0a5ff554fbe95fdec65426f3ad76f"
+        },
+        {
+          "step": 9400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009400-e2-p286.json",
+          "sha256": "fb1741bd80611eda328f538c0ef2b1042f2375e66f1c1800659b3af69a95532c"
+        },
+        {
+          "step": 9450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009450-e2-p336.json",
+          "sha256": "6bbb21a75bb62ef642957044aee69ff02ec2f4e23d95cbc7197aec9942f1d317"
+        },
+        {
+          "step": 9500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009500-e2-p386.json",
+          "sha256": "ec501fced717125bb4baf95f85c57cb2a85bd92707f9f9fdbe451617727d5e52"
+        },
+        {
+          "step": 9550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009550-e2-p436.json",
+          "sha256": "1ddfd5f2ac9edd4d31df882d02eccba012a4f157925c102a445d52a337353424"
+        },
+        {
+          "step": 9600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009600-e2-p486.json",
+          "sha256": "abc959e0efb6d9bdc44fd08c485f42086801a0db23dd0c3104962f8f444caead"
+        },
+        {
+          "step": 9650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009650-e2-p536.json",
+          "sha256": "b8112784825875d368dee040b272ade7280e78e4f1bdabc77fa0ec627c50fa72"
+        },
+        {
+          "step": 9700,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009700-e2-p586.json",
+          "sha256": "d4f8c500f4b27860830da76050cfabf20b7e7515f1eaa1f0fc534cc0752984d5"
+        },
+        {
+          "step": 9750,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009750-e2-p636.json",
+          "sha256": "fb9d2898ee6f3aa9679c9fcaffbc676a47710010782284ec01132b3713cea45c"
+        },
+        {
+          "step": 9800,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009800-e2-p686.json",
+          "sha256": "35f9cdfec69a76813c76bcf75e69f1ed0ee682157665fe22468581d359c7c234"
+        },
+        {
+          "step": 9850,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009850-e2-p736.json",
+          "sha256": "d6ef7f8fcdbae054dc52ada31e5d665357cb97c7cadf8ff5b4bc9df57311d190"
+        },
+        {
+          "step": 9900,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009900-e2-p786.json",
+          "sha256": "184db9e1a84329e1ea64f88538ccd1b3c96b5ccf73a2337ec0b950163cbe20df"
+        },
+        {
+          "step": 9950,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0009950-e2-p836.json",
+          "sha256": "45984c366241c558db98e914473ecc84b74ab68443d45da61f2ca13aeeb7cd68"
+        },
+        {
+          "step": 10000,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010000-e2-p886.json",
+          "sha256": "39a3061f6370b02392321827b050280302fde66d422afe07b4647f0cd9645e0e"
+        },
+        {
+          "step": 10050,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010050-e2-p936.json",
+          "sha256": "faa014c89a9be7d87207327f230e7e7e05538729e788b5bdaacdd08eca9524c5"
+        },
+        {
+          "step": 10100,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010100-e2-p986.json",
+          "sha256": "a9a976121e921b75b96e447792985d0c3279978c2517d1065326fd1e4be30212"
+        },
+        {
+          "step": 10150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010150-e2-p1036.json",
+          "sha256": "416eaf1fcfbf4831527beeef8d605ed489f731f0fb0bfae2ffeb150b44c033c3"
+        },
+        {
+          "step": 10200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010200-e2-p1086.json",
+          "sha256": "d651929b7ebc7dbd4d3388a139ef9f55dc77d8b81d069e7eb2404bc4f4340d21"
+        },
+        {
+          "step": 10250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010250-e2-p1136.json",
+          "sha256": "35b1b15235cf8178df6e7339aea7706849d95520e7b075f72cd24b7dec710488"
+        },
+        {
+          "step": 10300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010300-e2-p1186.json",
+          "sha256": "14b4df1a09f4ac992b8b76d6f3bc7a0c25dab1eef7e3d4eaefbd190d2b4e1363"
+        },
+        {
+          "step": 10350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010350-e2-p1236.json",
+          "sha256": "6257fb395b8170172099a45a0f7c0c7344abd45bcf618a3637525cb3a009f385"
+        },
+        {
+          "step": 10400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010400-e2-p1286.json",
+          "sha256": "8cc6b0218917ea0c6e1547928d67b64e7b7cee817e226338291dc47de02dd935"
+        },
+        {
+          "step": 10450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010450-e2-p1336.json",
+          "sha256": "db921459a5fcc9e20c2fab9b0ed9e35619382f8f3354d2ad5f2e722534f3d06c"
+        },
+        {
+          "step": 10500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010500-e2-p1386.json",
+          "sha256": "5cc7c3663d875f26585c534179446984a5d5dd313b2dc3f0bdc372f792ce097f"
+        },
+        {
+          "step": 10550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010550-e2-p1436.json",
+          "sha256": "884d2a9c72d61e3cc744a884b19c41cdeb1a776a0de5f027bd5105a48df410b1"
+        },
+        {
+          "step": 10600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010600-e2-p1486.json",
+          "sha256": "bc919bcb5c63bfc042484572fcc03f12268b599c9ac3242325e3b943938846e6"
+        },
+        {
+          "step": 10650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010650-e2-p1536.json",
+          "sha256": "00c550109db255a79ee112a83ddc9230d537c9550420fb77240196b2888d1484"
+        },
+        {
+          "step": 10700,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010700-e2-p1586.json",
+          "sha256": "7ac09ae0c9ac1a3fbb17050372e2e7105dc3f85bb5f4aa7d90f951632519d6d1"
+        },
+        {
+          "step": 10750,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010750-e2-p1636.json",
+          "sha256": "72668cf4a1973cbb8ecb1e310942e4cede75936871b2e74e145c672cf9cb260b"
+        },
+        {
+          "step": 10800,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010800-e2-p1686.json",
+          "sha256": "e605bd5fdd5f1a773a592f468751dc296387a408c708e0fcad5d925b498fa6f5"
+        },
+        {
+          "step": 10850,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010850-e2-p1736.json",
+          "sha256": "de19b4917a048ae98c637cc8ee5d39811c9377dba55a7c1dc8116faa57a96dc2"
+        },
+        {
+          "step": 10900,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010900-e2-p1786.json",
+          "sha256": "f4ec939929ef7db91ee6af435b5b495ee71a42f3bb8c36a8682222645f64b9e8"
+        },
+        {
+          "step": 10950,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0010950-e2-p1836.json",
+          "sha256": "5bdf2cecb56385bc7cf411d1befced82ede30c43c0b2331febf3aefc2b519939"
+        },
+        {
+          "step": 11000,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011000-e2-p1886.json",
+          "sha256": "409c4226c81628e3fb4a16b30e30e90c2d1e6c86ad7e245e2478a5ca40d6644a"
+        },
+        {
+          "step": 11050,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011050-e2-p1936.json",
+          "sha256": "d74d93f5d5a52d2f7b707daa467026d1db68889f7bd7e606aa0e0cc6927de9cf"
+        },
+        {
+          "step": 11100,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011100-e2-p1986.json",
+          "sha256": "2633b09da28ebd913d042bd67c2e2a997cc21944e4a478e9cd06ffc735e8cf22"
+        },
+        {
+          "step": 11150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011150-e2-p2036.json",
+          "sha256": "2ab5042335f08bfaf57942972c814466d293a763dca62bc0abbdf887fb0cc80f"
+        },
+        {
+          "step": 11200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011200-e2-p2086.json",
+          "sha256": "020de8436fb9fa257d989d89ee3d353b27a1526a71c8712d979453490a8c4f54"
+        },
+        {
+          "step": 11250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011250-e2-p2136.json",
+          "sha256": "7a393315cc271c9fafc9ff1473364dc883ee9b123339da806d283eb295f350d3"
+        },
+        {
+          "step": 11300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011300-e2-p2186.json",
+          "sha256": "8f56eaba1d9bfedf7fa7e829bf27cd16b1560b0e75ba6883dd348c4fa665105f"
+        },
+        {
+          "step": 11350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011350-e2-p2236.json",
+          "sha256": "9300d668c1ffe1cc32be07a54c4eb4b56204e5d151ecf0aeafe505ce1c7996bc"
+        },
+        {
+          "step": 11400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011400-e2-p2286.json",
+          "sha256": "34f666f79caa19710ebc1175d1313761e99243052e1e7ba064e058d3dcdd71ee"
+        },
+        {
+          "step": 11450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011450-e2-p2336.json",
+          "sha256": "6c62c8898483677c4da2689cd4f50c49d620abaeda7fcef80193703f3789bfe1"
+        },
+        {
+          "step": 11500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011500-e2-p2386.json",
+          "sha256": "b52f8512a46c0b6354195de5ad5d7d93d42382e47e7bec70896dfbfeb2db9179"
+        },
+        {
+          "step": 11550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011550-e2-p2436.json",
+          "sha256": "814631b88865ca990c2e0b018ac92bae68199c1da0153bc2236bde2724a27a17"
+        },
+        {
+          "step": 11600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011600-e2-p2486.json",
+          "sha256": "36a4286a82d962fa94ce2763a808078dd8f9eceaa88bc8736b9eaf30edc40eff"
+        },
+        {
+          "step": 11650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011650-e2-p2536.json",
+          "sha256": "76afa849018bf550b8b27a47fa49ab536aace6284cb4b4b96a1d41d8ff77d15c"
+        },
+        {
+          "step": 11700,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011700-e2-p2586.json",
+          "sha256": "f21247ca853cd0261c809e4894fa41398ad3a213d7d0a178c8557b5883b7c83a"
+        },
+        {
+          "step": 11750,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011750-e2-p2636.json",
+          "sha256": "0404136a29ebc246ee5ffadf6c73a38207e27debf4e277e96c9391216acec955"
+        },
+        {
+          "step": 11800,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011800-e2-p2686.json",
+          "sha256": "04f9a763fd24dcd86b7a0c9cc1645140db99ede153fcbb1c0193fa60fefbc99e"
+        },
+        {
+          "step": 11850,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011850-e2-p2736.json",
+          "sha256": "57581c4ec62d20ab770ae3a5b258c6d9cd151f68044afdd449255549d7fcdf80"
+        },
+        {
+          "step": 11900,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011900-e2-p2786.json",
+          "sha256": "96ec6a6e1b8c5b4934b0325c42994175f33577bdceae54bbb55caf1bed4b750a"
+        },
+        {
+          "step": 11950,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0011950-e2-p2836.json",
+          "sha256": "83fd10a34e4644661d62774e422dd7d4c04dd33b672a5f3834398ab3d704ae6b"
+        },
+        {
+          "step": 12000,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012000-e2-p2886.json",
+          "sha256": "112cd0284286c7dbea6a6c066e024e7ffb8cedc53ecd6b46b4050c60fcd3ca4a"
+        },
+        {
+          "step": 12050,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012050-e2-p2936.json",
+          "sha256": "2f4c2d306fc0c1e1b591d228d90b3ce93b1745832a57e99250a3eaf0bbac275f"
+        },
+        {
+          "step": 12100,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012100-e2-p2986.json",
+          "sha256": "9beac193007f871961897d32081c777d02c9bf4d3729e8b6fd891e212c8170e5"
+        },
+        {
+          "step": 12150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012150-e2-p3036.json",
+          "sha256": "0837d549a898dd61d4d01060136f1e60d57f383d49329094faf196786e1d3365"
+        },
+        {
+          "step": 12200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012200-e2-p3086.json",
+          "sha256": "42922e6aaac11485045d12b248c5b1bbd0616b73e4eedd42074a1ac2090e9263"
+        },
+        {
+          "step": 12250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012250-e2-p3136.json",
+          "sha256": "e356e90e691555a23f296f1731cf3147445931c3b23ea8f5ef2fdb549edc4360"
+        },
+        {
+          "step": 12300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012300-e2-p3186.json",
+          "sha256": "496327cad2e7d9d49a035fe51e1b85603e3ee1b4a7e81670383a34c1503ce408"
+        },
+        {
+          "step": 12350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012350-e2-p3236.json",
+          "sha256": "16cf7db986d46b891e1b7d770962760d04020adf06ff839be3132365b7962cc8"
+        },
+        {
+          "step": 12400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012400-e2-p3286.json",
+          "sha256": "f7b5d105d316e73159b5c41e16fe7ddc829ab373c2a3c723b787c4c386a17462"
+        },
+        {
+          "step": 12450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012450-e2-p3336.json",
+          "sha256": "929c34aa4f586ee3494bf5a0fec4368d881b79ab0b23f137de8a4c5f0ee12bbd"
+        },
+        {
+          "step": 12500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012500-e2-p3386.json",
+          "sha256": "872a36252ad2b0a4114ef2e0c82b172b874a53a903a3b71bbf91de5defb04ae8"
+        },
+        {
+          "step": 12550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012550-e2-p3436.json",
+          "sha256": "2d8c18e372c378cbd8223cfa00325e5b20bd944ea5909453bf33b689c378b321"
+        },
+        {
+          "step": 12600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012600-e2-p3486.json",
+          "sha256": "3cf2efa38646dc97e799a592dd6f77adc9c7031d032e13ac3fa2483f4fd2dae9"
+        },
+        {
+          "step": 12650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012650-e2-p3536.json",
+          "sha256": "fa0a4277b29a307023d50cb43cf63cbbf191a53406a77627341012bef70da4e1"
+        },
+        {
+          "step": 12700,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012700-e2-p3586.json",
+          "sha256": "a536c2f1b33b5024868fa4b2f30cb85cddd9441752a58dcf041d8fbfca8be53f"
+        },
+        {
+          "step": 12750,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012750-e2-p3636.json",
+          "sha256": "a2c2865892830938238c86c405930a52b5a2df94dc752be257f4abd81ff6a76c"
+        },
+        {
+          "step": 12800,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012800-e2-p3686.json",
+          "sha256": "b8ce71707e00dafb232756ba7b677d6163ef2d79b9ffa96513e05c5377ccf3fb"
+        },
+        {
+          "step": 12850,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012850-e2-p3736.json",
+          "sha256": "4dd1ea9943d40c3a77c99f20f34b76b0713ba1a97389fe38c554225e2116e59c"
+        },
+        {
+          "step": 12900,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012900-e2-p3786.json",
+          "sha256": "ba6f0edc6e1d1036837e3a3d9e71e6e12fed6f40534f38e8b4d5a285dedd386b"
+        },
+        {
+          "step": 12950,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0012950-e2-p3836.json",
+          "sha256": "dcd7d2d8e6c99ea8188147b1b483c0fcb5da30c39f77947e40947d1b2f09dc39"
+        },
+        {
+          "step": 13000,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013000-e2-p3886.json",
+          "sha256": "582c4ca95d47c709839f217bb1feb6481697a36de842e307564107f4a3045016"
+        },
+        {
+          "step": 13050,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013050-e2-p3936.json",
+          "sha256": "3a7d511e3253c714a64d538099794447c3e918bad0728a8193f71f6e2a0903b8"
+        },
+        {
+          "step": 13100,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013100-e2-p3986.json",
+          "sha256": "3ba7071a295a64e7cb8518db2ba164a258255c0822084649e4a54b2824a2c285"
+        },
+        {
+          "step": 13150,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013150-e2-p4036.json",
+          "sha256": "30e2a5797da4a302db939f3e4626a84b71a55e1e62851020f143cf109dcaae9e"
+        },
+        {
+          "step": 13200,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013200-e2-p4086.json",
+          "sha256": "d4063c7dc0c1c107bea050d1b28ebe28ba50865a43c4303209adaaae9a572479"
+        },
+        {
+          "step": 13250,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013250-e2-p4136.json",
+          "sha256": "7a029fee5f86ae5d7c2b7d0752a750068ee1bb954a2e0e32105cfa77393e8ce4"
+        },
+        {
+          "step": 13300,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013300-e2-p4186.json",
+          "sha256": "e60db4cd9a66550a0179dcd48d8a8a970827b4bf16a5a06fa6d41578e28ae8e6"
+        },
+        {
+          "step": 13350,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013350-e2-p4236.json",
+          "sha256": "308180b0b6afc5287667919998aebee6b0a11b13739c4f4a1935c575fc56a6a8"
+        },
+        {
+          "step": 13400,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013400-e2-p4286.json",
+          "sha256": "04b1b93778a6580557ff7ea16acb03bb86ab0ac739d59419b28576659988b61f"
+        },
+        {
+          "step": 13450,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013450-e2-p4336.json",
+          "sha256": "0c745efa9da1d6f73a1b932e272e9f9bf520009c079ae2f1a0548393327df855"
+        },
+        {
+          "step": 13500,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013500-e2-p4386.json",
+          "sha256": "b86fb133a38a06e31078b73c0baa2dad55b560a958c9478f8748bbfd5eaaaa84"
+        },
+        {
+          "step": 13550,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013550-e2-p4436.json",
+          "sha256": "4a594a219c5b66a241e82f6991ebb6dc63523b34b9b21c2b5fe3d2332048d0e8"
+        },
+        {
+          "step": 13600,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013600-e2-p4486.json",
+          "sha256": "2472d191b00728c3028f85f89454c48bee111b94330ef160ed5fe555e1344b27"
+        },
+        {
+          "step": 13650,
+          "path": ".biohub/cache/trajectory-event-fork16-fit-6bba-v1/checkpoint-0013650-e2-p4536.json",
+          "sha256": "4952fb75c625fb045eb61d50277e31a6fffba64da58ea1a1c64640a716881742"
+        }
+      ],
+      "trajectory": [
+        {
+          "step": 9150,
+          "geometry_norm": 0.23448963327609856
+        },
+        {
+          "step": 9200,
+          "geometry_norm": 0.010871602793913037
+        },
+        {
+          "step": 9250,
+          "geometry_norm": 0.0015141903212515196
+        },
+        {
+          "step": 9300,
+          "geometry_norm": 0.30959728442260026
+        },
+        {
+          "step": 9350,
+          "geometry_norm": 0.23154898811167243
+        },
+        {
+          "step": 9400,
+          "geometry_norm": 0.19764293091218701
+        },
+        {
+          "step": 9450,
+          "geometry_norm": 0.0986087020626054
+        },
+        {
+          "step": 9500,
+          "geometry_norm": 0.002688356561454575
+        },
+        {
+          "step": 9550,
+          "geometry_norm": 0.000410952250633923
+        },
+        {
+          "step": 9600,
+          "geometry_norm": 3.0351291669458108e-05
+        },
+        {
+          "step": 9650,
+          "geometry_norm": 0.08131050746291027
+        },
+        {
+          "step": 9700,
+          "geometry_norm": 0.005583356653672691
+        },
+        {
+          "step": 9750,
+          "geometry_norm": 0.0002690256460483399
+        },
+        {
+          "step": 9800,
+          "geometry_norm": 1.8439511669133703e-05
+        },
+        {
+          "step": 9850,
+          "geometry_norm": 0.09909490321216831
+        },
+        {
+          "step": 9900,
+          "geometry_norm": 0.006288269549634003
+        },
+        {
+          "step": 9950,
+          "geometry_norm": 0.10655264282769841
+        },
+        {
+          "step": 10000,
+          "geometry_norm": 0.007430975216976906
+        },
+        {
+          "step": 10050,
+          "geometry_norm": 0.5099986022184182
+        },
+        {
+          "step": 10100,
+          "geometry_norm": 0.029352365940980615
+        },
+        {
+          "step": 10150,
+          "geometry_norm": 0.13987847516872626
+        },
+        {
+          "step": 10200,
+          "geometry_norm": 0.20391764526677303
+        },
+        {
+          "step": 10250,
+          "geometry_norm": 0.012297779067812018
+        },
+        {
+          "step": 10300,
+          "geometry_norm": 0.001436515303272228
+        },
+        {
+          "step": 10350,
+          "geometry_norm": 0.12765054728816383
+        },
+        {
+          "step": 10400,
+          "geometry_norm": 0.7127863132784873
+        },
+        {
+          "step": 10450,
+          "geometry_norm": 0.06900269148282458
+        },
+        {
+          "step": 10500,
+          "geometry_norm": 0.2505894925949689
+        },
+        {
+          "step": 10550,
+          "geometry_norm": 0.015261524514146247
+        },
+        {
+          "step": 10600,
+          "geometry_norm": 0.0006857630882838452
+        },
+        {
+          "step": 10650,
+          "geometry_norm": 9.124634347678528e-05
+        },
+        {
+          "step": 10700,
+          "geometry_norm": 3.6858749432846353e-06
+        },
+        {
+          "step": 10750,
+          "geometry_norm": 0.06456397645179275
+        },
+        {
+          "step": 10800,
+          "geometry_norm": 0.08226938132623658
+        },
+        {
+          "step": 10850,
+          "geometry_norm": 0.14389312659586997
+        },
+        {
+          "step": 10900,
+          "geometry_norm": 0.1780747946732731
+        },
+        {
+          "step": 10950,
+          "geometry_norm": 0.2655929680991929
+        },
+        {
+          "step": 11000,
+          "geometry_norm": 0.3595615081657424
+        },
+        {
+          "step": 11050,
+          "geometry_norm": 0.015747479483464957
+        },
+        {
+          "step": 11100,
+          "geometry_norm": 1.2122301706847485
+        },
+        {
+          "step": 11150,
+          "geometry_norm": 1.1657094555507066
+        },
+        {
+          "step": 11200,
+          "geometry_norm": 0.11127514409126224
+        },
+        {
+          "step": 11250,
+          "geometry_norm": 0.10930415492131709
+        },
+        {
+          "step": 11300,
+          "geometry_norm": 0.006558189482216252
+        },
+        {
+          "step": 11350,
+          "geometry_norm": 0.09214404283272044
+        },
+        {
+          "step": 11400,
+          "geometry_norm": 0.006544091149599718
+        },
+        {
+          "step": 11450,
+          "geometry_norm": 0.0003475258694468422
+        },
+        {
+          "step": 11500,
+          "geometry_norm": 3.183841994535156e-05
+        },
+        {
+          "step": 11550,
+          "geometry_norm": 0.0727517644125602
+        },
+        {
+          "step": 11600,
+          "geometry_norm": 0.002652438245936523
+        },
+        {
+          "step": 11650,
+          "geometry_norm": 0.0003504107936922772
+        },
+        {
+          "step": 11700,
+          "geometry_norm": 1.6475692282946718e-05
+        },
+        {
+          "step": 11750,
+          "geometry_norm": 1.3123344097950337e-06
+        },
+        {
+          "step": 11800,
+          "geometry_norm": 0.3442073104911429
+        },
+        {
+          "step": 11850,
+          "geometry_norm": 0.3061501651007379
+        },
+        {
+          "step": 11900,
+          "geometry_norm": 0.21173375546822218
+        },
+        {
+          "step": 11950,
+          "geometry_norm": 0.009300231139906108
+        },
+        {
+          "step": 12000,
+          "geometry_norm": 0.23105944105698015
+        },
+        {
+          "step": 12050,
+          "geometry_norm": 0.008870990736418413
+        },
+        {
+          "step": 12100,
+          "geometry_norm": 0.08851382873861124
+        },
+        {
+          "step": 12150,
+          "geometry_norm": 0.00395126493344217
+        },
+        {
+          "step": 12200,
+          "geometry_norm": 0.7201125853283735
+        },
+        {
+          "step": 12250,
+          "geometry_norm": 0.08200904218179371
+        },
+        {
+          "step": 12300,
+          "geometry_norm": 0.006823798427707939
+        },
+        {
+          "step": 12350,
+          "geometry_norm": 0.00028203021514916217
+        },
+        {
+          "step": 12400,
+          "geometry_norm": 0.4817675625504038
+        },
+        {
+          "step": 12450,
+          "geometry_norm": 0.0781735254199961
+        },
+        {
+          "step": 12500,
+          "geometry_norm": 0.2777982053316037
+        },
+        {
+          "step": 12550,
+          "geometry_norm": 0.23886291283161132
+        },
+        {
+          "step": 12600,
+          "geometry_norm": 0.03220773787934406
+        },
+        {
+          "step": 12650,
+          "geometry_norm": 0.0029637650069331673
+        },
+        {
+          "step": 12700,
+          "geometry_norm": 0.0001414153891086817
+        },
+        {
+          "step": 12750,
+          "geometry_norm": 8.961309999576843e-06
+        },
+        {
+          "step": 12800,
+          "geometry_norm": 0.26255216962034994
+        },
+        {
+          "step": 12850,
+          "geometry_norm": 0.009094342690548362
+        },
+        {
+          "step": 12900,
+          "geometry_norm": 0.0013531092037055911
+        },
+        {
+          "step": 12950,
+          "geometry_norm": 0.00012241262003210668
+        },
+        {
+          "step": 13000,
+          "geometry_norm": 9.214551329074417e-06
+        },
+        {
+          "step": 13050,
+          "geometry_norm": 0.04963442106825857
+        },
+        {
+          "step": 13100,
+          "geometry_norm": 0.004643831855925658
+        },
+        {
+          "step": 13150,
+          "geometry_norm": 0.18224251340774064
+        },
+        {
+          "step": 13200,
+          "geometry_norm": 0.022176818753543937
+        },
+        {
+          "step": 13250,
+          "geometry_norm": 0.0023038453715643406
+        },
+        {
+          "step": 13300,
+          "geometry_norm": 0.00018694614965401608
+        },
+        {
+          "step": 13350,
+          "geometry_norm": 1.4695649272711998e-05
+        },
+        {
+          "step": 13400,
+          "geometry_norm": 0.7908115593566728
+        },
+        {
+          "step": 13450,
+          "geometry_norm": 0.03302319281754219
+        },
+        {
+          "step": 13500,
+          "geometry_norm": 0.0035411212353437275
+        },
+        {
+          "step": 13550,
+          "geometry_norm": 0.00032002704699181334
+        },
+        {
+          "step": 13600,
+          "geometry_norm": 2.3464767273783026e-05
+        },
+        {
+          "step": 13650,
+          "geometry_norm": 1.4645976216472321e-06
+        }
+      ],
+      "snapshot_count": 91,
+      "model_sha256": "cf39a432b110bf3bca05e040af990d1c8f8e8c0ff9897141adceccad5d05d1a9",
+      "final_weights_sha256": "2e4034baa6d3d8e07ae0cb63ea0d2acc22fc94a6cc2f4c13b15a1121e35aefed",
+      "fit_contract_sha256": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111",
+      "fit_report_sha256": "9bb0ef61d09c13fa871f6f9b61870d837aea5a798b534e0a019a9112a53a62cd",
+      "geometry_norm_final": 5.993629008295893e-07,
+      "geometry_norm_average": 0.12099246255106184,
+      "weights": [
+        -0.11797081228712235,
+        -0.2222404198947588,
+        -0.11948977425098989,
+        -0.18230852293708139,
+        -0.1284735088584157,
+        -0.18897505411021626,
+        0.0014467864813306277,
+        0.002096688439621647,
+        0.23179850521193854,
+        0.07362731402028798,
+        0.0108811158784976,
+        0.07327908003319347,
+        0.4568279132766149,
+        0.5526938952422754,
+        1.0264410528897685,
+        1.0187642523151546,
+        -0.02235366782729756,
+        0.0011441747872477264,
+        -0.08161898706087849,
+        -6.175160938820033,
+        -0.03758622927272506,
+        0.02227156686357002,
+        0.06612997635458288,
+        0.04614983724194944,
+        0.029758050721713877,
+        0.05939030917627466,
+        0.010156595912022774,
+        0.06016882828113142,
+        -0.1332422797165805,
+        -0.047553277177025996
+      ],
+      "tail_regularization_only_control": {
+        "initial_checkpoint_sha256": "04b1b93778a6580557ff7ea16acb03bb86ab0ac739d59419b28576659988b61f",
+        "start": 13400,
+        "end": 13671,
+        "geometry_max_abs_discrepancy": 0.0
+      }
+    }
+  },
+  "seconds": 1.3899999999557622
+}

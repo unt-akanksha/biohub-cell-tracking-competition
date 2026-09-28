@@ -1,0 +1,40 @@
+{
+  "status": "both_source_fits_running",
+  "launch_observed_utc": "2026-09-14T19:15:08Z",
+  "gpu_used": false,
+  "production_candidate_changed": false,
+  "source_only": true,
+  "corpus_sha256": "1c520023037a0a273da9722bf8a44b4a82476b00eda8baa383fe80aeda804e92",
+  "real_resume_audit_sha256": "1faafe3303a8fafe1149a9bfd2df7098e78339468b4775629db24af7f3d77214",
+  "training_script_sha256": "d13c1798ad4327e2d095c392605d481fc546b02569ad201f88e672a9e2ab796f",
+  "fixed_epochs": 3,
+  "local_wall_cap_seconds_per_invocation": 7200,
+  "checkpoint_every_updates": 50,
+  "workers": {
+    "44b6": {
+      "session_id": 80955,
+      "actual_python_pid": 7572,
+      "contract_sha256": "551f749c87590874a590403095e3cb7e826e4c3de5114f93890319d35db7c8cf",
+      "movies": 13,
+      "cases_per_epoch": 1223,
+      "total_planned_updates": 3669,
+      "resumed_from_step": 4,
+      "first_live_checkpoint_step": 50,
+      "first_live_checkpoint_seconds": 53.06199999997625
+    },
+    "6bba": {
+      "session_id": 78731,
+      "actual_python_pid": 43524,
+      "contract_sha256": "ea0bcdfe8c7bb18ca56e55a929b32451eeafa96cf92791dce70f6798dd2ce111",
+      "movies": 47,
+      "cases_per_epoch": 4557,
+      "total_planned_updates": 13671,
+      "resumed_from_step": 4,
+      "first_live_checkpoint_step": 50,
+      "first_live_checkpoint_seconds": 20.5
+    }
+  },
+  "quality_gain_established": false,
+  "submission_performed": false,
+  "do_not_duplicate_live_fits": true
+}

@@ -1,0 +1,290 @@
+{
+  "run_id": "focus-registration-probe-v1",
+  "status": "completed_training_registration_residual_screen",
+  "registration": {
+    "status": "completed_training_image_registration_probe",
+    "records": [
+      {
+        "stem": "6bba_f1fde7e0",
+        "frame_hashes": [
+          "12b1b3066394b669aa0f4e8243bc02b899f22afff05badc7025656dfdd3f3019",
+          "51b45ccc74c9223f5d68fb22e64ae1aefd1d37ae7cf9d687483205ca47065a8d",
+          "9cb73a54a2b37fd66a91630f71d9c65cd6532667c99678348a3043887af1e29d"
+        ],
+        "transitions": [
+          {
+            "source_frame": 0,
+            "target_frame": 1,
+            "forward": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                -4.0,
+                -6.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                -1.625,
+                -2.4375
+              ],
+              "zero_shift_ncc": 0.9511643150450161,
+              "aligned_ncc": 0.986352722685151,
+              "phase_peak_margin": 0.24213727471147076,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.6125927414301863,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "reverse": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                4.0,
+                6.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                1.625,
+                2.4375
+              ],
+              "zero_shift_ncc": 0.9511643150450161,
+              "aligned_ncc": 0.986352722685151,
+              "phase_peak_margin": 0.24213727471147065,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.6125927414301863,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "inverse_consistency_um": 0.0
+          },
+          {
+            "source_frame": 1,
+            "target_frame": 2,
+            "forward": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9594142208746207,
+              "aligned_ncc": 0.9594142208746207,
+              "phase_peak_margin": 0.04642713452779571,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.5019785369875236,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "reverse": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9594142208746207,
+              "aligned_ncc": 0.9594142208746207,
+              "phase_peak_margin": 0.04642713452779589,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.5019785369875236,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "inverse_consistency_um": 0.0
+          }
+        ]
+      },
+      {
+        "stem": "6bba_23af9eeb",
+        "frame_hashes": [
+          "53d3ee56ce34a40c11863272057dcb1280cd608baacfa95c8a8f7f0af21b55e2",
+          "5d2a1ad3be262cfa244460b7a5b5090cd9288cd396303ba1ac8b6f40fbf6b48a",
+          "9c0b03087ca771c0e72164aec453ca1b3c235bdf8013e379b584a53866a2ce45"
+        ],
+        "transitions": [
+          {
+            "source_frame": 0,
+            "target_frame": 1,
+            "forward": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9757951863084233,
+              "aligned_ncc": 0.9757951863084233,
+              "phase_peak_margin": 0.7004329870100812,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.8296371616822454,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "reverse": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9757951863084233,
+              "aligned_ncc": 0.9757951863084233,
+              "phase_peak_margin": 0.7004329870100812,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.8296371616822454,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "inverse_consistency_um": 0.0
+          },
+          {
+            "source_frame": 1,
+            "target_frame": 2,
+            "forward": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9772354992756713,
+              "aligned_ncc": 0.9772354992756713,
+              "phase_peak_margin": 0.5816017131862048,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.772798669920389,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "reverse": {
+              "global_shift_zyx_voxel": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "global_shift_zyx_um": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "zero_shift_ncc": 0.9772354992756713,
+              "aligned_ncc": 0.9772354992756713,
+              "phase_peak_margin": 0.5816017131862049,
+              "duplicate_confidence": 0.0,
+              "reliability": 0.772798669920389,
+              "fft_stride_zyx": [
+                1,
+                2,
+                2
+              ]
+            },
+            "inverse_consistency_um": 0.0
+          }
+        ]
+      }
+    ],
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "ground_truth_opened": false,
+    "gpu_used": false,
+    "elapsed_seconds": 3.5295164240000076,
+    "synthetic_sign_check_passed": true,
+    "source_hashes": {
+      "split.json": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+      "transition_context.py": "fc505c7773fa1e60817c603d786374abb83ba25ad63aee660de341f82efda08d",
+      "run_pilot.py": "7040e7eecc3b97f5cae862baba8754581187f63513111e424af86b7c19ff6d94"
+    },
+    "authorized_for_submission": false
+  },
+  "launcher": {
+    "status": "completed",
+    "run_id": "focus-registration-probe-v1",
+    "elapsed_seconds": 61.889691217999996,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "per_movie": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "ordinary_links": 9,
+      "mean_squared_residual_um2": {
+        "original": 14.93579372041824,
+        "anchored": 14.994945869291335
+      },
+      "delta": 0.059152148873096166
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "ordinary_links": 12,
+      "mean_squared_residual_um2": {
+        "original": 1.0789260865442178,
+        "anchored": 1.0395836725177872
+      },
+      "delta": -0.03934241402643068
+    }
+  ],
+  "pooled_mean_squared_residual_um2": {
+    "original": 7.017583643918798,
+    "anchored": 7.020453185420737
+  },
+  "feasibility_gate_passed": false,
+  "prediction_manifest": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "sha256": "c1035514d177bed21d424c454ed6370a5d759c58024c97a73819dfe1dd6c4ab4",
+      "source_sha256": "cf970302a726434df62ed45a55b2ef47648aaacd7d56c1b33b65b27faae2b5df"
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "sha256": "527ac9fe67d8513c845ef1406019317a5fa7917cda18787c5879dff27f55ad6d",
+      "source_sha256": "6531abde5b1b10c1aa76552a9b1b2a7250ad3497db7a806796a4035398e6944b"
+    }
+  ],
+  "notebook_sha256": "31f1a8091e64506ce9f2cef485b508464add2ee07d3c133b983fac48d2bf0e60",
+  "elapsed_seconds": 7.7960000000020955,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "source_hashes": {
+    "research/registration_flow_anchor.py": "7db9f985d27d3922580384cd21ea46accfc7e0adbde63d907b5dcbce9704e6ae",
+    "scripts/score-focus-registration-probe.py": "d55a8d1ccb3b37b7660af8abbf617cf044efbeec17fa0a6ae463f880665ab208",
+    "reports/experiments/focus-registration-anchor-v1-design.md": "9405ae6cb932f5c6a1b417821e728466a342d0e7754079a53484e506cb23f573"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "status": "removed_verified_ram_copies",
+  "timestamp_utc": "2026-09-14T09:04:45.805272+00:00",
+  "bytes": 100994472,
+  "records": [
+    {
+      "path": "/dev/shm/biohub-dense-warp-v1-smoke/RESULT.json",
+      "bytes": 5840,
+      "sha256": "192086427da8243360328cc1da2ce917c6889d2c8e09406dd04823d256259007",
+      "recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-v1-smoke-output\\RESULT.json"
+    },
+    {
+      "path": "/dev/shm/biohub-dense-warp-v1-smoke/smoke-only.pt",
+      "bytes": 8361542,
+      "sha256": "c09f96724549d81c447755cd5dbb66c6e163f0d555883c28d7bd4e296934eea3",
+      "recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-v1-smoke-output\\smoke-only.pt"
+    },
+    {
+      "path": "/dev/shm/biohub-dense-warp-v1-smoke/source-frames.npz",
+      "bytes": 10215570,
+      "sha256": "5dd3c37347f41ce0f302d33862665e4b6b8ffde8a4737e27fa03bfd3009bc08f",
+      "recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-v1-smoke-output\\source-frames.npz"
+    },
+    {
+      "path": "/dev/shm/biohub-dense-warp-movie-v1.tar",
+      "bytes": 82411520,
+      "sha256": "be8bf51d17f73b1e12400554882bf6055e54d6cea1c932dc3821e6ab0a24606c",
+      "recovery": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\dense-warp-movie-v1-bundle.tar"
+    }
+  ],
+  "free_before": 7685656576,
+  "free_after": 7786659840,
+  "rsna_touched": false,
+  "gpu_reset": false,
+  "system_cache_dropped": false,
+  "live_movie_run_touched": false
+}

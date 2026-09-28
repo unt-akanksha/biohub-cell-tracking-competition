@@ -1,0 +1,186 @@
+{
+  "status": "verified_flow_spatial_tta_probe_not_selection",
+  "result": {
+    "status": "passed_flow_spatial_tta_functionality",
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "control": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 269,
+      "predicted_edges": 160,
+      "scorer_counts": {
+        "edge_tp": 14,
+        "edge_fp": 5,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 269
+      },
+      "elapsed_seconds": 7.292175936000035,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": {
+        "limit": 2048,
+        "maximum_nodes": 95,
+        "truncation": false
+      },
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "encode_calls": 2,
+        "features": "native unchanged",
+        "logits": "inverse-aligned XY D4 arithmetic mean",
+        "maximum_mean_absolute_logit_delta": 0.2008494883775711
+      },
+      "flow_patch_receipt": {
+        "mode": "native"
+      },
+      "motion_execution_receipt": {
+        "skip_zero_neural": false,
+        "neural_forward_calls": 2,
+        "zero_weight_skips": 0
+      },
+      "standalone_image_flow": true
+    },
+    "optimized": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 269,
+      "predicted_edges": 160,
+      "scorer_counts": {
+        "edge_tp": 14,
+        "edge_fp": 5,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 1,
+        "division_fn": 0,
+        "num_pred_nodes": 269
+      },
+      "elapsed_seconds": 2.365918186999977,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": {
+        "limit": 2048,
+        "maximum_nodes": 95,
+        "truncation": false
+      },
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "encode_calls": 2,
+        "features": "native unchanged",
+        "logits": "inverse-aligned XY D4 arithmetic mean",
+        "maximum_mean_absolute_logit_delta": 0.2008494883775711
+      },
+      "flow_patch_receipt": {
+        "mode": "native"
+      },
+      "motion_execution_receipt": {
+        "skip_zero_neural": true,
+        "neural_forward_calls": 0,
+        "zero_weight_skips": 2
+      },
+      "standalone_image_flow": true
+    },
+    "candidate": {
+      "status": "passed",
+      "device": "cuda",
+      "checkpoint_step": 1000,
+      "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+      "movie": "6bba_b204cac7",
+      "frames": 3,
+      "strict_reload": true,
+      "geff_round_trip": true,
+      "predicted_nodes": 269,
+      "predicted_edges": 161,
+      "scorer_counts": {
+        "edge_tp": 14,
+        "edge_fp": 6,
+        "edge_fn": 2,
+        "division_tp": 0,
+        "division_fp": 2,
+        "division_fn": 0,
+        "num_pred_nodes": 269
+      },
+      "elapsed_seconds": 2.5675544389999914,
+      "scope": "Training-movie functionality only",
+      "authorized_for_submission": false,
+      "encode_patch_receipt": {
+        "limit": 2048,
+        "maximum_nodes": 95,
+        "truncation": false
+      },
+      "pre_motion_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "encode_calls": 2,
+        "features": "native unchanged",
+        "logits": "inverse-aligned XY D4 arithmetic mean",
+        "maximum_mean_absolute_logit_delta": 0.2008494883775711
+      },
+      "flow_patch_receipt": {
+        "version": 1,
+        "views": 8,
+        "forward_calls": 2,
+        "components": "ZYX physical microns; inverse XY vector basis and grid",
+        "output_precision": "FP32 arithmetic mean",
+        "maximum_mean_absolute_flow_delta_um": 0.031499892473220825
+      },
+      "motion_execution_receipt": {
+        "skip_zero_neural": true,
+        "neural_forward_calls": 0,
+        "zero_weight_skips": 2
+      },
+      "standalone_image_flow": true
+    },
+    "frozen_flow_hashes": [
+      {
+        "before": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+        "after": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779"
+      },
+      {
+        "before": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+        "after": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779"
+      },
+      {
+        "before": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779",
+        "after": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779"
+      }
+    ],
+    "detections_identical": true,
+    "zero_weight_graph_identical": true,
+    "coordinate_sha256": "f574ac338bde27b598d1fc1b448e46d5279469f1bd6405ee3c09d1799ee85d51",
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "terminal": {
+    "status": "completed",
+    "run_id": "backward-flow-spatial-tta-probe-v2",
+    "elapsed_seconds": 71.29516017100002,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "source_sha256": {
+    "notebook": "240e10391ba83992f4ecde60e3b3cdf463d2cdc9c33863a6d34f320772477a8c",
+    "result": "a3e502799e706e48515053dbfabf28a6bbf01fb092767a8fe5ded33530dfd58f"
+  },
+  "authorized_for_submission": false,
+  "caveat": "Three training frames establish functionality only; cold/cache timing differences do not establish a speedup factor. No full-movie gain or transfer evidence yet."
+}

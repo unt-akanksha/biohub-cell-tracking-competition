@@ -1,0 +1,19 @@
+{
+  "status": "staged_not_launched",
+  "kernel": "indarkarhana/biohub-trajectory-overlap-cache-acceptance",
+  "notebook_sha256": "4e37ce3688b59231569c2c65908f7227668b7a7575a0300b464bcefb1c9280ac",
+  "contract_sha256": "99c9fb48404e31051ce3096a0901b32698d19742abb3f04d5f4dc0453f9ec411",
+  "overlay_sha256": "9c369e6c2a463bf85568ef9c7dacb99b835c34b447f471b33befbb715809117c",
+  "source_proof_sha256": "262ba9c9eb11876cf44c000b6597d8770ddc765ad26ad4612b9375cb6b487cf9",
+  "a10_verified_movies": 4,
+  "a10_verified_graphs": 8,
+  "a10_walltime_reduction_fraction": 0.32272810592874,
+  "required_gpus": 2,
+  "maximum_workers": 4,
+  "acceptance_wall_cap_seconds": 3600,
+  "fresh_quota_and_pending_reservation_check_required": true,
+  "sequential_gpu_gate_required": true,
+  "two_t4_acceptance_passed": false,
+  "kernel_pushed": false,
+  "submission_performed": false
+}

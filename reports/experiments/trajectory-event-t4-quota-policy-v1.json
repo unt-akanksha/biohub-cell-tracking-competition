@@ -1,0 +1,19 @@
+{
+  "status": "direct_staff_t4_quota_clarification_verified",
+  "checked_utc": "2026-09-14T16:13:57.469112+00:00",
+  "topic_id": 361104,
+  "comment_id": 1995818,
+  "author_name": "Dustin",
+  "author_url": "",
+  "source_url": "https://www.kaggle.com/discussions/product-feedback/361104#1995818",
+  "excerpt": "1 hour of Notebook runtime in the 2xT4 setup only consumes 1 hour of your GPU quota",
+  "comment_content_sha256": "301a1e0f286674a4e343177493be3f193cb34ec294e31c06bdc7c43550e8af2c",
+  "t4x2_quota_hours_per_notebook_hour": 1,
+  "corroborating_current_source": "https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2/overview/upgraded-accelerators",
+  "pending_hidden_evaluation_assumed_free": false,
+  "pending_platform_cap_reserved_hours": 12,
+  "new_one_hour_acceptance_reserved_hours": 2,
+  "minimum_unreserved_hours": 8,
+  "retrospective_receipts_not_changed": true,
+  "source_sha256": "6730bf7021b1a2611bfe960caa0874a04ada75ac15d7d76a1bb96d2168c42e1c"
+}

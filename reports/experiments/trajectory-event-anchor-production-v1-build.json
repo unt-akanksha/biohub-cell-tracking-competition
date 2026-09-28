@@ -1,0 +1,20 @@
+{
+  "status": "public_production_test_staged_not_launched",
+  "kernel": "indarkarhana/biohub-event-anchor-candidate",
+  "acceptance_sha256": "2b6b681926f596d422261f34c40cca3d22811a02df691896cdbc68ffef5dfe96",
+  "contract_sha256": "e8f1c79e6309fb9458c64e9e879b2576d0d570d61856cffafcb64cb50b6a6801",
+  "overlay_sha256": "d975ea7e7579edc185d463c7dc43bc9def4de6e6f543ea842685dfb097b5f623",
+  "notebook_sha256": "fa3e4e365d80e0b32c74e5d18384dee2e0d0ef4b84fb8b4d9b74db5248738a35",
+  "event_portable_proof_sha256": "da428b0f52c4255d463e684e04856f192c00541b4587aff437427a0daa353ab1",
+  "required_gpus": 2,
+  "maximum_workers": 4,
+  "acceptance_wall_cap_seconds": 3600,
+  "runtime_projection_hours": 7.504155394838402,
+  "only_executable_change_from_acceptance_is_run_mode": true,
+  "model_or_threshold_changed": false,
+  "contract_flags_are_acceptance_time_provenance": true,
+  "quality_failures_preserved": true,
+  "quality_tradeoff_release_review_required": true,
+  "competition_submission_authorized": false,
+  "submission_performed": false
+}

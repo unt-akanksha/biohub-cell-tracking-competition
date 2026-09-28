@@ -2761,6 +2761,362 @@
       "registered_at": "2026-08-27T14:21:26.940444Z",
       "run_id": "zebrahub-contextual-pretrain-v1-mp-repair",
       "status": "completed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "User explicitly authorized all available Kaggle GPU quota and autonomous submission of the first fully accepted candidate; record zero reserve and v4 eligibility without weakening scientific gates.",
+          "replacement_fields": {
+            "authorized_for_submission": true,
+            "gpu_quota_policy": {
+              "provider": "kaggle",
+              "required_gpu_count": 2,
+              "reserve_hours": "0.0",
+              "use_all_available_quota": true
+            },
+            "scientific_boundary": {
+              "audit_source": "ZSNS005 disjoint fixed windows",
+              "public_leaderboard_used_for_selection": false,
+              "selection_source": "ZSNS005 fixed windows",
+              "zsns001_reopened_for_v4": false
+            },
+            "submission_authorization": {
+              "authorized_at": "2026-08-28",
+              "gpu_required_for_upload": false,
+              "rejected_or_ungated_candidate_upload_forbidden": true,
+              "scope": "first_hash_bound_candidate_passing_all_external_reciprocal_calibration_exact_processed_integrity_and_non_replica_gates",
+              "upload_without_additional_prompt": true
+            }
+          },
+          "target_event_id": "evt-9b1d20308bce427781e7bb02bb4b68ce"
+        }
+      ],
+      "authorized_for_submission": true,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "12",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "A project-authored 46.4M-parameter axial multiscale residual branch, warm-started from accepted contextual v3, will improve clean external and reciprocal Biohub association quality without public prediction reuse or leaderboard selection.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-08-28T16:26:12.640664Z",
+      "run_id": "temporal-multiscale-contextual-pair-fusion-candidate-v4",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": "0.18",
+      "amendments": [
+        {
+          "correction_reason": "Kaggle derived the kernel slug from the notebook title rather than the metadata id, so the live kernel ref differs from the authorized one. No code, data, config or budget changed; the pushed directory and its notebook SHA-256 are exactly the authorized ones.",
+          "replacement_fields": {
+            "actual_kernel_ref": "indarkarhana/biohub-d4-complete-harmonic-production-v1",
+            "authorized_kernel_ref": "indarkarhana/biohub-d4-harmonic-production-v1",
+            "cause": "kaggle slugifies the title on first push",
+            "notebook_sha256": "fd961d0f685a5ae752fda736b4052deb64b43d90e89da57b0fc46cb7062f54c3"
+          },
+          "target_event_id": "evt-7102a30863704db6ae2eac0d16785526"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": "Kernel ERROR before inference, caught by the project-authored on-kernel SHA-256 guard. Root cause is the push path, not the pipeline: kaggle kernels push from this Windows host re-read the UTF-8 notebook with the system code page and re-serialized it, mojibaking the embedded predictor literal (U+00B5 -> U+00C2 U+00B5). Pushed cell 4 carried 16 non-ASCII characters where the local build had 6; the predictor written on the kernel hashed to 2988f4cb instead of ef6fc4f8, so the guard refused to run a corrupted predictor. No inference, submission, scoring or leaderboard claim. Fix: the artifact is now pure ASCII end to end and a regression test simulates the corruption path.",
+      "hypothesis": "Completing the public eight-pass D4 TTA group from seven unique views to eight, by replacing the duplicated horizontal-flip anti-diagonal view with the true R180+transpose view and its exact inverse, improves the clean licensed public base. Eight rotation arguments change; no model, checkpoint, threshold, fusion weight, post-process constant or call count changes, and no proxy sweep or leaderboard feedback selects anything.",
+      "imported_audit": false,
+      "lifecycle_status": "failed",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-16T17:55:00.160061Z",
+      "run_id": "d4-complete-harmonic-production-v1",
+      "status": "failed"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Kernel COMPLETE and submitted; run intentionally left open because it carries no complete-movie metric evidence. Production mode disables the in-notebook validator so no proxy override can reach submission.csv, which also means no adjusted_edge_jaccard/division_jaccard/edge_jaccard/node_recall are produced. The ledger correctly refuses to finish it. Closing requires either the returned public score plus complete-movie scoring, or a separate validation-mode run.",
+          "replacement_fields": {
+            "config_selected": "base",
+            "device_guard": "two T4 confirmed",
+            "kernel": "indarkarhana/biohub-d4-complete-harmonic-production-v1 v2",
+            "kernel_status": "COMPLETE",
+            "matches_gpu_validated_20260910": true,
+            "on_kernel_predictor_sha256": "ef6fc4f8335ec799f7229dc880b2247fb776394821c382a2f113906f6b9b0c6a",
+            "predict_minutes_public": "9.07",
+            "public_score": null,
+            "quota_after_hours": "26.67",
+            "submission_ref": 56285962,
+            "submitted_at": "2026-09-16T19:00:55Z",
+            "tta_views": {
+              "deepcenter": 8,
+              "edge": 8,
+              "secondary_edge": 8
+            },
+            "wall_minutes": 26
+          },
+          "target_event_id": "evt-f82b0cb2030a46e6933aabb1a460d3b6"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Completing the public eight-pass D4 TTA group from seven unique views to eight, by replacing the duplicated horizontal-flip anti-diagonal view with the true R180+transpose view and its exact inverse, improves the clean licensed public base. Eight rotation arguments change; no model, checkpoint, threshold, fusion weight, post-process constant or call count changes, and no proxy sweep or leaderboard feedback selects anything. Identical science to v1; v2 differs only in that the artifact is pure ASCII so the Windows push path cannot corrupt the embedded predictor.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "d4-complete-harmonic-production-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-16T18:27:23.977822Z",
+      "run_id": "d4-complete-harmonic-production-v2",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Kernel COMPLETE and submitted. Recovery executed on all four public movies with no fail-safe fallback, no source drift and no rescue-constant mismatch. Run left open: production mode disables the validator so it carries no complete-movie metric evidence and the ledger cannot finish it. Note the node budget, not the evidence gate, is binding on three of four movies (117, 118, 117 against a cap of 120), so on the hidden set this will add up to roughly 120 nodes per movie against the official node-count penalty.",
+          "replacement_fields": {
+            "budget_binding_movies": 3,
+            "fail_safe_fallbacks": 0,
+            "kernel_status": "COMPLETE",
+            "public_score": null,
+            "quality_gain_established": false,
+            "recovery_per_movie": {
+              "44b6_0113de3b": {
+                "budget": 120,
+                "components": "26/27",
+                "edges": 91,
+                "nodes": 117
+              },
+              "44b6_0b24845f": {
+                "budget": 120,
+                "components": "27/58",
+                "edges": 91,
+                "nodes": 118
+              },
+              "6bba_05b6850b": {
+                "budget": 76,
+                "components": "6/6",
+                "edges": 21,
+                "nodes": 27
+              },
+              "6bba_05db0fb1": {
+                "budget": 120,
+                "components": "26/49",
+                "edges": 91,
+                "nodes": 117
+              }
+            },
+            "rows_vs_d4_only": 673,
+            "submission_ref": 56286675,
+            "submission_rows": 240468,
+            "submitted_at": "2026-09-16T20:01:58Z",
+            "total_added_edges": 294,
+            "total_added_nodes": 379,
+            "wall_minutes": 20
+          },
+          "target_event_id": "evt-d61fec8a3c184d55880a5433f84b8322"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "On top of the complete-D4 correction, restoring genuine strong short motion components that output pruning discarded improves the clean public base. The recovery implementation is research/public_pruned_track_recovery.py embedded verbatim and SHA-pinned to 68827c90, the exact file the 2026-09-10 four-movie run pinned when it scored 0.9493103203140519 locally. All six rescue constants are the notebook's own and equal the frozen values; nothing is retuned. Local diagnostic only: that run FAILED the movie and embryo non-regression gates, regressing 0.0062 on 6bba_23af9eeb, and added 241 nodes across four movies with measured edge benefit in one. No leaderboard claim.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "d4-complete-harmonic-production-v2",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-16T19:27:46.655015Z",
+      "run_id": "d4-recovery-harmonic-production-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Reference arm. The public harmonic-fusion base run exactly as published, with its held-out TRAIN validator and post-process sweep enabled, establishes the real 0.947-class baseline. Our three sweep-disabled submissions all scored 0.938, matching the notebook's own BIOHUB_SCORE_AXIS label of 'public 0.939 base + holdout-selected post-process configuration', so the sweep, not the base, carries roughly 0.009. No numerical change of ours is applied here; only the two-device guard.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-17T02:46:08.823249Z",
+      "run_id": "stock-sweep-harmonic-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [
+        {
+          "correction_reason": "Kernel COMPLETE and submitted as 56297442. Paired reference stock-sweep-harmonic-v1 submitted as 56294968. Important caveat for interpretation: the two arms did NOT select the same post-process override. With D4 off the sweep chose tight55; with D4 on it chose relaxed9, which had been the worst candidate in the D4-off table. The pair is therefore a best-configuration comparison, not a clean isolation of the correction. On the 8 held-out TRAIN movies D4 raises base proxy 0.9490380 to 0.9496698 and division Jaccard 0.2308 to 0.2857.",
+          "replacement_fields": {
+            "base_proxy": "0.9496698330083752",
+            "clean_d4_isolation": false,
+            "division_jaccard_d4_off": "0.2308",
+            "division_jaccard_d4_on": "0.2857",
+            "kernel_status": "COMPLETE",
+            "paired_reference_ref": 56294968,
+            "public_score": null,
+            "reference_base_proxy": "0.9490380316323633",
+            "reference_selected_label": "tight55",
+            "reference_selected_proxy": "0.9510954147638787",
+            "same_override_in_both_arms": false,
+            "selected_label": "relaxed9",
+            "selected_override": {
+              "MOTION_RELINK_RELAXED_UM": "9.0"
+            },
+            "selected_proxy": "0.9519125454671334",
+            "submission_ref": 56297442,
+            "submission_rows": 239395
+          },
+          "target_event_id": "evt-653464179d884d7d9e4e11ddd1b0b68f"
+        },
+        {
+          "correction_reason": "Leaderboard returned 0.940 against the paired stock reference 56294968 at 0.947. The complete-D4 geometry correction is REJECTED: it costs about 0.007 on the hidden set. Every local and proxy signal pointed the other way - 4-movie diagnostic +0.002781, 8-movie base proxy 0.9490380 to 0.9496698, division Jaccard 0.2308 to 0.2857 - and all of them were wrong about the sign. The most likely reading is that the public checkpoints and every downstream threshold were calibrated around the seven-unique-view behaviour, so correcting the geometry invalidates that calibration. Note the two arms also selected different overrides (tight55 vs relaxed9), so 0.007 is the combined effect, not the correction alone; either way the corrected arm is clearly worse. Do not ship D4.",
+          "replacement_fields": {
+            "delta_vs_reference": "-0.007",
+            "local_4movie_predicted": "0.002781",
+            "paired_reference_public_score": "0.947",
+            "proxy_8movie_predicted": "0.0006318",
+            "proxy_sign_correct": false,
+            "public_score": "0.94",
+            "ship_d4": false,
+            "verdict": "rejected"
+          },
+          "target_event_id": "evt-ec60d2f4c52d4902a0e35c567c0c6224"
+        }
+      ],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Treatment arm paired with stock-sweep-harmonic-v1. Identical stock public notebook with its validator and post-process sweep enabled, plus only the eight complete-D4 rotation-argument corrections. Measuring the correction against a genuine 0.947-class baseline instead of the 0.939 base config, because our three sweep-disabled submissions all returned 0.938 and could not separate the correction from the missing sweep override. The correction previously measured +0.002781 on a four-movie local diagnostic that failed the embryo gate; that diagnostic has now failed to predict the leaderboard three times.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": "stock-sweep-harmonic-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-17T02:48:03.986825Z",
+      "run_id": "d4-sweep-harmonic-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "5.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Harvest raw prediction graphs for 60 held-out TRAIN movies (30 per embryo prefix) so post-process configuration selection can move off the submission kernel. The published notebook selects on 8 movies because the validator and sweep cost ~75 minutes inside the 12-hour competition cap; that step is nonetheless worth about +0.009 on the leaderboard, an order of magnitude more than anything measured on the 4-movie diagnostic. Moving selection offline allows far more movies, more than 7 candidates, and genuine embryo-held-out evaluation, which an in-kernel sweep structurally cannot do. No configuration is scored or selected in this kernel; the sweep table is emptied and the run only persists evidence.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-17T15:25:31.839796Z",
+      "run_id": "config-harvest-n60-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "7.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Hold the front end fixed at the stock public pipeline, which scores 0.947, and re-run the post-process selection on 40 held-out TRAIN movies (20 per embryo) instead of the published notebook's 8. The stock sweep showed MOTION_RELINK_TIGHT_UM is the one sensitive axis: every other candidate clustered at 0.9490-0.9491 while 5.5 reached 0.9511 and is the configuration now earning 0.947. This probes 5.0, 5.25, 5.5, 5.75 plus RELAXED_UM 9.0 against base, so the winner rests on five times the evidence and can be checked with an embryo held out. The proxy is contaminated - the public checkpoints saw these movies - and it got D4's sign wrong across front ends, so this is only valid within a fixed front end, which is the regime where it has actually worked. No D4: that correction was rejected at 0.940 against 0.947.",
+      "imported_audit": false,
+      "lifecycle_status": "running",
+      "next_gate": null,
+      "parent": null,
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-17T17:49:53.343694Z",
+      "run_id": "config-widesweep-n40-v1",
+      "status": "running"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "7.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "The 40-movie deficit is a tail of ten movies below 0.85 edge Jaccard, seven of them 6bba, not an embryo effect: medians are 0.9070 and 0.9009. Detector node counts on those movies are already correct (6bba_474be664 at 0.98x truth still scores 0.7508) and corr(detector ratio, edgeJ) is only -0.221, so detection is not the cause. The best predictor is edges per node, +0.489, meaning the linker fragments tracks there. The first wide sweep tested only thresholds TIGHTER than the defaults and found everything within 0.0009 of base, so if links are dropped for exceeding a distance gate none of it could have helped. This probes the untested looser direction: OUTPUT_EDGE_MAX_UM 16/18 against 14, TIGHT_UM 7.0 against 6.0, RELAXED_UM 12/14 against 10. If the tail reached the 0.93 median, pooled edgeJ moves about +0.046. Front end stays stock.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "config-widesweep-n40-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-18T01:25:05.130328Z",
+      "run_id": "config-loosesweep-n40-v1",
+      "status": "registered"
+    },
+    {
+      "actual_gpu_hours": null,
+      "amendments": [],
+      "authorized_for_submission": false,
+      "decision": null,
+      "decision_evidence": [],
+      "declared_gpu_hours": "4.00",
+      "dependencies": [],
+      "exact_evidence": {},
+      "failed_gate": null,
+      "failure_reason": null,
+      "hypothesis": "Condition the motion-relink gates on measured cell density instead of one global constant. Our 40-movie decomposition found the deficit is a fragmented tail (edges per node 0.93-0.95 vs 0.99) with correct node counts, and density correlates -0.32 with edge Jaccard. Mechanism from public notebook haideptry/biohub-sota-0-948-density-adaptive-2xt4-22m: bands at 120 and 400 nodes per frame, computed from the movie's own predicted graph, never from its name, so it generalises and is not movie-identity routing. On our 40 movies five of the six worst fall in the middle band, where the change is tight 6.0->6.5, relaxed 10.0->9.0, velocity 0.5->0.0 and learned_bonus 1.0->6.0, i.e. trust the learned linker far more where geometric extrapolation is unreliable. Source screened: no negative-time nodes, no out-of-volume coordinates, no node-count targeting. Its advertised score is not evidence. Stock front end; D4 rejected at 0.940.",
+      "imported_audit": false,
+      "lifecycle_status": "registered",
+      "next_gate": null,
+      "parent": "config-widesweep-n40-v1",
+      "public_score_non_authoritative": null,
+      "registered_at": "2026-09-18T01:39:28.631987Z",
+      "run_id": "density-adaptive-harmonic-v1",
+      "status": "registered"
     }
   ],
   "schema_version": 1

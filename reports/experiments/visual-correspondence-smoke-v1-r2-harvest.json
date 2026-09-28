@@ -1,0 +1,49 @@
+{
+  "status": "verified_backup",
+  "output": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-smoke-v1-r2-output",
+  "records": [
+    {
+      "path": "result.json",
+      "bytes": 20228,
+      "sha256": "c56a70797bdf3a69adb62212d4992a37fc03b7cdbd41cd9da7faf3111e906d81"
+    },
+    {
+      "path": "resume.pt",
+      "bytes": 190329357,
+      "sha256": "608801c1cf6bcf72256e2b061ca6eabc4eeb478b96b644e57be078d1d6ceef5d"
+    },
+    {
+      "path": "6bba-resnet3d/best.pt",
+      "bytes": 36073034,
+      "sha256": "11394af9285c5272bbddf193f70be57ad9ba280d30466ed5f02e2914ef0dceb5"
+    },
+    {
+      "path": "6bba-resnet3d/history.json",
+      "bytes": 5944,
+      "sha256": "250698a3c9aa40d0257c00f054284aa0b7ada3dbd54e7bad49a2abfa5e398af5"
+    },
+    {
+      "path": "6bba-resnet3d/result.json",
+      "bytes": 8292,
+      "sha256": "cd5894fc1f04e71ec5e37d547efa8c801dda8628f7b00ec0134b47b6f9455354"
+    },
+    {
+      "path": "6bba-token_transformer3d/best.pt",
+      "bytes": 63427436,
+      "sha256": "f9eeb2b042f41a06328bb942ab3035e31c0196eec701ebe6f93941d13a17a104"
+    },
+    {
+      "path": "6bba-token_transformer3d/history.json",
+      "bytes": 5954,
+      "sha256": "79e88698bc486abbb98373b2f2292f358fbe7611a4aff0bcafc0507afe060399"
+    },
+    {
+      "path": "6bba-token_transformer3d/result.json",
+      "bytes": 8300,
+      "sha256": "9bfec2b07243d6565318e269c7ef0ca980ace6b45c273d6f96d5561ee39001d2"
+    }
+  ],
+  "total_bytes": 289878545,
+  "elapsed_seconds": 11.561999999976251,
+  "remote_files_deleted": false
+}

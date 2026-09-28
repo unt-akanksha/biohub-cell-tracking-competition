@@ -1,0 +1,67 @@
+{
+  "status": "additive_smoke_passed",
+  "records": [
+    {
+      "path": "data/44b6_996155de-019.npz",
+      "sha256": "f34fc19561eb6d3f0a9bdd06a8efc6033b91056978b7b8780f1b2b998b56c831",
+      "bytes": 47321,
+      "stem": "44b6_996155de",
+      "embryo": "44b6",
+      "role": "optimization",
+      "transition": 19,
+      "patches": 3,
+      "triples": 1,
+      "positive": 1,
+      "negative": 0
+    },
+    {
+      "path": "data/6bba_085bf656-018.npz",
+      "sha256": "f43f097c56044c6ecb9fca137039e18897f5cd622b6caef9d9ec225606d53642",
+      "bytes": 40988,
+      "stem": "6bba_085bf656",
+      "embryo": "6bba",
+      "role": "optimization",
+      "transition": 18,
+      "patches": 3,
+      "triples": 1,
+      "positive": 1,
+      "negative": 0
+    }
+  ],
+  "totals": {
+    "44b6": 1,
+    "6bba": 1
+  },
+  "encoders": [
+    {
+      "embryo": "6bba",
+      "family": "resnet3d",
+      "sha256": "6fbd68f59d68cb7970f8e11c87d3e171243bdfd447c70a9fe13ce15dd2500f73",
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/6bba-resnet3d/best.pt"
+    },
+    {
+      "embryo": "6bba",
+      "family": "token_transformer3d",
+      "sha256": "401df7cd2c43211c96b3caf05666615e99a73bcb59d6630c92de4130baa38cdb",
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/6bba-token_transformer3d/best.pt"
+    },
+    {
+      "embryo": "44b6",
+      "family": "resnet3d",
+      "sha256": "c5c188b1776e01ab1f7c53c2a2526bb04e1ccf94b0e4c0edf96f02d4cd3c517a",
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/44b6-resnet3d/best.pt"
+    },
+    {
+      "embryo": "44b6",
+      "family": "token_transformer3d",
+      "sha256": "fef09a9eaa02bf6e12524097570604e76d104de1a7efa29c1a373f295b6ab0b9",
+      "path": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-full/44b6-token_transformer3d/best.pt"
+    }
+  ],
+  "contract_sha256": "cb5105bf5dac9f2585ff2e585789983bdb11d3d04eed235470a80c2c2c1a124c",
+  "seconds": 1.3292945760040311,
+  "old_data_sha256": "7e0e7b1ca3c11b27319824fad3746b49f8a1cf519a73d3dad38e12d2ef8a0e06",
+  "selection_opened": false,
+  "target_pilot_labels_used": false,
+  "authorized_for_submission": false
+}

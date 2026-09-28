@@ -1,0 +1,79 @@
+{
+  "status": "verified_backup",
+  "output": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\visual-correspondence-train-v1-r2-output",
+  "records": [
+    {
+      "path": "result.json",
+      "bytes": 123539,
+      "sha256": "d67df95db152d84515dd1261a29f3087ac7660ea29b121b2f4381f44554a7c88"
+    },
+    {
+      "path": "resume.pt",
+      "bytes": 190329357,
+      "sha256": "d5918c36e90035faa3152298fd827aa49cfc3ca7c87e40164393b446636578a8"
+    },
+    {
+      "path": "6bba-resnet3d/best.pt",
+      "bytes": 36073034,
+      "sha256": "a8d3e0b14185c3c23ded1a87985d7bc363b51befca8e92a94741e295f1a49596"
+    },
+    {
+      "path": "6bba-resnet3d/history.json",
+      "bytes": 30958,
+      "sha256": "84eda92afcadff546e0821657677802a36a236637e7ec8efa360539c4ad01dd4"
+    },
+    {
+      "path": "6bba-resnet3d/result.json",
+      "bytes": 33332,
+      "sha256": "d09eda369f093d18045696788aa5181e59f6ba549d3ce8ef5cb45bf7fe566b50"
+    },
+    {
+      "path": "6bba-token_transformer3d/best.pt",
+      "bytes": 63427436,
+      "sha256": "9448ae84c570e0c7aa569028d915265dab45d9480f3c44205578227cd76b3cc5"
+    },
+    {
+      "path": "6bba-token_transformer3d/history.json",
+      "bytes": 30988,
+      "sha256": "5a3122cdff208cb3f80304bbba6719a829db370986a19e138b831228395f4c9d"
+    },
+    {
+      "path": "6bba-token_transformer3d/result.json",
+      "bytes": 33367,
+      "sha256": "1eabc0dd85e707fdc993ebb3585e31b36070b9d277e6dcd465f42bf8a49fbd38"
+    },
+    {
+      "path": "44b6-resnet3d/best.pt",
+      "bytes": 36072842,
+      "sha256": "9dd023ab3ac694f44d6c55c7c539118b4df022e18a5bb09cd74b5a68211c2a8e"
+    },
+    {
+      "path": "44b6-resnet3d/history.json",
+      "bytes": 17925,
+      "sha256": "a8269a161f32babce7223140eaa96a3260c1888f8adcc1a1f2e4d4b5f27af6a0"
+    },
+    {
+      "path": "44b6-resnet3d/result.json",
+      "bytes": 19380,
+      "sha256": "8d25238783b2be8ea30d809b9a11048f59bcea68dc3375bc0fd61885457ce45e"
+    },
+    {
+      "path": "44b6-token_transformer3d/best.pt",
+      "bytes": 63427180,
+      "sha256": "edc92c512cafc3eb9c96282b24790ed816ed17c15dd052cd7062248a34c5a742"
+    },
+    {
+      "path": "44b6-token_transformer3d/history.json",
+      "bytes": 17920,
+      "sha256": "808f742435670a70e14cfe5aac185de9c42f9707ae1fc05c80a35d9230095bac"
+    },
+    {
+      "path": "44b6-token_transformer3d/result.json",
+      "bytes": 19379,
+      "sha256": "7a2e11bb61cc93a3fa6750e2c3371b10e3299caba8cac813deb0604c5080eee9"
+    }
+  ],
+  "total_bytes": 389656637,
+  "elapsed_seconds": 16.81300000002375,
+  "remote_files_deleted": false
+}

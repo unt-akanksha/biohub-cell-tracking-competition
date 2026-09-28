@@ -1,0 +1,24 @@
+{
+  "run_id": "public-owned-flow-repair-v1",
+  "status": "frozen_before_scores",
+  "hypothesis": "Our image-derived backward flow can corroborate missing continuations in the stronger public graph without replacing its detector or existing links.",
+  "candidate": "Apply the unchanged focus_edge_consensus.repair rule to the public control and the cached FOCUS plus owned native-flow graph. No sequential stacking or threshold search.",
+  "comparators": ["unchanged public control", "previous public-neural FOCUS edge-consensus repair"],
+  "scope": "The same four previously exposed base-training diagnostic movies only; not independent validation",
+  "stems": ["44b6_24264f12", "44b6_81c256f0", "6bba_23af9eeb", "6bba_f1fde7e0"],
+  "gate": "Against BOTH controls: strictly positive combined score and raw edge Jaccard gain, at least one additional correct edge, no additional false edges, no movie regression, identical nodes and recall. Passing remains diagnostic only.",
+  "node_changes_allowed": false,
+  "existing_edge_changes_allowed": false,
+  "division_additions_allowed": false,
+  "labels_or_estimated_counts_used_in_repair": false,
+  "new_target_movies_opened": 0,
+  "gpu_hours": 0,
+  "authorized_for_submission": false,
+  "pins": {
+    "research/focus_edge_consensus.py": "7848de5aa087483e4f06c90e264ee83e1dfdcaa1436fc1e0cdbf4bd026250123",
+    "reports/experiments/focus-owned-flow-full-v1-result.json": "079abeeccec5f7a76e27b40c88063fae30bca4a155f3dae3bf3bc0311e4f6685",
+    "reports/experiments/focus-edge-consensus-v1-result.json": "9a513c12ac1dad49f268ec3083af7da4bdd74df11b89d6843571dced2c7ac896",
+    ".biohub/cache/kernel-outputs/focus-bridge-cached-control-v2/prelabel_graph_manifest.json": "3429172cb35da36903c219d7ff50465edb90c24ed9ac996366c5383b88222a0a",
+    "kaggle/biohub-focus-owned-flow-full-v1/biohub-focus-owned-flow-full-v1.ipynb": "5af97d02de71448af3d4f2367db307a77212fb59ae0d1389f0a6beffb7e3db9f"
+  }
+}

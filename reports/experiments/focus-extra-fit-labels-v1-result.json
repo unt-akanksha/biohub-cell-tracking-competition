@@ -1,0 +1,207 @@
+{
+  "status": "completed_extra_fitting_label_inventory",
+  "run_id": "focus-extra-fit-labels-v1",
+  "records": [
+    {
+      "stem": "6bba_971fa5e0",
+      "role": "fitting",
+      "raw_sha256": "3d56cb90637c99da0c90c90ac8137664575ef0d339814b6692ff61a5c49f57ef",
+      "labels_sha256": "a6d62e60d89f3c15b4fb8950815bd3167f4f3df6b1ba308496d0266a08169af2",
+      "counts": {
+        "unknown_target": 5673,
+        "known_parent": 762,
+        "no_unique_adjacent_annotated_parent": 19,
+        "known_parent_absent": 2
+      },
+      "windows": 99,
+      "nodes": 6549,
+      "max_frame_nodes": 110
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "role": "fitting",
+      "raw_sha256": "62fc0fdf143ddbf5a5c21770f97d410c127d3af14f2949e47c1dc183bef0ffbe",
+      "labels_sha256": "13636472ab65062c3c0f67cd0bbd95d6a65c5c5b9c44ec7b2c5b4ff67a4105d1",
+      "counts": {
+        "unknown_target": 40995,
+        "known_parent": 804,
+        "known_parent_absent": 5,
+        "no_unique_adjacent_annotated_parent": 20
+      },
+      "windows": 99,
+      "nodes": 42172,
+      "max_frame_nodes": 574
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "role": "fitting",
+      "raw_sha256": "c12f0b2a4cc3ec8ea156f2ba9814b71755794c6434b0f7bcef88592171648e0a",
+      "labels_sha256": "186ad67619bf89d821853d4a867cd66509ddba37e88bf72652e7d62508d517a4",
+      "counts": {
+        "unknown_target": 51717,
+        "no_unique_adjacent_annotated_parent": 70,
+        "known_parent": 1490,
+        "known_parent_absent": 4
+      },
+      "windows": 99,
+      "nodes": 53559,
+      "max_frame_nodes": 650
+    },
+    {
+      "stem": "6bba_edf14583",
+      "role": "fitting",
+      "raw_sha256": "8de1d8bd9196b4e9b087bc1b4c104b21efcc113ae1c791d4ff7b066282527ac5",
+      "labels_sha256": "981610ab92c5cc975c78880ee7ecc005d8d0d1cbedc39be0299d50925c51b5ca",
+      "counts": {
+        "unknown_target": 78954,
+        "known_parent": 736,
+        "no_unique_adjacent_annotated_parent": 35,
+        "known_parent_absent": 9
+      },
+      "windows": 99,
+      "nodes": 80491,
+      "max_frame_nodes": 872
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "role": "fitting",
+      "raw_sha256": "9b801f95e068373c42dd9e08cc479d72c8ed0590f98012d9ca1d814f0e7cc9a6",
+      "labels_sha256": "e4550aa055c7a94294cc75b4f06026b9169507603838638c505ab67015f5feb6",
+      "counts": {
+        "unknown_target": 15615,
+        "known_parent": 714,
+        "no_unique_adjacent_annotated_parent": 22,
+        "known_parent_absent": 2
+      },
+      "windows": 99,
+      "nodes": 16686,
+      "max_frame_nodes": 333
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "role": "fitting",
+      "raw_sha256": "27c3e94cd6899f0fb6b25ee59c240260574f47c6484729bcc8f2f9cb37aabff4",
+      "labels_sha256": "bf7b76c25938cb6dac326024f841319d119bf89da0c276a51019e9e5d8fe1e0d",
+      "counts": {
+        "unknown_target": 7527,
+        "known_parent": 1157,
+        "known_parent_absent": 7,
+        "no_unique_adjacent_annotated_parent": 16
+      },
+      "windows": 99,
+      "nodes": 8778,
+      "max_frame_nodes": 111
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "role": "fitting",
+      "raw_sha256": "90c7e9929fdade9c56a17f97b760101ab85ad46ddbf06a1de330b883248e6a19",
+      "labels_sha256": "a04e9cb9467da3647179b43744bd241e47c9322d57e4fca39bd6fdb37c8f4009",
+      "counts": {
+        "unknown_target": 5117,
+        "known_parent": 965,
+        "known_parent_absent": 14,
+        "no_unique_adjacent_annotated_parent": 35
+      },
+      "windows": 99,
+      "nodes": 6211,
+      "max_frame_nodes": 84
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "role": "fitting",
+      "raw_sha256": "5859e0566de5638a6c97270523de1d4914090c510865a8c9864a1e8e7016e442",
+      "labels_sha256": "5e5460721f1f700a808142498f3e5d09d02bf7d109f3aa8788002c126f99f78a",
+      "counts": {
+        "unknown_target": 107470,
+        "known_parent": 1308,
+        "known_parent_absent": 66,
+        "no_unique_adjacent_annotated_parent": 40
+      },
+      "windows": 99,
+      "nodes": 109965,
+      "max_frame_nodes": 1187
+    }
+  ],
+  "new_fitting_totals": {
+    "unknown_target": 313068,
+    "known_parent": 7936,
+    "no_unique_adjacent_annotated_parent": 257,
+    "known_parent_absent": 109
+  },
+  "combined_twelve_movie_fitting_totals": {
+    "unknown_target": 450809,
+    "known_parent": 10754,
+    "no_unique_adjacent_annotated_parent": 350,
+    "known_parent_absent": 161,
+    "ambiguous_or_unmatched_near_parent": 1
+  },
+  "unchanged_diagnostic_totals": {
+    "unknown_target": 29643,
+    "known_parent": 2645,
+    "known_parent_absent": 27,
+    "no_unique_adjacent_annotated_parent": 40,
+    "ambiguous_or_unmatched_near_parent": 2
+  },
+  "raw_receipt_sha256": "55e3e18d7af5e486dc6ba90688e0f47159804fcb158117ec4a0cac6169939c41",
+  "original_label_receipt_sha256": "c97a67746d355e165bb3a5476f7ffaec80dfcf1aec9de0e9d5bef7a0019089b4",
+  "source_hashes": {
+    "research/focus_adaptation_labels.py": "69ebaeae0dab39f1b9561f8fb8f5ce35c694fc83aa89a7fcbefd57eb775912dd",
+    "research/focus_predicted_training_labels.py": "48e90685b049ad0d388e08e7710fd2e5280a2a3ad9852fc6358f7e271dd050b2",
+    "research/focus_extra_fit_scope.py": "b5efabf2a4b5329929c3f758e4fe46007b25a485e9362f78ec11126101bcd1bd",
+    "scripts/verify-focus-extra-fit-cache.py": "353d439c5cac3d8af93372181db468c1409518fec10d258fcf4b203f13f16d26",
+    "scripts/audit-focus-extra-fit-labels.py": "91ea77e54a090ee3b92260fed8866d980455569db603389412296ed2602f9153",
+    "reports/experiments/focus-extra-fit-labels-v1-design.md": "5f9a1df3453857bafaf6357c78c79ec993b44369fbf19f060c8ab54cd482338a"
+  },
+  "contract": {
+    "fitting_stems": [
+      "6bba_971fa5e0",
+      "6bba_cf35214c",
+      "6bba_cff5865f",
+      "6bba_edf14583",
+      "6bba_1ebfb80d",
+      "6bba_7d3058ae",
+      "6bba_4f99ce20",
+      "6bba_57b7cc1e"
+    ],
+    "training_stems": [
+      "6bba_971fa5e0",
+      "6bba_cf35214c",
+      "6bba_cff5865f",
+      "6bba_edf14583",
+      "6bba_1ebfb80d",
+      "6bba_7d3058ae",
+      "6bba_4f99ce20",
+      "6bba_57b7cc1e"
+    ],
+    "replay_stems": [
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "previous_fitting_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41"
+    ],
+    "unchanged_diagnostic_stems": [
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "role_assignment": "Next eight original96 fitting movies, excluding cached/replay movies; no labels or scores used",
+    "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+  },
+  "all_raw_outputs_verified_before_label_access": true,
+  "optimizer_run": false,
+  "source_selection_opened": false,
+  "new_target_movies_opened": 0,
+  "authorized_for_submission": false,
+  "gpu_seconds": 0,
+  "elapsed_seconds": 41.5619999999908
+}

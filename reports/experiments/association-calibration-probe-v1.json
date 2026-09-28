@@ -1,0 +1,346 @@
+{
+  "status": "verified_calibration_not_tracking_candidate",
+  "profile": "probe",
+  "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+  "parameters": [
+    0.0,
+    0.35209859685540035,
+    -12.0
+  ],
+  "windows": 18,
+  "launcher_seconds": 62.39009597199998,
+  "result": {
+    "status": "completed_calibration_not_tracking_validation",
+    "profile": "probe",
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "fitting_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41"
+    ],
+    "diagnostic_stems": [
+      "6bba_b204cac7",
+      "6bba_2646afc7"
+    ],
+    "frozen_before": {
+      "neural": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+      "flow": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779"
+    },
+    "frozen_after": {
+      "neural": "41e82ccfd2e049abbc3d7d11e5eb08b60361b3673b606f848787597de6d62327",
+      "flow": "e82b7255fb2cded608a800fb6627ec4972043491e636e22a0dcbd66fc5c93779"
+    },
+    "records": [
+      {
+        "role": "fitting",
+        "stem": "6bba_6479435d",
+        "t_start": 63,
+        "source_nodes": 220,
+        "target_nodes": 226,
+        "supervised_columns": 2,
+        "known_null_columns": 0,
+        "input_sha256": "efb2d529ba544903bd46a3615eec346fd900454988e1cfcbc496cb65cbac5733",
+        "cache_file": "6bba_6479435d_63.npz",
+        "cache_sha256": "b11c60b95d972b5065971e5e4ac80ff7ae7d55da0404338f4264c7ac1dcc458c"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_6479435d",
+        "t_start": 19,
+        "source_nodes": 486,
+        "target_nodes": 471,
+        "supervised_columns": 10,
+        "known_null_columns": 0,
+        "input_sha256": "a1acba4cb90602c387dcf129d63a4f7898f996999914687d97a470ad799649a0",
+        "cache_file": "6bba_6479435d_19.npz",
+        "cache_sha256": "f4cc3eead0178c9f8e46f447aa830d130eaac571a63a84654079cfc7ded0abaf"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_6479435d",
+        "t_start": 92,
+        "source_nodes": 115,
+        "target_nodes": 109,
+        "supervised_columns": 4,
+        "known_null_columns": 0,
+        "input_sha256": "f6a32ec7432ffebe13d778c1227eae3ee98c2d3f313779e2e712c55e313b2519",
+        "cache_file": "6bba_6479435d_92.npz",
+        "cache_sha256": "a485681e43c495bc54bd97ee13b3597c12aeae20f92db8f9a1167384f5578026"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_df673a83",
+        "t_start": 36,
+        "source_nodes": 248,
+        "target_nodes": 234,
+        "supervised_columns": 5,
+        "known_null_columns": 0,
+        "input_sha256": "5db393c30a78fca65f2e8e0da4dbbea2e69f602d75766a61bcdc1b0a3875d79e",
+        "cache_file": "6bba_df673a83_36.npz",
+        "cache_sha256": "a6f42ad44278f895e9f88b2b1ceefb481bcbe4cead6d277f24eb8c0af9ac573c"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_df673a83",
+        "t_start": 16,
+        "source_nodes": 238,
+        "target_nodes": 235,
+        "supervised_columns": 6,
+        "known_null_columns": 0,
+        "input_sha256": "ffc8d485fcb55982809fde3e08ba856552d331d1be7b3eec3ce3d3b841a83f70",
+        "cache_file": "6bba_df673a83_16.npz",
+        "cache_sha256": "357e6a08fe2155baf741752d3af6a841acb8f49030c7f9863acab4c60d9df723"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_df673a83",
+        "t_start": 38,
+        "source_nodes": 230,
+        "target_nodes": 237,
+        "supervised_columns": 5,
+        "known_null_columns": 0,
+        "input_sha256": "5ebfe3c383f1ed7c65cb5fd8b9bc5f911a2157d62a1cb62b9230ceeac779840d",
+        "cache_file": "6bba_df673a83_38.npz",
+        "cache_sha256": "3faef005f7ca60f56252d8c7197c01495dde1a3c593beb616d8245b7510b883a"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_767a1e17",
+        "t_start": 86,
+        "source_nodes": 674,
+        "target_nodes": 674,
+        "supervised_columns": 19,
+        "known_null_columns": 0,
+        "input_sha256": "58df9aa94305ff42e31203d21b1aed154ec12a4bff163f9d1acbc6fcb21523b4",
+        "cache_file": "6bba_767a1e17_86.npz",
+        "cache_sha256": "abcaece77e732e34e08af27cfe3aff204deafc50f40d0d81f62e42d700a48ac9"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_767a1e17",
+        "t_start": 63,
+        "source_nodes": 624,
+        "target_nodes": 636,
+        "supervised_columns": 2,
+        "known_null_columns": 0,
+        "input_sha256": "7d21b0cfd3934c051c5d8be563ad8d43f1e05b82373edd6de6791028d29fe39a",
+        "cache_file": "6bba_767a1e17_63.npz",
+        "cache_sha256": "13e4027c057f264a57aead1066f6c2bfc2f6c2e4adabbf20f94a6c2fbaac41bc"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_767a1e17",
+        "t_start": 46,
+        "source_nodes": 547,
+        "target_nodes": 552,
+        "supervised_columns": 1,
+        "known_null_columns": 0,
+        "input_sha256": "73d8ff31d7473434f3d6e15867e0ae3a702a0d46afd0cc902f3e350123b057be",
+        "cache_file": "6bba_767a1e17_46.npz",
+        "cache_sha256": "81f9d5f485979b52cd749bbffa47fd27fdcb23369605354b34056174d41cb039"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_2312ac41",
+        "t_start": 44,
+        "source_nodes": 138,
+        "target_nodes": 136,
+        "supervised_columns": 10,
+        "known_null_columns": 0,
+        "input_sha256": "bceca4fa9572aeeaababbbe3b0ca1065d140fe02b4ff910b1dec28a23a53cd41",
+        "cache_file": "6bba_2312ac41_44.npz",
+        "cache_sha256": "4cd5e667c9955340c1bbb73e5dde62b2db8ba77cc6890f882b70946f12ee6933"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_2312ac41",
+        "t_start": 35,
+        "source_nodes": 182,
+        "target_nodes": 184,
+        "supervised_columns": 8,
+        "known_null_columns": 0,
+        "input_sha256": "cde3742ff57909c855217fc5acb54cfc710e0e97fcd6e4137b96541dcc416b7b",
+        "cache_file": "6bba_2312ac41_35.npz",
+        "cache_sha256": "f240770c5583bd909764b4466d0ca857ad285a36372c507ba00912ec5a30d41e"
+      },
+      {
+        "role": "fitting",
+        "stem": "6bba_2312ac41",
+        "t_start": 81,
+        "source_nodes": 86,
+        "target_nodes": 85,
+        "supervised_columns": 8,
+        "known_null_columns": 0,
+        "input_sha256": "6178fdb856b428ef665f19db06225a5ccd8da9a5f3f47a5001d4fef620d735c4",
+        "cache_file": "6bba_2312ac41_81.npz",
+        "cache_sha256": "f038b1ae29257f15f244aafb397da4adfd8e1bb31d6694f3ab3b19787b50cab0"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_b204cac7",
+        "t_start": 61,
+        "source_nodes": 88,
+        "target_nodes": 89,
+        "supervised_columns": 9,
+        "known_null_columns": 0,
+        "input_sha256": "c6e719afee20a9025e2209fda4297196b5b40adc87ecf460701b94301cd07789",
+        "cache_file": "6bba_b204cac7_61.npz",
+        "cache_sha256": "e7f89700297444fc914bcac31b1daee7cb408ad11425116a170fa648d40dc30f"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_b204cac7",
+        "t_start": 1,
+        "source_nodes": 99,
+        "target_nodes": 97,
+        "supervised_columns": 7,
+        "known_null_columns": 0,
+        "input_sha256": "6e8c3ce5c34556c714ea338951a587dc70f3b78a25bfa0a413e0dde4d19c68a4",
+        "cache_file": "6bba_b204cac7_1.npz",
+        "cache_sha256": "ca1a3559c98e24f3627eb269fe4289ad6300a2fd0bff6d4de2ed263cb60bad1e"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_b204cac7",
+        "t_start": 51,
+        "source_nodes": 86,
+        "target_nodes": 80,
+        "supervised_columns": 8,
+        "known_null_columns": 0,
+        "input_sha256": "9a0478f184130ca593af0444f8b1fed35eb0b3c65f838e6b005d0a3ac7655b5a",
+        "cache_file": "6bba_b204cac7_51.npz",
+        "cache_sha256": "e3510951a8cd5877b6efe52df76b7679ab85f25025f1b9eb8bb1ad5c0712c5f3"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_2646afc7",
+        "t_start": 54,
+        "source_nodes": 82,
+        "target_nodes": 75,
+        "supervised_columns": 5,
+        "known_null_columns": 0,
+        "input_sha256": "a24326edeb8b8f1135884b3669ebce1442c02bccd2f1cdec77a4116834adb662",
+        "cache_file": "6bba_2646afc7_54.npz",
+        "cache_sha256": "d00606507e2122b50c00d1f32ddd5184562e2361cdf6cc2fcd7f7c6ff6272840"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_2646afc7",
+        "t_start": 92,
+        "source_nodes": 58,
+        "target_nodes": 56,
+        "supervised_columns": 5,
+        "known_null_columns": 0,
+        "input_sha256": "0f248ce6c92fbcd9571af2c043e47610b7d1fab2238d41dca2b733ca0c2e7bd3",
+        "cache_file": "6bba_2646afc7_92.npz",
+        "cache_sha256": "b3a9debfbb8c7c34b57070a03ef7cb5dfae61ff901b145241507bf00c3abe7d1"
+      },
+      {
+        "role": "diagnostic",
+        "stem": "6bba_2646afc7",
+        "t_start": 45,
+        "source_nodes": 74,
+        "target_nodes": 77,
+        "supervised_columns": 6,
+        "known_null_columns": 0,
+        "input_sha256": "1afe5d44d4dd437df77dd626aa1fe6f27cef41a2950892ca9395565273a92df2",
+        "cache_file": "6bba_2646afc7_45.npz",
+        "cache_sha256": "8de8b02e10309ed5358cb76f1dd352daeec817dce4fa4232a023f2d913d6154f"
+      }
+    ],
+    "fit": {
+      "parameters": [
+        0.0,
+        0.35209859685540035,
+        -12.0
+      ],
+      "bounds": [
+        [
+          0.0,
+          1.0
+        ],
+        [
+          0.25,
+          4.0
+        ],
+        [
+          -12.0,
+          4.0
+        ]
+      ],
+      "optimizer": "SciPy L-BFGS-B",
+      "iterations": 20,
+      "converged": true,
+      "fit_metrics": {
+        "nll": 0.1979959401418499,
+        "columns": 80,
+        "known_null_columns": 0,
+        "correct": 76,
+        "confident_correct": 75,
+        "confident_wrong": 4,
+        "brier": 0.12146427468775159
+      },
+      "flow_control": {
+        "nll": 0.38874319393289936,
+        "columns": 80,
+        "known_null_columns": 0,
+        "correct": 74,
+        "confident_correct": 73,
+        "confident_wrong": 6,
+        "brier": 0.15296588818637352
+      },
+      "neural_control": {
+        "nll": 0.4002457951743044,
+        "columns": 80,
+        "known_null_columns": 0,
+        "correct": 74,
+        "confident_correct": 74,
+        "confident_wrong": 6,
+        "brier": 0.1243112583796007
+      }
+    },
+    "diagnostic": {
+      "calibrated": {
+        "nll": 0.28951467712495155,
+        "columns": 40,
+        "known_null_columns": 0,
+        "correct": 37,
+        "confident_correct": 36,
+        "confident_wrong": 3,
+        "brier": 0.1543159235600296
+      },
+      "flow": {
+        "nll": 0.5623469953617245,
+        "columns": 40,
+        "known_null_columns": 0,
+        "correct": 36,
+        "confident_correct": 36,
+        "confident_wrong": 4,
+        "brier": 0.166141813701838
+      },
+      "neural": {
+        "nll": 0.40867167843382435,
+        "columns": 40,
+        "known_null_columns": 0,
+        "correct": 38,
+        "confident_correct": 38,
+        "confident_wrong": 2,
+        "brier": 0.12654278928447482
+      }
+    },
+    "functionality_passed": true,
+    "probe_inputs_replayed": false,
+    "elapsed_seconds": 14.309120533000026,
+    "diagnostic_scope": "Calibration-held-out windows within original neural training pool; not independent model validation",
+    "selection_opened": false,
+    "target_audit_opened": false,
+    "authorized_for_submission": false
+  },
+  "authorized_for_submission": false,
+  "source_sha256": {
+    "result": "9d50d7c280de68535d4c7de6df1db5b9ae35e604ac73a6816563b94917c5c9ae",
+    "terminal": "424fd0af8e792261f329f9a3491b5c9c62131ffd4983975e7bb8612d24e0675a"
+  }
+}

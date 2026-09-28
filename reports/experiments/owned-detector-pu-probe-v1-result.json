@@ -1,0 +1,86 @@
+{
+  "status": "verified_owned_detector_pu_functionality_not_selection",
+  "checkpoint_sha256": "817b8c1a5583f9eecf6cf647a907e473a0d54d85d0e0e2c0c01f8a8efd4f7c8d",
+  "steps": 10,
+  "launcher_seconds": 110.186904024,
+  "optimization_seconds": 35.958934133999946,
+  "input_count": 20,
+  "target_count": 40,
+  "all_frozen_components_unchanged": true,
+  "detector_changed": true,
+  "control": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 1000,
+    "checkpoint_sha256": "76f7da6e32c901e3e3f9d2ab870b8a22235b0b91086cfcf909aa41674896a144",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 269,
+    "predicted_edges": 160,
+    "scorer_counts": {
+      "edge_tp": 14,
+      "edge_fp": 5,
+      "edge_fn": 2,
+      "division_tp": 0,
+      "division_fp": 1,
+      "division_fn": 0,
+      "num_pred_nodes": 269
+    },
+    "elapsed_seconds": 3.0926617699999497,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null,
+    "pre_motion_patch_receipt": {
+      "version": 1,
+      "views": 8,
+      "encode_calls": 2,
+      "features": "native unchanged",
+      "logits": "inverse-aligned XY D4 arithmetic mean",
+      "maximum_mean_absolute_logit_delta": 0.2008494883775711
+    },
+    "standalone_image_flow": true
+  },
+  "candidate": {
+    "status": "passed",
+    "device": "cuda",
+    "checkpoint_step": 10,
+    "checkpoint_sha256": "817b8c1a5583f9eecf6cf647a907e473a0d54d85d0e0e2c0c01f8a8efd4f7c8d",
+    "movie": "6bba_b204cac7",
+    "frames": 3,
+    "strict_reload": true,
+    "geff_round_trip": true,
+    "predicted_nodes": 168,
+    "predicted_edges": 106,
+    "scorer_counts": {
+      "edge_tp": 11,
+      "edge_fp": 7,
+      "edge_fn": 5,
+      "division_tp": 0,
+      "division_fp": 0,
+      "division_fn": 0,
+      "num_pred_nodes": 168
+    },
+    "elapsed_seconds": 2.436263328000109,
+    "scope": "Training-movie functionality only",
+    "authorized_for_submission": false,
+    "encode_patch_receipt": null,
+    "pre_motion_patch_receipt": {
+      "version": 1,
+      "views": 8,
+      "encode_calls": 2,
+      "features": "native unchanged",
+      "logits": "inverse-aligned XY D4 arithmetic mean",
+      "maximum_mean_absolute_logit_delta": 0.11592154204845428
+    },
+    "standalone_image_flow": true
+  },
+  "authorized_for_submission": false,
+  "caveat": "Ten updates and three training frames only; larger fit and independent complete-movie tracking evidence still required",
+  "source_sha256": {
+    "result": "d412a2282e0b19447140b61aa4b3203521cd0b65bdc30d7151a6bb1cce8779b4",
+    "terminal": "f6495db3ea4faa31774bb527856c0d289d8e6383856bb52ac83aa654fd02bac0"
+  },
+  "notebook_sha256": "7b4e2296899a5f507701912597f9ee2c00cdeb200879a30b066dcbd56028e200"
+}

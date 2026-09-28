@@ -1,0 +1,4040 @@
+{
+  "status": "fixed_morphology_screen_finished",
+  "contract": {
+    "design_sha256": "1a4b7a2df7165f5bc0bcb73711b0cd45d1df04b8deddb823456a0d52eabf3425",
+    "source_sha256": "ed9acd673bf927278ba3a4b06cb2f662f1c13b0a384df56dfedf8bf97b876acb",
+    "helper_sha256": "bbf0d2881b3ab12c71b6baa493a0464917389ce5c461ccb8b3727efa9fd7dcb9",
+    "data_sha256": [
+      "7e0e7b1ca3c11b27319824fad3746b49f8a1cf519a73d3dad38e12d2ef8a0e06",
+      "e358a984eade85b96fbf2d77937ba0d57307f4813f44fb6c339346024d17df87"
+    ]
+  },
+  "smoke": false,
+  "source_only_fitting": true,
+  "gpu_used": false,
+  "competition_test_opened": false,
+  "complete_movie_validation_opened": false,
+  "previously_exposed_selection_cohort": true,
+  "authorized_for_submission": false,
+  "records": [
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-011.npz",
+      "sha256": "e27d2bb3a46d0bc66117d8df40436fdf54472321825c53cbbd18fb2d64de56d8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-012.npz",
+      "sha256": "aacc26ac71d10a62f28fdc7b89e3990c1fda26a9d2ebc312c1ffd8328355ddbe",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-013.npz",
+      "sha256": "5867b2e40f5493503c4a2b58d87626ecacc41b0db61f06663bd02bf59d68b0a2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-014.npz",
+      "sha256": "524d80de56810a303c11f5978eb574e25d8de2cff20a630de123704dfeab2067",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-015.npz",
+      "sha256": "9ea765c34c39c3c2bcc2637f8da8691c22456cfea593c3f23582263d3607c3a4",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-020.npz",
+      "sha256": "2b6bd8fbb35b729208b3a71225d21504fd18f412d075693294cc8eb1d4f93178",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-021.npz",
+      "sha256": "f39ec5990d1209af7e2378498e6c79e2d0b99bd900644b0d72ec4a6a1a7115a0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-022.npz",
+      "sha256": "0ccbaf4aeec74ea77dad78d6e3d175be053718246d8a6c7022c6af9346f7376c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-023.npz",
+      "sha256": "b5b5f374b66ace9f39e0008d98702ddbc962231ebcb11af718ba217a85c13733",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-024.npz",
+      "sha256": "2e6e8292db4fd5b13fa08075a281a66cdb1faf1300576ed64756cb3acf3d35d8",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-025.npz",
+      "sha256": "ff931a2d4cf869d5e30b219d5232d8580680c9845438fbdde68458c4b3b08e15",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-026.npz",
+      "sha256": "749822ffff7e16a5ab683ed89e33a60a4694f526fc137ffefc91c284abb680d4",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-027.npz",
+      "sha256": "a148d5807bfba530c6e882f2f184b9cf21ef98e8e8f9e57b5ff00c6425dc8129",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-028.npz",
+      "sha256": "4da6e6f0b04f83e9ca81e59a4052f0fdde99d109e94231a6c59bbc52450a435d",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-029.npz",
+      "sha256": "f802774c86182c26ae873cdba0e439e0cec8ee1a8396b273bc8cb882af02518b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-030.npz",
+      "sha256": "66078f587856921d4dbab901ffcb2c2931096e1d939f2e728738f5741ac84f8f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-031.npz",
+      "sha256": "f66b7e40af5a3e1f595ffea846f853935341f56028bf096398355e993c9b8856",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-032.npz",
+      "sha256": "212c53fd10878abae12be45e636d825e15be2c16eac8b7b6d0a8385dcec9a66d",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-033.npz",
+      "sha256": "cca5873cfccac43a7a8e32c2e45603a2a22f3dfb18405ba5d7f8912015946c95",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-034.npz",
+      "sha256": "512afe75b7bd2bef62d15207a19f55b385d313eabffc8a633905255698fad62d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-035.npz",
+      "sha256": "4273f8fa66a441727061bad466c99d4d4415f68d13414afa6df1ed08777d4fff",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-036.npz",
+      "sha256": "53f612bfb753d09c1abf053447c2eaeb713f9ab0de8825fddeafdc9cbd33ad2e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-037.npz",
+      "sha256": "b98c8f1c1c36b74764dce24a5e2428fcdf3aff67a6715849893c16c7493ef156",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-038.npz",
+      "sha256": "74fa9b2eb1d07657b66e6c953b0810c5280594b40e600db80da72d52cd092207",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-039.npz",
+      "sha256": "66a816e7a2e1781c4e7ccf397bfb978221fbb34a1310ccbd8c6a59484be0a7e8",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-040.npz",
+      "sha256": "b7175643a14573e7c278b42426608367dcd13cb98ea184cdfab5544ec1157182",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-041.npz",
+      "sha256": "bc4318be2608e6fa2794e036cc92eee11c4a24a1fef77764d56a8ecf4411a754",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-042.npz",
+      "sha256": "f5a30da799f7278a865aeda058531b1433c754f5eefae9a7965ec8b7416eaa73",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-043.npz",
+      "sha256": "43c57ea354be65c2043d51a889d6410c30631ce4cefb97b02462b174994aeb94",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-044.npz",
+      "sha256": "48b7fe11c9db0bb8f1825a343e5c00207eab9c719cd7fa3a0039b1aa6969eb5f",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-045.npz",
+      "sha256": "4b38c2c2433177ab1172ccb93863afe17650dd93edbdebf188f163f7188573aa",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-046.npz",
+      "sha256": "34653775ecd3468b0fc2359b449a132a789ba8f795b4ac83157579e6e61f8150",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-047.npz",
+      "sha256": "b4a3604d6ccc13752dce6eaa874bbdfb50d42160462c51cabe9e92e7f0b13a52",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-048.npz",
+      "sha256": "94a9a3dfc3a5930ac5cbdeba23ccbab5fbffe3be41ba7142ab708079659bb025",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-049.npz",
+      "sha256": "476565603142cb109b302a7b4a1456533b2cbb5b03b31ac74dc62a3487917da3",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-050.npz",
+      "sha256": "f24f85682d35c10d6fa078d3b7f3ca7305586679216571e94afa10dd45fd4cc5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-051.npz",
+      "sha256": "23f175121a5d9c1e9d7847cca34b76c485b2a200f919ac727eb4a32d7ee11d94",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-052.npz",
+      "sha256": "9e15daba79077812a2a6f1c4fa31919258741c42356cd6f96c78fc50a91a249f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-053.npz",
+      "sha256": "8028012583555c696ea6584e1e7225b1351707b9e81457492fa6ac1dbf388a46",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-054.npz",
+      "sha256": "19078b3dfaa826628390d7e5da2715af7c456c28eb1f1c42d0b0d0e087bd8d99",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_2a2eff9f-055.npz",
+      "sha256": "c19d0b490ef4a7e1816f64ff223666cf4a953c8d76316d004b3b8bb2b44bb69e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-025.npz",
+      "sha256": "2b26b4928623ffab5f6bcd1b7bf3602755ef452e62b4c2a3d8045cf14bb61b14",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-031.npz",
+      "sha256": "834a4433b107537154c8291ac67ba37b984532232421b8f3bee61379258ac89f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-032.npz",
+      "sha256": "5ef969bc76af407e53f4eece2a77a290ccbdb14f7d4d832d65da1acc66b41992",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-033.npz",
+      "sha256": "30d99a9461455612036ab57535ee0862cc2600d23f797cb8d6d377f8c5f2d607",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-034.npz",
+      "sha256": "16f9930015d6c2bfe7db5130a4eb0b460b1661c1bf66a7e67522778f08f198c0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-045.npz",
+      "sha256": "8e5c9fa3497e561db95bd8a3827d4c6bc227f7daa2f7b405fe87dd7121939a12",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-046.npz",
+      "sha256": "26c03b65c4e30ce136d2665915528fa47985f71b185064927518eced6a6afb88",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-080.npz",
+      "sha256": "66a11a3c35383766a8282e0b6b54798e593391b4644bd1688a6a892d9a7b00b7",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-081.npz",
+      "sha256": "27e467a1a1830d34c08c5b7a2453cfb5874243d4e5d67be55609c4a99da1f96a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-082.npz",
+      "sha256": "5dd1a429d72935dc8342abccd9445d3791d24afb5bb0e32ee53bb0c051974ab6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-083.npz",
+      "sha256": "51f0c60b78723555c14693e50d0b702342d5cfe9b14c39dcd5410d2b06219b0c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-094.npz",
+      "sha256": "1cf4dbbc13380d7a069cef0c080298a9bd580949c026c9da4a267ef4956a1c58",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-095.npz",
+      "sha256": "c1bf3d316ad88948fbc9c305f6c9f21dd0262d3a39ff2d12e0001d2101518fe0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_341df25f-096.npz",
+      "sha256": "1c69f747387097d782b364dc9cdb49accf0b7667b5e45f5b3027d6db47832cbf",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-000.npz",
+      "sha256": "04b9a92433de3cd30084f9268c54ad37ab18f6b1a50fd94335599a6e02686ae4",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-020.npz",
+      "sha256": "e72afb60617d416c6428fb9c7c5178dce1f83e5f89ad23e9cf88d1a7f3ac5aba",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-026.npz",
+      "sha256": "bec65ecbce167a954af693d533a686be348afe0106e5fae267a9599783eca5d8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-033.npz",
+      "sha256": "e6d8a0f8b4342ea053377642f7a00b579cad31d53b8a840aafc4482024b46983",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-039.npz",
+      "sha256": "32bbfb3bf990ee652b40d49116ca583fbc7cb0c2e9e55d159772d6c1af1ce132",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-046.npz",
+      "sha256": "1f389668fa629b3f1665812ee58bb95602f3f3f95b78901b0ee40e097cf73323",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-052.npz",
+      "sha256": "718a530b266d66027c5054dd4cdb9dda3d961c296006b8c1f65573d357686a73",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_3a861e03-098.npz",
+      "sha256": "0f387880d96bc6e732040df79662ae39c9887e28aa95bddf78a8a48ed446c2cb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_415c0a3a-007.npz",
+      "sha256": "805f137034baea8825e73d25527a36b2524ceb0efecf8c2bfaff09dee033846e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-024.npz",
+      "sha256": "b9173ddf688060e07aac5509f7954d32c6be4f1c240c439b6d316eff8ca2b55e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-036.npz",
+      "sha256": "e51b14557d63afb5f2903b77bdbc69c0f0aeb991e44224359dcbcf2edfde7176",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-042.npz",
+      "sha256": "27d6bf1f5c26ada507e249f07cca9dd9aaeacc3310a2aa3454202735f6739bb7",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-048.npz",
+      "sha256": "e511036cd8936565db83988b8edf58134fa51410bc47abf07b796ecf30123f1a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-055.npz",
+      "sha256": "5538a79404f39b4ae0d654c0817eecdace1d7481f7f5a9c1283b99a8450c6a2e",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_587a1e22-061.npz",
+      "sha256": "2192d640df58c42278ecead91b063f31b62110323eb26101d1f255f31dafabb5",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_5f15d135-039.npz",
+      "sha256": "450efef729e378e942208e08af4a584718e4f4b6dbdc12ed023b62850dd9a1b5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_5f15d135-065.npz",
+      "sha256": "dd6ae69585f80aa51ecb1ef89905a77b5f87b7e834151823f9e9b6257f423065",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-013.npz",
+      "sha256": "66f726f88329b096834b9cb8a161767f8a89a23a7e9c15b441f2ea7db1eca0d6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-020.npz",
+      "sha256": "ec15663791f2713ccd5f16a532cd690d2958d62b729ba8fadc40c5f18f863d7c",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-026.npz",
+      "sha256": "4b2008e5cfb62d22484a6a91cc239e507cc6fe60549bc9b25cc4b58bb5dfc819",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-033.npz",
+      "sha256": "8b160d8a20a11675cc9c51ab2d8d24eac7cd21b832f5141e522bece0f55ae18f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-039.npz",
+      "sha256": "3b010ee856d1acc5fc92c1b26392b5a22c847373f3c17b79b8610cce2dc629c8",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-046.npz",
+      "sha256": "7f4793fac5222768de09af406c5606ed77e39d3eb1ac0eeeddbc8ad9232842eb",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-052.npz",
+      "sha256": "357d636c3dfda6e9561b6c638b472866ef72cd7ea25464a84d87cffdd56722c1",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-059.npz",
+      "sha256": "0d7c1dc29b91f6c546d463f10e382d99fb2e056c70de491d4aa5f0a36537fc24",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-065.npz",
+      "sha256": "489af7efc4d78ff2543576c8b318478284002d256075b53953139e1bbd6631b4",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-072.npz",
+      "sha256": "addc42369981e61bf52ca7cef6a2ec8fa150e6641604ce7b2587eaeb6b1ec4cd",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-078.npz",
+      "sha256": "a7e50239b6e5470a80e557017fe0e62d40d87cdaeaf400f71a1833ee26b4e68f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-085.npz",
+      "sha256": "db6b47af29906726996458b92e8634c4d45d31679d267d75ad48d71ea95aeba7",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_668e0cc7-098.npz",
+      "sha256": "2f74d78045026ab38100a9fe0a7e698a76ab66504dcc12602f70346b334a7127",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-051.npz",
+      "sha256": "76146b46f8c7b0c7b980d721e52c699af089efb1ae17bee9fc00f2aae092e40c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-052.npz",
+      "sha256": "38e5391eceb697a114dea053def16f8cfd2840807b19049c5cb918f011d8b24d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-053.npz",
+      "sha256": "2538b0b248dbc2b62b7968e0d1f3f16399a8442eaf3f7a1b9cf7433ebcbb427e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-054.npz",
+      "sha256": "d167318690acfbfc9aec1c55bfeff8a465b433933b3433f04f6a6d0931cc4093",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-055.npz",
+      "sha256": "92e1091ea6903f1bd0332c138d8c89ca48cac60443465ab0d098415375c3ebc7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-056.npz",
+      "sha256": "7d9b1d6317d22162fa43486b8c4944bff45cd5261f2e5a478847e9e734a2be2a",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-057.npz",
+      "sha256": "c9c421dcef0c1e2828daced595aaa8b8413e189eb1b279b82609b9c37bf729dc",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-058.npz",
+      "sha256": "2bf51f45d279c9c74a9eb5e26a5a879cd3c3e0a08850788097ce00d5828aaa5d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-059.npz",
+      "sha256": "a9cc1dd958b23785ea59fa261877a8db873546092178dcc87855cfe240d42247",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-060.npz",
+      "sha256": "ff10db2ed562f91dd092042824cf69028d12c01321f887e882f29283cab03779",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-061.npz",
+      "sha256": "72857a54f2b31c4a770f4d91efd409d82e9d436fdded0452e873de27ebeb9b7f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-062.npz",
+      "sha256": "ccd7e2df2669d4989b955f2c092c724d7f6cbaa7b64a4b666525ce8905637f62",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_706092f0-063.npz",
+      "sha256": "846174a58f5788c2b4b284f0be7b59ce2057ed1b8ded8412b11f53b2292398a4",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_74d0c52e-059.npz",
+      "sha256": "1beb7625fb784a1e59916caad785e5ec0cd8b9862f28763993f8b1eeb04c15b2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_74d0c52e-065.npz",
+      "sha256": "9196f579b1f5f5c7e40692ce70f41b6a581494671affda79229f7f4fbe1e4476",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-007.npz",
+      "sha256": "3f2c20f9511ab62fe492f4db56eea77590c77443f873364924b8d431c5a11d1a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-013.npz",
+      "sha256": "4a88b8dd527b61930f97863e6e33bb957161f5723e4c340155f46ddb7211ae39",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-020.npz",
+      "sha256": "1614d03f50de96fd0c6ba4eb3eb7161bb3ea5ecb7bfaaf1b814afbfa8be065b6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-033.npz",
+      "sha256": "e60f1f7a010fefdbe3ff1ab61546b3dfeac0386dba32cfe06dfb5520ef5e659a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-039.npz",
+      "sha256": "7b80d2ef7ee8f78290b36c6b5009713590dc333524f6468b2f2eb2d0d227543d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_7a302da0-091.npz",
+      "sha256": "20372d463245bc27dfaf74101ea44a5dfab310b527b946548ad1b188b82dabce",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_949adeb1-054.npz",
+      "sha256": "3c1124d7b3054153712c12b7550eaf4ce2b89c783436db922edc347546611a4a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-000.npz",
+      "sha256": "3f4037f6b2aeb133103de3689576b76c0a02abdfa907e9fbebaaaeb54092612f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-007.npz",
+      "sha256": "dc6b83f52f0da6595b1c7f1337e5e6743bad1f26ffa474f69166096b064878c7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-039.npz",
+      "sha256": "323ba6631c3a8ea4a61fdd020b27253e620a91ec7deb32486c489608b8ecb5db",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-052.npz",
+      "sha256": "b1bb2a94cd4d2690116ef89d62dc3ca583ad96850b5913cf99559c3550789a04",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-059.npz",
+      "sha256": "1efc9022874bf3573ea7447bdddb29781605b94e526d9ad2be3697633c1a1d9c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-072.npz",
+      "sha256": "9ffd31e8e196fb9631968b1ff6ea5e1f5621a9488b07f2d007d79be797832faa",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-085.npz",
+      "sha256": "fb58766c49a9d3c59440e0fd0da53121c1ceaee0145f74ac0d88c0e9b5b58ddf",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_996155de-091.npz",
+      "sha256": "8aff0ce6c09e490627823f3eb2d62b76abea2bf5e91ef0b51774ccc38564a394",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_9be80b04-078.npz",
+      "sha256": "97adce478fad21a12d5197e6a7364e2c75817dd430399418b4668224bbf01dab",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_9be80b04-085.npz",
+      "sha256": "a31954059be5edb5520e77137bca85677efbec72a7889384c98809f52f14ca55",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-000.npz",
+      "sha256": "72a587fd585cae56c7279f750ba6d8a4c713dea95a174081e24926e9872364af",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-006.npz",
+      "sha256": "98a214ead3c4ce2d6caa70a51e7af0f3f067c7a673ad0b5fd7292739200fc867",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-055.npz",
+      "sha256": "5808e24a0ad51920aa121e322d9131943e295b329decfe41d1b4a66b37840e6f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-061.npz",
+      "sha256": "a861047545c35ee9d9c11c3f7672f917840c9e6df2e9894b9ae7e339e3361533",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-066.npz",
+      "sha256": "198caf6716aac946215192b86492121f7c371f6d803e764bfb9262c33fe927d8",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-072.npz",
+      "sha256": "29c4b9373c5c3c54ae6cd302677b39501ef05fd23d5e1c3cdbffc1816f4a0a08",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_a21120c2-077.npz",
+      "sha256": "87c85a4770c7c61966e2041ecfa637eba21a885bd37e1744567bb10eb6de2abd",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c15fded2-028.npz",
+      "sha256": "fef58aa75d00a0cc2f15ebaafbc79b33558197795e5e91e539def18f49ea6eea",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c15fded2-031.npz",
+      "sha256": "ca4d616fb82f5a456008e0c20146825474ec037e9d6d9a4133307416951641aa",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c8e2a523-005.npz",
+      "sha256": "4846c17dcb1e33f0cae14ff0d9171f2cc8db7e696bb36bf03c843216014656c8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c8e2a523-021.npz",
+      "sha256": "1bf07b241135572bf5f2db4bcc9a4ba22f5c6cc6aed90397f6a5b2d301423792",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-020.npz",
+      "sha256": "9681ee519f43e81fdddd88e6a7227b1629aa6b1fe032b21bd2efacae46af5d21",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-026.npz",
+      "sha256": "331e5cf7c811fe885240a902f4b107893f9819b282fcde20502abd3bb534cd57",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-033.npz",
+      "sha256": "09492c86d06f2b97b995c4033b7522c3fa03b6b6812b5e2d6ef1fee63b671d3a",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-039.npz",
+      "sha256": "628c7d7cd5f2db86ea0a8958584a61b95d45b01b8e2be7bdbc5c5f9507d03319",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-046.npz",
+      "sha256": "c1aedb7e05a51ba6d7c85c751c1dac9c6aa962d6af9e4fd024a12424a8ce9d20",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-052.npz",
+      "sha256": "71ae03f0e6ad7b8c50d4b98594d6f1f39fb34a608a2d5c4740c6162685fd841a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-065.npz",
+      "sha256": "8f1424ac4965a9dc80c243e54a9b4dcffc2bbeb88a6fe46685cc856ddf3d81d9",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_c96cfa10-098.npz",
+      "sha256": "c4c3a86f0d21206a4732a7d2e1c471da3cea4dde2490c0117d41c9e1b3b8984a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_cf8fed6b-067.npz",
+      "sha256": "b940844b4bd919c61833533b0631df15bb253e2998d03bab53aeb61cf5f7f5c8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d2f34f90-052.npz",
+      "sha256": "9b56be28e133bd652d569771a5063f2e3f18cf93dcc096256e2df084dcfe28b5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d2f34f90-072.npz",
+      "sha256": "610d9bfc7ce8fc4c7f6198b4d2e73fb9e0f7151bf7dab99a7abce2fd6f833ee2",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d2f34f90-078.npz",
+      "sha256": "c63bd5446dd9fc176067eb349fec94b6f191841027dc09561bb48b1794d26009",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-020.npz",
+      "sha256": "041550cbc84c9b957659f4eaa758308993818d387ffc6849be1f20d99f2b075d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-026.npz",
+      "sha256": "f4c87f303097396f57bc7cd7231281ae8229fd4323c2ac6d8f4b48529a86ad88",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-033.npz",
+      "sha256": "af06ad6bee70934380aa2e90b10ce8c07cbfebc7c530f1a2d9d8c7720872e05d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-039.npz",
+      "sha256": "8e8f9c8675b1e65963c29cfbc4975e2921c682d9c2eff20c503add9307a4dd79",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-078.npz",
+      "sha256": "83e839bb689a69c5ea41f1873c95da3dbcd09fe2d90e965c7dd1b2b91839b4d8",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_d5e7d891-098.npz",
+      "sha256": "2128f3df10628031709a4e44694ccf0a65ee32f530121089373685d5f6bebaab",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_deabac95-035.npz",
+      "sha256": "30610aa59971a89702dfa7c0421f034602eaf6bfc0e0be8abccb81e3d9dcf629",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-026.npz",
+      "sha256": "0099a51dd3b8c94da077429c99decb49476135ec043b394be45db858002fcc57",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-052.npz",
+      "sha256": "4d2de2c30e15f2d1c9a160ac1197cfbd48a0c811652950479a376887244213f5",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-072.npz",
+      "sha256": "884b168b17926d862883f83d471adf97b171d6c3b868950ed93426177d9b6a5f",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-078.npz",
+      "sha256": "46060361b015019aa15fd30c7cff3e9f23b6599b385e4ce57ab1b42164c5bc79",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-085.npz",
+      "sha256": "b990283a9c80743c022e7464c8af6d7214a681f5bc3c8c2faa2bd976d1c1ebff",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-091.npz",
+      "sha256": "655cf769076960a89b211b0562b99d823f0505a45fbf9539bae42beb2db0316c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_e28840c6-098.npz",
+      "sha256": "58d508a8360001f8dde17744e71b11af471459a536884c12bf9dfce89f6e300a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-013.npz",
+      "sha256": "a81e67eaaab204e7cecb9b05c57cb6751234163a5c41b2ccd07060ee27503410",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-026.npz",
+      "sha256": "d4482c9c753eed5c08b1992dd9f068652eabe70503950d94b6cdfd71ee62701d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-033.npz",
+      "sha256": "f8884e48310eb5339831b610caa6e5295635c5a60c1bec55706e6ac72a65c708",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-039.npz",
+      "sha256": "a0e5c21e01d9dfd15eae5ec76abfc2b5a375e4f277c587249310c267e74231f4",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-046.npz",
+      "sha256": "43bfa32a9b4ab11f275900958a4065e3fef18650b65c67dea0c45bceed99441f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-052.npz",
+      "sha256": "060e1476dc77bc6db4ac529d7c8029a8c67edd19d7420a48647416fb051459a8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-059.npz",
+      "sha256": "57f765fd569d2cbba021d6aefcd474384f0b63172bca67059afe433f34790542",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-072.npz",
+      "sha256": "20f3ed95fd49768fe50e462a94e8f45c4820f132146f916c216b88b96c086a4c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-078.npz",
+      "sha256": "a7de3667f6e899e8cb8986227616d1e88d762bb9df9f7167fb96714c2e329442",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\44b6_eb2880fc-085.npz",
+      "sha256": "808294c170ee5233ef8e8eaf367373bbbe218129422af24d33c391a44219d068",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_085bf656-020.npz",
+      "sha256": "8dbb580cf2c7f4b7281555654eb6e7b7d2e85a524a916a5dd3e353ae8d3b0707",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_085bf656-059.npz",
+      "sha256": "30f72b4a3268be45e9d26b61098e1ee59659591bc9003308c570388964e0b11c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-000.npz",
+      "sha256": "003373441eb3ed347932f0a5a473a92eb9acce361f4a18bd9b0ef2b47bee60c4",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-007.npz",
+      "sha256": "eda88f9577edd826a0e374799b8d14f4c150a38f8b210a8984dcb420eb6c5411",
+      "rows": 43
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-013.npz",
+      "sha256": "e038f7d6b20deb93a580074a517e4c5f0adcd9ba180ac8b951ecc53a95f933af",
+      "rows": 30
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-020.npz",
+      "sha256": "5f73e99f652b7a8c2eea89f3cb9512799120945b75f02ce1f2464b95cae0ba13",
+      "rows": 45
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-026.npz",
+      "sha256": "4a28e1f634e98812572982cda39cc04a7fc3bf1e1bce588b76b1e1cb84f9baa4",
+      "rows": 16
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-033.npz",
+      "sha256": "670c414ed2f72cad4a578177da2b7edec88dfe711fe989eadeed804fa9f7b7cc",
+      "rows": 21
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-039.npz",
+      "sha256": "c0dac38f1682480acb512b38d73ae4651a7785e34ad59cc38b7cae8b08a59102",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-046.npz",
+      "sha256": "bcf8dbc333c62d7ada5a8c0eece6f5a9a30794e41c85ffdc047af7877357626b",
+      "rows": 26
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-052.npz",
+      "sha256": "5039fbdc18e549135f48d91ff034c6a61f0da7d814457c06800fe64234747cf7",
+      "rows": 15
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-059.npz",
+      "sha256": "0d6a853072162b5068285ac3fb43ce98e9aa3eef8ebc7aa1e484cd3ac7cf221e",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-065.npz",
+      "sha256": "a9ad3f4d47163451d541aa46dfa56a292402749168a7c2a50f871d129140c00c",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-072.npz",
+      "sha256": "f946866f377b72ff3c6a071868ad88127c7a00864c6734642f7c409c812aa016",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-078.npz",
+      "sha256": "c3366840bd06bd4102c59b828825adf78e2861362d008c14fa0811ade8ef0034",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_09961292-098.npz",
+      "sha256": "529ce054085354259180ee8cc751f0d6dad27dbc5338c528c0559a630080590e",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-007.npz",
+      "sha256": "11e6c87fabcf6c2ad88613060e89bf3ecd5a0261f36e14f86379e213a4f3f421",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-020.npz",
+      "sha256": "5b620ac730d31e5beb42c28a7e11f3c4e7bdb998d2fd2bdc7aaf0b35e625d0e1",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-026.npz",
+      "sha256": "0e48bf902b0f76d6a64dbccf4753a50760ebdc0dcdeae0002c7ca26815672e62",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-033.npz",
+      "sha256": "7a0ab5df4551d84d6f49b0a8b278bbf461324591dfac37f549c446639a626587",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-039.npz",
+      "sha256": "7dc44c0290630d3d38b2fae452ee35c1b05cc81cfc012fac11081c52790bdedf",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-052.npz",
+      "sha256": "84abdf3dfbf208d466aabfb3335165908d37590cf8ede7967c20907553b67853",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_12665c0e-098.npz",
+      "sha256": "64ecf263c1d27f5b23e551d10e7cbf8b2c18bac7cb36f456976dc3b0c8dc4f06",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_13f19531-000.npz",
+      "sha256": "788a47c354bdec9700e39836d1ea2ff02ded002e27fa16e119d34fdafd8c08bb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_15403b9a-020.npz",
+      "sha256": "3b773add998fdd24166bbd58a3aea7d41154d2ec414edea4960f4be47e266722",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_15403b9a-046.npz",
+      "sha256": "9f8ab713d3b3005373026861ef999105cab04afeba62023cc24864f59aa022ba",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-000.npz",
+      "sha256": "e85fb1080a5eed3fd77e29d6bbb2be154f7c409e20e71a98b256402f676d03f8",
+      "rows": 28
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-007.npz",
+      "sha256": "974c3baca13818bd9ac7dc3902678a002e2b7e4191c97ad4eb2ddec456352185",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-013.npz",
+      "sha256": "c2deeb80007ee0cd1157d1992fdb069fcdd6d1c94b2fd1c454b2b262b83171a1",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-020.npz",
+      "sha256": "28acb0696a665d050eccd9440e72b6eece761790beb4d1046daf34ab83996ed5",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-026.npz",
+      "sha256": "1dafe16ac1bf3fdc21155501c5870520194acfa7b1954b3faf16095a45e6ce38",
+      "rows": 22
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-046.npz",
+      "sha256": "536d6a8dbde437185a0ffcc9ef142b1d3031d6f854c9405e69165a0696cc5eec",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-059.npz",
+      "sha256": "f0ff21f0d878ce14330d10388055a0c5f97b2b6bfdc2e9c0bc70141d12796da9",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-065.npz",
+      "sha256": "3db0fab3de8fdb3ae9cc02c7691d7bf27787b492f69a419f1d6aa47919c96e8e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-072.npz",
+      "sha256": "ac5ef6a98cbb349adb83fd2acbde94697f80021efe77b4ecab907149f3e5f620",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-078.npz",
+      "sha256": "a8973feed0053f7929d0ba3ba6a2c6d13f4d85df7091cf3ef2d1d8c93f1b0efb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-085.npz",
+      "sha256": "19e91353706846b996abba80206076f3d91277ba9ece884615de5171bb14e02d",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-091.npz",
+      "sha256": "51f620149c0b9855d22bb315682580a8b7cc1489f6919d4fba1856748efe9c5c",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_1d0d8384-098.npz",
+      "sha256": "4c1b3c88ae8cb1c496c9d7fe35c36880e04ed782f33698038ee93d75a8ad7d29",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-013.npz",
+      "sha256": "251159f95fbc1ef0e48856de44f377d3e282cc0dd9c757ce8c7714eeb6ff6719",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-033.npz",
+      "sha256": "9ceb0cc8628125bc6ef4f0a58368cdd52d632a483b579a815fd167d15c3f2567",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-039.npz",
+      "sha256": "7e32c4f93913f83676db1718b8a6790703c125441ffb8cabbaed2be051c2c916",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-046.npz",
+      "sha256": "c8a2694fe8d115f8baddfde35eb6fa897473ac28d184b602a2c0ff9025d5fda7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-052.npz",
+      "sha256": "3e8c21c4acd249b466d0cb3b0978ab3a07418f0f1daf5a96d0bafd0971b3b5f0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-059.npz",
+      "sha256": "3b760a56a759887e83b3f69c8797c9356debf611316e4412ad2529605cfbc0cb",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-065.npz",
+      "sha256": "857c6eeb12fc3a21d35bdda735068c781ac3d39f62c795f939130421e0be8f91",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_20852818-091.npz",
+      "sha256": "2e88bcf753fac884d661a2e9dc0db74cdd5c9f76227efbecde5991423c021931",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_2819ca14-000.npz",
+      "sha256": "07ef7bc98e1aa30c6c0cc063b3477ada075b39e1dc7fc16893024ec460ca0895",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_2819ca14-013.npz",
+      "sha256": "dead18f20f2683f3b85003dfc8f09e3f2d2efbcdd418c511e1bf7b5b2bcbb550",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_2819ca14-065.npz",
+      "sha256": "20b5dbbf2a91fd25c4f25d12949065834cb88d1ccecfaafcfe0c014611c4b5a2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_2819ca14-072.npz",
+      "sha256": "bbf7e19db8d2d8bdda2f184bde18749631334e587be55b634f79f53958b6f14e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-000.npz",
+      "sha256": "2d774134913f5eb426688965b323f5e1c6ada9b3689fd26b7c6b33b50a9f0700",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-007.npz",
+      "sha256": "01a10f81decf77bb8cbc50f4468ced004b3bfc79aa9aa013c84c48110439693c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-013.npz",
+      "sha256": "7ce8cee9dc26ee5e90236898de340aa6cae1ab6a2018f27152d226ba80866807",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-020.npz",
+      "sha256": "f731475ffcc48ed06cd3939b1b18fd92aec36f9222ae71569f260d9a0972b6ef",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-059.npz",
+      "sha256": "88215be3291fb39d665754ca8219ef31617d31c63aa9ce06f1692f689925553c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-065.npz",
+      "sha256": "c0946c69a5935ebb2c1ebe0260dfa79d00c9db094d9ebf0b7dd4849c44528aec",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-072.npz",
+      "sha256": "6fae19b8ba1443027a500337077d39c5640aa83f37091b102902f952123b2fb1",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-078.npz",
+      "sha256": "95bd654038ebcda20e176e59639f933b0533d2b8af094d9206d2e47cd6a966af",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-085.npz",
+      "sha256": "0ce7090e303fb1691d7aa8f0f04abc3447485eab47992b287dd032e437fba760",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-091.npz",
+      "sha256": "54274c621f89a269fe6153201ac9c1c710ef138e0afdf5953d73018d2463fe90",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_283bf9f1-098.npz",
+      "sha256": "305ce876466c9479b04c36434d593d15b09b6517fd5ef62626958c10a1802c47",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-000.npz",
+      "sha256": "6a2564c414de8b4ac724e3fe0073e72ab53dce2f1a61bd51d43f5e856637960c",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-001.npz",
+      "sha256": "ef26dfb2a7e1ed05d9e187a4be6c1d63f16c252a42a7c57eeffa2fe75f0bc030",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-002.npz",
+      "sha256": "36d2f5a3193ad56d327bf431902d1193f2b5b2fc528933999938ca0ed22e4531",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-003.npz",
+      "sha256": "ae6fe13792b6ff089eda34c763de08572489b7763edbf8bb59d32564bfa3ec71",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-004.npz",
+      "sha256": "836f42927e4de23ca4cb0c2e9fe590314f590958d6627f980683185ec21f85d5",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-005.npz",
+      "sha256": "2ddbaed509bfd0b027a1bcf0c88a70d0946f7dd594527d2f7fb412f15adb0a90",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-006.npz",
+      "sha256": "0d6908bdb251292a4d5dca6eb1751de7d901f1a69e9c42ff44fa063d1a73ca1b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-007.npz",
+      "sha256": "ce7b2d519cd31f9eb56c519b741e1c2c7bb078aaf4e9f962b1e43b9116996cd5",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-008.npz",
+      "sha256": "8a471a4b99bba1fb7d484d19e2c9017770f18c31d14f19318d753d87fb847ac4",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-009.npz",
+      "sha256": "6062c37e5f699bf52d005b9357686f4ec53464ee505ad25c2041e8da595664f1",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-010.npz",
+      "sha256": "c00f5493230a3602c5cf100e197b531221b71333250c770dfa6f0944fce5d7d3",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-011.npz",
+      "sha256": "2533b2caa1e7b60a52c2f49840a4f99a31f8b2211736cd56c7c4bd130cb7d2bd",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-012.npz",
+      "sha256": "2c5c82a3eed4bdda16615ea8cf7209547bf1ebce75c382bd9fcb25ca1b9546c7",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-013.npz",
+      "sha256": "7929c9cac9b85a86214fa3e75ba11cce4757197541ba2d6242f1945a89673f3b",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-015.npz",
+      "sha256": "b63fbce78118d7fa4c70eefcda1cde78f6d2f51055a5e2e18d52a608245858c4",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-024.npz",
+      "sha256": "cb7b0b6c44e23597dc719e1eb7bc31ad6919dfdbbca4cd847e0e3339e0192fc1",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-025.npz",
+      "sha256": "afca8b35b9e20e84c0f688ccae410a069a15487745b7f78be3ee213581fedb1b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-040.npz",
+      "sha256": "5d0dffa9ebbfa1c0fcef7a3a9aef80a595b1c278ca32833d7bf20fd669c98653",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-042.npz",
+      "sha256": "e14548ec4cfe651984cb64f5accabb7fa9aa7bd4f24a8aca9ee58fac89bbbc2c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-043.npz",
+      "sha256": "864dcd51a60366ce56fb19a2bc9505fcd492da32f2d40c4eec5e3fe36bdda0ca",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-044.npz",
+      "sha256": "7d0429c10ed80a56b8dc8d17cbf20058a10c9e6c1f98e0f895dc9b9573a015dd",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-045.npz",
+      "sha256": "6642b1c7d85af8bb46781fa46aabb982d3779bed5bec8c94eececefc2bb62e57",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-046.npz",
+      "sha256": "994bf4f83bd0602d4e66cb6332e853f8f0887a232daedb4f314843ec3a266872",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-047.npz",
+      "sha256": "ec550016f145e87089494e9c9de9b01751712ad2b27328f7acbd1c1c0acea442",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-071.npz",
+      "sha256": "c1ca9e9deae5bcdeecedb8748a420dccc079538020d082ea468fadf5ca96c03d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-072.npz",
+      "sha256": "fbee6af72a7a5453f70d66d3247299e3dd0033c9638ad948236e5e4b1c02f110",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-073.npz",
+      "sha256": "75edb806050ff2ebd6eef42a993ae096a28d2ed2558400d2d0be5b006c44b486",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_32db13fc-090.npz",
+      "sha256": "71b8a745d8525e4942e50adf2973c38b6634dda0846f776151cbdae2ba9552c5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-035.npz",
+      "sha256": "9030a7716a685772db64e212def9d39ce025e390e1d2a969f0166b031259383b",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-040.npz",
+      "sha256": "52162ca81d2da666caf510ec727d5a08a2f7ebbdb705f881dadd82cf2aefe968",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-045.npz",
+      "sha256": "5beb50ed3c719e62328b897a9bce292e5f9cfc5a9c70bea8449a9147e67b6423",
+      "rows": 14
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-051.npz",
+      "sha256": "e020ebef42ca528e50ecd4fdbe0305c8d3faf18d37584173a8ce36a977c0000d",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-056.npz",
+      "sha256": "ee0051325169a4df93dacd0f8fbae5e52b2a5571e9d2ae5b810e935474b2bada",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-061.npz",
+      "sha256": "fcd7b8476a1c073cbeb54df9842961d2cf06585f2bf3718ee72f16ea2b6411b5",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-066.npz",
+      "sha256": "05fb0494e38a6f795e2c89f29840c93e7c03180bc9f5ea65da3998ed03e272d6",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-072.npz",
+      "sha256": "80af51dd3f4674ea26261332061d5d598d6560e09fcbd4fac40f64766d13ec01",
+      "rows": 40
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-077.npz",
+      "sha256": "3ef5c8b425cb510dde18aad78e994cac8527fef503414d16905297e0eb32c4be",
+      "rows": 26
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-082.npz",
+      "sha256": "f218dcff49c60298d83a7286993d2a48b8df4c525b02174c1838a938bbd612f4",
+      "rows": 17
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-087.npz",
+      "sha256": "5030ff6deeb612ab404dd533fef2b5207aacf56c2b7079c71b5bab7218abcd13",
+      "rows": 14
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-093.npz",
+      "sha256": "30819780bb42f746c0cdea5095ddabb884ae3a0a112b4a4c22ae4ca2869516f8",
+      "rows": 19
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_337b1b3a-098.npz",
+      "sha256": "d08d969c20ecc9608fbbe115a22b947968c483ef2a22cf791b4f55d8edb8d111",
+      "rows": 17
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-034.npz",
+      "sha256": "d8415944f290a9676709691421130e151659ae312e1548cf890b8a34f42dc41d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-061.npz",
+      "sha256": "19948631229579245d6373a1d474f02818165f536a503388739d175e0acba14e",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-066.npz",
+      "sha256": "5d46b82b2dddec30604dbd6e3b51b73df0883897426a17fd771de16104ce5936",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-071.npz",
+      "sha256": "49ecdb34fe8c18ed3f2778b55b0f3509485f0c096b854eab364bcc85a9dbc87a",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-077.npz",
+      "sha256": "1cf654420ebd34bef44c12164b84680a82dc09b1f5c447f305ea6f9e554074bb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-082.npz",
+      "sha256": "86de994d8baf80cc3dc79b71a35bf9212a8ab9874e4857c57d83f63d8eb76ea1",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3abfe10a-087.npz",
+      "sha256": "e114b614575e37087e91c5981736d2eb21dd83dcea0d57039e99e899b490e975",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-007.npz",
+      "sha256": "bec8560b36e988cf0423704de458c24591b48d0f261e0eec66c722322da3d823",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-046.npz",
+      "sha256": "ec35ed5ee2bf5493075c06e3277d0738672c2628e5335c25c03987409c08dc1e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-065.npz",
+      "sha256": "105d786ce3fd2221ef147aee3a6e03d8cb39497964309b4b97b2f153ac90e33b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-072.npz",
+      "sha256": "a73ed88ae843da97a753b4f3ff037c2aeb85807ec49a2bffdfe05382f1f78e0c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-085.npz",
+      "sha256": "929c5c36f854b0e24ed85d2d84bce15415a564f8f9a308864464f9201854043d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_3c5691b6-091.npz",
+      "sha256": "777b7e2049013d28399cc680d562cdfb852912c54b34183d897f23d829346e89",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_48816121-078.npz",
+      "sha256": "c495759098e1a13d86c32ba7fb8c4355d0da27c0ec0bc3ec6b8e62305a3df03b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-000.npz",
+      "sha256": "1e82bc3fc945870f35c313f6397d46ce7e8b02b395febacbe8d5b69ac6887b1c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-001.npz",
+      "sha256": "0e34d56d9728981e243033988060a4eb1bf65a8b763876734fb9e0e223254460",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-002.npz",
+      "sha256": "8cdde265b03ba8ef1d57f290fa3417a4b217f380c9ea632781cc31f6226e8f5b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-003.npz",
+      "sha256": "4b96acfdf119b7853d35e5aaff16513febc6745104e886434d94c0871966cddf",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-009.npz",
+      "sha256": "d8293465df53a2a6edb5f3cffbb48987c74aa37d912cef8885e0b90a957921b1",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-012.npz",
+      "sha256": "d6569e464334eab9a371320ac1f60e282d52ddce7283201292fad9fc7ea48860",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-013.npz",
+      "sha256": "d84f6f9fe2ca648184674f8aa23d77401e1f3f207ee79ecda2086fb238f6e0e8",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-030.npz",
+      "sha256": "9655214b9f632a1cd85d11d9c813ce7aed56ceea61412a74d3cef669775e1b46",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-031.npz",
+      "sha256": "fd63435f1568908a819d8f10d91763205d61b089642c7f3a7a23e9483e76769d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-034.npz",
+      "sha256": "8583b998b4042834866a996139d709244d2fae5f6f2bc2a5ac578fbae5e3ac55",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-035.npz",
+      "sha256": "dc40260e76b975afd2cf08b32be112f938ccd614bbd8b73eef02ed0852468882",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-051.npz",
+      "sha256": "149b5eadfe86b41f64e5f8f0696967f021f64e66df34c906cff591f6820ef3bd",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-054.npz",
+      "sha256": "f73ef8717b5b0ac303ac08b1b1306dbffe3ed4873f316f2d00745602bf935c39",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-066.npz",
+      "sha256": "d3244fa491e56462869149407f1c4611dd0db0dd7819becfc6f99ef4e92370fd",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-067.npz",
+      "sha256": "c5541dea8bc2145e989931a781d96598f88995f5b44112b26efb87c10bad3cb6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-068.npz",
+      "sha256": "49a55012aa3718b46bf264ba4587de0a9eae3ed3cbdf36564d5f71ef9eed90ec",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-069.npz",
+      "sha256": "f9d0e82b915e2de3d646e2876daa3920b58b6307a18eb9f2dba7507da24b52a6",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-070.npz",
+      "sha256": "9427164f781159a84624a1e2d9ba9299064a31bf4b2fa9565dde88a99325b099",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-071.npz",
+      "sha256": "b41fac7181e46965163400ba3235feeb45118b5f58e9dc14deb376b073e0beba",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-072.npz",
+      "sha256": "74b0abaa6083af543c0eb993f22cd52c38a3f11b1da56791f29fd3afff88af3a",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-073.npz",
+      "sha256": "ff4cf7bd26fd9ba7495d32a0b5fbb685f6b81a6ad22afd4eb7f167876383a6bf",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-074.npz",
+      "sha256": "ddcb441fc0c16ea21576c8dc709710aeaef553a3d709386e798a89b0d06ef6c9",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-075.npz",
+      "sha256": "d412b107dfdd874da7d406380cdde873f98dcd9cec8b80b84557fbc62084465a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-076.npz",
+      "sha256": "b86e87b15883d12e4b680b8d92579da1d70599e0137ecf185326fbc4259e28d0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-077.npz",
+      "sha256": "c019db2030af5721d58b7cd1c63573b46ffb38a652edd719e09b6ae1ef3357e9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-078.npz",
+      "sha256": "f24e2f3758353494a735b9a8ebb3fd3cc69eec8b2eec12607f202156850a3047",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-086.npz",
+      "sha256": "0cf7376e372389a00cac39e3fc44726ef37f8869fc5687b87e899c64809bb4b2",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-087.npz",
+      "sha256": "b3322145eba8a41e7f8b515fbbc661604f800d514c76aedd6fb28db5bc68dcbb",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-089.npz",
+      "sha256": "bd33ed9dbde704636fc67aa3e0d82dc0832959609191f07a82a526a5da3c77ec",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-092.npz",
+      "sha256": "85ddb1074e1e549cc488a25c365061b82f89b3e987582d51b2a40b87564f3b6c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-093.npz",
+      "sha256": "873867ec62e84d5d9d12a3129855e5de202aaa5367ced13c59d6355654ff421f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-094.npz",
+      "sha256": "8db707a288fad7064fed78827067858c472884f9cc72b0acc059dc8d0fad7caa",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-095.npz",
+      "sha256": "f48ed840d579045c24d482c1135bef342928d76a8cfd6577618b0bc84419e113",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4f99ce20-096.npz",
+      "sha256": "6080fdf95f1b99ded73b1433da7d7d93c427457323223df5783e6a6fb9232cef",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-035.npz",
+      "sha256": "595366e89f6ecab33026afd5d2565ee05bdecee6b3f90dceab4da133c284c3aa",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-039.npz",
+      "sha256": "22f677f2557850c4749fcf4ee939e5b662c92580b1b425e322182c7146e772b3",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-040.npz",
+      "sha256": "52cd9f9eda27d9400681ab420810871f6f417067336822bb3fed6d1cc31dd7b8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-066.npz",
+      "sha256": "451b3a1424d3771c86cc27631f857894270ed6ec7f9d4366351d5a8b129fcf2f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-069.npz",
+      "sha256": "7a8848ac7a347f429eb160e55402e83394cf93513c9795eace545788abb08bb2",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-070.npz",
+      "sha256": "afbb1e135a8fed8da5886a019d999900e8c43dde0141876ab0503f15155dbb95",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-071.npz",
+      "sha256": "49bea753b3ac5285ac44164ca23ce18c2a802534628108c66d964abf6179a71c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_4ffd3da3-076.npz",
+      "sha256": "a44c8db1c3dc2299c1c8f3a8b1260f14a3ab16370c48c5dd87271708fe3e4455",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55b7eebe-059.npz",
+      "sha256": "3f63f1e37a0d70e4d80dae0c5e0ab2716df0374b0a712c10019df388387b4c52",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55c70843-045.npz",
+      "sha256": "aec2a94a5714479bed7a9f922949bab7c684a8d0e57b82d4b701354f166dacd0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55c70843-056.npz",
+      "sha256": "556fbdcb38d9390b78a8036c65a81f5b431ef01236ee224d62aa64f168e58f58",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55c70843-061.npz",
+      "sha256": "ddef86fdfc811631fd182af0a1b53c19fa4853f7862aad9be900818fa83195fb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55c70843-077.npz",
+      "sha256": "43064f1b07cf83163ecf2d9f49b9df2bec9866800b9f667db8c2312b8c04cde2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_55c70843-087.npz",
+      "sha256": "08e6213aa16f6188452887c952dd4131590ab3ff0a946bf5cbc6595265c014b9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_57b7cc1e-039.npz",
+      "sha256": "ad93e192555ef4e5370da228de8c72f8605f84af7bc73e9d29a0094b6d693ce4",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_57b7cc1e-072.npz",
+      "sha256": "a52cac572cc187303de81334e3ad030c7c764ebaa409102f5122a482dd285ea4",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5c039895-013.npz",
+      "sha256": "40256cfd985b53d3138861e733fb3bda4edac68d763931d9a37e9f296642120e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5c824876-007.npz",
+      "sha256": "4ba0554588825448c339c71431cba976c43cc7f74a6493a0f1c208e872ea2762",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5c824876-039.npz",
+      "sha256": "58b9c089c2eccea76da6ad028ea5cc584f048bf32b8bf3930e88586a3dabfa4c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5c824876-065.npz",
+      "sha256": "8a90bef6872993a9e8b7cfbf1a81a06880c7079806dca60dad05e1d07f3a59e3",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-000.npz",
+      "sha256": "46b9145d64c75260889c377c9823f4b004100e723f15079d138d0d5b8a84c1ff",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-007.npz",
+      "sha256": "cec7d9972a86eee59411cd6e47286c8aca24b908927a25c235f3c72d777e9c14",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-013.npz",
+      "sha256": "f422826788f90790354af9e2731ea6191fb795c197a662f8d8196d1a5199685b",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-020.npz",
+      "sha256": "057a98b97f7bf2b59ca6d5f03e9752d4bb8e89a4166af4a5b4f9407aba5f401c",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-026.npz",
+      "sha256": "1fd0d26b9fac11af41dc4be75acbc15973844ce073d15df9b594f3165c5f106e",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-033.npz",
+      "sha256": "5e44b3473d352e397e0392845f151c3749556c39bd13564d4127e31a7bdc9ae7",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-039.npz",
+      "sha256": "f451ce0d6509f90514600fbeeb93e09f6f84469f37e52c5c72657e1908038250",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-046.npz",
+      "sha256": "384ebb693c2fcf216e62bf3667fe8a1ea473312e6ad8f473e0ab196363262b37",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-052.npz",
+      "sha256": "5330db5e79169a0fc35a289337898819841700088fb241b18d0518f1f0d1f2c0",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-065.npz",
+      "sha256": "8289c8c5e0828202219e5e64361e10c7d86bf75dff7e06009d8468454a639ed9",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-072.npz",
+      "sha256": "8230510e25c855679ed3a71cfdf23893719c87b192636a0086f17f72a0211abf",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-078.npz",
+      "sha256": "ea08b01b5c71e3afe62666013d43cf644ecf8109643e8312450da324f0ab6af0",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-091.npz",
+      "sha256": "be9890328bd0ede7831d5141f7a36e2e9c84baa40be3f5394c90f3b962138839",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5dfe9ad1-098.npz",
+      "sha256": "57dfcd10a777e13b8187cd3abd72ab4a7c7b419c34c27d0232df4c0f697960ca",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_5f89039d-007.npz",
+      "sha256": "940910e903eb3c38f7683cdad2a6dd4982ec7970ec006c589386161e0221aca7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6321a359-013.npz",
+      "sha256": "809593d9fde8b0080a26eb01545770331b9fe2674d3f4292a2c5c90a73dbbe09",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6321a359-092.npz",
+      "sha256": "60af5e0d4f6ca7546687e260ffc2a17734da755a749454fe92a42072897101a4",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_67ebd073-066.npz",
+      "sha256": "b051cab260ac8976644b124e54e7ca128863ff0964402a8d9e9275573087dc52",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_67ebd073-092.npz",
+      "sha256": "a4f63279fe96da2474bd2ea688422f09af5a8700dc76254261ee2413c7c64268",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6ca87370-072.npz",
+      "sha256": "471789aa713e7b18baddb5567a88679553dcf7440975ac47201af9c8cf2e7d9d",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6ca87370-078.npz",
+      "sha256": "652cabfdf467220502ae2dbc18753e03693237a1c6405d40eb62054a8a49d8af",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6ca87370-085.npz",
+      "sha256": "4d2fd9e1cf938cc517fe22aaf001682b53138ccde90a74472450db8941daaa5c",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6ca87370-091.npz",
+      "sha256": "f19639ff8d094349aa71915b82ca6ce5be27410f7f605609681b79ead131e9fb",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_6ca87370-098.npz",
+      "sha256": "917e8f658a889c02a6bf543b0ae949dfd4b335751e62f9c6fca6c43978b6dbf5",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_705ec2c9-020.npz",
+      "sha256": "07dc8688d24917bd6f4f75b7c9c2971caa8739700908dec5e1385f4c7a893681",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_705ec2c9-033.npz",
+      "sha256": "bfca4810a919e371de151e1a665614e751242b012261a5456046dce8ebea09a6",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_705ec2c9-039.npz",
+      "sha256": "8bae5ca713bc8171c797f59748d0eb45b1a52a260056585de1cbb620b2af6dc6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_705ec2c9-046.npz",
+      "sha256": "1dfeebf26cd75cc65b0db5bcf65b838757a18bbab07e6d55cda246937056f2ed",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_705ec2c9-098.npz",
+      "sha256": "06651fb1066487c27d85e5fb485d575724e35b01ca072e2ec7b55e90849d885e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_74686d6a-098.npz",
+      "sha256": "ae329a58e6598726eb1f87fccf9d934d1c1fd5b5b23e343a382e2e74a01d7eb2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_784a78c9-007.npz",
+      "sha256": "f05f14ad4fa8208ea56028e9543090e868c1a1d7fce73f744b485e15e3146023",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_784a78c9-020.npz",
+      "sha256": "b946944b0d8b962aed1bcbdac7967b66c6536125b7a92fbbe2c492bbb20e71bc",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_784a78c9-026.npz",
+      "sha256": "e3c2f25fa35659555e79989827c8fc0b6ac26bbe3ac10882350cdc35969833d5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_784a78c9-039.npz",
+      "sha256": "1f82ec24f4d58aee722b24aa09fcb7027dfae3a294a3ce7d6b70360047a018bf",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_784a78c9-072.npz",
+      "sha256": "c1e76bad728d23128f673e1351f664f5e8fac32a3e51d3956ea2bd6fdae3c265",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-000.npz",
+      "sha256": "a095cc86997457fb14673791644c34b69700e21e237caca5c119a0a40c996e3b",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-007.npz",
+      "sha256": "95ed04028d276cb37505700ffac1c370ee8a9b5531bf995a3269fb48723cab58",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-013.npz",
+      "sha256": "2322eb2e6d25795914efb716aceee0fe4b17a8b377fb0c00d127d1094c0a3713",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-020.npz",
+      "sha256": "02ca1fd04b26b3b632212881bdaf1dfcc1a6f3f42c2c3a73aadd800912751b2b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-026.npz",
+      "sha256": "70f39489a42c41a41006fbbbff8b2e316e5c9050472ac783927ba6316415a18a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-033.npz",
+      "sha256": "9549812231c1083090384c355f72ac172858a74bb7f1a57450e90007ac176995",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-046.npz",
+      "sha256": "1ee5c49cf895c4017811ba0225d5d1f501ac66066d1f98424695c739784d7919",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-052.npz",
+      "sha256": "7476e467bf6004f85fd56607af1f37304d5ea7eeebf082d9ce5f7e3d903e59dc",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-059.npz",
+      "sha256": "865383cc8f6f068367415a86793cf1b70e67027007b47d95bd7c8da5ca9ba06f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-065.npz",
+      "sha256": "9013fa028b8c882425b7af186e637b3d3980ca87b105191b6e65906ef1bfd9a2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_786893ac-072.npz",
+      "sha256": "501c5c1d4c8ced52d9e0148f2da5ce6b64d23745f81c29aef34125e623a30e69",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_78a7bd97-050.npz",
+      "sha256": "bf215c418c9e85cd5c119d8ce0a8da70d55776cd024e01b599d0bcb2a45f9c04",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_78a7bd97-068.npz",
+      "sha256": "20d74e08fc37cfa0243acba02f4c7ba692ab7855a9890c556a3b2f98736f4c2d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_78a7bd97-074.npz",
+      "sha256": "66e98aae62fae693778f50150178b864c8fd3d01a0b324c455bbadab47ed3cfa",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_78a7bd97-092.npz",
+      "sha256": "e562b0b227f53a6c8e73cc1d93ff144ed5b9e10d0d165097b6ae4340027b8962",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7af54fde-007.npz",
+      "sha256": "5d5d4e8452335dffec55563b1fda094f1664181cafea4c711a917de4733adf52",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7af54fde-033.npz",
+      "sha256": "d9650b97fc81c4fa82ac84e187977a757faaeb736d48a44d8224fafa4befb834",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7af54fde-046.npz",
+      "sha256": "506047ac9ba474e7ab2f76f9bd575c095129555ab9af873571fb12f6bba20fa1",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7af54fde-065.npz",
+      "sha256": "acb01f0f36de6f31cb7f229eeca1280dc7bf74d2fbdd5d6727486072ab5cea4e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7af54fde-085.npz",
+      "sha256": "8ee2e23522876a9cd6edc18e9053e1294eb2b90b3184587875b6ed34584f35c2",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-033.npz",
+      "sha256": "b9538bcfba375d409980c4e39d953bc09e2c82065729bda20ff90e2757d61991",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-039.npz",
+      "sha256": "9144b903aa66ffbc73dabb56fdff7596fdfb94f204ac7052b83fa703791a09f3",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-046.npz",
+      "sha256": "33267ba32715d3dbb9e800e8d042bd75da03bdccc3b6e2baacb2e3731cb29008",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-052.npz",
+      "sha256": "06f87874c4c1805476daeddc34cddbcba72b9215a57b4c534348100efa12e630",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-065.npz",
+      "sha256": "75b36dbaaabbe9ebe4fd07fa1b247a1a3112ec69d6b663ca55990f0e865dfbf5",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-072.npz",
+      "sha256": "732983837c2656b40a2fa340c2dbfde4201957bfd019405d1ace4daf201dee89",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-078.npz",
+      "sha256": "82b0e5bfce6621c5a7c45919d6677a63df4be8fb1cd7e9a8278b3c92b90063cc",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-085.npz",
+      "sha256": "5c6d5f68bf3c54577212c20d52414c6ebfdce4fc70a385767ac5e93a894c82eb",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-091.npz",
+      "sha256": "917975f9421d02c54fb3272e66d3d3f6aada97295b977dffb7de2aafdbf4f4fb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7d3058ae-098.npz",
+      "sha256": "1b5c91b875bb06ef8126a53dd2704ce8bd7b8c91dceb6d4adc3aafc2de601a32",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-000.npz",
+      "sha256": "ea63d64939039b230c2c15704daea1a7c605d524ef3cb9180206f43971aadf47",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-006.npz",
+      "sha256": "80b96033d745a2e7637325502d5b4c005de8c7a218bcd6906de05b53deb6539b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-026.npz",
+      "sha256": "98953a9402660f5c8ec0e2f9cffd3021aa4c11c7bc72e3c0c9ce328e87df89da",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-033.npz",
+      "sha256": "32f966e73b72d27e43608215ec949760f5c6d10974a1438b17096acd2d6c5330",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-039.npz",
+      "sha256": "116d6c9d5de3513cd7ad9490402b939614a4bd976735f1aef6dce00c2bb12ec5",
+      "rows": 16
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-045.npz",
+      "sha256": "b21376e1e4a1782b473bd69cb3b8d5e13a5ce69511104d379ada2c61d0398e77",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-052.npz",
+      "sha256": "f26cbae2c93fc0ffa49886a9537992952017d2d163432ce1fb49f5de0b8f4b48",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-058.npz",
+      "sha256": "f2d9605494a8502d692dc25dfb112fce5baa2427b3563b42411281a7032a6f0c",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-064.npz",
+      "sha256": "a95b8b4a5711ae08319c8f150f34fafa9f7269f58c9caf3cffa0d1e92991097c",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-083.npz",
+      "sha256": "5b9e545edd68081977cf2d7f6f8ee9dbab3b1f4801902045b18ff9093d356768",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-092.npz",
+      "sha256": "a3ae32e9016f15a6b47a418b8c5d1d77467c8ec9ccf3bf2eea26f2f8623d4c8e",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_7f87b3d8-098.npz",
+      "sha256": "bcdc89b1d21ef780dc7ae2c2499d90cbd68e177b91ec3a86d8401ef401a6ce3a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_80d12824-059.npz",
+      "sha256": "bc5450add17bff854475a92b2f5ec597e749234c3655b9ca8fcb69cd4f8a4a68",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_80d12824-065.npz",
+      "sha256": "dc6abe275ef2438840f1753d150b3280aaa762b6a72c8def39793805aa44efd0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-002.npz",
+      "sha256": "f113f4a8944603ec2d9c901e533261d5aabdd53915218b49d776191040d2b073",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-009.npz",
+      "sha256": "958d3b28556326ea235b2635514155905292fb5fc980707839cd99449113156b",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-010.npz",
+      "sha256": "f7e8db8c68aeacfba7b26c31ad464f965658ae1ca564a81c24b194567e34292c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-013.npz",
+      "sha256": "ba70e8878ca536012bcb08f5d6af00deaed721c8476cda0b33d48f64edd96b63",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-017.npz",
+      "sha256": "8101a36165d6372e35cb3374b5e1f310e45ef4ab3fca01881a1f9b5c12baa770",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-018.npz",
+      "sha256": "40c63fce2ea3015b64dcf2e64b9ad93da8f6e1ab78e463fdb73fd2d7ab91be21",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-019.npz",
+      "sha256": "90e60fde257ccf107240bbec4fbb3b54bcb761336f3d2812ee50fd71d0111ee2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-020.npz",
+      "sha256": "30d4e8656a67f8c3299ba37708826f3f01f081514a3514b65c12c8946edfc66f",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-021.npz",
+      "sha256": "bbae9eb16ecae9c8849bc6b58c187f354d78842c874cbc97b9d2e67b93562fe8",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-022.npz",
+      "sha256": "f41400e02e8ba365c8edcd3b0a2dee60fd915afec5190b14e355a4c61242f22f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-023.npz",
+      "sha256": "539173c4776ff570a43ee0257c7326bc6658f9ae93b268184d6ae93f7048437e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-024.npz",
+      "sha256": "33f9ad9e396c32b60c3dfd7c734ee3fd2bca9d5af4e6479546dcdb41020751fe",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-025.npz",
+      "sha256": "0a61a6946d56f67a4de921c8143eb0420a86de0e747c2b5fe7977901d52c6c90",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-026.npz",
+      "sha256": "0316421f645a6d626c5309e42fbed6ec95051669286504e19d123ffcf53a99c9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-027.npz",
+      "sha256": "fdb64174b837949dcfc205b22e929d8ebd8c0c504760701aa90e86f9fa1eb352",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-028.npz",
+      "sha256": "25e0bb6576e1d4675853320ea3a53c9583bff394c49677c92d3673761fd9c5f1",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-029.npz",
+      "sha256": "37b58ae5bf7569dcec663b13db999d87ef8f368ee72f811f0ba4b535ee9a7aa9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-030.npz",
+      "sha256": "6073a241b4895514d75733352d6a9a6cbbe462ed8ae683819862e4fbd64f3d1b",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-031.npz",
+      "sha256": "205b065d88ebba3577536a008142ad6af64352c1c16e225e5af2321ef1eaab84",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-032.npz",
+      "sha256": "f2892f8aeec96f271871644dbf69fc38b8f16a62382069cbbf45d47bdae01691",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-034.npz",
+      "sha256": "8a7d201c4cb33acf2cc1d718c41e0f35864792fba88321f19105d676d5b7c04d",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-035.npz",
+      "sha256": "a13240e0da09036eba79ba191691d70393c9df0232389472862b36ddd188bf64",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-036.npz",
+      "sha256": "5fc492c16bb4f5fc29e4d760ec090d8a1000456f448afcb6fa89b0dadb0118e3",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-037.npz",
+      "sha256": "d0ac569b3989a354e9dd9e02077baf44f6f5dd9f3a57f53fbc922453f04ee745",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-038.npz",
+      "sha256": "69faae327e2e1fb5469a2b16629d623b107728f3f376d41644559577861bd79a",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-039.npz",
+      "sha256": "c8f1c1ca960f8f07bef50f4c4bc21281b19986e79cb72024ebcca1801ad7deef",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-040.npz",
+      "sha256": "d490a1a3befe402fb9ce69bb8133a31d012ab029b9c0c403fc0e71fad7475c5a",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-041.npz",
+      "sha256": "5e6d41ef136cba70a26a15264911a5e179daf0da05d9539f2605d0e215fd37bd",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-042.npz",
+      "sha256": "c0201c1f901e32be4f2adb55723479d0c958dcf3485400fddaf17126babf29cc",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-043.npz",
+      "sha256": "a02e9750122d25a0da14b5bd9db0f09d73d07e1d7714af4b42f938b470b4d5bb",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-044.npz",
+      "sha256": "cb2ca6781da98a664acd2167bd2c6461f4afea987d3369fa25ccd765e6d143b3",
+      "rows": 11
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-045.npz",
+      "sha256": "498f8f53b66fabeea246ae93a233556a2fca2dfed2b66620871588b357d652fa",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-046.npz",
+      "sha256": "7b2c830c23dccbe859ab96973aea1a6be63449e9ef34565480f138ff5abf26d1",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-047.npz",
+      "sha256": "7f0ff5bd526d2c2af200b656f56c10c878db59ea0aa7772cc3a6cec04199dc69",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-048.npz",
+      "sha256": "b0cd792d52d262c78c72069a4e2d6386f7ec26394637afc6b8b187f34789db13",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-049.npz",
+      "sha256": "33b209ed6735f300ed27a38acc5d027e392f7fa58161d4b3ba0e890ce1785930",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-050.npz",
+      "sha256": "e8ee4ea350355b640796aa830018e8daa5fbb33fc2808b052703c1fe9b1b9016",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-051.npz",
+      "sha256": "9ca2792395fbe77e90139a67ea9083f5070f83478a7ff67d7313fade72c8c525",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-052.npz",
+      "sha256": "0cc56e6157328dbf139981dbe995ef70a645b98114947cea64cc3a7fd5dc599d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-056.npz",
+      "sha256": "2829a0e4bf6fffbb784094eeedaa9c272d952b8bae9930e6d6faa1ddc9a27c08",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-060.npz",
+      "sha256": "19714ba5a7c165742765b6483a6429e7c75e29e79235616bee65e0f5cf2bcd47",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-063.npz",
+      "sha256": "aa0f8c7e382fe3d8a96e8323e0b41da6e17786f42187c0eb20496d5caea5c866",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-064.npz",
+      "sha256": "4975645ba9cf01d816dea4bfbce02c2ab22706a1e8fe720f7121b42da2699869",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-069.npz",
+      "sha256": "b27cf33a23f065fac1a52ff08c25226f20bd3abdb174785363eb3132eb554d91",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-074.npz",
+      "sha256": "2709863b5d1d4907dbd656687742922fbba1c9b3caa6a4b8e2030c12fa09ed0f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-075.npz",
+      "sha256": "59f0c3ad1d914cde7e85e173bed725a9559e66e4cc99e877a0c59bdd9b7385e9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-076.npz",
+      "sha256": "d97304396960af87d1cae2342b7c765e8d6362992f3ed08b3dc8ad089f004a01",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-077.npz",
+      "sha256": "fbba43e46bb09db3dfc2f9a4abf931631dd20fbac2815bf0f3d92ce43fb772b7",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-078.npz",
+      "sha256": "37f2c579ac92883b1939f0d63a1af03c6de50529054be8434048af1e9033505b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-079.npz",
+      "sha256": "1946509267d7a090f9ffdf5290d0e896ebf534da0ac36e9dc5665fb120376f2f",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_87289e13-080.npz",
+      "sha256": "c6a4973b17dc60fe68e237d0e1dc7f1a6572cf9ba24ee0312138964be5b2d1ca",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-003.npz",
+      "sha256": "93c30bd65c71345fe7584767b6ec1984e18911089fb405a5eeba9396e2364d03",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-004.npz",
+      "sha256": "f911fdfe72965dbb0f2b90d1abab42d60ba9c561a9157fbfbac14f3ebee07bd6",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-005.npz",
+      "sha256": "60ca96957e631485861050d1f46dcbea845e81054a97769fab99e8cd87423ccb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-006.npz",
+      "sha256": "d6c0d55bc319861fe743921bbfa298ed72f5ab8094d055a7a5633f63a1673074",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-033.npz",
+      "sha256": "3bca17925b162d6049ef4f13eb603110904bca1a8a48cb78bbf510e637109a44",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-034.npz",
+      "sha256": "f918f9a8203cd63b79bcae31e1f4b38ad637e0c8933fae4f203a76cf7b30dd60",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_8b7818bf-035.npz",
+      "sha256": "a3d57b1673dbdc0ba44718bd8c10efaab82ddca3e9774dfa33b83d29b59cd20c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_907271db-046.npz",
+      "sha256": "b34e73528e23560e60962d049510fa1a7554a00cf65e78aac00d54090ad3517f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_907271db-091.npz",
+      "sha256": "e0702b50df72d04cf83f8dab73d79254c14a59997931a19e56a20d2334c1945e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_96833384-025.npz",
+      "sha256": "6a46b1db16b07eab458e7e8cdd914a5953b443159ad87fe6eb041165b5700e11",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_96833384-035.npz",
+      "sha256": "bd8e7a2af7a38da30654d1f8e8c04635d7f8116aeca3a6dad29f38be36c4c8e3",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_96833384-041.npz",
+      "sha256": "c7f711d916f480847a36fdf560102934f5da1495dad321b56c7bcf05300796d5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_969618f6-007.npz",
+      "sha256": "1af685c35de276a6738c00005c54e72a95c3fab3badc1b4e8dd119f01b7d5d99",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_969618f6-020.npz",
+      "sha256": "2ba6913616902e163be6546fe196f07b46b24739997ccb9bf105cfc9b7c6a1bd",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_969618f6-052.npz",
+      "sha256": "7ffc761cd0d230b182aabec61ff056fe93e300a82c617b333d6e154926dcd2b0",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_969618f6-098.npz",
+      "sha256": "04a09e7f7d8f96025ea83bffa6d175cfdc4c7e868d55bb4406692e4bd1fdd1ba",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-013.npz",
+      "sha256": "efe0bff799d11f891b2585a71cdc906d4014f605ad20d0daa856a45cefc6ff62",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-033.npz",
+      "sha256": "c053c4ddbbf0e5f195863da7e4b8e29ff94b9bffdfa394efad7324e04886b540",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-052.npz",
+      "sha256": "6b1d8832ae05c0d34748d55b0465cffd99d6d12caeece339f259726447c23fd9",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-059.npz",
+      "sha256": "877bc0aff02c4ce10cd306881129decc1960bacc63d4dac63532af9b69bd0ed3",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-065.npz",
+      "sha256": "00a561c4cf1b6a42920fa9b498770133636e55665b37444026e8de69002121c5",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-072.npz",
+      "sha256": "d20da706cf8f80ad9d51ba6254cd2de2a439f178e913ce9cc7e87571f7f3810c",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-078.npz",
+      "sha256": "a13f69e0f08f0dc2b1044e8b78383596b79c83d1936cf87787c8ef9b7067d43c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-085.npz",
+      "sha256": "d1e899ff739d73028d3db77cd03f497132c04fda35b3ebd5255a22978a5c3eb1",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-091.npz",
+      "sha256": "26dec7ffb012c0e6b409a37b19935f02442198a31c89fc3f48747e1241919c27",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9a41d029-098.npz",
+      "sha256": "e89c422c1c7cc0a8bccc1e326022a18fa77b84d969d20948ffdbf80d28972e7d",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9e23430b-033.npz",
+      "sha256": "f882bd3f2ff62cc9a1ba1cc1806b53ebb82358dee7cc4e27d31af72d6ea7c6ed",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_9e23430b-091.npz",
+      "sha256": "09f2361bdf3f20fcc92a7faeb849a21c3f6bcb9d69b81523f8b5dcc288f4fa60",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-035.npz",
+      "sha256": "aed8d427ae499472063a05e7d2f337359b39a730000e451aa95de1f7e1161bc9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-041.npz",
+      "sha256": "633e27eb049d45b2107ab62d2b387d418e2c77b26bb9f3dfc990615124027ebd",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-081.npz",
+      "sha256": "626f9cb0f8091b301530145b28867b3950dbf0da3b92788cbe0dcf4afaaa0c16",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-087.npz",
+      "sha256": "67a1a30711ec9ec6b7a08657d22d74cbb3f2437ceab61102b466f510157b78de",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-092.npz",
+      "sha256": "262fa9c41d02d3df26338235eba3d3cd27a78598b35ee7957d4369f5aa104507",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_acd782a8-098.npz",
+      "sha256": "79d381e25cd4809803f8a00b40b45c20032872cd94760fad4c63150cddde0c68",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_afb141ff-033.npz",
+      "sha256": "f27f4666357d80099e6dfd6aae66ee4f861d8a9e35174b579ae82bea89a2e76f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_afb141ff-046.npz",
+      "sha256": "b88c28656716f1673fce046310bdeb1a98f9e2b049d151a2b39c7156fd68148e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_afb141ff-059.npz",
+      "sha256": "1b658d5f405db8475c9e624f01568a9066b239cd3e8095c968b6b4e7d2046811",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-039.npz",
+      "sha256": "7d77fdd2fc8f0c1ade666cdfb1f94a19f17102701a82c75c08e33f1385edd448",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-046.npz",
+      "sha256": "214758007c3e76cea04a420cc10bbe3b35f8efe9e87e8f622fa0b8627610763d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-052.npz",
+      "sha256": "a61b3a417fbead63683e42db2a40020a4d5675f1d32eb4bf067bb6a32c9c4dfa",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-065.npz",
+      "sha256": "83ac723dd6c81f452953df2a953e8438d036c8597958e9e802b47b9644a70f6f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-072.npz",
+      "sha256": "3a75bf96c950352faf3ed3a5ffef4ea613843e396bab663c4eb0dcb6728fc5c0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-078.npz",
+      "sha256": "3a17afd174a560c69963a33c7a777ebc82224057d057848c414ae91a66185d0a",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-085.npz",
+      "sha256": "04c7fa5b1035a0ba47892919ae757f6b458de5e960337cc4bff004b6e62ecab5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b204cac7-098.npz",
+      "sha256": "d38a7670b7b560fe3cf1e85a4fabbb5812921f1224106e4870b10790f5d696af",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-000.npz",
+      "sha256": "63065a8d4ff88ba3302a15e3c0a63f9f6dda845821989516642f62083bb4558c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-001.npz",
+      "sha256": "5631ef0defee27dd193ced9893fe5b789fbc45f7f9535880dc2d84b477405358",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-002.npz",
+      "sha256": "efc2d80d30342b764e96b68af50b9b5b4aa3653f4bf1f3f19e391a405fcdb3fd",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-004.npz",
+      "sha256": "a67aa22c97176ac1f3070876017970322d32394c4f162eb9eb07fabbd31e856a",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-005.npz",
+      "sha256": "da6bdcc1f7940bb68c881636ef5b851ca255574a5f5dd4e7bfa9f736f7bc764d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-006.npz",
+      "sha256": "5ea31ba29d69a698e9651c81da5ad3c25ca76d5d017905248b0ce085a79703e9",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-007.npz",
+      "sha256": "bca614b022172be55bbf9a35faee91e17acdf0d459207cc92c104e5b5dbb02b1",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-008.npz",
+      "sha256": "d22359e93e6b52220d1fbce8ad27d6a3d1d686019fb90cc84730442ee39e3826",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-009.npz",
+      "sha256": "b653dd2c6d9d1675b717039c76405281e3dcbafbe05876bcf8d91696c52c1ab5",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-010.npz",
+      "sha256": "bb922a7b19a97a32882d2c5ed4bceea14137bf883470c47ca31f8c372ea511e0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-011.npz",
+      "sha256": "32356635ce1602527b8d0022d4cd1a3838e03852f8be1bb7664b7f2590154271",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-012.npz",
+      "sha256": "6f56e39db868deab986f73b21bc470c92fa1007a7f85bfd619807ffc0e50b174",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-013.npz",
+      "sha256": "27203e9ad460690e4d2f8885009f6e6f606d88d3a2d2372193161f330d95be3a",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-014.npz",
+      "sha256": "766265ea79e352999ca7ad0158d6153bd2ae724a4741ff8155baff37f9babbdd",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-017.npz",
+      "sha256": "e089937146b38c8e1020666ac0b028eec3bb52cb946d984d1422c39e0b493b33",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-018.npz",
+      "sha256": "ef6cb7c489e3cf4c2f80b580caef12ef6855b37e92307c5ac92d2e92c316b4ef",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-019.npz",
+      "sha256": "dc7577fcb3625752572c4064f22d256ae06087ab67f80fcb9a3c831f454517ed",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-020.npz",
+      "sha256": "a9e6550ec0a5fe8645998f1c00ab85c0b32ffc70aaba780cf8de7cbf628e0cee",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-021.npz",
+      "sha256": "5b7108d88ba99d5acdc2c559d73ce1318c87897fe40256890ad841d4fb029eb4",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-022.npz",
+      "sha256": "a6b91b7d032ce36ddacfdcd93a4cbb23ac0bb8439b4ccf94bd96503247c9444c",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-023.npz",
+      "sha256": "69a7aa2c3cdf910b01d1e7818d0a69b013a11e7dc278934148cec5fa6e008485",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-024.npz",
+      "sha256": "ba00e55355540882a478c0408fb10a603ac3978655393995b90d2eb53cf15153",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-025.npz",
+      "sha256": "cdd0fa2b7ebc0e95fd7792080cff83e09e7846ef67d251ef53d3e07dec302de3",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-026.npz",
+      "sha256": "06a011b438982fefccca2a93d1eeb5af5fdf1cc33835569110c258a285617a06",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-027.npz",
+      "sha256": "50986229baccbe6cda77becbfe84aff73c44e13774acb7a3675bbf73b156e355",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-028.npz",
+      "sha256": "2f2dd59a60d175416b8bf34ecdaa82524c16e4aef97ad1d148ca2ee9d679d58b",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-029.npz",
+      "sha256": "a1d3a6781e676c88024f2b63e66d6f5602c59bf770bcdd0ce4118ab54e7bd195",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-030.npz",
+      "sha256": "a6355f69a744137ef71e5bddd5aaf289585d3f17b2228e8aa1f0906c4c6ccb36",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-031.npz",
+      "sha256": "8f747d1a5bf7c927e5a07680bd33b5133f1f7482e8a7a81cad29cfb175381842",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-033.npz",
+      "sha256": "bb594318ea37f84d53e4cd7f2d25bade603e36709e0186a27327d438eb94a0d8",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-034.npz",
+      "sha256": "03456e1d47546d6eb60c9e35b75f25dc85ec8a6afb18b36404b4266aed285c4b",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-035.npz",
+      "sha256": "6771733e82e096a0beb1d1ecf473db05891b3f28447d4fc926e2a976ddf6bd3c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-036.npz",
+      "sha256": "6330aceec116b9ed8b2cf9030c03d67dc41e4a877b7a8a4802362b3c1252b8e0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-042.npz",
+      "sha256": "92fa9c9c501b19793ad3eb5482d83801afabc61f9079909e2706dedc07e8043d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-044.npz",
+      "sha256": "68a4d44818bad0f47021e15ae0ac9de4c24c20d0900b6412a4a1fae0b424f610",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-045.npz",
+      "sha256": "be62b563d8bfbb54af32e3f356d6e6c0adbec28ca5d54dd5febded76d0288d87",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-047.npz",
+      "sha256": "f0434f502c35fc75b840d5e67791ecbdbdff1747365065b69594daddeea1da53",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-048.npz",
+      "sha256": "3ca34c2dbc7aeafc8dcceefa11dfd0063b6d8837be588ea75d6b907c2b938c40",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_b329af44-084.npz",
+      "sha256": "3bd7a91714dc891b848399aca878d280875329db067f2e21cb7068939e432231",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-004.npz",
+      "sha256": "a5ec75165c0b2d1ef623ae50eafeb505ccff318bfe7229c6596385ccbf6a8a9e",
+      "rows": 10
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-010.npz",
+      "sha256": "47594fc9df973262b30679f285bc126e739431a0e7675aaa314432b6ae325bb5",
+      "rows": 14
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-017.npz",
+      "sha256": "bc2dd55977e3465cf1114d0178fce0ca955c98aa7dacb1d3c9e3423b737fad47",
+      "rows": 19
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-023.npz",
+      "sha256": "6e44ccc6305e9da9c5e3de9b5871bf22e31e660b065eb98785ca7fefa6dfcecb",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-029.npz",
+      "sha256": "60153cf9e66488e9499bfd73eae6ac545e910d6e0a5c1e8ac14263392a050771",
+      "rows": 22
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-035.npz",
+      "sha256": "fc93e8be0a0d72a9e56203afa0bdb9515bfdd52d6a6da94437dcae58c65e46b9",
+      "rows": 9
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-042.npz",
+      "sha256": "0d5a6f285403b277aa52ac06f151c482e8a3f2c3c40d1ca97c2fb8e7f5368d1c",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-048.npz",
+      "sha256": "bc5a927b661e98da42db0aa30880b07d2a52cc107bcce8e82daf7da555696d96",
+      "rows": 16
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-054.npz",
+      "sha256": "1e497117e1331ef9a25af65db9098cd5c603434a2771ea101f1ae4f05a60c33e",
+      "rows": 20
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-060.npz",
+      "sha256": "896ffefc8873a144f8d05810fa53a9d8cab5764e7b356e52a07ecba1eedb56af",
+      "rows": 23
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-067.npz",
+      "sha256": "a7ee7d89fd2dd3f5b339d9ec5f08cfabce182712d34fbfe9c901bdbda6ab9cb0",
+      "rows": 25
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-073.npz",
+      "sha256": "cb3e5696c5fa7b8203704d8f11b8bac13f69dcc75b9b5842655e3612d6b70f9e",
+      "rows": 31
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-079.npz",
+      "sha256": "6e44994b0df6805f8c5029c15dce4331bc96953ac2fe1ca11e4e97cbaba3676f",
+      "rows": 35
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-085.npz",
+      "sha256": "bad2be7a50e6462f3431cbd8b351bc8d025986d9ec03b643284ab27a5b4cce20",
+      "rows": 14
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-092.npz",
+      "sha256": "dfec18d80307a85d87af05bdf1f43addc076941efe3c1a9a2112ee793775dadc",
+      "rows": 23
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_bb9f20c3-098.npz",
+      "sha256": "43a9a98c94779c9d9d742716dd07dcb0fa2417819ed5a0b02674c0b8c9263694",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_c328f2fd-023.npz",
+      "sha256": "337fb3e59579d7c8c67f1e154938a4c0b417edd1c84354d3bd7369506677c7ef",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_c328f2fd-029.npz",
+      "sha256": "055b131baa0be51bc1c7b85d80887cc5073c8b15c808ebc23209ad36275f5a6e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_c328f2fd-048.npz",
+      "sha256": "f744da4ba5d1d3844fefca0350d15b74d1e68baaef79a13dc6bbe2cacd1e90a8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_c328f2fd-054.npz",
+      "sha256": "2539d803546146e6b23d840bfc69cb4e2170aec652557674be281b6f1bb07f97",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_c328f2fd-073.npz",
+      "sha256": "69b4e87ec22cdbb159eef27f06812286692aba76a863f452e2ac4c147b11429b",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-034.npz",
+      "sha256": "dbe3a546bc3db980ba41296c8cb650c5dd77a6d671deac703dc27a2b1b8ae151",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-039.npz",
+      "sha256": "a5e964da0e4b2a82e261bb1e1ab611c0ff3cc2a96eaf2ed338dc1857b2220ac6",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-045.npz",
+      "sha256": "cbbaf49123d44240cee02832704ab48957b3f9aa25c23aba109656a4697f4eac",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-050.npz",
+      "sha256": "bb1dd5813bfafeb9472a25bf3f30603257cd2f38d29dbc02a33e36c7df76c2c8",
+      "rows": 21
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-055.npz",
+      "sha256": "7a188753804954b50de2bbed93254cae413d36d04dc0d0230cf6c0716ed2d0e6",
+      "rows": 20
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-061.npz",
+      "sha256": "e388d4543f69f8ba3afb698e35939a446d7ca0d64f7f4ec55a8428101ae67c03",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-066.npz",
+      "sha256": "e4a34f94cccb982772a7b2358a3fecb6a01a495f74d80116b5d86cb999f940c9",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-071.npz",
+      "sha256": "ce6ce7078fb390b0fca7d4a97542d4435ff06a017bd79f79ed2d401f33fdce3c",
+      "rows": 24
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-077.npz",
+      "sha256": "258c0dea743ed9056c2484a4f7fa97a7e6a1cadfddd7116402c96c1ca931cdf2",
+      "rows": 26
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-082.npz",
+      "sha256": "483e6cd95f939b5232bd064e0a0bbe046632861341612392c7bc142fe02d286e",
+      "rows": 17
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-087.npz",
+      "sha256": "023ed7279a8c24312a103740365eb103d6886c266dc8e913a8d5d30681cba52e",
+      "rows": 28
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-093.npz",
+      "sha256": "920754e1ad4a7a256221703619033b113dd35e46fad5b0701bbaf2b6c5676839",
+      "rows": 35
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_cdcfe533-098.npz",
+      "sha256": "4a9a128d7503eb51c7bfb070995d3d725266bd4dc2bec4fb9fc5a2253a9a33b9",
+      "rows": 40
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d2b9fc0c-091.npz",
+      "sha256": "af6620dc1d15bf23b07b9f69e787a1f8c9043f2a7f53d8dbc504ef964dde070f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-007.npz",
+      "sha256": "e06839878049fe184a4a7e425c88ba736b44e62d52a7ab132f11ce9f0083c34f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-020.npz",
+      "sha256": "d62b9eb6d5f1dbdfa75ff3b577b166da592fa0a9eb658bbdfb1c2368a9c6c27b",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-033.npz",
+      "sha256": "607296943d6f316dfa8b7b42b8f862f53a9c6a1004dc26a74a55c234c1e4088e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-039.npz",
+      "sha256": "e201211afa0e2b1d37b8c34ce502a1386878c1e75ca30dd83ee199956bc6b49a",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-046.npz",
+      "sha256": "09e67dfe108c97f68a969be82ebb477d0ec4206afa0bf8dfa310212970e9bda6",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-052.npz",
+      "sha256": "9538b41bd6b0fd7dcc1c63221faecf53a45b6c500a9e507af99dba7021c51e29",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d3da753b-059.npz",
+      "sha256": "ef8193cfc0ebd06038f093e4aef80ee3f81a57ad61da1ede82afe8e709369d53",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d82a4fc6-046.npz",
+      "sha256": "de4da9bfab19b9a526d9d9af681d2923e8fada359a9290003da5b625bbf76600",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d82a4fc6-078.npz",
+      "sha256": "8070bd1e686abbed715dfb255495288d101cd3d7361cc14496d095157f2de0c5",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d82a4fc6-085.npz",
+      "sha256": "a33e11c4a88334370f14e57b2f857bcb5e13174fa7cd16858ace667a4bfa2e3c",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_d82a4fc6-091.npz",
+      "sha256": "5452c58bc8c92f4e887053acb6f18d6727adb1af993c0d543075c31eefa36882",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-001.npz",
+      "sha256": "cbfd168c1a0dad30a2840fc93a78c1bf9ecd612c43a3de7e63514509a285889b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-002.npz",
+      "sha256": "9f2479a612839e7bb394b34dd08bb1533e5929e21eb61105852b06345cb6b611",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-003.npz",
+      "sha256": "62bd8c7342864a630135d0aa0f213003157536629da1991764c81df0a84505ae",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-004.npz",
+      "sha256": "76b8899967b98d2ad79476a28cac1e3ed9c87d1cad76f1a079d97e4e8489e010",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-005.npz",
+      "sha256": "61703e83049a3f5a86aae2eb47a66f0463d5b8469c5471570e5bd80cb04c49fe",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-006.npz",
+      "sha256": "78be99845388fc013099fb77d5398317356d13d2c3d061998b31a34b1a9fa7f7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-012.npz",
+      "sha256": "755d498b28dc2cba5aa1c368439dc03948f05150e31318e151d18240262ef8ee",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-013.npz",
+      "sha256": "e381d65ade0b7ddde3fb18942447e914af2696d8eeff6275e9ec044c64221ee2",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-014.npz",
+      "sha256": "091dacbbfd083aad042ec3ca3926ead071f469fc5052d4d5bff5c8b87f6d9c18",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-021.npz",
+      "sha256": "b8a5ee83f8119b90128403fa8aa542575aed39306e48f1660486b1a48d3340ab",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-026.npz",
+      "sha256": "9911e01804ff2d74e5f4a6d7f96375d3ea8fbabcbcb422eef5985d6201e73aa1",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-027.npz",
+      "sha256": "b593fa25dab4f15d04ceec017f7047066043aad37ad5bdfba630375dde5af293",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-028.npz",
+      "sha256": "f479c748deca5467332348ec9d478f723d2b071d99597bb50d829d7b31ceab32",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-029.npz",
+      "sha256": "fa912423052664aa35cf7b4fa454b551961518dabbdb3ccb6c9d92f8168c2097",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-034.npz",
+      "sha256": "74947bbdf36725857c44c396ec19e965bf6460e095462fe179715e641b2ec552",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-035.npz",
+      "sha256": "45e44b9557d80f435b082a33fd875fb12d4836e8cf9d50104ea832f837c5aeea",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-036.npz",
+      "sha256": "141d71459910098c2c1a13a89c610e97fe7674438e80452c98de7a96d0add3b9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-037.npz",
+      "sha256": "70d0a27fcda127fa0947156c3fb96487bfd4a2e493383bc595892f120d8a951e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-038.npz",
+      "sha256": "a8bfc525cca66345c1f59eb7757cc9a435c69ac4648d3cc825f542601294e30a",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-039.npz",
+      "sha256": "c7901429ba5e55f72b0484db724ed3ddc087241a20252a5203ab4988279ed90e",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-040.npz",
+      "sha256": "04a1ccf25dff4d8b9482dbef3858b62e293905e3ab22058a87b51d851541051f",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-041.npz",
+      "sha256": "eb98880e287d1ca0f1828e71310e3d2da11b5806b7baa182a7257cc058051076",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-042.npz",
+      "sha256": "55e95588d386fceeff9c8e47e03c04c13d3eb7b3f0c3c78c29392467ada404a1",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-043.npz",
+      "sha256": "7751607334986a19712779782e2630c2069178ff288a7cfd5743cf6e66ea3aa5",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-044.npz",
+      "sha256": "2cb20b7be07427ea8c4284b7396fb331715eeb1263fe8902123ad54fca9cb953",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-045.npz",
+      "sha256": "2be27cce2b99c9cd67f4c4a13bae31749ee7420f7c8bcd4f57d6d8b8534f4636",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-046.npz",
+      "sha256": "d42f83b8935d75988a347caf3ccbb488c81bd90bd6d152617bdbfc76646b27ff",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-047.npz",
+      "sha256": "e66d67e19ee274ee564532a884b8153d80c5b7fa9456db3b6463c73100649405",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-077.npz",
+      "sha256": "3ba47b467bdbfec635a74733c6df02a6ee51a725fd4fa40ef2d0c6c5fb7b52db",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-080.npz",
+      "sha256": "9049edb5b7a8c7ae124c100bffd6762c060df3fd2cf85d9e877636c5ac24af3a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-082.npz",
+      "sha256": "40a7b711f4c1167799e15f567752db0c397709c514672af0086e249541a24709",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-083.npz",
+      "sha256": "f9701dccf87337048d222cea1a8c29c90a7029add31349533d66dfec624c6928",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-084.npz",
+      "sha256": "aa50fd5a5496d43a9bdc14de27bc4ee9e03c718b8f167d9522a98afd6ed6f3dc",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_debd7bfa-085.npz",
+      "sha256": "a48b3912fc758aad3d38db4dee15aa753c3ed79393ac0c9be4dafdc4cc3d945a",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_e16ffc58-007.npz",
+      "sha256": "8e3794fa65ad5ccb06155f4e97a004c7afa5fac311719545587569e73b3e036d",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_e16ffc58-013.npz",
+      "sha256": "44a461ddc378c516002eaff670f411648efb70746262c6e37d04fae46ae9f571",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_e16ffc58-026.npz",
+      "sha256": "631a0bd9388ccc8a6ecf2a0623b0a6eaea869844cfc76a040afadd9f36393a7a",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_e16ffc58-033.npz",
+      "sha256": "91484206af065f66ffc0657334b5566bdffe65d3c77ab52528205ab37a980112",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_e16ffc58-059.npz",
+      "sha256": "5cbb0dfab5153fb7152505d3bd28be5fbcdcf7953d6cd56a91d197abdc5e81f7",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-000.npz",
+      "sha256": "cf591d9cc5b87b91910d335ba4017ca5f1ce5329e137d381edef7bf6c491a42e",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-006.npz",
+      "sha256": "20b25ec46beab207768784a6dd7ebf17271f84ea32f23b43e4fae16bd2c81685",
+      "rows": 20
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-015.npz",
+      "sha256": "6dc0bcf4821d27f4cc6a027573f1596c4faaf2da0aca7033d1a298e14c23a668",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-021.npz",
+      "sha256": "a21e8470099c165ded1138c0ceaee2037033120995b5414dc7e0cef0f79e6fdb",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-028.npz",
+      "sha256": "1b16b61321d03b1e0b74f438c66e088ad27c8c2e8b5ab3a19fc6938b08a8f702",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-034.npz",
+      "sha256": "0b275c0c59e03d33bbd9d8c4ac9412188cbf0350e0c26dcdfdf501fb6b85ddae",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-040.npz",
+      "sha256": "57f7e378ce376e999ca0a027f06a6a7fee8c78709f085543df54e8fbfd08b8f0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-047.npz",
+      "sha256": "f9a839ebf6243da20ee4a97c822c2a722d140ebaab9ca1c36c0a4a765ea3b861",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-053.npz",
+      "sha256": "53f08355091bd29e9ba7ec273079f3cdf2eafb1dc418c1ddd33decdeb7e161d3",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-066.npz",
+      "sha256": "4cc9f694f9cf46b3d5405fc59fb0ab5158bae25cdfe9f18b15eb4505887668b7",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-079.npz",
+      "sha256": "27d12ac4a0202e4fb7a5407ccc364c94ce2667db2433db1d98e680ef86872cd8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ebdf3b34-092.npz",
+      "sha256": "0b6515a678bd75369b2d3a3034a711d1d216404860dc581c44824db28d0f4912",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-015.npz",
+      "sha256": "1071a354caabb2a7c7ce3ac909c740dfc035464884a672517312bd3c0a34cfce",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-034.npz",
+      "sha256": "bfd8f4387c6bf240df8e4ee217118d891343a03eaf92547dba76c26585165cf5",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-060.npz",
+      "sha256": "8d0a42a0b89d5d9c2c5b808a40ff0eff3903185e43aa9d4fff468e9771a957a9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-072.npz",
+      "sha256": "a89eb0211fe50625546574fc4cb3e9a6156db2086634ab754f83127f118575aa",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-079.npz",
+      "sha256": "0c1cad9baf9ff14fa4d2aa416adac977e3bbf8efa46620614a834e5659bb6570",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_ef7b4f7e-085.npz",
+      "sha256": "6262012e4e5009f93157fe16bd283123bfb98d19ace4b44f39081118eaf440f1",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f20478e9-026.npz",
+      "sha256": "a3047c8669788c87944be69a54f4fa8f24f2e418acd544973fd90cf8f8ff6e1f",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f20478e9-033.npz",
+      "sha256": "a8aa4544db9d1e594124cab0c3504e7937ee67651e3fc5d809a69bc95d38fef1",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-000.npz",
+      "sha256": "f8fedcab425d2b7bae628d98ef72afbe4fc2657d852791e377ec1da516a93c53",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-006.npz",
+      "sha256": "34a56bd0dd10713a0542f7f756572328d3c3dfcefec438fd3603cb233a700b44",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-012.npz",
+      "sha256": "3ab71176e904b09ee054554c68e88a6742bddfa9186cfd973a095d7fa9a3104f",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-018.npz",
+      "sha256": "d40d290357625a893057636006a96799d6b5009ee1cdf0a5b61c3f40afff526b",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-024.npz",
+      "sha256": "2ce11ceeafab621586345f50a735dc15efddff2fa32fdf2c3d056c3da1779f66",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-030.npz",
+      "sha256": "59e746838a1fc21ffb0b9fd02da5fed798969b02e64fa4814c4eed22d36cace0",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-036.npz",
+      "sha256": "2b87841c374112edc9f451e452443445f16a083043db972ba5ccaf81204efcb8",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-042.npz",
+      "sha256": "e5bf726fbc55cd62b2ae11b481055145103a0925ceea96742f794a2f24ecca59",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-048.npz",
+      "sha256": "62f9da9f5811543063384caa4308afa466ba4947df22e08f2e3e4351359cd3ec",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-054.npz",
+      "sha256": "701e1ec341e27c5baaa2e1fd60a1826389eca3636bd5757a3d7b2fc4476b9c72",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-060.npz",
+      "sha256": "6e30dd615ef3a00322f2ca2a68950c2f7551274f34f754fd057d80b20a014147",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-086.npz",
+      "sha256": "43401666c3db755511ee7f97d26ab3b888209bb90921cf7d4d9358cad9bc0144",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_f8ffd5e7-098.npz",
+      "sha256": "d11b6945d8073eb5de8bd9ff93ea224feaf4285d93b0c120908e6bb129c5273f",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_fc83837d-065.npz",
+      "sha256": "a4fa70ff99a0974f561ca7a4ec30f6db8b4e7f36b2dffc91bcc892ec8f8fed63",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_fc83837d-072.npz",
+      "sha256": "71c5cd97c24a97683089ad6c8645e85d15c9ceaf735aefb5f56c2b3d273141db",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\legacy\\data\\6bba_fe670320-000.npz",
+      "sha256": "e8ced27d0cfbc0b54a0247866729208d62fa80aa66213b545c8956b0b39036a1",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\44b6_74d0c52e-058.npz",
+      "sha256": "9e560970b3da9565a26433c2a91569785437de56c88407f5472f0f84cf421640",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\44b6_a21120c2-052.npz",
+      "sha256": "a7de852da2ea720987842e15f4b07587bd07c2a5685ca570b76c3fdf83f9a292",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\44b6_a21120c2-060.npz",
+      "sha256": "19b2a49a4b36fda1336f788c8c3fd75ddd5dd563ffea8e3e5621641ea162c7dd",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\44b6_d2f34f90-051.npz",
+      "sha256": "9b188107c9fdf24fb95833be39265c2bed952ef679f9d338d4933926e187d9d1",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\44b6_e28840c6-023.npz",
+      "sha256": "59a91a62dd478d6fd3ef2aced845eeb55f130d8079ff38b8bc04831ed7994a2b",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_09961292-024.npz",
+      "sha256": "8361ff9a453574bfd2f3361dcab9d3d2766d4edec3e6f1c85bb2e072f63350b9",
+      "rows": 24
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_09961292-044.npz",
+      "sha256": "7dfab87d40125009546203669b651bd62633223214d33dac0217b33ab69fe06d",
+      "rows": 24
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_09961292-048.npz",
+      "sha256": "89049085e1e27eed9c502a749883e5e2a3d7b8454592d7a8904fcf48516c2490",
+      "rows": 23
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_12665c0e-097.npz",
+      "sha256": "d3e5d71e69753b5d4722c5b83dc0eaf06a5981050199c106d9596cb17862714e",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_1d0d8384-014.npz",
+      "sha256": "3b9639aa27322b6d6753802e84487347fc849e5b7ad7930498a70daa43e20713",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_20852818-041.npz",
+      "sha256": "639bb60823c9dd1a36db5a26be9815e5661d9c183bd4c4d456fed79276f930fd",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_337b1b3a-038.npz",
+      "sha256": "09918138cc854be6ca2f4c281c58d4ee1d2b2f81f42950d2327e9e51967315a9",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_337b1b3a-058.npz",
+      "sha256": "00ce05a3fff4e491a6f1d6033ce847ca2a28cea533cd6a43e1fd52a910915380",
+      "rows": 22
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_3abfe10a-081.npz",
+      "sha256": "efcc3bdb6917d660d2fb2920ad812fb30df1019594241a9a33cc7823e8e16f10",
+      "rows": 6
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_3c5691b6-022.npz",
+      "sha256": "31b29c352579667157329cfed70b8b11c07dac36f81814d02f808434b3c45a23",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_5c039895-010.npz",
+      "sha256": "2425a093de3fffb16ceb80a3e87e0ccff9ba666ad2f2deffe7cec400d77396ab",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_5c824876-002.npz",
+      "sha256": "1e64cd79f45c27b2a36af1cc12fdb77f1dded00c3702e50a0f598fb6d53485a9",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_6321a359-008.npz",
+      "sha256": "73051cf4ec19b9af856b72fb925da212f864bd4bb81561da49bea98469985f8d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_67ebd073-086.npz",
+      "sha256": "89be020fa29126dfcec79951be20935386ace2ec1279d6930fdbfe823806f6d8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_784a78c9-025.npz",
+      "sha256": "adc518979b8ea979e6bc3c74253a4193657774e49bd589bbce33a5a6cbe89bb3",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_786893ac-001.npz",
+      "sha256": "ec39bf14497cf2954e96b5ef75df3f76c35df5bfa8a9734be260aa08ff455773",
+      "rows": 8
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_786893ac-017.npz",
+      "sha256": "ee6fbb049c94c2f5eb87adaf3d5b36c8a8caec2de841aa18184c1da8eb836f72",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_786893ac-063.npz",
+      "sha256": "f55ee97fcd76a9122d742c9f830ddd5f61429779bf6792ac2bed938d05fdbecd",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_78a7bd97-064.npz",
+      "sha256": "5787d83d86d7dea501de58134dbaa9f2ec469be0ac8eae7cc96476ff3108215c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_7d3058ae-083.npz",
+      "sha256": "cbc46859e632e788b427ca8d5ae4336091d716413ee15f8b5b4dfd18be7b26c8",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_7f87b3d8-027.npz",
+      "sha256": "23de71de661a0e27b9494397685d3ba9b133a85fa0d7c89d426f7f265fc0b900",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_7f87b3d8-037.npz",
+      "sha256": "82c9af8d4120fd211c002f1d8689aa1357b72aca3623b42e439edb222c3fd776",
+      "rows": 7
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_7f87b3d8-072.npz",
+      "sha256": "32249444bfb8e383e63e567860f1fdc662ea5dd30bf95cfdbc9bdb7c9261171e",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_969618f6-056.npz",
+      "sha256": "ce4db41856946bb6de9f7f7df97bed2937ed096c9fd478f277e1b31337c2fb3c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_969618f6-071.npz",
+      "sha256": "b9a00a925924d2c3eaa8ecbd9f01ba813bee585b52bb0f6d25012bfbf1c38bdc",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_9a41d029-049.npz",
+      "sha256": "d280ea4b8e085dc0a517aec7f19a6cf992fd16a3688c8a7b2b7c2aa16f3ec804",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_afb141ff-028.npz",
+      "sha256": "1c1933f973b968f095e10cde83e490bf0b74c5f611b502f5de3b5cd7f63bc4df",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_afb141ff-032.npz",
+      "sha256": "25a07ef2bbe24e345872f89d8551a3aff39a213a6f3c2d5a270100903afcd3de",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_afb141ff-048.npz",
+      "sha256": "0cc9931a34b1eb5893d3443be3885b452996292015dbb00a5f4009d771e5ce7c",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_b204cac7-073.npz",
+      "sha256": "e7f6f3b3627a353ebf946e659a484e68eda10e4b5a71fb662bd903bc292993cb",
+      "rows": 2
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_b204cac7-094.npz",
+      "sha256": "519e74030c7ab9f3249b7e9f7d8b4c041b02e3d127e3756e03d142924e540669",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_bb9f20c3-031.npz",
+      "sha256": "95de85f91032b9dd9b22d3a4fc0b5835f17575db5b6e928cb70749651d9a455b",
+      "rows": 13
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_bb9f20c3-046.npz",
+      "sha256": "c8bd288d01461ebdf672db2659f1db4505d06a771cdec68e247d40ac76100638",
+      "rows": 12
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_c328f2fd-028.npz",
+      "sha256": "65f2b2236c8a66a0ae0a6aec41b4b09914f31e67381c20c0d268cb1321ec19c6",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_c328f2fd-066.npz",
+      "sha256": "1664250e2d4807a1227d7eb7a84b3faff12d9cc13937779343b1fcd8705b8f57",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_cdcfe533-048.npz",
+      "sha256": "f9ef89c6a612dff57b035948a88e6bdb1e905e4b4868ea5f4c709dd715eaf340",
+      "rows": 18
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_cdcfe533-052.npz",
+      "sha256": "9bf648fd2148dd2b456b8a23116a4ebdcdeb867b867065df7c358a6971125301",
+      "rows": 16
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_cdcfe533-086.npz",
+      "sha256": "cd7fba197488287cfeb4820ca9e28f63680cba50649b3920952a1fc64c627ab4",
+      "rows": 36
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_d1acb6ff-067.npz",
+      "sha256": "78d259560748f954971ddf38e75248898583050371849eb68c6e4ebf4059afbf",
+      "rows": 5
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_ebdf3b34-084.npz",
+      "sha256": "21fb70e739c91a09f79e867f9f4af071edfb38d39e2cf844f7ac21b7a9b21511",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_ef7b4f7e-014.npz",
+      "sha256": "6980cecb2e1a5b296ad6fa692b2cf814d469ecd55cd295ad2d594c080147b1dc",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_ef7b4f7e-089.npz",
+      "sha256": "d6e71e0fe2ec6fd98c7b3491e4229e9645820fadae6e84e7a31c0dab7dfe16f5",
+      "rows": 3
+    },
+    {
+      "path": ".biohub\\cache\\native-division-v3-data-bundle\\extra\\data\\6bba_f8ffd5e7-010.npz",
+      "sha256": "f18865cffc17b5e0d02c4799b8e6c655e7bb72a4d8ca2667d1299eeccdba01d8",
+      "rows": 4
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\44b6_996155de-019.npz",
+      "sha256": "f34fc19561eb6d3f0a9bdd06a8efc6033b91056978b7b8780f1b2b998b56c831",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\44b6_9be80b04-077.npz",
+      "sha256": "23c04cd0f6a6c86b6c8b49244f1898bb041d8e984c0ef80f8968b1a7a2ac5f54",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\44b6_c50204e0-028.npz",
+      "sha256": "f02b991b7b1b3b17783fa718f77bbf5e8e05041382a5500fb59979019b68c93d",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_085bf656-018.npz",
+      "sha256": "f43f097c56044c6ecb9fca137039e18897f5cd622b6caef9d9ec225606d53642",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_12665c0e-039.npz",
+      "sha256": "780e0d86004b32fa86d7e242340302946f8bc043deebde634e6fd2cde74698ac",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_20852818-082.npz",
+      "sha256": "edf9d8f2c5e6a7c9f24159544a1883fefc10e791f337f6d4403873c33a34cbb8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_3abfe10a-081.npz",
+      "sha256": "1a2fabd0bd32751214d2d3a52647911971358c4469f775a1cd531844b705addf",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_55b7eebe-048.npz",
+      "sha256": "a72c3679a0411a2a202eec5b5fcf3ecd920c0f69419a3ef8843316ac89b3592c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_57b7cc1e-077.npz",
+      "sha256": "b5881bf7ef4e63e401d0a577a09f043a2e850b2649cfbf0c1a06d32238e12276",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_61ecbe65-034.npz",
+      "sha256": "ca6729dc8bfbe0e7e382db1f138593e84e5639ef601120cda67ae81a354263c8",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_907271db-096.npz",
+      "sha256": "7aab1eaaa4e654840fc7d5894fdbe241ee28a322e4e91d01b4e25f2ba6caa7f5",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_9e23430b-089.npz",
+      "sha256": "27bbb471d77b2ee7bc0b310cfc38c67682769f432e94c9246d78ab93920a0920",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_aeee7805-013.npz",
+      "sha256": "04fc845229c8da53dafa87913829e603729d8188f56d7afd207354b4b307c7e7",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_afb141ff-047.npz",
+      "sha256": "4be905027b35b3450736633220b4e44787f2b3e3eb320e5e60ed88dcd83fb8bf",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_afb141ff-048.npz",
+      "sha256": "68ef4b0e8914a77d9fef6969a1627e6ce44f30825a09a074030b7170a9d45a97",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_bb9f20c3-031.npz",
+      "sha256": "af3aff8969f174fea5d9442e60d215218242c1497b4880362df7c7444f27b45c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_cdcfe533-028.npz",
+      "sha256": "1e98614d24a14448c992de117427ffc31f82d982de2462ed5a37e9c59460fd8a",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_cdcfe533-048.npz",
+      "sha256": "95b67788928f709dcf69402d9868dbbc8e4f4f957aab89adc78889a2a37ab07c",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_cdcfe533-052.npz",
+      "sha256": "265e7e2b8458142687a6d9121afe4a6d9e1f7e4b0f1520c8cbb9b99eb22328f0",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_ebdf3b34-084.npz",
+      "sha256": "217953901fff8185082a6294f5df029ab5a185bae24f148e8ab029a18f0651cb",
+      "rows": 1
+    },
+    {
+      "path": ".biohub\\cache\\native-division-additive-v5-full-output\\data\\6bba_fe670320-066.npz",
+      "sha256": "6be53bfde7123711f17e7e6558cc3cc67f1ecf6b43e772f04d5e1498957a74a7",
+      "rows": 1
+    }
+  ],
+  "seconds": 30.46899999998277,
+  "rows": 3108,
+  "feature_sha256": "62ce49da978c48529289af7745a079d594d75644daf3043b7d158ec4cbcad8b9",
+  "feature_shapes": {
+    "geometry": [
+      3108,
+      6
+    ],
+    "legacy_statistics": [
+      3108,
+      30
+    ],
+    "morphology": [
+      3108,
+      18
+    ]
+  },
+  "folds": [
+    {
+      "source": "44b6",
+      "training_rows": 244,
+      "training_positives": 9,
+      "source_metrics": {
+        "geometry": {
+          "positive": 1,
+          "negative": 151,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "balanced_nll": 0.6948014463320757,
+          "threshold": 0.9671329802908665
+        },
+        "legacy_statistics": {
+          "positive": 1,
+          "negative": 151,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "balanced_nll": 0.35072617831698455,
+          "threshold": 0.9847827796529142
+        },
+        "morphology": {
+          "positive": 1,
+          "negative": 151,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "balanced_nll": 0.2940308045911878,
+          "threshold": 0.9599162741088093
+        }
+      },
+      "model_files": {
+        "geometry": {
+          "path": "44b6-geometry.npz",
+          "sha256": "5daeabf71f21780adb0a9f26cd189ad8d7b012d47588e7e2e556392108e6301e",
+          "iterations": 19
+        },
+        "legacy_statistics": {
+          "path": "44b6-legacy_statistics.npz",
+          "sha256": "8963d918145bdde159c6f754d9a421edb719a365657d99473c40580e7d0f372e",
+          "iterations": 36
+        },
+        "morphology": {
+          "path": "44b6-morphology.npz",
+          "sha256": "05e764cb6a7a54958820f2ded5c465647a20b2c9a538a110bc7531c982102ba6",
+          "iterations": 29
+        }
+      },
+      "source_pass": false,
+      "opposite_opened": false,
+      "source_per_movie": {
+        "geometry": {
+          "44b6_2a2eff9f": {
+            "rows": 109,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_341df25f": {
+            "rows": 24,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_706092f0": {
+            "rows": 19,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          }
+        },
+        "legacy_statistics": {
+          "44b6_2a2eff9f": {
+            "rows": 109,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_341df25f": {
+            "rows": 24,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_706092f0": {
+            "rows": 19,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          }
+        },
+        "morphology": {
+          "44b6_2a2eff9f": {
+            "rows": 109,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_341df25f": {
+            "rows": 24,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "44b6_706092f0": {
+            "rows": 19,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          }
+        }
+      }
+    },
+    {
+      "source": "6bba",
+      "training_rows": 2126,
+      "training_positives": 56,
+      "source_metrics": {
+        "geometry": {
+          "positive": 6,
+          "negative": 580,
+          "tp": 3,
+          "fp": 0,
+          "fn": 3,
+          "balanced_nll": 0.17208299362001778,
+          "threshold": 0.9780342205692925
+        },
+        "legacy_statistics": {
+          "positive": 6,
+          "negative": 580,
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "balanced_nll": 0.08512594661174726,
+          "threshold": 0.9768430454533334
+        },
+        "morphology": {
+          "positive": 6,
+          "negative": 580,
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "balanced_nll": 0.12735044506805837,
+          "threshold": 0.9874061327855987
+        }
+      },
+      "model_files": {
+        "geometry": {
+          "path": "6bba-geometry.npz",
+          "sha256": "f5efda3dbb912c81aa904f0258883e1f869e51e87de03585691e631abb9ea750",
+          "iterations": 20
+        },
+        "legacy_statistics": {
+          "path": "6bba-legacy_statistics.npz",
+          "sha256": "36a9c17f92ccc0a44b93c0368f8f44ef2b8271a62fef488ecbdf612f8bb3bf0e",
+          "iterations": 31
+        },
+        "morphology": {
+          "path": "6bba-morphology.npz",
+          "sha256": "231174080f27cf52e40a1fbf0fd7471e139e046fa365fb5611596bf0a9c431d7",
+          "iterations": 23
+        }
+      },
+      "source_pass": false,
+      "opposite_opened": false,
+      "source_per_movie": {
+        "geometry": {
+          "6bba_32db13fc": {
+            "rows": 108,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4f99ce20": {
+            "rows": 76,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4ffd3da3": {
+            "rows": 18,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_87289e13": {
+            "rows": 180,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_8b7818bf": {
+            "rows": 12,
+            "positive": 2,
+            "predicted_positive": 1,
+            "tp": 1
+          },
+          "6bba_b329af44": {
+            "rows": 101,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_debd7bfa": {
+            "rows": 91,
+            "positive": 2,
+            "predicted_positive": 2,
+            "tp": 2
+          }
+        },
+        "legacy_statistics": {
+          "6bba_32db13fc": {
+            "rows": 108,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4f99ce20": {
+            "rows": 76,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4ffd3da3": {
+            "rows": 18,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_87289e13": {
+            "rows": 180,
+            "positive": 1,
+            "predicted_positive": 1,
+            "tp": 1
+          },
+          "6bba_8b7818bf": {
+            "rows": 12,
+            "positive": 2,
+            "predicted_positive": 2,
+            "tp": 2
+          },
+          "6bba_b329af44": {
+            "rows": 101,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_debd7bfa": {
+            "rows": 91,
+            "positive": 2,
+            "predicted_positive": 2,
+            "tp": 2
+          }
+        },
+        "morphology": {
+          "6bba_32db13fc": {
+            "rows": 108,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4f99ce20": {
+            "rows": 76,
+            "positive": 1,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_4ffd3da3": {
+            "rows": 18,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_87289e13": {
+            "rows": 180,
+            "positive": 1,
+            "predicted_positive": 1,
+            "tp": 1
+          },
+          "6bba_8b7818bf": {
+            "rows": 12,
+            "positive": 2,
+            "predicted_positive": 2,
+            "tp": 2
+          },
+          "6bba_b329af44": {
+            "rows": 101,
+            "positive": 0,
+            "predicted_positive": 0,
+            "tp": 0
+          },
+          "6bba_debd7bfa": {
+            "rows": 91,
+            "positive": 2,
+            "predicted_positive": 2,
+            "tp": 2
+          }
+        }
+      }
+    }
+  ],
+  "any_candidate_passed": false,
+  "complete_movie_gain_established": false,
+  "automatic_followup_authorized": false
+}

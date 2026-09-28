@@ -1,0 +1,50 @@
+{
+  "status": "verified_backup",
+  "local_root": "C:\\Users\\IndarKumar\\Documents\\Comp\\Biohub\\.biohub\\cache\\native-correspondence-v2-training-smoke-r3-output",
+  "remote_root": "/tmp/biohub-image-context-v2.ScdSdY/native-correspondence-v2-training-smoke-r3",
+  "records": [
+    {
+      "path": "RESULT.json",
+      "bytes": 20527,
+      "sha256": "28e6eee493a64b13f36a9d34f1761cc3ea06b7667e0f4d21bdad2ecf01a73806"
+    },
+    {
+      "path": "resume.pt",
+      "bytes": 190346829,
+      "sha256": "06e49d4049974b9f7372e26e8c1c238286eacadfe4dd36124e5768bb5af0459c"
+    },
+    {
+      "path": "6bba-resnet3d/best.pt",
+      "bytes": 36080010,
+      "sha256": "5cea2e7ed911e1cf0aa3afbfe34a1343bd8ee077ba909f1125182b38c86e3069"
+    },
+    {
+      "path": "6bba-resnet3d/HISTORY.json",
+      "bytes": 7216,
+      "sha256": "6552e774c86675c0c3e4a15523493a79eda357cfe460ffd38ea089dfca65784c"
+    },
+    {
+      "path": "6bba-resnet3d/RESULT.json",
+      "bytes": 7456,
+      "sha256": "cb6d1ae2c3feea1682a6badf5fbd9fd32dbc4ba7f999f6d62ce23cf04e4b28be"
+    },
+    {
+      "path": "6bba-token_transformer3d/best.pt",
+      "bytes": 63437100,
+      "sha256": "53fbc0ce141764dede19423f6ad2796b8af0121f819a91ad98ba29ad73847726"
+    },
+    {
+      "path": "6bba-token_transformer3d/HISTORY.json",
+      "bytes": 7238,
+      "sha256": "fd90a82d6dc32f9da95a7dea0471041a1dd6eec385d913b9cd8cf65f4994f635"
+    },
+    {
+      "path": "6bba-token_transformer3d/RESULT.json",
+      "bytes": 7479,
+      "sha256": "3872ca839838267482ce32ce87cce7343c6356d00c8f2b2afed8eff54a4d8937"
+    }
+  ],
+  "total_bytes": 289913855,
+  "remote_files_deleted": false,
+  "seconds": 14.297000000020489
+}

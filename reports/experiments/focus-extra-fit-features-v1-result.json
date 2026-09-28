@@ -1,0 +1,206 @@
+{
+  "status": "verified_focus_extra_fitting_feature_cache",
+  "run_id": "focus-extra-fit-features-v1",
+  "records": [
+    {
+      "stem": "6bba_f1fde7e0",
+      "role": "replay",
+      "frames": 3,
+      "nodes": 785,
+      "pairs": 2,
+      "raw_sha256": "14425b393d47908756e52ccf98a010bb65fb4a5ad22272c59b839ea5b3236893",
+      "manifest_sha256": "da55fbeece20825e37878eacf3dac2ecf46b805e0bea53f4188aa38adb4b940d",
+      "counts": {
+        "known_parent": 0,
+        "known_absent": 0,
+        "unknown": 520
+      }
+    },
+    {
+      "stem": "6bba_23af9eeb",
+      "role": "replay",
+      "frames": 3,
+      "nodes": 285,
+      "pairs": 2,
+      "raw_sha256": "9f157968bf88118f806dfbf957d8d15e4f74e9514ac5c77eaa470cb188e42012",
+      "manifest_sha256": "e0426df6fed260abd54ae4fca0b903adfcdad860eebdceb608f6d84ae8b5d4aa",
+      "counts": {
+        "known_parent": 0,
+        "known_absent": 0,
+        "unknown": 185
+      }
+    },
+    {
+      "stem": "6bba_971fa5e0",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 6549,
+      "pairs": 99,
+      "raw_sha256": "3d56cb90637c99da0c90c90ac8137664575ef0d339814b6692ff61a5c49f57ef",
+      "manifest_sha256": "384b06f06ab15274e41b0d15a8d911266c5fe71e3ec13c671d59e326fb4623f8",
+      "counts": {
+        "known_parent": 762,
+        "known_absent": 2,
+        "unknown": 5692
+      }
+    },
+    {
+      "stem": "6bba_cf35214c",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 42172,
+      "pairs": 99,
+      "raw_sha256": "62fc0fdf143ddbf5a5c21770f97d410c127d3af14f2949e47c1dc183bef0ffbe",
+      "manifest_sha256": "4c561ea583daf8d0348482b8afc88facab548d392e0be8d21b0064040cf0e75d",
+      "counts": {
+        "known_parent": 804,
+        "known_absent": 5,
+        "unknown": 41015
+      }
+    },
+    {
+      "stem": "6bba_cff5865f",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 53559,
+      "pairs": 99,
+      "raw_sha256": "c12f0b2a4cc3ec8ea156f2ba9814b71755794c6434b0f7bcef88592171648e0a",
+      "manifest_sha256": "8b324f29d9bc3054ee5b2a381545d7a3e8db2c9321aefe35dbbda5bea90e431b",
+      "counts": {
+        "known_parent": 1490,
+        "known_absent": 4,
+        "unknown": 51787
+      }
+    },
+    {
+      "stem": "6bba_edf14583",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 80491,
+      "pairs": 99,
+      "raw_sha256": "8de1d8bd9196b4e9b087bc1b4c104b21efcc113ae1c791d4ff7b066282527ac5",
+      "manifest_sha256": "a667f77319a79ada4a14446ad1b1879c527a3007ccb35172e096094268474db6",
+      "counts": {
+        "known_parent": 736,
+        "known_absent": 9,
+        "unknown": 78989
+      }
+    },
+    {
+      "stem": "6bba_1ebfb80d",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 16686,
+      "pairs": 99,
+      "raw_sha256": "9b801f95e068373c42dd9e08cc479d72c8ed0590f98012d9ca1d814f0e7cc9a6",
+      "manifest_sha256": "b978858269d8b48b19bba839ff20f2bd5ea9029a405d532d91b4f01fca055a1c",
+      "counts": {
+        "known_parent": 714,
+        "known_absent": 2,
+        "unknown": 15637
+      }
+    },
+    {
+      "stem": "6bba_7d3058ae",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 8778,
+      "pairs": 99,
+      "raw_sha256": "27c3e94cd6899f0fb6b25ee59c240260574f47c6484729bcc8f2f9cb37aabff4",
+      "manifest_sha256": "fd27067c4e96a140a8be0e6977264b3321b459f1cde84fa8bb56969ed1b6629d",
+      "counts": {
+        "known_parent": 1157,
+        "known_absent": 7,
+        "unknown": 7543
+      }
+    },
+    {
+      "stem": "6bba_4f99ce20",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 6211,
+      "pairs": 99,
+      "raw_sha256": "90c7e9929fdade9c56a17f97b760101ab85ad46ddbf06a1de330b883248e6a19",
+      "manifest_sha256": "fc5dff8174daa929a374cd6622a4a19f165efc97addecd330fa6bab2fda19108",
+      "counts": {
+        "known_parent": 965,
+        "known_absent": 14,
+        "unknown": 5152
+      }
+    },
+    {
+      "stem": "6bba_57b7cc1e",
+      "role": "fitting",
+      "frames": 100,
+      "nodes": 109965,
+      "pairs": 99,
+      "raw_sha256": "5859e0566de5638a6c97270523de1d4914090c510865a8c9864a1e8e7016e442",
+      "manifest_sha256": "ffda5690ebecd4075d4b9135050034e99f49cbde3942bb2fc345d4d6c1c2ceee",
+      "counts": {
+        "known_parent": 1308,
+        "known_absent": 66,
+        "unknown": 107510
+      }
+    }
+  ],
+  "contract": {
+    "fitting_stems": [
+      "6bba_971fa5e0",
+      "6bba_cf35214c",
+      "6bba_cff5865f",
+      "6bba_edf14583",
+      "6bba_1ebfb80d",
+      "6bba_7d3058ae",
+      "6bba_4f99ce20",
+      "6bba_57b7cc1e"
+    ],
+    "training_stems": [
+      "6bba_971fa5e0",
+      "6bba_cf35214c",
+      "6bba_cff5865f",
+      "6bba_edf14583",
+      "6bba_1ebfb80d",
+      "6bba_7d3058ae",
+      "6bba_4f99ce20",
+      "6bba_57b7cc1e"
+    ],
+    "replay_stems": [
+      "6bba_f1fde7e0",
+      "6bba_23af9eeb"
+    ],
+    "previous_fitting_stems": [
+      "6bba_6479435d",
+      "6bba_df673a83",
+      "6bba_767a1e17",
+      "6bba_2312ac41"
+    ],
+    "unchanged_diagnostic_stems": [
+      "6bba_b204cac7",
+      "6bba_2646afc7",
+      "6bba_8b7818bf",
+      "6bba_312f0dc3"
+    ],
+    "split_sha256": "12eca8b1f77b549cebb241bd81ced8f3b4b38bef16d18dce2a551c40d31e9d13",
+    "source_selection_opened": false,
+    "new_target_movies_opened": 0,
+    "authorized_for_submission": false,
+    "role_assignment": "Next eight original96 fitting movies, excluding cached/replay movies; no labels or scores used",
+    "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies",
+    "diagnostic_stems": [],
+    "feature_scope": "Eight new fitting movies only; original four diagnostic summaries reused unchanged"
+  },
+  "notebook_sha256": "40115a147daa6b20c68967fff63b3b53180b48f8a807a524137f60c5575a8935",
+  "staged_identity_sha256": "3a5176871b8756bc560398a7e8bae4136b60d692809e3623b363878dcd92ac8a",
+  "worker_result_sha256": "66f7b3f34173e838ff553ecfb97bfbdae9adb667b1ea36ef87530a8ab263f421",
+  "launcher": {
+    "status": "completed",
+    "run_id": "focus-extra-fit-features-v1",
+    "elapsed_seconds": 222.57866029900003,
+    "declared_budget_seconds": 3600,
+    "submission_performed": false
+  },
+  "all_raw_nodes_and_sparse_labels_exact": true,
+  "optimizer_run": false,
+  "authorized_for_submission": false,
+  "diagnostic_caveat": "Excluded from future adaptation only; original encoder/linker training included these movies"
+}

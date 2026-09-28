@@ -1,0 +1,955 @@
+{
+  "status": "completed",
+  "run_id": "focus-pair-tree-lomo-v1",
+  "source_hashes": {
+    "research/focus_pair_tree.py": "2a1b0cfda867d2425fa7ff6906464f08c47027bf54d23a2749e8c999cc832d9c",
+    "scripts/smoke-focus-pair-tree.py": "4cd5c48c4e241b703ec4d40e44d52b532a276d108b3516667c9da20d4f7e388f",
+    "tests/test_focus_pair_tree.py": "49e5909724b4999e876c16bfb5b5ca8436bf3a21966c0b8116976a111f0ed9cc",
+    "reports/experiments/focus-pair-tree-v1-design.md": "4790fa75d9d0b3024a8c126c42b5ef50f8c2b04271c518be4eb6d201204ca0c5",
+    "scripts/profile-focus-pair-tree.py": "c41db38c3c03daebefa750d0aaf765daeed3b5f940dbb92b7884680464ccc2dc",
+    "reports/experiments/focus-pair-tree-first-fold-v1-design.md": "89a3eb4c8ba65da2b6c9b3888db7a5859c5fdf4bba2e275af68f01a3a0b52ca6",
+    "research/focus_pair_tree_resume.py": "2ac4463b0a1ce9b76a52b1723dbea701b77f79806406581e41ef2db65fdf5fa4",
+    "scripts/recover-focus-pair-tree-profile.py": "06bb58beb6a05181ee8701b5ea1b84d2ba2b90ea515affab9e2bf2ae6deced72",
+    "reports/experiments/focus-pair-tree-first-fold-recovery-v1-design.md": "17f145dbaa1ce9577076aac62cbbe6e0bbad361d3dec0f9750fb7ce0e095a7d3",
+    "scripts/fit-focus-pair-tree-lomo.py": "4cb8b1593d3b96024250c93f02ec0f3cb81405994e7e5f0bbb6f08d97fbd81de",
+    "tests/test_focus_pair_tree_lomo.py": "5bbe748dd46adc9dc8584b60f98c9e8daa65c08fce46d9aafdb5c96872f458d4",
+    "reports/experiments/focus-pair-tree-lomo-v1-design.md": "781263ffea1886d2a6716c0acd387ed7142b4a14eda7b77d6502707363bfb13f"
+  },
+  "folds": [
+    {
+      "held_out": "6bba_6479435d",
+      "training_stems": [
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "a8bc79d23e2c3f9546351ac1bbd05d111e836ab66969bbd5180e9ddd4ba596b0",
+      "reused_profile": true,
+      "physical": {
+        "loss_sum": 652.6634092535569,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 401,
+        "correct_absent": 16,
+        "nll": 1.2747332211983533
+      },
+      "neural": {
+        "loss_sum": 581.1471284215985,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 421,
+        "correct_absent": 14,
+        "nll": 1.1350529851984346
+      },
+      "weighted_ranker": {
+        "loss_sum": 279.093844007351,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 426,
+        "correct_absent": 9,
+        "nll": 0.5451051640768574
+      },
+      "lda": {
+        "loss_sum": 286.8536824198977,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 416,
+        "correct_absent": 12,
+        "nll": 0.5602610984763627
+      },
+      "full_linear": {
+        "loss_sum": 283.7744203087024,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 420,
+        "correct_absent": 11,
+        "nll": 0.5542469146654344
+      },
+      "candidate": {
+        "loss_sum": 281.0841852673584,
+        "known_parent": 492,
+        "known_absent": 20,
+        "correct_parent": 417,
+        "correct_absent": 11,
+        "nll": 0.5489925493503094
+      },
+      "fit_seconds": 0.0,
+      "elapsed_seconds": 1.4060000000172295
+    },
+    {
+      "held_out": "6bba_df673a83",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "131863ea5cd9b0dd0cd51ad2b0e5b0b179fb8a0fda595b795164e0ba99921148",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 163.98787554132088,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 605,
+        "correct_absent": 5,
+        "nll": 0.2566320431006586
+      },
+      "neural": {
+        "loss_sum": 128.31565505545697,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 609,
+        "correct_absent": 2,
+        "nll": 0.20080697191777305
+      },
+      "weighted_ranker": {
+        "loss_sum": 97.97966108833762,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 615,
+        "correct_absent": 1,
+        "nll": 0.15333280295514495
+      },
+      "lda": {
+        "loss_sum": 108.90373746580376,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 618,
+        "correct_absent": 2,
+        "nll": 0.17042838414053796
+      },
+      "full_linear": {
+        "loss_sum": 115.45053129272141,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 609,
+        "correct_absent": 1,
+        "nll": 0.1806737578915828
+      },
+      "candidate": {
+        "loss_sum": 114.35839483823197,
+        "known_parent": 631,
+        "known_absent": 8,
+        "correct_parent": 608,
+        "correct_absent": 0,
+        "nll": 0.17896462415998743
+      },
+      "fit_seconds": 294.9679999999935,
+      "elapsed_seconds": 311.5
+    },
+    {
+      "held_out": "6bba_767a1e17",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "c53bc4e8395bd1d44d2fe75434d3f6673ebb89284f2f130b060c1f86066ec4a8",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 1298.9609573600203,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 413,
+        "correct_absent": 11,
+        "nll": 2.1577424540864123
+      },
+      "neural": {
+        "loss_sum": 1114.4279897032775,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 453,
+        "correct_absent": 2,
+        "nll": 1.8512092852213913
+      },
+      "weighted_ranker": {
+        "loss_sum": 467.5707286711395,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 478,
+        "correct_absent": 5,
+        "nll": 0.7766955625766436
+      },
+      "lda": {
+        "loss_sum": 453.5279021968376,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 481,
+        "correct_absent": 7,
+        "nll": 0.7533686083003946
+      },
+      "full_linear": {
+        "loss_sum": 442.5572547875761,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 482,
+        "correct_absent": 7,
+        "nll": 0.7351449415076015
+      },
+      "candidate": {
+        "loss_sum": 440.2760102089159,
+        "known_parent": 587,
+        "known_absent": 15,
+        "correct_parent": 483,
+        "correct_absent": 7,
+        "nll": 0.7313554986859069
+      },
+      "fit_seconds": 257.78100000001723,
+      "elapsed_seconds": 280.98399999999674
+    },
+    {
+      "held_out": "6bba_2312ac41",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "2966b4d6f369f98a916c32e9287a7a3699d9af6d10eeea316adfa6f2ef89b397",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 310.14486979324346,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1057,
+        "correct_absent": 7,
+        "nll": 0.27765879122045073
+      },
+      "neural": {
+        "loss_sum": 202.1939597678404,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1083,
+        "correct_absent": 5,
+        "nll": 0.1810151833194632
+      },
+      "weighted_ranker": {
+        "loss_sum": 139.5165211891633,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1084,
+        "correct_absent": 5,
+        "nll": 0.12490288378618022
+      },
+      "lda": {
+        "loss_sum": 121.14655257735792,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1085,
+        "correct_absent": 4,
+        "nll": 0.10845707482305991
+      },
+      "full_linear": {
+        "loss_sum": 118.85025034766939,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1086,
+        "correct_absent": 4,
+        "nll": 0.106401298431217
+      },
+      "candidate": {
+        "loss_sum": 117.46466767864426,
+        "known_parent": 1108,
+        "known_absent": 9,
+        "correct_parent": 1087,
+        "correct_absent": 4,
+        "nll": 0.10516084841418466
+      },
+      "fit_seconds": 245.92199999999139,
+      "elapsed_seconds": 264.7030000000086
+    },
+    {
+      "held_out": "6bba_971fa5e0",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "2c62999ba03213c4cc7ca44ad6f0ec61ac3dd2a6639b461c0d9a6185f7231296",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 498.16611581967226,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 724,
+        "correct_absent": 2,
+        "nll": 0.652049889816325
+      },
+      "neural": {
+        "loss_sum": 344.7879437291949,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 737,
+        "correct_absent": 1,
+        "nll": 0.45129312006439126
+      },
+      "weighted_ranker": {
+        "loss_sum": 154.6685054795866,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 742,
+        "correct_absent": 1,
+        "nll": 0.202445687800506
+      },
+      "lda": {
+        "loss_sum": 88.21240270359623,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 746,
+        "correct_absent": 1,
+        "nll": 0.11546126008324113
+      },
+      "full_linear": {
+        "loss_sum": 86.73652865604954,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 744,
+        "correct_absent": 1,
+        "nll": 0.11352948776969836
+      },
+      "candidate": {
+        "loss_sum": 83.6250485690439,
+        "known_parent": 762,
+        "known_absent": 2,
+        "correct_parent": 744,
+        "correct_absent": 1,
+        "nll": 0.1094568698547695
+      },
+      "fit_seconds": 263.7030000000086,
+      "elapsed_seconds": 279.06299999999464
+    },
+    {
+      "held_out": "6bba_cf35214c",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "03701efb6a9914c85050d8929c86e3ca3aac1a7279bbab3920539d2dc75b29ae",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 361.03680984935835,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 747,
+        "correct_absent": 4,
+        "nll": 0.4462754139052637
+      },
+      "neural": {
+        "loss_sum": 272.09500693823566,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 765,
+        "correct_absent": 3,
+        "nll": 0.3363349900349019
+      },
+      "weighted_ranker": {
+        "loss_sum": 175.32260630120345,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 764,
+        "correct_absent": 3,
+        "nll": 0.21671521174438005
+      },
+      "lda": {
+        "loss_sum": 158.19799937315005,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 769,
+        "correct_absent": 4,
+        "nll": 0.19554758884196546
+      },
+      "full_linear": {
+        "loss_sum": 147.4583293409314,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 768,
+        "correct_absent": 4,
+        "nll": 0.18227234776382129
+      },
+      "candidate": {
+        "loss_sum": 147.88373829296376,
+        "known_parent": 804,
+        "known_absent": 5,
+        "correct_parent": 766,
+        "correct_absent": 4,
+        "nll": 0.18279819319278584
+      },
+      "fit_seconds": 295.23499999998603,
+      "elapsed_seconds": 315.51499999998487
+    },
+    {
+      "held_out": "6bba_cff5865f",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "799f8ce37b52c74f2c90c3b8bd841da2d36bc175ba087b46016dbe5cac505b5f",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 637.3586147045219,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1373,
+        "correct_absent": 4,
+        "nll": 0.42661219190396377
+      },
+      "neural": {
+        "loss_sum": 494.41701384762524,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1414,
+        "correct_absent": 3,
+        "nll": 0.3309350828966702
+      },
+      "weighted_ranker": {
+        "loss_sum": 442.37869423421716,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1396,
+        "correct_absent": 2,
+        "nll": 0.29610354366413466
+      },
+      "lda": {
+        "loss_sum": 443.65345687101063,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1392,
+        "correct_absent": 3,
+        "nll": 0.29695679844110484
+      },
+      "full_linear": {
+        "loss_sum": 439.98490890480724,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1392,
+        "correct_absent": 3,
+        "nll": 0.2945012777140611
+      },
+      "candidate": {
+        "loss_sum": 435.6336788531077,
+        "known_parent": 1490,
+        "known_absent": 4,
+        "correct_parent": 1391,
+        "correct_absent": 2,
+        "nll": 0.29158880779993823
+      },
+      "fit_seconds": 240.36000000001513,
+      "elapsed_seconds": 265.9690000000119
+    },
+    {
+      "held_out": "6bba_edf14583",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "0f7e1ab279af4878958d24eb7ebee43daa420486bdb5c0b38e94c6835b9fed98",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 561.0536910121327,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 647,
+        "correct_absent": 6,
+        "nll": 0.7530922027008493
+      },
+      "neural": {
+        "loss_sum": 540.3230547292479,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 644,
+        "correct_absent": 6,
+        "nll": 0.7252658452741583
+      },
+      "weighted_ranker": {
+        "loss_sum": 328.284965658483,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 667,
+        "correct_absent": 6,
+        "nll": 0.44065096061541337
+      },
+      "lda": {
+        "loss_sum": 328.4126611303172,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 659,
+        "correct_absent": 3,
+        "nll": 0.44082236393331165
+      },
+      "full_linear": {
+        "loss_sum": 318.6140756464972,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 656,
+        "correct_absent": 4,
+        "nll": 0.42766990019664053
+      },
+      "candidate": {
+        "loss_sum": 316.1759561321617,
+        "known_parent": 736,
+        "known_absent": 9,
+        "correct_parent": 657,
+        "correct_absent": 4,
+        "nll": 0.4243972565532371
+      },
+      "fit_seconds": 256.9070000000065,
+      "elapsed_seconds": 292.98400000002584
+    },
+    {
+      "held_out": "6bba_1ebfb80d",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "3aaca5d63992f92854749a9eb90a815d0ccaf3827863a438cb12f1b16ada39c4",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 655.0157621756791,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 628,
+        "correct_absent": 2,
+        "nll": 0.9148264834855854
+      },
+      "neural": {
+        "loss_sum": 543.461415235273,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 653,
+        "correct_absent": 2,
+        "nll": 0.7590243229542919
+      },
+      "weighted_ranker": {
+        "loss_sum": 280.45936375150654,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 651,
+        "correct_absent": 2,
+        "nll": 0.39170302199931084
+      },
+      "lda": {
+        "loss_sum": 228.93680775940396,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 656,
+        "correct_absent": 2,
+        "nll": 0.3197441449153687
+      },
+      "full_linear": {
+        "loss_sum": 224.93769831497488,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 655,
+        "correct_absent": 2,
+        "nll": 0.3141587965292945
+      },
+      "candidate": {
+        "loss_sum": 223.16660391939027,
+        "known_parent": 714,
+        "known_absent": 2,
+        "correct_parent": 656,
+        "correct_absent": 2,
+        "nll": 0.311685201004735
+      },
+      "fit_seconds": 338.23399999999674,
+      "elapsed_seconds": 398.7190000000119
+    },
+    {
+      "held_out": "6bba_7d3058ae",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_4f99ce20",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "d8363d35ce689cb82964c33ba6ba83cf7a5cd1177b81cb3cfc90a149997fd123",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 527.4140455330587,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1067,
+        "correct_absent": 5,
+        "nll": 0.4531048501143116
+      },
+      "neural": {
+        "loss_sum": 245.4009148614949,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1120,
+        "correct_absent": 5,
+        "nll": 0.21082552823152484
+      },
+      "weighted_ranker": {
+        "loss_sum": 158.62720623855986,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1134,
+        "correct_absent": 5,
+        "nll": 0.13627766858982807
+      },
+      "lda": {
+        "loss_sum": 106.95721998488298,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1131,
+        "correct_absent": 5,
+        "nll": 0.09188764603512284
+      },
+      "full_linear": {
+        "loss_sum": 153.43989846757628,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1123,
+        "correct_absent": 5,
+        "nll": 0.13182121861475626
+      },
+      "candidate": {
+        "loss_sum": 152.49070988294784,
+        "known_parent": 1157,
+        "known_absent": 7,
+        "correct_parent": 1122,
+        "correct_absent": 5,
+        "nll": 0.13100576450425072
+      },
+      "fit_seconds": 337.0779999999795,
+      "elapsed_seconds": 361.06200000000536
+    },
+    {
+      "held_out": "6bba_4f99ce20",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_57b7cc1e"
+      ],
+      "model_sha256": "acd8fa14f0b12db46d53326cb811147d17fe9ace900ee9d740dc82d8f733b300",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 441.26847517913313,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 890,
+        "correct_absent": 10,
+        "nll": 0.4507338868019746
+      },
+      "neural": {
+        "loss_sum": 242.58111023900486,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 937,
+        "correct_absent": 8,
+        "nll": 0.24778458655669547
+      },
+      "weighted_ranker": {
+        "loss_sum": 258.03943222810756,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 904,
+        "correct_absent": 8,
+        "nll": 0.263574496657924
+      },
+      "lda": {
+        "loss_sum": 237.46403400070562,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 904,
+        "correct_absent": 9,
+        "nll": 0.24255774668100677
+      },
+      "full_linear": {
+        "loss_sum": 237.2708438236495,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 902,
+        "correct_absent": 9,
+        "nll": 0.2423604124858524
+      },
+      "candidate": {
+        "loss_sum": 233.3482282688192,
+        "known_parent": 965,
+        "known_absent": 14,
+        "correct_parent": 902,
+        "correct_absent": 9,
+        "nll": 0.23835365502433015
+      },
+      "fit_seconds": 302.7190000000119,
+      "elapsed_seconds": 323.84399999998277
+    },
+    {
+      "held_out": "6bba_57b7cc1e",
+      "training_stems": [
+        "6bba_6479435d",
+        "6bba_df673a83",
+        "6bba_767a1e17",
+        "6bba_2312ac41",
+        "6bba_971fa5e0",
+        "6bba_cf35214c",
+        "6bba_cff5865f",
+        "6bba_edf14583",
+        "6bba_1ebfb80d",
+        "6bba_7d3058ae",
+        "6bba_4f99ce20"
+      ],
+      "model_sha256": "49cf01fa575ae1feb31b8cdf4c0fc372c96a82e031b421298b41d917f64b71b2",
+      "reused_profile": false,
+      "physical": {
+        "loss_sum": 2656.2716122802785,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 962,
+        "correct_absent": 43,
+        "nll": 1.9332398924892857
+      },
+      "neural": {
+        "loss_sum": 2575.596382030655,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 999,
+        "correct_absent": 21,
+        "nll": 1.8745242955099382
+      },
+      "weighted_ranker": {
+        "loss_sum": 1174.2752457686543,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 1030,
+        "correct_absent": 26,
+        "nll": 0.8546399168621938
+      },
+      "lda": {
+        "loss_sum": 1178.314574017985,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 1023,
+        "correct_absent": 32,
+        "nll": 0.8575797481935844
+      },
+      "full_linear": {
+        "loss_sum": 1245.203378880755,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 1017,
+        "correct_absent": 33,
+        "nll": 0.9062615566817722
+      },
+      "candidate": {
+        "loss_sum": 1228.6038980097028,
+        "known_parent": 1308,
+        "known_absent": 66,
+        "correct_parent": 1015,
+        "correct_absent": 34,
+        "nll": 0.8941804206766396
+      },
+      "fit_seconds": 196.82800000000861,
+      "elapsed_seconds": 236.73499999998603
+    }
+  ],
+  "executions": [
+    {
+      "held_out": "6bba_6479435d",
+      "peak_working_bytes": 229355520,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 2.2810000000172295
+    },
+    {
+      "held_out": "6bba_df673a83",
+      "peak_working_bytes": 5279973376,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 312.8280000000086
+    },
+    {
+      "held_out": "6bba_767a1e17",
+      "peak_working_bytes": 4942680064,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 299.51599999997416
+    },
+    {
+      "held_out": "6bba_2312ac41",
+      "peak_working_bytes": 5261676544,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 281.23499999998603
+    },
+    {
+      "held_out": "6bba_971fa5e0",
+      "peak_working_bytes": 5410447360,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 280.875
+    },
+    {
+      "held_out": "6bba_cf35214c",
+      "peak_working_bytes": 5067870208,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 316.73399999999674
+    },
+    {
+      "held_out": "6bba_cff5865f",
+      "peak_working_bytes": 4488736768,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 267.1719999999914
+    },
+    {
+      "held_out": "6bba_edf14583",
+      "peak_working_bytes": 4776361984,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 298.06299999999464
+    },
+    {
+      "held_out": "6bba_1ebfb80d",
+      "peak_working_bytes": 5331341312,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 472.4539999999979
+    },
+    {
+      "held_out": "6bba_7d3058ae",
+      "peak_working_bytes": 5350129664,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 363.2190000000119
+    },
+    {
+      "held_out": "6bba_4f99ce20",
+      "peak_working_bytes": 5397454848,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 340.5940000000119
+    },
+    {
+      "held_out": "6bba_57b7cc1e",
+      "peak_working_bytes": 3726270464,
+      "actual_worker_pid_confirmed": true,
+      "elapsed_seconds": 240.71900000001187
+    }
+  ],
+  "failure": null,
+  "gate": {
+    "pooled": {
+      "physical": {
+        "loss_sum": 8763.342238501977,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9514,
+        "correct_absent": 115,
+        "nll": 0.8028714831426456
+      },
+      "neural": {
+        "loss_sum": 7284.747574558905,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9835,
+        "correct_absent": 72,
+        "nll": 0.6674070155344851
+      },
+      "candidate": {
+        "loss_sum": 3774.111119921288,
+        "known_parent": 10754,
+        "known_absent": 161,
+        "correct_parent": 9848,
+        "correct_absent": 83,
+        "nll": 0.3457728923427657
+      }
+    },
+    "conditions": {
+      "nll_below_both": true,
+      "parent_not_lower": true,
+      "absent_not_lower": false,
+      "eight_movie_nll_wins": true,
+      "per_movie_nll_loss_bounded": true
+    },
+    "passed": false,
+    "scope": "New ranking correction LOMO only; original encoder used fitting movies"
+  },
+  "final_model": null,
+  "diagnostic_movies_opened": 0,
+  "source_movies_opened": 0,
+  "new_target_movies_opened": 0,
+  "gpu_seconds": 0,
+  "authorized_for_submission": false,
+  "elapsed_seconds": 3478.985000000015
+}
