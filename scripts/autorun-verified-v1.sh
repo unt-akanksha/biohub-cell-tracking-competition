@@ -8,6 +8,7 @@
 #
 # Entries are  run_id|kernel_slug|declared_hours|submit(0|1)|hypothesis
 set -uo pipefail
+PYBIN="${PYBIN:-python}"
 QUEUE_FILE="$1"
 WAIT_FIRST="${2:-}"
 WAIT_FIRST_DESC="${3:-Auto-submitted on completion.}"
@@ -26,7 +27,7 @@ wait_terminal () {
 
 submit () {
   echo "$(date -u +%H:%M) submitting $1"
-  python scripts/fast-submit-v1.py "$1" "$2" 2>&1 | tail -2
+  "${PYBIN:-python}" scripts/fast-submit-v1.py "$1" "$2" 2>&1 | tail -2
 }
 
 if [ -n "$WAIT_FIRST" ]; then
