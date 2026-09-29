@@ -188,6 +188,12 @@ ENV_OVERRIDABLE = {
     "BIOHUB_SAFE_DIV_GLOBAL_FRAC_CAP": (0.0, 0.03),
     "BIOHUB_DEEPCENTER_SAFE_DIV_THRESHOLD": (0.02, 0.60),
     "BIOHUB_ILP_DIVISION_WEIGHT": (0.5, 4.0),
+    # Master switch for the safe-division post-process. 0 disables it entirely.
+    # Added after the leaderboard came back MONOTONIC in divisions added:
+    # divwide 0.956, divmax 0.956, divrevert 0.932 against a 0.960 baseline,
+    # i.e. every arm that added more divisions scored worse. The gradient points
+    # at fewer, which nothing public or ours has probed.
+    "BIOHUB_OUTPUT_SAFE_DIVISIONS": (0.0, 1.0),
 }
 
 _PP_CANDIDATES_ANCHOR = "PP_CANDIDATES: dict[str, dict] = {"
