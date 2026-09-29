@@ -6694,3 +6694,48 @@ Launched `hfv3-symtau0-v1` (clean, carrying none of the refuted loosening) and
 `hfv3-symtau0-dc40-v1`, which probes the DeepCenter veto UPWARD to 0.40 to cut
 symtau0's +14 false positives while keeping its +7 true ones. The sweep only
 probed that threshold downward, where it was harmful both times.
+
+
+## 2026-09-29 -- The proxy is not trustworthy on the division axis
+
+`divrevert` returned 0.932, a 0.028 loss, against `divwide`'s 0.956 and a 0.960
+baseline. It carried symtau0 plus dcthresh12 plus the geometry loosening, so it
+is confounded -- but the proxy predicted that combination POSITIVE at +0.0015.
+
+    config                     proxy              LB        outcome
+    v3 base                    -                  0.953
+    v3+density+det93           0.9302             0.960     +0.0298 offset
+    divwide  (caps+geometry)   ~0.9300 (flat)     0.956     LB -0.004
+    divmax   (further)         ~0.9300 (flat)     0.956     LB -0.004
+    divrevert(~combo+geom)     0.9317 (+0.0015)   0.932     LB -0.028
+    symtau0  (clean)           0.9356 (+0.0054)   pending
+
+Two consecutive mispredictions, the second badly wrong in sign and magnitude.
+
+**Why, structurally.** The proxy's ground truth is sparse: roughly 2% coverage,
+about 1.5 annotated divisions per movie. Of the ~530 safe divisions the pipeline
+adds across 40 movies, only 29 -- 5.5% -- are ever scored. So on this axis the
+proxy grades a 5.5% sample of precisely the quantity these arms change, while
+the real scorer feels all of it. Every earlier refuted hypothesis moved distance
+gates, which alter existing edges that ARE densely annotated; the proxy was a
+fair screen for those. It is not a fair screen for anything that changes the
+NUMBER of divisions, and that is exactly what this family does.
+
+This also reframes symtau0's headline number. Its apparent 1:2 precision is
+measured on the same tiny slice, and symtau0 is the mechanism that most
+increases how many divisions get added, so it carries the largest exposure to
+this bias. The +0.0054 proxy gain is the largest we have ever measured and may
+still be an artefact. Its own clean submission is the deciding evidence.
+
+**Consequence for selection.** Unless symtau0 clears 0.960 on the leaderboard,
+the division axis is closed too and the 0.960 configurations stand. Per-embryo
+proxy evidence from `hfv3-symtau0-valid-v1` inherits the same sparse-GT bias, so
+it can support a decision but cannot overturn a leaderboard result on this axis.
+
+**Unrelated, confirmed safe.** A public warning reports 0.954 -> 0.946 from
+writing float node coordinates instead of int(round(...)). Our writer emits
+`max(0, int(round(float(node[axis]))))`, inherited from the baseline and never
+touched, so no submission of ours is affected. Worth noting the poster's
+unconfirmed guess that the Kaggle-side scorer truncates rather than rounds would
+also explain why the D4 correction and the pool-kernel experiment, both of which
+assumed sub-voxel output geometry mattered, came back flat.
