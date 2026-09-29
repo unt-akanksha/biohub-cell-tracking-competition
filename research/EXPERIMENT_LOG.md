@@ -6640,3 +6640,57 @@ peak. `hfv3-divsweep-v1` follows for the per-embryo evidence the leaderboard
 cannot supply. Nine SAFE_DIV keys added to ENV_OVERRIDABLE with audited ranges.
 
 Submitted `hfv3-contdet93-v1` from the bank (ref 56646242).
+
+
+## 2026-09-29 -- Division loosening refuted on the leaderboard; one gate survives
+
+**Leaderboard result on the division axis.** Both widening arms lost:
+
+    contdet93 (continuous gate)        0.960   =
+    divwide   (amanatar's values)      0.956   -0.004
+    divmax    (beyond amanatar)        0.956   -0.004
+
+Going further did not lose more, consistent with added divisions arriving below
+the ~1:4 precision break-even the cost model set. Layering amanatar's constants
+onto our stack is not the same as running their notebook, so their public
+standing is not contradicted; on our stack the direction is refuted.
+
+**The sweep explains exactly why, and finds the one gate that works.**
+
+    candidate      div tp/fp/fn   divJ     proxy
+    base           12/17/48       0.1558   0.9302
+    caps2x         12/17/48       0.1558   +0.0000
+    caps4x         12/17/48       0.1558   +0.0000
+    geomwide       12/19/48       0.1519   -0.0005
+    diverge15      13/24/47       0.1548   -0.0001
+    dcthresh12     12/23/48       0.1446   -0.0013
+    dcthresh06     12/25/48       0.1412   -0.0017
+    symtau0        19/31/41       0.2088   +0.0054
+    combo          20/54/40       0.1754   +0.0015
+
+The frac caps NEVER BIND -- 2x and 4x return counts identical to base, the same
+lesson as the gap-fill cap. So divwide and divmax raised caps that did nothing
+while widening geometry that adds pure false positives (geomwide +2 FP, 0 TP).
+That is the whole -0.004.
+
+`SAFE_DIV_SISTER_SYMMETRY_TAU` 0.6 -> stock 0.0 is the exception and the only
+mechanism that has ever moved the division term: +7 true divisions, false
+negatives 48 -> 41, divJ 0.1558 -> 0.2088, at 1:2 precision against a 1:4
+break-even, with adjusted edge Jaccard unchanged at 0.9147. Proxy +0.0054 is
+roughly seven times any gain previously measured on any axis. TAU 0.0 is the
+floor of its range, so the axis is fully explored in the helpful direction.
+
+`combo` is worse than symtau0 alone because it folds in dcthresh12, which
+contributes 23 false positives and zero true ones.
+
+**Method note.** The validator prints per-movie rows only once, for the base, and
+reports candidates as pooled 40-movie summaries, so the pre-declared
+both-embryos rule could NOT be applied to symtau0 from the sweep log.
+`hfv3-symtau0-valid-v1` rebuilds it as a validation config so its per-movie rows
+are printed and can be differenced against the base rows already in hand. That
+gate is required before symtau0 becomes a final selection.
+
+Launched `hfv3-symtau0-v1` (clean, carrying none of the refuted loosening) and
+`hfv3-symtau0-dc40-v1`, which probes the DeepCenter veto UPWARD to 0.40 to cut
+symtau0's +14 false positives while keeping its +7 true ones. The sweep only
+probed that threshold downward, where it was harmful both times.
