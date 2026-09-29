@@ -6739,3 +6739,48 @@ touched, so no submission of ours is affected. Worth noting the poster's
 unconfirmed guess that the Kaggle-side scorer truncates rather than rounds would
 also explain why the D4 correction and the pool-kernel experiment, both of which
 assumed sub-voxel output geometry mattered, came back flat.
+
+
+## 2026-09-29 -- Both axes closed. The division response is unimodal at v3 defaults.
+
+All four probes scored, and all four lose to the 0.960 baseline. Ordering the
+whole family by how many safe divisions each adds gives a clean unimodal curve:
+
+    arm          divisions added   LB
+    nosafediv    0                 0.914
+    symtau08     fewer than base   0.956
+    BASELINE     ~540 (v3 default) 0.960   <- peak
+    divwide      more              0.956
+    divmax       more              0.956
+    symtau0      ~1264 (2.3x)      0.950
+    dc40         1264 + veto       0.943
+    divrevert    most              0.932
+
+**My fewer-divisions call was wrong.** I read a gradient off three loosening
+points and concluded the leaderboard was monotonic in divisions added. Adding
+the tightening points shows it was a peak all along, sitting exactly on v3's
+shipped configuration. Disabling safe divisions costs 0.046, so divisions matter
+enormously; v3 had simply already tuned them.
+
+**symtau0 resolved at 0.950**, below baseline as predicted once the sparse-GT
+bias was understood. Its +0.0054 proxy gain -- the largest we ever measured --
+was an artefact of grading a 4.8% sample of the quantity it changed.
+
+**The both-embryos rule did not protect us.** symtau0 passed it cleanly (44b6
++0.0087, 6bba +0.0031) and still lost 0.010 on the leaderboard. The rule guards
+against a result driven by one lineage; it cannot guard against a metric
+computed on a biased sample of the change. Both embryos share the same sparse
+annotation protocol, so a sampling bias appears in both and the rule sees
+nothing wrong. This is a real limit of our main generalization instrument and
+should be recorded as such: it is necessary, not sufficient.
+
+**Position.** The edge term is saturated (14 configurations identical across two
+sweeps, seven refuted hypotheses) and the division term is at its optimum.
+0.960 is the ceiling for the mechanisms available to us. Rank ~96 of 3984, top
+2.4%, against a frontier of 0.978.
+
+Final slot spent on ILP_DIVISION_WEIGHT 1.2 -> 1.6, the only division mechanism
+neither we nor any public notebook has probed, and a different mechanism from
+the post-process heuristic that is now closed. Expected to lose; it is free
+because the final selections are frozen at 0.960 and a submission does not
+change them.
