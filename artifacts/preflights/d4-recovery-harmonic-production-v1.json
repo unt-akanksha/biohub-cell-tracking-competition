@@ -1,0 +1,201 @@
+{
+  "checks": [
+    {
+      "detail": "Every code cell of the built notebook compiles at build time and the builder refuses to emit an artifact otherwise. 34 focused tests pass, including a byte-span test that restores the six recorded rotation-argument spans in the 51,316-byte materialized predictor and asserts byte equality with the legacy source, so no other change anywhere in that file could pass.",
+      "evidence": [
+        {
+          "path": "research/public_d4_complete_v1.py",
+          "sha256": "e7067a34d092557f90f1c23caaec0e5dbe86d5135a6897a8e914292098552aee"
+        },
+        {
+          "path": "scripts/build-d4-complete-v1.py",
+          "sha256": "5ce795b5545ae1160a3a6aef2dccaec44bfd8df897cb8aa7cf0dda6c6b405b38"
+        },
+        {
+          "path": "research/public_d4_correction.py",
+          "sha256": "81bd21d826c222acd22c241b81d75931695ac222db9b70b32faaa5d21745f950"
+        },
+        {
+          "path": "tests/test_public_d4_complete_v1.py",
+          "sha256": "dbf782c11209093a5d33c131804d7314a4c3a4725ddce2d31ae542365d5965ac"
+        },
+        {
+          "path": "tests/test_public_d4_correction.py",
+          "sha256": "6afd88cb10e78eb0b8309a3a91ce71af10c21588553a2dd5a36906dd9ae39177"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/biohub-d4-complete-recovery-harmonic-production-v1.ipynb",
+          "sha256": "8556dba6c419f2f21db8316c90dc6c0e039f62ca159f231da5b8c2a7e9ee6241"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Kernel metadata is private, internet-disabled, NvidiaTeslaT4, and attaches only the competition plus the three public CC0 Pilkwang model datasets that the base notebook already used. The base notebook is pinned at SHA-256 e378e723...fb44a and the support-pack predictor at c44e771b...c234b9; either drifting fails the build closed rather than being silently corrected.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/kernel-metadata.json",
+          "sha256": "fe7c801c7d52cb80612db4391c3d06d4f26e4dcae8df4c402f1981948eba0e16"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/build-manifest.json",
+          "sha256": "d823153cc820b296571a497062b07d767a577914c1e3ea9c3bba83fd06186afc"
+        },
+        {
+          "path": ".biohub/cache/public-d4-complete-v1/sources/biohub-harmonic-fusion.ipynb",
+          "sha256": "e378e723ff30c3bebbe21b68553b3c666c4592141288f32529c1322b790fb44a"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-support-source/predict_unet_transformer.py",
+          "sha256": "c44e771ba5980b820f93091e03a303c25dfe8f3232e501f54dc9565731c234b9"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "Real GPU execution of the byte-identical corrected predictor (SHA-256 ef6fc4f8335ec799f7229dc880b2247fb776394821c382a2f113906f6b9b0c6a) on NVIDIA A10G under torch 2.5.1+cu121, 21.614s. Both encoders report 8 calls and 8 unique views corrected versus 8 calls and 7 unique views legacy; DeepCenter likewise 8 versus 7. Encoder mean absolute deltas [0.07138083875179291, 0.043244361877441406, 0.6154616475105286, 0.6114733219146729] and DeepCenter delta 0.000413095 are nonzero, so the corrected arm is not a silent no-op, and inputs_unchanged=True.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/gpu-result.json",
+          "sha256": "d7e1d92a263941ab14563f402e093ab12e48c388f0cd4bf7dad12ffb5ca405ac"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/MANIFEST.json",
+          "sha256": "879906e3da6164493aa9a2a83bf27012f58c780557fa03e8702a0e7d4b10a1be"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/public-predictor-d4-corrected.py",
+          "sha256": "ef6fc4f8335ec799f7229dc880b2247fb776394821c382a2f113906f6b9b0c6a"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/build-manifest.json",
+          "sha256": "d823153cc820b296571a497062b07d767a577914c1e3ea9c3bba83fd06186afc"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "This kernel performs inference only. It constructs no optimizer, takes no gradient and writes no checkpoint; the eight rotation arguments are the only change and all weights are loaded frozen from the attached public datasets. There is no forward/backward step to exercise.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "The GPU preflight loaded the exact attached checkpoints under strict loading and produced finite outputs: primary 12f6881e...fe771, secondary 9bac2fa0...e305f, DeepCenter 8040999a...afe2a0. The correction rewrites only predictor source text, never a state dictionary, and the built notebook verifies the predictor SHA-256 both before and after writing it, raising on drift in either direction.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/MANIFEST.json",
+          "sha256": "879906e3da6164493aa9a2a83bf27012f58c780557fa03e8702a0e7d4b10a1be"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/gpu-result.json",
+          "sha256": "d7e1d92a263941ab14563f402e093ab12e48c388f0cd4bf7dad12ffb5ca405ac"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/build-manifest.json",
+          "sha256": "d823153cc820b296571a497062b07d767a577914c1e3ea9c3bba83fd06186afc"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "The notebook writes /kaggle/working/submission.csv and then asserts, before finishing, that columns equal the accepted schema, row ids are contiguous, the dataset set equals every test .zarr stem, every edge advances exactly one frame, no node has two parents and no node exceeds out-degree two.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/biohub-d4-complete-recovery-harmonic-production-v1.ipynb",
+          "sha256": "8556dba6c419f2f21db8316c90dc6c0e039f62ca159f231da5b8c2a7e9ee6241"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/build-manifest.json",
+          "sha256": "d823153cc820b296571a497062b07d767a577914c1e3ea9c3bba83fd06186afc"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Measured peak CUDA on the corrected arm is 654326784 bytes (654.3 MB) for the encoder path and 167.5 MB for DeepCenter, against roughly 16 GB per T4. Decisively, the corrected and legacy arms report byte-identical peak CUDA, because the correction changes which single view is constructed, not tensor shapes, dtypes or the eight calls per stage, so it adds no memory by construction. Measured on A10G rather than T4; the shapes recorded in the receipt are device-independent and the unmodified base notebook is a published two-T4 kernel.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/gpu-result.json",
+          "sha256": "d7e1d92a263941ab14563f402e093ab12e48c388f0cd4bf7dad12ffb5ca405ac"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/MANIFEST.json",
+          "sha256": "879906e3da6164493aa9a2a83bf27012f58c780557fa03e8702a0e7d4b10a1be"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "The deployed recovery is research/public_pruned_track_recovery.py embedded verbatim at SHA-256 68827c90...79980d, the exact pin recorded by the run that scored 0.9493103203140519. Replaying that run's eight frozen input sets through the deployed call path reproduces all eight scored candidate graphs byte for byte, with identical component, node, edge and budget counts. All six rescue constants equal the frozen values and the kernel raises if they differ. The call is wrapped so a contract violation on any single movie falls back to the unmodified base graph instead of aborting the submission.",
+      "evidence": [
+        {
+          "path": "research/public_d4_recovery_v1.py",
+          "sha256": "b50990d21f5a87c15cef9d5071d18899bc68a90959404b489f50125ad48e668f"
+        },
+        {
+          "path": "research/public_pruned_track_recovery.py",
+          "sha256": "68827c90bda26f77eded76cc3222d29d4d31f8faf4dd957ad21e82dabf79980d"
+        },
+        {
+          "path": "scripts/verify-d4-recovery-integration.py",
+          "sha256": "e4a89b1126f005e5432e6c8f193a4f8de01ca9bd65dd24fad697f5e1472b943d"
+        },
+        {
+          "path": "reports/experiments/public-pruned-track-recovery-v1-result.json",
+          "sha256": "724c9d51e22ee34d5875262d12e93a5983597ecbb16ec785b6ceb6f75175ade3"
+        }
+      ],
+      "name": "recovery_integration",
+      "status": "passed"
+    },
+    {
+      "detail": "Attempt 1 of this run ERRORed before inference because kaggle kernels push from this Windows host re-read the UTF-8 notebook with the system code page, mojibaking the embedded predictor literal (U+00B5 -> U+00C2 U+00B5); the on-kernel SHA-256 guard rejected it rather than running a corrupted predictor. The artifact is now pure ASCII in every cell and in notebook metadata, so UTF-8, cp1252 and latin-1 readers all reproduce identical bytes. A regression test replays the exact corruption path and asserts the literal still hashes to ef6fc4f8...b0c6a.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/biohub-d4-complete-recovery-harmonic-production-v1.ipynb",
+          "sha256": "8556dba6c419f2f21db8316c90dc6c0e039f62ca159f231da5b8c2a7e9ee6241"
+        },
+        {
+          "path": "tests/test_public_d4_complete_v1.py",
+          "sha256": "dbf782c11209093a5d33c131804d7314a4c3a4725ddce2d31ae542365d5965ac"
+        },
+        {
+          "path": "reports/experiments/d4-complete-v1-logs/harmonic-production-v1-attempt1-encoding-failure.log",
+          "sha256": "6a42fd94e81a4bc86caa42ee4ab56495bc19a62f74352b4302bafa685cdd31a1"
+        }
+      ],
+      "name": "push_encoding_integrity",
+      "status": "passed"
+    },
+    {
+      "detail": "The kernel enumerates every .zarr stem in the competition test directory, builds a deterministic whole-movie shard plan across exactly two CUDA devices, and verifies disjoint, complete coverage: each shard's outputs must equal its expected stem slice, shards must not overlap, and the merged set must equal the full test set or the run raises. A project-authored guard fails the kernel closed unless torch reports exactly two devices, so a silent single-GPU fallback cannot consume the declared budget.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/biohub-d4-complete-recovery-harmonic-production-v1.ipynb",
+          "sha256": "8556dba6c419f2f21db8316c90dc6c0e039f62ca159f231da5b8c2a7e9ee6241"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/kernel-metadata.json",
+          "sha256": "fe7c801c7d52cb80612db4391c3d06d4f26e4dcae8df4c402f1981948eba0e16"
+        },
+        {
+          "path": "kaggle/biohub-d4-complete-recovery-harmonic-production-v1/build-manifest.json",
+          "sha256": "d823153cc820b296571a497062b07d767a577914c1e3ea9c3bba83fd06186afc"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-09-16T19:28:01.598903Z",
+  "report_sha256": "1af06da4e82ac9b2216d0d5420844a5ec8dbba9543e98c1585082201b4b0a67e",
+  "run_id": "d4-recovery-harmonic-production-v1",
+  "schema_version": 1
+}

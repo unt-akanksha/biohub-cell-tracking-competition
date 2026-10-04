@@ -165,3 +165,26 @@ def test_output_validation_rejects_wrong_or_duplicate_coverage() -> None:
     )
     with pytest.raises(RuntimeError, match="output mismatch"):
         validate_shard_outputs(shards, {0: ["a"], 1: ["b", "d"]})
+
+
+def test_output_validation_does_not_hide_duplicates_by_converting_to_set() -> None:
+    shards = build_movie_shards(["a", "b", "c", "d"], ["0", "1"])
+    with pytest.raises(RuntimeError, match="duplicate movie outputs within"):
+        validate_shard_outputs(shards, {0: ["a", "c", "a"], 1: ["b", "d"]})
+
+
+@pytest.mark.parametrize('observed', [{0: ['a']}, {0: ['a'], 1: ['b'], 2: ['extra']}])
+def test_output_validation_requires_exact_worker_inventory(observed) -> None:
+    shards = build_movie_shards(['a', 'b'], ['0', '1'])
+    with pytest.raises(RuntimeError, match='missing or extra'):
+        validate_shard_outputs(shards, observed)
+
+
+def test_output_validation_rejects_empty_or_duplicated_plan() -> None:
+    from dataclasses import replace
+    with pytest.raises(RuntimeError, match='invalid two-GPU'):
+        validate_shard_outputs([], {})
+    shards = build_movie_shards(['a','b'], ['0','1'])
+    corrupted = (shards[0], replace(shards[1], movie_ids=('a',)))
+    with pytest.raises(RuntimeError, match='duplicate movies in GPU shard plan'):
+        validate_shard_outputs(corrupted, {0:['a'],1:['a']})

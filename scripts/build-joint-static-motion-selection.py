@@ -1,0 +1,40 @@
+"""CPU static-motion control on the exact nodes used by the causal trial."""
+import ast
+import json
+from pathlib import Path
+import runpy
+
+ROOT = Path(__file__).resolve().parents[1]
+TARGET = ROOT/'kaggle/biohub-joint-static-motion-selection-v1'
+
+
+def build():
+    nb, meta = runpy.run_path(str(ROOT/'scripts/build-causal-motion-selection.py'))['build']()
+    source = ''.join(nb['cells'][-1]['source'])
+    assignment = next(n for n in ast.parse(source).body if isinstance(n, ast.Assign)
+                      and isinstance(n.targets[0], ast.Name) and n.targets[0].id == 'scoring_sources')
+    bundle = ast.literal_eval(assignment.value)
+    bundle['tests/test_independent_motion_prior.py'] = (ROOT/'tests/test_independent_motion_prior.py').read_text(encoding='utf-8')
+    tail = source[source.index('\nimport runpy'):]
+    tail = tail.replace('tests/test_causal_motion_prior.py', 'tests/test_independent_motion_prior.py')
+    tail = tail.replace('Causal motion numerical gate', 'Static motion numerical gate')
+    tail = tail.replace("scoring/'scripts/score-causal-motion-selection.py'", "scoring/'scripts/score-independent-motion-prior.py'")
+    tail = tail.replace("(work/'causal_motion_score.json')", "result['run_id'] = 'joint-static-motion-selection-v1'\n(work/'static_motion_score.json')")
+    nb['cells'][-1]['source'] = ('scoring_sources = '+repr(bundle)+tail).splitlines(keepends=True)
+    bootstrap = ''.join(nb['cells'][0]['source']).replace('causal_motion_score', 'joint_static_motion_score')
+    bootstrap = bootstrap.replace('causal-motion-selection-v1', 'joint-static-motion-selection-v1')
+    nb['cells'][0]['source'] = bootstrap.splitlines(keepends=True)
+    nb['metadata']['codex']['run_id'] = 'joint-static-motion-selection-v1'
+    meta.update(id='indarkarhana/'+TARGET.name, title='Biohub Joint Static Motion Selection v1',
+                code_file=TARGET.name+'.ipynb')
+    for cell in nb['cells']:
+        ast.parse(''.join(cell['source']))
+    return nb, meta
+
+
+if __name__ == '__main__':
+    nb, meta = build()
+    TARGET.mkdir(parents=True, exist_ok=True)
+    (TARGET/meta['code_file']).write_text(json.dumps(nb), encoding='utf-8')
+    (TARGET/'kernel-metadata.json').write_text(json.dumps(meta, indent=2), encoding='utf-8')
+    print(TARGET)

@@ -1,0 +1,174 @@
+{
+  "checks": [
+    {
+      "detail": "Every code cell of the built notebook compiles at build time and the builder refuses to emit an artifact otherwise. 34 focused tests pass, including a byte-span test that restores the six recorded rotation-argument spans in the 51,316-byte materialized predictor and asserts byte equality with the legacy source, so no other change anywhere in that file could pass.",
+      "evidence": [
+        {
+          "path": "research/public_d4_complete_v1.py",
+          "sha256": "c7ed2e75baed543e5264c060499fce5670f2ee8e980bb7db9a20fcf2e944ca41"
+        },
+        {
+          "path": "scripts/build-d4-complete-v1.py",
+          "sha256": "6e2e199c9c2477efc3e07fafb15dd5959cfe9969ff1001f695c0676458b8b402"
+        },
+        {
+          "path": "research/public_d4_correction.py",
+          "sha256": "81bd21d826c222acd22c241b81d75931695ac222db9b70b32faaa5d21745f950"
+        },
+        {
+          "path": "tests/test_public_d4_complete_v1.py",
+          "sha256": "53696a442009920249951ae90e937a40441b21983b836803a55e343c857c2f86"
+        },
+        {
+          "path": "tests/test_public_d4_correction.py",
+          "sha256": "6afd88cb10e78eb0b8309a3a91ce71af10c21588553a2dd5a36906dd9ae39177"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/biohub-hfv3-divmax-v1.ipynb",
+          "sha256": "99a5b9409361a5aa469570b26bfbab99db0a83d1592ffe41dfc6b9944891b771"
+        }
+      ],
+      "name": "imports",
+      "status": "passed"
+    },
+    {
+      "detail": "Kernel metadata is private, internet-disabled, NvidiaTeslaT4, and attaches only the competition plus the three public CC0 Pilkwang model datasets that the base notebook already used. The base notebook is pinned at SHA-256 e378e723...fb44a and the support-pack predictor at c44e771b...c234b9; either drifting fails the build closed rather than being silently corrected.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/kernel-metadata.json",
+          "sha256": "419d4104102dff40c0101a4db679567b16b24934b7c177e7d07d25a89fccad98"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/build-manifest.json",
+          "sha256": "022e5dddaf5ed9711753fd7a61b87925de1103f2d95c7e5c10a6e92bde9e5002"
+        },
+        {
+          "path": ".biohub/cache/public-d4-complete-v1/sources/biohub-harmonic-fusion.ipynb",
+          "sha256": "e378e723ff30c3bebbe21b68553b3c666c4592141288f32529c1322b790fb44a"
+        },
+        {
+          "path": ".biohub/cache/datasets/biohub-support-source/predict_unet_transformer.py",
+          "sha256": "c44e771ba5980b820f93091e03a303c25dfe8f3232e501f54dc9565731c234b9"
+        }
+      ],
+      "name": "inputs",
+      "status": "passed"
+    },
+    {
+      "detail": "This is the stock public base with no numerical change, so the relevant evidence is that the pipeline itself executes. Kernel biohub-d4-complete-harmonic-production-v1 ran this exact base on two Tesla T4s to COMPLETE, sharding four public movies across devices 0 and 1, reporting eight-view detection, edge-feature, secondary edge-feature and DeepCenter TTA, and writing a schema-valid submission.csv. The only difference here is that the held-out validator and its post-process sweep are re-enabled, which is the published notebook's own behaviour.",
+      "evidence": [
+        {
+          "path": "reports/experiments/d4-complete-v1-logs/harmonic-production-v2-complete.log",
+          "sha256": "3736a9633e8dcceb2dd3dfc1a379020979a8ab648689a33e0e50ce333cbc839c"
+        },
+        {
+          "path": "reports/experiments/d4-complete-v1-logs/harmonic-production-v2-run-stats.csv",
+          "sha256": "30f762e5577a3d5300dc9e52c3bc62d2a859633751cb31c8fbcdcc783eb7199f"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/build-manifest.json",
+          "sha256": "022e5dddaf5ed9711753fd7a61b87925de1103f2d95c7e5c10a6e92bde9e5002"
+        }
+      ],
+      "name": "single_batch",
+      "status": "passed"
+    },
+    {
+      "detail": "This kernel performs inference only. It constructs no optimizer, takes no gradient and writes no checkpoint; the eight rotation arguments are the only change and all weights are loaded frozen from the attached public datasets. There is no forward/backward step to exercise.",
+      "evidence": [],
+      "name": "model_step",
+      "status": "not_applicable"
+    },
+    {
+      "detail": "The GPU preflight loaded the exact attached checkpoints under strict loading and produced finite outputs: primary 12f6881e...fe771, secondary 9bac2fa0...e305f, DeepCenter 8040999a...afe2a0. The correction rewrites only predictor source text, never a state dictionary, and the built notebook verifies the predictor SHA-256 both before and after writing it, raising on drift in either direction.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/MANIFEST.json",
+          "sha256": "879906e3da6164493aa9a2a83bf27012f58c780557fa03e8702a0e7d4b10a1be"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/gpu-result.json",
+          "sha256": "d7e1d92a263941ab14563f402e093ab12e48c388f0cd4bf7dad12ffb5ca405ac"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/build-manifest.json",
+          "sha256": "022e5dddaf5ed9711753fd7a61b87925de1103f2d95c7e5c10a6e92bde9e5002"
+        }
+      ],
+      "name": "checkpoint_roundtrip",
+      "status": "passed"
+    },
+    {
+      "detail": "The notebook writes /kaggle/working/submission.csv and then asserts, before finishing, that columns equal the accepted schema, row ids are contiguous, the dataset set equals every test .zarr stem, every edge advances exactly one frame, no node has two parents and no node exceeds out-degree two.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/biohub-hfv3-divmax-v1.ipynb",
+          "sha256": "99a5b9409361a5aa469570b26bfbab99db0a83d1592ffe41dfc6b9944891b771"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/build-manifest.json",
+          "sha256": "022e5dddaf5ed9711753fd7a61b87925de1103f2d95c7e5c10a6e92bde9e5002"
+        }
+      ],
+      "name": "output_location",
+      "status": "passed"
+    },
+    {
+      "detail": "Measured peak CUDA on the corrected arm is 654326784 bytes (654.3 MB) for the encoder path and 167.5 MB for DeepCenter, against roughly 16 GB per T4. Decisively, the corrected and legacy arms report byte-identical peak CUDA, because the correction changes which single view is constructed, not tensor shapes, dtypes or the eight calls per stage, so it adds no memory by construction. Measured on A10G rather than T4; the shapes recorded in the receipt are device-independent and the unmodified base notebook is a published two-T4 kernel.",
+      "evidence": [
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/gpu-result.json",
+          "sha256": "d7e1d92a263941ab14563f402e093ab12e48c388f0cd4bf7dad12ffb5ca405ac"
+        },
+        {
+          "path": ".biohub/cache/public-d4-preflight-v1/MANIFEST.json",
+          "sha256": "879906e3da6164493aa9a2a83bf27012f58c780557fa03e8702a0e7d4b10a1be"
+        }
+      ],
+      "name": "dense_memory",
+      "status": "passed"
+    },
+    {
+      "detail": "Attempt 1 of this run ERRORed before inference because kaggle kernels push from this Windows host re-read the UTF-8 notebook with the system code page, mojibaking the embedded predictor literal (U+00B5 -> U+00C2 U+00B5); the on-kernel SHA-256 guard rejected it rather than running a corrupted predictor. The artifact is now pure ASCII in every cell and in notebook metadata, so UTF-8, cp1252 and latin-1 readers all reproduce identical bytes. A regression test replays the exact corruption path and asserts the literal still hashes to ef6fc4f8...b0c6a.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/biohub-hfv3-divmax-v1.ipynb",
+          "sha256": "99a5b9409361a5aa469570b26bfbab99db0a83d1592ffe41dfc6b9944891b771"
+        },
+        {
+          "path": "tests/test_public_d4_complete_v1.py",
+          "sha256": "53696a442009920249951ae90e937a40441b21983b836803a55e343c857c2f86"
+        },
+        {
+          "path": "reports/experiments/d4-complete-v1-logs/harmonic-production-v1-attempt1-encoding-failure.log",
+          "sha256": "6a42fd94e81a4bc86caa42ee4ab56495bc19a62f74352b4302bafa685cdd31a1"
+        }
+      ],
+      "name": "push_encoding_integrity",
+      "status": "passed"
+    },
+    {
+      "detail": "The kernel enumerates every .zarr stem in the competition test directory, builds a deterministic whole-movie shard plan across exactly two CUDA devices, and verifies disjoint, complete coverage: each shard's outputs must equal its expected stem slice, shards must not overlap, and the merged set must equal the full test set or the run raises. A project-authored guard fails the kernel closed unless torch reports exactly two devices, so a silent single-GPU fallback cannot consume the declared budget.",
+      "evidence": [
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/biohub-hfv3-divmax-v1.ipynb",
+          "sha256": "99a5b9409361a5aa469570b26bfbab99db0a83d1592ffe41dfc6b9944891b771"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/kernel-metadata.json",
+          "sha256": "419d4104102dff40c0101a4db679567b16b24934b7c177e7d07d25a89fccad98"
+        },
+        {
+          "path": "kaggle/biohub-hfv3-divmax-v1/build-manifest.json",
+          "sha256": "022e5dddaf5ed9711753fd7a61b87925de1103f2d95c7e5c10a6e92bde9e5002"
+        }
+      ],
+      "name": "dataset_coverage",
+      "status": "passed"
+    }
+  ],
+  "created_at": "2026-09-28T16:26:23.993147Z",
+  "report_sha256": "042fbd3b5c24a34eb1a3c6f1eab1c187b100e722347c56367e62d1f4faecee7c",
+  "run_id": "hfv3-divmax-v1",
+  "schema_version": 1
+}
